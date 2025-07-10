@@ -88,7 +88,7 @@ const fns_02_004 =
         btn01: "OK",
         msg: "Document is locked!\nPlease unlock it to save changes!"
     },
-    msgDoclocked:
+    msgDocLocked:
     {
         title: "Warning",
         btn01: "OK",

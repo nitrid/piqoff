@@ -88,7 +88,7 @@ const fns_02_004 =
         btn01: "OK",
         msg: "Document Vérouillé !  \n  Veuillez Dévérouillez Pour Enregistrerles Modifications !"
     },
-    msgDoclocked:
+    msgDocLocked:
     {
         title: "Attention",
         btn01: "OK",

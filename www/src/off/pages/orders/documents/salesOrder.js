@@ -254,7 +254,7 @@ export default class salesOrder extends DocBase
                             onClick:async ()  =>
                             {
                                 this.msgUnit.tmpData = e.data
-                                await this.msgUnit.show()
+                                //await this.msgUnit.show()
 
                                 e.key.UNIT = this.cmbUnit.value
                                 e.key.UNIT_FACTOR = this.txtUnitFactor.value

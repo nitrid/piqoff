@@ -3,27 +3,22 @@ import App from '../../../lib/app.js';
 import { docCls,docItemsCls,docCustomerCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
 import { payPlanCls,payPlanMatchingCls } from '../../../../core/cls/payPlan.js';
 import moment from 'moment';
-
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import ContextMenu from 'devextreme-react/context-menu';
-import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
-
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
-import tr from '../../../meta/lang/devexpress/tr.js';
+import { NdForm, NdItem, NdLabel, NdEmptyItem }from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class collection extends React.PureComponent
 {
@@ -40,13 +35,10 @@ export default class collection extends React.PureComponent
         this.payPlanMatchingObj = new payPlanMatchingCls();
         this.payPlanMatchingObj.lang = this.lang;
         this.tabIndex = props.data.tabkey
-        
-        this._calculateTotal = this._calculateTotal.bind(this)
-        this._addPayment = this._addPayment.bind(this)
-        this._btnCloseInvoice = this._btnCloseInvoice.bind(this)
-
+        this.calculateTotal = this.calculateTotal.bind(this)
+        this.addPayment = this.addPayment.bind(this)
+        this.btnCloseInvoice = this.btnCloseInvoice.bind(this)
         this.docLocked = false;        
-
     }
     async componentDidMount()
     {
@@ -180,14 +172,7 @@ export default class collection extends React.PureComponent
         if(this.docObj.dt()[0].LOCKED != 0)
         {
             this.docLocked = true
-            let tmpConfObj =
-            {
-                id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
-            }
-
-            await dialog(tmpConfObj);
+            this.toast.show({type:"warning",message:this.t("msgGetLocked.msg")})
             this.frmCollection.option('disabled',true)
         }
         else
@@ -213,7 +198,7 @@ export default class collection extends React.PureComponent
                         title:"Dikkat",
                         showCloseButton:true,
                         width:'500px',
-                        height:'200px',
+                        height:'auto',
                         button:[{id:"btn01",caption:"Evrağa Git",location:'before'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Evrak Bulundu"}</div>)
                     }
@@ -240,37 +225,15 @@ export default class collection extends React.PureComponent
             }
         });
     }
-    async _calculateTotal()
+    async calculateTotal()
     {
         this.docObj.dt()[0].AMOUNT = this.docObj.docCustomer.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].TOTAL = this.docObj.docCustomer.dt().sum("AMOUNT",2)
     }
-    async _addPayment(pType,pAmount)
+    async addPayment(pType,pAmount)
     {
         if(pAmount > 0)
         {
-            // Grid'de fazla para satırı var mı kontrol et
-            let hasExtraAmount = this.docObj.docCustomer.dt().some(row => row._EXTRA_AMOUNT === true);
-            if(hasExtraAmount) 
-            {
-                let tmpConfObj =
-                {
-                    id:'msgClearGrid',showTitle:true,title:this.t("msgClearGrid.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgClearGrid.btn01"),location:'before'},{id:"btn02",caption:this.t("msgClearGrid.btn02"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgClearGrid.msg")}</div>)
-                }
-                
-                let pResult = await dialog(tmpConfObj);
-                if(pResult == 'btn01') {
-                    // Grid'i temizle
-                    this.docObj.docCustomer.dt().removeAll();
-                    this._calculateTotal();
-                } else {
-                    // İptal edildi, işlemi durdur
-                    return;
-                }
-            }
-            
             // ÇOKLU FATURA İŞLEMİ - Seçilen faturalar varsa tutarı dağıt
             let selectedInvoices = this.deptCreditMatchingObj.popUpList.filter(x => x.REMAINDER != 0 && x.TYPE == 1);
             
@@ -283,12 +246,14 @@ export default class collection extends React.PureComponent
                 {
                     let invoice = selectedInvoices[i];
                     let paymentAmount = 0;
-                    
                     // AKİLLİ GİRİŞ - Pozitif/Negatif fatura ayrımı
-                    if(invoice.REMAINDER > 0) {
+                    if(invoice.REMAINDER > 0) 
+                    {
                         // Pozitif bakiye (borçlu fatura): Normal dağıtım
                         paymentAmount = Math.min(remainingAmount, invoice.REMAINDER);
-                    } else {
+                    } 
+                    else 
+                    {
                         // Negatif bakiye (alacaklı fatura): Kullanılabilir alacak tutarı
                         paymentAmount = Math.min(remainingAmount, Math.abs(invoice.REMAINDER));
                     }
@@ -374,7 +339,8 @@ export default class collection extends React.PureComponent
                     if(invoice.REMAINDER > 0) 
                     {
                         invoice.REMAINDER -= paymentAmount;
-                        if(invoice.REMAINDER < 0.01) {
+                        if(invoice.REMAINDER < 0.01) 
+                        {
                             invoice.REMAINDER = 0;
                         }
                     } 
@@ -486,11 +452,11 @@ export default class collection extends React.PureComponent
                 }
             }
             /******************************************************************************/
-            this._calculateTotal()
+            this.calculateTotal()
             this.deptCreditMatchingObj.popUpList = [];
         }
     }
-    async _btnCloseInvoice(pCustomer)
+    async btnCloseInvoice(pCustomer)
     {
         let tmpQuery = 
         {
@@ -553,21 +519,14 @@ export default class collection extends React.PureComponent
                                     {
                                         if(this.docLocked == true)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocLocked',showTitle:true,title:this.t("msgDocLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocLocked.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocLocked.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({type:"warning",message:this.t("msgDocLocked.msg")})
                                             return
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
@@ -596,15 +555,15 @@ export default class collection extends React.PureComponent
                                                 
                                                 let tmpConfObj1 =
                                                 {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
                                                 if((await this.docObj.save()) == 0)
                                                 {                       
-                                                    await this.deptCreditMatchingObj.save()
-                                                    
+                                                    await this.deptCreditMatchingObj.save() 
                                                     await this.payPlanMatchingObj.save()  
+                                                    this.toast.show({type:"success",message:this.t("msgSaveResult.msgSuccess")})
                                                     if(this.deptCreditMatchingObj.dt().length > 0)
                                                     {
                                                         let tmpQuery = 
@@ -627,8 +586,7 @@ export default class collection extends React.PureComponent
                                                         await this.core.sql.execute(tmpQuery)
                                                     }
                                                     
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
+                                                    this.toast.show({type:"success",message:this.t("msgSaveResult.msgSuccess")})
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
                                                     this.init();
@@ -644,7 +602,7 @@ export default class collection extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
                                             }
@@ -659,7 +617,7 @@ export default class collection extends React.PureComponent
                                     {                                        
                                         let tmpConfObj =
                                         {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
@@ -688,14 +646,7 @@ export default class collection extends React.PureComponent
                                             await this.docObj.save()
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgLocked',showTitle:true,title:this.t("msgLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgLocked.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLocked.msg")}</div>)
-                                                }
-
-                                                await dialog(tmpConfObj);
+                                                this.toast.show({type:"warning",message:this.t("msgLocked.msg")})
                                             }
                                             else
                                             {
@@ -738,7 +689,7 @@ export default class collection extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -757,10 +708,10 @@ export default class collection extends React.PureComponent
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id={"frmCollection"  + this.tabIndex}>
+                            <NdForm colCount={3} id={"frmCollection"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
-                                <Item>
-                                    <Label text={this.t("txtRefRefno")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
                                         <div className="col-4 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
@@ -807,8 +758,7 @@ export default class collection extends React.PureComponent
                                                                 {
                                                                     this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
                                                                 }
-                                                            }
-                                                                   
+                                                            }     
                                                         }
                                                     },
                                                     {
@@ -869,27 +819,22 @@ export default class collection extends React.PureComponent
                                         <Column dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} defaultSortOrder="asc" />
                                         
                                     </NdPopGrid>
-                                </Item>
+                                </NdItem>
                                {/* dtDocDate */}
-                               <Item>
-                                    <Label text={this.t("dtDocDate")} alignment="right" />
+                               <NdItem>
+                                    <NdLabel text={this.t("dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
-                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
-                                    onValueChanged={(async()=>
-                                        {
-                                            
-                                    }).bind(this)}
-                                    >
+                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}>
                                         <Validator validationGroup={"frmCollection"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
-                                </Item>
+                                </NdItem>
                                 {/* Boş */}
-                                <EmptyItem />
+                                <NdEmptyItem />
                                 {/* txtCustomerCode */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
@@ -964,7 +909,7 @@ export default class collection extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -975,10 +920,6 @@ export default class collection extends React.PureComponent
                                         {
                                             id:'01',
                                             icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
                                         }
                                     }
                                     >
@@ -988,35 +929,33 @@ export default class collection extends React.PureComponent
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
                                         
                                     </NdPopGrid>
-                                </Item> 
+                                </NdItem> 
                                 {/* txtCustomerName */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_NAME"}} 
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    >
+                                    access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}>
                                     </NdTextBox>
-                                </Item> 
+                                </NdItem> 
                                 {/* Boş */}
-                                <EmptyItem />
-
+                                <NdEmptyItem />
                                 {/* Boş */}
-                                <EmptyItem />
-                            </Form>
+                                <NdEmptyItem />
+                            </NdForm>
                         </div>
                     </div>
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>
+                            <NdForm colCount={1} onInitialized={(e)=>
                             {
                                 this.frmCollection = e.component
                             }}>
-                                <Item location="after">
+                                <NdItem location="after">
                                     <Button icon="add" text={this.t("btnCash")}
                                     validationGroup={"frmCollection"  + this.tabIndex}
                                     onClick={async (e)=>
@@ -1031,7 +970,7 @@ export default class collection extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
                                             }
@@ -1039,8 +978,8 @@ export default class collection extends React.PureComponent
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
-                                </Item>
-                                <Item colSpan={1}>
+                                </NdItem>
+                                <NdItem colSpan={1}>
                                     <React.Fragment>
                                         <NdGrid parent={this} id={"grdDocPayments"} 
                                         showBorders={true} 
@@ -1052,20 +991,13 @@ export default class collection extends React.PureComponent
                                         dbApply={false}
                                         onRowDblClick={async(e)=>
                                         {
-                                            this._btnCloseInvoice(e.data.GUID)
+                                            this.btnCloseInvoice(e.data.GUID)
                                         }}
                                         onRowUpdating={async(e)=>{      
                                             if(this.deptCreditMatchingObj.popUpList.length > 0)
                                             {
                                                 e.cancel = true
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgRowNotUpdate',showTitle:true,title:this.t("msgRowNotUpdate.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgRowNotUpdate.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotUpdate.msg")}</div>)
-                                                }
-                                            
-                                                dialog(tmpConfObj);
+                                                this.toast.show({type:"warning",message:this.t("msgRowNotUpdate.msg")})
                                                 e.component.cancelEditData()
                                             }
                                             
@@ -1075,11 +1007,11 @@ export default class collection extends React.PureComponent
                                                 e.data.AMOUNT = Number(e.data.AMOUNT).round(2);
                                             }
                                             
-                                            this._calculateTotal()
+                                            this.calculateTotal()
                                         }}
                                         onRowRemoved={async (e)=>
                                         {
-                                            this._calculateTotal()
+                                            this.calculateTotal()
                                             await this.docObj.save()
                                         }}
                                         >
@@ -1141,24 +1073,24 @@ export default class collection extends React.PureComponent
                                         {
                                         }).bind(this)} />
                                     </React.Fragment>     
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} parent={this} id={"frmCollection"  + this.tabIndex}>                            
+                            <NdForm colCount={4} parent={this} id={"frmCollection"  + this.tabIndex}>                            
                                 {/* TOPLAM */}
-                                <EmptyItem colSpan={3}/>
-                                <Item>
+                                <NdEmptyItem colSpan={3}/>
+                                <NdItem>
                                 <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
                                     maxLength={32}
                                     param={this.param.filter({ELEMENT:'txtTotal',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtTotal',USERS:this.user.CODE})}
                                     ></NdTextBox>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     {/* Cash PopUp */}
@@ -1173,10 +1105,10 @@ export default class collection extends React.PureComponent
                         height={'400'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
+                            <NdForm colCount={1} height={'fit-content'}>
                                 {/* cmbPayType */}
-                                <Item>
-                                    <Label text={this.t("cmbPayType.title")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbPayType.title")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPayType"
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
@@ -1193,23 +1125,27 @@ export default class collection extends React.PureComponent
                                         }
                                         else if(e.value == 1)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 1"}
+                                            tmpQuery = {query : "SELECT GUID, CODE, NAME, TYPE, STATUS FROM SAFE_VW_01 WHERE TYPE = 1"}
                                         }
                                         else if(e.value == 2)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : "SELECT GUID, CODE, NAME, TYPE, STATUS FROM BANK_VW_01 WHERE TYPE = 0"}
                                         }
                                         else if(e.value == 3)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : "SELECT GUID, CODE, NAME, TYPE, STATUS FROM BANK_VW_01 WHERE TYPE = 0"}
                                         }
                                         else if(e.value == 4)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : "SELECT GUID, CODE, NAME, TYPE, STATUS FROM BANK_VW_01 WHERE TYPE = 0"}
                                         }
                                         else if(e.value == 5)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : "SELECT GUID, CODE, NAME, TYPE, STATUS FROM BANK_VW_01 WHERE TYPE = 0"}
+                                        }
+                                        else
+                                        {
+                                            return;
                                         }
                                 
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
@@ -1230,10 +1166,10 @@ export default class collection extends React.PureComponent
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
+                                </NdItem>
                                 {/* cmbCashSafe */}
-                                <Item>
-                                    <Label text={this.t("cmbCashSafe")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbCashSafe")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbCashSafe"
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
@@ -1247,9 +1183,9 @@ export default class collection extends React.PureComponent
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("cash")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("cash")} alignment="right" />
                                     <div className="col-4 pe-0">
                                         <NdNumberBox id="numCash" parent={this} simple={true} maxLength={32}
                                         param={this.param.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
@@ -1260,9 +1196,9 @@ export default class collection extends React.PureComponent
                                             </Validator>  
                                         </NdNumberBox>
                                     </div>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("description")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("description")} alignment="right" />
                                     <div className="col-12 pe-0">
                                         <NdTextBox id="cashDescription" parent={this} simple={true} width={500}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -1272,8 +1208,8 @@ export default class collection extends React.PureComponent
                                         >
                                         </NdTextBox>
                                     </div>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("invoiceSelect")} type="normal" stylingMode="contained" width={'100%'} 
@@ -1300,8 +1236,8 @@ export default class collection extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popCash.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
@@ -1316,7 +1252,7 @@ export default class collection extends React.PureComponent
                                                     }
                                                     else
                                                     {
-                                                        this._addPayment(this.cmbPayType.value,this.numCash.value)
+                                                        this.addPayment(this.cmbPayType.value,this.numCash.value)
                                                         this.popCash.hide();  
                                                     }
                                                 }
@@ -1330,8 +1266,8 @@ export default class collection extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div> 
                     {/* Check PopUp */}
@@ -1346,9 +1282,9 @@ export default class collection extends React.PureComponent
                         height={'260'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("checkReference")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("checkReference")} alignment="right" />
                                     <div className="col-12 pe-0">
                                         <NdTextBox id="checkReference" parent={this} simple={true} width={500}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -1358,25 +1294,20 @@ export default class collection extends React.PureComponent
                                         >
                                         </NdTextBox>
                                     </div>
-                                </Item>
-                                <Item>
-                                        <Label text={this.t("checkDate")} alignment="right" />
-                                        <NdDatePicker simple={true}  parent={this} id={"checkDate"}
-                                        onValueChanged={(async()=>
-                                        {
-                                                
-                                        }).bind(this)}
-                                        >
+                                </NdItem>
+                                <NdItem>
+                                        <NdLabel text={this.t("checkDate")} alignment="right" />
+                                        <NdDatePicker simple={true}  parent={this} id={"checkDate"}>
                                         </NdDatePicker>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popCheck.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
                                             validationGroup={"frmCollCheck" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
-                                                this._addPayment(1,this.numCash.value)
+                                                this.addPayment(1,this.numCash.value)
                                                 this.popCheck.hide(); 
                                                 this.popCash.hide();  
                                             }}/>
@@ -1389,8 +1320,8 @@ export default class collection extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div> 
                     {/* Close Invoice PopUp */}
@@ -1405,8 +1336,8 @@ export default class collection extends React.PureComponent
                         height={'360'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-12'>
                                             <NdGrid parent={this} id={"grdPopCloseInvoice"} 
@@ -1419,6 +1350,9 @@ export default class collection extends React.PureComponent
                                                 e.component.refresh(true);
                                             }}
                                             >
+                                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                                 <Column dataField="REF" caption={this.lang.t("popDeptCreditList.clmRef")} width={80}/>
                                                 <Column dataField="REF_NO" caption={this.lang.t("popDeptCreditList.clmRefNo")} width={100}/>
                                                 <Column dataField="DOC_TYPE" caption={this.lang.t("popDeptCreditList.clmTypeName")} width={100}/>
@@ -1447,9 +1381,10 @@ export default class collection extends React.PureComponent
                                             </NdGrid>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
+                        <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                     </div>  
                 </ScrollView>     
             </div>
