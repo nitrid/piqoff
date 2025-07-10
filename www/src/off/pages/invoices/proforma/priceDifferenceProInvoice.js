@@ -1595,7 +1595,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                        query :"SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0",
                                                         param:  ['GUID:string|50'],
                                                         value:  [this.docObj.dt()[0].INPUT]
                                                     }

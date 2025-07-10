@@ -77,10 +77,10 @@ export default class purchaseOffer extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE, " + 
-                                "ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),COST_PRICE) AS PURC_PRICE, " +
-                                "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE " +
-                                "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
+                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_04.GUID ORDER BY CDATE DESC),'') AS BARCODE, " + 
+                                "ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),COST_PRICE) AS PURC_PRICE, " +
+                                "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE " +
+                                "FROM ITEMS_VW_04 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -95,9 +95,9 @@ export default class purchaseOffer extends DocBase
                 {
                     select:
                     {   
-                        query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,VAT,BARCODE,ITEMS_VW_01.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
-                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
+                        query : "SELECT ITEMS_VW_04.GUID,CODE,NAME,COST_PRICE,VAT,BARCODE,ITEMS_VW_04.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
+                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_04.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                                "FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
                         param : ['BARCODE:string|50'],
                     },
                     sql:this.core.sql
@@ -112,7 +112,7 @@ export default class purchaseOffer extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -162,7 +162,7 @@ export default class purchaseOffer extends DocBase
                         {
                             let tmpQuery = 
                             {
-                                query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,ITEMS_VW_01.VAT,COST_PRICE,ITEMS_VW_01.UNIT FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                                query :"SELECT ITEMS_VW_04.GUID,CODE,NAME,ITEMS_VW_04.VAT,COST_PRICE,ITEMS_VW_04.UNIT FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                                 param : ['CODE:string|50'],
                                 value : [r.component._changedValue]
                             }
@@ -174,7 +174,7 @@ export default class purchaseOffer extends DocBase
                             }
                             else
                             {
-                                this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning',displayTime:1000})
+                                this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning',displayTime:2000})
                             }
                         }
                     }).bind(this)}
@@ -538,8 +538,8 @@ export default class purchaseOffer extends DocBase
             }
             if(this.docObj.dt()[0].VAT_ZERO == 1)
             {
-                this.docObj.docItems.dt()[pIndex].VAT = 0
-                this.docObj.docItems.dt()[pIndex].VAT_RATE = 0
+                this.docObj.docOffers.dt()[pIndex].VAT = 0
+                this.docObj.docOffers.dt()[pIndex].VAT_RATE = 0
             }
             App.instance.setState({isExecute:false})
             resolve()
@@ -571,8 +571,8 @@ export default class purchaseOffer extends DocBase
                 let tmpQuery = 
                 {
                     query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE " ,
+                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_GRP_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
+                    " FROM ITEMS_GRP_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_GRP_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE " ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -595,8 +595,8 @@ export default class purchaseOffer extends DocBase
                 let tmpQuery = 
                 {
                     query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
+                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
+                    " FROM ITEMS_VW_04 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -708,7 +708,7 @@ export default class purchaseOffer extends DocBase
                                                 
                                                 if((await this.docObj.save()) == 0)
                                                 {                                                    
-                                                    this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:'success',displayTime:1000})
+                                                    this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:'success',displayTime:2000})
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
                                                 }
@@ -957,7 +957,7 @@ export default class purchaseOffer extends DocBase
                                             this.frmDocItems.option('disabled',false)
                                         }
                                     }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN (0,2) AND STATUS = 1"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM DEPOT_VW_01  WHERE TYPE IN (0,2) AND STATUS = 1"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
@@ -1160,11 +1160,11 @@ export default class purchaseOffer extends DocBase
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdForm colCount={1} onInitialized={(e)=>
+                            <Form colCount={1} onInitialized={(e)=>
                             {
                                 this.frmDocItems = e.component
                             }}>
-                                <NdItem location="after">
+                                <Item location="after">
                                     <Button icon="add"
                                     validationGroup={"frmPurcoffer"  + this.tabIndex}
                                     onClick={async (e)=>
@@ -1226,8 +1226,8 @@ export default class purchaseOffer extends DocBase
                                             this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
                                         }
                                     }}/>
-                                </NdItem>
-                                <NdItem>
+                                </Item>
+                                <Item>
                                     <NdGrid parent={this} id={"grdPurcoffers"+this.tabIndex} 
                                     showBoffers={true} 
                                     columnsAutoWidth={true} 
@@ -1386,10 +1386,10 @@ export default class purchaseOffer extends DocBase
                                         await this["grdPurcoffers"+this.tabIndex].dataRefresh({source:this.docObj.docOffers.dt('DOC_OFFERS')});
                                     }}
                                     >
-                                        <Paging defaultPageSize={10} />
-                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="standart" />
+                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menuOff.sip_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
@@ -1410,24 +1410,24 @@ export default class purchaseOffer extends DocBase
                                         <Column dataField="TOTAL" caption={this.t("grdPurcoffers.clmTotal")} width={110} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdPurcoffers.clmDescription")} width={120}  headerFilter={{visible:true}}/>
                                     </NdGrid>
-                                </NdItem>
-                            </NdForm>
+                                </Item>
+                            </Form>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                     <div className="col-12">
-                        <NdForm colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
+                        <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
                             {/* Ara Toplam */}
-                            <NdEmptyItem colSpan={2}/>
-                            <NdItem>
-                                <NdLabel text={this.t("txtAmount")} alignment="right" />
+                            <EmptyItem colSpan={2}/>
+                            <Item>
+                                <Label text={this.t("txtAmount")} alignment="right" />
                                 <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
                                 maxLength={32}
                             
                                 ></NdTextBox>
-                            </NdItem>
-                            <NdItem>
-                                <NdLabel text={this.t("txtDiscount")} alignment="right" />
+                            </Item>
+                            <Item>
+                                <Label text={this.t("txtDiscount")} alignment="right" />
                                 <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
                                 maxLength={32}
                                 button=
@@ -1462,17 +1462,17 @@ export default class purchaseOffer extends DocBase
                                     ]
                                 }
                                 ></NdTextBox>
-                            </NdItem>
+                            </Item>
                             {/* İndirim */}
-                            <NdEmptyItem colSpan={2}/>
-                            <NdItem>
-                                <NdLabel text={this.t("txtSubTotal")} alignment="right" />
+                            <EmptyItem colSpan={2}/>
+                            <Item>
+                                <Label text={this.t("txtSubTotal")} alignment="right" />
                                 <NdTextBox id="txtSubTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"SUBTOTAL"}}
                                 maxLength={32}
                                 ></NdTextBox>
-                            </NdItem>
-                            <NdItem>
-                                <NdLabel text={this.t("txtDocDiscount")} alignment="right" />
+                            </Item>
+                            <Item>
+                                <Label text={this.t("txtDocDiscount")} alignment="right" />
                                 <NdTextBox id="txtDocDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DOC_DISCOUNT"}}
                                 maxLength={32}
                                 button=
@@ -1507,17 +1507,17 @@ export default class purchaseOffer extends DocBase
                                     ]
                                 }
                                 ></NdTextBox>
-                            </NdItem>
+                            </Item>
                             {/* KDV */}
-                            <NdEmptyItem colSpan={2}/>
-                            <NdItem>
-                                <NdLabel text={this.t("txtTotalHt")} alignment="right" />
+                            <EmptyItem colSpan={2}/>
+                            <Item>
+                                <Label text={this.t("txtTotalHt")} alignment="right" />
                                 <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}
                                 maxLength={32}
                                 ></NdTextBox>
-                            </NdItem>
-                            <NdItem>
-                                <NdLabel text={this.t("txtVat")} alignment="right" />
+                            </Item>
+                            <Item>
+                                <Label text={this.t("txtVat")} alignment="right" />
                                 <NdTextBox id="txtVat" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"VAT"}}
                                 maxLength={32}
                                 button=
@@ -1543,17 +1543,17 @@ export default class purchaseOffer extends DocBase
                                     ]
                                 }
                                 ></NdTextBox>
-                            </NdItem>
+                            </Item>
                             {/* KDV */}
-                            <NdEmptyItem colSpan={3}/>
+                            <EmptyItem colSpan={3}/>
                             
-                            <NdItem>
-                                <NdLabel text={this.t("txtTotal")} alignment="right" />
+                            <Item>
+                                <Label text={this.t("txtTotal")} alignment="right" />
                                 <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
                                 maxLength={32}
                                 ></NdTextBox>
-                            </NdItem>
-                        </NdForm>
+                            </Item>
+                        </Form>
                     </div>
                     </div>
                     {/* Dizayn Seçim PopUp */}
@@ -1685,7 +1685,7 @@ export default class purchaseOffer extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+                                                        query :"SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0",
                                                         param:  ['GUID:string|50'],
                                                         value:  [this.docObj.dt()[0].INPUT]
                                                     }
@@ -1728,7 +1728,7 @@ export default class purchaseOffer extends DocBase
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT * FROM MAIL_SETTINGS "},sql:this.core.sql}}}
+                                    data={{source:{select:{query : "SELECT MAIL_ADDRESS,GUID FROM MAIL_SETTINGS "},sql:this.core.sql}}}
                                     >
                                          <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                             <RequiredRule message={this.t("validMail")} />

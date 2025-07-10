@@ -202,8 +202,15 @@ export const dialog = function()
                 </div>
             </NdDialog>
         )
-        
         ReactDOM.render(tmpJsx,document.body.appendChild(document.createElement('div',{id:'dialog'})));
-        resolve(await tmpObj.current.show())
+ 
+        if(tmpObj.current != null && tmpObj.current != undefined)
+        {
+            resolve(await tmpObj.current.show())
+        }
+        else
+        {
+            resolve()
+        }
     });
 }
