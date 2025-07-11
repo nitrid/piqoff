@@ -4,6 +4,7 @@ const fns_04_003 =
     cmbSafe : "N° Caisse",
     btnCheck : "Actif",  
     btnGet :"Rechercher", 
+    dtDate : "Date",
     grdListe : 
     {
         clmOutputName : "Compte sortant",

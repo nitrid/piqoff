@@ -4,6 +4,7 @@ const fns_04_003 =
     cmbSafe : "Kassenwahl",  
     btnCheck : "Aktiv",  
     btnGet :"Suchen",  
+    dtDate : "Datum",
     grdListe : 
     {
         clmOutputName : "Versandkonto",  

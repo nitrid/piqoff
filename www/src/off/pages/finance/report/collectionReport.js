@@ -1,25 +1,19 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
-
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-
 import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Editing,Popup} from '../../../../core/react/devex/grid.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdTextBox, { Validator, RequiredRule, RangeRule } from '../../../../core/react/devex/textbox.js';
-import NdPivot,{FieldChooser,Export} from '../../../../core/react/devex/pivot.js';
 import NdCollectionGrid, { groupCollection } from '../../../../core/react/devex/collectiongrid.js';
-import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
+import { NdForm,NdItem,NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
 
 export default class collectionReport extends React.PureComponent
 {
@@ -29,13 +23,12 @@ export default class collectionReport extends React.PureComponent
         
         this.core = App.instance.core;
         this.state = {
-            expandedRowKeys: [] // BU SATIR EKLENECEK
+            expandedRowKeys: []
         }
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        this.chkRowTotal.value = true
         this.init()
     }
     async init()
@@ -64,7 +57,7 @@ export default class collectionReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -82,25 +75,23 @@ export default class collectionReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmCriter">
+                            <NdForm colCount={2} id="frmCriter">
                                 {/* dtFirst */}
-                                <Item>
-                                    <Label text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
-                                    >
+                                <NdItem>
+                                    <NdLabel text={this.t("dtFirst")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}>
                                     </NdDatePicker>
-                                </Item>
+                                </NdItem>
                                 {/* dtLast */}
-                                <Item>
-                                    <Label text={this.t("dtLast")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"}
-                                    >
+                                <NdItem>
+                                    <NdLabel text={this.t("dtLast")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"}>
                                     </NdDatePicker>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
-                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onEnterKey={(async()=>
                                     {
                                         await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
@@ -177,11 +168,11 @@ export default class collectionReport extends React.PureComponent
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                    <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
+                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
                                     
                                     </NdPopGrid>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -260,16 +251,6 @@ export default class collectionReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form>
-                                <Item>
-                                    <Label text={this.t("chkRowTotal")} alignment="right" />
-                                    <NdCheckBox id="chkRowTotal" parent={this} defaultValue={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.pvtData.setState({showRowTotals:e.value})
-                                    }}/>
-                                </Item>
-                            </Form>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

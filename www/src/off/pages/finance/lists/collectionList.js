@@ -284,7 +284,7 @@ export default class collectionList extends React.PureComponent
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
-                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsContList"}/>
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdColListe"}/>
                                 <ColumnChooser enabled={true} />
                                 <Export fileName={this.lang.t("menuOff.fns_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdColList.clmRef")} visible={true} width={200}/> 
@@ -299,18 +299,18 @@ export default class collectionList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} parent={this} >                            
+                            <NdForm colCount={4} parent={this} >                            
                                 {/* TOPLAM */}
-                                <EmptyItem />
-                                <Item>
-                                <Label text={this.t("txtTotal")} alignment="right" />
+                                <NdEmptyItem />
+                                <NdItem>
+                                <NdLabel text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true}
                                     maxLength={32}
                                     param={this.param.filter({ELEMENT:'txtTotal',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtTotal',USERS:this.user.CODE})}
                                     ></NdTextBox>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div>
