@@ -377,6 +377,10 @@ export default class DocBase extends React.PureComponent
     }
     async getDocs(pType)
     {
+        console.log(pType)
+        console.log(this.type)
+        console.log(this.docType)
+        console.log(this.rebate)
         let tmpQuery = {}
         if(pType == 0)
         {

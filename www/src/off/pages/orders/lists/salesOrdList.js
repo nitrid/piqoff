@@ -20,6 +20,7 @@ import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
 
 export default class salesOrdList extends React.PureComponent
 {
@@ -149,7 +150,7 @@ export default class salesOrdList extends React.PureComponent
     {
         let tmpConfObj =
         {
-            id:'msgConvertDispatch',showTitle:true,title:this.t("msgConvertDispatch.title"),showCloseButton:false,width:'500px',height:'200px',
+            id:'msgConvertDispatch',showTitle:true,title:this.t("msgConvertDispatch.title"),showCloseButton:false,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgConvertDispatch.btn01"),location:'before'},{id:"btn02",caption:this.t("msgConvertDispatch.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertDispatch.msg")}</div>)
         }
@@ -377,7 +378,7 @@ export default class salesOrdList extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -584,12 +585,12 @@ export default class salesOrdList extends React.PureComponent
                         title={this.t("popDesign.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'280'}
+                        height={'auto'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDesign.design")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
                                     displayExpr="DESIGN_NAME"                       
                                     valueExpr="TAG"
@@ -603,9 +604,9 @@ export default class salesOrdList extends React.PureComponent
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
-                                <Label text={this.t("popDesign.lang")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                <NdLabel text={this.t("popDesign.lang")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
@@ -614,8 +615,8 @@ export default class salesOrdList extends React.PureComponent
                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmSlsOrderMail" + this.tabIndex}
@@ -700,8 +701,8 @@ export default class salesOrdList extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div>  
                       {/* Dizayn Seçim PopUp */}
@@ -713,12 +714,12 @@ export default class salesOrdList extends React.PureComponent
                         title={this.t("popDesign.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'200'}
+                        height={'auto'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDesign.design")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbAllDesignList" notRefresh = {true}
                                     displayExpr="DESIGN_NAME"                       
                                     valueExpr="TAG"
@@ -727,9 +728,9 @@ export default class salesOrdList extends React.PureComponent
                                     data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '111'"},sql:this.core.sql}}}
                                     >
                                     </NdSelectBox>
-                                </Item>
+                                </NdItem>
                              
-                                <Item>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmSlsOrderMail" + this.tabIndex}
@@ -746,8 +747,8 @@ export default class salesOrdList extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div>  
             </div>

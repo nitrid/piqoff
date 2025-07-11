@@ -18,6 +18,8 @@ import NdPopUp from '../../../../core/react/devex/popup.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core';
 import { docCls } from '../../../../core/cls/doc.js'
+import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class salesOrdList extends React.PureComponent
 {
@@ -313,17 +315,17 @@ export default class salesOrdList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmCriter">
+                            <NdForm colCount={2} id="frmCriter">
                                 {/* dtFirst */}
-                                <Item>
+                                <NdItem>
                                     <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}onApply={(async()=>{this._btnGetClick()}).bind(this)}/>
-                                </Item>
+                                </NdItem>
                                 {/* dtLast */}
-                                <Item>
-                                </Item>
+                                <NdItem>
+                                </NdItem>
                                 {/* cmbDepot */}
-                                <Item>
-                                    <Label text={this.t("cmbDepot")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot" 
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
@@ -335,8 +337,8 @@ export default class salesOrdList extends React.PureComponent
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -422,6 +424,7 @@ export default class salesOrdList extends React.PureComponent
                             <NdButton text={this.t("btnSave")} type="success" width="100%" onClick={this._btnApprove}></NdButton>
                         </div>
                     </div>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 73px'}}/>
                 </ScrollView>
                 <div>
                     <NdPopUp id={"popOrderDetail"} container={"#root"} parent={this}
