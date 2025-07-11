@@ -3,7 +3,7 @@ const fns_05_001 =
 {
     txtRefRefno : "Réf. Réf No:",
     validRef :"Saisir Réf ",
-    cmbCashSafe : "Caisse Espèce",
+    checkReference : "Réf. Chèque",
     excelAdd : "Inscription à partir d'Excel",
     popExcel : {title:"Les en-têtes de ligne de votre fichier Excel doivent être corrects"}, 
     msgDocValid:
@@ -11,6 +11,13 @@ const fns_05_001 =
         title: "Attention",
         btn01: "OK",
         msg: "Veuillez saisir les en-tête avant l'achèvement !"
+    },
+    pg_txtCustomerCode : {
+        title : "Sélectionner le client",
+        clmCode : "Code Client",
+        clmTitle : "Nom Client",
+        clmTypeName : "Type",
+        clmGenusName : "Genre"
     },
     msgSaveValid:
     {
@@ -21,15 +28,12 @@ const fns_05_001 =
     cmbPayType : 
     {
         title : "Mode de Règlement ",
-        esc:"Espèce",
-        cb : "CB",
+        cash:"Espèce",
         check : "Chèque",
-        ticket : "Chèque",
-        bonD : "Bon D'Avoir",
-        avoir : "Avoir",
-        virment : "Virement",
-        prlv :"Prélèvement ",
-        all :"Tout"
+        bankTransfer : "Virement",
+        otoTransfer : "Prélèvement",
+        foodTicket : "Ticket Restaurant",
+        bill : "Effet de Commerce"
     },
     popExcel :
     {
@@ -57,6 +61,24 @@ const fns_05_001 =
         clmFacDate : "Date de facture ",
         clmDate :"Date",
         clmDocDate : "Date"
+    },
+    popCash : 
+    {
+        title: "Entrée de Caisse",
+        btnApprove : "Ajouter",
+        btnCancel : "Annuler",
+        dtDocDate : "Date",
+        cash : "Montant",
+        txtCustomerCode : "Code Client",
+        txtCustomerName : "Nom Client",
+        description : "Motif",
+        cmbCashSafe : "Selectionner la caisse",
+    },
+    popCheck : 
+    {
+        title: "Entrée de Chèque",
+        btnApprove : "Ajouter",
+        btnCancel : "Annuler",
     },
  
 }

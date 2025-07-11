@@ -16,6 +16,11 @@ const fns_01_004 =
         clmDate: "Date",
         clmAmount : "Amount",
         clmDate : "Date",
+    },  
+    msgNotBank : {
+        title : "Attention",
+        btn01 : "OK",
+        msg : "Veuillez sélectionner un compte"
     },
 }
 

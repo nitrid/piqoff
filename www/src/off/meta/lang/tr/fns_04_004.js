@@ -2,25 +2,26 @@
 const fns_04_004 =
 {
     txtCustomerCode: "Müşteri Kodu",
-    btnGet: "Getir",
+    btnGet: "Getir",    
+    dtDate: "Tarih",
     pg_txtCustomerCode: {
-        "title": "Müşteri Seçimi",
-        "clmCode": "Kod",
-        "clmTitle": "Ünvan",
-        "clmTypeName": "Tip",
-        "clmGenusName": "Cins",
-        "clmBalance": "Bakiye"
+        title: "Müşteri Seçimi",
+        clmCode: "Kod",
+        clmTitle: "Ünvan",
+        clmTypeName: "Tip",
+        clmGenusName: "Cins",
+        clmBalance: "Bakiye"
     },
     grdListe: {
-        "clmCustomerCode": "Müşteri Kodu",
-        "clmCustomerName": "Müşteri Adı",
-        "clmDocDate": "Belge Tarihi",
-        "clmTypeName": "İşlem Tipi",
-        "clmRef": "Referans",
-        "clmRefNo": "Ref. No",
-        "clmDebit": "Borç",
-        "clmReceive": "Alacak",
-        "clmAmount": "Tutar"
+        clmCustomerCode: "Müşteri Kodu",
+        clmCustomerName: "Müşteri Adı",
+        clmDocDate: "Belge Tarihi",
+        clmTypeName: "İşlem Tipi",
+        clmRef: "Referans",
+        clmRefNo: "Ref. No",
+        clmDebit: "Borç",
+        clmReceive: "Alacak",
+        clmAmount: "Tutar"
     },
     popDesign : 
     {

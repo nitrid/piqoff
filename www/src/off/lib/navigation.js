@@ -249,7 +249,7 @@ export default class Navigation extends React.PureComponent
     render()
     {
         return(
-            <div style={this.style.div}>
+            <div className="navigation-container" style={this.style.div}>
            
                 <LoadPanel
                 shadingColor="rgba(255,255,255,1)"
@@ -263,7 +263,17 @@ export default class Navigation extends React.PureComponent
                 <React.Fragment>
                     <TabPanel id="tabPanel" width={300} height={'100%'}>
                         <Item title={this.lang.t("menu")} icon="menu">
-                            <TreeView id="Menu1" style={this.style.treeview}
+                            <TreeView id="Menu1" 
+                            className="custom-menu-treeview"
+                            style={{
+                                ...this.style.treeview,
+                                backgroundColor: '#ffffff',
+                                border: 'none',
+                                borderRadius: '0',
+                                padding: '5px',
+                                boxShadow: 'none',
+                                margin: '0'
+                            }}
                             items = {this.state.menu}
                             width = {300}
                             height = {'100%'}
@@ -280,7 +290,17 @@ export default class Navigation extends React.PureComponent
                             </TreeView> 
                         </Item>
                         <Item title={this.lang.t("favMenu")} icon="favorites">
-                            <TreeView id="Menu2" style={this.style.treeview}
+                            <TreeView id="Menu2" 
+                            className="custom-menu-treeview"
+                            style={{
+                                ...this.style.treeview,
+                                backgroundColor: '#ffffff',
+                                border: 'none',
+                                borderRadius: '0',
+                                padding: '10px',
+                                boxShadow: 'none',
+                                margin: '0'
+                            }}
                             items = {this.state.favMenu}
                             width = {300}
                             height = {'100%'}

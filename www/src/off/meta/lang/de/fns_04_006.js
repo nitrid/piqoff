@@ -2,6 +2,7 @@
  const fns_04_006 =
  {
     btnGet :"Suchen",
+    dtDate : "Datum",
     grdListe : 
     {
         clmCustomerCode : "Kundenkode",

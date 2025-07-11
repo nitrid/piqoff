@@ -17,6 +17,11 @@ const fns_01_003 =
         clmAmount : "Tutar",
         clmDate : "Tarih",
     },
+    msgNotBank : {
+        title : "Dikkat",
+        btn01 : "Tamam",
+        msg : "Lütfen bir hesap seçiniz"
+    },
 
 }
 

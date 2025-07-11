@@ -2,6 +2,7 @@
 const fns_05_001 =
 {
     txtRefRefno : "Series-Sequence",
+    checkReference : "Reference",
     cmbCashSafe : "Cash Selection",
     cmbCheckSafe : "Check Selection",
     cmbBank : "Bank Selection",
@@ -15,6 +16,13 @@ const fns_05_001 =
     btnCash : "Collection Entry",
     ValidCash : "Enter an amount greater than 0",
     excelAdd : "Record from Excel",
+    pg_txtCustomerCode : {
+        title : "Customer Selection",
+        clmCode : "Customer Code",
+        clmTitle : "Customer Name",
+        clmTypeName : "Type",
+        clmGenusName : "Genus"
+    },
     popExcel : 
     {
         title:"The row headers of your Excel file must be correct",
@@ -86,13 +94,21 @@ const fns_05_001 =
     },
     popCash : 
     {
-        title: "Cash Entry",
-        btnApprove : "Add"
+        title: "Collection Entry",
+        btnApprove : "Add",
+        btnCancel : "Cancel",
+        dtDocDate : "Date",
+        cash : "Amount",
+        txtCustomerCode : "Customer Code",
+        txtCustomerName : "Customer Name",
+        description : "Description",
+        cmbCashSafe : "Cash Selection",
     },
     popCheck : 
     {
         title: "Check Entry",
-        btnApprove : "Add"
+        btnApprove : "Add",
+        btnCancel : "Cancel",
     },
     popBank : 
     {

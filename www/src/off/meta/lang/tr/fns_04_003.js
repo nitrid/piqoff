@@ -4,6 +4,7 @@ const fns_04_003 =
     cmbSafe : "Kasa Seçimi",
     btnCheck : "Aktif",
     btnGet :"Getir",
+    dtDate : "Tarih",
     grdListe : 
     {
         clmOutputName : "Çıkış Hesabı",
