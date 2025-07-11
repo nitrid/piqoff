@@ -67,7 +67,7 @@ const fns_02_001 =
         clmAmount: "Betrag",
         clmOutputName: "Kasse/Bank",
         clmDescription: "Beschreibung",
-        clmInvoice: "Bezahlte Rechnung",
+        clmInvoice: "Rechnungsreferenz",
         clmFacDate: "Rechnungsdatum",
         clmDocDate: "Zahlungsdatum"
     },
@@ -166,5 +166,6 @@ const fns_02_001 =
         btn01: "OK",
         msg: "Sie können keine Zahlung hinzufügen, ohne eine Rechnung auszuwählen!"
     },
+    msgNotBank : "Bitte wählen Sie ein Konto",
 }
 export default fns_02_001

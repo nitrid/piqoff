@@ -2,30 +2,23 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import { docCls,docItemsCls,docCustomerCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
 import { payPlanCls } from '../../../../core/cls/payPlan.js';
-
 import moment from 'moment';
-
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import ContextMenu from 'devextreme-react/context-menu';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
-
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
-import tr from '../../../meta/lang/devexpress/tr.js';
+import { NdForm, NdItem, NdLabel, NdEmptyItem }from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class payPlan extends React.PureComponent
 {
@@ -120,7 +113,7 @@ export default class payPlan extends React.PureComponent
             this.payPlanObj.dt()[i].REF = this.txtRef.value
         }
     }
-    async _addInstallment(pDate,pAmount,pNo,pFacRef,pFacRefNo,pFacGuid,pTotalAmount,pDocGuid,pVatAmount)
+    async addInstallment(pDate,pAmount,pNo,pFacRef,pFacRefNo,pFacGuid,pTotalAmount,pDocGuid,pVatAmount)
     {
         let tmpPayPlan = {...this.payPlanObj.empty}
         tmpPayPlan.FAC_GUID = pFacGuid
@@ -160,7 +153,7 @@ export default class payPlan extends React.PureComponent
                         title:"Dikkat",
                         showCloseButton:true,
                         width:'500px',
-                        height:'200px',
+                        height:'auto',
                         button:[{id:"btn01",caption:"Evrağa Git",location:'before'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{"Evrak Bulundu"}</div>)
                     }
@@ -255,7 +248,7 @@ export default class payPlan extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
@@ -265,15 +258,14 @@ export default class payPlan extends React.PureComponent
                                             {
                                                 let tmpConfObj1 =
                                                 {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
                                                 if((await this.payPlanObj.save()) == 0 && this.txtRefno.value != '')
                                                 {
                                                     await this.payPlanObj.save()
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
+                                                    this.toast.show({type:"success",message:this.t("msgSaveResult.msgSuccess")})
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
                                                 }
@@ -288,7 +280,7 @@ export default class payPlan extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
                                             }
@@ -303,7 +295,7 @@ export default class payPlan extends React.PureComponent
                                     {                                        
                                         let tmpConfObj =
                                         {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
@@ -314,6 +306,7 @@ export default class payPlan extends React.PureComponent
                                             this.tmpDocGuid = ''
                                             this.payPlanObj.dt().removeAll()
                                             await this.payPlanObj.dt().delete()
+                                            this.toast.show({type:"success",message:this.t("msgDelete.msgSuccess")})
                                             this.init()
                                         }
                                         
@@ -327,7 +320,7 @@ export default class payPlan extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
                                             }
@@ -349,7 +342,7 @@ export default class payPlan extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -368,10 +361,10 @@ export default class payPlan extends React.PureComponent
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id={"frmPayPlan"  + this.tabIndex}> 
+                            <NdForm colCount={3} id={"frmPayPlan"  + this.tabIndex}> 
                                 {/* txtRef-Refno */}
-                                <Item>
-                                    <Label text={this.t("txtRefRefno")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
                                         <div className="col-4 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.payPlanObj.dt(),field:"REF"}}
@@ -487,10 +480,10 @@ export default class payPlan extends React.PureComponent
                                         <Column dataField="DATE" caption={this.t("pg_Docs.clmInstallmentDate")} width={200}  dataType="datetime" format={"dd/MM/yyyy"} defaultSortOrder="asc" />
                                         <Column dataField="TOTAL" caption={this.t("pg_Docs.clmTotal")} width={100} />
                                     </NdPopGrid>
-                                </Item>
+                                </NdItem>
                                 {/* dtDocDate */}
-                                <Item>
-                                    <Label text={this.t("dtDocDate")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.payPlanObj.dt(),field:"DOC_DATE"}}
                                     onValueChanged={(async()=>
@@ -502,12 +495,12 @@ export default class payPlan extends React.PureComponent
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
-                                </Item>
+                                </NdItem>
                                 {/* Boş */}
-                                <EmptyItem />   
+                                <NdEmptyItem />   
                                 {/* txtCustomerCode */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true} dt={{data:this.payPlanObj.dt(),field:"REF"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     value={this.tmpDocCode}
@@ -571,7 +564,7 @@ export default class payPlan extends React.PureComponent
                                     data = {{
                                         source:{
                                             select:{
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -582,95 +575,82 @@ export default class payPlan extends React.PureComponent
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
                                     </NdPopGrid>
-                                </Item>
+                                </NdItem>
                                 {/* txtCustomerName */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true} dt={{data:this.payPlanObj.dt(),field:"CUSTOMER_NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     />
-                                </Item>
+                                </NdItem>
                                 {/* Boş */}
-                                <EmptyItem />
+                                <NdEmptyItem />
                                 {/* btnInstallment */}
-                                <Item>
+                                <NdItem>
                                     <NdButton text={this.t("btnInstallment")} type="normal" stylingMode="contained" width={'35%'}
                                     onClick={async ()=>
                                     {
                                         if(this.payPlanObj.dt().length > 0)
                                         {
-                                            this.btnInstallment.readOnly = true
                                             return
                                         }
                                         if(this.txtCustomerCode.value == '' || this.txtCustomerCode.value == undefined) {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgCustomerNotSelected',showTitle:true,title:this.t("msgCustomerNotSelected.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgCustomerNotSelected.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotSelected.msg")}</div>)
-                                            }
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({type:"warning",message:this.t("msgCustomerNotSelected.msg")})
                                             return;
                                         }
                                         await this.popInstallment.show()
                         
                                     }}/>
-                                </Item> 
+                                </NdItem> 
                                 {/* btnInstallmentCount */}
-                                <Item>
+                                <NdItem>
                                     <NdButton text={this.t("btnInstallmentCount")} type="normal" stylingMode="contained" width={'35%'}
                                     onClick={async ()=>
                                     {
                                         if(this.tmpFacGuid == '' || this.tmpFacGuid == undefined || this.txtRefno.value == '') {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgFactureNotSelected',showTitle:true,title:this.t("msgFactureNotSelected.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgFactureNotSelected.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgFactureNotSelected.msg")}</div>)
-                                            }
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({type:"warning",message:this.t("msgFactureNotSelected.msg")})
                                             return;
                                         }
                                         if(this.tmpDocGuid != '' && this.tmpDocGuid != undefined)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgPayPlanNotSelected',showTitle:true,title:this.t("msgPayPlanNotSelected.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgPayPlanNotSelected.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPayPlanNotSelected.msg")}</div>)
-                                            }
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({type:"warning",message:this.t("msgPayPlanNotSelected.msg")})
                                             return;
                                         }
                                         this.popInstallmentCount.show()
                                     }}
                                     />
-                                </Item>
+                                </NdItem>
                                        
-                            </Form>
+                            </NdForm>
                         </div>
                     </div>
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdGrid id="grdInstallment" parent={this} dataSource={this.payPlanObj.dt()} 
+                                columnsAutoWidth={true} 
+                                allowColumnReordering={true} 
+                                allowColumnResizing={true}
+                                height={'500'} 
+                                width={'100%'}
+                                dbApply={false}
                                 onRowInserted={async(e)=>
                                 {
                                     this.grdInstallment.dataRefresh()
                                 }}
                                 >
-                                <Paging defaultPageSize={10} />
-                                <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}                                            
                                 <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                <Scrolling mode="standart" />
-                                <Editing mode="cell" allowUpdating={true} />
+                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} useIcons={true} />
                                 <Export fileName={this.lang.t("menuOff.fns_02_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="DOC_DATE" caption={this.t("grdInstallment.clmDocDate")} width={100} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy"}/>
-                                <Column dataField="REF_NO" caption={this.t("grdInstallment.clmRefNo")} width={100} allowEditing={false}/>
                                 <Column dataField="REF" caption={this.t("grdInstallment.clmRef")} width={100} allowEditing={false}/>
+                                <Column dataField="REF_NO" caption={this.t("grdInstallment.clmRefNo")} width={100} allowEditing={false}/>
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdInstallment.clmCustomerName")} width={200} allowEditing={false}/>
                                 <Column dataField="INSTALLMENT_NO" caption={this.t("grdInstallment.clmInstallmentNo")} width={100} allowEditing={false} sortOrder={"asc"}/>
                                 <Column dataField="INSTALLMENT_DATE" caption={this.t("grdInstallment.clmInstallmentDate")} width={200} allowEditing={true} dataType="datetime" format={"dd/MM/yyyy"}
@@ -706,13 +686,13 @@ export default class payPlan extends React.PureComponent
                                 await this._btnGetClick()
                             }}
                             >
-                                <Form colCount={1} height={'fit-content'}>
-                                    <Item>
+                                <NdForm colCount={1} height={'fit-content'}>
+                                    <NdItem>
                                         <div className='row'>
                                             <div className='col-12'>
-                                                <Form colCount={1} className="mb-2">
-                                                    <Item>
-                                                        <Label text={this.t("dtFirst")} alignment="right" />
+                                                <NdForm colCount={1} className="mb-2">
+                                                    <NdItem>
+                                                        <NdLabel text={this.t("dtFirst")} alignment="right" />
                                                         <NbDateRange id={"dtFirst"} 
                                                             parent={this} 
                                                             startDate={moment(new Date())} 
@@ -723,8 +703,8 @@ export default class payPlan extends React.PureComponent
                                                             }}
                                                             
                                                         />
-                                                    </Item>
-                                                </Form>
+                                                    </NdItem>
+                                                </NdForm>
                                                 <NdGrid id="grdPopInstallment" parent={this} 
                                                 selection={{mode:"multiple"}} 
                                                 height={600}
@@ -760,8 +740,8 @@ export default class payPlan extends React.PureComponent
                                                 </NdGrid>
                                             </div>
                                         </div>
-                                    </Item>
-                                </Form>
+                                    </NdItem>
+                                </NdForm>
                         </NdPopUp>
                     </div>
                     {/* Installment Count and Date */}
@@ -777,9 +757,9 @@ export default class payPlan extends React.PureComponent
                             height={'400'}
                             position={{of:'#root'}}
                             >
-                                <Form colCount={1} height={'fit-content'}>
-                                    <Item>
-                                        <Label text={this.t("installmentPeriod")} alignment="right" />
+                                <NdForm colCount={1} height={'fit-content'}>
+                                    <NdItem>
+                                        <NdLabel text={this.t("installmentPeriod")} alignment="right" />
                                         <NdNumberBox id="installmentPeriod" parent={this} simple={true} width={200} 
                                         min={3} max={24} step={3}
                                         onValueChanged={(e)=>
@@ -793,16 +773,16 @@ export default class payPlan extends React.PureComponent
                                         <RangeRule min={3} max={24} step={3} message={this.t("ValidInstallmentPeriod")} />
                                         </Validator>  
                                         </NdNumberBox>
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.t("paymentDate")} alignment="right" />
+                                    </NdItem>
+                                    <NdItem>
+                                        <NdLabel text={this.t("paymentDate")} alignment="right" />
                                         <NdDatePicker id="paymentDate" parent={this} simple={true} width={200} />
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.t("installmentTotal")} alignment="right" />
+                                    </NdItem>
+                                    <NdItem>
+                                        <NdLabel text={this.t("installmentTotal")} alignment="right" />
                                         <NdNumberBox id="installmentTotal" readOnly={true} value={''} visible={true} parent={this} simple={true} width={200} />
-                                    </Item>
-                                    <Item>
+                                    </NdItem>
+                                    <NdItem>
                                         <div className="row">
                                             <div className="col-12" style={{display: 'flex', justifyContent: 'flex-end'}}>
                                                 <NdButton text={this.t("installmentAdd")} type="normal" stylingMode="contained" width={'25%'} 
@@ -834,14 +814,14 @@ export default class payPlan extends React.PureComponent
                                                             currentVatAmount = +(this.tmpVatTotal - previousVatTotal).toFixed(2);
                                                         }
 
-                                                        this._addInstallment(documentDate,currentInstallmentAmount,i,this.tmpFacRef,this.txtRefno.value,this.tmpFacGuid,this.installmentTotal.value,doc_guid,currentVatAmount)
+                                                        this.addInstallment(documentDate,currentInstallmentAmount,i,this.tmpFacRef,this.txtRefno.value,this.tmpFacGuid,this.installmentTotal.value,doc_guid,currentVatAmount)
                                                     }
                                                     this.popInstallmentCount.hide()
                                                 }}/>
                                             </div>
                                         </div>
-                                    </Item>
-                                </Form>
+                                    </NdItem>
+                                </NdForm>
                             </NdPopUp>
                         </div>
                     </div>
@@ -858,9 +838,9 @@ export default class payPlan extends React.PureComponent
                         position={{of:'#root'}}
                         deferRendering={false}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDesign.design")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
                                     displayExpr="DESIGN_NAME"                       
                                     valueExpr="TAG"
@@ -874,9 +854,9 @@ export default class payPlan extends React.PureComponent
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDesign.lang")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDesign.lang")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
@@ -888,8 +868,8 @@ export default class payPlan extends React.PureComponent
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmPrintPop" + this.tabIndex}
@@ -991,9 +971,10 @@ export default class payPlan extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
+                        <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                     </div>  
                 </ScrollView>     
             </div>

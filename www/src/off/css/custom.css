@@ -127,3 +127,262 @@
 {
     height: auto !important;
 }
+
+/* Custom Menu TreeView Styles - Clean & Simple */
+.custom-menu-treeview {
+    background: #ffffff;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-menu-treeview .dx-treeview-item {
+    background: #ffffff;
+    border: 1px solid #f0f0f0;
+    border-radius: 4px;
+    margin: 2px 4px;
+    padding: 3px 7px;
+}
+
+.custom-menu-treeview .dx-treeview-item:hover {
+    background: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+.custom-menu-treeview .dx-treeview-item.dx-state-selected {
+    background: #28a745;
+    color: white;
+    font-weight: bold;
+    border-color: #1e7e34;
+}
+
+.custom-menu-treeview .dx-treeview-toggle-item-visibility {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.custom-menu-treeview .dx-treeview-toggle-item-visibility:hover {
+    color: #007bff;
+}
+
+.custom-menu-treeview .dx-texteditor {
+    background: #ffffff;
+    border: 2px solid #ced4da;
+    border-radius: 4px;
+}
+
+.custom-menu-treeview .dx-texteditor:focus-within {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Navigation Specific Styles - Only for Navigation */
+.dx-drawer-panel-content#navigation-panel {
+    background: linear-gradient(135deg, #fffdf8 0%, #fffbf0 100%) !important;
+    border-right: none !important;
+}
+
+/* Navigation TreeView Minimal Styles */
+.navigation-container .custom-menu-treeview {
+    background: rgba(255, 248, 220, 0.3);
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.navigation-container .custom-menu-treeview .dx-treeview-item {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 3px 6px;
+    color: #4a4a4a;
+    transition: all 0.3s ease;
+}
+
+.navigation-container .custom-menu-treeview .dx-treeview-item:hover {
+    background: rgba(255, 200, 150, 0.15);
+    color: #333;
+    transform: translateX(5px);
+}
+
+.navigation-container .custom-menu-treeview .dx-treeview-item.dx-state-selected {
+    background: rgba(255, 200, 150, 0.25);
+    color: #2c2c2c;
+    font-weight: 500;
+}
+
+.navigation-container .custom-menu-treeview .dx-texteditor {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin: 1px 0;
+    transition: all 0.2s ease;
+    width: calc(90% + 25px);
+    max-width: 265px;
+    height: 32px;
+    min-height: 32px;
+}
+
+.navigation-container .custom-menu-treeview .dx-texteditor .dx-texteditor-input-container {
+    padding: 2px 4px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.navigation-container .custom-menu-treeview .dx-texteditor .dx-texteditor-input {
+    padding: 6px 6px;
+    font-size: 13px;
+    line-height: 1.2;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.navigation-container .custom-menu-treeview .dx-texteditor .dx-icon-search {
+    font-size: 12px;
+    margin-right: 1px;
+    display: flex;
+    align-items: center;
+}
+
+.navigation-container .custom-menu-treeview .dx-texteditor:focus-within {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(255, 200, 150, 0.8);
+    box-shadow: 0 0 0 2px rgba(255, 200, 150, 0.2);
+}
+
+/* Navigation TabPanel Styles */
+.navigation-container #tabPanel {
+    background: rgba(255, 248, 220, 0.2);
+    border: none;
+    border-radius: 0;
+    margin: 2px;
+    box-shadow: none;
+}
+
+.navigation-container #tabPanel .dx-tabpanel-tabs {
+    background: rgba(255, 248, 220, 0.4);
+    border-radius: 8px;
+    padding: 4px;
+    margin: 3px;
+    backdrop-filter: blur(10px);
+    border: none;
+}
+
+.navigation-container #tabPanel .dx-tabs-wrapper {
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.navigation-container #tabPanel .dx-tab {
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    margin: 0 2px;
+    color: #555;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 8px 10px;
+    font-size: 14px;
+    min-width: 80px;
+}
+
+.navigation-container #tabPanel .dx-tab .dx-tab-content {
+    border-radius: 5px;
+}
+
+.navigation-container #tabPanel .dx-tab .dx-tab-text {
+    border-radius: 5px;
+}
+
+.navigation-container #tabPanel .dx-tab:hover {
+    background: rgba(255, 200, 150, 0.2);
+    color: #333;
+}
+
+.navigation-container #tabPanel .dx-tab.dx-tab-selected {
+    background: rgba(255, 200, 150, 0.4);
+    color: #2c2c2c;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.navigation-container #tabPanel .dx-tabpanel-container {
+    background: rgba(255, 252, 245, 0.5);
+    border-radius: 0;
+    padding: 2px 8px;
+    border: none;
+}
+
+/* Navigation Footer Styles */
+.navigation-container .row {
+    margin: 0;
+}
+
+.navigation-container .row .col-12 {
+    background: rgba(255, 248, 220, 0.4);
+    margin: 1px 3px;
+    padding: 4px 8px !important;
+    border-radius: 4px;
+    border: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.navigation-container .row .col-12::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(255, 200, 150, 0.6) 0%, rgba(255, 200, 150, 0.3) 100%);
+    transition: width 0.3s ease;
+}
+
+.navigation-container .row .col-12:hover {
+    background: rgba(255, 240, 200, 0.6);
+    transform: translateX(2px);
+}
+
+.navigation-container .row .col-12:hover::before {
+    width: 3px;
+}
+
+/* Navigation Context Menu */
+.navigation-container .dx-context-menu {
+    background: rgba(255, 252, 245, 0.95);
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    backdrop-filter: blur(15px);
+}
+
+.navigation-container .dx-context-menu .dx-menu-item {
+    color: #4a4a4a;
+    padding: 6px 10px;
+    transition: all 0.2s ease;
+    border: none;
+    background: transparent;
+}
+
+.navigation-container .dx-context-menu .dx-menu-item:hover {
+    background: rgba(255, 200, 150, 0.3);
+    color: #2c2c2c;
+}
+
+/* Navigation Accent Line */
+.navigation-container #tabPanel::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 200, 150, 0.5) 50%, transparent 100%);
+    border-radius: 1px;
+}

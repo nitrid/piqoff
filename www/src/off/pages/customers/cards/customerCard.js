@@ -1,7 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { customersCls,customerAdressCls, customerOfficalCls } from '../../../../core/cls/customers.js';
-
+import { Form } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import { Label,Item} from 'devextreme-react/form';
@@ -913,10 +913,10 @@ export default class CustomerCard extends React.PureComponent
                                     <Item title={this.t("tabTitleDetail")}>
                                         <div className='row px-2 py-2'>
                                             <div className='col-9'>
-                                               <NdForm colCount={3}>
+                                               <Form colCount={3}>
                                                     {/* txtSector */}
                                                     <Item>                                    
-                                                        <NdLabel text={this.t("txtSector")} alignment="right" />
+                                                        <Label text={this.t("txtSector")} alignment="right" />
                                                         <NdTextBox id="txtSector" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"SECTOR_NAME"}} 
                                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} readOnly={true}
                                                         button=
@@ -1241,7 +1241,7 @@ export default class CustomerCard extends React.PureComponent
                                                             }
                                                         }}></NdCheckBox>
                                                     </Item>
-                                               </NdForm>
+                                               </Form>
                                             </div>
                                             <div className='col-3'>
                                             <div className='row'>

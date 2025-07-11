@@ -3,27 +3,24 @@ import App from '../../../lib/app.js';
 import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js';
 import moment from 'moment';
 import * as xlsx from 'xlsx'
-
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import ContextMenu from 'devextreme-react/context-menu';
-import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
-
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
-import tr from '../../../meta/lang/devexpress/tr.js';
+import { NdForm, NdItem, NdLabel, NdEmptyItem }from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
+
 
 export default class wholeCollectionEntry extends React.PureComponent
 {
@@ -36,20 +33,33 @@ export default class wholeCollectionEntry extends React.PureComponent
         this.docObj = new docCls();
         this.tabIndex = props.data.tabkey
         this.payDt = new datatable()
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)        
+        this.cellRoleRender = this.cellRoleRender.bind(this)        
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
         this.init()
     }
+    loadState()
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
     async init()
     {
         this.payDt = new datatable()
         await this.grdDocPayments.dataRefresh({source:this.payDt});
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == "OUTPUT_CODE")
         {
@@ -124,10 +134,8 @@ export default class wholeCollectionEntry extends React.PureComponent
                 let tmpOutput = '00000000-0000-0000-0000-000000000000'
                 let tmpOutputCode = ''
                 let tmpOutputName = ''
-                console.log(pData[i][tmpShema.OUTPUT_CODE])
                 let tmpQuery = {query : "SELECT * FROM CUSTOMER_VW_01 WHERE CODE = '" + pData[i][tmpShema.OUTPUT_CODE] + "'"}
                 let tmpCustomerData = await this.core.sql.execute(tmpQuery)
-                console.log(tmpCustomerData)
                 if(tmpCustomerData.result.recordset.length > 0)
                 {
                     tmpOutput = tmpCustomerData.result.recordset[0].GUID
@@ -177,7 +185,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
@@ -185,11 +193,6 @@ export default class wholeCollectionEntry extends React.PureComponent
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
 
                                                 for (let i = 0; i < this.payDt.length; i++) 
                                                 {
@@ -241,15 +244,14 @@ export default class wholeCollectionEntry extends React.PureComponent
                                                     await this.docObj.save()
                                                 }
 
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                await dialog(tmpConfObj1);
+                                                this.toast.show({type:"success",message:this.t("msgSaveResult.msgSuccess")})
                                             }
                                         }                              
                                         else
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
                                             }
@@ -270,7 +272,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -289,10 +291,10 @@ export default class wholeCollectionEntry extends React.PureComponent
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id={"frmCollection"  + this.tabIndex}>
+                            <NdForm colCount={3} id={"frmCollection"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
-                                <Item>
-                                    <Label text={this.t("txtRefRefno")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <NdTextBox id="txtRef" parent={this} simple={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     maxLength={32}
@@ -303,19 +305,19 @@ export default class wholeCollectionEntry extends React.PureComponent
                                             <RequiredRule message={this.t("validRef")} />
                                         </Validator>  
                                     </NdTextBox>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>
+                            <NdForm colCount={1} onInitialized={(e)=>
                             {
                                 this.frmCollection = e.component
                             }}>
-                                <Item location="after">
-                                    <Button icon="add"
+                                <NdItem location="after">
+                                    <NdButton icon="add"
                                     validationGroup={"frmCollection"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
@@ -335,7 +337,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
                                             }
@@ -361,8 +363,8 @@ export default class wholeCollectionEntry extends React.PureComponent
 
                                         this.popExcel.show()
                                     }}/>
-                                </Item>
-                                <Item colSpan={1}>
+                                </NdItem>
+                                <NdItem colSpan={1}>
                                     <React.Fragment>
                                         <NdGrid parent={this} id={"grdDocPayments"} 
                                         showBorders={true} 
@@ -377,14 +379,16 @@ export default class wholeCollectionEntry extends React.PureComponent
                                             
                                         }}
                                         >
-                                            <Paging defaultPageSize={10} />
-                                            <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsContList"}/>
+                                            <ColumnChooser enabled={true} />
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                            <Scrolling mode="infinite" />
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                             <Export fileName={this.lang.t("menuOff.fns_02_002")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="DOC_DATE" caption={this.t("grdDocPayments.clmDate")} dataType="date" allowEditing={false}/>
-                                            <Column dataField="OUTPUT_CODE" caption={this.t("grdDocPayments.clmCustomerCode")} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="OUTPUT_CODE" caption={this.t("grdDocPayments.clmCustomerCode")} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="OUTPUT_NAME" caption={this.t("grdDocPayments.clmCustomerName")} allowEditing={false}/>
                                             <Column dataField="INPUT_NAME" caption={this.t("grdDocPayments.clmInputName")} allowEditing={false}/>
                                             <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
@@ -398,8 +402,8 @@ export default class wholeCollectionEntry extends React.PureComponent
                                         {
                                         }).bind(this)} />
                                     </React.Fragment>     
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     {/* Cash PopUp */}
@@ -414,10 +418,10 @@ export default class wholeCollectionEntry extends React.PureComponent
                         height={'500'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
+                            <NdForm colCount={1} height={'fit-content'}>
                                 {/* cmbPayType */}
-                                <Item>
-                                    <Label text={this.t("cmbPayType.title")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbPayType.title")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPayType"
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
@@ -426,7 +430,11 @@ export default class wholeCollectionEntry extends React.PureComponent
                                     notRefresh={true}
                                     onValueChanged={(async(e)=>
                                     {
-                                        this.cmbCashSafe.value = ''
+                                        if(this.cmbCashSafe.value == '')
+                                        {
+                                            return 
+                                        }
+
                                         let tmpQuery
                                         if(e.value == 0)
                                         {
@@ -471,15 +479,15 @@ export default class wholeCollectionEntry extends React.PureComponent
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
+                                </NdItem>
                                 {/* dtDocDate */}
-                                <Item>
-                                    <Label text={this.t("dtDocDate")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("popCash.dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}/>
-                                </Item>
+                                </NdItem>
                                 {/* cmbCashSafe */}
-                                <Item>
-                                    <Label text={this.t("cmbCashSafe")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("popCash.cmbCashSafe")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbCashSafe"
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
@@ -493,14 +501,14 @@ export default class wholeCollectionEntry extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     >
-                                        <Validator validationGroup={"frmPayCash"  + this.tabIndex}>
+                                        <Validator validationGroup={"popCash.frmPayCash"  + this.tabIndex}>
                                             <RequiredRule message={this.t("ValidCash")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
+                                </NdItem>
                                 {/* numCash */}
-                                <Item>
-                                    <Label text={this.t("cash")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("popCash.cash")} alignment="right" />
                                     <div className="col-4 pe-0">
                                         <NdNumberBox id="numCash" parent={this} simple={true}
                                         maxLength={32}                                        
@@ -512,10 +520,10 @@ export default class wholeCollectionEntry extends React.PureComponent
                                             </Validator>  
                                         </NdNumberBox>
                                     </div>
-                                </Item>
+                                </NdItem>
                                 {/* txtCustomerCode */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("popCash.txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onEnterKey={(async()=>
@@ -556,10 +564,10 @@ export default class wholeCollectionEntry extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>                                    
-                                </Item> 
+                                </NdItem> 
                                 {/* txtCustomerName */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("popCash.txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     readOnly={true}
@@ -567,10 +575,10 @@ export default class wholeCollectionEntry extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* cashDescription */}
-                                <Item>
-                                    <Label text={this.t("description")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("popCash.description")} alignment="right" />
                                     <div className="col-12 pe-0">
                                         <NdTextBox id="cashDescription" parent={this} simple={true} width={500}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -580,8 +588,8 @@ export default class wholeCollectionEntry extends React.PureComponent
                                         >
                                         </NdTextBox>
                                     </div>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popCash.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
@@ -620,15 +628,15 @@ export default class wholeCollectionEntry extends React.PureComponent
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                            <NdButton text={this.t("popCash.btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                             onClick={()=>
                                             {
                                                 this.popCash.hide();  
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div> 
                     {/* Check PopUp */}
@@ -710,7 +718,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                             {
                                 select:
                                 {
-                                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                                     param : ['VAL:string|50']
                                 },
                                 sql:this.core.sql
@@ -721,10 +729,6 @@ export default class wholeCollectionEntry extends React.PureComponent
                             {
                                 id:'01',
                                 icon:'more',
-                                onClick:()=>
-                                {
-                                    console.log(1111)
-                                }
                             }
                         }
                         >
@@ -747,10 +751,10 @@ export default class wholeCollectionEntry extends React.PureComponent
                         height={'450'}
                         position={{of:'#root'}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
+                            <NdForm colCount={1} height={'fit-content'}>
                                 {/* cmbPayType */}
-                                <Item>
-                                    <Label text={this.t("cmbPayType.title")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbPayType.title")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPayTypeEx"
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
@@ -801,10 +805,10 @@ export default class wholeCollectionEntry extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     >
                                     </NdSelectBox>
-                                </Item>
+                                </NdItem>
                                 {/* cmbCashSafe */}
-                                <Item>
-                                    <Label text={this.t("cmbCashSafe")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbCashSafe")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbCashSafeEx"
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
@@ -815,9 +819,9 @@ export default class wholeCollectionEntry extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     >
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.clmDate")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.clmDate")} alignment="right" />
                                     <NdTextBox id="txtPopExcelDate" parent={this} simple={true} notRefresh = {true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     >
@@ -825,9 +829,9 @@ export default class wholeCollectionEntry extends React.PureComponent
                                             <RequiredRule message={this.t("validExcel")} />
                                         </Validator>  
                                     </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.clmDesc")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.clmDesc")} alignment="right" />
                                     <NdTextBox id="txtPopExcelDesc" parent={this} simple={true} notRefresh = {true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     >
@@ -835,9 +839,9 @@ export default class wholeCollectionEntry extends React.PureComponent
                                             <RequiredRule message={this.t("validExcel")} />
                                         </Validator>  
                                     </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.clmAmount")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.clmAmount")} alignment="right" />
                                     <NdTextBox id="txtPopExcelAmount" parent={this} simple={true} notRefresh = {true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     >
@@ -845,9 +849,9 @@ export default class wholeCollectionEntry extends React.PureComponent
                                             <RequiredRule message={this.t("validExcel")} />
                                         </Validator>  
                                     </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.clmOutputCode")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.clmOutputCode")} alignment="right" />
                                     <NdTextBox id="txtPopExcelOutputCode" parent={this} simple={true} notRefresh = {true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     >
@@ -855,10 +859,10 @@ export default class wholeCollectionEntry extends React.PureComponent
                                             <RequiredRule message={this.t("validExcel")} />
                                         </Validator>  
                                     </NdTextBox>
-                                </Item>
-                            </Form>
-                            <Form colCount={2}>
-                                <Item>
+                                </NdItem>
+                            </NdForm>
+                            <NdForm colCount={2}>
+                                <NdItem>
                                     <input type="file" name="upload" id="upload" text={"Excel Aktarım"} onChange={(e)=>
                                     {
                                         e.preventDefault();
@@ -878,8 +882,8 @@ export default class wholeCollectionEntry extends React.PureComponent
                                             reader.readAsArrayBuffer(e.target.files[0]);
                                         }
                                     }}/>    
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <NdButton id="btnShemaSave" parent={this} text={this.t('popExcel.shemaSave')} type="default"
                                     onClick={async()=>
                                     {
@@ -887,9 +891,10 @@ export default class wholeCollectionEntry extends React.PureComponent
                                         this.prmObj.add({ID:'excelFormat',VALUE:shemaJson,USERS:this.user.CODE,APP:'OFF',TYPE:1,PAGE:'fns_05_001'})
                                         await this.prmObj.save()
                                     }}/>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
+                        <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                     </div>  
                 </ScrollView>     
             </div>
