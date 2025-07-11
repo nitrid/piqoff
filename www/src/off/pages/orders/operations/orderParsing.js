@@ -23,6 +23,8 @@ import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import tr from '../../../meta/lang/devexpress/tr.js';
+import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class orderParsing extends React.PureComponent
 {
@@ -66,12 +68,12 @@ export default class orderParsing extends React.PureComponent
                     "ITEM_CODE,  " +
                     "ORDERS.ITEM_NAME,  " +
                     "QUANTITY, " +
-                    "CUSTOMER_PRICE AS CUSTOMER_PRICE, " +
-                    "CUSTOMER_NAME AS CUSTOMER_NAME, " +
-                    "CUSTOMER_GUID AS CUSTOMER_GUID, " +
-					"CUSTOMER_PRICE * QUANTITY AS AMOUNT,   " +
-					"(CUSTOMER_PRICE * (ORDERS.VAT_RATE/100)) * QUANTITY AS VAT,   " +
-					"(CUSTOMER_PRICE * QUANTITY) + ((CUSTOMER_PRICE * (ORDERS.VAT_RATE/100)) * QUANTITY) AS TOTAL   " +
+                    "DOC_ORDERS_VW_01.CUSTOMER_PRICE AS CUSTOMER_PRICE, " +
+                    "DOC_ORDERS_VW_01.CUSTOMER_NAME AS CUSTOMER_NAME, " +
+                    "DOC_ORDERS_VW_01.CUSTOMER_GUID AS CUSTOMER_GUID, " +
+					"DOC_ORDERS_VW_01.CUSTOMER_PRICE * QUANTITY AS AMOUNT,   " +
+					"(DOC_ORDERS_VW_01.CUSTOMER_PRICE * (ORDERS.VAT_RATE/100)) * QUANTITY AS VAT,   " +
+					"(DOC_ORDERS_VW_01.CUSTOMER_PRICE * QUANTITY) + ((DOC_ORDERS_VW_01.CUSTOMER_PRICE * (ORDERS.VAT_RATE/100)) * QUANTITY) AS TOTAL   " +
                     "FROM   " +
                     "DOC_ORDERS_VW_01 AS ORDERS  " +
                     "INNER JOIN   " +
@@ -96,7 +98,7 @@ export default class orderParsing extends React.PureComponent
            {
                 let tmpConfObj =
                 {
-                    id:'msgCustomerFound',showTitle:true,title:this.t("msgCustomerFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                    id:'msgCustomerFound',showTitle:true,title:this.t("msgCustomerFound.title"),showCloseButton:true,width:'500px',height:'auto',
                     button:[{id:"btn01",caption:this.t("msgCustomerFound.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{ this.t("msgCustomerFound.msg")}</div>)
                 }
@@ -112,7 +114,7 @@ export default class orderParsing extends React.PureComponent
            {
                 let tmpConfObj =
                 {
-                    id:'msgDublicateItem',showTitle:true,title:this.t("msgDublicateItem.title"),showCloseButton:true,width:'500px',height:'200px',
+                    id:'msgDublicateItem',showTitle:true,title:this.t("msgDublicateItem.title"),showCloseButton:true,width:'500px',height:'auto',
                     button:[{id:"btn01",caption:this.t("msgDublicateItem.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{Object.values(tmpItem)[i][0].ITEM_NAME + ' ' + this.t("msgDublicateItem.msg")}</div>)
                 }
@@ -124,7 +126,7 @@ export default class orderParsing extends React.PureComponent
 
         let tmpConfObj =
         {
-            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
         }
@@ -193,13 +195,12 @@ export default class orderParsing extends React.PureComponent
         }
         let tmpConfObj1 =
         {
-            id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
         }
         if((await this.docObj.save()) == 0)
         {                                                    
-            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-            await dialog(tmpConfObj1);
+            this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
             this.docObj.clearAll()
             this.txtRef = Math.floor(Date.now() / 1000)
             this._btnGetClick()
@@ -244,7 +245,7 @@ export default class orderParsing extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -262,10 +263,10 @@ export default class orderParsing extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmCriter">
+                            <NdForm colCount={2} id="frmCriter">
                                {/* cmbDepot */}
-                               <Item>
-                                    <Label text={this.t("cmbDepot")} alignment="right" />
+                               <NdItem>
+                                    <NdLabel text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot"
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
@@ -283,10 +284,10 @@ export default class orderParsing extends React.PureComponent
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                                <EmptyItem/>
-                                <Item>
-                                <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                </NdItem>
+                                <NdEmptyItem/>
+                                <NdItem>
+                                <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                 <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
                                 onEnterKey={(async()=>
                                 {
@@ -372,8 +373,8 @@ export default class orderParsing extends React.PureComponent
                                     <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
                                     
                                 </NdPopGrid>
-                                </Item> 
-                            </Form>
+                                </NdItem> 
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -410,6 +411,7 @@ export default class orderParsing extends React.PureComponent
                             </NdGrid>
                         </div>
                     </div>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 73px'}}/>
                 </ScrollView>
             </div>
         )

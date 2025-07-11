@@ -55,7 +55,8 @@ const irs_02_006 =
         clmCode :  "ÜRÜN KODU",
         clmName : "ÜRÜN ADI",
         clmPrice : "SATIŞ FIYATI",
-        clmPartiLot : "LOT NUMARASI"
+        clmPartiLot : "LOT NUMARASI",
+        clmMulticode : "TEDARİKÇİ KODU"
     },
     grdSlsDispatch: 
     {

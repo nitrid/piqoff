@@ -53,6 +53,7 @@ const irs_02_006 =
         clmName: "ArtikelNAME",
         clmPrice: "Preis",
         clmPartiLot : "Losnummer",
+        clmMulticode : "Lieferantennummer"
     },
     grdSlsDispatch: 
     {
