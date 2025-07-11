@@ -4,6 +4,7 @@ const fns_05_001 =
     txtRefRefno : "Seri-Sıra",
     cmbCashSafe : "Kasa Seçimi",
     cmbCheckSafe : "Çek Kasası",
+    checkReference : "Çek Referansı",
     cmbBank : "Banka Seçimi",
     txtCustomerCode : "Müşteri Kodu",
     txtCustomerName : "Müşteri Adı",
@@ -15,6 +16,13 @@ const fns_05_001 =
     btnCash : "Tahsilat Girişi",
     ValidCash : "0'dan büyük bir tutar giriniz",
     excelAdd : "Excelden Kayıt",
+    pg_txtCustomerCode : {
+        title : "Müşteri Seçimi",
+        clmCode :  "CARİ KODU",
+        clmTitle : "CARİ ADI",
+        clmTypeName : "TİPİ",
+        clmGenusName : "CİNSİ"
+    },
     popExcel : 
     {
         title:"Excel Dosyanızın Satır Başlıkları Doğru Olmalıdır",
@@ -86,13 +94,21 @@ const fns_05_001 =
     },
     popCash : 
     {
-        title: "Nakit Girişi",
-        btnApprove : "Ekle"
+        title: "Tahsilat Girişi",
+        btnApprove : "Ekle",
+        btnCancel : "Vazgeç",
+        dtDocDate : "Tarih",
+        cash : "Tutar",
+        txtCustomerCode : "Müşteri Kodu",
+        txtCustomerName : "Müşteri Adı",
+        description : "Açıklama",
+        cmbCashSafe : "Kasa Seçimi",
     },
     popCheck : 
     {
         title: "Çek Girişi",
-        btnApprove : "Ekle"
+        btnApprove : "Ekle",
+        btnCancel : "Vazgeç",
     },
     popBank : 
     {
@@ -101,6 +117,7 @@ const fns_05_001 =
     },
     validRef :"Seri Boş Geçilemez",
     validCustomerCode : "Müşteri Kodu Boş Geçilemez",
+
 }
 
 export default fns_05_001

@@ -17,6 +17,11 @@ const fns_01_004 =
         clmAmount : "Tutar",
         clmDate : "Tarih",
     },
+    msgNotBank : {
+        title : "Dikkat",
+        btn01 : "Tamam",
+        msg : "Lütfen bir hesap seçiniz"
+    },
 }
 
 export default fns_01_004
