@@ -2,25 +2,16 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import { vatCls} from '../../../../core/cls/items.js';
 
-
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
+import Toolbar,{ Item } from 'devextreme-react/toolbar';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
+import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
+import { Column } from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
+import { NdForm, NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class vatCard extends React.PureComponent
 {
@@ -99,10 +90,11 @@ export default class vatCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT * FROM VAT WHERE ID = @ID",
+                    query : `SELECT TOP 1 ID FROM VAT WHERE ID = @ID`,
                     param : ['ID:string|50'],
                     value : [pCode]
                 }
+
                 let tmpData = await this.core.sql.execute(tmpQuery) 
 
                 if(tmpData.result.recordset.length > 0)
@@ -114,7 +106,7 @@ export default class vatCard extends React.PureComponent
                         title:this.t("msgCode.title"),
                         showCloseButton:true,
                         width:'500px',
-                        height:'200px',
+                        height:'auto',
                         button:[{id:"btn01",caption:this.t("msgCode.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCode.btn02"),location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCode.msg")}</div>)
                     }
@@ -151,20 +143,16 @@ export default class vatCard extends React.PureComponent
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                        onClick={()=>
-                                        {
-                                            if(this.prevCode != '')
-                                            {
-                                                this.getVat(this.prevCode); 
-                                            }
-                                        }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={()=>
                                     {
-                                        this.init(); 
+                                        if(this.prevCode != '')
+                                        {
+                                            this.getVat(this.prevCode); 
+                                        }
                                     }}/>
+                                </Item>
+                                <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnNew" parent={this} icon="file" type="default" onClick={()=>{this.init()}}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmMainGrp"  + this.tabIndex}
@@ -174,44 +162,36 @@ export default class vatCard extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
-                                                
                                                 if((await this.vatObj.save()) == 0)
                                                 {                                      
                                                     this.btnNew.setState({disabled:false});
                                                     this.btnSave.setState({disabled:true});              
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
+                                                    this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:'success'})
                                                 }
                                                 else
                                                 {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    let tmpConfObj1 =
+                                                    {
+                                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    }
                                                     await dialog(tmpConfObj1);
                                                 }
                                             }
                                         }                              
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgSaveValid.msg"),type:'warning'})
                                         }                                                 
                                     }}/>
                                 </Item>
@@ -227,12 +207,13 @@ export default class vatCard extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -245,10 +226,10 @@ export default class vatCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmMainGrp">
+                            <NdForm colCount={3} id="frmMainGrp">
                                  {/* txtId */}
-                                 <Item>
-                                    <Label text={this.t("txtId")} alignment="right" />
+                                 <NdItem>
+                                    <NdLabel text={this.t("txtId")} alignment="right" />
                                     <NdTextBox id="txtId" parent={this} simple={true} dt={{data:this.vatObj.dt('VAT'),field:"ID"}}  
                                     button=
                                     {
@@ -261,7 +242,6 @@ export default class vatCard extends React.PureComponent
                                                     this.pg_txtCode.show()
                                                     this.pg_txtCode.onClick = (data) =>
                                                     {
-                                                        console.log(data)
                                                         if(data.length > 0)
                                                         {
                                                             this.getVat(data[0].ID)
@@ -292,50 +272,29 @@ export default class vatCard extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} //
-                                    data={{source:{select:{query : "SELECT ID,VAT,TYPE FROM VAT"},sql:this.core.sql}}}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
+                                    data={{source:{select:{query : `SELECT ID,VAT,TYPE FROM VAT`},sql:this.core.sql}}}
+                                    button={{id:'01',icon:'more',onClick:()=>{}}}
                                     >
                                         <Column dataField="ID" caption={this.t("pg_txtCode.clmId")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="VAT" caption={this.t("pg_txtCode.clmVat")} width={300}  />
                                         <Column dataField="TYPE" caption={this.t("pg_txtCode.clmType")} width={150} />
                                     </NdPopGrid>
-                                </Item>
+                                </NdItem>
                                 {/* txtVat */}
-                                <Item>
-                                    <Label text={this.t("txtVat")} alignment="right" />
-                                    <NdTextBox id="txtVat" parent={this} simple={true} dt={{data:this.vatObj.dt('VAT'),field:"VAT"}}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <EmptyItem />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtVat")} alignment="right" />
+                                    <NdTextBox id="txtVat" parent={this} simple={true} dt={{data:this.vatObj.dt('VAT'),field:"VAT"}}/>
+                                </NdItem>
+                                <NdEmptyItem />
                                 {/* txtType */}
-                                <Item>
-                                    <Label text={this.t("txtType")} alignment="right" />
-                                    <NdTextBox id="txtType" parent={this} simple={true} dt={{data:this.vatObj.dt('VAT'),field:"TYPE"}}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
-                                    >
-                                    </NdTextBox>
-                                </Item> 
-                            </Form>
+                                <NdItem>
+                                    <NdLabel text={this.t("txtType")} alignment="right" />
+                                    <NdTextBox id="txtType" parent={this} simple={true} dt={{data:this.vatObj.dt('VAT'),field:"TYPE"}}/>
+                                </NdItem> 
+                            </NdForm>
                         </div>
                     </div>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )

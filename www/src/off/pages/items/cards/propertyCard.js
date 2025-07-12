@@ -2,14 +2,11 @@ import React from 'react';
 import App from '../../../lib/app.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
 
-import NdButton from '../../../../core/react/devex/button.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{ Column,Editing } from '../../../../core/react/devex/grid.js';
 
-import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
-
+import { NdToast } from '../../../../core/react/devex/toast.js';
 export default class propertyCard extends React.PureComponent
 {
     constructor(props)
@@ -24,23 +21,23 @@ export default class propertyCard extends React.PureComponent
         this.propertyDt = new datatable()
         this.propertyDt.selectCmd = 
         {
-            query : "SELECT * FROM PROPERTY WHERE DELETED = 0"
+            query : `SELECT * FROM PROPERTY WHERE DELETED = 0`
         }
         this.propertyDt.insertCmd = 
         {
-            query : "INSERT INTO PROPERTY (GUID,CDATE,CUSER,LDATE,LUSER,CODE,NAME,DELETED) VALUES (@GUID,dbo.GETDATE(),@CUSER,dbo.GETDATE(),@LUSER,@CODE,@NAME,0)",
+            query : `INSERT INTO PROPERTY (GUID,CDATE,CUSER,LDATE,LUSER,CODE,NAME,DELETED) VALUES (@GUID,dbo.GETDATE(),@CUSER,dbo.GETDATE(),@LUSER,@CODE,@NAME,0)`,
             param : ['GUID:string|50','CUSER:string|25','LUSER:string|25','CODE:string|25','NAME:string|50'],
             dataprm : ['GUID','CUSER','LUSER','CODE','NAME']
         }
         this.propertyDt.updateCmd = 
         {
-            query : "UPDATE PROPERTY SET LDATE = dbo.GETDATE(),LUSER = @LUSER, CODE = @CODE, NAME = @NAME WHERE GUID = @GUID",
+            query : `UPDATE PROPERTY SET LDATE = dbo.GETDATE(),LUSER = @LUSER, CODE = @CODE, NAME = @NAME WHERE GUID = @GUID`,
             param : ['LUSER:string|25','CODE:string|25','NAME:string|50','GUID:string|50'],
             dataprm : ['LUSER','CODE','NAME','GUID']
         }
         this.propertyDt.deleteCmd = 
         {
-            query : "UPDATE PROPERTY SET DELETED = 1 WHERE GUID = @GUID",
+            query : `UPDATE PROPERTY SET DELETED = 1 WHERE GUID = @GUID`,
             param : ['GUID:string|50'],
             dataprm : ['GUID']
         }
@@ -75,27 +72,19 @@ export default class propertyCard extends React.PureComponent
                             {
                                 if (!this.dialogOpened) 
                                 {
-                                    let tmpConfObj =
-                                    {
-                                        id:'msgAlertCodeName',showTitle:true,title:this.t("msgAlertCodeName.title"),showCloseButton:true,width:'500px',height:'200px',
-                                        button:[{id:"btn01",caption:this.t("msgAlertCodeName.btn01"),location:'before'}],
-                                    }
                                     if(typeof e.data.CODE == 'undefined' || e.data.CODE == null)
                                     {
                                         e.cancel = true;
                                         this.dialogOpened = true;
-                                        tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlertCodeName.msg1")}</div>)
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgAlertCodeName.msg1"),type:'warning'})
                                         this.dialogOpened = false;
-                                        console.log(1)
                                         return
                                     }
                                     if(typeof e.data.NAME == 'undefined' || e.data.NAME == null)
                                     {
                                         e.cancel = true;
-                                        this.dialogOpened = true;
-                                        tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlertCodeName.msg2")}</div>)
-                                        await dialog(tmpConfObj);
+                                        this.dialogOpened = true
+                                        this.toast.show({message:this.t("msgAlertCodeName.msg2"),type:'warning'})
                                         this.dialogOpened = false;
                                         return
                                     }
@@ -122,17 +111,11 @@ export default class propertyCard extends React.PureComponent
                             {
                                 if (!this.dialogOpened) 
                                 {
-                                    let tmpConfObj =
-                                    {
-                                        id:'msgAlertCodeName',showTitle:true,title:this.t("msgAlertCodeName.title"),showCloseButton:true,width:'500px',height:'200px',
-                                        button:[{id:"btn01",caption:this.t("msgAlertCodeName.btn01"),location:'before'}],
-                                    }
                                     if(typeof e.newData.CODE != 'undefined' && e.newData.CODE == '')
                                     {
                                         e.cancel = true;
                                         this.dialogOpened = true;
-                                        tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlertCodeName.msg1")}</div>)
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgAlertCodeName.msg1"),type:'warning'})
                                         this.dialogOpened = false;
                                         return
                                     }
@@ -140,8 +123,7 @@ export default class propertyCard extends React.PureComponent
                                     {
                                         e.cancel = true;
                                         this.dialogOpened = true;
-                                        tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlertCodeName.msg2")}</div>)
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgAlertCodeName.msg2"),type:'warning'})
                                         this.dialogOpened = false;
                                         return
                                     }
@@ -159,6 +141,7 @@ export default class propertyCard extends React.PureComponent
                             </NdGrid>
                         </div>
                     </div>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )
