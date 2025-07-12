@@ -21,26 +21,9 @@ export default class openInvoiceSalesReport extends React.PureComponent
     constructor(props)
     {
         super(props)
-        this.state = 
-        {
-            columnListValue : ['DOC_DATE','INPUT_CODE','INPUT_NAME','DOC_REF','DOC_REF_NO','REMAINDER','DOC_TOTAL','REBATE']
-        }
-        
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "DOC_DATE",NAME : this.t("grdListe.clmDate")},                                   
-            {CODE : "INPUT_CODE",NAME : this.t("grdListe.clmCode")},                                   
-            {CODE : "INPUT_NAME",NAME : this.t("grdListe.clmName")},
-            {CODE : "DOC_REF",NAME : this.t("grdListe.clmRef")},
-            {CODE : "DOC_REF_NO",NAME : this.t("grdListe.clmRefNo")},
-            {CODE : "REMAINDER",NAME : this.t("grdListe.clmRemainder")},
-            {CODE : "DOC_TOTAL",NAME : this.t("grdListe.clmTotal")},
-            {CODE : "REBATE",NAME : this.t("grdListe.clmRebate")},
-        ]
         this.groupList = [];
         this._btnGetirClick = this._btnGetirClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
         this.groupOpenInvoices = this.groupOpenInvoices.bind(this)
@@ -53,6 +36,8 @@ export default class openInvoiceSalesReport extends React.PureComponent
     saveState(e)
     {
         let tmpSave = this.access.filter({ELEMENT:'grdListe',USERS:this.user.CODE})
+        console.log(e)
+        console.log(tmpSave)
         tmpSave.setValue(e)
         tmpSave.save()
     }
@@ -62,79 +47,6 @@ export default class openInvoiceSalesReport extends React.PureComponent
         setTimeout(async () => 
         {
         }, 1000);
-    }
-    _columnListBox(e)
-    {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'INPUT_CODE') != 'undefined')
-                {
-                    this.groupList.push('INPUT_CODE')
-                }
-                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('INPUT_NAME')
-                }                
-                if(typeof e.value.find(x => x == 'DOC_REF') != 'undefined')
-                {
-                    this.groupList.push('DOC_REF')
-                }
-                if(typeof e.value.find(x => x == 'DOC_REF_NO') != 'undefined')
-                {
-                    this.groupList.push('DOC_REF_NO')
-                }
-                if(typeof e.value.find(x => x == 'REMAINDER') != 'undefined')
-                {
-                    this.groupList.push('REMAINDER')
-                }
-                if(typeof e.value.find(x => x == 'DOC_TOTAL') != 'undefined')
-                {
-                    this.groupList.push('DOC_TOTAL')
-                }
-                if(typeof e.value.find(x => x == 'REBATE') != 'undefined')
-                {
-                    this.groupList.push('REBATE')
-                }
-                
-                for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdListe.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                {
-                    columnListValue : e.value
-                })
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
     }
     async InvPrint()
     {

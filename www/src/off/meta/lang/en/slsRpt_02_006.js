@@ -3,6 +3,7 @@ const slsRpt_02_006 =
 {
     btnGet: "Get",
     txtCustomerCode : "Customer", 
+    dtFirst : "Date",
     grdListe : 
     {
         clmDate : "Date",

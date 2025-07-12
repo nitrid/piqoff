@@ -932,7 +932,6 @@ export class dataset
             }
             else
             {
-                console.log(tmpResult.result.err)
                 tmpQuerys.forEach(x =>
                 {
                     if(x.rowData.stat == 'newing')
@@ -1317,7 +1316,6 @@ export class datatable
             }
             else
             {
-                console.log(tmpResult.result.err)
                 tmpQuerys.forEach(x =>
                 {
                     if(x.rowData.stat == 'newing')
@@ -2062,6 +2060,21 @@ export class access extends datatable
                 {
                     tmpMeta[i].USERS = arguments[0].USERS
                 }
+            }
+            // EMPTY parametresi metası olmayan kayıtların meta datalarını oluşturmak istenildiğinde kullanılır.
+            if(tmpMeta.length == 0 && arguments[0].EMPTY == true)
+            {
+               tmpMeta =   [
+               {
+                TYPE : 2,
+                ID :arguments[0].ELEMENT,
+                VALUE : {},
+                SPECIAL : "",
+                PAGE : arguments[0].PAGE,
+                ELEMENT : arguments[0].ELEMENT,
+                APP : arguments[0].APP,
+                USERS : arguments[0].USERS
+            }]
             }
             let tmpAcs = new access(tmpMeta)
             tmpAcs.import(tmpData)

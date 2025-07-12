@@ -5,6 +5,7 @@ const slsRpt_02_005 =
     txtCustomerCode : "Müşteri",   
     btnCheck : "Aktif",   
     btnGet :"Getir",   
+    dtDate : "Tarih",
     grdListe :    
     {   
         clmCustomsNo : "Gümrük Kodu",   

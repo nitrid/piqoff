@@ -1442,6 +1442,26 @@ export const acs =
             }
         }
     },
+    //grdListesState
+    {
+        TYPE : 2,
+        ID :"grdListeState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "slsRpt_02_005",
+        ELEMENT : "grdListeState",
+        APP : "OFF"
+    },
+    //grdListesState
+    {
+        TYPE : 2,
+        ID :"grdListeState",
+        VALUE : {},
+        SPECIAL : "",
+        PAGE : "slsRpt_02_002",
+        ELEMENT : "grdListeState",
+        APP : "OFF"
+    },
     //grdSlsDispatchState
     {
         TYPE : 2,
@@ -1451,23 +1471,7 @@ export const acs =
         PAGE : "irs_02_006",
         ELEMENT : "grdSlsDispatchState",
         APP : "OFF",
-        VIEW : 
-        {
-            TYPE : "popInput",
-            PAGE_NAME : "Şubeler Arası Alış",
-            CAPTION : "",
-            DISPLAY : "visible",
-            FORM: 
-            {
-                width:"400",
-                height:"180",
-                item:
-                [
-                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
-                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
-                ]
-            }
-        }
+
     },
     //grdSlsDispatchState
     {
@@ -1935,23 +1939,6 @@ export const acs =
         PAGE : "sip_02_001",
         ELEMENT : "grdPurcOrdersState",
         APP : "OFF",
-        VIEW : 
-        {
-            TYPE : "popInput",
-            PAGE_NAME : "",
-            CAPTION : "",
-            DISPLAY : "visible",
-            FORM: 
-            {
-                width:"400",
-                height:"180",
-                item:
-                [
-                    {type:"textbox",caption:"Visible",field:"visible",id:"chkPopGrdListVisible"},
-                    {type:"textbox",caption:"Editable",field:"editable",id:"chkPopGrdListEditable"}
-                ]
-            }
-        }
     },
     //grdSlsOrderState
     {

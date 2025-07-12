@@ -5,6 +5,7 @@ const slsRpt_02_002 =
     txtCustomerCode : "Müşteri",   
     btnCheck : "Aktif",   
     btnGet :"Getir",   
+    dtDate : "Tarih",
     grdListe :    
     {   
         clmAdress : "Adres",   

@@ -2,6 +2,7 @@
 const slsRpt_02_004 =
 {
     btnGet :"Suchen",
+    dtDate : "Datum",
     grdListe :
     {
         clmCode: "Code",

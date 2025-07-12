@@ -1,10 +1,21 @@
 // "Satış Faturası Yaşlandırma Raporu"
+
 const slsRpt_02_007 =
 {
-    txtCustomerCode : "Müşteri",
-    btnGet : "Getir",
-    dtFirst : "İlk Tarih",
-    dtLast : "Son Tarih",
+    btnGet: "Getir",
+    txtCustomerCode : "Müşteri", 
+    dtFirst : "Başlangıç Tarihi",
+    dtLast : "Bitiş Tarihi",
+    grdList : 
+    {
+        clmDate : "Tarih",
+        clmType : "Evrak",
+        clmCustomerName : "Müşteri Adı",
+        clmDebit : "Borç",
+        clmCredit :"Alacak",
+        clmBalance : "Bakiye"
+
+    },
     pg_txtCustomerCode : 
     {
         title : "Müşteri Seçimi",
@@ -13,15 +24,5 @@ const slsRpt_02_007 =
         clmTypeName : "TİPİ",
         clmGenusName : "CİNSİ"
     },
-    grdList: 
-    {
-        clmDate: "Tarih",
-        clmType: "Evrak",
-        clmCustomerName : "Müşteri Adı",
-        clmDebit : "Borç",
-        clmCredit :"Alacak",
-        clmBalance : "Bakiye"
-    },
 }
-
 export default slsRpt_02_007

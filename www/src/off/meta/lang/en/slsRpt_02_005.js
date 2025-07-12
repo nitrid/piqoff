@@ -5,6 +5,7 @@ const slsRpt_02_005 =
     txtCustomerCode : "Customer",   
     btnCheck : "Active",   
     btnGet :"Get",   
+    dtDate : "Date",
     grdListe :    
     {   
         clmCustomsNo : "Customs Code",   

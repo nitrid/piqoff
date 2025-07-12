@@ -1,7 +1,8 @@
 // "Ürün Detaylı Satış Raporu"
 const slsRpt_02_004 =
 {
-    btnGet :"Apporter", 
+    btnGet :"Rechercher",    
+    dtDate : "Date",
     grdListe :
     {
         clmCode: "Code", 
