@@ -3,6 +3,8 @@ const stk_02_002 =
 {
     txtRefRefno : "Series-Sequence",
     validRef : "The series cannot be left blank",
+    validDepot : "You must select a depot",
+    validDesign : "Please select a design",
     cmbOutDepot: "Out Depot",
     cmbInDepot: "In Depot",
     dtDocDate : "Date",
@@ -148,5 +150,12 @@ const stk_02_002 =
         msg: "Please enter the quantity !"
     },
     txtQuantity : "Quantity",
+    msgCode :
+    {
+        title: "Attention",
+        btn01: "Go to Document",
+        btn02: "Cancel",
+        msg: "The document is found"
+    },
 }
 export default stk_02_002

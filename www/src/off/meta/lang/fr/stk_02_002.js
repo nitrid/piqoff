@@ -3,6 +3,8 @@ const stk_02_002 =
 {
     txtRefRefno : "Réf. Réf No",
     validRef : "Ligne-Colonne Ne Peut Pas Être Laissée Vide",
+    validDepot : "Sélectionner Dépôt",
+    validDesign : "Veuillez Sélectionner un Design",
     cmbOutDepot: "Sortie Dépôt",
     cmbInDepot: "Entrée Dépot",
     dtDocDate : "Date",
@@ -148,5 +150,12 @@ const stk_02_002 =
         msg: "Veuillez Saisir la Quantité !" ,
     },
     txtQuantity :"Quantité",
+    msgCode : 
+    {
+        title: "Attention",
+        btn01: "Aller au document",
+        btn02: "Annuler",
+        msg: "Document trouvé !"
+    },
 }
 export default stk_02_002

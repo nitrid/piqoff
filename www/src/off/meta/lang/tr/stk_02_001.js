@@ -159,6 +159,7 @@ const stk_02_001 =
     {
         title: "Dikkat",
         btn01: "Evrağa Git",
+        btn02: "Vazgeç",
         msg: "Evrak Bulundu"
     },
 }
