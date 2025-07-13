@@ -151,6 +151,11 @@ export default class depotTransfer extends React.PureComponent
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
+
+        if(this.docObj.dt().length == 0)
+        {
+            return
+        }
         
         if(this.docObj.dt()[0].LOCKED != 0)
         {
@@ -627,7 +632,7 @@ export default class depotTransfer extends React.PureComponent
                                 <NdItem>
                                     <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
-                                        <div className="col-4 pe-0">
+                                        <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
@@ -656,7 +661,7 @@ export default class depotTransfer extends React.PureComponent
                                                 </Validator>  
                                             </NdTextBox>
                                         </div>
-                                        <div className="col-5 ps-0">
+                                        <div className="col-6 ps-0">
                                             <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
@@ -796,7 +801,7 @@ export default class depotTransfer extends React.PureComponent
                                 </NdItem>
                                 {/* Boş */}
                                 <NdEmptyItem />
-                                {/* BARKOD EKLEME */}
+                                {/* Barkod Ekleme */}
                                 <NdItem>
                                     <NdLabel text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  

@@ -4,25 +4,19 @@ import {itemExpDateCls} from '../../../../core/cls/items.js'
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import DropDownButton from 'devextreme-react/drop-down-button';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
+import Toolbar,{ Item } from 'devextreme-react/toolbar';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
-
+import { NdForm, NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 export default class expdateEntry extends React.Component
 {
     constructor()
@@ -95,7 +89,6 @@ export default class expdateEntry extends React.Component
         this.expObj.clearAll()
         await this.expObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno});
         this.btnPrint.setState({disabled:false});
-
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
     }
@@ -105,17 +98,20 @@ export default class expdateEntry extends React.Component
         {
             return
         }
+
         for (let i = 0; i < this.expObj.dt().length; i++) 
         {
             if(this.expObj.dt()[i].ITEM_CODE == pData.CODE)
             {
                 let tmpConfObj = 
                 {
-                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
+                    id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'auto',
                     button:[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>)
                 }
+
                 let pResult = await dialog(tmpConfObj);
+                
                 if(pResult == 'btn01')
                 {
                     await this.grdExpDate.devGrid.deleteRow(0)
@@ -125,7 +121,6 @@ export default class expdateEntry extends React.Component
                 {
                     break
                 }
-                
             }
         }
         this.expObj.dt()[pIndex].ITEM_GUID = pData.GUID 
@@ -133,11 +128,11 @@ export default class expdateEntry extends React.Component
         this.expObj.dt()[pIndex].ITEM_NAME = pData.NAME 
         this.expObj.dt()[pIndex].QUANTITY = pQuantity
         this.expObj.dt()[pIndex].EXP_DATE = pDate
+
         if(this.cmbDepot.value !=  '')
         {
             this.expObj.dt()[pIndex].DEPOT = this.cmbDepot.value
         }
-        console.log(111)
     }
     render()
     {
@@ -148,11 +143,7 @@ export default class expdateEntry extends React.Component
                 <div className="col-12">
                     <Toolbar>
                         <Item location="after" locateInMenu="auto">
-                            <NdButton id="btnNew" parent={this} icon="file" type="default"
-                            onClick={()=>
-                            {
-                                this.init(); 
-                            }}/>
+                            <NdButton id="btnNew" parent={this} icon="file" type="default" onClick={()=>{this.init()}}/>
                         </Item>
                         <Item location="after" locateInMenu="auto">
                             <NdButton id="btnSave" parent={this} icon="floppy" type="success" 
@@ -165,69 +156,63 @@ export default class expdateEntry extends React.Component
 
                                 let tmpConfObj =
                                 {
-                                    id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                    id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                 }
                                 
                                 let pResult = await dialog(tmpConfObj);
+
                                 if(pResult == 'btn01')
                                 {
-                                    
-
-                                    let tmpConfObj1 =
-                                    {
-                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                    }
-                                    
                                     if((await this.expObj.save()) == 0)
-                                    {                       
-                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                        await dialog(tmpConfObj1);
+                                    {
+                                        this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
                                         this.btnSave.setState({disabled:true});
                                         this.btnNew.setState({disabled:false});
                                         this.btnPrint.setState({disabled:false});
                                     }
                                     else
                                     {
-                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                        let tmpConfObj1 =
+                                        {
+                                            id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
+                                            button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                            content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                        }
                                         await dialog(tmpConfObj1);
                                     }
                                 }
                             }}/>
                         </Item>
                         <Item location="after" locateInMenu="auto">
-                            <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                            onClick={()=>
-                            {
-                                this.popDesign.show()
-                            }}/>
+                            <NdButton id="btnPrint" parent={this} icon="print" type="default" onClick={()=>{this.popDesign.show()}}/>
                         </Item>
                         <Item location="after" locateInMenu="auto">
                             <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                             onClick={async()=>
                             {
-                                
                                 let tmpConfObj =
                                 {
-                                    id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                    id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                     button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                 }
                                 
                                 let pResult = await dialog(tmpConfObj);
+
                                 if(pResult == 'btn01')
                                 {
                                     let tmpDelete = {...this.expObj.dt('ITEM_EXPDATE')}
+
                                     for (let i = 0; i < tmpDelete.length; i++) 
                                     {
                                         this.expObj.dt('ITEM_EXPDATE').removeAt(0)
                                     }
+
                                     await this.expObj.dt('ITEM_EXPDATE').delete();
                                     this.init(); 
                                 }
-                                
                             }}/>
                         </Item>
                         <Item location="after"
@@ -242,12 +227,13 @@ export default class expdateEntry extends React.Component
                                 {
                                     let tmpConfObj =
                                     {
-                                        id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                        id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                         button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                     }
                                     
                                     let pResult = await dialog(tmpConfObj);
+
                                     if(pResult == 'btn01')
                                     {
                                         App.instance.panel.closePage()
@@ -262,12 +248,12 @@ export default class expdateEntry extends React.Component
             <div className="row px-2 pt-2">
                 <div className="row px-2 pt-2">
                     <div className="col-12">
-                        <Form colCount={3} id="frmExpDate">
+                        <NdForm colCount={3} id="frmExpDate">
                             {/* txtRef-Refno */}
-                            <Item>
-                                <Label text={this.t("txtRefRefno")} alignment="right" />
+                            <NdItem>
+                                <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                 <div className="row">
-                                    <div className="col-4 pe-0">
+                                    <div className="col-6 pe-0">
                                         <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.expObj.dt('ITEM_EXPDATE'),field:"REF"}}
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         readOnly={true}
@@ -280,7 +266,9 @@ export default class expdateEntry extends React.Component
                                                 param : ['REF:string|25'],
                                                 value : [this.txtRef.value]
                                             }
+
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            
                                             if(tmpData.result.recordset.length > 0)
                                             {
                                                 this.txtRefno.value = tmpData.result.recordset[0].REF_NO
@@ -289,12 +277,12 @@ export default class expdateEntry extends React.Component
                                         param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmExpDate" + this.tabIndex}>
+                                            <Validator validationGroup={"frmExpDate" + this.tabIndex}>
                                                 <RequiredRule message={this.t("validRef")} />
                                             </Validator>  
                                         </NdTextBox>
                                     </div>
-                                    <div className="col-5 ps-0">
+                                    <div className="col-6 ps-0">
                                         <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} dt={{data:this.expObj.dt('ITEM_EXPDATE'),field:"REF_NO"}}
                                         readOnly={true}
                                         button=
@@ -313,7 +301,6 @@ export default class expdateEntry extends React.Component
                                                                 this.getDoc('00000000-0000-0000-0000-000000000000',data[0].REF,data[0].REF_NO)
                                                             }
                                                         }
-                                                                
                                                     }
                                                 },
                                                 {
@@ -337,7 +324,7 @@ export default class expdateEntry extends React.Component
                                         param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmExpDate" + this.tabIndex}>
+                                            <Validator validationGroup={"frmExpDate" + this.tabIndex}>
                                                 <RequiredRule message={this.t("validRefNo")} />
                                             </Validator> 
                                         </NdTextBox>
@@ -353,67 +340,47 @@ export default class expdateEntry extends React.Component
                                 height={'90%'}
                                 title={this.t("pg_Docs.title")} 
                                 data={{source:{select:{query : "SELECT REF,REF_NO,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE  FROM ITEM_EXPDATE_VW_01 GROUP BY REF,REF_NO,DOC_DATE ORDER BY DOC_DATE DESC"},sql:this.core.sql}}}
-                                button=
-                                {
-                                    [
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                
-                                            }
-                                        }
-                                    ]
-                                    
-                                }
+                                button={[{id:'01',icon:'more',onClick:()=>{}}]}
                                 >
                                     <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={70} />
                                     <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={70}  />                                        
                                     <Column dataField="DOC_DATE" caption={this.t("pg_Docs.clmDate")} width={100}  />
                                 </NdPopGrid>
-                            </Item>
+                            </NdItem>
                             {/* Boş */}
-                            <EmptyItem />
+                            <NdEmptyItem />
                             {/* Boş */}
-                            <EmptyItem />
+                            <NdEmptyItem />
                             {/* cmbDepot */}
-                            <Item>
-                                <Label text={this.t("cmbDepot")} alignment="right" />
+                            <NdItem>
+                                <NdLabel text={this.t("cmbDepot")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbDepot"
                                 dt={{data:this.expObj.dt('ITEM_EXPDATE'),field:"DEPOT"}}  
                                 displayExpr="NAME"                       
                                 valueExpr="GUID"
                                 searchEnabled={true}
                                 notRefresh = {true}
-                                onValueChanged={(async()=>
-                                {
-                                }).bind(this)}
-                                data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 "},sql:this.core.sql}}}
+                                data={{source:{select:{query:`SELECT GUID,NAME FROM DEPOT_VW_01`},sql:this.core.sql}}}
                                 param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                 access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
-                                >
-                                </NdSelectBox>
-                            </Item>
+                                />
+                            </NdItem>
                             {/* dtDocDate */}
-                            <Item>
-                                <Label text={this.t("dtDocDate")} alignment="right" />
+                            <NdItem>
+                                <NdLabel text={this.t("dtDocDate")} alignment="right" />
                                 <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                 dt={{data:this.expObj.dt('ITEM_EXPDATE'),field:"DOC_DATE"}}
-                                onValueChanged={(async()=>
-                                {
-                                }).bind(this)}
                                 >
                                     <Validator validationGroup={"frmExpDate" + this.tabIndex}>
                                         <RequiredRule message={this.t("validDocDate")} />
                                     </Validator> 
                                 </NdDatePicker>
-                            </Item>
+                            </NdItem>
                             {/* Boş */}
-                            <EmptyItem />
-                            {/* BARKOD EKLEME */}
-                            <Item>
-                                <Label text={this.t("txtBarcode")} alignment="right" />
+                            <NdEmptyItem />
+                            {/* Barkod Ekleme */}
+                            <NdItem>
+                                <NdLabel text={this.t("txtBarcode")} alignment="right" />
                                 <NdTextBox id="txtBarcode" parent={this} simple={true}  
                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                 button=
@@ -424,8 +391,8 @@ export default class expdateEntry extends React.Component
                                             icon:"fa-solid fa-barcode",
                                             onClick:async(e)=>
                                             {
-
                                                 await this.pg_txtBarcode.setVal(this.txtBarcode.value)
+
                                                 this.pg_txtBarcode.show()
                                                 this.pg_txtBarcode.onClick = async(data) =>
                                                 {
@@ -438,6 +405,7 @@ export default class expdateEntry extends React.Component
                                                     this.expObj.addEmpty(tmpExpItems)
             
                                                     await this.core.util.waitUntil(100)
+
                                                     if(data.length > 0)
                                                     {
                                                         this.customerControl = true
@@ -478,22 +446,30 @@ export default class expdateEntry extends React.Component
                                 onEnterKey={(async(e)=>
                                 {
                                     let tmpQuery = 
-                                    {   query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
-                                        "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                        " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                                    {   
+                                        query : `SELECT 
+                                                ITEMS.GUID,
+                                                ITEMS.CODE,
+                                                ITEMS.NAME,
+                                                ITEMS.VAT,
+                                                ITEMS.COST_PRICE,
+                                                ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS.GUID ORDER BY LDATE DESC),'') AS MULTICODE,  
+                                                ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_02 WHERE ITEM_MULTICODE_VW_02.ITEM_GUID = ITEMS.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME 
+                                                FROM ITEMS_VW_04 AS ITEMS  
+                                                INNER JOIN ITEM_BARCODE_VW_01 AS BARCODE ON ITEMS.GUID = BARCODE.ITEM_GUID WHERE CODE = @CODE OR BARCODE.BARCODE = @CODE`,
                                         param : ['CODE:string|50'],
                                         value : [this.txtBarcode.value]
                                     }
+                                    
                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                     this.txtBarcode.setState({value:""})
+
                                     if(tmpData.result.recordset.length > 0)
                                     {
                                         this.txtMsgQuantity.value =  1
                                         this.dtMsgDate.value =  moment(new Date()).format("YYYY-MM-DD"),
-                                        setTimeout(async () => 
-                                        {
-                                            this.txtMsgQuantity.focus()
-                                        }, 500);
+                                        setTimeout(async () => {this.txtMsgQuantity.focus()}, 500);
+
                                         await this.msgQuantity.show().then(async (e) =>
                                         {
                                             if(typeof this.expObj.dt()[this.expObj.dt().length - 1] == 'undefined' || this.expObj.dt()[this.expObj.dt().length - 1].CODE != '')
@@ -509,18 +485,10 @@ export default class expdateEntry extends React.Component
                                         
                                             this.addItem(tmpData.result.recordset[0],this.expObj.dt().length - 1,this.txtMsgQuantity.value,this.dtMsgDate.value)
                                         })
-                                      
                                     }
                                     else
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgItemNotFound.msg"),type:"error"})
                                     }
                                     
                                 }).bind(this)}
@@ -528,20 +496,20 @@ export default class expdateEntry extends React.Component
                                 access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                 >
                                 </NdTextBox>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </div>
                 </div>
-                <Form colCount={1}>
-                    <Item location="after">
-                            <Button icon="add"
-                            onClick={async (e)=>
-                            {
-                                await this.core.util.waitUntil(100)
-                                this.popItems.show()
-                            }}/>
-                    </Item>
-                    <Item>
+                <NdForm colCount={1}>
+                    <NdItem location="after">
+                        <NdButton icon="add"
+                        onClick={async (e)=>
+                        {
+                            await this.core.util.waitUntil(100)
+                            this.popItems.show()
+                        }}/>
+                    </NdItem>
+                    <NdItem>
                         <NdGrid parent={this} id={"grdExpDate"} 
                         showBorders={true} 
                         columnsAutoWidth={true} 
@@ -551,12 +519,6 @@ export default class expdateEntry extends React.Component
                         height={'600'} 
                         width={'100%'}
                         dbApply={false}
-                        onRowUpdated={async(e)=>{
-                            
-                        }}
-                        onRowRemoved={async (e)=>{
-                            
-                        }}
                         >
                             <Scrolling mode="standart" />
                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
@@ -572,13 +534,12 @@ export default class expdateEntry extends React.Component
                                 {
                                     return e.text
                                 }
-                                
                                 return
                             }}/>
                              <Column dataField="DESCRIPTION" caption={this.t("grdExpDate.clmDescription")} width={150}/>
                         </NdGrid>
-                    </Item>
-                </Form>
+                    </NdItem>
+                </NdForm>
                 {/* Stok Popup*/}
                 <div>
                     <NdPopUp parent={this} id={"popItems"} 
@@ -588,31 +549,31 @@ export default class expdateEntry extends React.Component
                     title={this.t("popItems.title")}
                     container={"#root"} 
                     width={'500'}
-                    height={'400'}
+                    height={'auto'}
                     position={{of:'#root'}}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("popItems.txtPopItemsCode")} alignment="right" />
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("popItems.txtPopItemsCode")} alignment="right" />
                                 <NdTextBox id={"txtPopItemsCode"} parent={this} simple={true}
                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                 onEnterKey={(async()=>
+                                {
+                                    await this.popItemsCode.setVal(this.txtPopItemsCode.value)
+                                    this.popItemsCode.show()
+                                    this.popItemsCode.onClick = (data) =>
                                     {
-                                        await this.popItemsCode.setVal(this.txtPopItemsCode.value)
-                                        this.popItemsCode.show()
-                                        this.popItemsCode.onClick = (data) =>
+                                        if(data.length > 0)
                                         {
-                                            if(data.length > 0)
-                                            {
-                                                this.PopGrdItemData = data;
-                                                this.txtPopQuantity.focus()
-                                            
-                                                this.txtPopItemsCode.GUID = data[0].GUID
-                                                this.txtPopItemsCode.value = data[0].CODE;
-                                                this.txtPopItemsName.value = data[0].NAME;
-                                            }
+                                            this.PopGrdItemData = data;
+                                            this.txtPopQuantity.focus()
+                                        
+                                            this.txtPopItemsCode.GUID = data[0].GUID
+                                            this.txtPopItemsCode.value = data[0].CODE;
+                                            this.txtPopItemsName.value = data[0].NAME;
                                         }
-                                    }).bind(this)}
+                                    }
+                                }).bind(this)}
                                 button=
                                 {
                                     [
@@ -621,7 +582,6 @@ export default class expdateEntry extends React.Component
                                             icon:'more',
                                             onClick:()=>
                                             {                  
-                                                                            
                                                 this.popItemsCode.show()
                                                 this.popItemsCode.onClick = (data) =>
                                                 {
@@ -639,26 +599,25 @@ export default class expdateEntry extends React.Component
                                         },
                                     ]
                                 }>       
-                                <Validator validationGroup={"frmPurcContItems"  + this.tabIndex}>
+                                    <Validator validationGroup={"frmPurcContItems"  + this.tabIndex}>
                                         <RequiredRule message={this.t("validItemsCode")} />
-                                </Validator>                                 
+                                    </Validator>                                 
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popItems.txtPopItemsName")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popItems.txtPopItemsName")} alignment="right" />
                                 <NdTextBox id={"txtPopItemsName"} parent={this} simple={true} editable={true}
                                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popItems.txtPopItemsQuantity")} alignment="right" />
-                                <NdTextBox id="txtPopQuantity" parent={this} simple={true}>
-                                </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popItems.dtPopDate")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popItems.txtPopItemsQuantity")} alignment="right" />
+                                <NdTextBox id="txtPopQuantity" parent={this} simple={true}/>
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popItems.dtPopDate")} alignment="right" />
                                 <NdDatePicker simple={true}  parent={this} id={"dtPopDate"}/>
-                            </Item>
-                            <Item>
+                            </NdItem>
+                            <NdItem>
                                 <div className='row'>
                                     <div className='col-6'>
                                         <NdButton text={this.lang.t("btnSave")} type="success" stylingMode="contained" width={'100%'} validationGroup={"frmPurcContItems"  + this.tabIndex}
@@ -683,6 +642,7 @@ export default class expdateEntry extends React.Component
                                                         return
                                                     }
                                                 }
+
                                                 let tmpExpItems = {...this.expObj.empty}
                                                 tmpExpItems.REF = this.txtRef.value
                                                 tmpExpItems.REF_NO = this.txtRefno.value
@@ -694,55 +654,43 @@ export default class expdateEntry extends React.Component
                                             }
                                             else
                                             {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
-                                                }
-                                                
-                                                await dialog(tmpConfObj);
+                                                this.toast.show({message:this.t("msgSaveValid.msg"),type:"error"})
                                             }    
-                                            
                                         }}/>
                                     </div>
                                     <div className='col-6'>
-                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                        onClick={()=>
-                                        {
-                                            this.popItems.hide();  
-                                        }}/>
+                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'} onClick={()=>{this.popItems.hide()}}/>
                                     </div>
                                 </div>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div>
                 {/* Stok Seçim */}
                 <NdPopGrid id={"popItemsCode"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBoffers={true}
-                        width={'90%'}
-                        height={'90%'}
-                        title={this.t("popItemsCode.title")} //
-                        search={true}
-                        data = 
-                        {{
-                            source:
-                            {
-                                select:
-                                {
-                                    query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 WHERE STATUS = 1 AND UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
-                                    param : ['VAL:string|50']
-                                },
-                                sql:this.core.sql
-                            }
-                        }}
-                        >
-                            <Column dataField="CODE" caption={this.t("popItemsCode.clmCode")} width={150} />
-                            <Column dataField="NAME" caption={this.t("popItemsCode.clmName")} width={300} defaultSortoffer="asc" />
+                visible={false}
+                position={{of:'#root'}} 
+                showTitle={true} 
+                showBoffers={true}
+                width={'90%'}
+                height={'90%'}
+                title={this.t("popItemsCode.title")} //
+                search={true}
+                data = 
+                {{
+                    source:
+                    {
+                        select:
+                        {
+                            query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_04 WHERE STATUS = 1 AND UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
+                    }
+                }}
+                >
+                    <Column dataField="CODE" caption={this.t("popItemsCode.clmCode")} width={150} />
+                    <Column dataField="NAME" caption={this.t("popItemsCode.clmName")} width={300} defaultSortoffer="asc" />
                 </NdPopGrid>
             </div>
             {/* BARKOD POPUP */}
@@ -761,9 +709,17 @@ export default class expdateEntry extends React.Component
                 {
                     select:
                     {
-                        query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
-                        "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME,ITEM_BARCODE_VW_01.BARCODE AS BARCODE " + 
-                        " FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEM_BARCODE_VW_01.BARCODE LIKE '%'+@BARCODE",
+                        query : `SELECT 
+                                ITEMS.GUID,
+                                ITEMS.CODE,
+                                ITEMS.NAME,
+                                ITEMS.VAT,
+                                ITEMS.COST_PRICE,
+                                ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS.GUID ORDER BY LDATE DESC),'') AS MULTICODE, 
+                                ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_02 WHERE ITEM_MULTICODE_VW_02.ITEM_GUID = ITEMS.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME,
+                                BARCODE.BARCODE AS BARCODE 
+                                FROM ITEMS_VW_04 AS ITEMS 
+                                INNER JOIN ITEM_BARCODE_VW_01 AS BARCODE ON ITEMS.GUID = BARCODE.ITEM_GUID WHERE  BARCODE.BARCODE LIKE '%' + @BARCODE`,
                         param : ['BARCODE:string|50']
                     },
                     sql:this.core.sql
@@ -776,42 +732,35 @@ export default class expdateEntry extends React.Component
             </NdPopGrid>
             {/* Miktar Dialog  */}
             <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
-                position={{of:'#root'}} 
-                showTitle={true} 
-                title={this.t("msgQuantity.title")} 
-                showCloseButton={false}
-                width={"350px"}
-                height={"300px"}
-                button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'after'}]}
-                >
-                    <div className="row">
-                        <div className="col-12 py-2">
-                            <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
-                        </div>
-                        <div className="col-12 py-2">
-                        <Form>
+            showTitle={true} 
+            title={this.t("msgQuantity.title")} 
+            showCloseButton={false}
+            width={"350px"}
+            height={"auto"}
+            button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'after'}]}
+            >
+                <div className="row">
+                    <div className="col-12 py-2">
+                        <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
+                    </div>
+                    <div className="col-12 py-2">
+                        <NdForm>
                             {/* checkCustomer */}
-                            <Item>
-                                <Label text={this.t("popItems.txtPopItemsQuantity")} alignment="right" />
+                            <NdItem>
+                                <NdLabel text={this.t("popItems.txtPopItemsQuantity")} alignment="right" />
                                 <NdNumberBox id="txtMsgQuantity" parent={this} simple={true} 
-                                onEnterKey={(async(e)=>
-                                {
-                                    this.msgQuantity._onClick()
-                                }).bind(this)} 
-                                >
-                            </NdNumberBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popItems.dtPopDate")} alignment="right" />
+                                onEnterKey={(async(e)=>{this.msgQuantity._onClick()}).bind(this)} 
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popItems.dtPopDate")} alignment="right" />
                                 <NdDatePicker simple={true}  parent={this} id={"dtMsgDate"}/>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </div>
-                    </div>
-                    <div className='row'>
-                    
-                    </div>
+                </div>
             </NdDialog>  
+            <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
         </ScrollView>
         )
     }
