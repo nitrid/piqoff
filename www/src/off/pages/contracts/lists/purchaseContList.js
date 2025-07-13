@@ -35,16 +35,16 @@ export default class purchaseContList extends React.PureComponent
     {
         this.txtCustomerCode.CODE = ''
     }
-    loadState() 
+    async loadState() 
     {
-        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        let tmpLoad = await this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-    saveState(e)
+    async saveState(e)
     {
-        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
-        tmpSave.setValue(e)
-        tmpSave.save()
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        await tmpSave.setValue(e)
+        await tmpSave.save()
     }
     async btnGetClick()
     {

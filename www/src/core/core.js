@@ -1947,17 +1947,19 @@ export class access extends datatable
             {
                 this.selectCmd = 
                 {
-                    query : "SELECT * FROM ACCESS WHERE ((APP = @APP) OR (@APP = '')) AND ((USERS = @USERS) OR (@USERS = '-1') OR (USERS = '')) AND ((ID = @ID) OR (@ID = ''))" ,
-                    param : ['APP:string|50','USERS:string|50','ID:string|50'],
+                    query : "SELECT * FROM ACCESS WHERE ((APP = @APP) OR (@APP = '')) AND ((USERS = @USERS) OR (@USERS = '-1') OR (USERS = '')) AND ((ID = @ID) OR (@ID = '')) AND ((PAGE = @PAGE) OR (@PAGE = '')) AND ((ELEMENT = @ELEMENT) OR (@ELEMENT = ''))" ,
+                    param : ['APP:string|50','USERS:string|50','ID:string|50','PAGE:string|50','ELEMENT:string|50'],
                     value : [
                         typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
                         typeof arguments[0].USERS == 'undefined' ? '-1' : arguments[0].USERS,
                         typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID,
+                        typeof arguments[0].PAGE == 'undefined' ? '' : arguments[0].PAGE,
+                        typeof arguments[0].ELEMENT == 'undefined' ? '' : arguments[0].ELEMENT,
                     ],
                     local : 
                     {
                         type : "select",
-                        query : "SELECT * FROM ACCESS WHERE ((APP = ?) OR (? = '')) AND ((USERS = ?) OR (? = '-1') OR (USERS = '')) AND ((ID = ?) OR (? = ''));",
+                        query : "SELECT * FROM ACCESS WHERE ((APP = ?) OR (? = '')) AND ((USERS = ?) OR (? = '-1') OR (USERS = '')) AND ((ID = ?) OR (? = '')) AND ((PAGE = ?) OR (? = '')) AND ((ELEMENT = ?) OR (? = ''));",
                         values : 
                         [
                             typeof arguments[0].APP == 'undefined' ? '' : arguments[0].APP,
@@ -1966,6 +1968,10 @@ export class access extends datatable
                             typeof arguments[0].USERS == 'undefined' ? '-1' : arguments[0].USERS,
                             typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID,
                             typeof arguments[0].ID == 'undefined' ? '' : arguments[0].ID,
+                            typeof arguments[0].PAGE == 'undefined' ? '' : arguments[0].PAGE,
+                            typeof arguments[0].PAGE == 'undefined' ? '' : arguments[0].PAGE,
+                            typeof arguments[0].ELEMENT == 'undefined' ? '' : arguments[0].ELEMENT,
+                            typeof arguments[0].ELEMENT == 'undefined' ? '' : arguments[0].ELEMENT,
                         ],             
                     } 
                 } 
@@ -2014,6 +2020,7 @@ export class access extends datatable
         {
             let tmpData = this.toArray();
             let tmpMeta = [...this.meta];
+            
             //PARAMETRENİN META DATASI FİLİTRELENİYOR.
             if(this.meta != null && this.meta.length > 0)
             {
@@ -2026,9 +2033,9 @@ export class access extends datatable
                     {
                         tmpMeta = tmpMeta.filter(x => x[tmpKey] === tmpValue)
                     }
-
                 }
             }
+            
             //DATA FİLİTRELENİYOR.
             if(this.length > 0)
             {
@@ -2053,7 +2060,8 @@ export class access extends datatable
                     }
                 }
             }
-            //META DATANIN İÇERİSİNE USER DEĞERİ EKLENİYOR.BU DATAYI SET EDERKEN İŞİMİZE YARAYACAK.
+            
+            //META DATANIN İÇERİSİNE USER DEĞERİ EKLENİYOR.
             if(typeof Object.keys(arguments[0]).filter(key => key.includes('USERS')) != 'undefined')
             {
                 for (let i = 0; i < tmpMeta.length; i++) 
@@ -2061,13 +2069,14 @@ export class access extends datatable
                     tmpMeta[i].USERS = arguments[0].USERS
                 }
             }
+            
             // EMPTY parametresi metası olmayan kayıtların meta datalarını oluşturmak istenildiğinde kullanılır.
-            if(tmpMeta.length == 0 && arguments[0].EMPTY == true)
+            if(tmpMeta.length == 0 && tmpData.length == 0 && typeof arguments[0].ELEMENT != 'undefined' && typeof arguments[0].PAGE != 'undefined' && typeof arguments[0].APP != 'undefined')
             {
-               tmpMeta =   [
+               tmpMeta = [
                {
                 TYPE : 2,
-                ID :arguments[0].ELEMENT,
+                ID : arguments[0].ELEMENT,
                 VALUE : {},
                 SPECIAL : "",
                 PAGE : arguments[0].PAGE,
@@ -2076,83 +2085,87 @@ export class access extends datatable
                 USERS : arguments[0].USERS
             }]
             }
+            
             let tmpAcs = new access(tmpMeta)
             tmpAcs.import(tmpData)
             return tmpAcs;
         }
         return this;
     }
-    getValue()
+    async getValue()
     {
-        // DB İÇERİSİNDEKİ PARAMETRE DEĞERİ GERİ DÖNDÜRÜLÜYOR.
-        if(this.length > 0)
+        return new Promise(async resolve => 
         {
-            // EĞER PARAMETRE OLARAK HİÇBİRŞEY GELMEDİYSE SIFIRINCI SATIRI.
-            if(arguments.length == 0)
+            // DB İÇERİSİNDEKİ PARAMETRE DEĞERİ GERİ DÖNDÜRÜLÜYOR.
+            if(this.length > 0)
             {
-                // return JSON.parse(JSON.stringify(this[0].VALUE))
-                try
+                // EĞER PARAMETRE OLARAK HİÇBİRŞEY GELMEDİYSE SIFIRINCI SATIRI.
+                if(arguments.length == 0)
                 {
-                    return JSON.parse(this[0].VALUE)
+                    // return JSON.parse(JSON.stringify(this[0].VALUE))
+                    try
+                    {
+                        resolve(JSON.parse(this[0].VALUE))
+                    }
+                    catch(ex)
+                    {
+                        resolve(this[0].VALUE)
+                    }
                 }
-                catch(ex)
+                // EĞER PARAMETRE GELMİŞ İSE VE GELEN VERİ NUMBER İSE VERİLEN SATIR I DÖNDÜR.
+                else if(arguments.length == 1 && typeof arguments[0] == 'number')
                 {
-                    return this[0].VALUE
-                }
-            }
-            // EĞER PARAMETRE GELMİŞ İSE VE GELEN VERİ NUMBER İSE VERİLEN SATIR I DÖNDÜR.
-            else if(arguments.length == 1 && typeof arguments[0] == 'number')
-            {
-                try 
-                {
-                    //  return JSON.parse(JSON.stringify(this[arguments[0]].VALUE))
-                    return JSON.parse(this[arguments[0]].VALUE)
+                    try 
+                    {
+                        //  return JSON.parse(JSON.stringify(this[arguments[0]].VALUE))
+                        resolve(JSON.parse(this[arguments[0]].VALUE))
 
-                } catch (error) 
-                {
-                    console.log('error param.toValue() : ' + error)
-                }
-            }                    
-        }
-        // DB İÇERİSİNDE KAYIT YOKSA META İÇERİSİNDEKİ DEĞER DÖNDÜRÜLÜYOR.
-        else if(this.length == 0 && this.meta != null && this.meta.length > 0 && typeof this.meta[0].VALUE != 'undefined')
-        {               
-            return JSON.parse(JSON.stringify(this.meta[0].VALUE))
-        }
-        return undefined;
+                    } catch (error) 
+                    {
+                        console.log('error param.toValue() : ' + error)
+                    }
+                }                    
+            }
+            // DB İÇERİSİNDE KAYIT YOKSA META İÇERİSİNDEKİ DEĞER DÖNDÜRÜLÜYOR.
+            else if(this.length == 0 && this.meta != null && this.meta.length > 0 && typeof this.meta[0].VALUE != 'undefined')
+            {               
+                resolve(JSON.parse(JSON.stringify(this.meta[0].VALUE)))
+            }
+                resolve(undefined);
+            });
     }
-    setValue()
+    async setValue()
     {
-        // BU FONKSİYON 1 VEYA 2 PARAMETRE ALABİLİR. BİR PARAMETRE ALIRSA SIFIRINCI SATIRA PARAMETRE DEĞERİ SET EDİLİR. İKİ PARAMETRE ALIRSA BİRİNCİ PARAMETRE SATIR İKİNCİ PARAMETRE SET EDİLECEK DEĞERDİR.
+        // Mevcut kayıt var mı kontrol et
         if(this.length > 0)
         {
-            // EĞER PARAMETRE OLARAK HİÇBİRŞEY GELMEDİYSE SIFIRINCI SATIRA SET EDİLİYOR
             if(arguments.length == 1)
             {
                 this[0].VALUE = typeof arguments[0] == 'object' ? JSON.stringify(arguments[0]) : arguments[0];
             }
-            // EĞER PARAMETRE GELMİŞ İSE VE GELEN VERİ NUMBER İSE VERİLEN SATIR I DÖNDÜR.
             else if(arguments.length == 2 && typeof arguments[0] == 'number')
             {
                 try 
                 {
-                    this[arguments[0]].VALUE = typeof arguments[0] == 'object' ? JSON.stringify(arguments[0]) : arguments[0];
+                    this[arguments[0]].VALUE = typeof arguments[1] == 'object' ? JSON.stringify(arguments[1]) : arguments[1];
                 } catch (error) 
                 {
-                    console.log('error param.toValue() : ' + error)
+                    console.log('error access.setValue() : ' + error)
                 }
             }
         }
         else
         {
-            if(this.meta.length == 1)
+            if(this.meta && this.meta.length > 0)
             {
                 let tmpData = {...this.meta[0]}
-                tmpData.VALUE = JSON.stringify(arguments[0])
-                
-                this.push(tmpData)
+                tmpData.VALUE = typeof arguments[0] == 'object' ? JSON.stringify(arguments[0]) : arguments[0];
+                tmpData.GUID = datatable.uuidv4();
+                this.push(tmpData);
+                this.save()
             }
         }
+        
     }
 }
 export class menu
@@ -2447,6 +2460,6 @@ Number.prototype.round = function(pDigits)
     tmpNum = Number(tmpNum)
     
     return isNaN(Number(Math.round(Number(this)+'e'+pDigits)+'e-'+pDigits)) ? 0 : Number(Math.round(Number(this)+'e'+pDigits)+'e-'+pDigits)
-    //return Math.round((Number(this.toFixed(pDigits + 1)) + Number.EPSILON) * tmpNum) / tmpNum
+    //return Math.round((Number(this.toFixed(pDigits + 1)) + Number.EPSILON) * tmpNum) / tmpNum
     //return Math.round((this + Number.EPSILON) * tmpNum) / tmpNum
 }

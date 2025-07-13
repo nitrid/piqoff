@@ -31,16 +31,16 @@ export default class openInvoicePurchaseReport extends React.PureComponent
         {
         }, 1000);
     }
-    loadState()
+    async loadState()
     {
-        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        let tmpLoad = await this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-    saveState(e)
+    async saveState(e)
     {   
-        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF",EMPTY:true})
-        tmpSave.setValue(e)
-        tmpSave.save()
+        let tmpSave = await this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        await tmpSave.setValue(e)
+        await tmpSave.save()
     }
     async calculateTotal()
     {
@@ -105,7 +105,7 @@ export default class openInvoicePurchaseReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
