@@ -4,7 +4,8 @@ const slsRpt_02_003 =
     chkZeroBalance : "Afficher soldes 0", 
     txtCustomerCode : "Actuel",   
     btnCheck : "Actif",    
-    btnGet :"Apporter",  
+    dtDate : "Date",
+    btnGet :"Rechercher",  
     grdListe :    
     {   
         clmRef: "Ref. Facture",   

@@ -10,11 +10,12 @@ import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdOpenInvoiceReport from '../../../../core/react/devex/openinvoicereport.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
+import { NdForm, NdItem, NdLabel, NdEmptyItem} from '../../../../core/react/devex/form.js';
+import { NdToast} from '../../../../core/react/devex/toast.js';
 
 export default class openInvoiceSalesReport extends React.PureComponent
 {
@@ -23,7 +24,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
         super(props)
         this.core = App.instance.core;
         this.groupList = [];
-        this._btnGetirClick = this._btnGetirClick.bind(this)
+        this.btnGetirClick = this.btnGetirClick.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
         this.groupOpenInvoices = this.groupOpenInvoices.bind(this)
@@ -36,8 +37,6 @@ export default class openInvoiceSalesReport extends React.PureComponent
     saveState(e)
     {
         let tmpSave = this.access.filter({ELEMENT:'grdListe',USERS:this.user.CODE})
-        console.log(e)
-        console.log(tmpSave)
         tmpSave.setValue(e)
         tmpSave.save()
     }
@@ -81,7 +80,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
         App.instance.setState({isExecute:false})
     }
 
-    async _btnGetirClick()
+    async btnGetirClick()
     {
         try {
             if(this.txtCustomerCode.value == '')
@@ -174,12 +173,17 @@ export default class openInvoiceSalesReport extends React.PureComponent
             
             let tmpData = await this.core.sql.execute(tmpSource.source.select);
             
-            if(tmpData && tmpData.result && tmpData.result.recordset && tmpData.result.recordset.length > 0) {
+            if(tmpData && tmpData.result && tmpData.result.recordset && tmpData.result.recordset.length > 0) 
+            {
                 this.grdListe.setDataSource(tmpData.result.recordset);
-            } else {
+            } 
+            else 
+            {
                 this.grdListe.setDataSource([]);
             }
-        } catch (error) {
+        } 
+        catch (error)
+        {
             this.grdListe.setDataSource([]);
             await dialog({
                 id: 'msgError',
@@ -187,26 +191,30 @@ export default class openInvoiceSalesReport extends React.PureComponent
                 title: this.t("msgError.title"),
                 showCloseButton: true,
                 width: '500px',
-                height: '200px',
+                height: 'auto',
                 button: [{id: "btn01", caption: this.t("msgError.btn01"), location: 'after'}],
                 content: (<div style={{textAlign: "center", fontSize: "20px"}}>{this.t("msgError.msg") + ": " + error.message}</div>)
             });
         }
     }
 
-    groupOpenInvoices(rows) {
+    groupOpenInvoices(rows) 
+    {
         let map = new Map();
 
-        for (let row of rows) {
+        for (let row of rows) 
+        {
             // Normal satışlar için INPUT_NAME, iadeler için OUTPUT_NAME kullan
             let key = (row.TYPE == 1 && row.REBATE == 0) ? row.INPUT_NAME : row.OUTPUT_NAME;
             
             // Eğer key undefined ise, diğer alanı kullan
-            if (!key) {
+            if (!key) 
+            {
                 key = (row.TYPE == 1 && row.REBATE == 0) ? row.OUTPUT_NAME : row.INPUT_NAME;
             }
             
-            if (!map.has(key)) {
+            if (!map.has(key)) 
+            {
                 map.set(key, {
                     INVOICE_KEY: key, 
                     INPUT_NAME: key, // Burada artık key kullanıyoruz
@@ -217,7 +225,8 @@ export default class openInvoiceSalesReport extends React.PureComponent
                 });
             }
 
-            let invoice = {
+            let invoice = 
+            {
                 DOC_DATE: row.DOC_DATE,
                 DOC_GUID: row.DOC_GUID,
                 DOC_REF: row.DOC_REF,
@@ -234,11 +243,14 @@ export default class openInvoiceSalesReport extends React.PureComponent
             map.get(key).INVOICES.push(invoice);
             
             // Toplamları hesapla ve fatura sayısını artır
-            if (row.REBATE == 0) {
+            if (row.REBATE == 0) 
+            {
                 // Normal fatura
                 map.get(key).REMAINDER += Number(row.REMAINDER || 0);
                 map.get(key).DOC_TOTAL += Number(row.DOC_TOTAL || 0);
-            } else {
+            } 
+            else 
+            {
                 // İade faturası
                 map.get(key).REMAINDER -= Number(row.REMAINDER || 0);
                 map.get(key).DOC_TOTAL -= Number(row.DOC_TOTAL || 0);
@@ -277,7 +289,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -295,14 +307,16 @@ export default class openInvoiceSalesReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmKriter">
-                                <Item>
+                            <NdForm colCount={2} id="frmKriter">
+                                <NdItem>
+                                    <NdLabel text={this.t("dtDate")} alignment="right" />
                                     <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('month')} endDate={moment().endOf('month')}/>
-                                </Item>
-                                <Item>
-                                    <EmptyItem/>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
+                                    <NdEmptyItem/>
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                     {/* <Label text={this.t("txtCustomerCode")} alignment="right" /> */}
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true} placeholder = {this.t("txtCustomerCode")}
                                     onEnterKey={(async()=>
@@ -401,8 +415,8 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
                                         
                                     </NdPopGrid>
-                                </Item> 
-                            </Form>
+                                </NdItem> 
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -416,7 +430,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -425,25 +439,30 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                 id="grdListe" 
                                 parent={this} 
                                 ref={(r) => { this.grdListe = r; }}
-                                height={'calc(100vh - 200px)'}
+                                height={'calc(100vh - auto)'}
                                 currency="EUR"
                                 allowFiltering={true}
                                 allowSorting={true}
                                 allowExporting={true}
                                 showGroupPanel={false}
-                                onSelectionChanged={(e) => {
+                                onSelectionChanged={(e) => 
+                                {
                                     // Seçilen satırları sakla
                                     this.selectedRows = e.selectedRowsData;
                                 }}
-                                onRowDblClick={async (e) => {
-                                      if (e.data.REBATE == 1) {
+                                onRowDblClick={async (e) => 
+                                {
+                                      if (e.data.REBATE == 1) 
+                                    {
                                         App.instance.menuClick({
                                           id: 'ftr_02_003',
                                           text: this.t("menu"),
                                           path: 'invoices/documents/rebatePurcInvoice.js',
                                           pagePrm: { GUID: e.data.DOC_GUID }
                                         });
-                                      } else {
+                                      } 
+                                      else 
+                                      {
                                         App.instance.menuClick({
                                           id: 'ftr_02_002',
                                           text: this.t("menu"),
@@ -452,32 +471,6 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                         });
                                       }
                                   }}
-                            />
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-3">
-                            <NdButton id="btnMailSend" parent={this} 
-                                text={this.t("btnMailSend")}
-                                type="default"
-                                width={120}
-                                onClick={async () => {
-                                    if (this.grdListe && typeof this.grdListe.sendMailSelectedRows === 'function') {
-                                        await this.grdListe.sendMailSelectedRows();
-                                    }
-                                }}
-                            />
-                        </div>
-                        <div className="col-3">
-                            <NdButton id="btnPrint" parent={this} 
-                                text={this.t("btnPrint")}
-                                type="default"
-                                width={120}
-                                onClick={() => {
-                                    if (this.grdListe && typeof this.grdListe.printSelectedRows === 'function') {
-                                        this.grdListe.printSelectedRows();
-                                    }
-                                }}
                             />
                         </div>
                     </div>
@@ -493,9 +486,9 @@ export default class openInvoiceSalesReport extends React.PureComponent
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDesign.design")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
                                     displayExpr="DESIGN_NAME"                       
                                     valueExpr="TAG"
@@ -509,8 +502,8 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop" + this.tabIndex}
@@ -568,8 +561,8 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div> 
                     <div>
@@ -584,9 +577,9 @@ export default class openInvoiceSalesReport extends React.PureComponent
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbMailAddress" notRefresh = {true}
                                     displayExpr="MAIL_ADDRESS"                       
                                     valueExpr="GUID"
@@ -598,9 +591,9 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                             <RequiredRule message={this.t("validMail")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                     <NdTextBox id="txtMailSubject" parent={this} simple={true}
                                     maxLength={128}
                                     >
@@ -608,9 +601,9 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                             <RequiredRule message={this.t("validMail")} />
                                         </Validator> 
                                     </NdTextBox>
-                                </Item>
-                                <Item>
-                                <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                <NdLabel text={this.t("popMailSend.txtSendMail")} alignment="right" />
                                     <NdTextBox id="txtSendMail" parent={this} simple={true}
                                     maxLength={128}
                                     >
@@ -618,12 +611,12 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                             <RequiredRule message={this.t("validMail")} />
                                         </Validator> 
                                     </NdTextBox>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <NdHtmlEditor id="htmlEditor" parent={this} height={300} placeholder={this.t("placeMailHtmlEditor")}>
                                     </NdHtmlEditor>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
@@ -668,14 +661,13 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                                                 App.instance.setState({isExecute:false})
                                                                 let tmpConfObj1 =
                                                                 {
-                                                                    id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                    id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'auto',
                                                                     button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
                                                                 }
                                                                 
                                                                 if((pResult1) == 0)
                                                                 {  
-                                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
-                                                                    await dialog(tmpConfObj1);
+                                                                    this.toast.show({message:this.t("msgMailSendResult.msgSuccess"),type:"success"})
                                                                     this.htmlEditor.value = '',
                                                                     this.txtMailSubject.value = '',
                                                                     this.txtSendMail.value = ''
@@ -704,9 +696,10 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
+                        <NdToast id={"toast"} parent={this} displayTime={3000} position={{at:"top center",offset:'0px 110px'}}/>
                     </div>                     
                 </ScrollView>
             </div>

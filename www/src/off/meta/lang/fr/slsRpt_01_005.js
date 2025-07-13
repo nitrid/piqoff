@@ -3,7 +3,8 @@ const slsRpt_01_005 =
 {
     chkZeroBalance : "Afficher soldes 0",  
     txtItemCode : "Choix de produit", 
-    btnGet :"Apporter",  
+    dtDate : "Date",
+    btnGet :"Rechercher",  
     grdListe : 
     {
         clmCode : "Code client",  

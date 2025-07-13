@@ -3,6 +3,7 @@ const slsRpt_01_006 =
 {
     chkZeroBalance : "0 Bakiyeler Gösterilsin", 
     txtCustomerCode : "Müşteri Seçimi", 
+    dtDate : "Tarih",
     btnGet :"Getir", 
     grdListe : 
     {

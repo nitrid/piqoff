@@ -7,11 +7,13 @@ const slsRpt_01_013 =
     txtProductCode : "Code produit",
     txtProductName : "Nom produit",
     txtProductTypeName : "Type",
-    btnGet :"Apporter", 
+    btnGet :"Rechercher", 
     msgNoData : "Aucune donnée trouvée pour les critères sélectionnés.",
     grdListe : 
     {
         clmDate : "Date",   
+        clmCustomerMainGrp : "Groupe principal",
+        clmDocDate : "Date de document",
         clmCode: "Code",   
         clmName : "Nom",            
         clmAmount : "Montant",   

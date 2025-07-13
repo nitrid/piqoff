@@ -1,20 +1,15 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
-
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
+import { NdForm, NdItem, NdLabel, NdEmptyItem} from '../../../../core/react/devex/form.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
 export default class itemSaleRebateReport extends React.PureComponent
@@ -23,23 +18,11 @@ export default class itemSaleRebateReport extends React.PureComponent
     {
         super(props)
 
-        this.state = 
-        {
-            columnListValue : ['INPUT_CODE','INPUT_NAME','DISPATCH','INVOICE','REBATE']
-        }
-        
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "INPUT_CODE",NAME : this.t("grdListe.clmCode")},                                   
-            {CODE : "INPUT_NAME",NAME : this.t("grdListe.clmName")},
-            {CODE : "DISPATCH",NAME : this.t("grdListe.clmDispatch")},
-            {CODE : "INVOICE",NAME : this.t("grdListe.clmInvoice")},
-            {CODE : "REBATE",NAME : this.t("grdListe.clmRebate")},
-        ]
         this.groupList = [];
-        this._btnGetirClick = this._btnGetirClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
+        this.btnGetirClick = this.btnGetirClick.bind(this)
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
@@ -47,68 +30,18 @@ export default class itemSaleRebateReport extends React.PureComponent
         {
         }, 1000);
     }
-    _columnListBox(e)
+    async loadState()
     {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'INPUT_CODE') != 'undefined')
-                {
-                    this.groupList.push('INPUT_CODE')
-                }
-                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('INPUT_NAME')
-                }                
-                if(typeof e.value.find(x => x == 'DISPATCH') != 'undefined')
-                {
-                    this.groupList.push('DISPATCH')
-                }
-                if(typeof e.value.find(x => x == 'INVOICE') != 'undefined')
-                {
-                    this.groupList.push('INVOICE')
-                }
-                if(typeof e.value.find(x => x == 'REBATE') != 'undefined')
-                {
-                    this.groupList.push('REBATE')
-                }
-                
-                for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdListe.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
+        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
     }
-    async _btnGetirClick()
+    async saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        await tmpSave.setValue(e)
+        await tmpSave.save()
+    }
+    async btnGetirClick()
     {
        
         let tmpSource =
@@ -159,7 +92,7 @@ export default class itemSaleRebateReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -177,112 +110,105 @@ export default class itemSaleRebateReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="itemSaleRabate">
-                            <Item>
-                                <Label text={this.t("txtItemCode")} alignment="right" />
-                                <NdTextBox id="txtItemCode" parent={this} simple={true} 
-                                onEnterKey={(async()=>
-                                {
-                                    await this.pg_txtItemCode.setVal(this.txtItemCode.value)
-                                    this.pg_txtItemCode.show()
-                                    this.pg_txtItemCode.onClick = (data) =>
-                                    { 
-                                        if(data.length > 0)
-                                        {
-                                            this.txtItemCode.setState({value:data[0].NAME})
-                                            this.txtItemCode.CODE = data[0].CODE
+                            <NdForm colCount={2} id="itemSaleRabate">
+                                <NdItem>
+                                    <NdLabel text={this.t("txtItemCode")} alignment="right" />
+                                    <NdTextBox id="txtItemCode" parent={this} simple={true} 
+                                    onEnterKey={(async()=>
+                                    {
+                                        await this.pg_txtItemCode.setVal(this.txtItemCode.value)
+                                        this.pg_txtItemCode.show()
+                                        this.pg_txtItemCode.onClick = (data) =>
+                                        { 
+                                            if(data.length > 0)
+                                            {
+                                                this.txtItemCode.setState({value:data[0].NAME})
+                                                this.txtItemCode.CODE = data[0].CODE
+                                            }
                                         }
+                                    }).bind(this)}
+                                    button=
+                                    {
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.pg_txtItemCode.show()
+                                                    this.pg_txtItemCode.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtItemCode.setState({value:data[0].NAME})
+                                                            this.txtItemCode.CODE = data[0].CODE
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                id:'02',
+                                                icon:'clear',
+                                                onClick:()=>
+                                                {
+                                                    this.txtItemCode.setState({value:''})
+                                                    this.txtItemCode.CODE =''
+                                                }
+                                            },
+                                        ]
                                     }
-                                }).bind(this)}
-                                button=
-                                {
-                                    [
+                                    >
+                                    <Validator validationGroup={"itemSaleRebate" + this.tabIndex}>
+                                        <RequiredRule message={this.t("validCode")} />
+                                    </Validator>  
+                                    </NdTextBox>
+                                    {/*Stok SECIMI POPUP */}
+                                    <NdPopGrid id={"pg_txtItemCode"} parent={this} container={"#root"}
+                                    visible={false}
+                                    position={{of:'#root'}} 
+                                    showTitle={true} 
+                                    showBorders={true}
+                                    width={'90%'}
+                                    height={'90%'}
+                                    title={this.t("pg_txtItemCode.title")} //
+                                    search={true}
+                                    data = 
+                                    {{
+                                        source:
+                                        {
+                                            select:
+                                            {  
+                                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT, " 
+                                                        + "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                param : ['VAL:string|50']
+                                            },
+                                            sql:this.core.sql
+                                        }
+                                    }}
+                                    button=
+                                    {
                                         {
                                             id:'01',
                                             icon:'more',
                                             onClick:()=>
                                             {
-                                                this.pg_txtItemCode.show()
-                                                this.pg_txtItemCode.onClick = (data) =>
-                                                {
-                                                    if(data.length > 0)
-                                                    {
-                                                        this.txtItemCode.setState({value:data[0].NAME})
-                                                        this.txtItemCode.CODE = data[0].CODE
-                                                    }
-                                                }
+                                                console.log(1111)
                                             }
-                                        },
-                                        {
-                                            id:'02',
-                                            icon:'clear',
-                                            onClick:()=>
-                                            {
-                                                this.txtItemCode.setState({value:''})
-                                                this.txtItemCode.CODE =''
-                                            }
-                                        },
-                                    ]
-                                }
-                                >
-                                <Validator validationGroup={"itemSaleRebate" + this.tabIndex}>
-                                    <RequiredRule message={this.t("validCode")} />
-                                </Validator>  
-                                </NdTextBox>
-                                {/*Stok SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtItemCode"} parent={this} container={"#root"}
-                                visible={false}
-                                position={{of:'#root'}} 
-                                showTitle={true} 
-                                showBorders={true}
-                                width={'90%'}
-                                height={'90%'}
-                                title={this.t("pg_txtItemCode.title")} //
-                                search={true}
-                                data = 
-                                {{
-                                    source:
-                                    {
-                                        select:
-                                        {  
-                                            query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT, " 
-                                                    + "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
-                                            param : ['VAL:string|50']
-                                        },
-                                        sql:this.core.sql
-                                    }
-                                }}
-                                button=
-                                {
-                                    {
-                                        id:'01',
-                                        icon:'more',
-                                        onClick:()=>
-                                        {
-                                            console.log(1111)
                                         }
                                     }
-                                }
-                                >
-                                    <Column dataField="CODE" caption={this.t("pg_txtItemCode.clmCode")} width={150} />
-                                    <Column dataField="NAME" caption={this.t("pg_txtItemCode.clmName")} width={500} defaultSortOrder="asc" />
-                                </NdPopGrid>
-                            </Item> 
-                            <Item>
-                                <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('month')} endDate={moment().endOf('month')}/>
-                            </Item>
-                            </Form>
+                                    >
+                                        <Column dataField="CODE" caption={this.t("pg_txtItemCode.clmCode")} width={150} />
+                                        <Column dataField="NAME" caption={this.t("pg_txtItemCode.clmName")} width={500} defaultSortOrder="asc" />
+                                    </NdPopGrid>
+                                </NdItem> 
+                                <NdItem>
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('month')} endDate={moment().endOf('month')}/>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
                         </div>
                         <div className="col-3">
                       
@@ -296,7 +222,7 @@ export default class itemSaleRebateReport extends React.PureComponent
                             {
                                 if(e.validationGroup.validate().status == "valid")
                                 {
-                                    this._btnGetirClick()
+                                    this.btnGetirClick()
                                 }
                             }}
                             ></NdButton>
@@ -319,6 +245,8 @@ export default class itemSaleRebateReport extends React.PureComponent
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdListe"}/>
+                                <ColumnChooser enabled={true} />
                                 <Export fileName={this.lang.t("menuOff.slsRpt_01_005")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="INPUT_CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
                                 <Column dataField="INPUT_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 

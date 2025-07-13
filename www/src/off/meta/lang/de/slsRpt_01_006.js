@@ -3,7 +3,8 @@ const slsRpt_01_006 =
 {
     chkZeroBalance : "Nullsalden anzeigen!", 
     txtCustomerCode : "Kundenauswahl", 
-    btnGet :"Suchen", 
+    dtDate : "Datum",
+    btnGet :"Suchen",   
     grdListe : 
     {
         clmCode : "Artikelcode",  

@@ -1,30 +1,15 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls,docCustomerCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
 import moment from 'moment';
-
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import ContextMenu from 'devextreme-react/context-menu';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
-
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,Summary,StateStoring,ColumnChooser,TotalItem} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
-import fr from '../../../meta/lang/devexpress/fr.js';
-import tr from '../../../meta/lang/tr/tr.js';
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
+import {NdForm,NdItem, NdLabel, NdEmptyItem} from '../../../../core/react/devex/form.js';
 
 export default class customerProfitReport extends React.PureComponent
 {
@@ -41,7 +26,7 @@ export default class customerProfitReport extends React.PureComponent
         
         this.cmbItem = null;
 
-        this._btnGetirClick = this._btnGetirClick.bind(this)
+        this.btnGetirClick = this.btnGetirClick.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
     }
@@ -68,7 +53,7 @@ export default class customerProfitReport extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                                 }
@@ -85,30 +70,25 @@ export default class customerProfitReport extends React.PureComponent
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
-                        <div className="col-6">
-                            <NbDateRange id={"dtDate"} parent={this} 
-                            startDate={moment().startOf('month')} 
-                            endDate={moment().endOf('month')}/>
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-6">
-                            <NdSelectBox simple={true} parent={this} id="cmbCustomerMainGrp"
-                            value={''}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            placeholder={this.t("selectCustomerMainGrp")}
-                            showClearButton={true}
-                            data={{
-                                source:{
-                                    select:{
-                                        query:  "SELECT NAME,CODE FROM CUSTOMER_GROUP " +
-                                                "ORDER BY NAME",
-                                    },
-                                    sql: this.core.sql
-                                }
-                            }}
-                            />
+                        <div className="col-12">
+                            <NdForm colCount={2} id="frmKriter">
+                                <NdItem>
+                                    <NdLabel text={this.t("grdListe.clmDocDate")}/>
+                                    <NbDateRange id={"dtDate"} parent={this} 
+                                    startDate={moment().startOf('month')} 
+                                    endDate={moment().endOf('month')}/>
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("grdListe.clmCustomerMainGrp")}/>
+                                    <NdSelectBox simple={true} parent={this} id="cmbCustomerMainGrp"
+                                    value={''}
+                                    displayExpr="NAME"                       
+                                    valueExpr="CODE"
+                                    placeholder={this.t("selectCustomerMainGrp")}
+                                    showClearButton={true}
+                                    />
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -122,7 +102,7 @@ export default class customerProfitReport extends React.PureComponent
                                 
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -190,7 +170,7 @@ export default class customerProfitReport extends React.PureComponent
         )
     }
 
-    async _btnGetirClick()
+    async btnGetirClick()
     {
             let tmpSource =
             {

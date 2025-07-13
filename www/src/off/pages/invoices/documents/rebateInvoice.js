@@ -62,7 +62,7 @@ export default class rebateInvoice extends DocBase
                 setTimeout(() => 
                     {
                         this.initPiqX()
-                    }, 1000);
+                    }, 2000);
             }
         }
     }

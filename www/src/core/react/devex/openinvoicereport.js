@@ -4,7 +4,8 @@ import App from '../../../off/lib/app.js';
 import DataGrid, { Column, Summary, TotalItem, Sorting, FilterRow, Export, GroupPanel, GroupItem } from 'devextreme-react/data-grid';
 
 
-export default class NdOpenInvoiceReport extends Base {
+export default class NdOpenInvoiceReport extends Base 
+{
   constructor(props) {
     super(props);
     this.state = {
@@ -102,11 +103,100 @@ export default class NdOpenInvoiceReport extends Base {
     this.setState({ dataSource: data });
   }
 
-  getSelectedData() {
-    if (this.devGrid && this.devGrid.instance) {
+  // DÜZELTME: getSelectedData metodunu düzelt
+  getSelectedData() 
+  {
+    // DevExtreme DataGrid'de doğru referans alma yöntemi
+    if (this.devGrid && typeof this.devGrid.getSelectedRowsData === 'function') 
+    {
+      return this.devGrid.getSelectedRowsData();
+    }
+    
+    // Alternatif: instance üzerinden
+    if (this.devGrid && this.devGrid.instance && typeof this.devGrid.instance.getSelectedRowsData === 'function') 
+    {
       return this.devGrid.instance.getSelectedRowsData();
     }
+
     return [];
+  }
+
+  // EKSİK METOD: Seçili satırları yazdır
+  async printSelectedRows() 
+  {
+    try 
+    {
+      const selectedData = this.getSelectedData();
+      console.log('Seçili veriler:', selectedData);
+      
+      if (selectedData.length === 0) 
+      {
+        await dialog({
+          id: 'msgWarning',
+          showTitle: true,
+          title: this.t("msgWarning"),
+          showCloseButton: true,
+          width: '500px',
+          height: 'auto',
+          button: [{id: "btn01", caption: this.t("btnOk"), location: 'after'}],
+          content: (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSelectRow")}</div>)
+        });
+        return;
+      }
+
+      // Yazdırma işlemi için parent'a event gönder
+      if (this.props.onPrintSelectedRows) 
+      {
+        await this.props.onPrintSelectedRows(selectedData);
+      } 
+      else 
+      {
+        console.warn('onPrintSelectedRows callback tanımlanmamış');
+      }
+    } 
+    catch (error) 
+    {
+      console.error('printSelectedRows hatası:', error);
+    }
+  }
+
+  // EKSİK METOD: Seçili satırları mail gönder
+  async sendMailSelectedRows() 
+  {
+    try 
+    {
+      const selectedData = this.getSelectedData();
+      console.log('Seçili veriler:', selectedData);
+      
+      if (selectedData.length === 0) 
+      {
+        await dialog({
+          id: 'msgWarning',
+          showTitle: true,
+          title: this.t("msgWarning"),
+          showCloseButton: true,
+          width: '500px',
+          height: 'auto',
+          button: [{id: "btn01", caption: this.t("btnOk"), location: 'after'}],
+          content: (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSelectRow")}</div>)
+        });
+        return;
+      }
+
+      // Mail gönderme işlemi için parent'a event gönder
+      if (this.props.onSendMailSelectedRows) 
+      {
+        await this.props.onSendMailSelectedRows(selectedData);
+      } 
+      else 
+      {
+        console.warn('onSendMailSelectedRows callback tanımlanmamış');
+      }
+    } 
+    catch (error) 
+    {
+      console.error('sendMailSelectedRows hatası:', error);
+    }
   }
   _onRowClick(e)
   {
@@ -123,15 +213,18 @@ export default class NdOpenInvoiceReport extends Base {
       }
   }
 
-  render() {
-    let processedData = this.state.dataSource.map(item => {
+  render() 
+  {  
+    let processedData = this.state.dataSource.map(item => 
+    {
       // satis input, iade output
       let displayName = (item.TYPE == 1 && item.REBATE == 0) ? item.INPUT_NAME : item.OUTPUT_NAME;
       let docTotal = item.DOC_TOTAL;
       let payingAmount = item.PAYING_AMOUNT;
       let remainder = item.REMAINDER;
 
-      if (item.REBATE == 1) {
+      if (item.REBATE == 1) 
+      {
         // iade için değerler negatif
         docTotal = -Math.abs(docTotal);
         payingAmount = -Math.abs(payingAmount);
@@ -150,29 +243,35 @@ export default class NdOpenInvoiceReport extends Base {
     });
 
     let totalRemainder = 0;
-    processedData.forEach(item => {
+    processedData.forEach(item => 
+    {
       totalRemainder += item.DISPLAY_REMAINDER || 0;
     });
 
     let groupTotals = {};
-    processedData.forEach(item => {
+    processedData.forEach(item => 
+    {
       let key = item.DISPLAY_NAME;
-      if (!groupTotals[key]) {
+      if (!groupTotals[key]) 
+      {
         groupTotals[key] = 0;
       }
       groupTotals[key] += item.DISPLAY_REMAINDER || 0;
     });
 
     let groupCounts = {};
-    processedData.forEach(item => {
+    processedData.forEach(item => 
+    {
       let key = item.DISPLAY_NAME;
-      if (!groupCounts[key]) {
+      if (!groupCounts[key]) 
+      {
         groupCounts[key] = 0;
       }
       groupCounts[key]++;
     });
 
-    let dataSource = {
+    let dataSource = 
+    {
       store: processedData,
       group: [{ selector: 'DISPLAY_NAME' }]
     };
@@ -194,7 +293,13 @@ export default class NdOpenInvoiceReport extends Base {
           mode: 'multiple',
           showCheckBoxesMode: 'always'
         }}
-        ref={(ref) => { this.devGrid = ref; }}
+        // DÜZELTME: onInitialized event'ini ekleyin
+        onInitialized={(e) => 
+        {
+          console.log('DataGrid initialized:', e.component);
+          this.devGrid = e.component;
+        }}
+        // DÜZELTME: ref'i kaldırın, onInitialized kullanın
       >
         <Sorting mode="multiple" />
         <FilterRow visible={true} />
@@ -224,14 +329,16 @@ export default class NdOpenInvoiceReport extends Base {
         <Column dataField="DOC_REF_NO" caption={this.t("grdListe.clmRefNo")} width={100} />
         <Column dataField="INVOICE_TYPE" caption={this.t("grdListe.clmRebate")} 
           lookup={{
-            dataSource: [
+            dataSource: 
+            [
               { value: 'Facture Ouverte', text: this.t("grdListe.clmNormal") },
               { value: 'Retour', text: this.t("grdListe.clmRebateFact") }
             ],
             valueExpr: 'value',
             displayExpr: 'text'
           }}
-          cellRender={(cell) => {
+          cellRender={(cell) => 
+          {
             return cell.data.REBATE == 1 ? 
               <div style={{ color: 'red', fontWeight: 'bold' }}>{this.t("grdListe.clmRebateFact")}</div> : 
               <div>{this.t("grdListe.clmNormal")}</div>;
@@ -240,7 +347,8 @@ export default class NdOpenInvoiceReport extends Base {
         <Column dataField="DISPLAY_DOC_TOTAL" caption={this.t("grdListe.clmTotal")}
           format={{ style: "currency", currency: Number.money ? Number.money.code : "EUR", precision: 2 }}
           alignment="right"
-          cellRender={(cell) => {
+          cellRender={(cell) => 
+          {
             let style = cell.data.IS_REBATE ? { color: 'red' } : {};
             return <div style={style}>{cell.text}</div>;
           }}
@@ -248,7 +356,8 @@ export default class NdOpenInvoiceReport extends Base {
         <Column dataField="DISPLAY_PAYING_AMOUNT" caption={this.t("grdListe.clmPaid")}
           format={{ style: "currency", currency: Number.money ? Number.money.code : "EUR", precision: 2 }}
           alignment="right"
-          cellRender={(cell) => {
+          cellRender={(cell) => 
+          {
             let style = cell.data.IS_REBATE ? { color: 'red' } : { color: 'green' };
             return <div style={style}>{cell.text}</div>;
           }}
@@ -256,7 +365,8 @@ export default class NdOpenInvoiceReport extends Base {
         <Column dataField="DISPLAY_REMAINDER" caption={this.t("grdListe.clmRemainder")}
           format={{ style: "currency", currency: Number.money ? Number.money.code : "EUR", precision: 2 }}
           alignment="right"
-          cellRender={(cell) => {
+          cellRender={(cell) => 
+          {
             if (cell.data.IS_REBATE || cell.data.DISPLAY_REMAINDER < 0) {
               return <div style={{ color: 'green' }}>{cell.text}</div>;
             }

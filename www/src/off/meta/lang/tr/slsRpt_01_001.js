@@ -4,6 +4,7 @@ const slsRpt_01_001 =
     chkZeroBalance : "0 Bakiyeler Gösterilsin",
     txtCustomerCode : "Müşteri",
     btnCheck : "Aktif",
+    dtDate : "Tarih",
     btnGet :"Getir",
     grdListe : 
     {

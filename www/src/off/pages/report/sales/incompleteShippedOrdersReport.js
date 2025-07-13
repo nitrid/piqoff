@@ -1,25 +1,20 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
-import { docCls,docItemsCls,docCustomerCls,docExtraCls,deptCreditMatchingCls} from '../../../../core/cls/doc.js';
-
+import Button from 'devextreme-react/button';
+import { docCls } from '../../../../core/cls/doc.js';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import Button from 'devextreme-react/button';
-
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
+import { NdToast} from '../../../../core/react/devex/toast.js';
 
 export default class incompleteShippedOrdersReport extends React.PureComponent
 {
@@ -27,29 +22,13 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
     {
         super(props)
 
-        this.state = 
-        {
-            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE','TOTAL']
-        }
         this.printGuid = ''
-        
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "REF",NAME : this.t("grdSlsOrdList.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdSlsOrdList.clmRefNo")},
-            {CODE : "INPUT_CODE",NAME : this.t("grdSlsOrdList.clmInputCode")},                                   
-            {CODE : "INPUT_NAME",NAME : this.t("grdSlsOrdList.clmInputName")},
-            {CODE : "ITEM_NAME",NAME : this.t("grdSlsOrdList.clmItemName")},
-            {CODE : "DOC_DATE",NAME : this.t("grdSlsOrdList.clmDate")},
-            {CODE : "QUANTITY",NAME : this.t("grdSlsOrdList.clmQuantity")},
-            {CODE : "COMP_QUANTITY",NAME : this.t("grdSlsOrdList.clmCompQuantity")},
-            {CODE : "PEND_QUANTITY",NAME : this.t("grdSlsOrdList.clmPendQuantity")},
-        ]
         this.groupList = [];
-        this._btnGetClick = this._btnGetClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
-        this._btnGrdPrint = this._btnGrdPrint.bind(this)
+        this.btnGetClick = this.btnGetClick.bind(this)        
+        this.btnGrdPrint = this.btnGrdPrint.bind(this)
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
@@ -64,69 +43,18 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
     }
-    _columnListBox(e)
+    async loadState()
     {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }                
-                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('INPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
-                {
-                    this.groupList.push('TOTAL')
-                }
-                
-                for (let i = 0; i < this.grdSlsOrdList.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdSlsOrdList.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdSlsOrdList.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdSlsOrdList.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
+        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
     }
-    async _btnGetClick()
+    async saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        await tmpSave.setValue(e)
+        await tmpSave.save()
+    }
+    async btnGetClick()
     {
        
         let tmpSource =
@@ -153,7 +81,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
         App.instance.setState({isExecute:false})
     
     }
-    async _btnGrdPrint(e)
+    async btnGrdPrint(e)
     {
         this.printGuid = e.row.data.GUID
         this.popDesign.show() 
@@ -162,12 +90,16 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
     {
         let tmpConfObj =
         {
-            id:'msgConvertDispatch',showTitle:true,title:this.t("msgConvertDispatch.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgConvertDispatch',showTitle:true,title:this.t("msgConvertDispatch.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgConvertDispatch.btn01"),location:'before'},{id:"btn02",caption:this.t("msgConvertDispatch.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertDispatch.msg")}</div>)
         }
         
         let pResult = await dialog(tmpConfObj);
+        if(pResult == 'btn01')
+        {
+            this.toast.show({type:"success",message:this.t("msgConvertDispatch.msg")})
+        }
         if(pResult == 'btn02')
         {
             return
@@ -263,14 +195,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                 await tmpDocCls.save()
             }
 
-            let tmpConfObj =
-            {
-                id:'msgConvertSucces',showTitle:true,title:this.t("msgConvertSucces.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgConvertSucces.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertSucces.msg")}</div>)
-            }
-
-            await dialog(tmpConfObj);
+            this.toast.show({type:"success",message:this.t("msgConvertSucces.msg")})
         }
     }
     async printOrders()
@@ -358,7 +283,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -375,49 +300,30 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmCriter">
+                            <NdForm colCount={2} id="frmCriter">
                                 {/* dtFirst */}
-                                <Item>
-                                    <Label text={this.t("dtFirst")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("dtFirst")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
                                     >
                                     </NdDatePicker>
-                                </Item>
+                                </NdItem>
                                 {/* dtLast */}
-                                <Item>
-                                    <Label text={this.t("dtLast")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("dtLast")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtLast"}/>
-                                </Item>
-                                <Item>
-                                <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
-                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                onEnterKey={(async()=>
-                                    {
-                                        await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
-                                        this.pg_txtCustomerCode.show()
-                                        this.pg_txtCustomerCode.onClick = (data) =>
-                                        { 
-                                            if(data.length > 0)
-                                            {
-                                                if(data.length > 0)
-                                                {
-                                                    this.txtCustomerCode.setState({value:data[0].TITLE})
-                                                    this.txtCustomerCode.CODE = data[0].CODE
-                                                }
-                                            }
-                                        }
-                                    }).bind(this)}
-                                button=
-                                {
-                                    [
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    onEnterKey={(async()=>
                                         {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                this.pg_txtCustomerCode.show()
-                                                this.pg_txtCustomerCode.onClick = (data) =>
+                                            await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                            this.pg_txtCustomerCode.show()
+                                            this.pg_txtCustomerCode.onClick = (data) =>
+                                            { 
+                                                if(data.length > 0)
                                                 {
                                                     if(data.length > 0)
                                                     {
@@ -426,62 +332,74 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                                     }
                                                 }
                                             }
-                                        },
-                                    ]
-                                }
-                                />
-                                {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
-                                visible={false}
-                                position={{of:'#root'}} 
-                                showTitle={true} 
-                                showBorders={true}
-                                width={'90%'}
-                                height={'90%'}
-                                title={this.t("pg_txtCustomerCode.title")} //
-                                search={true}
-                                data = 
-                                {{
-                                    source:
+                                        }).bind(this)}
+                                    button=
                                     {
-                                        select:
-                                        {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
-                                            param : ['VAL:string|50']
-                                        },
-                                        sql:this.core.sql
+                                        [
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:()=>
+                                                {
+                                                    this.pg_txtCustomerCode.show()
+                                                    this.pg_txtCustomerCode.onClick = (data) =>
+                                                    {
+                                                        if(data.length > 0)
+                                                        {
+                                                            this.txtCustomerCode.setState({value:data[0].TITLE})
+                                                            this.txtCustomerCode.CODE = data[0].CODE
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                        ]
                                     }
-                                }}
-                                button=
-                                {
-                                    {
-                                        id:'01',
-                                        icon:'more',
-                                        onClick:()=>
+                                    />
+                                    {/*CARI SECIMI POPUP */}
+                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    visible={false}
+                                    position={{of:'#root'}} 
+                                    showTitle={true} 
+                                    showBorders={true}
+                                    width={'90%'}
+                                    height={'90%'}
+                                    title={this.t("pg_txtCustomerCode.title")} //
+                                    search={true}
+                                    data = 
+                                    {{
+                                        source:
                                         {
-                                            console.log(1111)
+                                            select:
+                                            {
+                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                param : ['VAL:string|50']
+                                            },
+                                            sql:this.core.sql
+                                        }
+                                    }}
+                                    button=
+                                    {
+                                        {
+                                            id:'01',
+                                            icon:'more',
+                                            onClick:()=>
+                                            {
+                                                console.log(1111)
+                                            }
                                         }
                                     }
-                                }
-                                >
-                                    <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
-                                    <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
-                                    <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                    <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>       
-                                </NdPopGrid>
-                                </Item> 
-                            </Form>
+                                    >
+                                        <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
+                                        <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
+                                        <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
+                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>       
+                                    </NdPopGrid>
+                                </NdItem> 
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
                         </div>
                         <div className="col-3">
                             
@@ -489,7 +407,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                         <div className="col-3"> 
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -507,6 +425,8 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdListe"}/>
+                                <ColumnChooser enabled={true} />
                                 <Export fileName={this.lang.t("menuOff.sip_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdSlsOrdList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdSlsOrdList.clmRefNo")} visible={false} width={100}/> 
@@ -550,9 +470,9 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                     height={'280'}
                     position={{of:'#root'}}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("popDesign.design")} alignment="right" />
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("popDesign.clmDesign")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
                                 displayExpr="DESIGN_NAME"                       
                                 valueExpr="TAG"
@@ -566,9 +486,9 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                         <RequiredRule message={this.t("validDesign")} />
                                     </Validator> 
                                 </NdSelectBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("popDesign.lang")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popDesign.lang")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                 displayExpr="VALUE"                       
                                 valueExpr="ID"
@@ -576,8 +496,8 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                 searchEnabled={true}
                                 data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                 />
-                            </Item>
-                            <Item>
+                            </NdItem>
+                            <NdItem>
                                 <div className='row'>
                                     <div className='col-6'>
                                         <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmSlsOrderMail" + this.tabIndex}
@@ -656,8 +576,8 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                         }}/>
                                     </div>
                                 </div>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div>  
                 {/* Dizayn Seçim PopUp */}
@@ -672,9 +592,9 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                     height={'200'}
                     position={{of:'#root'}}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("popDesign.design")} alignment="right" />
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("popDesign.clmDesign")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbAllDesignList" notRefresh = {true}
                                 displayExpr="DESIGN_NAME"                       
                                 valueExpr="TAG"
@@ -682,8 +602,8 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                 searchEnabled={true}
                                 data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '11'"},sql:this.core.sql}}}
                                 />
-                            </Item>
-                            <Item>
+                            </NdItem>
+                            <NdItem>
                                 <div className='row'>
                                     <div className='col-6'>
                                         <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmSlsOrderMail" + this.tabIndex}
@@ -700,9 +620,10 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                         }}/>
                                     </div>
                                 </div>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
+                    <NdToast id={"toast"} parent={this} displayTime={3000} position={{at:"top center",offset:'0px 110px'}}/>
                 </div>  
             </div>
         )

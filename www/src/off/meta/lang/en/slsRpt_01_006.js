@@ -3,6 +3,7 @@ const slsRpt_01_006 =
 {
     chkZeroBalance : "Show Zero Balances", 
     txtCustomerCode : "Customer Selection", 
+    dtDate : "Date",
     btnGet :"Get", 
     grdListe : 
     {

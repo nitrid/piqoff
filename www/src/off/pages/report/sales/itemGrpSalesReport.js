@@ -1,25 +1,17 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
-
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-
 import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import {  Chart, Series, CommonSeriesSettings,  Format, Legend } from 'devextreme-react/chart';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import { NdForm, NdItem, NdLabel, NdEmptyItem} from '../../../../core/react/devex/form.js';
 
 export default class itemGrpSalesReport extends React.PureComponent
 {
@@ -29,7 +21,7 @@ export default class itemGrpSalesReport extends React.PureComponent
         this.state = {dataSource : {}} 
         this.core = App.instance.core;
         this.groupList = [];
-        this._btnGetClick = this._btnGetClick.bind(this)
+        this.bbtnGetClick = this.bbtnGetClick.bind(this)
         this.getDetail = this.getDetail.bind(this)
         this.btnAnalysis = this.btnAnalysis.bind(this)
     }
@@ -44,7 +36,7 @@ export default class itemGrpSalesReport extends React.PureComponent
     {
 
     }
-    async _btnGetClick()
+    async bbtnGetClick()
     {
         let tmpQuery = {
             query :"SELECT COUNT(GUID) AS TICKET,ISNULL(AVG(TOTAL),0) AS AVGTOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 AND  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE ",
@@ -163,7 +155,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -181,37 +173,43 @@ export default class itemGrpSalesReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
+                            <NdForm colCount={2} id="frmKriter">
+                                <NdItem>
+                                    <NdLabel text={this.t("dtDate")} alignment="right" />
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-6">
-                            <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
-                        </div>
+                            
+                         </div>
                         <div className="col-3">
                           
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmPurcoffer">
-                                <Item  >
-                                    <Label text={this.t("txtTotalTicket")} alignment="right" />
+                            <NdForm colCount={4} parent={this} id="frmPurcoffer">
+                                <NdItem  >
+                                    <NdLabel text={this.t("txtTotalTicket")} alignment="right" />
                                     <NdTextBox id="txtTotalTicket" parent={this} simple={true} readOnly={true} 
                                     maxLength={32}
                                    
                                     ></NdTextBox>
-                                </Item>
-                                <Item  >
-                                    <Label text={this.t("txtTicketAvg")} alignment="right" />
+                                </NdItem>
+                                <NdItem  >
+                                    <NdLabel text={this.t("txtTicketAvg")} alignment="right" />
                                     <NdTextBox id="txtTicketAvg" parent={this} simple={true} readOnly={true} 
                                     maxLength={32}
                                    
                                     ></NdTextBox>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

@@ -30,6 +30,25 @@ const slsRpt_01_011 =
         clmItemName :"Ürün İsmi",
         clmLivre : "Gönderildi"
     },
+    msgConvertDispatch : 
+    {
+        title : "Gönderim Dönüştürme",
+        msg : "Gönderim dönüştürme işlemi başarıyla tamamlandı.",
+        btn01 : "Tamam",
+        btn02 : "İptal"
+    },
+    msgConvertSucces : 
+    {
+        title : "Gönderim Dönüştürme",
+        msg : "Gönderim dönüştürme işlemi başarıyla tamamlandı.",
+        btn01 : "Tamam",
+        btn02 : "İptal"
+    },
+    popDesign : {
+        title : "Düzen",
+        clmDesign : "Düzen",
+        clmPath : "Yol"
+    }
 }
 
 export default slsRpt_01_011

@@ -7,7 +7,8 @@ const slsRpt_01_012 =
     txtProductCode : "Code produit",
     txtProductName : "Nom produit",
     txtProductTypeName : "Type",
-    btnGet :"Apporter", 
+    dtDate : "Date",
+    btnGet :"Rechercher", 
     msgNoData : "Aucune donnée trouvée pour les critères sélectionnés.",
     grdListe : 
     {
