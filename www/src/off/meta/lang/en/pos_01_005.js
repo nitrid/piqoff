@@ -45,6 +45,10 @@ const pos_01_005 =
         title : "Payment Types",
         clmCode: "Code",
         clmName : "Name",
+    },
+    msgDeleteResult:
+    {
+        msgSuccess: "Your record has been saved successfully !"
     }
 }
 

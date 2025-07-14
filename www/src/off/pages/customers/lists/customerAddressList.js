@@ -37,7 +37,7 @@ export default class barcodeList extends React.PureComponent
     }
     async saveState(e)
     {
-        let tmpSave = await this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF",EMPTY:true})
+        let tmpSave = await this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
         await tmpSave.setValue(e)
         await tmpSave.save()
     }

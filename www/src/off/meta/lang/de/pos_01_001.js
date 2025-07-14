@@ -46,6 +46,10 @@ const pos_01_001 =
         btn02: "Abbrechen",
         msg: "Möchten Sie den Eintrag wirklich löschen?"
     },
+    msgDeleteResult:
+    {
+        msgSuccess: "Der Eintrag wurde erfolgreich gelöscht!"
+    },
     msgCode : 
     {
         title: "Achtung",

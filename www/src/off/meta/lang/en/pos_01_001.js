@@ -46,6 +46,10 @@ const pos_01_001 =
         btn02: "Cancel",
         msg: "Do you want to delete the record ?"
     },
+    msgDeleteResult:
+    {
+        msgSuccess: "Record deletion was successful !"
+    },
     msgCode : 
     {
         title: "Attention",

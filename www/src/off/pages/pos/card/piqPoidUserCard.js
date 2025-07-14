@@ -1,14 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-
-import NdButton from '../../../../core/react/devex/button.js';
 import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
-
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class piqPoidUserCard extends React.PureComponent
 {
@@ -77,15 +73,14 @@ export default class piqPoidUserCard extends React.PureComponent
                                 {
                                     let tmpConfObj =
                                     {
-                                        id:'msgAlertCodeName',showTitle:true,title:this.t("msgAlertCodeName.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        id:'msgAlertCodeName',showTitle:true,title:this.t("msgAlertCodeName.title"),showCloseButton:true,width:'500px',height:'auto',
                                         button:[{id:"btn01",caption:this.t("msgAlertCodeName.btn01"),location:'before'}],
                                     }
                                     if(typeof e.data.CODE == 'undefined' || e.data.CODE == null)
                                     {
                                         e.cancel = true;
                                         this.dialogOpened = true;
-                                        tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlertCodeName.msg1")}</div>)
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgAlertCodeName.msg1"),type:"warning"})
                                         this.dialogOpened = false;
                                         console.log(1)
                                         return
@@ -94,8 +89,7 @@ export default class piqPoidUserCard extends React.PureComponent
                                     {
                                         e.cancel = true;
                                         this.dialogOpened = true;
-                                        tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlertCodeName.msg2")}</div>)
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgAlertCodeName.msg2"),type:"warning"})
                                         this.dialogOpened = false;
                                         return
                                     }
@@ -124,15 +118,14 @@ export default class piqPoidUserCard extends React.PureComponent
                                 {
                                     let tmpConfObj =
                                     {
-                                        id:'msgAlertCodeName',showTitle:true,title:this.t("msgAlertCodeName.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        id:'msgAlertCodeName',showTitle:true,title:this.t("msgAlertCodeName.title"),showCloseButton:true,width:'500px',height:'auto',
                                         button:[{id:"btn01",caption:this.t("msgAlertCodeName.btn01"),location:'before'}],
                                     }
                                     if(typeof e.newData.CODE != 'undefined' && e.newData.CODE == '')
                                     {
                                         e.cancel = true;
                                         this.dialogOpened = true;
-                                        tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlertCodeName.msg1")}</div>)
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgAlertCodeName.msg1"),type:"warning"})
                                         this.dialogOpened = false;
                                         return
                                     }
@@ -140,8 +133,7 @@ export default class piqPoidUserCard extends React.PureComponent
                                     {
                                         e.cancel = true;
                                         this.dialogOpened = true;
-                                        tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlertCodeName.msg2")}</div>)
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgAlertCodeName.msg2"),type:"warning"})
                                         this.dialogOpened = false;
                                         return
                                     }

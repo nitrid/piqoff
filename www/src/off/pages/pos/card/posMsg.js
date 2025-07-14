@@ -1,13 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { posDeviceCls} from '../../../../core/cls/pos';
-
 import ScrollView from 'devextreme-react/scroll-view';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox';
 import NdTextArea from '../../../../core/react/devex/textarea';
 import NdButton from '../../../../core/react/devex/button';
 import NdListBox from '../../../../core/react/devex/listbox';
-import NdDialog,{ dialog } from "../../../../core/react/devex/dialog.js";
+import { dialog } from "../../../../core/react/devex/dialog.js";
 export default class posDeviceCard extends React.PureComponent
 {
     constructor(props)
@@ -112,7 +110,7 @@ export default class posDeviceCard extends React.PureComponent
 
                                 let tmpConfObj =
                                 {
-                                    id:'msgResult',showTitle:true,title:this.t("msgResult.title"),showCloseButton:true,width:'500px',height:'250px',
+                                    id:'msgResult',showTitle:true,title:this.t("msgResult.title"),showCloseButton:true,width:'500px',height:'auto',
                                     button:[{id:"btn01",caption:this.t("msgResult.btn01"),location:'before'}],
                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgResult.msg")}</div>)
                                 }

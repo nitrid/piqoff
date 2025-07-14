@@ -46,6 +46,11 @@ const pos_01_001 =
         btn02: "Vazgeç",
         msg: "Kaydı silmek istediğinize eminmisiniz ?"
     },
+    msgDeleteResult:
+    {
+        msgSuccess: "Kayıt silme işleminiz başarılı !",
+        msgFailed: "Kayıt silme işleminiz başarısız !"
+    },
     msgCode : 
     {
         title: "Dikkat",
