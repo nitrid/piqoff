@@ -2096,7 +2096,7 @@ export default class posSalesOrder extends DocBase
                         </NdPopUp>
                     </div>
                     <div>{super.render()}</div>
-                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 73px'}}/>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>                
             </div>
         )

@@ -1,17 +1,15 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
-
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-
 import NdButton from '../../../../core/react/devex/button.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-
 import { datatable } from '../../../../core/core.js';
+import { NdForm,NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
 
 export default class posLottery extends React.PureComponent
 {
@@ -127,7 +125,7 @@ export default class posLottery extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -145,20 +143,20 @@ export default class posLottery extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmFilter">
-                                <Item>
-                                    <Label text={this.t("dtDate")} alignment="right" />
+                            <NdForm colCount={3} id="frmFilter">
+                                <NdItem>
+                                    <NdLabel text={this.t("dtDate")} alignment="right" />
                                     <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtLucky")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("txtLucky")} alignment="right" />
                                     <NdTextBox id="txtLucky" parent={this} simple={true} value={"1"}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtPoint")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("txtPoint")} alignment="right" />
                                     <NdTextBox id="txtPoint" parent={this} simple={true} value={"0"}/>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

@@ -2,32 +2,20 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import ReactWizard from 'react-bootstrap-wizard';
 import moment from 'moment';
-
 import { posEnddayCls } from '../../../../core/cls/pos.js';
-
-import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
-
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import { NdForm,NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
+import { Validator, RangeRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdTagBox from '../../../../core/react/devex/tagbox.js';
 import { docCls} from "../../../../core/cls/doc.js"
-
-
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
-import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
+import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
-import tr from '../../../meta/lang/devexpress/tr.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class endOfDay extends React.PureComponent
 {
@@ -245,9 +233,6 @@ export default class endOfDay extends React.PureComponent
             this.Cash = tmpCashValue
             this.setState({Cash:tmpCashValue})
         }
-
-        console.log(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT'))
-        console.log(this.paymentData.where({'PAY_TYPE':9}).sum('AMOUNT'))
         if((Number(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')).round(2) + Number(this.paymentData.where({'PAY_TYPE':9}).sum('AMOUNT')).round(2)) ==  Number(this.txtCreditCard.value).round(2))
         {
             this.color.card = "green"
@@ -256,7 +241,6 @@ export default class endOfDay extends React.PureComponent
         }
         else 
         {
-            console.log(((this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')).toFixed(2) + (this.paymentData.where({'PAY_TYPE':9}).sum('AMOUNT')).toFixed(2)))
             let tmpDebit = Number(this.txtCreditCard.value - (Number(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')).round(2) + Number(this.paymentData.where({'PAY_TYPE':9}).sum('AMOUNT')).round(2))).round(2)
             let tmpDebitValue
             if(tmpDebit > 0)
@@ -319,10 +303,6 @@ export default class endOfDay extends React.PureComponent
             this.TicketRest = tmpTicketValue
             this.setState({TicketRest:tmpTikcet})
         }
-      
-
-        
-
         this.popFinish.show()
     }
     stepStart()
@@ -612,19 +592,13 @@ export default class endOfDay extends React.PureComponent
         console.log(tmpSave)
         if(tmpSave == 0)
         {
-            let tmpConfObj =
-            {
-                id:'msgSucces',showTitle:true,title:this.t("msgSucces.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgSucces.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSucces.msg")}</div>)
-            }
-            await dialog(tmpConfObj);
+            this.toast.show({message:this.t("msgSucces.msg"),type:"success"})
         }
         else
         {
             let tmpConfObj =
             {
-                id:'msgError',showTitle:true,title:this.t("msgError.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgError',showTitle:true,title:this.t("msgError.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.t("msgError.btn01"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgError.msg")}</div>)
             }
@@ -1040,23 +1014,23 @@ export default class endOfDay extends React.PureComponent
                     height={'250'}
                     position={{of:'#root'}}
                     >
-                        <Form colCount={1} height={'fit-content'} id={"frmAdvances"}>
-                            <Item>
+                        <NdForm colCount={1} height={'fit-content'} id={"frmAdvances"}>
+                            <NdItem>
                                 <div className='row px-4'>
                                     <div className='col-12'>
                                         <h4>{this.t("popAdvance.msg")}</h4>
                                     </div>
                                 </div>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("txtPopAdvance")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("txtPopAdvance")} alignment="right" />
                                 <NdNumberBox id="txtPopAdvance" parent={this} simple={true}>
                                     <Validator validationGroup={"frmAdvance" + this.tabIndex}>
                                         <RangeRule min={0.9} message={this.t("validPriceFloat")}/>
                                     </Validator>
                                 </NdNumberBox>
-                            </Item>
-                            <Item>
+                            </NdItem>
+                            <NdItem>
                                 <div className='row'>
                                     <div className='col-6'>
                                     </div>
@@ -1070,7 +1044,7 @@ export default class endOfDay extends React.PureComponent
                                                 {
                                                     let tmpConfObj =
                                                     {
-                                                        id:'msgZeroQuantity',showTitle:true,title:this.t("msgZeroQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        id:'msgZeroQuantity',showTitle:true,title:this.t("msgZeroQuantity.title"),showCloseButton:true,width:'500px',height:'auto',
                                                         button:[{id:"btn01",caption:this.t("msgZeroQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgZeroQuantity.btn02"),location:'after'}],
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgZeroQuantity.msg")}</div>)
                                                     }
@@ -1085,7 +1059,7 @@ export default class endOfDay extends React.PureComponent
                                                 {
                                                     let tmpConfObj =
                                                     {
-                                                        id:'msgBigAmount',showTitle:true,title:this.t("msgBigAmount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        id:'msgBigAmount',showTitle:true,title:this.t("msgBigAmount.title"),showCloseButton:true,width:'500px',height:'auto',
                                                         button:[{id:"btn01",caption:this.t("msgBigAmount.btn01"),location:'before'}],
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBigAmount.msg")}</div>)
                                                     }
@@ -1140,8 +1114,8 @@ export default class endOfDay extends React.PureComponent
                                         }}/>
                                     </div>
                                 </div>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div>  
                 {/* Detay Popup */}
@@ -1219,6 +1193,7 @@ export default class endOfDay extends React.PureComponent
                             </div>
                         </div>
                     </NdPopUp>
+                    <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </div>
             </div>
         )

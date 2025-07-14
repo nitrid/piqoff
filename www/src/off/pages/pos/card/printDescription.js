@@ -1,27 +1,13 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { posDeviceCls} from '../../../../core/cls/pos.js';
-import moment from 'moment';
-
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
-
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
 import NdTextArea from '../../../../core/react/devex/textarea.js';
+import  { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class printDescription extends React.PureComponent
 {
@@ -33,7 +19,7 @@ export default class printDescription extends React.PureComponent
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
 
-        this._btnSave = this._btnSave.bind(this)
+        this.btnSave = this.btnSave.bind(this)
         this.getDescription = this.getDescription.bind(this)
     }
     async componentDidMount()
@@ -57,7 +43,7 @@ export default class printDescription extends React.PureComponent
            this.txtDescription.value = tmpData.result.recordset[0].PRINT_DESCRIPTION
         }
     }
-    async _btnSave()
+    async btnSave()
     {
         let tmpQuery = 
         {
@@ -66,14 +52,7 @@ export default class printDescription extends React.PureComponent
             value : [this.txtDescription.value,this.cmbFirm.value]
         }
         await this.core.sql.execute(tmpQuery)
-        let tmpConfObj =
-        {
-            id:'msgSaveResult',showTitle:true,title:this.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
-            button:[{id:"btn01",caption:this.t("msgSaveResult.btn01"),location:'before'}],
-            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-        }
-        
-        await dialog(tmpConfObj);
+        this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
     }
     render()
     {
@@ -95,7 +74,7 @@ export default class printDescription extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -131,7 +110,7 @@ export default class printDescription extends React.PureComponent
                                         }}/>
                                 </Item>
                                 <Item>
-                                    <NdButton text={this.t("btnSave")} type="success" width="100%" onClick={this._btnSave} ></NdButton>
+                                    <NdButton text={this.t("btnSave")} type="success" width="100%" onClick={this.btnSave} ></NdButton>
                                 </Item>
                                 <Item colSpan={2}>
                                     <NdTextArea simple={true} parent={this} id="txtDescription" height='300px' placeholder={this.t("txtDescriptionPlaceHolder")}
@@ -140,6 +119,7 @@ export default class printDescription extends React.PureComponent
                             </Form>
                         </div>
                     </div>
+                    <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )

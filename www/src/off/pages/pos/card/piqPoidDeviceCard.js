@@ -1,12 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-
-import NdButton from '../../../../core/react/devex/button.js';
 import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
-
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
@@ -77,7 +72,7 @@ export default class piqPoidDeviceCard extends React.PureComponent
                                 {
                                     let tmpConfObj =
                                     {
-                                        id:'msgAlertCodeName',showTitle:true,title:this.t("msgAlertCodeName.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        id:'msgAlertCodeName',showTitle:true,title:this.t("msgAlertCodeName.title"),showCloseButton:true,width:'500px',height:'auto',
                                         button:[{id:"btn01",caption:this.t("msgAlertCodeName.btn01"),location:'before'}],
                                     }
                                     if(typeof e.data.CODE == 'undefined' || e.data.CODE == null)
@@ -140,7 +135,7 @@ export default class piqPoidDeviceCard extends React.PureComponent
                                 {
                                     let tmpConfObj =
                                     {
-                                        id:'msgAlertCodeName',showTitle:true,title:this.t("msgAlertCodeName.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        id:'msgAlertCodeName',showTitle:true,title:this.t("msgAlertCodeName.title"),showCloseButton:true,width:'500px',height:'auto',
                                         button:[{id:"btn01",caption:this.t("msgAlertCodeName.btn01"),location:'before'}],
                                     }
                                     if(typeof e.newData.CODE != 'undefined' && e.newData.CODE == '')

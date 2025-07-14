@@ -34,6 +34,10 @@ const pos_01_005 =
         title: "Types de paiement",
         clmCode: "Code",
         clmName: "Nom",
+    },
+    msgDeleteResult:
+    {
+        msgSuccess: "Votre enregistrement a été effectué avec succès !"
     }
 }
 export default pos_01_005

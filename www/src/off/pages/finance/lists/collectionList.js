@@ -49,7 +49,7 @@ export default class collectionList extends React.PureComponent
     }
     saveState(e)
     {
-        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE, PAGE:this.props.data.id, APP:"OFF"})
         tmpSave.setValue(e)
         tmpSave.save()
     }

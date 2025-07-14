@@ -7,7 +7,7 @@
 }
 .main-toolbar
 {
-    background: linear-gradient(90deg, rgba(19, 58, 187, 0.85) 0%, rgba(5,44,173,0.65) 60%, rgba(5,44,173,0.55) 100%);
+    background: linear-gradient(90deg, rgba(72,46,112,1) 0%, rgba(72,46,112,1) 100%);
     padding: 5px 10px;
     border-bottom: 1px solid #bdc3c7
 }

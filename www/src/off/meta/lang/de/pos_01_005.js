@@ -44,6 +44,10 @@ const pos_01_005 =
         title : "Zahlungsarten",
         clmCode: "Code",
         clmName : "Name",
+    },
+    msgDeleteResult:
+    {
+        msgSuccess: "Ihr Speichervorgang war erfolgreich!"
     }
 }
 export default pos_01_005

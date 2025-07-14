@@ -46,6 +46,10 @@ const pos_01_001 =
         btn02: "Abandonner",
         msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
     },
+    msgDeleteResult:
+    {
+        msgSuccess: "Enregistrement supprimé avec succès !"
+    },
     msgCode : 
     {
         title: "Attention",
