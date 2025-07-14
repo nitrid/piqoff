@@ -21,8 +21,7 @@ export class NdForm extends React.PureComponent
         
         // Label sayısı veya içerikleri değişmediyse hesaplama yapma
         const currentLabelTexts = Array.from(labels).map(label => label.textContent);
-        if (labels.length === this.lastLabelCount && 
-            JSON.stringify(currentLabelTexts) === JSON.stringify(this.lastLabelTexts)) 
+        if (labels.length === this.lastLabelCount && JSON.stringify(currentLabelTexts) === JSON.stringify(this.lastLabelTexts)) 
         {
             return;
         }
