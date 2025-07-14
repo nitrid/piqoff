@@ -17,7 +17,7 @@ const sip_02_002 =
     txtBarcode: "Code barre",
     txtBarcodePlace: "Scanner Code Barre...",
     txtQuantity : "Quantité", 
-    getOffers : "Obtenir l'offre", 
+    getOffers : "Rechercher l'offre", 
     txtUnitFactor : "Coefficient unitaire",  
     txtUnitQuantity : "Quantité unitaire",  
     txtTotalQuantity : "Quantité totale",  

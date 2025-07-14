@@ -1,7 +1,7 @@
 // "Ürün Kıyas Raporu"
 const pos_02_011 =
 {
-    btnGet :"Apporter", 
+    btnGet :"Rechercher", 
     dtDate : "Date",  
     txtRef : "Produit", 
     grdListe : 

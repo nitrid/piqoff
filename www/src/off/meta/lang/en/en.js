@@ -11,6 +11,7 @@ export const langEn =
     btnPrint :"Print",
     btnOk: "OK",
     btnGet: "Get",
+    dtDate: "Date",
     msgWarning: "Attention",
     msgSqlService1: "Cannot connect to Sql server.", //BAK
     msgSqlService2: "Database not found. Do you want to create it?", //BAK

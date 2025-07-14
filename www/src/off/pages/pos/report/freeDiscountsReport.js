@@ -1,28 +1,19 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
-
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
+import Form, {Item, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
+import NdGrid,{Column,Editing,ColumnChooser,StateStoring,Paging,Pager,Scrolling,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
+import NdTextBox from '../../../../core/react/devex/textbox.js'
 
-import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NbRadioButton from "../../../../core/react/bootstrap/radiogroup.js";
-import NbLabel from "../../../../core/react/bootstrap/label.js";
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NbButton from "../../../../core/react/bootstrap/button.js";
-import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
-import { dataset,datatable,param,access } from "../../../../core/core.js";
-import { posExtraCls,posDeviceCls} from "../../../../core/cls/pos.js";
+import  { dialog } from '../../../../core/react/devex/dialog.js';
+import { datatable,param,access } from "../../../../core/core.js";
+import {posDeviceCls} from "../../../../core/cls/pos.js";
 import { nf525Cls } from "../../../../core/cls/nf525.js";
 
 
@@ -34,7 +25,7 @@ export default class freeDiscountsReport extends React.PureComponent
         
         this.core = App.instance.core;
         this.groupList = [];
-        this._btnGetClick = this._btnGetClick.bind(this)
+        this.btnGetClick = this.btnGetClick.bind(this)
         this.btnGetDetail = this.btnGetDetail.bind(this)
         this.posDevice = new posDeviceCls();
         this.lastPosDt = new datatable();
@@ -43,6 +34,8 @@ export default class freeDiscountsReport extends React.PureComponent
         this.lastPosPromoDt = new datatable();  
         this.nf525 = new nf525Cls();
         this.state={ticketId :""}
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
         
         Number.money = this.sysParam.filter({ID:'MoneySymbol',TYPE:0}).getValue()
 
@@ -62,7 +55,18 @@ export default class freeDiscountsReport extends React.PureComponent
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
     }
-    async _btnGetClick()
+    loadState()
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdSaleTicketReportState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdSaleTicketReportState',USERS:this.user.CODE, PAGE:this.props.data.id, APP:"OFF"})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
+    async btnGetClick()
     {
         let tmpSource =
         {
@@ -120,7 +124,7 @@ export default class freeDiscountsReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -187,7 +191,7 @@ export default class freeDiscountsReport extends React.PureComponent
                                             {
                                                 this.txtCustomerCode.setState({value:data[0].CODE})
                                                 this.txtCustomerName.setState({value:data[0].TITLE})
-                                                this._btnGetClick()
+                                                this.btnGetClick()
                                             }
                                         }
                                     }).bind(this)}
@@ -247,7 +251,7 @@ export default class freeDiscountsReport extends React.PureComponent
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -267,7 +271,12 @@ export default class freeDiscountsReport extends React.PureComponent
                                 this.btnGetDetail(e.data.GUID)
 
                             }}
-                            >                            
+                            >    
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}                      
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSaleTicketReport"}/>
+                                <ColumnChooser enabled={true} />
                                 <Scrolling mode="standart" />
                                 <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="DOC_DATE" caption={this.t("grdSaleTicketReport.clmDate")} visible={true} width={150} dataType="datetime" format={"dd/MM/yyyy"}/>

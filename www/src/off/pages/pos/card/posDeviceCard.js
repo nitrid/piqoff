@@ -11,6 +11,7 @@ import { Column} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { NdToast } from '../../../../core/react/devex/toast.js';
+import { NdForm,NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
 export default class posDeviceCard extends React.PureComponent
 {
     constructor(props)

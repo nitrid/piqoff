@@ -1,28 +1,22 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
-
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
+import Form, {Item,  Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-
 import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NbRadioButton from "../../../../core/react/bootstrap/radiogroup.js";
 import NbLabel from "../../../../core/react/bootstrap/label.js";
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NbButton from "../../../../core/react/bootstrap/button.js";
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { dataset,datatable,param,access } from "../../../../core/core.js";
 import { posExtraCls} from "../../../../core/cls/pos.js";
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 
 
@@ -34,7 +28,7 @@ export default class salesOrdList extends React.PureComponent
         
         this.core = App.instance.core;
         this.groupList = [];
-        this._btnGetClick = this._btnGetClick.bind(this)
+        this.btnGetClick = this.btnGetClick.bind(this)
         this.btnGetDetail = this.btnGetDetail.bind(this)
         this.lastPosSaleDt = new datatable();
         this.lastPosPayDt = new datatable();
@@ -77,7 +71,7 @@ export default class salesOrdList extends React.PureComponent
           this.popOpenTike.show()
         }
     }
-    async _btnGetClick()
+    async btnGetClick()
     {
         let tmpSource =
         {
@@ -93,7 +87,6 @@ export default class salesOrdList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        console.log(tmpSource)
         App.instance.setState({isExecute:true})
         await this.grdSaleTicketReport.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
@@ -187,7 +180,7 @@ export default class salesOrdList extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -246,7 +239,7 @@ export default class salesOrdList extends React.PureComponent
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -567,7 +560,7 @@ export default class salesOrdList extends React.PureComponent
                                                         {       
                                                             let tmpConfObj =
                                                             {
-                                                                id:'msgPayNotBigToPay',showTitle:true,title:this.lang.t("msgPayNotBigToPay.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                id:'msgPayNotBigToPay',showTitle:true,title:this.lang.t("msgPayNotBigToPay.title"),showCloseButton:true,width:'500px',height:'auto',
                                                                 button:[{id:"btn01",caption:this.lang.t("msgPayNotBigToPay.btn01"),location:'after'}],
                                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayNotBigToPay.msg")}</div>)
                                                             }
@@ -635,7 +628,7 @@ export default class salesOrdList extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgMissingPay',showTitle:true,title:this.lang.t("msgMissingPay.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgMissingPay',showTitle:true,title:this.lang.t("msgMissingPay.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("msgMissingPay.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMissingPay.msg")}</div>)
                                                 }
@@ -706,7 +699,8 @@ export default class salesOrdList extends React.PureComponent
                                 </Item>
                             </Form>
                         </NdPopUp>
-                        </div>          
+                    </div> 
+                    <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>       
                 </div>
                 </ScrollView>
             </div>
