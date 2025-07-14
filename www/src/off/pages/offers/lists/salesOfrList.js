@@ -24,8 +24,8 @@ export default class salesOfrList extends React.PureComponent
         this.core = App.instance.core;
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
-        this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
@@ -50,7 +50,7 @@ export default class salesOfrList extends React.PureComponent
     }
     saveState(e)
     {
-        let tmpSave = this.access.filter({ELEMENT:'grdSlsOfferState',USERS:this.user.CODE})
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsOfferState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
         tmpSave.setValue(e)
         tmpSave.save()
     }

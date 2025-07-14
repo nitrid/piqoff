@@ -11,7 +11,7 @@ import { Button } from 'devextreme-react/button';
 import NdTextBox, { Validator, RequiredRule} from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -37,6 +37,8 @@ export default class purchaseOffer extends DocBase
         this.customerClear = false
         this.combineControl = true
         this.combineNew = false
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
     }
     async componentDidMount()
     {
@@ -48,6 +50,17 @@ export default class purchaseOffer extends DocBase
                 this.getDoc(this.pagePrm.GUID,'',-1)
             }, 1000);
         }
+    }
+    async loadState()
+    {
+        let tmpLoad = await this.access.filter({ELEMENT:'grdPurcOffState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    async saveState(e)
+    {
+        let tmpSave = await this.access.filter({ELEMENT:'grdPurcOffState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        await tmpSave.setValue(e)
+        await tmpSave.save()
     }
     async init()
     {
@@ -1390,6 +1403,8 @@ export default class purchaseOffer extends DocBase
                                         {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                         {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                         {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                        <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPurcOffers"}/>
+                                        <ColumnChooser enabled={true}/>
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                         <Export fileName={this.lang.t("menuOff.sip_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>

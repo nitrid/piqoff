@@ -2,13 +2,13 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { EmptyItem, Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar'; 
+import Form, { EmptyItem, Label,Item } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import { docCls,docItemsCls,docCustomerCls,docExtraCls,deptCreditMatchingCls} from '../../../../core/cls/doc.js';
 import { nf525Cls } from '../../../../core/cls/nf525.js';
 
-import NdGrid,{Column,Paging,Pager,Export,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Export,Scrolling,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
@@ -20,7 +20,6 @@ import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-
 
 export default class salesDisList extends React.PureComponent
 {
@@ -34,7 +33,9 @@ export default class salesDisList extends React.PureComponent
         this.extraObj = new docExtraCls();
 
         this.groupList = [];
-        this._btnGetClick = this._btnGetClick.bind(this)
+        this.btnGetClick = this.btnGetClick.bind(this)
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
@@ -43,13 +44,23 @@ export default class salesDisList extends React.PureComponent
             this.Init()
         }, 1000);
     }
+    async loadState()
+    {
+        let tmpLoad = await this.access.filter({ELEMENT:'grdSlsDisListState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    async saveState(e)
+    {
+        let tmpSave = await this.access.filter({ELEMENT:'grdSlsDisListState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        await tmpSave.setValue(e)
+        await tmpSave.save()
+    }
     async Init()
     {
         this.txtCustomerCode.CODE = ''
         this.cmbAllDesignList.value = this.param.filter({ELEMENT:'cmbAllDesignList',USERS:this.user.CODE}).getValue().value
     }
-
-    async _btnGetClick()
+    async btnGetClick()
     {
         if(this.chkOpenDispatch.value == false)
         {
@@ -725,6 +736,8 @@ export default class salesDisList extends React.PureComponent
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                <StateStoring mode="custom" enabled={true} customSave={this.saveState} customLoad={this.loadState} storageKey={this.props.data.id + "_grdSlsDisList"} />
+                                <ColumnChooser enabled={true} />
                                 <Export fileName={this.lang.t("menuOff.stk_02_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdSlsDisList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdSlsDisList.clmRefNo")} visible={true} width={100}/> 
@@ -749,7 +762,7 @@ export default class salesDisList extends React.PureComponent
                         title={this.t("popDesign.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'200'}
+                        height={'auto'}
                         position={{of:'#root'}}
                         >
                             <Form colCount={1} height={'fit-content'}>

@@ -7,7 +7,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Editing,Button,Paging,Pager,Export,Summary,TotalItem,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Button,Paging,Pager,Export,Summary,TotalItem,Scrolling,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
@@ -36,6 +36,8 @@ export default class salesOrdList extends React.PureComponent
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
         this._btnGrdPrint = this._btnGrdPrint.bind(this)
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
@@ -43,6 +45,17 @@ export default class salesOrdList extends React.PureComponent
         {
             this.Init()
         }, 1000);
+    }
+    async loadState()
+    {
+        let tmpLoad = await this.access.filter({ELEMENT:'grdSlsOrdListState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    async saveState(e)
+    {
+        let tmpSave = await this.access.filter({ELEMENT:'grdSlsOrdListState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        await tmpSave.setValue(e)
+        await tmpSave.save()
     }
     async Init()
     {
@@ -441,6 +454,8 @@ export default class salesOrdList extends React.PureComponent
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsOrdList"}/>
+                                <ColumnChooser enabled={true}/>
                                 <Export fileName={this.lang.t("menuOff.sip_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Editing mode="cell" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
                                 <Column dataField="REF" caption={this.t("grdSlsOrdList.clmRef")} visible={true} width={170} allowEditing={false}/> 

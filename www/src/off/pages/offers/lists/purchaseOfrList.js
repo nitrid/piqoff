@@ -6,7 +6,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Paging,Pager,Export,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Export,Scrolling,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
@@ -20,28 +20,13 @@ export default class purchaseOfrList extends React.PureComponent
     constructor(props)
     {
         super(props)
-
-        this.state = 
-        {
-            columnListValue : ['REF','REF_NO','OUTPUT_NAME','DOC_DATE','TOTAL']
-        }
-        
+       
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "REF",NAME : this.t("grdPurcOfrList.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdPurcOfrList.clmRefNo")},
-            {CODE : "OUTPUT_CODE",NAME : this.t("grdPurcOfrList.clmOutputCode")},                                   
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdPurcOfrList.clmOutputName")},
-            {CODE : "INPUT_NAME",NAME : this.t("grdPurcOfrList.clmInputName")},
-            {CODE : "DOC_DATE",NAME : this.t("grdPurcOfrList.clmDate")},
-            {CODE : "AMOUNT",NAME : this.t("grdPurcOfrList.clmAmount")},
-            {CODE : "VAT",NAME : this.t("grdPurcOfrList.clmVat")},
-            {CODE : "TOTAL",NAME : this.t("grdPurcOfrList.clmTotal")},
-        ]
+      
         this.groupList = [];
         this._btnGetClick = this._btnGetClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
@@ -49,6 +34,17 @@ export default class purchaseOfrList extends React.PureComponent
         {
             this.Init()
         }, 1000);
+    }
+    async loadState()
+    {
+        let tmpLoad = await this.access.filter({ELEMENT:'grdPurcOfrListState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    async saveState(e)
+    {
+        let tmpSave = await this.access.filter({ELEMENT:'grdPurcOfrListState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        await tmpSave.setValue(e)
+        await tmpSave.save()
     }
     async Init()
     {

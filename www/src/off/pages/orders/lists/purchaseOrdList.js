@@ -6,7 +6,7 @@ import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, Paging,Pager,Export,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, Paging,Pager,Export,Scrolling,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
@@ -23,27 +23,11 @@ export default class purchaseOrdList extends React.PureComponent
     {
         super(props)
 
-        this.state = 
-        {
-            columnListValue : ['REF','REF_NO','OUTPUT_NAME','DOC_DATE','TOTAL']
-        }
         
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "REF",NAME : this.t("grdPurcOrdList.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdPurcOrdList.clmRefNo")},
-            {CODE : "OUTPUT_CODE",NAME : this.t("grdPurcOrdList.clmOutputCode")},                                   
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdPurcOrdList.clmOutputName")},
-            {CODE : "INPUT_NAME",NAME : this.t("grdPurcOrdList.clmInputName")},
-            {CODE : "DOC_DATE",NAME : this.t("grdPurcOrdList.clmDate")},
-            {CODE : "AMOUNT",NAME : this.t("grdPurcOrdList.clmAmount")},
-            {CODE : "VAT",NAME : this.t("grdPurcOrdList.clmVat")},
-            {CODE : "TOTAL",NAME : this.t("grdPurcOrdList.clmTotal")},
-        ]
-        this.groupList = [];
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
         this._btnGetClick = this._btnGetClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
     }
     componentDidMount()
     {
@@ -51,6 +35,17 @@ export default class purchaseOrdList extends React.PureComponent
         {
             this.Init()
         }, 1000);
+    }
+    async loadState()
+    {
+        let tmpLoad = await this.access.filter({ELEMENT:'grdPurcOrdListState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    async saveState(e)
+    {
+        let tmpSave = await this.access.filter({ELEMENT:'grdPurcOrdListState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        await tmpSave.setValue(e)
+        await tmpSave.save()
     }
     async Init()
     {
@@ -343,13 +338,6 @@ export default class purchaseOrdList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
                         </div>
                         <div className="col-3">
                             <Form>
@@ -391,6 +379,8 @@ export default class purchaseOrdList extends React.PureComponent
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPurcOrdList"}/>
+                                <ColumnChooser enabled={true}/>
                                 <Export fileName={this.lang.t("menu")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdPurcOrdList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdPurcOrdList.clmRefNo")} visible={true} width={100}/> 

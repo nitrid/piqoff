@@ -60,7 +60,7 @@ export default class salesOrder extends DocBase
     }
     saveState(e)
     {
-        let tmpSave = this.access.filter({ELEMENT:'grdSlsOrderState',USERS:this.user.CODE})
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsOrderState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
         tmpSave.setValue(e)
         tmpSave.save()
     }

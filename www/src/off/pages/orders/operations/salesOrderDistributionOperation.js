@@ -35,6 +35,8 @@ export default class salesOrdList extends React.PureComponent
         this.orderDetail = new datatable()
         this._btnGetClick = this._btnGetClick.bind(this)
         this._btnApprove = this._btnApprove.bind(this)
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
@@ -258,6 +260,17 @@ export default class salesOrdList extends React.PureComponent
         }
         this.popOrderDetail.show()
     }
+    async loadState()
+    {
+        let tmpLoad = await this.access.filter({ELEMENT:'grdOrderDetailState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    async saveState(e)
+    {
+        let tmpSave = await this.access.filter({ELEMENT:'grdOrderDetailState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        await tmpSave.setValue(e)
+        await tmpSave.save()
+    }
     render()
     {
         return(
@@ -318,6 +331,7 @@ export default class salesOrdList extends React.PureComponent
                             <NdForm colCount={2} id="frmCriter">
                                 {/* dtFirst */}
                                 <NdItem>
+                                    <NdLabel text={this.lang.t("dtDate")} alignment="right" />
                                     <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}onApply={(async()=>{this._btnGetClick()}).bind(this)}/>
                                 </NdItem>
                                 {/* dtLast */}
@@ -483,7 +497,11 @@ export default class salesOrdList extends React.PureComponent
                                         }}
                                         >
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                            <Scrolling mode="standart" />
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdOrderDetail"}/>
+                                            <ColumnChooser enabled={true}/>
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={false} />
                                             <Column dataField="DOC_DATE" caption={this.t("grdOrderDetail.clmDate")} width={100} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy"}/>
                                             <Column dataField="INPUT_NAME" caption={this.t("grdOrderDetail.clmCustomer")} width={230} allowEditing={false}/>
