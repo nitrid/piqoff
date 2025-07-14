@@ -19,6 +19,8 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
+import { NdForm,NdItem, NdEmptyItem } from '../../../../core/react/devex/form.js';
+import {NdToast} from '../../../../core/react/devex/toast.js';
 
 export default class salesDispatch extends DocBase
 {
@@ -351,13 +353,7 @@ export default class salesDispatch extends DocBase
                         }
                         else
                         {
-                            let tmpConfObj =
-                            {
-                                id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                                button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                            }
-                            await dialog(tmpConfObj);
+                            this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning',displayTime:2000})
                         }
                     }
                 }).bind(this)}
@@ -920,27 +916,12 @@ export default class salesDispatch extends DocBase
                                     {
                                         if(this.docLocked == true)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocLocked',showTitle:true,title:this.t("msgDocLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocLocked.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocLocked.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDocLocked.msg"),type:'warning',displayTime:2000})
                                             return
                                         }
                                         if(typeof this.docObj.docItems.dt()[0] == 'undefined')
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgNotRow',showTitle:true,title:this.lang.t("msgNotRow.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.lang.t("msgNotRow.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotRow.msg")}</div>)
-                                            }
-
-                                            await dialog(tmpConfObj);
-                                            this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
+                                            this.toast.show({message:this.t("msgNotRow.msg"),type:'warning',displayTime:2000})
                                             return
                                         }
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
@@ -984,8 +965,7 @@ export default class salesDispatch extends DocBase
                                                 
                                                 if((await this.docObj.save()) == 0)
                                                 {                                                    
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
+                                                    this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:'success',displayTime:2000})
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
                                                 }
@@ -998,13 +978,7 @@ export default class salesDispatch extends DocBase
                                         }                              
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
-                                            }                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgSaveValid.msg"),type:'warning',displayTime:2000})
                                         }                                                 
                                     }}/>
                                 </Item>
@@ -1015,14 +989,7 @@ export default class salesDispatch extends DocBase
                                         if(this.docObj.dt()[0].LOCKED != 0)
                                         {
                                             this.docLocked = true
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgGetLocked.msg"),type:'warning',displayTime:2000})
                                             return
                                         }
                                         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
@@ -1076,14 +1043,7 @@ export default class salesDispatch extends DocBase
                                             }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgLocked',showTitle:true,title:this.t("msgLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgLocked.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLocked.msg")}</div>)
-                                                }
-
-                                                await dialog(tmpConfObj);
+                                                this.toast.show({message:this.t("msgLocked.msg"),type:'success',displayTime:2000})
                                                 this.frmDocItems.option('disabled',true)
                                             }
                                             else
@@ -1100,14 +1060,7 @@ export default class salesDispatch extends DocBase
                                         }
                                         else if(this.docObj.dt()[0].LOCKED == 2)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgLockedType2',showTitle:true,title:this.t("msgLockedType2.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgLockedType2.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLockedType2.msg")}</div>)
-                                            }
-
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgLockedType2.msg"),type:'warning',displayTime:2000})
                                         }
                                         
                                     }}/>
@@ -1118,13 +1071,7 @@ export default class salesDispatch extends DocBase
                                     {                          
                                         if(this.docObj.isSaved == false)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
-                                            }
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("isMsgSave.msg"),type:'warning',displayTime:2000})
                                             return
                                         }
                                         else
@@ -1196,10 +1143,10 @@ export default class salesDispatch extends DocBase
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id={"frmSalesDis"  + this.tabIndex}>
+                            <NdForm colCount={3} id={"frmSalesDis"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
-                                <Item>
-                                    <Label text={this.t("txtRefRefno")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
                                         <div className="col-4 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
@@ -1294,10 +1241,10 @@ export default class salesDispatch extends DocBase
                                             </NdTextBox>
                                         </div>
                                     </div>
-                                </Item>
+                                </NdItem>
                                 {/* cmbDepot */}
-                                <Item>
-                                    <Label text={this.t("cmbDepot")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
                                     displayExpr="NAME"                       
@@ -1320,10 +1267,10 @@ export default class salesDispatch extends DocBase
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
+                                </NdItem>
                                 {/* DOC_NO */}
-                                <Item>
-                                    <Label text={this.t("txtDocNo")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtDocNo")} alignment="right" />
                                     <NdTextBox id="txtDocNo" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_NO"}} 
@@ -1334,10 +1281,10 @@ export default class salesDispatch extends DocBase
                                     }}
                                     >
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtCustomerCode */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
@@ -1345,14 +1292,7 @@ export default class salesDispatch extends DocBase
                                     {
                                         if(this.docObj.docItems.dt().length > 0)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgCustomerLock.msg"),type:'warning',displayTime:2000})
                                             return;
                                         }
                                         
@@ -1412,14 +1352,7 @@ export default class salesDispatch extends DocBase
                                                 {
                                                     if(this.docObj.docItems.dt().length > 0)
                                                     {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                                        }
-                                                        
-                                                        await dialog(tmpConfObj);
+                                                        this.toast.show({message:this.t("msgCustomerLock.msg"),type:'warning',displayTime:2000})
                                                         return;
                                                     }
                                                   
@@ -1480,10 +1413,10 @@ export default class salesDispatch extends DocBase
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>                                    
-                                </Item> 
+                                </NdItem> 
                                 {/* txtCustomerName */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}} 
@@ -1492,10 +1425,10 @@ export default class salesDispatch extends DocBase
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item> 
+                                </NdItem> 
                                 {/* cmbPricingList */}
-                                <Item>
-                                    <Label text={this.t("cmbPricingList")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbPricingList")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPricingList" notRefresh={true}
                                     displayExpr="NAME"
                                     valueExpr="NO"
@@ -1511,10 +1444,10 @@ export default class salesDispatch extends DocBase
                                         }).bind(this)}
                                     >
                                     </NdSelectBox>
-                                </Item>
+                                </NdItem>
                                 {/* dtDocDate */}
-                                <Item>
-                                    <Label text={this.t("dtDocDate")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                     onValueChanged={(async(e)=>
@@ -1526,10 +1459,10 @@ export default class salesDispatch extends DocBase
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
-                                </Item>
+                                </NdItem>
                                 {/* dtShipDate */}
-                                <Item>
-                                    <Label text={this.t("dtShipDate")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("dtShipDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtShipDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
                                     onValueChanged={(async()=>
@@ -1541,12 +1474,12 @@ export default class salesDispatch extends DocBase
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
-                                </Item>
+                                </NdItem>
                                 {/* Boş */}
-                                <EmptyItem />
+                                <NdEmptyItem />
                                 {/* txtBarcode */}
-                                <Item>
-                                    <Label text={this.t("txtBarcode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
@@ -1559,14 +1492,7 @@ export default class salesDispatch extends DocBase
                                                 {
                                                     if(this.cmbDepot.value == '' || this.txtCustomerCode.value == '')
                                                     {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                                        }
-                                                        
-                                                        await dialog(tmpConfObj);
+                                                        this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
                                                         this.txtBarcode.setState({value:""})
                                                         return
                                                     }
@@ -1597,14 +1523,7 @@ export default class salesDispatch extends DocBase
                                     {
                                         if(this.cmbDepot.value == '')
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
                                             this.txtBarcode.setState({value:""})
                                             return
                                         }
@@ -1659,10 +1578,10 @@ export default class salesDispatch extends DocBase
                                     access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item>
-                                <EmptyItem/>
-                                <EmptyItem/>
-                            </Form>
+                                </NdItem>
+                                <NdEmptyItem/>
+                                <NdEmptyItem/>
+                            </NdForm>
                         </div>
                     </div>
                     {/* Grid */}
@@ -1716,14 +1635,7 @@ export default class salesDispatch extends DocBase
                                         }
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
                                         }
                                     }}/>
                                      <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
@@ -1742,14 +1654,7 @@ export default class salesDispatch extends DocBase
                                         }
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
                                         }
                                     }}/>
                                 </Item>
@@ -1832,13 +1737,7 @@ export default class salesDispatch extends DocBase
                                             else
                                             {
                                                 e.cancel = true
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgUnderPrice2',showTitle:true,title:this.t("msgUnderPrice2.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgUnderPrice2.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUnderPrice2.msg")}</div>)
-                                                }
-                                                dialog(tmpConfObj);
+                                                this.toast.show({message:this.t("msgUnderPrice2.msg"),type:'warning',displayTime:2000})
                                                 e.component.cancelEditData()
                                                 return
                                             }
@@ -2204,9 +2103,9 @@ export default class salesDispatch extends DocBase
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDesign.design")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignList" 
                                     displayExpr="DESIGN_NAME"                       
                                     valueExpr="TAG"
@@ -2220,9 +2119,9 @@ export default class salesDispatch extends DocBase
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
-                                <Label text={this.t("popDesign.lang")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                <NdLabel text={this.t("popDesign.lang")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
@@ -2231,8 +2130,8 @@ export default class salesDispatch extends DocBase
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >                       
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop"  + this.tabIndex}
@@ -2357,8 +2256,8 @@ export default class salesDispatch extends DocBase
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div>                   
                     {/* Detay PopUp */}
@@ -2374,19 +2273,19 @@ export default class salesDispatch extends DocBase
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDetail.count")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDetail.count")} alignment="right" />
                                     <NdNumberBox id="numDetailCount" parent={this} simple={true} readOnly={true}
                                     maxLength={32}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDetail.quantity")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDetail.quantity")} alignment="right" />
                                     <NdNumberBox id="numDetailQuantity" parent={this} simple={true} readOnly={true}
                                     maxLength={32}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDetail.quantity2")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDetail.quantity2")} alignment="right" />
                                     <NdTextBox id="numDetailQuantity2" parent={this} simple={true} readOnly={true}
                                     maxLength={32}
                                     button={[
@@ -2420,18 +2319,18 @@ export default class salesDispatch extends DocBase
                                             }
                                         },
                                     ]}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDetail.margin")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDetail.margin")} alignment="right" />
                                     <NdTextBox id="txtDetailMargin" parent={this} simple={true} readOnly={true}
                                     maxLength={32}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDetail.explanation")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDetail.explanation")} alignment="right" />
                                     <NdTextBox id="txtDetailExplanation" parent={this} simple={true} 
                                     maxLength={512}/>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                 <NdButton 
                                     id="btnDetailSave" 
                                     text={this.t("btnSave")}  
@@ -2442,8 +2341,8 @@ export default class salesDispatch extends DocBase
                                         this.popDetail.hide();
                                         }}
                                     />
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div>                        
                     {/* Mail Send PopUp */}
@@ -2539,8 +2438,7 @@ export default class salesDispatch extends DocBase
                                                             
                                                             if((pResult1) == 0)
                                                             {  
-                                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgMailSendResult.msgSuccess")}</div>)
-                                                                await dialog(tmpConfObj1);
+                                                                this.toast.show({message:this.t("msgMailSendResult.msgSuccess"),type:'success',displayTime:2000})
                                                                 this.htmlEditor.value = '',
                                                                 this.txtMailSubject.value = '',
                                                                 this.txtSendMail.value = ''
@@ -2571,6 +2469,7 @@ export default class salesDispatch extends DocBase
                         </NdPopUp>
                     </div>  
                     <div>{super.render()}</div>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>                
             </div>
         )
