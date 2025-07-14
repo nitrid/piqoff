@@ -3,6 +3,7 @@ const pos_02_013 =
 {
     btnGet :"Get",
     txtTotalTicket : "Total Ticket",
+    dtDate : "Date",
     grdListe: 
     {
         clmDocDate: "Date",

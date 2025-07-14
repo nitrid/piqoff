@@ -11,6 +11,7 @@ export const langTr =
     btnPrint :"Yazdır",
     btnOk: "Tamam",
     btnGet: "Getir",
+    dtDate : "Tarih",
     msgWarning: "Dikkat",
     msgSqlService1: "Sql sunucuya bağlanılamıyor.", //BAK
     msgSqlService2: "Veritabanı yok. Oluşturmak istermisiniz.", //BAK

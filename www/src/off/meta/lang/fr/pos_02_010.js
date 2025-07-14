@@ -2,7 +2,7 @@
 const pos_02_010 =
 {
     chkItemCreated: "Récupérer en fonction de la date de création des produits",
-    btnGet :"Apporter", 
+    btnGet :"Rechercher", 
     grdListe : 
     {
         clmDate: "Date", 

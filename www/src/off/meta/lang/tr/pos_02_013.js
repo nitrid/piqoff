@@ -3,6 +3,7 @@ const pos_02_013 =
 {
     btnGet :"Getir",
     txtTotalTicket : "Toplam Fiş Adedi",
+    dtDate : "Tarih",
     grdListe: 
     {
         clmDocDate: "Tarih",

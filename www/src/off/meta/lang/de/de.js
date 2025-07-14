@@ -11,6 +11,7 @@ export const langDe =
     btnPrint: "Drucken",
     btnOk: "OK",
     btnGet: "Suchen",
+    dtDate: "Datum",
     msgWarning: "Hinweis!",
     msgSqlService1: "Es konnte keine Verbindung zum SQL-Server hergestellt werden.", 
     msgSqlService2: "Datenbank nicht vorhanden. Möchten Sie neue Datenbank erstellen?", 
