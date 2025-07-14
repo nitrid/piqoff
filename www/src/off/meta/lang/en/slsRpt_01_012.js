@@ -8,6 +8,7 @@ const slsRpt_01_012 =
     txtProductName : "Product Name",
     txtProductTypeName : "Product Type",
     btnGet :"Get", 
+    cmbMainGrp : "Product Group",
     msgNoData : "No data found for the selected criteria.",
     grdListe : 
     {

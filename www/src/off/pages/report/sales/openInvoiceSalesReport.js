@@ -27,7 +27,6 @@ export default class openInvoiceSalesReport extends React.PureComponent
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
-        this.groupOpenInvoices = this.groupOpenInvoices.bind(this)
     }
     loadState() 
     {
@@ -36,7 +35,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
     }
     saveState(e)
     {
-        let tmpSave = this.access.filter({ELEMENT:'grdListe',USERS:this.user.CODE})
+        let tmpSave = this.access.filter({ELEMENT:'grdListe',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
         tmpSave.setValue(e)
         tmpSave.save()
     }
@@ -196,70 +195,6 @@ export default class openInvoiceSalesReport extends React.PureComponent
                 content: (<div style={{textAlign: "center", fontSize: "20px"}}>{this.t("msgError.msg") + ": " + error.message}</div>)
             });
         }
-    }
-
-    groupOpenInvoices(rows) 
-    {
-        let map = new Map();
-
-        for (let row of rows) 
-        {
-            // Normal satışlar için INPUT_NAME, iadeler için OUTPUT_NAME kullan
-            let key = (row.TYPE == 1 && row.REBATE == 0) ? row.INPUT_NAME : row.OUTPUT_NAME;
-            
-            // Eğer key undefined ise, diğer alanı kullan
-            if (!key) 
-            {
-                key = (row.TYPE == 1 && row.REBATE == 0) ? row.OUTPUT_NAME : row.INPUT_NAME;
-            }
-            
-            if (!map.has(key)) 
-            {
-                map.set(key, {
-                    INVOICE_KEY: key, 
-                    INPUT_NAME: key, // Burada artık key kullanıyoruz
-                    REMAINDER: 0,
-                    DOC_TOTAL: 0,
-                    INVOICE_COUNT: 0,  
-                    INVOICES: []
-                });
-            }
-
-            let invoice = 
-            {
-                DOC_DATE: row.DOC_DATE,
-                DOC_GUID: row.DOC_GUID,
-                DOC_REF: row.DOC_REF,
-                DOC_REF_NO: row.DOC_REF_NO,
-                REMAINDER: row.REMAINDER,
-                DOC_TOTAL: row.DOC_TOTAL,
-                TYPE: row.TYPE,
-                DOC_TYPE: row.DOC_TYPE,
-                INPUT_NAME: (row.TYPE == 1 && row.REBATE == 0) ? row.INPUT_NAME : row.OUTPUT_NAME,
-                OUTPUT_NAME: row.OUTPUT_NAME,
-                REBATE: row.REBATE
-            };
-
-            map.get(key).INVOICES.push(invoice);
-            
-            // Toplamları hesapla ve fatura sayısını artır
-            if (row.REBATE == 0) 
-            {
-                // Normal fatura
-                map.get(key).REMAINDER += Number(row.REMAINDER || 0);
-                map.get(key).DOC_TOTAL += Number(row.DOC_TOTAL || 0);
-            } 
-            else 
-            {
-                // İade faturası
-                map.get(key).REMAINDER -= Number(row.REMAINDER || 0);
-                map.get(key).DOC_TOTAL -= Number(row.DOC_TOTAL || 0);
-            }
-            map.get(key).INVOICE_COUNT += 1;
-        }
-
-        let result = Array.from(map.values());
-        return result;
     }
 
     render(){
@@ -452,6 +387,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                 }}
                                 onRowDblClick={async (e) => 
                                 {
+                                    console.log("e1111",e)
                                       if (e.data.REBATE == 1) 
                                     {
                                         App.instance.menuClick({
@@ -463,6 +399,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                       } 
                                       else 
                                       {
+                                        console.log("e222",e)
                                         App.instance.menuClick({
                                           id: 'ftr_02_002',
                                           text: this.t("menu"),
