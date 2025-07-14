@@ -13,7 +13,8 @@ export class NdForm extends React.PureComponent
     
     calculateOptimalLabelWidth()
     {
-        if (!this.formRef.current || this.isCalculating) return;
+        if (!this.formRef.current || this.isCalculating) 
+            return;
         
         // Formdaki tüm NdLabel'ları bul
         const labels = this.formRef.current.querySelectorAll('.nd-label');
@@ -21,7 +22,8 @@ export class NdForm extends React.PureComponent
         // Label sayısı veya içerikleri değişmediyse hesaplama yapma
         const currentLabelTexts = Array.from(labels).map(label => label.textContent);
         if (labels.length === this.lastLabelCount && 
-            JSON.stringify(currentLabelTexts) === JSON.stringify(this.lastLabelTexts)) {
+            JSON.stringify(currentLabelTexts) === JSON.stringify(this.lastLabelTexts)) 
+        {
             return;
         }
         
@@ -40,10 +42,12 @@ export class NdForm extends React.PureComponent
         measureSpan.style.whiteSpace = 'nowrap';
         document.body.appendChild(measureSpan);
         
-        labels.forEach(label => {
+        labels.forEach(label => 
+        {
             measureSpan.textContent = label.textContent;
             const textWidth = measureSpan.offsetWidth + 10; // Sadece 10px padding
-            if (textWidth > maxWidth) {
+            if (textWidth > maxWidth) 
+            {
                 maxWidth = textWidth;
             }
         });
@@ -51,7 +55,8 @@ export class NdForm extends React.PureComponent
         document.body.removeChild(measureSpan);
         
         // Eğer hiç label yoksa varsayılan genişlik kullan
-        if (maxWidth === 0) {
+        if (maxWidth === 0) 
+        {
             maxWidth = 100;
         }
         
@@ -63,7 +68,8 @@ export class NdForm extends React.PureComponent
     componentDidMount()
     {
         // Label genişliklerini hesapla
-        setTimeout(() => {
+        setTimeout(() => 
+        {
             this.calculateOptimalLabelWidth();
         }, 100); // Biraz daha gecikme ekledim DOM'un tam yüklenmesi için
         
@@ -95,7 +101,8 @@ export class NdForm extends React.PureComponent
                     // Form'u yeniden çiz
                     this.forceUpdate();
                     // Manuel repaint durumunda label genişliklerini yeniden hesapla
-                    setTimeout(() => {
+                    setTimeout(() => 
+                    {
                         this.lastLabelCount = 0; // Cache'i temizle
                         this.lastLabelTexts = [];
                         this.calculateOptimalLabelWidth();
@@ -155,7 +162,12 @@ export class NdItem extends React.PureComponent
                 if (child && child.type && (child.type.displayName === 'Button' || child.props.icon || child.props.text)) 
                 {
                     return (
-                        <div key={index} style={{ display: 'inline-block', minWidth: 'auto', flexShrink: 0 }}>
+                        <div key={index} style={
+                        { 
+                            display: 'inline-block', 
+                            minWidth: 'auto', 
+                            flexShrink: 0 
+                        }}>
                             {child}
                         </div>
                     );
