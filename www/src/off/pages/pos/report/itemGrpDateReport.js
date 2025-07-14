@@ -1,19 +1,12 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
-
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
+import Form, {Item, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-
-import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling} from '../../../../core/react/devex/grid.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPivot,{FieldChooser,Export} from '../../../../core/react/devex/pivot.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
 //PDF cikti//
 // import { exportDataGrid } from 'devextreme/pdf_exporter';
 // import { jsPDF } from 'jspdf';
@@ -57,7 +50,7 @@ export default class itemGrpDateReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("btnYes"),location:'before'},{id:"btn02",caption:this.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgClose")}</div>)
                                             }
@@ -75,6 +68,7 @@ export default class itemGrpDateReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
+                            <Label text={this.lang.t("dtDate")} alignment="right" />
                             <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
                         </div>
                     </div>
