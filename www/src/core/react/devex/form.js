@@ -6,15 +6,30 @@ export class NdForm extends React.PureComponent
     {
         super(props);
         this.formRef = React.createRef();
+        this.lastLabelCount = 0;
+        this.lastLabelTexts = [];
+        this.isCalculating = false;
     }
     
     calculateOptimalLabelWidth()
     {
-        if (!this.formRef.current) return;
+        if (!this.formRef.current || this.isCalculating) return;
         
         // Formdaki tüm NdLabel'ları bul
         const labels = this.formRef.current.querySelectorAll('.nd-label');
-        let maxWidth = 0; // Minimum genişlik yok, gerçek genişliği kullan
+        
+        // Label sayısı veya içerikleri değişmediyse hesaplama yapma
+        const currentLabelTexts = Array.from(labels).map(label => label.textContent);
+        if (labels.length === this.lastLabelCount && 
+            JSON.stringify(currentLabelTexts) === JSON.stringify(this.lastLabelTexts)) {
+            return;
+        }
+        
+        this.isCalculating = true;
+        this.lastLabelCount = labels.length;
+        this.lastLabelTexts = currentLabelTexts;
+        
+        let maxWidth = 0;
         
         // Geçici bir span oluştur text genişliğini ölçmek için
         const measureSpan = document.createElement('span');
@@ -27,7 +42,7 @@ export class NdForm extends React.PureComponent
         
         labels.forEach(label => {
             measureSpan.textContent = label.textContent;
-            const textWidth = measureSpan.offsetWidth + 10; // Sadece 10px padding (daha az boşluk)
+            const textWidth = measureSpan.offsetWidth + 10; // Sadece 10px padding
             if (textWidth > maxWidth) {
                 maxWidth = textWidth;
             }
@@ -42,6 +57,7 @@ export class NdForm extends React.PureComponent
         
         // CSS değişkenini güncelle
         this.formRef.current.style.setProperty('--label-width', `${maxWidth}px`);
+        this.isCalculating = false;
     }
     
     componentDidMount()
@@ -49,7 +65,7 @@ export class NdForm extends React.PureComponent
         // Label genişliklerini hesapla
         setTimeout(() => {
             this.calculateOptimalLabelWidth();
-        }, 0);
+        }, 100); // Biraz daha gecikme ekledim DOM'un tam yüklenmesi için
         
         if (typeof this.props.onInitialized === 'function')
         {
@@ -78,23 +94,17 @@ export class NdForm extends React.PureComponent
                 {
                     // Form'u yeniden çiz
                     this.forceUpdate();
-                    // Label genişliklerini yeniden hesapla
+                    // Manuel repaint durumunda label genişliklerini yeniden hesapla
                     setTimeout(() => {
+                        this.lastLabelCount = 0; // Cache'i temizle
+                        this.lastLabelTexts = [];
                         this.calculateOptimalLabelWidth();
-                    }, 0);
+                    }, 50);
                 }
             };
             
             this.props.onInitialized({ component: componentObj });
         }
-    }
-    
-    componentDidUpdate()
-    {
-        // Component güncellendiğinde label genişliklerini yeniden hesapla
-        setTimeout(() => {
-            this.calculateOptimalLabelWidth();
-        }, 0);
     }
     render()
     {
