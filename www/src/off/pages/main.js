@@ -205,7 +205,8 @@ export default class mainPage extends React.PureComponent
                                             height:'180px', 
                                             borderRadius:'10px', 
                                             background:'#f8f9fa', 
-                                            border:'1px solid #dee2e6'
+                                            border:'1px solid #dee2e6',
+                                            margin:'0 10px'
                                         }} 
                                         onClick={() => {
                                             App.instance.menuClick({
