@@ -2,13 +2,11 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label,EmptyItem } from 'devextreme-react/form';
+import Form, { Label} from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import { NdForm, NdItem, NdLabel, NdEmptyItem }from '../../../../core/react/devex/form.js';
 import { NdToast } from '../../../../core/react/devex/toast.js';
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export,StateStoring,Editing} from '../../../../core/react/devex/grid.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
+import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -86,7 +84,7 @@ export default class collectionList extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">

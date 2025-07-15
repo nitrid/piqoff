@@ -68,6 +68,10 @@ const prsnl_01_003 =
     validation : //BAK
     {
         frmCustomerAddress: "Kodu boş geçemezsiniz !",
+    },
+    msgDeleteSuccess :
+    {
+        msg: "Silme işleminiz başarılı !"
     }
 }
 

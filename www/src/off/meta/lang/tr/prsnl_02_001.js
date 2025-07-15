@@ -37,6 +37,10 @@ const  prsnl_02_001 =
         both : "Her İkisi",
         branch : "Şube"
     },
+    msgDeleteSuccess :
+    {
+        msg: "Silme işleminiz başarılı !"
+    }
 }
 
 export default prsnl_02_001

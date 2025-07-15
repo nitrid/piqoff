@@ -169,6 +169,10 @@ const prsnl_03_001 =
         chkDigit : "EAN Digit"
     },
     btnGet : "Kaydet",
-}
+    msgDeleteSuccess :
+    {
+        msg: "Silme işleminiz başarılı !"
+    }
+}   
 
 export default prsnl_03_001

@@ -38,5 +38,9 @@ const  prsnl_02_001 =
         both : "Tous les Deux",
         branch : "Magasin" 
     },
+    msgDeleteSuccess :
+    {
+        msg: "Suppression réussie !"
+    }
 }
 export default prsnl_02_001

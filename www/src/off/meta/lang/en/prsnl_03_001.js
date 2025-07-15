@@ -169,6 +169,10 @@ const prsnl_03_001 =
         chkDigit : "EAN Digit"
     },
     btnGet : "Save",
+    msgDeleteSuccess :
+    {
+        msg: "Delete operation successful !"
+    }
 }
 
 export default prsnl_03_001

@@ -2,12 +2,10 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export,StateStoring} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -24,7 +22,8 @@ export default class safeList extends React.PureComponent
         this.groupList = [];
         this.btnGetClick = this.btnGetClick.bind(this)
         this.loadState = this.loadState.bind(this)
-        this.saveState = this.saveState.bind(this) 
+        this.saveState = this.saveState.bind(this)  
+        this.tabIndex = props.data.tabkey
     }
     componentDidMount()
     {

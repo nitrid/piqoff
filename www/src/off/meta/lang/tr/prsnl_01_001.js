@@ -248,6 +248,10 @@ const prsnl_01_001 =
         title : "Alt Grup Seçim",
         clmName : "Adı",
     },
+    msgDeleteSuccess :
+    {
+        msg: "Silme işleminiz başarılı !"
+    }
 }
 
 export default prsnl_01_001

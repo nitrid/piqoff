@@ -1,27 +1,20 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { employeesCls,employeeAdressCls, } from '../../../../core/cls/employees.js';
-
+import { employeesCls } from '../../../../core/cls/employees.js';
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem} from 'devextreme-react/form';
+import Form, { Label,Item} from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
-
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
+import NdTextBox, { Validator, NumericRule, RequiredRule, EmailRule} from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,Button as GrdButton} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdTextArea from '../../../../core/react/devex/textarea.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
-import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
-
+import { dialog } from '../../../../core/react/devex/dialog.js';        
+import { NdToast } from '../../../../core/react/devex/toast.js';
+import { NdForm, NdItem, NdLabel } from '../../../../core/react/devex/form.js';
 export default class collectiveEmployee extends React.PureComponent
 {
     constructor(props)
@@ -35,7 +28,7 @@ export default class collectiveEmployee extends React.PureComponent
         this.tabIndex = props.data.tabkey
         this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
 
-        this._onItemRendered = this._onItemRendered.bind(this)
+        this.onItemRendered  = this.onItemRendered .bind(this)
        
         
     }
@@ -140,7 +133,7 @@ export default class collectiveEmployee extends React.PureComponent
                         title:this.t("msgCode.title"),
                         showCloseButton:true,
                         width:'500px',
-                        height:'200px',
+                        height:'auto',
                         button:[{id:"btn01",caption:this.t("msgCode.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCode.btn02"),location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCode.msg")}</div>)
                     }
@@ -201,7 +194,7 @@ export default class collectiveEmployee extends React.PureComponent
     {
         await this.core.util.waitUntil(10)
     }
-    async _onItemRendered(e)
+    async onItemRendered (e)
     {
         await this.core.util.waitUntil(10)
         if(e.itemData.title == this.t("tabTitleAdress"))
@@ -214,7 +207,7 @@ export default class collectiveEmployee extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -245,7 +238,7 @@ export default class collectiveEmployee extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
@@ -255,14 +248,13 @@ export default class collectiveEmployee extends React.PureComponent
                                             {
                                                 let tmpConfObj1 =
                                                 {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
                                                 if((await this.employeeObj.save()) == 0)
                                                 {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
+                                                    this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
                                                 }
@@ -277,7 +269,7 @@ export default class collectiveEmployee extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
                                             }
@@ -293,7 +285,7 @@ export default class collectiveEmployee extends React.PureComponent
                                         
                                         let tmpConfObj =
                                         {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
@@ -303,6 +295,7 @@ export default class collectiveEmployee extends React.PureComponent
                                         {
                                             this.employeeObj.dt('EMPLOYEE').removeAt(0)
                                             await this.employeeObj.dt('EMPLOYEE').delete();
+                                            this.toast.show({message:this.t("msgDeleteSuccess.msg"),type:"success"})
                                             this.init(); 
                                         }
                                         
@@ -332,7 +325,7 @@ export default class collectiveEmployee extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -350,10 +343,10 @@ export default class collectiveEmployee extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id={"frmEmployees"  + this.tabIndex}>     
+                            <NdForm colCount={2} id={"frmEmployees"  + this.tabIndex}>     
                                 {/* txtCode */}
-                                <Item>
-                                    <Label text={this.t("txtCode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"CODE"}} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
@@ -400,9 +393,9 @@ export default class collectiveEmployee extends React.PureComponent
                                         </Validator>  
                                     </NdTextBox>
                                     {/*PERSONEL SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_txtCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -428,10 +421,10 @@ export default class collectiveEmployee extends React.PureComponent
                                         <Column dataField="LAST_NAME" caption={this.t("pg_txtCode.clmLastName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="MARIAL_STATUS" caption={this.t("pg_txtCode.clmStatus")} width={300} />
                                     </NdPopGrid>
-                                </Item>
+                                </NdItem>
                                 {/* txtEmployeeName */}
-                                <Item>
-                                    <Label text={this.t("txtEmployeeName")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtEmployeeName")} alignment="right" />
                                     <NdTextBox id="txtEmployeeName" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     maxLength={32}
@@ -439,10 +432,10 @@ export default class collectiveEmployee extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'txtEmployeeName',USERS:this.user.CODE})}
                                     >                                      
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtEmployeeLastname */}
-                                <Item>
-                                    <Label text={this.t("txtEmployeeLastname")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtEmployeeLastname")} alignment="right" />
                                     <NdTextBox id="txtEmployeeLastname" parent={this} simple={true} tabIndex={this.tabIndex} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"LAST_NAME"}}
@@ -451,10 +444,10 @@ export default class collectiveEmployee extends React.PureComponent
                                     access={this.access.filter({ELEMENT:'txtEmployeeLastname',USERS:this.user.CODE})}
                                     >                                      
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtPhone1 */}
-                                <Item>
-                                    <Label text={this.t("txtPhone1")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtPhone1")} alignment="right" />
                                     <NdTextBox id="txtPhone1" 
                                         parent={this} 
                                         simple={true} 
@@ -467,10 +460,10 @@ export default class collectiveEmployee extends React.PureComponent
                                             <NumericRule message={this.lang.t("phoneIsInvalid")}/>
                                         </Validator>
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtPhone2 */}
-                                <Item>
-                                    <Label text={this.t("txtPhone2")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtPhone2")} alignment="right" />
                                     <NdTextBox id="txtPhone2" 
                                         parent={this} 
                                         simple={true} 
@@ -483,10 +476,10 @@ export default class collectiveEmployee extends React.PureComponent
                                             <NumericRule message={this.lang.t("phoneIsInvalid")}/>
                                         </Validator>
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtGsmPhone */}
-                                <Item>
-                                    <Label text={this.t("txtGsmPhone")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtGsmPhone")} alignment="right" />
                                     <NdTextBox id="txtGsmPhone" 
                                         parent={this} 
                                         simple={true} 
@@ -499,10 +492,10 @@ export default class collectiveEmployee extends React.PureComponent
                                             <NumericRule message={this.lang.t("phoneIsInvalid")}/>
                                         </Validator>
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtOtherPhone */}
-                                <Item>
-                                    <Label text={this.t("txtOtherPhone")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtOtherPhone")} alignment="right" />
                                     <NdTextBox id="txtOtherPhone" 
                                         parent={this} 
                                         simple={true} 
@@ -515,10 +508,10 @@ export default class collectiveEmployee extends React.PureComponent
                                             <NumericRule message={this.lang.t("phoneIsInvalid")}/>
                                         </Validator>
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtEmail */}
-                                <Item>
-                                    <Label text={this.t("txtEmail")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtEmail")} alignment="right" />
                                     <NdTextBox id="txtEmail"                                       
                                         parent={this} 
                                         simple={true}  
@@ -531,10 +524,10 @@ export default class collectiveEmployee extends React.PureComponent
                                             <EmailRule message={this.lang.t("mailIsInvalid")}/>
                                         </Validator>
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtAge */}
-                                <Item>
-                                    <Label text={this.t("txtAge")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtAge")} alignment="right" />
                                     <NdTextBox id="txtAge" 
                                         parent={this} 
                                         simple={true} 
@@ -545,10 +538,10 @@ export default class collectiveEmployee extends React.PureComponent
                                     >
                                      
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtInsuranceNo */}
-                                <Item>
-                                    <Label text={this.t("txtInsuranceNo")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtInsuranceNo")} alignment="right" />
                                     <NdTextBox id="txtInsuranceNo" 
                                         parent={this} 
                                         simple={true} 
@@ -558,10 +551,10 @@ export default class collectiveEmployee extends React.PureComponent
                                         access={this.access.filter({ELEMENT:'txtInsuranceNo',USERS:this.user.CODE})}
                                     >                                  
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtGender */}
-                                <Item>
-                                    <Label text={this.t("txtGender")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtGender")} alignment="right" />
                                     <NdTextBox id="txtGender" 
                                         parent={this} 
                                         simple={true} 
@@ -571,10 +564,10 @@ export default class collectiveEmployee extends React.PureComponent
                                         access={this.access.filter({ELEMENT:'txtGender',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtMarialStatus */}
-                                <Item>
-                                    <Label text={this.t("txtMarialStatus")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtMarialStatus")} alignment="right" />
                                     <NdTextBox id="txtMarialStatus"                                       
                                         parent={this} 
                                         simple={true}  
@@ -585,10 +578,10 @@ export default class collectiveEmployee extends React.PureComponent
                                     >
                                        
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                  {/* txtWage */}
-                                 <Item>
-                                    <Label text={this.t("txtWage")} alignment="right" />
+                                 <NdItem>
+                                    <NdLabel text={this.t("txtWage")} alignment="right" />
                                     <NdTextBox id="txtWage" 
                                         parent={this} 
                                         simple={true} 
@@ -599,12 +592,12 @@ export default class collectiveEmployee extends React.PureComponent
                                     >
                                      
                                     </NdTextBox>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                         <div className='row px-2 pt-2'>
                             <div className='col-12'>
-                                <TabPanel height="100%" onItemRendered={this._onItemRendered} deferRendering={false}>
+                                <TabPanel height="100%" onItemRendered={this.onItemRendered } deferRendering={false}>
                                     <Item title={this.t("tabTitleAdress")}>
                                         <div className='row px-2 py-2'>
                                             <div className='col-12'>
@@ -656,10 +649,10 @@ export default class collectiveEmployee extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popAdress.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'350'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -822,7 +815,7 @@ export default class collectiveEmployee extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
-
+                    <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )

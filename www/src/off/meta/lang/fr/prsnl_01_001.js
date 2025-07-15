@@ -1,253 +1,258 @@
-// "Müşteri Tanımları"
 const prsnl_01_001 =
 {
-    cmbType :"Type",
+    cmbType :"Type"  ,
     cmbGenus :"Genre",
     txtCode : "Code",
     txtTitle : "Titre",
-    txtEmployeeName : "Prénom",
-    txtEmployeeLastname : "Nom De Famille",
+    txtEmployeeName : "Nom",
+    txtEmployeeLastname : "Prénom",
     txtPhone1 : "Téléphone 1",
     txtPhone2 : "Téléphone 2",
-    txtGsmPhone : "Port Tel.",
+    txtGsmPhone : "GSM Tel.",
     txtOtherPhone : "Autre Tel.",
     txtEmail : "E-Mail",
-    txtAge: "Âge",
+    txtAge: "Yaş",
     txtWage: "Salaire",
     txtInsuranceNo: "Numéro d'assurance",
-    txtGender: "Sexe",
-    txtMarialStatus: "État civil",
-    txtWeb : "Web",
+    txtGender: "Genre",
+    txtMarialStatus: "Statut marital",
     tabTitleAdress : "Adresse",
+    tabTitleAttendance : "Statut",
     tabTitleLegal : "Légal",
-    tabTitleOffical : "Administrateur",
-    tabEmployeeBank : "Données Bancaires",
-    tabTitleFinanceDetail : "Informations Financières", 
-    txtLegal :"Données Légales",
-    chkRebate :"Retour-Reprise",
-    chkVatZero :"Sans TVA",
-    txtExpiryDay : "Echéance",  
-    txtRiskLimit : "Limite de Risque",  
-    expDay : "(Jour)", 
+    txtDays: "Dates d'entrée",
+    expDay : "(Jour)",
     chkActive: "Actif",
     pg_txtCode : 
     {
-        title : "Sélectionner Client",
+        title : "Sélection de personnel",
         clmCode : "Code",
-        clmTitle : "Titre",
-        clmName : "Prénom",
-        clmLastName  : "Nom",
-        clmStatus  : "Statut",
-        clmGender  : "Sexe",
+        clmGender : "Genre",
+        clmName : "Nom",
+        clmLastName  : "Prénom",
+        clmStatus  : "Statut",   
     },
     grdAdress : 
     {
         clmAdress : "Adresse",
-        clmZipcode : "Code Postal",
+        clmZipcode : "Code postal",
         clmCity :"Ville",
         clmCountry : "Pays",
-        clmSiret : "Siret"
+    },
+    grdAttendance : 
+    {
+        clmAttendance_Date : "Date d'entrée",
+        clmCheck_In_Tıme : "Heure d'entrée",
+        clmCheck_Out_Tıme :"Heure de sortie",
+        clmIs_Absent : "Absent",
+        clmAbsence_Reason : "Raison",
     },
     grdLegal : 
     {
-        clmSiretID : "Siret No",
-        clmApeCode : "Code Ape",
-        clmTaxOffice : "Impôt",
-        clmTaxNo : "Numéro Impôt",
-        clmIntVatNo : "No EORI",
-        clmTaxType : "Type de Taxe",
-        clmSirenID : "Siren No",
-        clmRcs : "RCS",
+        clmSiretID : "SIRET N°",
+        clmApeCode : "APE Code",
+        clmTaxOffice : "Office de taxe",
+        clmTaxNo : "Taxe N°",
+        clmIntVatNo : "VAT N°",
+        clmTaxType : "Type de taxe",
+        clmSirenID : "SIREN N°",
+        clmRcs : "Chambre de commerce",
         clmCapital : "Capital",
-        clmInsurance : "Assurance No" 
+        clmInsurance : "Assurance N°"
     },
     grdOffical : 
     {
         clmName :"Nom",
-        clmLastName : "Nom De Famille",
+        clmLastName : "Prénom",
         clmPhone1 : "Téléphone 1",
         clmPhone2 : "Téléphone 2",
-        clmGsmPhone : "Tél. Port",
-        clmEMail : "E-Mail"
+        clmGsmPhone : "GSM",
+        clmEMail : "Email"
     },
     grdBank : 
     {
-        clmName : "Nom Banque",
+        clmName : "Banque",
         clmIban : "IBAN",
-        clmOffice : "Centre",
-        clmSwift : "Code Swift",
+        clmOffice : "Agence",
+        clmSwift : "Swift",
     },
     popAdress : 
     {
-        title : "Adresse",
+        title : "Adresse",    
         txtPopAdress : "Adresse",
-        cmbPopZipcode :"Code Postal",
+        cmbPopZipcode :"Code postal",
         cmbPopCity :"Ville",
         cmbPopCountry :"Pays",
-        txtPopAdressSiret : "Siret"
+    },
+    popAttendance : 
+    {
+        title : "Statut",
+        txtPopAttendance_Date : "Date d'entrée",
+        cmbPopCheck_In_Tıme : "Heure d'entrée",
+        cmbPopCheck_Out_Tıme :"Heure de sortie",
+        cmbPopIs_Absent : "Absent",
+        cmbPopAbsent_Reason : "Raison",
     },
     popBank : 
     {
-        title : "Données Bancaires",
-        txtName : "Nom de Banque",
+        title : "Informations bancaires",
+        txtName : "Banque",
         txtIban :"IBAN",
-        txtOffice :"Centre",
-        txtSwift :"Code Swift",
+        txtOffice :"Agence",
+        txtSwift :"Swift",
     },
     popOffical : 
     {
-        title : "Administrateur",
+        title : "Responsable",         
         txtPopName : "Nom",
-        txtPopLastName : "Nom De Famille",
+        txtPopLastName : "Prénom",
         txtPopPhone1 :"Téléphone 1",
-        txtPopPhone2 :"Téléphone  2",
-        txtPopGsmPhone : "Port Tel.",
-        txtPopOtherPhone : "Autre Tel.",
-        txtPopMail :"E-Mail"
+        txtPopPhone2 :"Téléphone 2",
+        txtPopGsmPhone : "GSM",
+        txtPopOtherPhone : "Autre Téléphone",
+        txtPopMail :"Email"
     },
     msgSave:
     {
         title: "Attention",
-        btn01: "OK",
-        btn02: "Abandonner",
-        msg: "Etês-vous sûr(e) de vouloir Enregistrer!"
+        btn01: "Oui",
+        btn02: "Non",
+        msg: "Voulez-vous vraiment enregistrer les informations ? !"
     },
     msgSaveResult:
     {
         title: "Attention",
-        btn01: "OK",
-        msgSuccess: "Enregistré avec succès !",
+        btn01: "Oui",
+        msgSuccess: "Enregistrement réussi !",
         msgFailed: "Enregistrement échoué !"
     },
     msgSaveValid:
     {
         title: "Attention",
-        btn01: "OK",
-        msg: "Veuillez saisir les zones nécessairess !"
+        btn01: "Oui",
+        msg: "Veuillez remplir les champs obligatoires !"
     },
     msgLegalNotValid:
     {
         title: "Attention",
-        btn01: "OK",
-        msg: "Veuillez Saisir les Zones Légales !"
+        btn01: "Oui",
+        msg: "Veuillez remplir les champs obligatoires !"
     },
     msgTaxNo:
     {
-        title: "Attention",   
-        btn01: "OK",   
-        msg: "Veuillez Saisir le Numéro TVA !"   
+        title: "Attention",
+        btn01: "Oui",
+        msg: "Veuillez remplir les champs obligatoires !"
     },
     msgAdressNotValid:
     {
         title: "Attention",
-        btn01: "OK",
-        msg: "Saisir pays de résidence !"
+        btn01: "Oui",
+        msg: "Veuillez sélectionner le pays de l'adresse !"
     },
     msgDelete:
     {
         title: "Attention",
-        btn01: "OK",
-        btn02: "Abandonner",
-        msg: "Êtes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+        btn01: "Oui",
+        btn02: "Non",
+        msg: "Voulez-vous vraiment supprimer le dossier ?"
     },
     cmbTypeData : 
     {
-        individual :  "Particulier",
-        company :  "Entreprise",
+        individual : "Individuel",
+        company : "Entreprise",
         association : "Association"
     },
     cmbGenusData:
     {
-        Employee : "Client",
+        Customer : "Client",
         supplier : "Fournisseur",
-        both : "Tous les Deux",
-        branch : "Magasin" 
+        both : "Les deux",
+        branch : "Agence"
     },
     cmbTaxTypeData : 
     {
-        individual :  "Particulier",
-        company :  "Entreprise"
+        individual : "Individuel",
+        company : "Entreprise"
     },
     msgCode : 
     {
         title: "Attention",
-        btn01: "Rechercher Client",
-        btn02: "OK",
-        msg : "Client déjà existant!"
+        btn01: "Client",
+        btn02: "Oui",
+        msg : "Le client existe déjà dans le système !"
     },
-    chkTaxSucre : "Taxe sucrée",
-    tabTitleDetail : "Information détail",
-    validation : 
+    chkTaxSucre : "Taxe sucre",  
+    tabTitleDetail : "Informations détaillées",
+    validation :
     {
-        frmEmployees: "Le Code ne peut être Vide !",
+        frmEmployees: "Le code ne peut pas être vide !",
     },
-    txtSubEmployee : "Fournisseur filiale", 
-    pg_subEmployee : 
+    txtSubCustomer : "Sous-client",
+    pg_subCustomer : 
     {
-        title : "Choix du fournisseur filiale",  
-        clmCode : "Code", 
-        clmTitle : "Titre", 
-        clmName : "Prénom",  
-        clmLastName  : "Nom", 
+        title : "Sous-client",
+        clmCode : "Code",
+        clmTitle : "Titre",
+        clmName : "Nom",
+        clmLastName  : "Prénom",
     },
-    txtMainEmployee : "Fournissseur principal",
-    pg_mainEmployee : 
+    txtMainCustomer : "Client principal",
+    pg_mainCustomer : 
     {
-        title : "Choix du fournisseur principal", 
-        clmCode : "Code",   
-        clmTitle : "Titre",  
-        clmName : "Prénom",   
-        clmLastName  : "Nom", 
+        title : "Client principal",
+        clmCode : "Code",
+        clmTitle : "Titre",
+        clmName : "Nom",
+        clmLastName  : "Prénom",
     },
-    txtArea : "Zone", 
+    txtArea : "Région",
     pg_AreaCode : 
     {
-        title : "Choix de la zone", 
-        clmCode : "Code", 
-        clmName : "Nom", 
+        title : "Région",
+        clmCode : "Code",
+        clmName : "Nom",
     },
     txtSector : "Secteur",
     pg_SectorCode : 
     {
-        title : "Choix de la zone",  
-        clmCode : "Code",  
-        clmName : "Nom", 
-    },
-    txtPriceListNo: "Numéro Liste Prix", //BAK
-    pg_priceListNo: //BAK
-    {
-        title: "Sélection de la Liste de Prix",
-        clmNo: "Numéro",
-        clmName: "Nom"
-    },
-    popNote : 
-    {
-        title : "Ajouter une note", 
-    },
-    tabTitleNote : "Les notes", 
-    grdNote:
-    {
-        clmNote : "Note",
-        clmName : "Nom", 
-    },
-    txtMainGroup : "Groupe principale ",
-    pg_MainGroup : 
-    {
-        title : "Choix du groupe",
+        title : "Secteur",
         clmCode : "Code",
         clmName : "Nom",
     },
-    btnSubGroup: "Ajouter un Sous-groupe",
-    pg_subGroup: 
+    txtPriceListNo : "Liste de prix",
+    pg_priceListNo : 
     {
-        title: "Sélection de Sous-groupe",
-        clmName: "Nom",
+        title : "Liste de prix",
+        clmNo : "N°",   
+        clmName : "Nom"
     },
-    msgTaxInSpace: 
+    popNote : 
     {
-        title: "Attention",
-        btn01: "D'accord",
-        msg: "Veuillez écrire le numéro de TVA sans espaces !"
-    }
+        title : "Ajouter une note",
+    },
+    tabTitleNote : "Notes",
+    grdNote:
+    {
+        clmName : "Note"
+    },
+    txtMainGroup : "Groupe principal",
+    pg_MainGroup : 
+    {
+        title : "Groupe principal",
+        clmCode : "Code",
+        clmName : "Nom",
+    },
+    btnSubGroup : "Ajouter un sous-groupe",
+    pg_subGroup : 
+    {
+        title : "Sous-groupe",
+        clmName : "Nom",
+    },
+    msgDeleteSuccess :
+    {
+        msg: "Suppression réussie !"
+    },
+
 }
+
 export default prsnl_01_001

@@ -1,14 +1,14 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import {contractCls} from '../../../../core/cls/contract.js'
-import moment from 'moment';
+
 import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
 import {NdToast} from '../../../../core/react/devex/toast.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import { Button } from 'devextreme-react/button';
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';

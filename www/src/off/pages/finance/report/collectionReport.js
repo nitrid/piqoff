@@ -2,18 +2,17 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label,EmptyItem } from 'devextreme-react/form';
+import Form from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Editing,Popup} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, Scrolling,Editing} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdTextBox, { Validator, RequiredRule, RangeRule } from '../../../../core/react/devex/textbox.js';
+import NdTextBox from '../../../../core/react/devex/textbox.js';
 import NdCollectionGrid, { groupCollection } from '../../../../core/react/devex/collectiongrid.js';
-import { NdForm,NdItem,NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
+import { NdForm,NdItem,NdLabel} from '../../../../core/react/devex/form.js';
 
 export default class collectionReport extends React.PureComponent
 {

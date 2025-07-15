@@ -167,6 +167,10 @@ const prsnl_03_001 =
         txtTotal : "Nombre total",    
         chkDigit : "EAN Code"    
     },  
-    btnGet : "Enregistrer"    
+    btnGet : "Enregistrer",
+    msgDeleteSuccess :
+    {
+        msg: "Suppression réussie !"
+    }
 }
 export default prsnl_03_001
