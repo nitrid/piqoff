@@ -41,7 +41,7 @@ export default class itemGrpSalesReport extends React.PureComponent
         let tmpLoad = this.access.filter({ELEMENT:'grdSlsOrderState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-    saveState()
+    saveState(e)
     {
         let tmpSave = this.access.filter({ELEMENT:'grdSlsOrderState',USERS:this.user.CODE, PAGE:this.props.data.id, APP:"OFF"})
         tmpSave.setValue(e)
