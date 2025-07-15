@@ -1,21 +1,14 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
-
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
+import Form, {Item,  Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import { Chart, Series, CommonSeriesSettings, Legend, ValueAxis, Title, Tooltip, Border, ArgumentAxis, CommonAxisSettings, Grid, Margin, Label as ChartLabel, Format, Strips, Strip, ZoomAndPan } from 'devextreme-react/chart';
 import PieChart, { Legend as PieLegend, Series as PieSeries, Tooltip as PieTooltip, Label as PieLabel , Connector as PieConnector, LoadingIndicator as PieLoadingIndicator} from 'devextreme-react/pie-chart';
-
-
-import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling} from '../../../../core/react/devex/grid.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js'
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-import NdPivot,{FieldChooser,Export} from '../../../../core/react/devex/pivot.js';
+import {Export} from '../../../../core/react/devex/pivot.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 
@@ -68,7 +61,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
             selectedAnalysisType: 'products',
             selectedAnalysis: 'topSellingProducts',
             chartType: 'bar'
-        }, async () => 
+        }, 
+        async () => 
         {
             // İlk veri yüklemesini yap
             let productAnalysisData = await this.calculateProductAnalysisData('topSellingProducts')
@@ -172,7 +166,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
         }
     }
 
-    calculateAnalysisData(dailySalesData) {
+    calculateAnalysisData(dailySalesData) 
+    {
         let analysisData = {}
         
         if (dailySalesData.length > 0) 
@@ -181,7 +176,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
             let topDay = dailySalesData.reduce((max, day) => 
                 day.totalSales > max.totalSales ? day : max
             )
-            analysisData.topDay = [{
+            analysisData.topDay = 
+            [{
                 category: topDay.date,
                 value: topDay.totalSales,
                 title: this.lang.t("topDay")
@@ -191,7 +187,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
             let worstDay = dailySalesData.reduce((min, day) => 
                 day.totalSales < min.totalSales ? day : min
             )
-            analysisData.worstDay = [{
+            analysisData.worstDay = 
+            [{
                 category: worstDay.date,
                 value: worstDay.totalSales,
                 title: this.lang.t("worstDay")
@@ -201,7 +198,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
             let top10Days = dailySalesData
                 .sort((a, b) => b.totalSales - a.totalSales)
                 .slice(0, 10)
-                .map((day, index) => ({
+                .map((day, index) => 
+                ({
                     category: day.date,
                     value: day.totalSales,
                     title: this.lang.t("top10Days"),
@@ -213,7 +211,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
             let worst10Days = dailySalesData
                 .sort((a, b) => a.totalSales - b.totalSales)
                 .slice(0, 10)
-                .map((day, index) => ({
+                .map((day, index) => 
+                ({
                     category: day.date,
                     value: day.totalSales,
                     title: this.lang.t("worst10Days"),
@@ -286,7 +285,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                 let firstHalf = dailySalesData.slice(0, midPoint).reduce((sum, day) => sum + day.totalSales, 0)
                 let secondHalf = dailySalesData.slice(midPoint).reduce((sum, day) => sum + day.totalSales, 0)
                 
-                analysisData.growthTrend = [
+                analysisData.growthTrend = 
+                [
                     { category: this.lang.t("firstHalf"), value: firstHalf, title: this.lang.t("growthTrend") },
                     { category: this.lang.t("secondHalf"), value: secondHalf, title: this.lang.t("growthTrend") }
                 ]
@@ -297,7 +297,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
             
             dayNumbers.forEach((dayNum, index) => {
                 let dayName = dayNames[index];
-                let dayData = dailySalesData.filter(day => {
+                let dayData = dailySalesData.filter(day => 
+                {
                     let date = moment(day.date, 'DD/MM/YYYY');
                     return date.day() === dayNum;
                 });
@@ -308,7 +309,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     let bestDays = dayData
                         .sort((a, b) => b.totalSales - a.totalSales)
                         .slice(0, 10)
-                        .map((day, idx) => ({
+                        .map((day, idx) => 
+                        ({
                             category: day.date,
                             value: day.totalSales,
                             title: this.lang.t(`best${dayName}`),
@@ -320,7 +322,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     let worstDays = dayData
                         .sort((a, b) => a.totalSales - b.totalSales)
                         .slice(0, 10)
-                        .map((day, idx) => ({
+                        .map((day, idx) => 
+                        ({
                             category: day.date,
                             value: day.totalSales,
                             title: this.lang.t(`worst${dayName}`),
@@ -334,7 +337,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
             analysisData.top5Days = dailySalesData
                 .sort((a, b) => b.totalSales - a.totalSales)
                 .slice(0, 5)
-                .map((day, index) => ({
+                .map((day, index) => 
+                ({
                     category: day.date,
                     value: day.totalSales,
                     title: this.lang.t("top5Days"),
@@ -344,7 +348,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
             analysisData.top15Days = dailySalesData
                 .sort((a, b) => b.totalSales - a.totalSales)
                 .slice(0, 15)
-                .map((day, index) => ({
+                .map((day, index) =>
+                ({
                     category: day.date,
                     value: day.totalSales,
                     title: this.lang.t("top15Days"),
@@ -354,7 +359,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
             analysisData.top20Days = dailySalesData
                 .sort((a, b) => b.totalSales - a.totalSales)
                 .slice(0, 20)
-                .map((day, index) => ({
+                .map((day, index) => 
+                ({
                     category: day.date,
                     value: day.totalSales,
                     title: this.lang.t("top20Days"),
@@ -364,7 +370,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
             analysisData.worst5Days = dailySalesData
                 .sort((a, b) => a.totalSales - b.totalSales)
                 .slice(0, 5)
-                .map((day, index) => ({
+                .map((day, index) => 
+                ({
                     category: day.date,
                     value: day.totalSales,
                     title: this.lang.t("worst5Days"),
@@ -374,7 +381,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
             analysisData.worst15Days = dailySalesData
                 .sort((a, b) => a.totalSales - b.totalSales)
                 .slice(0, 15)
-                .map((day, index) => ({
+                .map((day, index) => 
+                ({
                     category: day.date,
                     value: day.totalSales,
                     title: this.lang.t("worst15Days"),
@@ -384,7 +392,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
             analysisData.worst20Days = dailySalesData
                 .sort((a, b) => a.totalSales - b.totalSales)
                 .slice(0, 20)
-                .map((day, index) => ({
+                .map((day, index) => 
+                ({
                     category: day.date,
                     value: day.totalSales,
                     title: this.lang.t("worst20Days"),
@@ -395,7 +404,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
             let belowAverageDays = dailySalesData
                 .filter(day => day.totalSales < average)
                 .sort((a, b) => a.totalSales - b.totalSales)
-                .map(day => ({
+                .map(day => 
+                ({
                     category: day.date,
                     value: day.totalSales,
                     title: this.lang.t("belowAverage")
@@ -403,11 +413,13 @@ export default class posSalesStatisticalReport extends React.PureComponent
             analysisData.belowAverage = belowAverageDays
             
             // İlk hafta vs son hafta karşılaştırması
-            if (dailySalesData.length >= 7) {
+            if (dailySalesData.length >= 7) 
+            {
                 let firstWeek = dailySalesData.slice(0, 7).reduce((sum, day) => sum + day.totalSales, 0)
                 let lastWeek = dailySalesData.slice(-7).reduce((sum, day) => sum + day.totalSales, 0)
                 
-                analysisData.firstWeekVsLastWeek = [
+                analysisData.firstWeekVsLastWeek =
+                [
                     { category: this.lang.t("firstWeek"), value: firstWeek, title: this.lang.t("firstWeekVsLastWeek") },
                     { category: this.lang.t("lastWeek"), value: lastWeek, title: this.lang.t("firstWeekVsLastWeek") }
                 ]
@@ -415,15 +427,18 @@ export default class posSalesStatisticalReport extends React.PureComponent
             
             // Haftalık dağılım
             let weeklyData = {}
-            dailySalesData.forEach(day => {
+            dailySalesData.forEach(day => 
+            {
                 let week = moment(day.date, 'DD/MM/YYYY').format('YYYY-[W]WW')
-                if (!weeklyData[week]) {
+                if (!weeklyData[week]) 
+                {
                     weeklyData[week] = 0
                 }
                 weeklyData[week] += day.totalSales
             })
             
-            let sortedWeeks = Object.keys(weeklyData).sort((a, b) => {
+            let sortedWeeks = Object.keys(weeklyData).sort((a, b) => 
+            {
                 return moment(a, 'YYYY-[W]WW').diff(moment(b, 'YYYY-[W]WW'))
             })
             
@@ -443,7 +458,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                 let date = moment(day.date, 'DD/MM/YYYY')
                 let dayOfWeek = date.format('dddd')
                 
-                if (!dayOfWeekData[dayOfWeek]) {
+                if (!dayOfWeekData[dayOfWeek]) 
+                {
                     dayOfWeekData[dayOfWeek] = 0
                 }
                 dayOfWeekData[dayOfWeek] += day.totalSales
@@ -519,11 +535,14 @@ export default class posSalesStatisticalReport extends React.PureComponent
             }
             
             return []
-        } catch (error) {
+        } 
+        catch (error) 
+        {
             console.error('Error getting product groups:', error)
             return []
         }
-        finally {
+        finally 
+        {
             // Loading bitir
             App.instance.setState({isExecute:false})
         }
@@ -621,7 +640,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         yearNumber: item.YEAR_NUMBER,
                         title: `${productName} - ${this.lang.t("weeklySales")}`
                     }))
-                } else {
+                } 
+                else
+                {
                     productDetailData.weekly = []
                 }
             }
@@ -665,7 +686,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         yearNumber: item.YEAR_NUMBER,
                         title: `${productName} - ${this.lang.t("monthlySales")}`
                     }))
-                } else {
+                } 
+                else 
+                {
                     productDetailData.monthly = []
                 }
             }
@@ -708,7 +731,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         dayOfWeek: item.DAY_OF_WEEK,
                         title: `${productName} - ${this.lang.t("dayOfWeekDistribution")}`
                     }))
-                } else {
+                } 
+                else 
+                {
                     productDetailData.dayOfWeek = []
                 }
             }
@@ -746,7 +771,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         yearNumber: item.YEAR_NUMBER,
                         title: `${productName} - ${this.lang.t("yearlySales")}`
                     }))
-                } else {
+                } 
+                else 
+                {
                     productDetailData.yearly = []
                 }
             }
@@ -810,7 +837,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         itemCode: item.ITEM_CODE,
                         itemName: item.ITEM_NAME
                     }))
-                } else {
+                } 
+                else 
+                {
                     productAnalysisData.topSellingProducts = []
                 }
             }
@@ -851,7 +880,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         itemCode: item.ITEM_CODE,
                         itemName: item.ITEM_NAME
                     }))
-                } else {
+                } 
+                else 
+                {
                     productAnalysisData.worstSellingProducts = []
                 }
             }
@@ -859,7 +890,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
             if (analysisType === 'topSellingProductsInGroup' && this.selectedProductGroup) 
             {
                 // Seçili gruptaki en çok satan ürünler
-                let tmpQuery = {
+                let tmpQuery = 
+                {
                     query: `SELECT TOP 20 
                                 POS.ITEM_CODE,
                                 POS.ITEM_NAME,
@@ -895,7 +927,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         itemCode: item.ITEM_CODE,
                         itemName: item.ITEM_NAME
                     }))
-                } else {
+                } 
+                else 
+                {
                     productAnalysisData.topSellingProductsInGroup = []
                 }
             }
@@ -936,7 +970,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         rank: index + 1,
                         title: this.t("productAnalysis.topSellingProductGroups")
                     }))
-                } else {
+                } 
+                else 
+                {
                     productAnalysisData.topSellingProductGroups = []
                 }
             }
@@ -976,7 +1012,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -994,7 +1030,12 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                            <Form>
+                                <Item>
+                                    <Label text={this.lang.t("dtDate")} alignment="right" />
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                                </Item>
+                            </Form>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -1078,12 +1119,14 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             {
                                                 // Her cihaz için ödeme tiplerini sıfırla
                                                 devicePaymentTotals[row.DEVICE] = {}
-                                                this.payTypeList.forEach(type => {
+                                                this.payTypeList.forEach(type => 
+                                                {
                                                     devicePaymentTotals[row.DEVICE][type] = 0
                                                 })
                                             }
                                             // Eğer yeni bir ödeme tipi geldiyse ekle
-                                            if (devicePaymentTotals[row.DEVICE][row.TYPE] === undefined) {
+                                            if (devicePaymentTotals[row.DEVICE][row.TYPE] === undefined) 
+                                            {
                                                 devicePaymentTotals[row.DEVICE][row.TYPE] = 0
                                             }
                                             devicePaymentTotals[row.DEVICE][row.TYPE] += Math.abs(parseFloat(row.AMOUNT) || 0)
@@ -1092,14 +1135,14 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                     
                                     // Tüm ödeme tiplerini kontrol et
                                     let allPaymentTypes = new Set()
-                                    tmpData.result.recordset.forEach(row => {
-                                        if (row.TITLE === 'PAYMENT' && row.TYPE !== 'Total') {
+                                    tmpData.result.recordset.forEach(row => 
+                                    {
+                                        if (row.TITLE === 'PAYMENT' && row.TYPE !== 'Total') 
+                                        {
                                             allPaymentTypes.add(row.TYPE)
                                         }
                                     })
                                     
-                                    // payTypeList'te olmayan ödeme tiplerini bul
-                                    let missingTypes = Array.from(allPaymentTypes).filter(type => !this.payTypeList.includes(type))
                                     
                                     // Chart data formatına çevir - her kasa için 5 ödeme yöntemi
                                     Object.keys(devicePaymentTotals).forEach(device => 
@@ -1110,13 +1153,14 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                         let chartItem = {
                                             device: `${this.lang.t("device")} ${device}`
                                         }
-                                        this.payTypeList.forEach(type => {
+                                        this.payTypeList.forEach(type => 
+                                        {
                                             chartItem[type] = payments[type] || 0
                                             total += payments[type] || 0
                                         })
                                         chartItem.total = total
                                         chartData.push(chartItem)
-                                        })
+                                    })
                                     // Günlük satış verilerini işle
                                     let dailySalesData = []
                                     let dailyTotals = {}
@@ -1138,27 +1182,27 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                     // Günlük verileri sırala ve formatla
                                     Object.keys(dailyTotals).sort().forEach(date => 
                                     {
-                                        dailySalesData.push({
+                                        dailySalesData.push
+                                        ({
                                             date: moment(date).format('DD/MM/YYYY'),
                                             totalSales: dailyTotals[date]
                                         })
                                     })
-                                    // Toplam tutarları kontrol et
-                                    let totalDailySales = dailySalesData.reduce((sum, item) => sum + item.totalSales, 0)
-                                    let totalChartData = chartData.reduce((sum, item) => sum + item.total, 0)
                                     
                                     this.calculateAnalysisData(dailySalesData)
                                     
-                                    this.setState({ 
+                                    this.setState
+                                    ({ 
                                         chartData: chartData,
                                         dailySalesData: dailySalesData
                                     })
                                 }
                                 else
                                 {
-                                    this.setState({ 
+                                    this.setState
+                                    ({ 
                                         chartData: [],
-                                        dailySalesData: []
+                                        dailySalesData: []  
                                     })
                                 }
                             }}/>
@@ -1172,7 +1216,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                 width={'250px'}
                                 type="success"
                                 icon="fa-solid fa-chart-line"
-                                elementAttr={{
+                                elementAttr=
+                                {{
                                     style: "font-weight:bold;font-size:16px"
                                 }}
                                 onClick={() => 
@@ -1198,7 +1243,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                         <Chart
                                             id="dailySalesChart"
                                             title={this.lang.t("dailySalesChart.title")}
-                                            dataSource={this.state.dailySalesData.sort((a, b) => {
+                                            dataSource={this.state.dailySalesData.sort((a, b) => 
+                                            {
                                                 // Tarihe göre sırala - en eski tarih en solda
                                                 let dateA = moment(a.date, 'DD/MM/YYYY');
                                                 let dateB = moment(b.date, 'DD/MM/YYYY');
@@ -1224,9 +1270,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             >
                                                 <ChartLabel 
                                                     rotationAngle={45}
-                                                    customizeText={(arg) => {
-                                                        // Tarih formatını düzenle - sadece gün/ay göster
-                                                        if (arg.value) {
+                                                    customizeText={(arg) => 
+                                                    {
+                                                        if (arg.value) 
+                                                        {
                                                             let date = moment(arg.value, 'DD/MM/YYYY');
                                                             return date.format('DD/MM');
                                                         }
@@ -1249,7 +1296,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             />
                                             <Tooltip 
                                                 enabled={true}
-                                                customizeTooltip={(arg) => {
+                                                customizeTooltip={(arg) => 
+                                                {
                                                     let date = moment(arg.argumentText, 'DD/MM/YYYY');
                                                     let formattedDate = date.format('DD MMMM YYYY');
                                                     let dayName = date.format('dddd');
@@ -1272,7 +1320,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     <div style={{height: "50px"}}></div>
                     
                     {/* Grafikler */}
-                    <React.Suspense fallback={
+                    <React.Suspense fallback=
+                    {
                         <div style={{height: '500px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                             <span>{this.lang.t("loading")}</span>
                         </div>
@@ -1347,7 +1396,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     .filter(payType => 
                                                     (this.state.chartData || []).some(item => item[payType] && item[payType] > 0)
                                                 )
-                                                .map((payType, idx) => {
+                                                .map((payType, idx) => 
+                                                {
                                                     // Ödeme tipi için renk ve isim eşleştirmesi
                                                     let payTypeConfig = {
                                                         'ESC': { name: this.lang.t("barChart.cash"), color: "#ffeb3b" },
@@ -1486,7 +1536,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 width="100%"
                                                 onValueChanged={async (e) => 
                                                 {
-                                                    this.setState({ 
+                                                    this.setState
+                                                    ({ 
                                                         selectedAnalysisType: e.value,
                                                         selectedAnalysis: null,
                                                         selectedSubOption: null,
@@ -1500,17 +1551,20 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         
                                                         try {
                                                             let productGroups = await this.getProductGroups()
-                                                            this.setState({ 
+                                                            this.setState
+                                                            ({ 
                                                                 productGroups: productGroups
                                                                 // selectedAnalysis ve productAnalysisData ayarlama
                                                             })
-                                                        } catch (error) {
+                                                        } 
+                                                        catch (error) 
+                                                        {
                                                             console.error('Error loading product groups:', error)
                                                         }
                                                     }
                                                 }}
                                             />
-                            </div>
+                                    </div>
                                         <div className="col-md-6">
                                             <div style={{marginBottom: '15px'}}>
                                                 <Label 
@@ -1644,7 +1698,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                                     selectedProductGroup: e.value,
                                                                     selectedAnalysis: 'topSellingProductsInGroup',
                                                                     productAnalysisData: productData
-                                                                }, async () => 
+                                                                }, 
+                                                                async () => 
                                                                 {
                                                                     // Sonra veriyi yükle
                                                                     let productAnalysisData = await this.calculateProductAnalysisData('topSellingProductsInGroup');
@@ -1707,7 +1762,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         this.setState({ 
                                                             selectedProductGroup: e.target.data.groupCode,
                                                             selectedAnalysis: 'topSellingProductsInGroup'
-                                                        }, async () => 
+                                                        }, 
+                                                        async () => 
                                                         {
                                                             // Sonra veriyi yükle
                                                             let productAnalysisData = await this.calculateProductAnalysisData('topSellingProductsInGroup');
@@ -1729,7 +1785,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                             productDetailData: {}, // Veriyi temizle
                                                             productDetailAnalysisType: 'daily',
                                                             productDetailChartType: 'line'
-                                                        },  async () => 
+                                                        },  
+                                                        async () => 
                                                         {
                                                             // Ürün detay verilerini yükle
                                                             App.instance.setState({isExecute:true})
@@ -1808,7 +1865,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     }}
                                                 />
                                             </PieChart>
-                                        ) : this.state.chartType === 'line' ? (
+                                        ) : this.state.chartType === 'line' ? 
+                                        (
                                             <Chart
                                                 id="productAnalysisLineChart"
                                                 title={this.state.productAnalysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("productAnalysis.title")}
@@ -1839,14 +1897,16 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     {
                                                         // Ürün detay popup'ını aç
                                                         this.setState({ 
-                                                            selectedProduct: {
+                                                            selectedProduct: 
+                                                            {
                                                                 code: e.target.data.itemCode,
                                                                 name: e.target.data.itemName
                                                             },
                                                             productDetailData: {}, // Veriyi temizle
                                                             productDetailAnalysisType: 'daily',
                                                             productDetailChartType: 'line'
-                                                        },  async () => 
+                                                        },  
+                                                        async () => 
                                                         {
                                                             // Ürün detay verilerini yükle
                                                             App.instance.setState({isExecute:true})
@@ -1904,7 +1964,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 <Tooltip 
                                                     enabled={true}
                                                     zIndex={9999}
-                                                    customizeTooltip={(arg) => {
+                                                    customizeTooltip={(arg) => 
+                                                    {
                                                         if (!arg || !arg.argumentText || !arg.valueText) 
                                                         {
                                                             return { text: this.lang.t("noData") };
@@ -1915,7 +1976,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                             item.category === arg.argumentText
                                                         )
                                                         
-                                                        if (dataItem) {
+                                                        if (dataItem) 
+                                                        {
                                                             if (dataItem.rank) 
                                                             {
                                                                 tooltipText = `${dataItem.rank}. ${tooltipText}`
@@ -1943,7 +2005,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 palette="Bright"
                                                 style={{minHeight: '400px'}}
                                                 visible={this.state.productAnalysisData[this.state.selectedAnalysis]?.length > 0}
-                                                onPointClick={async (e) => {
+                                                onPointClick={async (e) => 
+                                                {
                                                     // Eğer ürün grupları grafiğindeyse ve bir gruba tıklandıysa
                                                     if (this.state.selectedAnalysis === 'topSellingProductGroups' && e.target.data.groupCode)
                                                     {
@@ -1951,7 +2014,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         this.setState({ 
                                                             selectedProductGroup: e.target.data.groupCode,
                                                             selectedAnalysis: 'topSellingProductsInGroup'
-                                                        }, async () => 
+                                                        }, 
+                                                        async () => 
                                                         {
                                                             // Sonra veriyi yükle
                                                             let productAnalysisData = await this.calculateProductAnalysisData('topSellingProductsInGroup');
@@ -1972,7 +2036,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                             },
                                                             productDetailChartType: 'line',
                                                             productDetailAnalysisType: 'daily'
-                                                        }, () => 
+                                                        }, 
+                                                        () => 
                                                         {
                                                             // Ürün detay verilerini yükle
                                                             App.instance.setState({isExecute:true})
@@ -2037,7 +2102,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 <Tooltip 
                                                     enabled={true}
                                                     zIndex={9999}
-                                                    customizeTooltip={(arg) => {
+                                                    customizeTooltip={(arg) => 
+                                                    {
                                                         if (!arg || !arg.argumentText || !arg.valueText)
                                                         {
                                                             return { text: this.lang.t("noData") };
@@ -2048,7 +2114,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                             item.category === arg.argumentText
                                                         )
                                                         
-                                                        if (dataItem) {
+                                                        if (dataItem) 
+                                                        {
                                                             if (dataItem.rank) 
                                                             {
                                                                 tooltipText = `${dataItem.rank}. ${tooltipText}`
@@ -2097,14 +2164,16 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             />
                                             <PieTooltip 
                                                 enabled={true}
-                                                customizeTooltip={(arg) => {
+                                                customizeTooltip={(arg) => 
+                                                {
                                                     return {
                                                         text: `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
                                                     };
                                                 }}
                                             />
                                         </PieChart>
-                                    ) : this.state.chartType === 'pie' ? (
+                                    ) : this.state.chartType === 'pie' ? 
+                                    (
                                         <PieChart
                                             id="analysisPieChart"
                                             type="doughnut"
@@ -2117,7 +2186,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 argumentField="category"
                                                 valueField="value"
                                             >
-                                                <PieLabel visible={true} customizeText={(arg) => {
+                                                <PieLabel visible={true} customizeText={(arg) => 
+                                                {
                                                     let total = (this.state.analysisData[this.state.selectedAnalysis] || []).reduce((sum, item) => sum + item.value, 0)
                                                     let percentage = ((arg.value / total) * 100).toFixed(1)
                                                     return `${arg.argumentText}\n${arg.value.toFixed(2)} € (${percentage}%)`
@@ -2132,7 +2202,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             />
                                             <PieTooltip 
                                                 enabled={true}
-                                                customizeTooltip={(arg) => {
+                                                customizeTooltip={(arg) => 
+                                                {
                                                     let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
                                                     if (this.state.selectedAnalysis === 'top10Days' || this.state.selectedAnalysis === 'worst10Days') 
                                                     {
@@ -2146,7 +2217,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 }}
                                             />
                                         </PieChart>
-                                    ) : this.state.chartType === 'line' ? (
+                                    ) : this.state.chartType === 'line' ? 
+                                    (
                                         <Chart
                                             id="analysisLineChart"
                                             title={this.state.analysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
@@ -2186,16 +2258,17 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                         <Tooltip 
                                             enabled={true}
                                                 zIndex={9999}
-                                                customizeTooltip={(arg) => {
+                                                customizeTooltip={(arg) => 
+                                                {
                                                 let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
                                                 if (this.state.selectedAnalysis === 'top10Days' || this.state.selectedAnalysis === 'worst10Days') 
                                                 {
                                                     let dataItem = this.state.analysisData[this.state.selectedAnalysis]?.find(item => item.category === arg.argumentText)
                                                     if (dataItem && dataItem.rank) 
                                                     {
-                                                            tooltipText = `${dataItem.rank}. ${tooltipText}`
-                                                        }
+                                                        tooltipText = `${dataItem.rank}. ${tooltipText}`
                                                     }
+                                                }
                                                     return { text: tooltipText };
                                                 }}
                                             />
@@ -2209,7 +2282,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             palette="Bright"
                                             style={{minHeight: '400px'}}
                                             visible={this.state.analysisData[this.state.selectedAnalysis]?.length > 0}
-                                            onPointClick={async (e) => {
+                                            onPointClick={async (e) => 
+                                            {
                                                 
                                                 // Eğer ürün grupları grafiğindeyse ve bir gruba tıklandıysa
                                                 if (this.state.selectedAnalysis === 'topSellingProductGroups' && e.target.data.groupCode) {
@@ -2218,7 +2292,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     this.setState({ 
                                                         selectedProductGroup: e.target.data.groupCode,
                                                         selectedAnalysis: 'topSellingProductsInGroup'
-                                                    }, async () => {
+                                                    },   
+                                                    async () => 
+                                                    {
                                                         // Sonra veriyi yükle
                                                         let productAnalysisData = await this.calculateProductAnalysisData('topSellingProductsInGroup');
                                                         this.setState({ productAnalysisData: productAnalysisData });
@@ -2310,7 +2386,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     height={'900'}
                     position={{of:'#root'}}
                     ref={(el) => { this.popProductDetail = el }}
-                    onHiding={async () => {
+                    onHiding={async () => 
+                    {
                         await new Promise(resolve => this.setState({
                             selectedProduct: null,
                             productDetailData: {},
@@ -2319,7 +2396,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         }, resolve));
                         App.instance.setState({isExecute:false});
                     }}
-                    onShowing={async () => {
+                    onShowing={async () => 
+                    {
                         const newKey = Date.now();
                         await new Promise(resolve => this.setState({
                             productDetailAnalysisType: 'daily',
@@ -2327,7 +2405,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                             productDetailData: {},
                             selectBoxResetKey: newKey
                         }, resolve));
-                        if (this.state.selectedProduct) {
+                        if (this.state.selectedProduct) 
+                        {
                             App.instance.setState({isExecute:true})
                             try {
                                 let productDetailData = await this.calculateProductDetailData(
@@ -2336,12 +2415,18 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                     'daily'
                                 )
                                 this.setState({ productDetailData })
-                            } catch (err) {
+                            } 
+                            catch (err) 
+                            {
                                 this.setState({ productDetailData: {} })
-                            } finally {
+                            } 
+                            finally 
+                            {
                                 App.instance.setState({isExecute:false})
                             }
-                        } else {
+                            } 
+                        else 
+                        {
                             this.setState({ productDetailData: {} })
                         }
                     }}
@@ -2433,7 +2518,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 valueExpr="id"
                                                 value={this.state.productDetailChartType}
                                                 width="100%"
-                                                onValueChanged={e => {
+                                                onValueChanged={e => 
+                                                {
                                                     this.setState({ productDetailChartType: e.value });
                                                 }}
                                             />
@@ -2455,7 +2541,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                 }}>
                                     {/* Ürün detay grafiği render kısmı */}
                                     {this.state.productDetailData && this.state.productDetailData[this.state.productDetailAnalysisType] ? (
-                                        this.state.productDetailChartType === 'pie' ? (
+                                        this.state.productDetailChartType === 'pie' ? 
+                                        (
                                             <PieChart
                                             key={this.state.popProductDetailResetKey}
                                                 id="productDetailPieChart"
@@ -2513,7 +2600,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     }}
                                                 />
                                             </PieChart>
-                                        ) : this.state.productDetailChartType === 'line' ? (
+                                        ) : this.state.productDetailChartType === 'line' ? 
+                                        (
                                             <Chart
                                                 key={this.state.popProductDetailResetKey}
                                                 id="productDetailLineChart"
@@ -2554,8 +2642,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 <Tooltip 
                                                     enabled={true}
                                                     zIndex={9999}
-                                                    customizeTooltip={(arg) => {
-                                                        if (!arg || !arg.argumentText || !arg.valueText) {
+                                                    customizeTooltip={(arg) => 
+                                                    {
+                                                        if (!arg || !arg.argumentText || !arg.valueText) 
+                                                        {
                                                             return { text: this.lang.t("noData") };
                                                         }
                                                         
@@ -2580,7 +2670,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     }}
                                                 />
                                             </Chart>
-                                        ) : this.state.productDetailChartType === 'bar' ? (
+                                        ) : this.state.productDetailChartType === 'bar' ? 
+                                        (
                                             <Chart
                                                 key={this.state.popProductDetailResetKey}
                                                 id="productDetailBarChart"
@@ -2628,8 +2719,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 <Tooltip 
                                                     enabled={true}
                                                     zIndex={9999}
-                                                    customizeTooltip={(arg) => {
-                                                        if (!arg || !arg.argumentText || !arg.valueText) {
+                                                    customizeTooltip={(arg) => 
+                                                    {
+                                                        if (!arg || !arg.argumentText || !arg.valueText) 
+                                                        {
                                                             return { text: this.lang.t("noData") };
                                                         }
                                                         
@@ -2698,8 +2791,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 <Tooltip 
                                                     enabled={true}
                                                     zIndex={9999}
-                                                    customizeTooltip={(arg) => {
-                                                        if (!arg || !arg.argumentText || !arg.valueText) {
+                                                    customizeTooltip={(arg) => 
+                                                    {
+                                                        if (!arg || !arg.argumentText || !arg.valueText) 
+                                                        {
                                                             return { text: this.lang.t("noData") };
                                                         }
                                                         

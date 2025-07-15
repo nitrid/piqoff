@@ -1,7 +1,7 @@
 // "Bons de livraison d'achat reçus"
 const piqx_02_001 = //BAK
 {
-    btnGet: "Récupérer",
+    btnGet: "Rechercher",
     dtFirst: "Date de début",
     dtLast: "Date de fin",
     grdList: 

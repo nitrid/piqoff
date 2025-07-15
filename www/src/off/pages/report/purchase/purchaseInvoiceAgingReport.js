@@ -38,8 +38,7 @@ export default class purchaseInvoiceAgingReport extends React.PureComponent
     }
     saveState(e)
     {
-        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF",EMPTY:true})
-        console.log(tmpSave)
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
         tmpSave.setValue(e)
         tmpSave.save()
     }

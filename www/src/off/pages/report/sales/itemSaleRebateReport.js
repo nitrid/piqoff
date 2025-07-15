@@ -30,16 +30,16 @@ export default class itemSaleRebateReport extends React.PureComponent
         {
         }, 1000);
     }
-    async loadState()
+    loadState()
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-    async saveState(e)
+    saveState(e)
     {
         let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
-        await tmpSave.setValue(e)
-        await tmpSave.save()
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async btnGetirClick()
     {

@@ -1,7 +1,7 @@
 // "Puan Hareketleri raporu"
 const pos_02_016 = 
 {
-    btnGet :"Récupérer",  //BAK
+    btnGet :"Rechercher",  //BAK
     chkTicket : "Uniquement les entrées manuelles",  //BAK
     grdUseingPointReport: 
     {

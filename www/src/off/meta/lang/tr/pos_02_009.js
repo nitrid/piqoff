@@ -11,6 +11,20 @@ const pos_02_009 =
     txtRestTotal : "Vergisiz Toplam Kar",
     btnGetAnalysis : "Grafik Görünümü",
     chkTicket : "Grub bazında fiş sayılarını hesapla",
+    chart :
+    {
+        salesAmount : "Satış Tutarı (€)",
+        productGroups : "Ürün Grupları",
+        highestSales : "En Yüksek Satış",
+        group : "Grup",
+        groupCode : "Ürün Grubu Kodu",
+        quantity : "Miktar",
+        ticket : "Fiş Sayısı",
+        cost : "Toplam Maliyet",
+        profit : "Vergisiz Toplam Kar",
+        vat : "Vergi Tutarı",
+        famount : "Vergisiz Tutar"
+    },
     grdGroupSalesReport: 
     {
         clmGrpCode : "Ürün Grubu Kodu",
