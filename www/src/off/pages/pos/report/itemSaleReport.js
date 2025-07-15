@@ -1,29 +1,16 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
-
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { EmptyItem, Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
+import Form, {Item, EmptyItem, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-
-import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,ColumnChooser,StateStoring,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-import NbRadioButton from "../../../../core/react/bootstrap/radiogroup.js";
-import NbLabel from "../../../../core/react/bootstrap/label.js";
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NbButton from "../../../../core/react/bootstrap/button.js";
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { dataset,datatable,param,access } from "../../../../core/core.js";
-import { posExtraCls} from "../../../../core/cls/pos.js";
 
 
 
@@ -35,7 +22,9 @@ export default class itemSaleReport extends React.PureComponent
         
         this.core = App.instance.core;
         this.groupList = [];
-        this._btnGetClick = this._btnGetClick.bind(this)
+        this.btnGetirClick = this.btnGetirClick.bind(this)
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
        
         Number.money = this.sysParam.filter({ID:'MoneySymbol',TYPE:0}).getValue()
 
@@ -53,13 +42,24 @@ export default class itemSaleReport extends React.PureComponent
     {
         this.txtRef.GUID = '00000000-0000-0000-0000-000000000000'
     }
-    async _btnGetClick()
+    loadState() 
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdSlsOrderState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState()
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsOrderState',USERS:this.user.CODE, PAGE:this.props.data.id, APP:"OFF"})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
+    async btnGetirClick()
     {
         if(this.txtRef.GUID == '00000000-0000-0000-0000-000000000000')
         {
             let tmpConfObj =
             {
-                id:'msgItemSelect',showTitle:true,title:this.t("msgItemSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgItemSelect',showTitle:true,title:this.t("msgItemSelect.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.t("msgItemSelect.btn01"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemSelect.msg")}</div>)
             }
@@ -108,7 +108,7 @@ export default class itemSaleReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -220,7 +220,7 @@ export default class itemSaleReport extends React.PureComponent
                                 </Item>
                                 <EmptyItem colSpan={1}/>
                                 <Item>
-                                <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                                <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
                                 </Item>
                             </Form>
                         </div>
@@ -255,7 +255,11 @@ export default class itemSaleReport extends React.PureComponent
                                 {
                                 }}
                             >                            
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdGroupSalesReport"}/>
+                                <ColumnChooser enabled={true} />
                                 <Export fileName={this.lang.t("menuOff.pos_02_008")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="ITEM_NAME" caption={this.t("grdItemSaleReport.itemName")} visible={true} width={200}/> 
                                 <Column dataField="FIRST_DATE" caption={this.t("grdItemSaleReport.clmFirstDate")} visible={true} width={180} dataType="date"

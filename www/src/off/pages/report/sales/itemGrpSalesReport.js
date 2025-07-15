@@ -21,7 +21,7 @@ export default class itemGrpSalesReport extends React.PureComponent
         this.state = {dataSource : {}} 
         this.core = App.instance.core;
         this.groupList = [];
-        this.bbtnGetClick = this.bbtnGetClick.bind(this)
+        this.btnGetClick = this.btnGetClick.bind(this)
         this.getDetail = this.getDetail.bind(this)
         this.btnAnalysis = this.btnAnalysis.bind(this)
     }
@@ -36,7 +36,7 @@ export default class itemGrpSalesReport extends React.PureComponent
     {
 
     }
-    async bbtnGetClick()
+    async btnGetClick()
     {
         let tmpQuery = {
             query :"SELECT COUNT(GUID) AS TICKET,ISNULL(AVG(TOTAL),0) AS AVGTOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 AND  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE ",

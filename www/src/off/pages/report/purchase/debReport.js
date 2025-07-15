@@ -3,7 +3,7 @@ import App from '../../../lib/app.js';
 import moment from 'moment';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
-import NdGrid,{Column, Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, Paging,Pager,Scrolling,ColumnChooser,StateStoring,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -17,6 +17,8 @@ export default class debReport extends React.PureComponent
         this.core = App.instance.core;
         this.groupList = [];
         this.btnGetirClick = this.btnGetirClick.bind(this)
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
 
     }
     componentDidMount()
@@ -24,6 +26,17 @@ export default class debReport extends React.PureComponent
         setTimeout(async () => 
         {
         }, 1000);
+    }
+    loadState()
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async btnGetirClick()
     {
@@ -126,6 +139,8 @@ export default class debReport extends React.PureComponent
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdListe"}/>
+                                <ColumnChooser enabled={true} />
                                 <Export fileName={this.lang.t("menuOff.slsRpt_01_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="OUTPUT_CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
                                 <Column dataField="OUTPUT_NAME" caption={this.t("grdListe.clmName")} visible={true}/> 

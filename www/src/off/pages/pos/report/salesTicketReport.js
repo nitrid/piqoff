@@ -1,17 +1,13 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
-
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
+import Form,  {Item, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-
-import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdGrid,{Column,Editing,ColumnChooser,StateStoring,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdTextBox, { Validator, NumericRule, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
@@ -20,12 +16,12 @@ import NbRadioButton from "../../../../core/react/bootstrap/radiogroup.js";
 import NbLabel from "../../../../core/react/bootstrap/label.js";
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NbButton from "../../../../core/react/bootstrap/button.js";
-import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
-import { dataset,datatable,param,access } from "../../../../core/core.js";
+import { dialog } from '../../../../core/react/devex/dialog.js';
+import { datatable } from "../../../../core/core.js";
 import { posExtraCls,posDeviceCls} from "../../../../core/cls/pos.js";
 import { nf525Cls } from "../../../../core/cls/nf525.js";
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
-
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class salesOrdList extends React.PureComponent
 {
@@ -35,10 +31,10 @@ export default class salesOrdList extends React.PureComponent
         
         this.core = App.instance.core;
         this.groupList = [];
-        this._btnGetClick = this._btnGetClick.bind(this)
-        this._sendMail = this._sendMail.bind(this)
+        this.btnGetClick = this.btnGetClick.bind(this)
+        this.sendMail = this.sendMail.bind(this)
         this.btnGetDetail = this.btnGetDetail.bind(this)
-        this._factureInsert = this._factureInsert.bind(this)
+        this.factureInsert = this.factureInsert.bind(this)
         this.posDevice = new posDeviceCls();
         this.lastPosDt = new datatable();
         this.lastPosSaleDt = new datatable();
@@ -47,6 +43,8 @@ export default class salesOrdList extends React.PureComponent
         this.firm = new datatable();
         this.nf525 = new nf525Cls();
         this.state={ticketId :""}
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
         
         Number.money = this.sysParam.filter({ID:'MoneySymbol',TYPE:0}).getValue()
 
@@ -97,7 +95,18 @@ export default class salesOrdList extends React.PureComponent
          }
          await this.firm.refresh();
     }
-    async _btnGetClick()
+    loadState()
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdAdvanceDataState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState()
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdAdvanceDataState',USERS:this.user.CODE, PAGE:this.props.data.id, APP:"OFF"})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
+    async btnGetClick()
     {
         if(this.chkDeletedTicket.value == false || this.chkDeletedTicket.value == undefined)
         {
@@ -298,7 +307,7 @@ export default class salesOrdList extends React.PureComponent
 
         this.popDetail.show()
     }
-    async _sendMail()
+    async sendMail()
     {
         for (let i = 0; i < this.grdSaleTicketReport.getSelectedData().length; i++) 
         {
@@ -401,11 +410,11 @@ export default class salesOrdList extends React.PureComponent
      
         this.mailPopup.hide()
     }
-    async _factureInsert()
+    async factureInsert()
     {
         let tmpConfObj =
         {
-            id:'msgFacture',showTitle:true,title:this.t("msgFacture.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgFacture',showTitle:true,title:this.t("msgFacture.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgFacture.btn01"),location:'before'},{id:"btn02",caption:this.t("msgFacture.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgFacture.msg")}</div>)
         }
@@ -431,13 +440,7 @@ export default class salesOrdList extends React.PureComponent
             if(tmpLastPos[0].CUSTOMER_GUID == '00000000-0000-0000-0000-000000000000')
             {
                 App.instance.setState({isExecute:false})
-                let tmpConfObj =
-                {
-                    id:'msgFactureCustomer',showTitle:true,title:this.t("msgFactureCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgFactureCustomer.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgFactureCustomer.msg")}</div>)
-                }
-                let pResult = await dialog(tmpConfObj);
+                this.toast.show({message:this.t("msgFactureCustomer.msg"),type:"warning"})
                 if(pResult == 'btn01')
                 {
                     return
@@ -522,7 +525,7 @@ export default class salesOrdList extends React.PureComponent
                                     <NdButton id="btnFacture" parent={this} icon="textdocument" type="default"
                                     onClick={async ()=>
                                     {
-                                        this._factureInsert()
+                                        this.factureInsert()
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -555,7 +558,7 @@ export default class salesOrdList extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -622,7 +625,7 @@ export default class salesOrdList extends React.PureComponent
                                             {
                                                 this.txtCustomerCode.setState({value:data[0].CODE})
                                                 this.txtCustomerName.setState({value:data[0].TITLE})
-                                                this._btnGetClick()
+                                                this.btnGetClick()
                                             }
                                         }
                                     }).bind(this)}
@@ -841,7 +844,7 @@ export default class salesOrdList extends React.PureComponent
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -860,10 +863,13 @@ export default class salesOrdList extends React.PureComponent
                             {
                                 this.btnGetDetail(e.data.POS_GUID)
                                 this.setState({ticketId:e.data.POS_ID})
-
                             }}
                             >                            
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdAdvanceData"}/>
+                                <ColumnChooser enabled={true} />
                                 <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="DATE" caption={this.t("grdSaleTicketReport.clmDate")} visible={true} width={150} dataType={"date"} format={"dd/MM/yyyy"}/> 
                                 <Column dataField="TIME" caption={this.t("grdSaleTicketReport.clmTime")} visible={true} width={100}/> 
@@ -1173,13 +1179,7 @@ export default class salesOrdList extends React.PureComponent
                                                             }
                                                             else
                                                             {       
-                                                                let tmpConfObj =
-                                                                {
-                                                                    id:'msgPayNotBigToPay',showTitle:true,title:this.lang.t("msgPayNotBigToPay.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                    button:[{id:"btn01",caption:this.lang.t("msgPayNotBigToPay.btn01"),location:'after'}],
-                                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayNotBigToPay.msg")}</div>)
-                                                                }
-                                                                await dialog(tmpConfObj);
+                                                                this.toast.show({message:this.t("msgPayNotBigToPay.msg"),type:"warning"})
                                                                 tmpAmount = (this.txtPopLastTotal.value  - tmpChange) * -1
                                                                 tmpChange = 0
                                                             }
@@ -1241,13 +1241,7 @@ export default class salesOrdList extends React.PureComponent
                                             {
                                                 if(this.lastPayRest.value > 0)
                                                 {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgMissingPay',showTitle:true,title:this.lang.t("msgMissingPay.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.lang.t("msgMissingPay.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgMissingPay.msg")}</div>)
-                                                    }
-                                                    await dialog(tmpConfObj);
+                                                    this.toast.show({message:this.t("msgMissingPay.msg"),type:"warning"})
                                                     return
                                                 }
 
@@ -1468,7 +1462,7 @@ export default class salesOrdList extends React.PureComponent
                                             <NbButton id={"btnMailSend"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}
                                             onClick={async()=>
                                             {
-                                                this._sendMail()
+                                                this.sendMail()
                                             }}>
                                                 <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                             </NbButton>
@@ -1478,6 +1472,7 @@ export default class salesOrdList extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div>
+                    <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/> 
                 </ScrollView>
             </div>
         )

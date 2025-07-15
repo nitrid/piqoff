@@ -220,8 +220,6 @@ export default class customerProfitReport extends React.PureComponent
     {
         let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
         tmpSave.setValue(e)
-        console.log(e)
-        console.log(tmpSave)
         tmpSave.save()
     }
 }

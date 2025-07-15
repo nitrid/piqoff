@@ -1,7 +1,7 @@
 // "Liste des factures entrantes"
 const piqx_01_002 = //BAK
 {
-    btnGet: "Récupérer",
+    btnGet: "Rechercher",
     dtFirst: "Date de début",
     dtLast: "Date de fin",
     grdList: 

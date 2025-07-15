@@ -35,6 +35,20 @@ const pos_02_009 =
         clmTotal : "Total Amount",
         clmRestTotal : "Tax Free Total Profit"
     },
+    chart :
+    {
+        salesAmount : "Sales Amount (€)",
+        productGroups : "Product Groups",
+        highestSales : "Highest Sales",
+        group : "Group",
+        groupCode : "Product Group Code",
+        quantity : "Quantity",
+        ticket : "Ticket Number",
+        cost : "Total Cost",
+        profit : "Tax Free Total Profit",
+        vat : "Tax Amount",
+        famount : "Tax Free Amount"
+    },
     popGrpDetail : 
     {
         title : "Sales Detail"

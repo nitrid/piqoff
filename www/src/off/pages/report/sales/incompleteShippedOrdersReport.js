@@ -43,16 +43,16 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
     }
-    async loadState()
+    loadState()
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-    async saveState(e)
+    saveState(e)
     {
         let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
-        await tmpSave.setValue(e)
-        await tmpSave.save()
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
     async btnGetClick()
     {

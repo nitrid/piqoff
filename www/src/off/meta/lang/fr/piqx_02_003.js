@@ -1,7 +1,7 @@
 // "Bons de retour"
 const piqx_02_003 = //BAK
 {
-    btnGet: "Récupérer",
+    btnGet: "Rechercher",
     dtFirst: "Date de début",
     dtLast: "Date de fin",
     grdList: 

@@ -2,7 +2,6 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem, StateStoring} from '../../../../core/react/devex/grid.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
@@ -18,7 +17,7 @@ export default class itemInvoiceSalesReport extends React.PureComponent
 
         this.core = App.instance.core;
         this.groupList = [];
-        this.bbtnGetirClick = this.bbtnGetirClick.bind(this)
+        this.btnGetirClick = this.btnGetirClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
     }
@@ -28,18 +27,18 @@ export default class itemInvoiceSalesReport extends React.PureComponent
         {
         }, 1000);
     }
-    async loadState()
+    loadState()
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
-    async saveState(e)
+    saveState(e)
     {
         let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
-        await tmpSave.setValue(e)
-        await tmpSave.save()
+        tmpSave.setValue(e)
+        tmpSave.save()
     }
-    async bbtnGetirClick()
+    async btnGetirClick()
     {
        
         let tmpSource =

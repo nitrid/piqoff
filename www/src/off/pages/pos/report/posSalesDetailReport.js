@@ -1,25 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
-
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
-import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import { dialog } from '../../../../core/react/devex/dialog.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-import NdPivot,{FieldChooser} from '../../../../core/react/devex/pivot.js';
+import Form, {Item, Label} from 'devextreme-react/form';
 
 export default class posSalesDetailReport extends React.PureComponent
 {
@@ -40,7 +25,12 @@ export default class posSalesDetailReport extends React.PureComponent
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                            <Form>
+                                <Item>
+                                    <Label text={this.lang.t("dtDate")} alignment="right" />
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                                </Item>
+                            </Form>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
