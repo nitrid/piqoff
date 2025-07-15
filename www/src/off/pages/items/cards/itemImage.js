@@ -112,7 +112,7 @@ export default class itemImage extends React.PureComponent
     render()
     {           
         return (
-            <React.Fragment>                
+            <div id={this.props.data.id + this.tabIndex}>                
                 <ScrollView>                    
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -240,9 +240,9 @@ export default class itemImage extends React.PureComponent
                                     >     
                                     </NdTextBox>      
                                     {/* STOK SEÇİM POPUP */}
-                                    <NdPopGrid id={"pg_txtRef"} parent={this} container={"#root"} 
+                                    <NdPopGrid id={"pg_txtRef"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -296,11 +296,7 @@ export default class itemImage extends React.PureComponent
                                     <NdButton id="btnSmallImg" parent={this} icon="add" type="default" width='100%'/>
                                 </div>
                                 <div className='col-6'>
-                                    <NdButton id="btnImgDel" parent={this} icon="trash" type="default" width='100%'
-                                    onClick={async()=>
-                                    {
-                                        this.deleteRow(0)
-                                    }}/>
+                                    <NdButton id="btnImgDel" parent={this} icon="trash" type="default" width='100%' onClick={async()=>{this.deleteRow(0)}}/>
                                 </div>
                             </div>
                         </div>
@@ -327,11 +323,7 @@ export default class itemImage extends React.PureComponent
                                     <NdButton id="btnLargeImg1" parent={this} icon="add" type="default" width='100%'/>
                                 </div>
                                 <div className='col-6'>
-                                    <NdButton id="btnImgDel" parent={this} icon="trash" type="default" width='100%'
-                                    onClick={()=>
-                                    {
-                                        this.deleteRow(1)
-                                    }}/>
+                                    <NdButton id="btnImgDel" parent={this} icon="trash" type="default" width='100%' onClick={()=>{this.deleteRow(1)}}/>
                                 </div>
                             </div>
                         </div>
@@ -351,11 +343,7 @@ export default class itemImage extends React.PureComponent
                                     <NdButton id="btnLargeImg2" parent={this} icon="add" type="default" width='100%'/>
                                 </div>
                                 <div className='col-6'>
-                                    <NdButton id="btnImgDel" parent={this} icon="trash" type="default" width='100%'
-                                    onClick={()=>
-                                    {
-                                        this.deleteRow(2)
-                                    }}/>
+                                    <NdButton id="btnImgDel" parent={this} icon="trash" type="default" width='100%' onClick={()=>{this.deleteRow(2)}}/>
                                 </div>
                             </div>
                         </div>
@@ -375,11 +363,7 @@ export default class itemImage extends React.PureComponent
                                     <NdButton id="btnLargeImg3" parent={this} icon="add" type="default" width='100%'/>
                                 </div>
                                 <div className='col-6'>
-                                    <NdButton id="btnImgDel" parent={this} icon="trash" type="default" width='100%'
-                                    onClick={()=>
-                                    {
-                                        this.deleteRow(3)
-                                    }}/>
+                                    <NdButton id="btnImgDel" parent={this} icon="trash" type="default" width='100%' onClick={()=>{this.deleteRow(3)}}/>
                                 </div>
                             </div>
                         </div>
@@ -399,18 +383,14 @@ export default class itemImage extends React.PureComponent
                                     <NdButton id="btnLargeImg4" parent={this} icon="add" type="default" width='100%'/>
                                 </div>
                                 <div className='col-6'>
-                                    <NdButton id="btnImgDel" parent={this} icon="trash" type="default" width='100%'
-                                    onClick={()=>
-                                    {
-                                        this.deleteRow(4)
-                                    }}/>
+                                    <NdButton id="btnImgDel" parent={this} icon="trash" type="default" width='100%' onClick={()=>{this.deleteRow(4)}}/>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </ScrollView>
                 <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
-            </React.Fragment>
+            </div>
         )
     }
 }

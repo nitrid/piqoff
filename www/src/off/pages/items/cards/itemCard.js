@@ -874,7 +874,7 @@ export default class itemCard extends React.PureComponent
     render()
     {           
         return (
-            <React.Fragment>                
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>                    
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -1222,9 +1222,9 @@ export default class itemCard extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})} 
                                             selectAll={true}/>      
                                             {/* STOK SEÇİM POPUP */}
-                                            <NdPopGrid id={"pg_txtRef"} parent={this} container={"#root"} 
+                                            <NdPopGrid id={"pg_txtRef"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                             visible={false}
-                                            position={{of:'#root'}} 
+                                            position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                             showTitle={true} 
                                             showBorders={true}
                                             width={'90%'}
@@ -2235,9 +2235,9 @@ export default class itemCard extends React.PureComponent
                                                     }
                                                     selectAll={true}/>     
                                                     {/*CİNS KODU POPUP */}
-                                                    <NdPopGrid id={"pg_txtGenre"} parent={this} container={"#root"} 
+                                                    <NdPopGrid id={"pg_txtGenre"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                                     visible={false}
-                                                    position={{of:'#root'}} 
+                                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                                     showTitle={true} 
                                                     showBorders={true}
                                                     width={'90%'}
@@ -2290,9 +2290,9 @@ export default class itemCard extends React.PureComponent
                                                         </Validator>
                                                     </NdTextBox>
                                                     {/*GÜMRÜK KODU POPUP */}
-                                                    <NdPopGrid id={"pg_customsCode"} parent={this} container={"#root"} 
+                                                    <NdPopGrid id={"pg_customsCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                                     visible={false}
-                                                    position={{of:'#root'}} 
+                                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                                     showTitle={true} 
                                                     showBorders={true}
                                                     width={'90%'}
@@ -2342,9 +2342,9 @@ export default class itemCard extends React.PureComponent
                                                     }
                                                     selectAll={true}/>     
                                                     {/*RAYON KODU POPUP */}
-                                                    <NdPopGrid id={"pg_rayonCode"} parent={this} container={"#root"} 
+                                                    <NdPopGrid id={"pg_rayonCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                                     visible={false}
-                                                    position={{of:'#root'}} 
+                                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                                     showTitle={true} 
                                                     showBorders={true}
                                                     width={'90%'}
@@ -2396,11 +2396,11 @@ export default class itemCard extends React.PureComponent
                                                         visible={false}
                                                         showTitle={true}
                                                         title={this.t("propertyPopup.title")}
-                                                        container={"#root"}
+                                                        container={'#' + this.props.data.id + this.tabIndex}
                                                         width={'500'}
                                                         height={'auto'}
                                                         showCloseButton={true}
-                                                        position={{of:'#root'}}>
+                                                        position={{of:'#' + this.props.data.id + this.tabIndex}}>
                                                             <NdForm colCount={1} height={'fit-content'}>
                                                                 <NdItem>
                                                                     <NdLabel text={this.t("propertyPopup.property")} alignment="right"/>
@@ -2540,9 +2540,9 @@ export default class itemCard extends React.PureComponent
                                             </div>
                                         </div>
                                         {/* ALT GRUP SEÇİM POPUP */}
-                                        <NdPopGrid id={"pg_subGroup"} parent={this} container={"#root"} 
+                                        <NdPopGrid id={"pg_subGroup"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                         visible={false}
-                                        position={{of:'#root'}} 
+                                        position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                         showTitle={true} 
                                         showBorders={true}
                                         width={'90%'}
@@ -2624,10 +2624,10 @@ export default class itemCard extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popPrice.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'600'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <NdForm colCount={2} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
@@ -2852,10 +2852,10 @@ export default class itemCard extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popUnit.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'510'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -2942,10 +2942,10 @@ export default class itemCard extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popBarcode.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'275'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -3081,10 +3081,10 @@ export default class itemCard extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popCustomer.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'320'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'} id={"frmItemCustomer" + + this.tabIndex}>
@@ -3135,11 +3135,10 @@ export default class itemCard extends React.PureComponent
                                                 }
                                             }
                                         ]
-                                    }>                                        
-                                    </NdTextBox>
+                                    }/>                                        
                                     <NdPopGrid id={"pg_txtPopCustomerCode"} parent={this} 
-                                    container={"#root"} 
-                                    position={{of:'#root'}} 
+                                    container={'#' + this.props.data.id + this.tabIndex} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -3258,10 +3257,10 @@ export default class itemCard extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popAnalysis.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'1200'}
                         height={'700'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <NdForm colCount={3} height={'fit-content'}>
@@ -3473,10 +3472,10 @@ export default class itemCard extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDescription.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'800'}
                         height={'470'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -3549,10 +3548,10 @@ export default class itemCard extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popItemLang.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'250'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -3605,7 +3604,7 @@ export default class itemCard extends React.PureComponent
                     </div>                            
                     <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
-            </React.Fragment>
+            </div>
         )
     }
 }

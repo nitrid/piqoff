@@ -3,8 +3,7 @@ import App from '../../../lib/app.js';
 import { docCls } from '../../../../core/cls/doc.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item } from 'devextreme-react/form';
+import Toolbar, { Item } from 'devextreme-react/toolbar';
 import { Button } from 'devextreme-react/button';
 
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
@@ -452,7 +451,7 @@ export default class depotTransfer extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -711,9 +710,9 @@ export default class depotTransfer extends React.PureComponent
                                         </div>
                                     </div>
                                     {/*EVRAK SEÇİM */}
-                                    <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_Docs"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -965,8 +964,8 @@ export default class depotTransfer extends React.PureComponent
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>{this.frmTrnsfItems = e.component}}>
-                                <Item location="after">
+                            <NdForm colCount={1} onInitialized={(e)=>{this.frmTrnsfItems = e.component}}>
+                                <NdItem location="after">
                                     <Button icon="add"
                                     validationGroup={"frmTrnsfr" + this.tabIndex}
                                     onClick={async (e)=>
@@ -1081,8 +1080,8 @@ export default class depotTransfer extends React.PureComponent
                                             this.toast.show({message:this.t("msgDocValid.msg"),type:'warning'})
                                         }
                                     }}/>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <NdGrid parent={this} id={"grdTrnsfItems"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
@@ -1119,13 +1118,13 @@ export default class depotTransfer extends React.PureComponent
                                         <Column dataField="QUANTITY" caption={this.t("grdTrnsfItems.clmQuantity")} dataType={'number'} width={150}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdTrnsfItems.clmDescription")} />
                                     </NdGrid>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
-                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
@@ -1150,12 +1149,11 @@ export default class depotTransfer extends React.PureComponent
                     </NdPopGrid>
                     {/* combineItem Dialog  */}
                     <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
                     showTitle={true} 
                     title={this.t("msgCombineItem.title")} 
                     showCloseButton={false}
                     width={"500px"}
-                    height={"250px"}
+                    height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
                     >
                         <div className="row">
@@ -1163,155 +1161,151 @@ export default class depotTransfer extends React.PureComponent
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
                             </div>
                             <div className="col-12 py-2">
-                                <Form>
+                                <NdForm>
                                     {/* checkCustomer */}
-                                    <Item>
-                                        <Label text={this.lang.t("checkAll")} alignment="right" />
+                                    <NdItem>
+                                        <NdLabel text={this.lang.t("checkAll")} alignment="right" />
                                         <NdCheckBox id="checkCombine" parent={this} simple={true} value ={false}/>
-                                    </Item>
-                                </Form>
+                                    </NdItem>
+                                </NdForm>
                             </div>
                         </div>
                     </NdDialog>  
                     {/* Dizayn Seçim PopUp */}
-                    <div>
-                        <NdPopUp parent={this} id={"popDesign"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popDesign.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'250'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDesign.design")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
-                                    displayExpr="DESIGN_NAME"                       
-                                    valueExpr="TAG"
-                                    value=""
-                                    searchEnabled={true}
-                                    data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '04'`},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                                    >
-                                        <Validator validationGroup={"frmPurcOrderPrint"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validDesign")} />
-                                        </Validator> 
-                                    </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popDesign.lang")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
-                                    displayExpr="VALUE"                       
-                                    valueExpr="ID"
-                                    value={localStorage.getItem('lang').toUpperCase()}
-                                    searchEnabled={true}
-                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}/>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
-                                            {       
-                                                let tmpQuery = 
-                                                {
-                                                    query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH 
-                                                            FROM [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO`,
-                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
-                                                }
-
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                
-                                                this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
-                                                {
-                                                    if(pResult.split('|')[0] != 'ERR')
-                                                    {
-                                                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
-
-                                                        mywindow.onload = function() 
-                                                        {
-                                                            mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                                                        }
-                                                    }
-                                                });
-                                                this.popDesign.hide();  
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popDesign.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div>  
-                    {/* Yönetici PopUp */}
-                    <div>
-                        <NdPopUp parent={this} id={"popPassword"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popPassword.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'200'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popPassword.Password")} alignment="right" />
-                                    <NdTextBox id="txtPassword" mode="password" parent={this} simple={true} maxLength={32}/>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("popPassword.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
-                                            {       
-                                                let tmpPass = btoa(this.txtPassword.value);
-                                                let tmpQuery = 
-                                                {
-                                                    query : `SELECT TOP 1 * FROM USERS WHERE PWD = @PWD AND ROLE = 'Administrator' AND STATUS = 1`, 
-                                                    param : ['PWD:string|50'],
-                                                    value : [tmpPass],
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {
-                                                    this.docObj.dt()[0].LOCKED = 0
-                                                    this.frmTrnsfItems.option('disabled',false)
-                                                    this.docLocked = false
-                                                    this.toast.show({message:this.t("msgPasswordSucces.msg"),type:'success'})
-                                                    this.popPassword.hide();  
-                                                }
-                                                else
-                                                {
-                                                    this.toast.show({message:this.t("msgPasswordWrong.msg"),type:'warning'})
-                                                }
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>{this.popPassword.hide()}}/>
-                                        </div>
-                                    </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div> 
-                    {/* BARKOD POPUP */}
-                    <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
+                    <NdPopUp parent={this} id={"popDesign"} 
                     visible={false}
-                    position={{of:'#root'}} 
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.t("popDesign.title")}
+                    container={'#' + this.props.data.id + this.tabIndex} 
+                    width={'500'}
+                    height={'250'}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    >
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("popDesign.design")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
+                                displayExpr="DESIGN_NAME"                       
+                                valueExpr="TAG"
+                                value=""
+                                searchEnabled={true}
+                                data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '04'`},sql:this.core.sql}}}
+                                param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                >
+                                    <Validator validationGroup={"frmPurcOrderPrint"  + this.tabIndex}>
+                                        <RequiredRule message={this.t("validDesign")} />
+                                    </Validator> 
+                                </NdSelectBox>
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popDesign.lang")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
+                                displayExpr="VALUE"                       
+                                valueExpr="ID"
+                                value={localStorage.getItem('lang').toUpperCase()}
+                                searchEnabled={true}
+                                data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}/>
+                            </NdItem>
+                            <NdItem>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {       
+                                            let tmpQuery = 
+                                            {
+                                                query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH 
+                                                        FROM [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO`,
+                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                            }
+
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            
+                                            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
+                                            {
+                                                if(pResult.split('|')[0] != 'ERR')
+                                                {
+                                                    var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
+
+                                                    mywindow.onload = function() 
+                                                    {
+                                                        mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                                                    }
+                                                }
+                                            });
+                                            this.popDesign.hide();  
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>
+                                        {
+                                            this.popDesign.hide();  
+                                        }}/>
+                                    </div>
+                                </div>
+                            </NdItem>
+                        </NdForm>
+                    </NdPopUp>
+                    {/* Yönetici PopUp */}
+                    <NdPopUp parent={this} id={"popPassword"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.t("popPassword.title")}
+                    container={'#' + this.props.data.id + this.tabIndex} 
+                    width={'500'}
+                    height={'200'}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    >
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("popPassword.Password")} alignment="right" />
+                                <NdTextBox id="txtPassword" mode="password" parent={this} simple={true} maxLength={32}/>
+                            </NdItem>
+                            <NdItem>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.t("popPassword.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {       
+                                            let tmpPass = btoa(this.txtPassword.value);
+                                            let tmpQuery = 
+                                            {
+                                                query : `SELECT TOP 1 * FROM USERS WHERE PWD = @PWD AND ROLE = 'Administrator' AND STATUS = 1`, 
+                                                param : ['PWD:string|50'],
+                                                value : [tmpPass],
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            if(tmpData.result.recordset.length > 0)
+                                            {
+                                                this.docObj.dt()[0].LOCKED = 0
+                                                this.frmTrnsfItems.option('disabled',false)
+                                                this.docLocked = false
+                                                this.toast.show({message:this.t("msgPasswordSucces.msg"),type:'success'})
+                                                this.popPassword.hide();  
+                                            }
+                                            else
+                                            {
+                                                this.toast.show({message:this.t("msgPasswordWrong.msg"),type:'warning'})
+                                            }
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>{this.popPassword.hide()}}/>
+                                    </div>
+                                </div>
+                            </NdItem>
+                        </NdForm>
+                    </NdPopUp>
+                    {/* Barkod Popup */}
+                    <NdPopGrid id={"pg_txtBarcode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
+                    visible={false}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
@@ -1340,22 +1334,20 @@ export default class depotTransfer extends React.PureComponent
                     </NdPopGrid>
                     {/* Miktar Dialog  */}
                     <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
                     showTitle={true} 
                     title={this.t("msgQuantity.title")} 
                     showCloseButton={false}
                     width={"400px"}
-                    height={"400px"}
+                    height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgQuantity.btn02"),location:'after'}]}
-                    deferRendering={true}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
                             </div>
                             <div className="col-12 py-2">
-                                <Form>
-                                    <Item>
+                                <NdForm>
+                                    <NdItem>
                                         <NdSelectBox simple={true} parent={this} id="cmbPopQteUnit"
                                         displayExpr="NAME"                       
                                         valueExpr="GUID"
@@ -1374,13 +1366,18 @@ export default class depotTransfer extends React.PureComponent
                                             };
                                         }).bind(this)}
                                         />
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.lang.t("msgQuantity.txtQuantity")} alignment="right" />
+                                    </NdItem>
+                                    <NdItem>
+                                        <NdLabel text={this.lang.t("msgQuantity.txtQuantity")} alignment="right" />
                                         <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
                                         onEnterKey={(async(e)=>{this.msgQuantity._onClick()}).bind(this)}
                                         onValueChanged={(async(e)=>
                                         {
+                                            if(typeof this.cmbPopQteUnit?.data?.datatable == 'undefined')
+                                            {
+                                                return
+                                            }
+                                            
                                             if(this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].TYPE == 1)
                                             {
                                                 this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value / this.txtPopQteUnitFactor.value).toFixed(3))
@@ -1391,16 +1388,16 @@ export default class depotTransfer extends React.PureComponent
                                             };
                                         }).bind(this)}
                                         />
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.lang.t("msgQuantity.txtUnitFactor")} alignment="right" />
+                                    </NdItem>
+                                    <NdItem>
+                                        <NdLabel text={this.lang.t("msgQuantity.txtUnitFactor")} alignment="right" />
                                         <NdNumberBox id="txtPopQteUnitFactor" parent={this} simple={true} readOnly={true} maxLength={32}/>
-                                    </Item>
-                                    <Item>
-                                        <Label text={this.lang.t("msgQuantity.txtTotalQuantity")} alignment="right" />
+                                    </NdItem>
+                                    <NdItem>
+                                        <NdLabel text={this.lang.t("msgQuantity.txtTotalQuantity")} alignment="right" />
                                         <NdNumberBox id="txtPopQteUnitQuantity" parent={this} simple={true} readOnly={true} maxLength={32}/>
-                                    </Item>
-                                </Form>
+                                    </NdItem>
+                                </NdForm>
                             </div>
                         </div>
                     </NdDialog>  

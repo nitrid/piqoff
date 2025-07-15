@@ -7,7 +7,7 @@ import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import NdButton from '../../../../core/react/devex/button.js';
 import { NdLayout,NdLayoutItem } from '../../../../core/react/devex/layout';
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,Button as grdbutton} from '../../../../core/react/devex/grid.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
@@ -24,7 +24,7 @@ export default class productRecipeCard extends React.PureComponent
 
         this.productObj = new productRecipeCls();
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
     }
@@ -91,7 +91,7 @@ export default class productRecipeCard extends React.PureComponent
             this.btnDelete.setState({disabled:false});
         })
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == "RAW_ITEM_CODE")
         {
@@ -219,7 +219,7 @@ export default class productRecipeCard extends React.PureComponent
     render()
     {
         return (
-            <React.Fragment>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -407,9 +407,9 @@ export default class productRecipeCard extends React.PureComponent
                                                 </Validator>
                                             </NdTextBox>      
                                             {/* STOK SEÇİM POPUP */}
-                                            <NdPopGrid id={"pg_txtItemCode"} parent={this} container={"#root"} 
+                                            <NdPopGrid id={"pg_txtItemCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                             visible={false}
-                                            position={{of:'#root'}} 
+                                            position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                             showTitle={true} 
                                             showBorders={true}
                                             width={'90%'}
@@ -544,7 +544,7 @@ export default class productRecipeCard extends React.PureComponent
                                                 <Paging enabled={false} />
                                                 <Scrolling mode="virtual" />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="RAW_ITEM_CODE" caption={this.t("grdList.clmCode")} allowEditing={true} width={'30%'} editCellRender={this._cellRoleRender}/>
+                                                <Column dataField="RAW_ITEM_CODE" caption={this.t("grdList.clmCode")} allowEditing={true} width={'30%'} editCellRender={this.cellRoleRender}/>
                                                 <Column dataField="RAW_ITEM_NAME" caption={this.t("grdList.clmName")} allowEditing={false} width={'60%'}/>
                                                 <Column dataField="RAW_QTY" caption={this.t("grdList.clmQuantity")} visible={true} allowEditing={true} width={'10%'}/>
                                             </NdGrid>
@@ -560,7 +560,7 @@ export default class productRecipeCard extends React.PureComponent
                     </div>                            
                     <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
-            </React.Fragment>
+            </div>
         )
     }
 }

@@ -120,7 +120,7 @@ export default class itemPartiLotCard extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -275,9 +275,9 @@ export default class itemPartiLotCard extends React.PureComponent
                                         </Validator> 
                                     </NdTextBox>                                
                                     {/* STOK SEÇİM */}
-                                    <NdPopGrid id={"popItemSelect"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"popItemSelect"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -347,9 +347,9 @@ export default class itemPartiLotCard extends React.PureComponent
                                         </Validator> 
                                     </NdTextBox>                                
                                     {/* PARTI LOT SEÇİM */}
-                                    <NdPopGrid id={"popItemPartiLotSelect"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"popItemPartiLotSelect"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}

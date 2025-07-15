@@ -34,7 +34,6 @@ export default class itemCount extends React.PureComponent
         this.countObj = new itemCountCls();
         this.tabIndex = props.data.tabkey
 
-
         this.state = 
         {
             columnListValue : ['CDATE_FORMAT','ITEM_CODE','ITEM_NAME','QUANTITY','COST_PRICE','TOTAL_COST','MULTICODE','CUSTOMER_NAME','BARCODE']
@@ -557,7 +556,7 @@ export default class itemCount extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -819,9 +818,9 @@ export default class itemCount extends React.PureComponent
                                         </div>
                                     </div>
                                     {/*EVRAK SEÇİM */}
-                                    <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_Docs"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -1200,9 +1199,9 @@ export default class itemCount extends React.PureComponent
                             </div>
                         </div>
                     </div>
-                    <NdPopGrid id={"pg_txtItemsCode"}  parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_txtItemsCode"}  parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
@@ -1241,7 +1240,7 @@ export default class itemCount extends React.PureComponent
                     title={this.t("msgQuantity.title")} 
                     showCloseButton={false}
                     width={"400px"}
-                    height={"400px"}
+                    height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgQuantity.btn02"),location:'after'}]}
                     >
                         <div className="row">
@@ -1310,10 +1309,10 @@ export default class itemCount extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popDesign.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'500'}
                     height={'250'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <NdForm colCount={1} height={'fit-content'}>
                             <NdItem>
@@ -1389,10 +1388,10 @@ export default class itemCount extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popPassword.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'500'}
                     height={'200'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <NdForm colCount={1} height={'fit-content'}>
                             <NdItem>
@@ -1441,9 +1440,9 @@ export default class itemCount extends React.PureComponent
                         </NdForm>
                     </NdPopUp>
                     {/* BARKOD POPUP */}
-                    <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_txtBarcode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}

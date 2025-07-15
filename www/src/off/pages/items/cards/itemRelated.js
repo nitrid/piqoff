@@ -93,7 +93,7 @@ export default class itemRelated extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -239,9 +239,9 @@ export default class itemRelated extends React.PureComponent
                                         </Validator> 
                                     </NdTextBox>                                
                                     {/* STOK SEÇİM */}
-                                    <NdPopGrid id={"popItemSelect"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"popItemSelect"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -326,9 +326,9 @@ export default class itemRelated extends React.PureComponent
                         </div>
                     </div>
                     {/* BAĞLI STOK SEÇİM */}
-                    <NdPopGrid id={"popRelatedSelect"} parent={this} container={"#root"}
+                    <NdPopGrid id={"popRelatedSelect"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}

@@ -125,6 +125,7 @@ export class NdForm extends React.PureComponent
             width: '100%',
             maxWidth: '100%',
             overflow: 'hidden',
+            padding: '1px 0px',
             ...style
         };
         
@@ -233,10 +234,12 @@ export class NdItem extends React.PureComponent
 }
 export class NdLabel extends React.PureComponent 
 {
+    static name = 'NdLabel';
+
     render() 
     {
         const { text, alignment = "right", className, style, width } = this.props;
-        
+
         const labelStyle = 
         {
             width: width || 'auto',

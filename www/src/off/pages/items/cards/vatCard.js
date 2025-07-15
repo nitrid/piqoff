@@ -136,7 +136,7 @@ export default class vatCard extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -264,9 +264,9 @@ export default class vatCard extends React.PureComponent
                                             <RequiredRule message={this.t("validCode")} />
                                         </Validator>  
                                     </NdTextBox>
-                                    <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_txtCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
