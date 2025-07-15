@@ -29,6 +29,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
         this.btnGrdPrint = this.btnGrdPrint.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
+        this.tabIndex = props.data.tabkey
     }
     componentDidMount()
     {
@@ -223,7 +224,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -356,9 +357,9 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                     }
                                     />
                                     {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}  
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -460,15 +461,15 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                 </ScrollView>
                 {/* Dizayn Seçim PopUp */}
                 <div>
-                    <NdPopUp parent={this} id={"popDesign"} 
+                    <NdPopUp parent={this} id={"popDesign"}     
                     visible={false}
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popDesign.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'500'}
                     height={'280'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <NdForm colCount={1} height={'fit-content'}>
                             <NdItem>
@@ -587,10 +588,10 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popDesign.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'500'}
                     height={'200'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <NdForm colCount={1} height={'fit-content'}>
                             <NdItem>

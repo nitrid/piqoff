@@ -3,13 +3,13 @@ import App from '../../../lib/app.js';
 import moment from 'moment';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem,StateStoring} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
+import {NdForm,NdItem,NdLabel} from '../../../../core/react/devex/form.js';
 
 export default class customerSaleRebateReport extends React.PureComponent
 {
@@ -22,6 +22,7 @@ export default class customerSaleRebateReport extends React.PureComponent
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
+        this.tabIndex = props.data.tabkey
     }
     componentDidMount()
     {
@@ -75,7 +76,7 @@ export default class customerSaleRebateReport extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -163,9 +164,9 @@ export default class customerSaleRebateReport extends React.PureComponent
                                 </Validator>  
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                 visible={false}
-                                position={{of:'#root'}} 
+                                position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                 showTitle={true} 
                                 showBorders={true}
                                 width={'90%'}

@@ -64,7 +64,7 @@ export default class customerList extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div >
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">

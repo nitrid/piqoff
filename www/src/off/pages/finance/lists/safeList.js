@@ -24,7 +24,7 @@ export default class safeList extends React.PureComponent
         this.groupList = [];
         this.btnGetClick = this.btnGetClick.bind(this)
         this.loadState = this.loadState.bind(this)
-        this.saveState = this.saveState.bind(this)
+        this.saveState = this.saveState.bind(this) 
     }
     componentDidMount()
     {

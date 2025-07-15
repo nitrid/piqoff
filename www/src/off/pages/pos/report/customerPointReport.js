@@ -27,6 +27,7 @@ export default class customerPointReport extends React.PureComponent
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
         this.state={ticketId :""}
+        this.tabIndex = props.data.tabkey
     }
     componentDidMount()
     {
@@ -171,7 +172,7 @@ export default class customerPointReport extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -250,9 +251,9 @@ export default class customerPointReport extends React.PureComponent
                                 >
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                 visible={false}
-                                position={{of:'#root'}} 
+                                position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                 showTitle={true} 
                                 showBorders={true}
                                 width={'90%'}
@@ -369,10 +370,10 @@ export default class customerPointReport extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popPointDetail.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'800'}
                         height={'600'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -432,10 +433,10 @@ export default class customerPointReport extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDetail.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'100%'}
                         height={'100%'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                          <div className="row">
                          <div className="col-1 pe-0"></div>
@@ -501,10 +502,10 @@ export default class customerPointReport extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popPointEntry.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex}    
                         width={'600'}
                         height={'400'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>

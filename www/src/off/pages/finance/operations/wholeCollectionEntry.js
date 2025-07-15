@@ -164,7 +164,7 @@ export default class wholeCollectionEntry extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -413,10 +413,10 @@ export default class wholeCollectionEntry extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popCash.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex}     
                         width={'500'}
                         height={'500'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
                                 {/* cmbPayType */}
@@ -646,10 +646,10 @@ export default class wholeCollectionEntry extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popCheck.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'200'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -703,9 +703,9 @@ export default class wholeCollectionEntry extends React.PureComponent
                     </div>
                     {/* Cari Secim PopUp */}
                     <div>                    
-                        <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                        <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                         visible={false}
-                        position={{of:'#root'}} 
+                        position={{of:'#' + this.props.data.id + this.tabIndex}} 
                         showTitle={true} 
                         showBorders={true}
                         width={'90%'}
@@ -746,10 +746,10 @@ export default class wholeCollectionEntry extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popExcel.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex}     
                         width={'600'}
                         height={'450'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
                                 {/* cmbPayType */}

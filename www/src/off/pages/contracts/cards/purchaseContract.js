@@ -291,7 +291,7 @@ export default class purchaseContract extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -467,9 +467,9 @@ export default class purchaseContract extends React.PureComponent
                                         </Validator> 
                                     </NdTextBox>                                    
                                     {/*EVRAK SEÇİM */}
-                                    <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_Docs"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -562,9 +562,9 @@ export default class purchaseContract extends React.PureComponent
                                         </Validator>  
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -779,10 +779,10 @@ export default class purchaseContract extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popItems.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'450'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
                                 <NdItem>
@@ -889,9 +889,9 @@ export default class purchaseContract extends React.PureComponent
                         </NdPopUp>
                     </div>  
                     {/* Stok Grid */}
-                    <NdPopGrid id={"pg_txtPopItemsCode"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_txtPopItemsCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}  
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
@@ -911,10 +911,10 @@ export default class purchaseContract extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDesign.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'250'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
                                 <NdItem>
@@ -1000,10 +1000,10 @@ export default class purchaseContract extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popMultiItem.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'900'}
                     height={'700'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <NdForm colCount={2} height={'fit-content'}>
                         <NdItem colSpan={2}>

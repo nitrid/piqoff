@@ -25,6 +25,7 @@ export default class collectionReport extends React.PureComponent
         this.state = {
             expandedRowKeys: []
         }
+        this.tabIndex = props.data.tabkey
     }
     async componentDidMount()
     {
@@ -40,7 +41,7 @@ export default class collectionReport extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -132,9 +133,9 @@ export default class collectionReport extends React.PureComponent
                                     >
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}    
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -274,10 +275,10 @@ export default class collectionReport extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.lang.t("popOpenTike.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'900'}
                     height={'500'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>

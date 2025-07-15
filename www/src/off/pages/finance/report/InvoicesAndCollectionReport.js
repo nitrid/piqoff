@@ -25,6 +25,7 @@ export default class InvoicesAndCollectionReport extends React.PureComponent
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
         this.btnGetirClick = this.btnGetirClick.bind(this)
+        this.tabIndex = props.data.tabkey
     }
     componentDidMount()
     {
@@ -88,7 +89,7 @@ export default class InvoicesAndCollectionReport extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -180,9 +181,9 @@ export default class InvoicesAndCollectionReport extends React.PureComponent
                                     >
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -286,10 +287,10 @@ export default class InvoicesAndCollectionReport extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popDesign.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'500'}
                     height={'180'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     deferRendering={true}
                     >
                         <NdForm colCount={1} height={'fit-content'}>

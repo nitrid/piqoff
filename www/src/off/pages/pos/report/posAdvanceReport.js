@@ -2,7 +2,7 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import Toolbar from 'devextreme-react/toolbar';
 import moment from 'moment';
-import Form, {Item, Label,EmptyItem } from 'devextreme-react/form';
+import Form, {Item, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import NdGrid,{Column, ColumnChooser,StateStoring,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';

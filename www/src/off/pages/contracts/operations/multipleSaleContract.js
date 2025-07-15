@@ -298,7 +298,7 @@ export default class multipleSaleContract extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -383,9 +383,9 @@ export default class multipleSaleContract extends React.PureComponent
                                     >                                       
                                     </NdTextBox>                                
                                     {/*EVRAK SEÇİM */}
-                                    <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_Docs"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -573,9 +573,9 @@ export default class multipleSaleContract extends React.PureComponent
                     </NdDialog>
                 </div>
                 {/* Stok Grid */}
-                <NdPopGrid id={"pg_txtPopItemsCode"} parent={this} container={"#root"}
+                <NdPopGrid id={"pg_txtPopItemsCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                 visible={false}
-                position={{of:'#root'}} 
+                position={{of:'#' + this.props.data.id + this.tabIndex}} 
                 showTitle={true} 
                 showBorders={true}
                 width={'90%'}

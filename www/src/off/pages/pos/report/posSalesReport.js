@@ -4,7 +4,7 @@ import moment from 'moment';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, {Item, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-import NdGrid,{Column,Editing,ColumnChooser,StateStoring,Paging,Pager,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing, Scrolling} from '../../../../core/react/devex/grid.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
@@ -19,6 +19,7 @@ export default class posSalesReport extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
+        this.tabIndex = props.data.tabkey
     }
     async componentDidMount()
     {
@@ -99,7 +100,7 @@ export default class posSalesReport extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -380,10 +381,10 @@ export default class posSalesReport extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.lang.t("popOpenTike.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'900'}
                     height={'500'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>

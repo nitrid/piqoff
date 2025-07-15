@@ -5,7 +5,7 @@ import Toolbar from 'devextreme-react/toolbar';
 import Form,  {Item, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import NdGrid,{Column,Editing,ColumnChooser,StateStoring,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
-import NdTextBox, { Validator, NumericRule, RequiredRule } from '../../../../core/react/devex/textbox.js'
+import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
@@ -516,7 +516,7 @@ export default class salesOrdList extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -632,9 +632,9 @@ export default class salesOrdList extends React.PureComponent
                                 >
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}  
                                 visible={false}
-                                position={{of:'#root'}} 
+                                position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                 showTitle={true} 
                                 showBorders={true}
                                 width={'90%'}
@@ -789,9 +789,9 @@ export default class salesOrdList extends React.PureComponent
                                     >     
                                     </NdTextBox>      
                                     {/* STOK SEÇİM POPUP */}
-                                    <NdPopGrid id={"pg_txtItem"} parent={this} container={"#root"} 
+                                    <NdPopGrid id={"pg_txtItem"} parent={this} container={'#' + this.props.data.id + this.tabIndex}      
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -892,10 +892,10 @@ export default class salesOrdList extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDetail.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'100%'}
                         height={'100%'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                            <div className="row">
                          <div className="col-1 pe-0"></div>
@@ -980,10 +980,10 @@ export default class salesOrdList extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popLastTotal.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex}     
                         width={"600"}
                         height={"700"}
-                        position={{of:"#root"}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         onHiding={async()=>
                         {
                             await this.lastPosPayDt.refresh()
@@ -1273,10 +1273,10 @@ export default class salesOrdList extends React.PureComponent
                             showCloseButton={true}
                             showTitle={true}
                             title={this.t("popOpenTike.title")}
-                            container={"#root"} 
+                            container={'#' + this.props.data.id + this.tabIndex} 
                             width={'900'}
                             height={'500'}
-                            position={{of:'#root'}}
+                            position={{of:'#' + this.props.data.id + this.tabIndex}}
                             >
                                 <Form colCount={1} height={'fit-content'}>
                                     <Item>
@@ -1318,10 +1318,10 @@ export default class salesOrdList extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDesign.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex}     
                         width={'500'}
                         height={'250'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -1410,10 +1410,10 @@ export default class salesOrdList extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("mailPopup.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'600'}
                         height={'600'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={false}
                        
                         >

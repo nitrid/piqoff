@@ -1,20 +1,20 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { customersCls,customerAdressCls, customerOfficalCls } from '../../../../core/cls/customers.js';
+import { customersCls } from '../../../../core/cls/customers.js';
 import { Form } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import { Label,Item} from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
-import { NdForm, NdItem, NdLabel, NdEmptyItem }from '../../../../core/react/devex/form.js';
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import { NdForm, NdItem, NdLabel}from '../../../../core/react/devex/form.js';
+import NdTextBox, { Validator, NumericRule, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,Button as GrdButton} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Button as GrdButton} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdTextArea from '../../../../core/react/devex/textarea.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -312,7 +312,7 @@ export default class CustomerCard extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -569,9 +569,9 @@ export default class CustomerCard extends React.PureComponent
                                         </Validator>  
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_txtCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -953,9 +953,9 @@ export default class CustomerCard extends React.PureComponent
                                                         >     
                                                         </NdTextBox>      
                                                         {/*SEKTÖR KODU POPUP */}
-                                                        <NdPopGrid id={"pg_SectorCode"} parent={this} container={"#root"} 
+                                                        <NdPopGrid id={"pg_SectorCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                                         visible={false}
-                                                        position={{of:'#root'}} 
+                                                        position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                                         showTitle={true} 
                                                         showBorders={true}
                                                         width={'90%'}
@@ -999,9 +999,9 @@ export default class CustomerCard extends React.PureComponent
                                                         >     
                                                         </NdTextBox>      
                                                         {/*BÖLGE KODU POPUP */}
-                                                        <NdPopGrid id={"pg_AreaCode"} parent={this} container={"#root"} 
+                                                        <NdPopGrid id={"pg_AreaCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                                         visible={false}
-                                                        position={{of:'#root'}} 
+                                                        position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                                         showTitle={true} 
                                                         showBorders={true}
                                                         width={'90%'}
@@ -1045,9 +1045,9 @@ export default class CustomerCard extends React.PureComponent
                                                         >     
                                                         </NdTextBox>      
                                                         {/*ANA CARİ POPUP */}
-                                                        <NdPopGrid id={"pg_mainCustomer"} parent={this} container={"#root"} 
+                                                        <NdPopGrid id={"pg_mainCustomer"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                                         visible={false}
-                                                        position={{of:'#root'}} 
+                                                        position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                                         showTitle={true} 
                                                         showBorders={true}
                                                         width={'90%'}
@@ -1089,9 +1089,9 @@ export default class CustomerCard extends React.PureComponent
                                                         >     
                                                         </NdTextBox>      
                                                         {/* FİYAT LİSTE POPUP */}
-                                                        <NdPopGrid id={"pg_priceListNo"} parent={this} container={"#root"} 
+                                                        <NdPopGrid id={"pg_priceListNo"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                                         visible={false}
-                                                        position={{of:'#root'}} 
+                                                        position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                                         showTitle={true} 
                                                         showBorders={true}
                                                         width={'90%'}
@@ -1135,9 +1135,9 @@ export default class CustomerCard extends React.PureComponent
                                                         >     
                                                         </NdTextBox>      
                                                         {/* ANA GRUP POPUP */}
-                                                        <NdPopGrid id={"pg_MainGroup"} parent={this} container={"#root"} 
+                                                        <NdPopGrid id={"pg_MainGroup"} parent={this} container={'#' + this.props.data.id + this.tabIndex}        
                                                         visible={false}
-                                                        position={{of:'#root'}} 
+                                                        position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                                         showTitle={true} 
                                                         showBorders={true}
                                                         width={'90%'}
@@ -1181,9 +1181,9 @@ export default class CustomerCard extends React.PureComponent
                                                         >     
                                                         </NdTextBox>      
                                                         {/*ALT CARİ KODU POPUP */}
-                                                        <NdPopGrid id={"pg_subCustomer"} parent={this} container={"#root"} 
+                                                        <NdPopGrid id={"pg_subCustomer"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                                         visible={false}
-                                                        position={{of:'#root'}} 
+                                                        position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                                         showTitle={true} 
                                                         showBorders={true}
                                                         width={'90%'}
@@ -1341,9 +1341,9 @@ export default class CustomerCard extends React.PureComponent
                                             </div>
                                         </div>
                                         {/* ALT GRUP SEÇİM POPUP */}
-                                        <NdPopGrid id={"pg_subGroup"} parent={this} container={"#root"} 
+                                        <NdPopGrid id={"pg_subGroup"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                         visible={false}
-                                        position={{of:'#root'}} 
+                                        position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                         showTitle={true} 
                                         showBorders={true}
                                         width={'90%'}
@@ -1436,10 +1436,10 @@ export default class CustomerCard extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popAdress.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'600'}
                         height={'400'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
                                 <NdItem>
@@ -1656,10 +1656,10 @@ export default class CustomerCard extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popOffical.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'500'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
                                 <NdItem>
@@ -1746,10 +1746,10 @@ export default class CustomerCard extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popBank.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'350'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
                                 <NdItem>  
@@ -1811,10 +1811,10 @@ export default class CustomerCard extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popNote.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'350'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
                                 <NdItem>

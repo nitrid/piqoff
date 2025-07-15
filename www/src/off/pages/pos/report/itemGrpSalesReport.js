@@ -28,6 +28,7 @@ export default class itemGrpSalesReport extends React.PureComponent
         this.btnAnalysis = this.btnAnalysis.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
+        this.tabIndex = props.data.tabkey
     }
     componentDidMount()
     {
@@ -186,7 +187,7 @@ export default class itemGrpSalesReport extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -341,10 +342,10 @@ export default class itemGrpSalesReport extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popGrpDetail.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'1200'}
                         height={'800'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -404,10 +405,10 @@ export default class itemGrpSalesReport extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popAnalysis.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'1400'}
                         height={'800'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={3} height={'fit-content'}>
                                 <Item colSpan={3}>

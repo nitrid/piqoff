@@ -2,7 +2,6 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import NdGrid,{Column,Paging,Pager,Export,Button,Scrolling,Editing} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';

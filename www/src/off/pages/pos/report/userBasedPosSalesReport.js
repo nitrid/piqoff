@@ -19,6 +19,7 @@ export default class userBasedPosSalesReport extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
+        this.tabIndex = props.data.tabkey
     }
     async componentDidMount()
     {
@@ -99,7 +100,7 @@ export default class userBasedPosSalesReport extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -384,10 +385,10 @@ export default class userBasedPosSalesReport extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.lang.t("popOpenTike.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'900'}
                     height={'500'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>

@@ -1,7 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import ScrollView from 'devextreme-react/scroll-view';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing} from '../../../../core/react/devex/grid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
@@ -53,7 +53,7 @@ export default class piqPoidDeviceCard extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">

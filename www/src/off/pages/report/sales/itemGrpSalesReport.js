@@ -4,14 +4,14 @@ import moment from 'moment';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-import {  Chart, Series, CommonSeriesSettings,  Format, Legend } from 'devextreme-react/chart';
+import {  Chart, Series, CommonSeriesSettings,  Format} from 'devextreme-react/chart';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { NdForm, NdItem, NdLabel, NdEmptyItem} from '../../../../core/react/devex/form.js';
+import { NdForm, NdItem, NdLabel} from '../../../../core/react/devex/form.js';
 
 export default class itemGrpSalesReport extends React.PureComponent
 {
@@ -24,6 +24,7 @@ export default class itemGrpSalesReport extends React.PureComponent
         this.btnGetClick = this.btnGetClick.bind(this)
         this.getDetail = this.getDetail.bind(this)
         this.btnAnalysis = this.btnAnalysis.bind(this)
+        this.tabIndex = props.data.tabkey   
     }
     componentDidMount()
     {
@@ -137,7 +138,7 @@ export default class itemGrpSalesReport extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -281,10 +282,10 @@ export default class itemGrpSalesReport extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popGrpDetail.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'1200'}
                         height={'800'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -350,10 +351,10 @@ export default class itemGrpSalesReport extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popAnalysis.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'1400'}
                         height={'800'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={3} height={'fit-content'}>
                                 <Item colSpan={3}>

@@ -40,7 +40,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
             productDetailChartType: 'line',
             selectBoxResetKey: Date.now(),
             popAnalysisResetKey: Date.now()
-        }
+        },
+        this.tabIndex = props.data.tabkey
 
         this.dtDate = new Date();
     }
@@ -995,7 +996,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -1464,10 +1465,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.lang.t("popAnalysis.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                         width={'1200'}
                         height={'800'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                         ref={(el) => { this.popAnalysis = el }}
                         onHiding={async () => {
                             await new Promise(resolve => this.setState({
@@ -2381,10 +2382,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.state.selectedProduct ? `${this.state.selectedProduct.name} - ${this.lang.t("productDetailAnalysis")}` : this.lang.t("productDetailAnalysis")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex}       
                     width={'1400'}
                     height={'900'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     ref={(el) => { this.popProductDetail = el }}
                     onHiding={async () => 
                     {

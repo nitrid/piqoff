@@ -4,7 +4,7 @@ import moment from 'moment';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, {Item,  Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
@@ -14,7 +14,7 @@ import NbRadioButton from "../../../../core/react/bootstrap/radiogroup.js";
 import NbLabel from "../../../../core/react/bootstrap/label.js";
 import NbButton from "../../../../core/react/bootstrap/button.js";
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { dataset,datatable,param,access } from "../../../../core/core.js";
+import { datatable } from "../../../../core/core.js";
 import { posExtraCls} from "../../../../core/cls/pos.js";
 import { NdToast } from '../../../../core/react/devex/toast.js';
 
@@ -163,7 +163,7 @@ export default class salesOrdList extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -278,10 +278,10 @@ export default class salesOrdList extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDetail.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'100%'}
                         height={'100%'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                            <div className="row">
                          <div className="col-1 pe-0"></div>
@@ -366,10 +366,10 @@ export default class salesOrdList extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.lang.t("popLastTotal.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={"600"}
                     height={"700"}
-                    position={{of:"#root"}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     onHiding={async()=>
                     {
                         await this.lastPosPayDt.refresh()
@@ -663,10 +663,10 @@ export default class salesOrdList extends React.PureComponent
                             showCloseButton={true}
                             showTitle={true}
                             title={this.t("popOpenTike.title")}
-                            container={"#root"} 
+                            container={'#' + this.props.data.id + this.tabIndex}      
                             width={'900'}
                             height={'500'}
-                            position={{of:'#root'}}
+                            position={{of:'#' + this.props.data.id + this.tabIndex}}
                             >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>

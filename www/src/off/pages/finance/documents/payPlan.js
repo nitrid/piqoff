@@ -1,17 +1,17 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls,docCustomerCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
+import { docCls } from '../../../../core/cls/doc.js';
 import { payPlanCls } from '../../../../core/cls/payPlan.js';
 import moment from 'moment';
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import  { Item } from 'devextreme-react/form';
+import NdTextBox, { Validator, RequiredRule, RangeRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
@@ -226,7 +226,7 @@ export default class payPlan extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -448,9 +448,9 @@ export default class payPlan extends React.PureComponent
                                         </div>
                                     </div>
                                     {/*EVRAK SEÇİM */}
-                                    <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_Docs"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -552,9 +552,9 @@ export default class payPlan extends React.PureComponent
                                     >
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -677,10 +677,10 @@ export default class payPlan extends React.PureComponent
                             showCloseButton={true}
                             showTitle={true}
                             title={this.t("popInstallment.title")}
-                            container={"#root"} 
+                            container={'#' + this.props.data.id + this.tabIndex} 
                             width={'1200'}
                             height={'800'}
-                            position={{of:'#root'}}
+                            position={{of:'#' + this.props.data.id + this.tabIndex}}
                             onShowing={async()=>
                             {
                                 await this._btnGetClick()
@@ -752,10 +752,10 @@ export default class payPlan extends React.PureComponent
                             showCloseButton={true}
                             showTitle={true}
                             title={this.t("popInstallmentCount.title")}
-                            container={"#root"} 
+                            container={'#' + this.props.data.id + this.tabIndex} 
                             width={'400'}
                             height={'400'}
-                            position={{of:'#root'}}
+                            position={{of:'#' + this.props.data.id + this.tabIndex}}
                             >
                                 <NdForm colCount={1} height={'fit-content'}>
                                     <NdItem>
@@ -832,10 +832,10 @@ export default class payPlan extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDesign.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'280'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={false}
                         >
                             <NdForm colCount={1} height={'fit-content'}>

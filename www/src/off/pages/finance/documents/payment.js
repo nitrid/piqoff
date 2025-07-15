@@ -1,13 +1,13 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls,docCustomerCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
+import { docCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
 import moment from 'moment';
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import  { Label,Item } from 'devextreme-react/form';
 import ContextMenu from 'devextreme-react/context-menu';
 import { Button } from 'devextreme-react/button';
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdTextBox, { Validator, RequiredRule, RangeRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -327,8 +327,7 @@ export default class payment extends React.PureComponent
     render()
     {
         return(
-            <div>
-                
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -574,9 +573,9 @@ export default class payment extends React.PureComponent
                                         </div>
                                     </div>
                                     {/*EVRAK SEÇİM */}
-                                    <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_Docs"} parent={this} container={'#' + this.props.data.id + this.tabIndex}  
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -684,9 +683,9 @@ export default class payment extends React.PureComponent
                                         </Validator>  
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}  
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -851,10 +850,10 @@ export default class payment extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popCash.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'400'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
                                 {/* cmbPayType */}
@@ -1014,10 +1013,10 @@ export default class payment extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popCheck.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'500'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
                                 <NdItem>
@@ -1058,9 +1057,9 @@ export default class payment extends React.PureComponent
                     </div> 
                     {/* Fatura Grid */}
                     <div>
-                        <NdPopGrid id={"pg_invoices"} parent={this} container={"#root"}
+                        <NdPopGrid id={"pg_invoices"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                         visible={false}
-                        position={{of:'#root'}} 
+                        position={{of:'#' + this.props.data.id + this.tabIndex}} 
                         showTitle={true} 
                         showBorders={true}
                         width={'90%'}
@@ -1080,9 +1079,9 @@ export default class payment extends React.PureComponent
                     </div>
                     {/* ÖN ÖDEME EVRAKI SEÇİM */}
                     <div>
-                        <NdPopGrid id={"pre_document"} parent={this} container={"#root"}
+                        <NdPopGrid id={"pre_document"} parent={this} container={'#' + this.props.data.id + this.tabIndex}    
                         visible={false}
-                        position={{of:'#root'}} 
+                        position={{of:'#' + this.props.data.id + this.tabIndex}} 
                         showTitle={true} 
                         showBorders={true}
                         width={'90%'}

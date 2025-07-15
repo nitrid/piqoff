@@ -667,7 +667,7 @@ export default class endOfDay extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <div className='panel'>
                     <div className={"panel-body container-fluid"}>
                         <div className={'row'}>
@@ -773,10 +773,10 @@ export default class endOfDay extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popTotalCreditCard.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex}     
                         width={'500'}
                         height={'620'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={false}
                         >
                             <Form colCount={1} height={'fit-content'}>
@@ -887,10 +887,10 @@ export default class endOfDay extends React.PureComponent
                     visible={false}
                     showTitle={true}
                     title={this.t("popFinish.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex}         
                     width={'500'}
                     height={'600'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <div className='col-12'>
                             <div className='row'>
@@ -968,10 +968,10 @@ export default class endOfDay extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popOpenTike.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'900'}
                     height={'500'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -1009,10 +1009,10 @@ export default class endOfDay extends React.PureComponent
                     visible={false}
                     showTitle={true}
                     title={this.t("popAdvance.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'450'}
                     height={'250'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <NdForm colCount={1} height={'fit-content'} id={"frmAdvances"}>
                             <NdItem>
@@ -1125,10 +1125,10 @@ export default class endOfDay extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popDetail.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'100%'}
                     height={'100%'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <div className="row">
                             <div className="col-1 pe-0"></div>
