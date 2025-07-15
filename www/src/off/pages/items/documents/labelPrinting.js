@@ -7,7 +7,7 @@ import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar, {Item} from 'devextreme-react/toolbar';
 import { Button } from 'devextreme-react/button';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -17,13 +17,14 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
+import { NdForm,NdItem,NdLabel,NdEmptyItem } from '../../../../core/react/devex/form.js';
 import { NdToast } from '../../../../core/react/devex/toast.js';
 export default class labelPrinting extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
@@ -32,7 +33,7 @@ export default class labelPrinting extends React.PureComponent
         this.pageCount = 0;
         this.tabIndex = props.data.tabkey
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
 
         this.frmOutwas = undefined;
     }
@@ -122,12 +123,15 @@ export default class labelPrinting extends React.PureComponent
                     ISNULL((SELECT COUNT(CODE) FROM ITEM_LABEL_QUEUE_VW_01 WHERE ITEM_LABEL_QUEUE_VW_01.GUID = LABEL_QUEUE.GUID),0) AS COUNT 
                     FROM LABEL_QUEUE WHERE STATUS IN(${pType}) AND REF <> 'SPECIAL' ` 
         }
+
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpRows = []
+        
         if(tmpData.result.recordset.length > 0)
         {
             tmpRows = tmpData.result.recordset
         }
+
         await this.pg_Docs.setData(tmpRows)
      
         this.pg_Docs.show()
@@ -148,8 +152,10 @@ export default class labelPrinting extends React.PureComponent
                     ISNULL((SELECT COUNT(CODE) FROM ITEM_LABEL_QUEUE_VW_01 WHERE ITEM_LABEL_QUEUE_VW_01.GUID = LABEL_QUEUE.GUID),0) AS COUNT 
                     FROM LABEL_QUEUE WHERE STATUS IN(${pType}) AND REF <> 'SPECIAL' ` 
         }
+
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpRows = []
+        
         if(tmpData.result.recordset.length > 0)
         {
             tmpRows = tmpData.result.recordset
@@ -166,13 +172,16 @@ export default class labelPrinting extends React.PureComponent
                 {
                     let lblCombineObj = new labelCls();
                     await lblCombineObj.load({GUID:data[i].GUID});
+
                     let updateQuery = 
                     {
                         query:  `UPDATE LABEL_QUEUE SET STATUS = 1 WHERE GUID = @GUID`,
                         param:  ['GUID:string|50'],
                         value:  [data[i].GUID]
                     }
+
                     await this.core.sql.execute(updateQuery) 
+                    
                     for (let i = 0; i < lblCombineObj.dt().length; i++) 
                     {
                         let tmpDocItems = {...this.lblObj.empty}
@@ -212,9 +221,11 @@ export default class labelPrinting extends React.PureComponent
                         FROM ITEMS_VW_01  
                         WHERE (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC) OR (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < ITEMS_VW_01.LDATE AND STATUS = 1) AS TMP`,
             }
+
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
             App.instance.setState({isExecute:false})
+            
             if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -255,9 +266,11 @@ export default class labelPrinting extends React.PureComponent
                 param : ['DATE:datetime'],
                 value : [this.dtSelectChange.value]
             }
+
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
             App.instance.setState({isExecute:false})
+            
             if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset && tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -300,9 +313,11 @@ export default class labelPrinting extends React.PureComponent
                 param : ['DATE:datetime'],
                 value : [this.dtSelectPriceChange.value]
             }
+
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
             App.instance.setState({isExecute:false})
+            
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -344,9 +359,11 @@ export default class labelPrinting extends React.PureComponent
                 param : ['GROUP:string|25'],
                 value : [this.cmbGroup.value]
             }
+
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
             App.instance.setState({isExecute:false})
+            
             if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -387,9 +404,11 @@ export default class labelPrinting extends React.PureComponent
                 param : ['CUSTOMER:string|50'],
                 value : [this.cmbCustomer.value]
             }
+
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
             App.instance.setState({isExecute:false})
+            
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -430,9 +449,11 @@ export default class labelPrinting extends React.PureComponent
                 param : ['FIRST_DATE:date','LAST_DATE:date'],
                 value : [this.dtDate.startDate,this.dtDate.endDate]
             }
+
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
             App.instance.setState({isExecute:false})
+            
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -470,9 +491,11 @@ export default class labelPrinting extends React.PureComponent
                         ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE TYPE = 1 AND ITEM_UNIT.ITEM = ITEMS_VW_01.GUID),0) AS UNDER_UNIT_VALUE 
                         FROM ITEMS_VW_01  WHERE STATUS = 1) AS TMP`, 
             }
+
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery) 
             App.instance.setState({isExecute:false})
+            
             if(tmpData.result.recordset.length > 0)
             {
                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -488,7 +511,7 @@ export default class labelPrinting extends React.PureComponent
             }
         }
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == "CODE")
         {
@@ -528,10 +551,7 @@ export default class labelPrinting extends React.PureComponent
                         }
                     }
                 }}
-                onValueChanged={(v)=>
-                {
-                    e.value = v.value
-                }}
+                onValueChanged={(v)=>{e.value = v.value}}
                 onChange={(async(r)=>
                 {
                     if(typeof r.event.isTrusted == 'undefined')
@@ -558,7 +578,9 @@ export default class labelPrinting extends React.PureComponent
                             param : ['CODE:string|50'],
                             value : [r.component._changedValue]
                         }
+
                         let tmpData = await this.core.sql.execute(tmpQuery) 
+                        
                         if(tmpData.result.recordset.length > 0)
                         {
                             this.addItem(tmpData.result.recordset[0],e.rowIndex)
@@ -608,14 +630,14 @@ export default class labelPrinting extends React.PureComponent
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
     }
     async addItem(pData,pIndex)
     {
         App.instance.setState({isExecute:true})
+
         for (let i = 0; i < this.lblObj.dt().length; i++) 
         {
             if(this.lblObj.dt()[i].CODE == pData.CODE)
@@ -639,6 +661,7 @@ export default class labelPrinting extends React.PureComponent
                 }  
             }
         }
+
         this.lblObj.dt()[pIndex].CODE = pData.CODE
         this.lblObj.dt()[pIndex].MULTICODE = pData.MULTICODE
         this.lblObj.dt()[pIndex].BARCODE = pData.BARCODE
@@ -699,32 +722,20 @@ export default class labelPrinting extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnWizard" parent={this} icon="tips" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popWizard.show()
-                                    }}/>
+                                    <NdButton id="btnWizard" parent={this} icon="tips" type="default" onClick={()=>{this.popWizard.show()}}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.getDoc(this.lblObj.dt()[0].GUID)
-                                    }}/>
+                                    <NdButton id="btnBack" parent={this} icon="revert" type="default" onClick={()=>{this.getDoc(this.lblObj.dt()[0].GUID)}}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init();
-                                    }}/>
+                                    <NdButton id="btnNew" parent={this} icon="file" type="default" onClick={()=>{this.init()}}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" 
@@ -741,7 +752,9 @@ export default class labelPrinting extends React.PureComponent
                                             button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                         }
+
                                         let pResult = await dialog(tmpConfObj);
+                                        
                                         if(pResult == 'btn01')
                                         {
                                             let Data = {data:this.lblObj.dt().toArray()}
@@ -780,10 +793,12 @@ export default class labelPrinting extends React.PureComponent
                                                 param:  ['GUID:string|50','DESIGN:string|25'],
                                                 value:  [this.mainLblObj.dt()[0].GUID,this.cmbDesignList.value]
                                             }
+
                                             App.instance.setState({isExecute:true})
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             App.instance.setState({isExecute:false})
                                             console.log(JSON.stringify(tmpData.result.recordset))
+                                            
                                             this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' +  JSON.stringify(tmpData.result.recordset)+ '}',(pResult) => 
                                             {                
                                                 App.instance.setState({isExecute:true})                                
@@ -797,12 +812,14 @@ export default class labelPrinting extends React.PureComponent
                                                 }
                                                 App.instance.setState({isExecute:false})
                                             });
+
                                             let updateQuery = 
                                             {
                                                 query:  `UPDATE LABEL_QUEUE SET STATUS = 1 WHERE GUID = @GUID`,
                                                 param:  ['GUID:string|50'],
                                                 value:  [this.mainLblObj.dt()[0].GUID]
                                             }
+
                                             await this.core.sql.execute(updateQuery)                                           
                                         }
                                         else
@@ -907,10 +924,10 @@ export default class labelPrinting extends React.PureComponent
                                             </NdTextBox>
                                         </div>
                                     </div>
-                                    {/*EVRAK SEÇİM */}
-                                    <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
+                                    {/* Evrak Seçimi */}
+                                    <NdPopGrid id={"pg_Docs"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -988,8 +1005,7 @@ export default class labelPrinting extends React.PureComponent
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtFreeLabel',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* Boş */}
                                 <NdEmptyItem />
@@ -1086,8 +1102,10 @@ export default class labelPrinting extends React.PureComponent
                                             param : ['CODE:string|50'],
                                             value : [this.txtBarcode.value]
                                         }
+
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         this.txtBarcode.setState({value:""})
+                                        
                                         if(tmpData.result.recordset.length > 0)
                                         {
                                             if(typeof this.lblObj.dt()[this.lblObj.dt().length - 1] == 'undefined' || this.lblObj.dt()[this.lblObj.dt().length - 1].CODE != '')
@@ -1109,8 +1127,7 @@ export default class labelPrinting extends React.PureComponent
                                     }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem> 
                                 {/* txtLineCount */}
                                 <NdItem>
@@ -1120,8 +1137,7 @@ export default class labelPrinting extends React.PureComponent
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtLineCount',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem> 
                             </NdForm>
                         </div>
@@ -1171,6 +1187,7 @@ export default class labelPrinting extends React.PureComponent
                                                     return
                                                 }
                                             }
+
                                             let tmpDocItems = {...this.lblObj.empty}
                                             tmpDocItems.REF = this.mainLblObj.dt()[0].REF
                                             tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
@@ -1178,6 +1195,7 @@ export default class labelPrinting extends React.PureComponent
                                             this.txtRef.readOnly = true
                                             this.txtRefno.readOnly = true
                                             this.lblObj.addEmpty(tmpDocItems)
+                                            
                                             this.pg_txtItemsCode.show()
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
@@ -1254,19 +1272,17 @@ export default class labelPrinting extends React.PureComponent
                                             this.mainLblObj.save()
                                         }, 500);
                                     }}
-                                    onRowRemoved={(e)=>
-                                    {
-                                        this.calculateCount()
-                                    }}
+                                    onRowRemoved={(e)=>{this.calculateCount()}}
                                     >
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Scrolling mode="virtual" />
-                                        <Paging enabled={false}/>
+                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
                                         <Export fileName={this.lang.t("menuOff.stk_02_004")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdLabelQueue.clmCuser")} width={100} allowEditing={false}/>
-                                        <Column dataField="CODE" caption={this.t("grdLabelQueue.clmItemCode")} width={110} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="CODE" caption={this.t("grdLabelQueue.clmItemCode")} width={110} editCellRender={this.cellRoleRender}/>
                                         <Column dataField="BARCODE" caption={this.t("grdLabelQueue.clmBarcode")} width={130} allowEditing={false} />
                                         <Column dataField="NAME" caption={this.t("grdLabelQueue.clmItemName")} width={450} />
                                         <Column dataField="ITEM_GRP_NAME" caption={this.t("grdLabelQueue.clmItemGrpName")} allowEditing={false} width={180}/>
@@ -1280,9 +1296,10 @@ export default class labelPrinting extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
+                    {/* Items Code Popup */}
+                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
@@ -1324,9 +1341,10 @@ export default class labelPrinting extends React.PureComponent
                         <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
-                    <NdPopGrid id={"pg_DocsCombine"} parent={this} container={"#root"}
+                    {/* Docs Combine Popup */}
+                    <NdPopGrid id={"pg_DocsCombine"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
@@ -1352,209 +1370,202 @@ export default class labelPrinting extends React.PureComponent
                         <Column dataField="COUNT" caption={this.t("pg_Docs.clmCount")} width={300} />
                         <Column dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDocDate")} width={300} />
                     </NdPopGrid>
-                    {/* popWizard */}
-                    <div>
-                        <NdPopUp parent={this} id={"popWizard"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popWizard.title")}
-                        container={"#root"} 
-                        width={'50%'}
-                        height={'45%'}
-                        position={{of:'#root'}}
-                        >
-                            <NdForm colCount={2} height={'fit-content'}>
-                                <NdItem  colSpan={2}>
-                                    <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
-                                        <NdLabel text={this.t("chkLastChange")} alignment="right" width="300px" />
-                                        <NdCheckBox id="chkLastChange" parent={this} defaultValue={true} 
-                                        param={this.param.filter({ELEMENT:'chkLastChange',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'chkLastChange',USERS:this.user.CODE})}
-                                        onValueChanged={(async()=>
-                                        {
-                                            this.chkPromotionItems.setState({value:false});
-                                            this.chkSelectChange.setState({value:false});
-                                            this.chkSelectPriceChange.setState({value:false});
-                                            this.chkGroup.setState({value:false});
-                                            this.chkCustomer.setState({value:false});
-                                            this.chkAllItems.setState({value:false});
-                                        }).bind(this)}
-                                        />
-                                    </div>
-                                </NdItem>
-                                <NdItem>
-                                    <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
-                                        <NdLabel text={this.t("chkSelectChange")} alignment="right" width="300px" />
-                                        <NdCheckBox id="chkSelectChange" parent={this} defaultValue={false} 
-                                        param={this.param.filter({ELEMENT:'chkSelectChange',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'chkSelectChange',USERS:this.user.CODE})}
-                                        onValueChanged={(async()=>
-                                        {
-                                            this.chkPromotionItems.setState({value:false});
-                                            this.chkLastChange.setState({value:false});
-                                            this.chkSelectPriceChange.setState({value:false});
-                                            this.chkGroup.setState({value:false});
-                                            this.chkCustomer.setState({value:false});
-                                            this.chkAllItems.setState({value:false});
-                                        }).bind(this)}
-                                        />
-                                    </div>
-                                </NdItem>
-                                <NdItem>
-                                    <NdDatePicker simple={true}  parent={this} id={"dtSelectChange"} type={'datetime'}/>
-                                </NdItem>
-                                <NdItem>
-                                    <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
-                                        <NdLabel text={this.t("chkSelectPriceChange")} alignment="right" width="300px" />
-                                        <NdCheckBox id="chkSelectPriceChange" parent={this} defaultValue={false} 
-                                        param={this.param.filter({ELEMENT:'chkSelectPriceChange',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'chkSelectPriceChange',USERS:this.user.CODE})}
-                                        onValueChanged={(async()=>
-                                        {
-                                            this.chkPromotionItems.setState({value:false});
-                                            this.chkLastChange.setState({value:false});
-                                            this.chkSelectChange.setState({value:false});
-                                            this.chkGroup.setState({value:false});
-                                            this.chkCustomer.setState({value:false});
-                                            this.chkAllItems.setState({value:false});
-                                        }).bind(this)}
-                                        />
-                                    </div>
-                                </NdItem>
-                                <NdItem>
-                                    <NdDatePicker simple={true}  parent={this} id={"dtSelectPriceChange"} type={'datetime'}/>
-                                </NdItem>
-                                <NdItem>
-                                    <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
-                                        <NdLabel text={this.t("chkGroup")} alignment="right" width="300px" />
-                                        <NdCheckBox id="chkGroup" parent={this} defaultValue={false} 
-                                        param={this.param.filter({ELEMENT:'chkGroup',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'chkGroup',USERS:this.user.CODE})}
-                                        onValueChanged={(async()=>
-                                        {
-                                            this.chkPromotionItems.setState({value:false});
-                                            this.chkLastChange.setState({value:false});
-                                            this.chkSelectChange.setState({value:false});
-                                            this.chkSelectPriceChange.setState({value:false});
-                                            this.chkCustomer.setState({value:false});
-                                            this.chkAllItems.setState({value:false});
-                                        }).bind(this)}
-                                        />
-                                    </div>
-                                </NdItem>
-                                <NdItem>
-                                    <NdSelectBox simple={true} parent={this} id="cmbGroup" notRefresh={true}
-                                    displayExpr="NAME"                       
-                                    valueExpr="CODE"
-                                    value=""
-                                    searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GROUP"},sql:this.core.sql}}}
-                                    >
-                                    </NdSelectBox>
-                                </NdItem>
-                                <NdItem>
-                                    <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
-                                        <NdLabel text={this.t("chkCustomer")} alignment="right" width="300px" />
-                                        <NdCheckBox id="chkCustomer" parent={this} defaultValue={false} 
-                                        param={this.param.filter({ELEMENT:'chkCustomer',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'chkCustomer',USERS:this.user.CODE})}
-                                        onValueChanged={(async()=>
-                                        {
-                                            this.chkPromotionItems.setState({value:false});
-                                            this.chkLastChange.setState({value:false});
-                                            this.chkSelectChange.setState({value:false});
-                                            this.chkSelectPriceChange.setState({value:false});
-                                            this.chkGroup.setState({value:false});
-                                            this.chkAllItems.setState({value:false});
-                                        }).bind(this)}
-                                        />
-                                    </div>
-                                </NdItem>
-                                <NdItem>
-                                    <NdSelectBox simple={true} parent={this} id="cmbCustomer" notRefresh={true}
-                                    displayExpr="TITLE"                       
-                                    valueExpr="GUID"
-                                    value=""
-                                    searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT GUID,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2)"},sql:this.core.sql}}}
-                                    >
-                                    </NdSelectBox>
-                                </NdItem>
-                                <NdItem>
-                                    <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
-                                        <NdLabel text={this.t("chkPromotionItems")} alignment="right" width="300px" />
-                                        <NdCheckBox id="chkPromotionItems" parent={this} defaultValue={false} 
-                                        onValueChanged={(async()=>
-                                        {
-                                            this.chkLastChange.setState({value:false});
-                                            this.chkSelectChange.setState({value:false});
-                                            this.chkGroup.setState({value:false});
-                                            this.chkSelectPriceChange.setState({value:false});
-                                            this.chkCustomer.setState({value:false});
-                                            this.chkAllItems.setState({value:false});
-                                        }).bind(this)}
-                                        />
-                                    </div>
-                                </NdItem>
-                                <NdItem>
-                                    <div className="col-12">
-                                        <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
-                                    </div>
-                                </NdItem>
-                                <NdItem>
-                                    <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
-                                        <NdLabel text={this.t("chkAllItems")} alignment="right" width="300px" />
-                                        <NdCheckBox id="chkAllItems" parent={this} defaultValue={false} 
-                                        param={this.param.filter({ELEMENT:'chkAllItems',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'chkAllItems',USERS:this.user.CODE})}
-                                        onValueChanged={(async()=>
-                                        {
-                                            this.chkPromotionItems.setState({value:false});
-                                            this.chkLastChange.setState({value:false});
-                                            this.chkSelectChange.setState({value:false});
-                                            this.chkSelectPriceChange.setState({value:false});
-                                            this.chkGroup.setState({value:false});
-                                            this.chkCustomer.setState({value:false});
-                                        }).bind(this)}
-                                        />
-                                    </div>
-                                </NdItem>
-                                <NdEmptyItem/>
-                                <NdItem colSpan={2}>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("AddItems")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
-                                            {       
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgAddItems',showTitle:true,title:this.t("msgAddItems.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                    button:[{id:"btn01",caption:this.t("msgAddItems.btn01"),location:'before'},{id:"btn02",caption:this.t("msgAddItems.btn02"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAddItems.msg")}</div>)
-                                                }
-                                                let pResult = await dialog(tmpConfObj);
-                                                if(pResult == 'btn01')
-                                                {
-                                                    this.AddWizardItems()
-                                                }
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popWizard.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </NdItem>
-                            </NdForm>
-                        </NdPopUp>
-                    </div>  
-                    <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
+                    {/* Wizard Popup */}
+                    <NdPopUp parent={this} id={"popWizard"} 
                     visible={false}
-                    position={{of:'#root'}} 
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.t("popWizard.title")}
+                    container={'#' + this.props.data.id + this.tabIndex} 
+                    width={'50%'}
+                    height={'45%'}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    >
+                        <NdForm colCount={2} height={'fit-content'}>
+                            <NdItem  colSpan={2}>
+                                <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                                    <NdLabel text={this.t("chkLastChange")} alignment="right" width="300px" />
+                                    <NdCheckBox id="chkLastChange" parent={this} defaultValue={true} 
+                                    param={this.param.filter({ELEMENT:'chkLastChange',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'chkLastChange',USERS:this.user.CODE})}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.chkPromotionItems.setState({value:false});
+                                        this.chkSelectChange.setState({value:false});
+                                        this.chkSelectPriceChange.setState({value:false});
+                                        this.chkGroup.setState({value:false});
+                                        this.chkCustomer.setState({value:false});
+                                        this.chkAllItems.setState({value:false});
+                                    }).bind(this)}
+                                    />
+                                </div>
+                            </NdItem>
+                            <NdItem>
+                                <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                                    <NdLabel text={this.t("chkSelectChange")} alignment="right" width="300px" />
+                                    <NdCheckBox id="chkSelectChange" parent={this} defaultValue={false} 
+                                    param={this.param.filter({ELEMENT:'chkSelectChange',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'chkSelectChange',USERS:this.user.CODE})}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.chkPromotionItems.setState({value:false});
+                                        this.chkLastChange.setState({value:false});
+                                        this.chkSelectPriceChange.setState({value:false});
+                                        this.chkGroup.setState({value:false});
+                                        this.chkCustomer.setState({value:false});
+                                        this.chkAllItems.setState({value:false});
+                                    }).bind(this)}
+                                    />
+                                </div>
+                            </NdItem>
+                            <NdItem>
+                                <NdDatePicker simple={true}  parent={this} id={"dtSelectChange"} type={'datetime'}/>
+                            </NdItem>
+                            <NdItem>
+                                <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                                    <NdLabel text={this.t("chkSelectPriceChange")} alignment="right" width="300px" />
+                                    <NdCheckBox id="chkSelectPriceChange" parent={this} defaultValue={false} 
+                                    param={this.param.filter({ELEMENT:'chkSelectPriceChange',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'chkSelectPriceChange',USERS:this.user.CODE})}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.chkPromotionItems.setState({value:false});
+                                        this.chkLastChange.setState({value:false});
+                                        this.chkSelectChange.setState({value:false});
+                                        this.chkGroup.setState({value:false});
+                                        this.chkCustomer.setState({value:false});
+                                        this.chkAllItems.setState({value:false});
+                                    }).bind(this)}
+                                    />
+                                </div>
+                            </NdItem>
+                            <NdItem>
+                                <NdDatePicker simple={true}  parent={this} id={"dtSelectPriceChange"} type={'datetime'}/>
+                            </NdItem>
+                            <NdItem>
+                                <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                                    <NdLabel text={this.t("chkGroup")} alignment="right" width="300px" />
+                                    <NdCheckBox id="chkGroup" parent={this} defaultValue={false} 
+                                    param={this.param.filter({ELEMENT:'chkGroup',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'chkGroup',USERS:this.user.CODE})}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.chkPromotionItems.setState({value:false});
+                                        this.chkLastChange.setState({value:false});
+                                        this.chkSelectChange.setState({value:false});
+                                        this.chkSelectPriceChange.setState({value:false});
+                                        this.chkCustomer.setState({value:false});
+                                        this.chkAllItems.setState({value:false});
+                                    }).bind(this)}
+                                    />
+                                </div>
+                            </NdItem>
+                            <NdItem>
+                                <NdSelectBox simple={true} parent={this} id="cmbGroup" notRefresh={true}
+                                displayExpr="NAME"                       
+                                valueExpr="CODE"
+                                value=""
+                                searchEnabled={true}
+                                data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GROUP"},sql:this.core.sql}}}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                                    <NdLabel text={this.t("chkCustomer")} alignment="right" width="300px" />
+                                    <NdCheckBox id="chkCustomer" parent={this} defaultValue={false} 
+                                    param={this.param.filter({ELEMENT:'chkCustomer',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'chkCustomer',USERS:this.user.CODE})}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.chkPromotionItems.setState({value:false});
+                                        this.chkLastChange.setState({value:false});
+                                        this.chkSelectChange.setState({value:false});
+                                        this.chkSelectPriceChange.setState({value:false});
+                                        this.chkGroup.setState({value:false});
+                                        this.chkAllItems.setState({value:false});
+                                    }).bind(this)}
+                                    />
+                                </div>
+                            </NdItem>
+                            <NdItem>
+                                <NdSelectBox simple={true} parent={this} id="cmbCustomer" notRefresh={true}
+                                displayExpr="TITLE"                       
+                                valueExpr="GUID"
+                                value=""
+                                searchEnabled={true}
+                                data={{source:{select:{query : "SELECT GUID,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2)"},sql:this.core.sql}}}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                                    <NdLabel text={this.t("chkPromotionItems")} alignment="right" width="300px" />
+                                    <NdCheckBox id="chkPromotionItems" parent={this} defaultValue={false} 
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.chkLastChange.setState({value:false});
+                                        this.chkSelectChange.setState({value:false});
+                                        this.chkGroup.setState({value:false});
+                                        this.chkSelectPriceChange.setState({value:false});
+                                        this.chkCustomer.setState({value:false});
+                                        this.chkAllItems.setState({value:false});
+                                    }).bind(this)}
+                                    />
+                                </div>
+                            </NdItem>
+                            <NdItem>
+                                <div className="col-12">
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                                </div>
+                            </NdItem>
+                            <NdItem>
+                                <div style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                                    <NdLabel text={this.t("chkAllItems")} alignment="right" width="300px" />
+                                    <NdCheckBox id="chkAllItems" parent={this} defaultValue={false} 
+                                    param={this.param.filter({ELEMENT:'chkAllItems',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'chkAllItems',USERS:this.user.CODE})}
+                                    onValueChanged={(async()=>
+                                    {
+                                        this.chkPromotionItems.setState({value:false});
+                                        this.chkLastChange.setState({value:false});
+                                        this.chkSelectChange.setState({value:false});
+                                        this.chkSelectPriceChange.setState({value:false});
+                                        this.chkGroup.setState({value:false});
+                                        this.chkCustomer.setState({value:false});
+                                    }).bind(this)}
+                                    />
+                                </div>
+                            </NdItem>
+                            <NdEmptyItem/>
+                            <NdItem colSpan={2}>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.t("AddItems")} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {       
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgAddItems',showTitle:true,title:this.t("msgAddItems.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                button:[{id:"btn01",caption:this.t("msgAddItems.btn01"),location:'before'},{id:"btn02",caption:this.t("msgAddItems.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAddItems.msg")}</div>)
+                                            }
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                this.AddWizardItems()
+                                            }
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'} onClick={()=>{this.popWizard.hide()}}/>
+                                    </div>
+                                </div>
+                            </NdItem>
+                        </NdForm>
+                    </NdPopUp>
+                    {/* Barkod Popup */}
+                    <NdPopGrid id={"pg_txtBarcode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
+                    visible={false}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
