@@ -18,7 +18,7 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import { datatable } from '../../../../core/core.js';
 import { NdForm, NdItem, NdLabel, NdGroupItem, NdEmptyItem } from '../../../../core/react/devex/form.js';
-import {NdToast} from '../../../../core/react/devex/toast.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class promotionCard extends React.PureComponent
 {

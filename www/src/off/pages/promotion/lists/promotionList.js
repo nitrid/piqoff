@@ -1,60 +1,27 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import moment from 'moment';
 
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Toolbar,{ Item } from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export,GroupPanel,StateStoring} from '../../../../core/react/devex/grid.js';
+import NdGrid,{ Column, ColumnChooser, Paging, Pager, Scrolling, Export, GroupPanel, StateStoring } from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-
+import { NdForm, NdItem, NdLabel } from '../../../../core/react/devex/form.js';
 export default class promotionList extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
-
-        this.state = 
-        {
-            columnListValue : ['CODE','TITLE','TYPE_NAME','GENUS_NAME']
-        }
         
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "CODE",NAME : this.t("grdListe.clmCode")},
-            {CODE : "TITLE",NAME : this.t("grdListe.clmTitle")},
-            {CODE : "TYPE_NAME",NAME : this.t("grdListe.clmType")},
-            {CODE : "GENUS_NAME",NAME : this.t("grdListe.clmGenus")},       
-            {CODE : "ADRESS",NAME : this.t("grdListe.clmAdress")},       
-            {CODE : "ZIPCDDE",NAME : this.t("grdListe.clmZipcode")},       
-            {CODE : "COUNTRY",NAME : this.t("grdListe.clmCountry")},       
-            {CODE : "CITY",NAME : this.t("grdListe.clmCity")},       
-            {CODE : "PHONE1",NAME : this.t("grdListe.clmPhone1")},       
-            {CODE : "GSM_PHONE",NAME : this.t("grdListe.clmGsm")},       
-            {CODE : "EMAIL",NAME : this.t("grdListe.clmEmail")}, 
-            {CODE : "IBAN",NAME : this.t("grdListe.clmIban")},       
-        ]
-        this.groupList = [];
-        this._btnGetirClick = this._btnGetirClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
-    }
-    componentDidMount()
-    {
-        setTimeout(async () => 
-        {
-
-        }, 1000);
+        
+        this.btnGetClick = this.btnGetClick.bind(this)
     }
     loadState() 
     {
@@ -67,94 +34,35 @@ export default class promotionList extends React.PureComponent
         tmpSave.setValue(e)
         tmpSave.save()
     }
-    _columnListBox(e)
-    {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'CODE') != 'undefined')
-                {
-                    this.groupList.push('CODE')
-                }                
-                if(typeof e.value.find(x => x == 'TITLE') != 'undefined')
-                {
-                    this.groupList.push('TITLE')
-                }
-                if(typeof e.value.find(x => x == 'TYPE_NAME') != 'undefined')
-                {
-                    this.groupList.push('TYPE_NAME')
-                }
-                if(typeof e.value.find(x => x == 'GENUS_NAME') != 'undefined')
-                {
-                    this.groupList.push('GENUS_NAME')
-                }
-                
-                for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdListe.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
-    }
-    async _btnGetirClick()
+    async btnGetClick()
     {        
         let tmpSource =
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT " +
-                            "CODE AS CODE," +
-                            "MAX(NAME) AS NAME," +
-                            "MAX(START_DATE) AS START_DATE," +
-                            "MAX(FINISH_DATE) AS FINISH_DATE," +
-                            "MAX(COND_TYPE_NAME) AS COND_TYPE_NAME," +
-                            "MAX(COND_ITEM_CODE) AS COND_ITEM_CODE," +
-                            "MAX(COND_ITEM_NAME) AS COND_ITEM_NAME," +
-                            "MAX(COND_QUANTITY) AS COND_QUANTITY," +
-                            "MAX(COND_AMOUNT) AS COND_AMOUNT," +
-                            "MAX(APP_TYPE_NAME) AS APP_TYPE_NAME," +
-                            "MAX(APP_ITEM_CODE) AS APP_ITEM_CODE," +
-                            "MAX(APP_ITEM_NAME) AS APP_ITEM_NAME," +
-                            "MAX(APP_QUANTITY) AS APP_QUANTITY," +
-                            "MAX(APP_AMOUNT) AS APP_AMOUNT, " +
-                            "CASE WHEN MAX(START_DATE) <= dbo.GETDATE() AND MAX(FINISH_DATE) >= (dbo.GETDATE() - 1) THEN 1 ELSE 0 END AS ACTIVE " +
-                            "FROM PROMO_COND_APP_VW_01 WHERE ((CODE LIKE '%' + @CODE + '%') OR (COND_ITEM_CODE LIKE '%' + @CODE + '%') OR " + 
-                            "(COND_BARCODE LIKE '%' + @CODE + '%') OR (APP_ITEM_CODE LIKE '%' + @CODE + '%') OR (APP_BARCODE LIKE '%' + @CODE + '%') OR (@CODE = '')) AND " + 
-                            "((NAME LIKE '%' + @NAME + '%') OR (COND_ITEM_NAME LIKE '%' + @NAME + '%') OR (APP_ITEM_NAME LIKE '%' + @NAME + '%') OR (@NAME = '')) AND " + 
-                            "((START_DATE >= @START_DATE) OR (@START_DATE = '19700101')) AND ((FINISH_DATE <= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) " +
-                            "GROUP BY CODE",
+                    query : `SELECT 
+                            CODE AS CODE,
+                            MAX(NAME) AS NAME,
+                            MAX(START_DATE) AS START_DATE,
+                            MAX(FINISH_DATE) AS FINISH_DATE,
+                            MAX(COND_TYPE_NAME) AS COND_TYPE_NAME,
+                            MAX(COND_ITEM_CODE) AS COND_ITEM_CODE,
+                            MAX(COND_ITEM_NAME) AS COND_ITEM_NAME,
+                            MAX(COND_QUANTITY) AS COND_QUANTITY,
+                            MAX(COND_AMOUNT) AS COND_AMOUNT,
+                            MAX(APP_TYPE_NAME) AS APP_TYPE_NAME,
+                            MAX(APP_ITEM_CODE) AS APP_ITEM_CODE,
+                            MAX(APP_ITEM_NAME) AS APP_ITEM_NAME,
+                            MAX(APP_QUANTITY) AS APP_QUANTITY,
+                            MAX(APP_AMOUNT) AS APP_AMOUNT,
+                            CASE WHEN MAX(START_DATE) <= dbo.GETDATE() AND MAX(FINISH_DATE) >= (dbo.GETDATE() - 1) THEN 1 ELSE 0 END AS ACTIVE
+                            FROM PROMO_COND_APP_VW_01 WHERE ((CODE LIKE '%' + @CODE + '%') OR (COND_ITEM_CODE LIKE '%' + @CODE + '%') OR 
+                            (COND_BARCODE LIKE '%' + @CODE + '%') OR (APP_ITEM_CODE LIKE '%' + @CODE + '%') OR (APP_BARCODE LIKE '%' + @CODE + '%') OR (@CODE = '')) AND 
+                            ((NAME LIKE '%' + @NAME + '%') OR (COND_ITEM_NAME LIKE '%' + @NAME + '%') OR (APP_ITEM_NAME LIKE '%' + @NAME + '%') OR (@NAME = '')) AND 
+                            ((START_DATE >= @START_DATE) OR (@START_DATE = '19700101')) AND ((FINISH_DATE <= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) 
+                            GROUP BY CODE`,
                     param : ['CODE:string|25','NAME:string|250','START_DATE:date','FINISH_DATE:date'],
                     value : [this.txtCode.value,this.txtName.value,this.dtStartDate.value,this.dtFinishDate.value]
                 },
@@ -177,7 +85,8 @@ export default class promotionList extends React.PureComponent
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
-                                options={{
+                                options=
+                                {{
                                     type: 'default',
                                     icon: 'add',
                                     onClick: async () => 
@@ -196,12 +105,13 @@ export default class promotionList extends React.PureComponent
                                     {                                        
                                         let tmpConfObj =
                                         {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
                                         
                                         let pResult = await dialog(tmpConfObj);
+
                                         if(pResult == 'btn01')
                                         {
                                             App.instance.setState({isExecute:true})
@@ -209,17 +119,14 @@ export default class promotionList extends React.PureComponent
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query : "EXEC [dbo].[PRD_PROMO_DELETE] " + 
-                                                            "@CUSER = @PCUSER, " + 
-                                                            "@UPDATE = 1, " + 
-                                                            "@CODE = @PCODE ", 
+                                                    query : `EXEC [dbo].[PRD_PROMO_DELETE] @CUSER = @PCUSER, @UPDATE = 1, @CODE = @PCODE `, 
                                                     param : ['PCUSER:string|50','PCODE:string|25'],
                                                     value : [this.user.CODE,this.grdListe.getSelectedData()[i].CODE]
                                                 }
                                                 await this.core.sql.execute(tmpQuery) 
                                             }
                                             App.instance.setState({isExecute:false})
-                                            this._btnGetirClick()
+                                            this.btnGetClick()
                                         }
                                     }}/>
                                 </Item>
@@ -234,12 +141,13 @@ export default class promotionList extends React.PureComponent
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                         }
                                         
                                         let pResult = await dialog(tmpConfObj);
+
                                         if(pResult == 'btn01')
                                         {
                                             App.instance.panel.closePage()
@@ -251,33 +159,29 @@ export default class promotionList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmKriter">
-                                <Item>
-                                    <Label text={this.t("txtCode")} alignment="right" />
-                                    <NdTextBox id="txtCode" parent={this} simple={true} onEnterKey={this._btnGetirClick} placeholder={this.t("txtCodePlace")}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtName")} alignment="right" />
-                                    <NdTextBox id="txtName" parent={this} simple={true} onEnterKey={this._btnGetirClick} placeholder={this.t("txtNamePlace")}/>
-                                </Item>       
-                                {/* <Item> </Item> */}
-                                <Item>
-                                    <Label text={this.t("dtStartDate")} alignment="right" />
+                            <NdForm colCount={2} id="frmKriter">
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCode")} alignment="right" />
+                                    <NdTextBox id="txtCode" parent={this} simple={true} onEnterKey={this.btnGetClick} placeholder={this.t("txtCodePlace")}/>
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("txtName")} alignment="right" />
+                                    <NdTextBox id="txtName" parent={this} simple={true} onEnterKey={this.btnGetClick} placeholder={this.t("txtNamePlace")}/>
+                                </NdItem>       
+                                <NdItem>
+                                    <NdLabel text={this.t("dtStartDate")} alignment="right" />
                                     <NdDatePicker simple={true} parent={this} id={"dtStartDate"}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("dtFinishDate")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("dtFinishDate")} alignment="right" />
                                     <NdDatePicker simple={true} parent={this} id={"dtFinishDate"}/>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
-                        <div className="col-9">
-                            
-                        </div>
-                        <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                        <div className="col-3 offset-9">
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
