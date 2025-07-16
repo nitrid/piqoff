@@ -4,8 +4,7 @@ import { docCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
 import { payPlanMatchingCls } from '../../../../core/cls/payPlan.js';
 import moment from 'moment';
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-import { Label,Item} from 'devextreme-react/form';
+import Toolbar,{ Item } from 'devextreme-react/toolbar';
 import ContextMenu from 'devextreme-react/context-menu';
 import { Button } from 'devextreme-react/button';
 import NdTextBox, { Validator,  RequiredRule, RangeRule } from '../../../../core/react/devex/textbox.js'
@@ -19,43 +18,45 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { NdForm, NdItem, NdLabel, NdEmptyItem }from '../../../../core/react/devex/form.js';
 import { NdToast } from '../../../../core/react/devex/toast.js';
-
 export default class collection extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
-        this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
+        this.acsObj = this.access.filter({TYPE:1,USERS:this.user.CODE});
+        
         this.docObj = new docCls();
         this.deptCreditMatchingObj = new deptCreditMatchingCls();
         this.deptCreditMatchingObj.lang = this.lang;
         this.deptCreditMatchingObj.type = 1
         this.payPlanMatchingObj = new payPlanMatchingCls();
         this.payPlanMatchingObj.lang = this.lang;
-        this.tabIndex = props.data.tabkey
+        
         this.calculateTotal = this.calculateTotal.bind(this)
         this.addPayment = this.addPayment.bind(this)
         this.btnCloseInvoice = this.btnCloseInvoice.bind(this)
+
         this.docLocked = false;        
+        this.tabIndex = props.data.tabkey
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
         await this.init()
+
         if(typeof this.pagePrm != 'undefined')
         {
-            setTimeout(() => {
-                this.getDoc(this.pagePrm.GUID,'',-1)
-            }, 1000);
+            setTimeout(() => {this.getDoc(this.pagePrm.GUID,'',-1)}, 1000);
         }
     }
-    
     async init()
     {
         this.docObj.clearAll()
         this.deptCreditMatchingObj.clearAll()
+
         this.docObj.ds.on('onAddRow',(pTblName,pData) =>
         {
             if(pData.stat == 'new')
@@ -129,19 +130,21 @@ export default class collection extends React.PureComponent
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
+
         App.instance.setState({isExecute:true})
+        
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:200});
         await this.deptCreditMatchingObj.load({PAID_DOC:this.docObj.dt()[0].GUID,PAYING_DOC:this.docObj.dt()[0].GUID})
         
         // Ödemelerle eşleşen fatura bilgilerini al
         let tmpQuery = 
         {
-            query : "SELECT " +
-                    "(SELECT TOP 1 REF FROM DOC_CUSTOMER_VW_01 WHERE GUID = (SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING WHERE PAYING_DOC = DC.GUID)) AS DOC_REF, " +
-                    "(SELECT TOP 1 REF_NO FROM DOC_CUSTOMER_VW_01 WHERE GUID = (SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING WHERE PAYING_DOC = DC.GUID)) AS DOC_REF_NO, " +
-                    "DC.GUID " +
-                    "FROM DOC_CUSTOMER AS DC " +
-                    "WHERE DC.DOC_GUID = @DOC_GUID",
+            query : `SELECT 
+                    (SELECT TOP 1 REF FROM DOC_CUSTOMER_VW_01 WHERE GUID = (SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING WHERE PAYING_DOC = DC.GUID)) AS DOC_REF, 
+                    (SELECT TOP 1 REF_NO FROM DOC_CUSTOMER_VW_01 WHERE GUID = (SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING WHERE PAYING_DOC = DC.GUID)) AS DOC_REF_NO, 
+                    DC.GUID 
+                    FROM DOC_CUSTOMER AS DC 
+                    WHERE DC.DOC_GUID = @DOC_GUID`,
             param : ['DOC_GUID:string|50'],
             value : [pGuid]
         }
@@ -204,6 +207,7 @@ export default class collection extends React.PureComponent
                     }
     
                     let pResult = await dialog(tmpConfObj);
+
                     if(pResult == 'btn01')
                     {
                         this.getDoc(pGuid,pRef,pRefno)
@@ -431,6 +435,7 @@ export default class collection extends React.PureComponent
 
             // Taksit eşleştirmesi (eski mantık korundu)
             let tmpPayDCPaidDt = this.payPlanMatchingObj.popUpList.where({AMOUNT: {'>' : 0}})
+
             if(tmpPayDCPaidDt.length > 0)
             {
                 tmpPayDCPaidDt.push
@@ -444,7 +449,9 @@ export default class collection extends React.PureComponent
                         REMAINDER : pAmount * -1,
                     }
                 )
+
                 await this.payPlanMatchingObj.matching(tmpPayDCPaidDt)
+
                 if(this.payPlanMatchingObj.popUpList.length > 0 && this.payPlanMatchingObj.popUpList[0].REF && this.payPlanMatchingObj.popUpList[0].REF_NO)
                 {
                     let payingRow = this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length - 1];
@@ -460,30 +467,32 @@ export default class collection extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query : "SELECT " +
-            "(SELECT VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](DOC.TYPE,DOC.DOC_TYPE,DOC.REBATE,DOC.PAY_TYPE)) AND LANG = 'TR') AS DOC_TYPE," +
-            "DOC.REF,DOC.REF_NO, " +
-            "DOC.DOC_DATE," +
-            "DOC.AMOUNT, " +
-            "DEPT.PAYING_AMOUNT " +
-            "FROM DOC_CUSTOMER_VW_01 AS DOC " +
-            "LEFT OUTER JOIN [DEPT_CREDIT_MATCHING] AS DEPT ON DOC.GUID = DEPT.PAID_DOC " +
-            "WHERE DEPT.PAYING_DOC = @pCustomer " +
-            "UNION ALL " +
-            "SELECT " +
-            "(SELECT VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](DOC.TYPE,DOC.DOC_TYPE,DOC.REBATE,DOC.PAY_TYPE)) AND LANG = 'TR') AS DOC_TYPE," +
-            "DOC.REF,DOC.REF_NO, " +
-            "DOC.DOC_DATE," +
-            "DOC.AMOUNT, " +
-            "DEPT.PAYING_AMOUNT " +
-            "FROM DOC_CUSTOMER_VW_01 AS DOC " +
-            "LEFT OUTER JOIN [DEPT_CREDIT_MATCHING] AS DEPT ON DOC.GUID = DEPT.PAID_DOC " +
-            "WHERE DEPT.PAYING_DOC = (SELECT TOP 1 PAID_DOC FROM [DEPT_CREDIT_MATCHING] WHERE PAYING_DOC = @pCustomer) " +
-            "AND DOC.PAY_TYPE = -1",
+            query : `SELECT 
+                    (SELECT VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](DOC.TYPE,DOC.DOC_TYPE,DOC.REBATE,DOC.PAY_TYPE)) AND LANG = 'TR') AS DOC_TYPE,
+                    DOC.REF,DOC.REF_NO, 
+                    DOC.DOC_DATE,
+                    DOC.AMOUNT, 
+                    DEPT.PAYING_AMOUNT 
+                    FROM DOC_CUSTOMER_VW_01 AS DOC 
+                    LEFT OUTER JOIN [DEPT_CREDIT_MATCHING] AS DEPT ON DOC.GUID = DEPT.PAID_DOC 
+                    WHERE DEPT.PAYING_DOC = @pCustomer 
+                    UNION ALL 
+                    SELECT 
+                    (SELECT VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](DOC.TYPE,DOC.DOC_TYPE,DOC.REBATE,DOC.PAY_TYPE)) AND LANG = 'TR') AS DOC_TYPE,
+                    DOC.REF,DOC.REF_NO, 
+                    DOC.DOC_DATE,
+                    DOC.AMOUNT, 
+                    DEPT.PAYING_AMOUNT 
+                    FROM DOC_CUSTOMER_VW_01 AS DOC 
+                    LEFT OUTER JOIN [DEPT_CREDIT_MATCHING] AS DEPT ON DOC.GUID = DEPT.PAID_DOC 
+                    WHERE DEPT.PAYING_DOC = (SELECT TOP 1 PAID_DOC FROM [DEPT_CREDIT_MATCHING] WHERE PAYING_DOC = @pCustomer) 
+                    AND DOC.PAY_TYPE = -1`,
             param : ['pCustomer:string|50'],
             value : [pCustomer]
         }
+
         let tmpData = await this.core.sql.execute(tmpQuery)
+        
         if(tmpData.result.recordset.length > 0)
         {
             await this.grdPopCloseInvoice.dataRefresh({source: tmpData.result.recordset});
@@ -501,17 +510,13 @@ export default class collection extends React.PureComponent
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                        onClick={()=>
-                                        {
-                                            this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
-                                        }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={()=>
                                     {
-                                        this.init(); 
+                                        this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
                                     }}/>
+                                </Item>
+                                <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnNew" parent={this} icon="file" type="default" onClick={()=>{this.init()}}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmCollection"  + this.tabIndex}
@@ -532,17 +537,19 @@ export default class collection extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 // Fazla para satırlarını DEPT_CREDIT_MATCHING'den çıkar
                                                 let extraAmountRowGuids = [];
-                                                for(let i = 0; i < this.docObj.docCustomer.dt().length; i++) {
+                                                for(let i = 0; i < this.docObj.docCustomer.dt().length; i++) 
+                                                {
                                                     let row = this.docObj.docCustomer.dt()[i];
-                                                    if(row._EXTRA_AMOUNT === true) {
+                                                    if(row._EXTRA_AMOUNT === true) 
+                                                    {
                                                         extraAmountRowGuids.push(row.GUID);
                                                     }
                                                 }
-                                                
                                                 // DEPT_CREDIT_MATCHING'den fazla para satırlarını çıkar
                                                 for(let i = this.deptCreditMatchingObj.dt().length - 1; i >= 0; i--) 
                                                 {
@@ -564,11 +571,12 @@ export default class collection extends React.PureComponent
                                                     await this.deptCreditMatchingObj.save() 
                                                     await this.payPlanMatchingObj.save()  
                                                     this.toast.show({type:"success",message:this.t("msgSaveResult.msgSuccess")})
+
                                                     if(this.deptCreditMatchingObj.dt().length > 0)
                                                     {
                                                         let tmpQuery = 
                                                         {
-                                                            query : "UPDATE DOC_INSTALLMENT SET STATUS = 1 WHERE FAC_GUID = @FAC_GUID",
+                                                            query : `UPDATE DOC_INSTALLMENT SET STATUS = 1 WHERE FAC_GUID = @FAC_GUID`,
                                                             param : ['FAC_GUID:string|50'],
                                                             value : [this.deptCreditMatchingObj.dt().where({TYPE : 1})[0].PAY_PLAN_DOC_GUID]
                                                         }
@@ -579,7 +587,7 @@ export default class collection extends React.PureComponent
                                                     {
                                                         let tmpQuery = 
                                                         {
-                                                            query : "UPDATE DOC_INSTALLMENT SET STATUS = 1 WHERE GUID = @GUID",
+                                                            query : `UPDATE DOC_INSTALLMENT SET STATUS = 1 WHERE GUID = @GUID`,
                                                             param : ['GUID:string|50'],
                                                             value : [this.payPlanMatchingObj.dt().where({TYPE : 1})[0].PAY_PLAN_GUID]
                                                         }
@@ -589,6 +597,7 @@ export default class collection extends React.PureComponent
                                                     this.toast.show({type:"success",message:this.t("msgSaveResult.msgSuccess")})
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
+
                                                     this.init();
                                                 }
                                                 else
@@ -600,14 +609,7 @@ export default class collection extends React.PureComponent
                                         }                              
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({type:"success",message:this.t("msgSaveValid.msg")})
                                         }                                                 
                                     }}/>
                                 </Item>
@@ -623,6 +625,7 @@ export default class collection extends React.PureComponent
                                         }
                                         
                                         let pResult = await dialog(tmpConfObj);
+                                        
                                         if(pResult == 'btn01')
                                         {
                                             this.docObj.dt('DOC').removeAt(0)
@@ -633,7 +636,6 @@ export default class collection extends React.PureComponent
 
                                             this.init(); 
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -650,32 +652,21 @@ export default class collection extends React.PureComponent
                                             }
                                             else
                                             {
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                await dialog(tmpConfObj1);
+                                                this.toast.show({type:"success",message:this.t("msgSaveResult.msgFailed")})
                                             }
-                                            
                                         }
                                         else
                                         {
                                             this.popPassword.show()
                                             this.txtPassword.value = ''
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
-                                        
-                                    }}/>
+                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
-                                    }}/>
+                                    <NdButton id="btnPrint" parent={this} icon="print" type="default" onClick={()=>{this.popDesign.show()}}/>
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -695,6 +686,7 @@ export default class collection extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -722,11 +714,14 @@ export default class collection extends React.PureComponent
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 200 AND REF = @REF ",
+                                                    query : `SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO 
+                                                            FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 200 AND REF = @REF `,
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
+
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                
                                                 if(tmpData.result.recordset.length > 0)
                                                 {
                                                     this.txtRefno.value = tmpData.result.recordset[0].REF_NO
@@ -735,7 +730,7 @@ export default class collection extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmCollection"  + this.tabIndex}>
+                                                <Validator validationGroup={"frmCollection"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -782,7 +777,7 @@ export default class collection extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmCollection"  + this.tabIndex}>
+                                                <Validator validationGroup={"frmCollection"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -797,34 +792,18 @@ export default class collection extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 200"},sql:this.core.sql}}}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                   
-                                                }
-                                            }
-                                        ]
-                                        
-                                    }
+                                    data={{source:{select:{query : `SELECT GUID,REF,REF_NO,OUTPUT_CODE,OUTPUT_NAME FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 200`},sql:this.core.sql}}}
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} defaultSortOrder="asc" />
-                                        
                                     </NdPopGrid>
                                 </NdItem>
                                {/* dtDocDate */}
                                <NdItem>
                                     <NdLabel text={this.t("dtDocDate")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
-                                    dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtDocDate"} dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}>
                                         <Validator validationGroup={"frmCollection"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
@@ -839,25 +818,25 @@ export default class collection extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
                                     onEnterKey={(async()=>
+                                    {
+                                        await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                        this.pg_txtCustomerCode.show()
+                                        this.pg_txtCustomerCode.onClick = (data) =>
                                         {
-                                            await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
-                                            this.pg_txtCustomerCode.show()
-                                            this.pg_txtCustomerCode.onClick = (data) =>
+                                            if(data.length > 0)
                                             {
-                                                if(data.length > 0)
+                                                this.docObj.dt()[0].OUTPUT = data[0].GUID
+                                                this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
+                                                this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
+                                                let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
-                                                    this.docObj.dt()[0].OUTPUT = data[0].GUID
-                                                    this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
-                                                    this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
-                                                    let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
-                                                    if(typeof tmpData != 'undefined' && tmpData.value ==  true)
-                                                    {
-                                                        this.txtRef.value = data[0].CODE;
-                                                        this.txtRef.props.onChange()
-                                                    }
+                                                    this.txtRef.value = data[0].CODE;
+                                                    this.txtRef.props.onChange()
                                                 }
                                             }
-                                        }).bind(this)}
+                                        }
+                                    }).bind(this)}
                                     button=
                                     {
                                         [
@@ -909,25 +888,18 @@ export default class collection extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 
+                                                        WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                        }
-                                    }
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                                        
                                     </NdPopGrid>
                                 </NdItem> 
                                 {/* txtCustomerName */}
@@ -938,8 +910,7 @@ export default class collection extends React.PureComponent
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_NAME"}} 
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}>
-                                    </NdTextBox>
+                                    access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}/>
                                 </NdItem> 
                                 {/* Boş */}
                                 <NdEmptyItem />
@@ -951,10 +922,7 @@ export default class collection extends React.PureComponent
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdForm colCount={1} onInitialized={(e)=>
-                            {
-                                this.frmCollection = e.component
-                            }}>
+                            <NdForm colCount={1} onInitialized={(e)=>{this.frmCollection = e.component}}>
                                 <NdItem location="after">
                                     <Button icon="add" text={this.t("btnCash")}
                                     validationGroup={"frmCollection"  + this.tabIndex}
@@ -974,7 +942,6 @@ export default class collection extends React.PureComponent
                                                 button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
                                             }
-                                            
                                             await dialog(tmpConfObj);
                                         }
                                     }}/>
@@ -993,20 +960,19 @@ export default class collection extends React.PureComponent
                                         {
                                             this.btnCloseInvoice(e.data.GUID)
                                         }}
-                                        onRowUpdating={async(e)=>{      
+                                        onRowUpdating={async(e)=>
+                                        {      
                                             if(this.deptCreditMatchingObj.popUpList.length > 0)
                                             {
                                                 e.cancel = true
                                                 this.toast.show({type:"warning",message:this.t("msgRowNotUpdate.msg")})
                                                 e.component.cancelEditData()
                                             }
-                                            
                                             // AMOUNT alanı için 2 ondalık basamağa yuvarlama
                                             if(e.data && e.data.AMOUNT !== undefined) 
                                             {
                                                 e.data.AMOUNT = Number(e.data.AMOUNT).round(2);
                                             }
-                                            
                                             this.calculateTotal()
                                         }}
                                         onRowRemoved={async (e)=>
@@ -1024,54 +990,46 @@ export default class collection extends React.PureComponent
                                             <Column dataField="CDATE_FORMAT" caption={this.t("grdDocPayments.clmCreateDate")} width={200} allowEditing={false}/>
                                             <Column dataField="INPUT_NAME" caption={this.t("grdDocPayments.clmInputName")} allowEditing={false}/>
                                             <Column dataField="AMOUNT" caption={this.t("grdDocPayments.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                                            <Column dataField="DOC_DATE" caption={this.t("grdDocPayments.clmDocDate")}  dataType="date" 
-                                                editorOptions={{value:null}}
-                                                cellRender={(e) => 
+                                            <Column dataField="DOC_DATE" caption={this.t("grdDocPayments.clmDocDate")}  dataType="date" editorOptions={{value:null}}
+                                            cellRender={(e) => 
+                                            {
+                                                if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
                                                 {
-                                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
-                                                    {
-                                                        return e.text
-                                                    }
-                                                    
-                                                    return
-                                                }}/>
-                                            <Column caption={this.t("grdDocPayments.clmMatchedDoc")} 
-                                                cellRender={(e) => 
+                                                    return e.text
+                                                }
+                                                return
+                                            }}/>
+                                            <Column caption={this.t("grdDocPayments.clmMatchedDoc")} allowEditing={false}
+                                            cellRender={(e) => 
+                                            {
+                                                // Fazla para satırlarında hiçbir şey gösterme
+                                                if(e.data._EXTRA_AMOUNT === true) 
                                                 {
-                                                    // Fazla para satırlarında hiçbir şey gösterme
-                                                    if(e.data._EXTRA_AMOUNT === true) 
-                                                    {
-                                                        return "";
-                                                    }
-                                                    
-                                                    if(this.deptCreditMatchingObj.popUpList.length > 0)
-                                                    {
-                                                        let matchedDoc = this.deptCreditMatchingObj.popUpList[0].DOC_REF + "-" + this.deptCreditMatchingObj.popUpList[0].DOC_REF_NO;
-
-                                                        if (!e.data.MATCHED_DOC) 
-                                                        {
-                                                            e.data.MATCHED_DOC = matchedDoc;
-                                                        }
-                                                        
-                                                        return e.data.MATCHED_DOC;
-                                                    }
-                                                    if(e.data.MATCHED_DOC) {
-                                                        return e.data.MATCHED_DOC;
-                                                    }
-                                                    
                                                     return "";
-                                                }}
-                                                allowEditing={false}/>
-                                                <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
-                                            
+                                                }
+                                                
+                                                if(this.deptCreditMatchingObj.popUpList.length > 0)
+                                                {
+                                                    let matchedDoc = this.deptCreditMatchingObj.popUpList[0].DOC_REF + "-" + this.deptCreditMatchingObj.popUpList[0].DOC_REF_NO;
+
+                                                    if (!e.data.MATCHED_DOC) 
+                                                    {
+                                                        e.data.MATCHED_DOC = matchedDoc;
+                                                    }
+                                                    
+                                                    return e.data.MATCHED_DOC;
+                                                }
+
+                                                if(e.data.MATCHED_DOC) 
+                                                {
+                                                    return e.data.MATCHED_DOC;
+                                                }
+                                                
+                                                return "";
+                                            }}/>
+                                            <Column dataField="DESCRIPTION" caption={this.t("grdDocPayments.clmDescription")} />
                                         </NdGrid>
-                                        <ContextMenu
-                                        dataSource={this.rightItems}
-                                        width={200}
-                                        target="#grdDocPayments"
-                                        onItemClick={(async(e)=>
-                                        {
-                                        }).bind(this)} />
+                                        <ContextMenu dataSource={this.rightItems} width={200} target="#grdDocPayments"/>
                                     </React.Fragment>     
                                 </NdItem>
                             </NdForm>
@@ -1083,12 +1041,12 @@ export default class collection extends React.PureComponent
                                 {/* TOPLAM */}
                                 <NdEmptyItem colSpan={3}/>
                                 <NdItem>
-                                <Label text={this.t("txtTotal")} alignment="right" />
+                                    <NdLabel text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
                                     maxLength={32}
                                     param={this.param.filter({ELEMENT:'txtTotal',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtTotal',USERS:this.user.CODE})}
-                                    ></NdTextBox>
+                                    />
                                 </NdItem>
                             </NdForm>
                         </div>
@@ -1121,27 +1079,27 @@ export default class collection extends React.PureComponent
                                         let tmpQuery
                                         if(e.value == 0)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : `SELECT * FROM SAFE_VW_01 WHERE TYPE = 0`}
                                         }
                                         else if(e.value == 1)
                                         {
-                                            tmpQuery = {query : "SELECT GUID, CODE, NAME, TYPE, STATUS FROM SAFE_VW_01 WHERE TYPE = 1"}
+                                            tmpQuery = {query : `SELECT GUID, CODE, NAME, TYPE, STATUS FROM SAFE_VW_01 WHERE TYPE = 1`}
                                         }
                                         else if(e.value == 2)
                                         {
-                                            tmpQuery = {query : "SELECT GUID, CODE, NAME, TYPE, STATUS FROM BANK_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : `SELECT GUID, CODE, NAME, TYPE, STATUS FROM BANK_VW_01 WHERE TYPE = 0`}
                                         }
                                         else if(e.value == 3)
                                         {
-                                            tmpQuery = {query : "SELECT GUID, CODE, NAME, TYPE, STATUS FROM BANK_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : `SELECT GUID, CODE, NAME, TYPE, STATUS FROM BANK_VW_01 WHERE TYPE = 0`}
                                         }
                                         else if(e.value == 4)
                                         {
-                                            tmpQuery = {query : "SELECT GUID, CODE, NAME, TYPE, STATUS FROM BANK_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : `SELECT GUID, CODE, NAME, TYPE, STATUS FROM BANK_VW_01 WHERE TYPE = 0`}
                                         }
                                         else if(e.value == 5)
                                         {
-                                            tmpQuery = {query : "SELECT GUID, CODE, NAME, TYPE, STATUS FROM BANK_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : `SELECT GUID, CODE, NAME, TYPE, STATUS FROM BANK_VW_01 WHERE TYPE = 0`}
                                         }
                                         else
                                         {
@@ -1149,6 +1107,7 @@ export default class collection extends React.PureComponent
                                         }
                                 
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
+
                                         if(tmpData.result.recordset.length > 0)
                                         {   
                                             this.cmbCashSafe.setData(tmpData.result.recordset)
@@ -1199,15 +1158,12 @@ export default class collection extends React.PureComponent
                                 </NdItem>
                                 <NdItem>
                                     <NdLabel text={this.t("description")} alignment="right" />
-                                    <div className="col-12 pe-0">
-                                        <NdTextBox id="cashDescription" parent={this} simple={true} width={500}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}                                        
-                                        param={this.param.filter({ELEMENT:'cashDescription',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'cashDescription',USERS:this.user.CODE})}
-                                        >
-                                        </NdTextBox>
-                                    </div>
+                                    <NdTextBox id="cashDescription" parent={this} simple={true} width={500}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={32}                                        
+                                    param={this.param.filter({ELEMENT:'cashDescription',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'cashDescription',USERS:this.user.CODE})}
+                                    />
                                 </NdItem>
                                 <NdItem>
                                     <div className='row'>
@@ -1229,6 +1185,7 @@ export default class collection extends React.PureComponent
                                                 await this.payPlanMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT)
                                                 this.numCash.value = Number(this.payPlanMatchingObj.popUpList[0].AMOUNT)
                                                 this.numCash.readOnly = true
+
                                                 if(this.payPlanMatchingObj.popUpList[0].STATUS == 1)
                                                 {
                                                     this.numCash.value = 0
@@ -1260,10 +1217,7 @@ export default class collection extends React.PureComponent
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popCash.hide();  
-                                            }}/>
+                                            onClick={()=>{this.popCash.hide()}}/>
                                         </div>
                                     </div>
                                 </NdItem>
@@ -1285,20 +1239,16 @@ export default class collection extends React.PureComponent
                             <NdForm colCount={1} height={'fit-content'}>
                                 <NdItem>
                                     <NdLabel text={this.t("checkReference")} alignment="right" />
-                                    <div className="col-12 pe-0">
-                                        <NdTextBox id="checkReference" parent={this} simple={true} width={500}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                        maxLength={32}                                        
-                                        param={this.param.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
-                                        >
-                                        </NdTextBox>
-                                    </div>
+                                    <NdTextBox id="checkReference" parent={this} simple={true} width={500}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    maxLength={32}                                        
+                                    param={this.param.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
+                                    />
                                 </NdItem>
                                 <NdItem>
-                                        <NdLabel text={this.t("checkDate")} alignment="right" />
-                                        <NdDatePicker simple={true}  parent={this} id={"checkDate"}>
-                                        </NdDatePicker>
+                                    <NdLabel text={this.t("checkDate")} alignment="right" />
+                                    <NdDatePicker simple={true}  parent={this} id={"checkDate"}/>
                                 </NdItem>
                                 <NdItem>
                                     <div className='row'>
@@ -1314,10 +1264,7 @@ export default class collection extends React.PureComponent
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popCheck.hide();  
-                                            }}/>
+                                            onClick={()=>{this.popCheck.hide()}}/>
                                         </div>
                                     </div>
                                 </NdItem>
@@ -1345,10 +1292,7 @@ export default class collection extends React.PureComponent
                                             width={'100%'}
                                             showBorders={true}
                                             selection={{mode:"multiple"}}
-                                            onSelectionChanged={(e)=>
-                                            {
-                                                e.component.refresh(true);
-                                            }}
+                                            onSelectionChanged={(e)=>{e.component.refresh(true)}}
                                             >
                                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
