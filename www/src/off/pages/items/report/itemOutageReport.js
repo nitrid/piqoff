@@ -6,9 +6,7 @@ import Toolbar,{ Item } from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
 
 import NdGrid,{Column,Paging,Pager,Scrolling,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { NdForm, NdItem } from '../../../../core/react/devex/form.js';
@@ -19,35 +17,8 @@ export default class itemOutageReport extends React.PureComponent
     {
         super(props)
 
-        this.state = 
-        {
-            columnListValue : ['OUTPUT_NAME','OUTPUT_NAME','REF','REF_NO','DOC_DATE','ITEM_CODE','ITEM_NAME','QUANTITY','TOTAL_COST','COST_PRICE','DESCRIPTION']
-        }
-        
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "OUTPUT_CODE",NAME : this.t("grdListe.clmOutputCode")},                                   
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdListe.clmOutputName")},                                   
-            {CODE : "REF",NAME : this.t("grdListe.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdListe.clmRefNo")},
-            {CODE : "DOC_DATE",NAME : this.t("grdListe.clmDocDate")},
-            {CODE : "ITEM_CODE",NAME : this.t("grdListe.clmCode")},
-            {CODE : "ITEM_NAME",NAME : this.t("grdListe.clmName")},
-            {CODE : "QUANTITY",NAME : this.t("grdListe.clmQuantity")},
-            {CODE : "COST_PRICE",NAME : this.t("grdListe.clmCostPrice")},
-            {CODE : "TOTAL_COST",NAME : this.t("grdListe.clmTotalCost")},
-            {CODE : "DESCRIPTION",NAME : this.t("grdListe.clmDescription")},
-        ]
-      
-        this.groupList = [];
         this.btnGetClick = this.btnGetClick.bind(this)
-    }
-    componentDidMount()
-    {
-        setTimeout(async () => 
-        {
-        }, 1000);
     }
     async btnGetClick()
     {
@@ -65,7 +36,6 @@ export default class itemOutageReport extends React.PureComponent
                 sql : this.core.sql
             }
         }
-
         await this.grdListe.dataRefresh(tmpSource)
     }
     render()

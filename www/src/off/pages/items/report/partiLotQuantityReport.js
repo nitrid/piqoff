@@ -195,7 +195,7 @@ export default class partiLotQuantityReport extends React.PureComponent
                                         <Column dataField="STATUS" caption={this.t("pg_txtRef.clmStatus")} width={'10%'} />
                                     </NdPopGrid>
                                 </NdItem>
-                                <NdEmptyItem colSpan={2}/>
+                                <NdEmptyItem/>
                                 <NdItem>
                                     <NdLabel text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot" showClearButton={true} notRefresh={true}  searchEnabled={true}

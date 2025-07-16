@@ -18,7 +18,7 @@ export default class NdListBox extends Base
     //#region Private
     _onOptionChanged(e) 
     {
-        if (e.name == 'selectedItemKeys') 
+        if (e.name == 'selectedItemKeys' && JSON.stringify(this.state.value) !== JSON.stringify(e.value)) 
         {
             this.value = e.value;
         }

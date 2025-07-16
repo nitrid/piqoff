@@ -2,8 +2,7 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import {discountCls} from '../../../../core/cls/discount.js';
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-import  { Item} from 'devextreme-react/form';
+import Toolbar,{ Item } from 'devextreme-react/toolbar';
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -15,16 +14,17 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import { NdForm, NdItem, NdLabel, NdEmptyItem, NdGroupItem } from '../../../../core/react/devex/form.js';
 import { NdToast } from '../../../../core/react/devex/toast.js';
-
 export default class discountCard extends React.PureComponent
 {
     constructor(props)
     {
         super(props) 
+
         this.state = 
         {
             discPrice:0,
         }               
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
 
@@ -40,6 +40,7 @@ export default class discountCard extends React.PureComponent
     {
         await this.core.util.waitUntil(0)
         this.init();
+
         if(typeof this.pagePrm != 'undefined')
         {
             this.txtCode.value = this.pagePrm.CODE
@@ -105,6 +106,7 @@ export default class discountCard extends React.PureComponent
                     }
                     
                     let pResult = await dialog(tmpConfObj);
+
                     if(pResult == 'btn01')
                     {
                         this.getDiscount(pCode)
@@ -129,18 +131,19 @@ export default class discountCard extends React.PureComponent
     async getDocs(pType)
     {
         let tmpQuery 
+
         if(pType == 0)
         {
             tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,START_DATE,FINISH_DATE FROM DISCOUNT_VW_01 WHERE CDATE > dbo.GETDATE() - 30 GROUP BY GUID,CODE,NAME,START_DATE,FINISH_DATE "
+                query : `SELECT GUID,CODE,NAME,START_DATE,FINISH_DATE FROM DISCOUNT_VW_01 WHERE CDATE > dbo.GETDATE() - 30 GROUP BY GUID,CODE,NAME,START_DATE,FINISH_DATE`
             }
         }
         else
         {
             tmpQuery = 
             {
-                query : "SELECT GUID,CODE,NAME,START_DATE,FINISH_DATE FROM DISCOUNT_VW_01 GROUP BY GUID,CODE,NAME,START_DATE,FINISH_DATE "
+                query : `SELECT GUID,CODE,NAME,START_DATE,FINISH_DATE FROM DISCOUNT_VW_01 GROUP BY GUID,CODE,NAME,START_DATE,FINISH_DATE`
             }
         }
 
@@ -151,6 +154,7 @@ export default class discountCard extends React.PureComponent
         {
             tmpRows = tmpData.result.recordset
         }
+
         await this.pg_txtCode.setData(tmpRows)
      
         this.pg_txtCode.show()
@@ -172,11 +176,7 @@ export default class discountCard extends React.PureComponent
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init();
-                                    }}/>
+                                    <NdButton id="btnNew" parent={this} icon="file" type="default" onClick={()=>{this.init()}}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmDiscount"  + this.tabIndex}
@@ -187,6 +187,7 @@ export default class discountCard extends React.PureComponent
                                             this.toast.show({message:this.t("msgAmount.msg"),type:"warning"})
                                             return
                                         }
+
                                         if(this.customerCondDt.length == 0 || this.itemCondDt.length == 0)
                                         {
                                             this.toast.show({message:this.t("msgCondOrApp.msg"),type:"warning"})
@@ -203,14 +204,9 @@ export default class discountCard extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
-                                                
                                                 this.customerCondDt.forEach((item)=>
                                                 {
                                                     let tmpCond = this.discount.cond.dt().where({LINK_GUID:item.LINK_GUID})
@@ -275,7 +271,6 @@ export default class discountCard extends React.PureComponent
 
                                                 this.customerCondDt._deleteList.forEach((item)=>
                                                 {
-                                                    console.log(item)
                                                     this.discount.cond.dt()._deleteList.push(item)
                                                 })
                                                 this.itemCondDt._deleteList.forEach((item)=>
@@ -293,21 +288,19 @@ export default class discountCard extends React.PureComponent
                                                 }
                                                 else
                                                 {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    let tmpConfObj1 =
+                                                    {
+                                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    }
                                                     await dialog(tmpConfObj1);
                                                 }
                                             }
                                         }
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgSaveValid.msg"),type:"warning"})
                                         } 
                                     }}/>
                                 </Item>
@@ -323,6 +316,7 @@ export default class discountCard extends React.PureComponent
                                         }
                                         
                                         let pResult = await dialog(tmpConfObj);
+
                                         if(pResult == 'btn01')
                                         {
                                             this.discount.dt().removeAt(0)
@@ -349,6 +343,7 @@ export default class discountCard extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -471,10 +466,7 @@ export default class discountCard extends React.PureComponent
                                             displayExpr="NAME"                       
                                             valueExpr="ID"
                                             data={{source:[{ID:0,NAME:this.t("cmbType.customer")},{ID:1,NAME:this.t("cmbType.customerGroup")}]}}
-                                            onValueChanged={(e)=>
-                                            {
-                                                this.customerCondDt.removeAll();
-                                            }}
+                                            onValueChanged={()=>{this.customerCondDt.removeAll()}}
                                             />
                                         </NdItem>
                                         <NdEmptyItem />
@@ -525,7 +517,8 @@ export default class discountCard extends React.PureComponent
                                                                     {
                                                                         select:
                                                                         {
-                                                                            query : "SELECT GUID,CODE,TITLE AS NAME FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                                            query : `SELECT GUID,CODE,TITLE AS NAME FROM CUSTOMER_VW_03 
+                                                                                    WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                                                             param : ['VAL:string|50']
                                                                         },
                                                                         sql:this.core.sql
@@ -540,7 +533,8 @@ export default class discountCard extends React.PureComponent
                                                                     {
                                                                         select:
                                                                         {
-                                                                            query : "SELECT GUID,CODE,NAME FROM CUSTOMER_GROUP_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
+                                                                            query : `SELECT GUID,CODE,NAME FROM CUSTOMER_GROUP_VW_01 
+                                                                                    WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))`,
                                                                             param : ['VAL:string|50']
                                                                         },
                                                                         sql:this.core.sql
@@ -555,13 +549,7 @@ export default class discountCard extends React.PureComponent
                                                                 {
                                                                     if(this.customerCondDt.where({LINK_GUID:data[i].GUID}).length > 0)
                                                                     {
-                                                                        let tmpConfObj =
-                                                                        {
-                                                                            id:'msgItemAlert',showTitle:true,title:this.t("msgItemAlert.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                                            button:[{id:"btn01",caption:this.t("msgItemAlert.btn01"),location:'after'}],
-                                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemAlert.msg")}</div>)
-                                                                        }
-                                                                        await dialog(tmpConfObj)
+                                                                        this.toast.show({message:this.t("msgItemAlert.msg"),type:"warning"})
                                                                         return
                                                                     }
                                                                 }
@@ -617,6 +605,7 @@ export default class discountCard extends React.PureComponent
                                                                 button:[{id:"btn01",caption:this.t("msgDeleteAll.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDeleteAll.btn02"),location:'after'}],
                                                                 content:(<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgDeleteAll.msg")}</div>)
                                                             }
+
                                                             if((await dialog(tmpConfObj1)) == 'btn01')
                                                             {
                                                                 this.customerCondDt.removeAll()
@@ -626,11 +615,7 @@ export default class discountCard extends React.PureComponent
                                                         </NdButton>
                                                     </div>
                                                     <div className="col-6">
-                                                        <NdButton type="success" width="100%" icon={"todo"}
-                                                        onClick={()=>
-                                                        {
-                                                            this.popPrmCustomerList.hide()
-                                                        }}>
+                                                        <NdButton type="success" width="100%" icon={"todo"} onClick={()=>{this.popPrmCustomerList.hide()}}>
                                                             <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
                                                         </NdButton>
                                                     </div>
@@ -648,10 +633,7 @@ export default class discountCard extends React.PureComponent
                                             displayExpr="NAME"                       
                                             valueExpr="ID"
                                             data={{source:[{ID:10,NAME:this.t("cmbType2.item")},{ID:11,NAME:this.t("cmbType2.itemGroup")}]}}
-                                            onValueChanged={(e)=>
-                                            {
-                                                this.itemCondDt.removeAll();
-                                            }}
+                                            onValueChanged={()=>{this.itemCondDt.removeAll()}}
                                             />
                                         </NdItem>
                                         <NdEmptyItem />
@@ -701,7 +683,8 @@ export default class discountCard extends React.PureComponent
                                                                 {
                                                                     select:
                                                                     {
-                                                                        query : "SELECT GUID,CODE,NAME FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                                        query : `SELECT GUID,CODE,NAME FROM ITEMS_VW_04 
+                                                                                WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                                                         param : ['VAL:string|50']
                                                                     },
                                                                     sql:this.core.sql
@@ -716,7 +699,8 @@ export default class discountCard extends React.PureComponent
                                                                 {
                                                                     select:
                                                                     {
-                                                                        query : "SELECT GUID,CODE,NAME FROM ITEM_GROUP WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                                        query : `SELECT GUID,CODE,NAME FROM ITEM_GROUP 
+                                                                                WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                                                         param : ['VAL:string|50']
                                                                     },
                                                                     sql:this.core.sql
@@ -731,13 +715,7 @@ export default class discountCard extends React.PureComponent
                                                             {
                                                                 if(this.itemCondDt.where({LINK_GUID:data[i].GUID}).length > 0)
                                                                 {
-                                                                    let tmpConfObj =
-                                                                    {
-                                                                        id:'msgItemAlert',showTitle:true,title:this.t("msgItemAlert.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                                        button:[{id:"btn01",caption:this.t("msgItemAlert.btn01"),location:'after'}],
-                                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemAlert.msg")}</div>)
-                                                                    }
-                                                                    await dialog(tmpConfObj)
+                                                                    this.toast.show({message:this.t("msgItemAlert.msg"),type:"warning"})
                                                                     return
                                                                 }
                                                             }
@@ -784,29 +762,26 @@ export default class discountCard extends React.PureComponent
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-6">
-                                                    <NdButton type="danger" width="100%" icon={"trash"}
-                                                    onClick={async()=>
-                                                    {
-                                                        let tmpConfObj1 =
+                                                        <NdButton type="danger" width="100%" icon={"trash"}
+                                                        onClick={async()=>
                                                         {
-                                                            id:'msgDeleteAll',showTitle:true,title:this.t("msgDeleteAll.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                            button:[{id:"btn01",caption:this.t("msgDeleteAll.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDeleteAll.btn02"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgDeleteAll.msg")}</div>)
-                                                        }
-                                                        if((await dialog(tmpConfObj1)) == 'btn01')
-                                                        {
-                                                            this.itemCondDt.removeAll()
-                                                        }
-                                                    }}>
-                                                        <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
-                                                    </NdButton>
+                                                            let tmpConfObj1 =
+                                                            {
+                                                                id:'msgDeleteAll',showTitle:true,title:this.t("msgDeleteAll.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                                button:[{id:"btn01",caption:this.t("msgDeleteAll.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDeleteAll.btn02"),location:'after'}],
+                                                                content:(<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgDeleteAll.msg")}</div>)
+                                                            }
+
+                                                            if((await dialog(tmpConfObj1)) == 'btn01')
+                                                            {
+                                                                this.itemCondDt.removeAll()
+                                                            }
+                                                        }}>
+                                                            <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
+                                                        </NdButton>
                                                     </div>
                                                     <div className="col-6">
-                                                        <NdButton type="success" width="100%" icon={"todo"}
-                                                        onClick={()=>
-                                                        {
-                                                            this.popPrmItemList.hide()
-                                                        }}>
+                                                        <NdButton type="success" width="100%" icon={"todo"} onClick={()=>{this.popPrmItemList.hide()}}>
                                                             <i className="text-white fa-solid fa-xmark" style={{fontSize: "24px"}} />
                                                         </NdButton>
                                                     </div>

@@ -265,7 +265,13 @@ export class NdGroupItem extends React.PureComponent
 {
     render() 
     {
-        const { children,  className, style, colSpan = 1, caption, colCount = 1, captionStyle, groupStyle } = this.props;
+        const { children, className, style, colSpan = 1, caption, colCount = 1, captionStyle, groupStyle, visible = true } = this.props;
+        
+        // Eğer visible false ise hiçbir şey render etme
+        if (!visible) 
+        {
+            return null;
+        }
         
         // Gruplar arası mesafeyi artırmak için marginBottom ekliyoruz
         const groupWrapperStyle = 
@@ -307,7 +313,6 @@ export class NdGroupItem extends React.PureComponent
         );
     }
 }
-
 export class NdEmptyItem extends React.PureComponent 
 {
     render() 
