@@ -1,4 +1,4 @@
-// "Yazıcı Tanıtım",
+    // "Yazıcı Tanıtım",
 const rest_01_003 = 
 {
     txtCode: "Code",
@@ -39,6 +39,10 @@ const rest_01_003 =
         btn01: "OK",
         btn02: "Annuler",
         msg: "Êtes-vous sûr de vouloir supprimer cet enregistrement ?"
+    },
+    msgDeleteResult:
+    {
+        msgSuccess: "Enregistrement supprimé avec succès !"
     },
     msgCode: 
     {

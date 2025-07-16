@@ -38,6 +38,10 @@ const rest_01_002 =
         btn02: "Vazgeç",
         msg: "Kaydı silmek istediğinize eminmisiniz ?"
     },
+    msgDeleteResult:
+    {
+        msgSuccess: "Kayıt silme işleminiz başarılı !"
+    },
     msgCode : 
     {
         title: "Dikkat",

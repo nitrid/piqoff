@@ -25,7 +25,7 @@ const rest_01_001 =
         msgFailed: "Record operation failed !"
     },
     msgSaveValid:
-    {
+    {   
         title: "Attention",
         btn01: "OK",
         msg: "Please fill in the required fields !"
@@ -36,6 +36,10 @@ const rest_01_001 =
         btn01: "OK",
         btn02: "Cancel",
         msg: "Are you sure you want to delete the record ?"
+    },
+    msgDeleteResult:
+    {
+        msgSuccess: "Record deletion successful !"
     },
     msgCode : 
     {

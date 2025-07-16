@@ -6,9 +6,7 @@ import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar,{ Item } from 'devextreme-react/toolbar';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import NdButton from '../../../../core/react/devex/button.js';
-import NbTableView from "../../../../rest/tools/tableView.js"
-import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
+import NbTableView from "../../../../rest/tools/tableView.js";
 
 export default class TableWatch extends React.PureComponent
 {

@@ -40,6 +40,10 @@ const rest_01_003 =
         btn02: "Cancel",
         msg: "Are you sure you want to delete the record ?"
     },
+    msgDeleteResult:
+    {
+        msgSuccess: "Record deletion successful !"
+    },
     msgCode : 
     {
         title: "Attention",

@@ -4,18 +4,16 @@ import { restPropertyCls } from '../../../../core/cls/rest.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import Form, { Item} from 'devextreme-react/form';
 import { Button } from 'devextreme-react/button';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdTextBox, { Validator, RequiredRule} from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
-import NbButton from '../../../../core/react/bootstrap/button';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
+import { NdForm, NdItem, NdLabel } from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class PropertyCard extends React.PureComponent
 {
@@ -112,7 +110,7 @@ export default class PropertyCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT * FROM REST_PROPERTY WHERE CODE = @CODE AND DELETED = 0",
+                    query :"SELECT GUID, CODE, NAME FROM REST_PROPERTY WHERE CODE = @CODE AND DELETED = 0",
                     param : ['CODE:string|50'],
                     value : [pCode]
                 }
@@ -127,7 +125,7 @@ export default class PropertyCard extends React.PureComponent
                         title:this.t("msgCode.title"),
                         showCloseButton:true,
                         width:'500px',
-                        height:'200px',
+                        height:'auto',
                         button:[{id:"btn01",caption:this.t("msgCode.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCode.btn02"),location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCode.msg")}</div>)
                     }
@@ -170,13 +168,7 @@ export default class PropertyCard extends React.PureComponent
             
             if(duplicateItems.length > 0)
             {
-                let tmpConfObj =
-                {
-                    id:'msgDuplicateItems',showTitle:true,title:this.t("msgDuplicateItems.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgDuplicateItems.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDuplicateItems.msg") + " " + duplicateItems.join(", ")}</div>)
-                }
-                await dialog(tmpConfObj);
+                this.toast.show({message:this.t("msgDuplicateItems.msg") + " " + duplicateItems.join(", "),type:"warning"})
                 return
             }
             else
@@ -202,7 +194,7 @@ export default class PropertyCard extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -237,7 +229,7 @@ export default class PropertyCard extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
@@ -247,7 +239,7 @@ export default class PropertyCard extends React.PureComponent
                                             {
                                                 let tmpConfObj1 =
                                                 {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
 
@@ -260,8 +252,7 @@ export default class PropertyCard extends React.PureComponent
                                                 {                                      
                                                     this.btnNew.setState({disabled:false});
                                                     this.btnSave.setState({disabled:true});              
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
+                                                    this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
                                                 }
                                                 else
                                                 {
@@ -274,7 +265,7 @@ export default class PropertyCard extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
                                             }
@@ -289,7 +280,7 @@ export default class PropertyCard extends React.PureComponent
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
@@ -301,6 +292,7 @@ export default class PropertyCard extends React.PureComponent
                                             this.propertyObj.dt().removeAt(0)
                                             await this.propertyObj.dt().delete();
                                             await this.propertyObj.dt("REST_ITEM_PROPERTY").delete();
+                                            this.toast.show({message:this.t("msgDeleteResult.msgSuccess"),type:"success"})
                                             this.init(); 
                                         }
                                         
@@ -318,7 +310,7 @@ export default class PropertyCard extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -336,10 +328,10 @@ export default class PropertyCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3}>
+                            <NdForm colCount={3}>
                                 {/* txtCode */}
-                                <Item>
-                                    <Label text={this.t("txtCode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.propertyObj.dt(),field:"CODE"}}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
@@ -386,9 +378,10 @@ export default class PropertyCard extends React.PureComponent
                                         </Validator>  
                                     </NdTextBox>
                                     {/* ÖZELLİK SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_txtCode"} parent={this} 
+                                    container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -400,28 +393,28 @@ export default class PropertyCard extends React.PureComponent
                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
                                     </NdPopGrid>
-                                </Item>
+                                </NdItem>
                                 {/* txtTitle */}
-                                <Item>
-                                    <Label text={this.t("txtName")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtName")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.propertyObj.dt(),field:"NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}                                    
                                     param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtSelection */}
-                                <Item>
-                                    <Label text={this.t("txtSelection")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtSelection")} alignment="right" />
                                     <NdTextBox id="txtSelection" parent={this} simple={true} dt={{data:this.propertyObj.dt(),field:"SELECTION"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}                                    
                                     param={this.param.filter({ELEMENT:'txtSelection',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtSelection',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -542,9 +535,10 @@ export default class PropertyCard extends React.PureComponent
                     </div>
                     {/* ÜRÜN SECIMI POPUP */}
                     <div>
-                        <NdPopGrid id={"pgProduct"} parent={this} container={"#root"}
+                        <NdPopGrid id={"pgProduct"} parent={this} 
+                        container={'#' + this.props.data.id + this.tabIndex}
                         visible={false}
-                        position={{of:'#root'}} 
+                        position={{of:'#' + this.props.data.id + this.tabIndex}} 
                         showTitle={true} 
                         showBorders={true}
                         width={'90%'}
@@ -557,6 +551,7 @@ export default class PropertyCard extends React.PureComponent
                             <Column dataField="NAME" caption={this.t("pgProduct.clmName")} width={300} defaultSortOrder="asc" />
                         </NdPopGrid>
                     </div>
+                    <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )
