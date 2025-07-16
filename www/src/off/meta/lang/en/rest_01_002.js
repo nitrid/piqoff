@@ -1,4 +1,4 @@
-// "Özellik Tanıtım",
+        // "Özellik Tanıtım",
 const rest_01_002 =
 {
     txtCode : "Code",
@@ -37,6 +37,10 @@ const rest_01_002 =
         btn01: "OK",
         btn02: "Cancel",
         msg: "Are you sure you want to delete the record ?"
+    },
+    msgDeleteResult:
+    {
+        msgSuccess: "Record deletion successful !"
     },
     msgCode : 
     {

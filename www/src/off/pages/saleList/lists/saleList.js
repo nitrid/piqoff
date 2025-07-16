@@ -2,8 +2,8 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
+import Form, { Label,Item } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import { docCls,docExtraCls} from '../../../../core/cls/doc.js';
 import { nf525Cls } from '../../../../core/cls/nf525.js';
@@ -16,6 +16,7 @@ import NdTabPanel from '../../../../core/react/devex/tabpanel.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
+import {NdToast} from '../../../../core/react/devex/toast.js';
 
 export default class saleList extends React.PureComponent
 {
@@ -23,16 +24,17 @@ export default class saleList extends React.PureComponent
     {
         super(props)
 
-     
         this.core = App.instance.core;
         this.nf525 = new nf525Cls();
         this.extraObj = new docExtraCls();
 
         this.groupList = [];
-        this._btnOffersGetClick = this._btnOffersGetClick.bind(this)
-        this._btnOrdersGetClick = this._btnOrdersGetClick.bind(this)
-        this._btnDispatchGetClick = this._btnDispatchGetClick.bind(this)
-        this._btnInvoiceGetClick = this._btnInvoiceGetClick.bind(this)
+        this.btnOffersGetClick = this.btnOffersGetClick.bind(this)
+        this.btnOrdersGetClick = this.btnOrdersGetClick.bind(this)
+        this.btnDispatchGetClick = this.btnDispatchGetClick.bind(this)
+        this.btnInvoiceGetClick = this.btnInvoiceGetClick.bind(this)
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
@@ -41,13 +43,24 @@ export default class saleList extends React.PureComponent
             this.init()
         }, 1000);
     }
+    loadState()
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
     async init()
     {
         this.dtFirst.startDate=moment(new Date()).format("YYYY-MM-DD");
         this.dtFirst.endDate=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
     }
-    async _btnOffersGetClick()
+    async btnOffersGetClick()
     {
         let tmpSource =
         {
@@ -74,7 +87,7 @@ export default class saleList extends React.PureComponent
         await this.grdOfferList.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
     }
-    async _btnOrdersGetClick()
+    async btnOrdersGetClick()
     {
         let tmpSource1 =
         {
@@ -101,7 +114,7 @@ export default class saleList extends React.PureComponent
         await this.grdOrderList.dataRefresh(tmpSource1)
         App.instance.setState({isExecute:false})
     }
-    async _btnDispatchGetClick()
+    async btnDispatchGetClick()
     {
         let tmpSource2 =
         {
@@ -128,7 +141,7 @@ export default class saleList extends React.PureComponent
         await this.grdDispatchList.dataRefresh(tmpSource2)
         App.instance.setState({isExecute:false})
     }
-    async _btnInvoiceGetClick()
+    async btnInvoiceGetClick()
     {
         let tmpSource3 =
         {
@@ -159,7 +172,7 @@ export default class saleList extends React.PureComponent
     {
         let tmpConfObj =
         {
-            id:'msgConvertInvoices',showTitle:true,title:this.t("msgConvertInvoices.title"),showCloseButton:false,width:'500px',height:'200px',
+            id:'msgConvertInvoices',showTitle:true,title:this.t("msgConvertInvoices.title"),showCloseButton:false,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgConvertInvoices.btn01"),location:'before'},{id:"btn02",caption:this.t("msgConvertInvoices.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertInvoices.msg")}</div>)
         }
@@ -322,7 +335,7 @@ export default class saleList extends React.PureComponent
         App.instance.setState({isExecute:false})
         let tmpConfObj2 =
         {
-            id:'msgConvertSucces',showTitle:true,title:this.t("msgConvertSucces.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgConvertSucces',showTitle:true,title:this.t("msgConvertSucces.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgConvertSucces.btn01"),location:'before'},{id:"btn02",caption:this.t("msgConvertSucces.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertSucces.msg")}</div>)
         }
@@ -387,13 +400,14 @@ export default class saleList extends React.PureComponent
                     }
                 });
             App.instance.setState({isExecute:false})
+            this.toast.show({message:this.t("msgConvertSucces.msg"),type:"success"})
         }
     }
     async printDispatch()
     {
         let tmpConfObj =
         {
-            id:'msgPrintDispatch',showTitle:true,title:this.t("msgPrintDispatch.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgPrintDispatch',showTitle:true,title:this.t("msgPrintDispatch.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgPrintDispatch.btn01"),location:'before'},{id:"btn02",caption:this.t("msgPrintDispatch.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPrintDispatch.msg")}</div>)
         }
@@ -421,8 +435,6 @@ export default class saleList extends React.PureComponent
        
         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
         {
-            console.log(pResult.split('|')[0])
-            console.log(pResult.split('|')[1])
             if(pResult.split('|')[0] != 'ERR')
             {
                 var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
@@ -496,7 +508,8 @@ export default class saleList extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
+                <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -513,7 +526,7 @@ export default class saleList extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -575,14 +588,24 @@ export default class saleList extends React.PureComponent
                                                 }
                                             }
                                         },
+                                        {
+                                            id:'02',
+                                            icon:'clear',
+                                            onClick:()=>
+                                            {
+                                                this.txtCustomerCode.setState({value:''})
+                                                this.txtCustomerCode.CODE =''
+                                            }
+                                        }
                                     ]
                                 }
                                 >
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} 
+                                container={"#" + this.props.data.id + this.tabIndex}
                                 visible={false}
-                                position={{of:'#root'}} 
+                                position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                 showTitle={true} 
                                 showBorders={true}
                                 width={'90%'}
@@ -595,7 +618,7 @@ export default class saleList extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql
@@ -640,7 +663,7 @@ export default class saleList extends React.PureComponent
                                         
                                         </div>
                                         <div className="col-3">
-                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnOffersGetClick}></NdButton>
+                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnOffersGetClick}></NdButton>
                                         </div>
                                     </div>
                                     <div className="row px-2 pt-2">
@@ -739,10 +762,9 @@ export default class saleList extends React.PureComponent
                                 <Item title={this.t("tabTitleOrder")} text={"tbOrder"}>
                                     <div className="row px-2 pt-2">
                                         <div className="col-9">
-                                        
                                         </div>
                                         <div className="col-3">
-                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnOrdersGetClick}></NdButton>
+                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnOrdersGetClick}></NdButton>
                                         </div>
                                     </div>
                                     <div className="row px-2 pt-2">
@@ -844,7 +866,7 @@ export default class saleList extends React.PureComponent
                                         
                                         </div>
                                         <div className="col-3">
-                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnDispatchGetClick}></NdButton>
+                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnDispatchGetClick}></NdButton>
                                         </div>
                                     </div>
                                     <div className="row px-2 pt-2">
@@ -946,7 +968,7 @@ export default class saleList extends React.PureComponent
                                         
                                         </div>
                                         <div className="col-3">
-                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnInvoiceGetClick}></NdButton>
+                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnInvoiceGetClick}></NdButton>
                                         </div>
                                     </div>
                                     <div className="row px-2 pt-2">

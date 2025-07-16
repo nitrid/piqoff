@@ -38,6 +38,10 @@ const rest_01_002 =
         btn02: "Annuler",
         msg: "Êtes-vous sûr de vouloir supprimer cet enregistrement ?"
     },
+    msgDeleteResult:
+    {
+        msgSuccess: "Enregistrement supprimé avec succès !"
+    },
     msgCode: 
     {
         title: "Attention",
