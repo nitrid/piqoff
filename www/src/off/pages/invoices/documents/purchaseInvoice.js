@@ -22,6 +22,8 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdDocAi from '../../../tools/NdDocAi';
+import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form';
+import {NdToast} from '../../../../core/react/devex/toast';
 
 export default class purchaseInvoice extends DocBase
 {
@@ -119,13 +121,7 @@ export default class purchaseInvoice extends DocBase
             }
             else
             {
-                let tmpConfObj =
-                {
-                    id:'msgFourniseurNotFound',showTitle:true,title:this.t("msgFourniseurNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgFourniseurNotFound.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgFourniseurNotFound.msg")}</div>)
-                }
-                await dialog(tmpConfObj);
+                this.toast.show({message:this.t("msgFourniseurNotFound.msg"),type:"warning"})
                 return
             }
 
@@ -148,7 +144,7 @@ export default class purchaseInvoice extends DocBase
                             "I.COST_PRICE AS COST_PRICE, " +
                             "I.VAT AS VAT " +
                             "FROM ITEM_MULTICODE AS M " + 
-                            "INNER JOIN ITEMS_VW_01 AS I ON " + 
+                            "INNER JOIN ITEMS_VW_04 AS I ON " + 
                             "M.ITEM = I.GUID " + 
                             "WHERE M.CODE = @CODE AND M.CUSTOMER = @CUSTOMER",
                     param : ['CODE:string|50','CUSTOMER:string|50'],
@@ -194,7 +190,7 @@ export default class purchaseInvoice extends DocBase
     }
     saveState(e)
     {
-        let tmpSave = this.access.filter({ELEMENT:'grdPurcInvState',USERS:this.user.CODE})
+        let tmpSave = this.access.filter({ELEMENT:'grdPurcInvState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
         tmpSave.setValue(e)
         tmpSave.save()
     }
@@ -259,10 +255,10 @@ export default class purchaseInvoice extends DocBase
                     {
                         select:
                         {
-                            query : "SELECT GUID,CODE,NAME,VAT,ITEMS_VW_01.UNIT,0 AS ITEM_TYPE," + 
-                                    "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE ITEM_PRICE.ITEM = ITEMS_VW_01.GUID AND ITEM_PRICE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0),COST_PRICE) AS PURC_PRICE,COST_PRICE, " +
-                                    "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_01.GUID AND CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "'  AND DELETED = 0),'') AS MULTICODE,STATUS " +
-                                    "FROM ITEMS_VW_01 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
+                            query : "SELECT GUID,CODE,NAME,VAT,ITEMS_VW_04.UNIT,0 AS ITEM_TYPE," + 
+                                    "ISNULL((SELECT TOP 1 PRICE FROM ITEM_PRICE WHERE ITEM_PRICE.ITEM = ITEMS_VW_04.GUID AND ITEM_PRICE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0),COST_PRICE) AS PURC_PRICE,COST_PRICE, " +
+                                    "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_04.GUID AND CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "'  AND DELETED = 0),'') AS MULTICODE,STATUS " +
+                                    "FROM ITEMS_VW_04 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
                             param : ['VAL:string|50']
                         },
                         sql:this.core.sql
@@ -277,10 +273,10 @@ export default class purchaseInvoice extends DocBase
                     source:
                     {
                         select:
-                        {   query : "SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_01.VAT,ITEMS_VW_01.UNIT,BARCODE,PARTILOT_GUID,LOT_CODE, " +
-                                    "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_01.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
-                                    "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                    "FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEMS_VW_01.STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
+                        {   query : "SELECT ITEMS_VW_04.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_04.VAT,ITEMS_VW_04.UNIT,BARCODE,PARTILOT_GUID,LOT_CODE, " +
+                                    "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
+                                    "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_04.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
+                                    "FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEMS_VW_04.STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
                             param : ['BARCODE:string|50'],
                         },
                         sql:this.core.sql
@@ -406,7 +402,7 @@ export default class purchaseInvoice extends DocBase
                     {
                         let tmpQuery = 
                         {
-                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE,ITEMS_VW_01.UNIT FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                            query :"SELECT ITEMS_VW_04.GUID,CODE,NAME,VAT,COST_PRICE,ITEMS_VW_04.UNIT FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
                             param : ['CODE:string|50'],
                             value : [r.component._changedValue]
                         }
@@ -418,14 +414,7 @@ export default class purchaseInvoice extends DocBase
                         }
                         else
                         {
-                            let tmpConfObj =
-                            {
-                                id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                                button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                            }
-                
-                            await dialog(tmpConfObj);
+                            this.toast.show({message:this.t("msgItemNotFound.msg"),type:"warning"})
                         }
                     }
                 }).bind(this)}
@@ -671,7 +660,7 @@ export default class purchaseInvoice extends DocBase
                                   {
                                     let tmpConfObj1 =
                                     {
-                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                         button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                     }
                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
@@ -733,7 +722,7 @@ export default class purchaseInvoice extends DocBase
                         {   
                             let tmpConfObj =
                             {
-                                id:'msgCompulsoryCustomer',showTitle:true,title:this.t("msgCompulsoryCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
+                                id:'msgCompulsoryCustomer',showTitle:true,title:this.t("msgCompulsoryCustomer.title"),showCloseButton:true,width:'500px',height:'auto',
                                 button:[{id:"btn01",caption:this.t("msgCompulsoryCustomer.btn01"),location:'after'}],
                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCompulsoryCustomer.msg") + " " + pData.NAME}</div>)
                             }
@@ -819,8 +808,8 @@ export default class purchaseInvoice extends DocBase
 
             let tmpGrpQuery = 
             {
-                query : "SELECT ORGINS,UNIT_SHORT,PARTILOT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),1) AS SUB_FACTOR, " +
-                        "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),'') AS SUB_SYMBOL FROM ITEMS_VW_01 WHERE GUID = @GUID",
+                query : "SELECT ORGINS,UNIT_SHORT,PARTILOT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),1) AS SUB_FACTOR, " +
+                        "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.ID = @ID),'') AS SUB_SYMBOL FROM ITEMS_GRP_VW_01 WHERE GUID = @GUID",
                 param : ['GUID:string|50','ID:string|20'],
                 value : [pData.GUID,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
             }
@@ -1000,7 +989,7 @@ export default class purchaseInvoice extends DocBase
         {
             let tmpConfObj =
             {
-                id:'msgMultiData',showTitle:true,title:this.t("msgMultiData.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgMultiData',showTitle:true,title:this.t("msgMultiData.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.t("msgMultiData.btn01"),location:'before'},{id:"btn02",caption:this.t("msgMultiData.btn02"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiData.msg")}</div>)
             }
@@ -1023,7 +1012,7 @@ export default class purchaseInvoice extends DocBase
                             "CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, " +
                             "CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, " + 
                             "ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID AND CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED =0),'') AS MULTICODE " +
-                            "FROM ITEMS_VW_01 AS ITEMS " + 
+                            "FROM ITEMS_VW_04 AS ITEMS " + 
                             "LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON " +
                             "ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '" + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + "' " +
                             "WHERE ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID AND CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED =0),'') = @VALUE AND ITEMS.STATUS = 1" ,
@@ -1054,7 +1043,7 @@ export default class purchaseInvoice extends DocBase
                             "CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, " +
                             "CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, " + 
                             "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE WHERE DELETED = 0 AND ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE " +
-                            "FROM ITEMS_VW_01 AS ITEMS " +
+                            "FROM ITEMS_VW_04 AS ITEMS " +
                             "LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON " +
                             "ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '" + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + "' " +
                             "WHERE ITEMS.CODE = @VALUE AND ITEMS.STATUS = 1" ,
@@ -1089,7 +1078,7 @@ export default class purchaseInvoice extends DocBase
         }
         let tmpConfObj =
         {
-            id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgMultiCodeCount.btn01"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiCodeCount.msg") + ' ' +tmpCounter}</div>)
         }
@@ -1117,7 +1106,7 @@ export default class purchaseInvoice extends DocBase
                         "ISNULL((SELECT TOP 1 GUID FROM ITEM_UNIT WHERE TYPE = 0 AND DELETED = 0 AND ITEM_UNIT.ITEM = ITEMS.GUID),'00000000-0000-0000-0000-000000000000') AS UNIT," +
                         "0 AS ITEM_TYPE," +
                         "COST_PRICE AS COST_PRICE " +
-                        "FROM ITEMS_VW_01 AS ITEMS WHERE ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID AND CUSTOMER = @CUSTOMER_GUID AND DELETED =0),'') = @VALUE AND STATUS = 1" ,
+                        "FROM ITEMS_VW_04 AS ITEMS WHERE ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID AND CUSTOMER = @CUSTOMER_GUID AND DELETED =0),'') = @VALUE AND STATUS = 1" ,
                 param : ['CUSTOMER_GUID:string|50','VALUE:string|50'],
                 value : [this.docObj.dt()[0].OUTPUT,pdata[i][tmpShema.CODE]]
             }
@@ -1148,7 +1137,7 @@ export default class purchaseInvoice extends DocBase
         }
         let tmpConfObj =
         {
-            id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgMultiCodeCount.btn01"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiCodeCount.msg") + ' ' +tmpCounter}</div>)
         }
@@ -1170,7 +1159,7 @@ export default class purchaseInvoice extends DocBase
     {
         let tmpConfObj =
         {
-            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
         }
@@ -1313,7 +1302,7 @@ export default class purchaseInvoice extends DocBase
             
             let tmpConfObj =
             {
-                id:'msgPriceDateUpdate',showTitle:true,title:this.t("msgPriceDateUpdate.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgPriceDateUpdate',showTitle:true,title:this.t("msgPriceDateUpdate.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.t("msgPriceDateUpdate.btn01"),location:'before'},{id:"btn02",caption:this.t("msgPriceDateUpdate.btn02"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPriceDateUpdate.msg")}</div>)
             }
@@ -1405,14 +1394,13 @@ export default class purchaseInvoice extends DocBase
             }
             let tmpConfObj1 =
             {
-                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
             }
             
             if((await this.docObj.save()) == 0)
             {                                                    
-                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                await dialog(tmpConfObj1);
+                this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
 
                 if(typeof this.piqX != 'undefined')
                 {
@@ -1549,27 +1537,12 @@ export default class purchaseInvoice extends DocBase
                                     {
                                         if(this.docLocked == true)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocLocked',showTitle:true,title:this.t("msgDocLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocLocked.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocLocked.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDocLocked.msg"),type:"warning"})
                                             return
                                         }
                                         if(typeof this.docObj.docItems.dt()[0] == 'undefined')
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgNotRow',showTitle:true,title:this.lang.t("msgNotRow.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.lang.t("msgNotRow.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotRow.msg")}</div>)
-                                            }
-
-                                            await dialog(tmpConfObj);
-                                            this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
+                                            this.toast.show({message:this.t("msgNotRow.msg"),type:"warning"})
                                             return
                                         }
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
@@ -1582,14 +1555,7 @@ export default class purchaseInvoice extends DocBase
                                         }                              
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgSaveValid.msg"),type:"warning"})
                                         }                                                 
                                     }}/>
                                 </Item>
@@ -1600,19 +1566,12 @@ export default class purchaseInvoice extends DocBase
                                         if(this.docObj.dt()[0].LOCKED != 0)
                                         {
                                             this.docLocked = true
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgGetLocked.msg"),type:"warning"})
                                             return
                                         }
                                         let tmpConfObj =
                                         {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
@@ -1640,15 +1599,7 @@ export default class purchaseInvoice extends DocBase
                                     {
                                         if(typeof this.docObj.docItems.dt()[0] == 'undefined')
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgNotRow',showTitle:true,title:this.lang.t("msgNotRow.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.lang.t("msgNotRow.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotRow.msg")}</div>)
-                                            }
-
-                                            await dialog(tmpConfObj);
-                                            this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
+                                            this.toast.show({message:this.t("msgNotRow.msg"),type:"warning"})
                                             return
                                         }
                                         if(this.docObj.dt()[0].LOCKED == 0)
@@ -1660,14 +1611,7 @@ export default class purchaseInvoice extends DocBase
                                             }
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgLocked',showTitle:true,title:this.t("msgLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgLocked.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgLocked.msg")}</div>)
-                                                }
-
-                                                await dialog(tmpConfObj);
+                                                this.toast.show({message:this.t("msgLocked.msg"),type:"success"})
                                             }
                                             else
                                             {
@@ -1711,16 +1655,9 @@ export default class purchaseInvoice extends DocBase
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async()=>
                                     {
-                                        console.log(this.docObj.isSaved)                             
                                         if(this.docObj.isSaved == false)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
-                                            }
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("isMsgSave.msg"),type:"warning"})
                                             return
                                         }
                                         else
@@ -1741,7 +1678,7 @@ export default class purchaseInvoice extends DocBase
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -1760,10 +1697,10 @@ export default class purchaseInvoice extends DocBase
                     {/* Form */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id={"frmDoc"  + this.tabIndex}>
+                            <NdForm colCount={3} id={"frmDoc"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
-                                <Item>
-                                    <Label text={this.t("txtRefRefno")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
                                         <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
@@ -1822,7 +1759,7 @@ export default class purchaseInvoice extends DocBase
                                                     {
                                                         let tmpConfObj =
                                                         {
-                                                            id:'msgDocDeleted',showTitle:true,title:this.lang.t("msgDocDeleted.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            id:'msgDocDeleted',showTitle:true,title:this.lang.t("msgDocDeleted.title"),showCloseButton:true,width:'500px',height:'auto',
                                                             button:[{id:"btn01",caption:this.lang.t("msgDocDeleted.btn01"),location:'after'}],
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDocDeleted.msg")}</div>)
                                                         }
@@ -1849,10 +1786,10 @@ export default class purchaseInvoice extends DocBase
                                             </NdTextBox>
                                         </div>
                                     </div>
-                                </Item>
+                                </NdItem>
                                 {/* cmbDepot */}
-                                <Item>
-                                    <Label text={this.t("cmbDepot")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true}
                                         dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}  
                                         displayExpr="NAME"                       
@@ -1876,9 +1813,9 @@ export default class purchaseInvoice extends DocBase
                                                 <RequiredRule message={this.t("validDepot")} />
                                             </Validator> 
                                         </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtDocNo")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("txtDocNo")} alignment="right" />
                                     <NdTextBox id="txtDocNo" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_NO"}} 
@@ -1889,10 +1826,10 @@ export default class purchaseInvoice extends DocBase
                                     }}
                                     >
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtCustomerCode */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}  notRefresh = {true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_CODE"}} 
@@ -1900,14 +1837,7 @@ export default class purchaseInvoice extends DocBase
                                     {
                                         if(this.docObj.docItems.dt().length > 0)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgCustomerLock.msg"),type:"warning"})
                                             return;
                                         }
                                         
@@ -1976,14 +1906,7 @@ export default class purchaseInvoice extends DocBase
                                                 {
                                                     if(this.docObj.docItems.dt().length > 0)
                                                     {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgCustomerLock',showTitle:true,title:this.t("msgCustomerLock.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgCustomerLock.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerLock.msg")}</div>)
-                                                        }
-                                                        
-                                                        await dialog(tmpConfObj);
+                                                        this.toast.show({message:this.t("msgCustomerLock.msg"),type:"warning"})
                                                         return;
                                                     }
                                                     this.pg_txtCustomerCode.show()
@@ -2049,10 +1972,10 @@ export default class purchaseInvoice extends DocBase
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
-                                </Item> 
+                                </NdItem> 
                                 {/* txtCustomerName */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT_NAME"}} 
@@ -2061,12 +1984,12 @@ export default class purchaseInvoice extends DocBase
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item> 
+                                </NdItem> 
                                 {/* Boş */}
-                                <EmptyItem />
+                                <NdEmptyItem />
                                 {/* dtDocDate */}
-                                <Item>
-                                    <Label text={this.t("dtDocDate")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                     onValueChanged={(async()=>
@@ -2079,10 +2002,10 @@ export default class purchaseInvoice extends DocBase
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
-                                </Item>
+                                </NdItem>
                                 {/* dtShipDate */}
-                                <Item>
-                                    <Label text={this.t("dtShipDate")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("dtShipDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtShipDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
                                     onValueChanged={(async()=>
@@ -2094,12 +2017,12 @@ export default class purchaseInvoice extends DocBase
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
-                                </Item>
+                                </NdItem>
                                 {/* Boş */}
-                                <EmptyItem />
+                                <NdEmptyItem />
                                 {/* txtBarcode */}
-                                <Item>
-                                    <Label text={this.t("txtBarcode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
@@ -2112,14 +2035,7 @@ export default class purchaseInvoice extends DocBase
                                                 {
                                                     if(this.cmbDepot.value == '' || this.txtCustomerCode.value == '')
                                                     {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                                        }
-                                                        
-                                                        await dialog(tmpConfObj);
+                                                        this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
                                                         this.txtBarcode.value = ''
                                                         return
                                                     }
@@ -2154,14 +2070,7 @@ export default class purchaseInvoice extends DocBase
                                         }
                                         if(this.cmbDepot.value == '')
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
                                             this.txtBarcode.value = ''
                                             return
                                         }
@@ -2211,10 +2120,10 @@ export default class purchaseInvoice extends DocBase
                                     access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* Vade Tarih */}
-                                <Item>
-                                    <Label text={this.t("dtExpDate")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("dtExpDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtExpDate"}
                                     dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_DATE"}}
                                     >
@@ -2222,8 +2131,8 @@ export default class purchaseInvoice extends DocBase
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>                    
                     {/* Grid */}
@@ -2274,14 +2183,7 @@ export default class purchaseInvoice extends DocBase
                                         }
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
                                         }
                                     }}/>
                                     <Button icon="add" text={this.t("serviceAdd")}
@@ -2324,14 +2226,7 @@ export default class purchaseInvoice extends DocBase
                                         }
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
                                         }
                                     }}/>
                                     <Button icon="add" text={this.lang.t("collectiveItemAdd")}
@@ -2349,14 +2244,7 @@ export default class purchaseInvoice extends DocBase
                                         }
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
                                         }
                                     }}/>  
                                     <Button icon="xlsxfile" text={this .t("excelAdd")}
@@ -2405,14 +2293,7 @@ export default class purchaseInvoice extends DocBase
                                             if(this.docLocked == true)
                                             {
                                                 e.cancel = true
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
-                                                }
-
-                                                dialog(tmpConfObj);
+                                                this.toast.show({message:this.t("msgGetLocked.msg"),type:"warning"})
                                                 e.component.cancelEditData()
                                             }
                                             if(typeof e.newData.QUANTITY != 'undefined')
@@ -2428,7 +2309,7 @@ export default class purchaseInvoice extends DocBase
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgNegativePrice',showTitle:true,title:this.t("msgNegativePrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgNegativePrice',showTitle:true,title:this.t("msgNegativePrice.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgNegativePrice.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNegativePrice.msg")}</div>)
                                                 }
@@ -2513,7 +2394,7 @@ export default class purchaseInvoice extends DocBase
                                                 {
                                                     let tmpConfObj =
                                                     {
-                                                        id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        id:'msgDiscount',showTitle:true,title:this.t("msgDiscount.title"),showCloseButton:true,width:'500px',height:'auto',
                                                         button:[{id:"btn01",caption:this.t("msgDiscount.btn01"),location:'after'}],
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscount.msg")}</div>)
                                                     }
@@ -2661,13 +2542,7 @@ export default class purchaseInvoice extends DocBase
                                                                 {
                                                                     if(this.docObj.isSaved == false)
                                                                     {
-                                                                        let tmpConfObj =
-                                                                        {
-                                                                            id:'isMsgSave',showTitle:true,title:this.t("isMsgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                            button:[{id:"btn01",caption:this.t("isMsgSave.btn01"),location:'after'}],
-                                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("isMsgSave.msg")}</div>)
-                                                                        }
-                                                                        await dialog(tmpConfObj);
+                                                                        this.toast.show({message:this.t("isMsgSave.msg"),type:"warning"})
                                                                         return
                                                                     }
                                                                     App.instance.menuClick(
@@ -2902,9 +2777,9 @@ export default class purchaseInvoice extends DocBase
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDesign.design")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
                                     displayExpr="DESIGN_NAME"                       
                                     valueExpr="TAG"
@@ -2918,9 +2793,9 @@ export default class purchaseInvoice extends DocBase
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
-                                <Label text={this.t("popDesign.lang")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                <NdLabel text={this.t("popDesign.lang")} alignment="right" />
                                 <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
@@ -2929,8 +2804,8 @@ export default class purchaseInvoice extends DocBase
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
@@ -3036,8 +2911,8 @@ export default class purchaseInvoice extends DocBase
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div>
                     {/* Detay PopUp */}
@@ -3119,9 +2994,9 @@ export default class purchaseInvoice extends DocBase
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popMailSend.cmbMailAddress")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbMailAddress"
                                     displayExpr="MAIL_ADDRESS"                       
                                     valueExpr="GUID"
@@ -3132,9 +3007,9 @@ export default class purchaseInvoice extends DocBase
                                     access={this.access.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
                                     >
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popMailSend.txtMailSubject")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popMailSend.txtMailSubject")} alignment="right" />
                                     <NdTextBox id="txtMailSubject" parent={this} simple={true}
                                     maxLength={128}
                                     >
@@ -3142,9 +3017,9 @@ export default class purchaseInvoice extends DocBase
                                             <RequiredRule message={this.t("validMail")} />
                                         </Validator> 
                                     </NdTextBox>
-                                </Item>
-                                <Item>
-                                <Label text={this.t("popMailSend.txtSendMail")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                <NdLabel text={this.t("popMailSend.txtSendMail")} alignment="right" />
                                     <NdTextBox id="txtSendMail" parent={this} simple={true}
                                     maxLength={128}
                                     >
@@ -3152,11 +3027,11 @@ export default class purchaseInvoice extends DocBase
                                             <RequiredRule message={this.t("validMail")} />
                                         </Validator> 
                                     </NdTextBox>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <NdHtmlEditor id="htmlEditor" parent={this} height={300} placeholder={this.t("placeMailHtmlEditor")}/>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popMailSend.btnSend")} type="normal" stylingMode="contained" width={'100%'}  
@@ -3192,7 +3067,7 @@ export default class purchaseInvoice extends DocBase
                                                             App.instance.setState({isExecute:false})
                                                             let tmpConfObj1 =
                                                             {
-                                                                id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'auto',
                                                                 button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
                                                             }
                                                             
@@ -3226,8 +3101,8 @@ export default class purchaseInvoice extends DocBase
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div>
                     {/* Document AI PopUp */}
@@ -3235,6 +3110,7 @@ export default class purchaseInvoice extends DocBase
                         <NdDocAi id={"popDocAi"} parent={this}/>
                     </div>
                     <div>{super.render()}</div>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>     
             </div>
         )

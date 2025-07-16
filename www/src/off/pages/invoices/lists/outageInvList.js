@@ -2,18 +2,17 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
+import Form, { Label,Item } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Paging,Pager,Export,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Export,Scrolling,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+
 
 export default class rebateInvList extends React.PureComponent
 {
@@ -21,27 +20,14 @@ export default class rebateInvList extends React.PureComponent
     {
         super(props)
 
-        this.state = 
-        {
-            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE','TOTAL']
-        }
+        
         
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "REF",NAME : this.t("grdSlsIvcList.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdSlsIvcList.clmRefNo")},
-            {CODE : "INPUT_CODE",NAME : this.t("grdSlsIvcList.clmInputCode")},                                   
-            {CODE : "INPUT_NAME",NAME : this.t("grdSlsIvcList.clmInputName")},
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdSlsIvcList.clmOutputName")},
-            {CODE : "DOC_DATE",NAME : this.t("grdSlsIvcList.clmDate")},
-            {CODE : "AMOUNT",NAME : this.t("grdSlsIvcList.clmAmount")},
-            {CODE : "VAT",NAME : this.t("grdSlsIvcList.clmVat")},
-            {CODE : "TOTAL",NAME : this.t("grdSlsIvcList.clmTotal")},
-        ]
+        
         this.groupList = [];
-        this._btnGetClick = this._btnGetClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
+        this.btnGetClick = this.btnGetClick.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
     }
     componentDidMount()
     {
@@ -50,75 +36,24 @@ export default class rebateInvList extends React.PureComponent
             this.Init()
         }, 1000);
     }
+    async loadState()
+    {
+        let tmpLoad = await this.access.filter({ELEMENT:'grdSlsIvcListState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    async saveState(e)
+    {
+        let tmpSave = await this.access.filter({ELEMENT:'grdSlsIvcListState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        await tmpSave.setValue(e)
+        await tmpSave.save()
+    }
     async Init()
     {
         this.dtFirst.value=moment(new Date()).format("YYYY-MM-DD");
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = '';
     }
-    _columnListBox(e)
-    {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }                
-                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('INPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
-                {
-                    this.groupList.push('TOTAL')
-                }
-                
-                for (let i = 0; i < this.grdSlsIvcList.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdSlsIvcList.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdSlsIvcList.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdSlsIvcList.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
-    }
-    async _btnGetClick()
+    async btnGetClick()
     {
         
         let tmpSource =
@@ -303,28 +238,22 @@ export default class rebateInvList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
+                            
+                        </div>
+                        <div className="col-3">
+                                
                         </div>
                         <div className="col-3">
                             
                         </div>
                         <div className="col-3">
-                            
-                        </div>
-                        <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdGrid id="grdSlsIvcList" parent={this} 
-                            selection={{mode:"multiple"}} 
+                            selection={{mode:"single"}} 
                             height={600}
                             showBorders={true}
                             filterRow={{visible:true}} 
@@ -346,6 +275,8 @@ export default class rebateInvList extends React.PureComponent
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsIvcList"}/>
+                                <ColumnChooser enabled={true} />
                                 <Export fileName={this.lang.t("menuOff.ftr_01_003")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdSlsIvcList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdSlsIvcList.clmRefNo")} visible={true} width={100}/> 

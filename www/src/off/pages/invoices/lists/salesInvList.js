@@ -7,8 +7,6 @@ import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
 import NdGrid,{Column,Paging,Pager,Export,Editing,Scrolling,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -16,6 +14,7 @@ import NdPopUp from '../../../../core/react/devex/popup.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdTextBox, { Validator, RequiredRule, RangeRule } from '../../../../core/react/devex/textbox.js'
+import {NdForm,NdItem,NdLabel} from '../../../../core/react/devex/form';
 
 export default class salesInvList extends React.PureComponent
 {
@@ -23,29 +22,11 @@ export default class salesInvList extends React.PureComponent
     {
         super(props)
 
-        this.state = 
-        {
-            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE','TOTAL','MAIL']
-        }
+       
         
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "REF",NAME : this.t("grdSlsIvcList.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdSlsIvcList.clmRefNo")},
-            {CODE : "INPUT_CODE",NAME : this.t("grdSlsIvcList.clmInputCode")},                                   
-            {CODE : "INPUT_NAME",NAME : this.t("grdSlsIvcList.clmInputName")},
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdSlsIvcList.clmOutputName")},
-            {CODE : "DOC_DATE",NAME : this.t("grdSlsIvcList.clmDate")},
-            {CODE : "AMOUNT",NAME : this.t("grdSlsIvcList.clmAmount")},
-            {CODE : "VAT",NAME : this.t("grdSlsIvcList.clmVat")},
-            {CODE : "TOTAL",NAME : this.t("grdSlsIvcList.clmTotal")},
-            {CODE : "MAIL",NAME : this.t("grdSlsIvcList.clmMail")},
-
-        ]
-        this.groupList = [];
-        this._btnGetClick = this._btnGetClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
+       
+        this.btnGetClick = this.btnGetClick.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
     }
@@ -56,7 +37,7 @@ export default class salesInvList extends React.PureComponent
     }
     saveState(e)
     {
-        let tmpSave = this.access.filter({ELEMENT:'grdSlsIvcList',USERS:this.user.CODE})
+        let tmpSave = this.access.filter({ELEMENT:'grdSlsIvcList',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
         tmpSave.setValue(e)
         tmpSave.save()
     }
@@ -70,77 +51,11 @@ export default class salesInvList extends React.PureComponent
     async Init()
     {
         this.txtCustomerCode.CODE = '';
-        this._btnGetClick()
+        this.btnGetClick()
         this.grdSlsIvcList.rowFilter = []
 
     }
-    _columnListBox(e)
-    {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }                
-                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('INPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
-                {
-                    this.groupList.push('TOTAL')
-                }
-                if(typeof e.value.find(x => x == 'MAIL') != 'undefined')
-                {
-                    this.groupList.push('MAIL')
-                }
-                
-                for (let i = 0; i < this.grdSlsIvcList.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdSlsIvcList.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdSlsIvcList.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdSlsIvcList.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
-    }
-    async _btnGetClick()
+    async btnGetClick()
     {
         let tmpSource =
         {
@@ -514,7 +429,7 @@ export default class salesInvList extends React.PureComponent
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -571,9 +486,9 @@ export default class salesInvList extends React.PureComponent
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDesign.design")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
                                     displayExpr="DESIGN_NAME"                       
                                     valueExpr="TAG"
@@ -587,8 +502,8 @@ export default class salesInvList extends React.PureComponent
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop" + this.tabIndex}
@@ -607,8 +522,8 @@ export default class salesInvList extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div>
                 </ScrollView>

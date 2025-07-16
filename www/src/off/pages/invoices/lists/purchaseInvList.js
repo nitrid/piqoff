@@ -2,14 +2,12 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
+import Form, { Label,Item } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
 import NdGrid,{Column,Paging,Pager,Export,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -17,7 +15,7 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import { Validator, RequiredRule, RangeRule } from '../../../../core/react/devex/textbox.js'
 import NdPopUp from '../../../../core/react/devex/popup.js';
-
+import {NdForm,NdItem,NdLabel} from '../../../../core/react/devex/form';
 
 export default class purchaseInvList extends React.PureComponent
 {
@@ -25,27 +23,12 @@ export default class purchaseInvList extends React.PureComponent
     {
         super(props)
 
-        this.state = 
-        {
-            columnListValue : ['REF','REF_NO','OUTPUT_NAME','DOC_DATE','TOTAL']
-        }
-        
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "REF",NAME : this.t("grdPurcIvcList.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdPurcIvcList.clmRefNo")},
-            {CODE : "OUTPUT_CODE",NAME : this.t("grdPurcIvcList.clmOutputCode")},                                   
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdPurcIvcList.clmOutputName")},
-            {CODE : "INPUT_NAME",NAME : this.t("grdPurcIvcList.clmInputName")},
-            {CODE : "DOC_DATE",NAME : this.t("grdPurcIvcList.clmDate")},
-            {CODE : "AMOUNT",NAME : this.t("grdPurcIvcList.clmAmount")},
-            {CODE : "VAT",NAME : this.t("grdPurcIvcList.clmVat")},
-            {CODE : "TOTAL",NAME : this.t("grdPurcIvcList.clmTotal")},
-        ]
+        
         this.groupList = [];
-        this._btnGetClick = this._btnGetClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
+        this.btnGetClick = this.btnGetClick.bind(this)
+        this.saveState = this.saveState.bind(this)
+        this.loadState = this.loadState.bind(this)
     }
     componentDidMount()
     {
@@ -54,75 +37,24 @@ export default class purchaseInvList extends React.PureComponent
             this.Init()
         }, 1000);
     }
+    async loadState()
+    {
+        let tmpLoad = await this.access.filter({ELEMENT:'grdSlsIvcListState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    async saveState(e)
+    {
+        let tmpSave = await this.access.filter({ELEMENT:'grdSlsIvcListState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        await tmpSave.setValue(e)
+        await tmpSave.save()
+    }
     async Init()
     {
         this.dtFirst.value=moment(new Date()).format("YYYY-MM-DD");
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
     }
-    _columnListBox(e)
-    {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }                
-                if(typeof e.value.find(x => x == 'OUTPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('OUTPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
-                {
-                    this.groupList.push('TOTAL')
-                }
-                
-                for (let i = 0; i < this.grdPurcIvcList.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdPurcIvcList.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdPurcIvcList.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdPurcIvcList.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
-    }
-    async _btnGetClick()
+    async btnGetClick()
     {
         let tmpSource =
         {
@@ -365,7 +297,7 @@ export default class purchaseInvList extends React.PureComponent
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -418,9 +350,9 @@ export default class purchaseInvList extends React.PureComponent
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDesign.design")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popDesign.design")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDesignList" notRefresh = {true}
                                     displayExpr="DESIGN_NAME"                       
                                     valueExpr="TAG"
@@ -432,8 +364,8 @@ export default class purchaseInvList extends React.PureComponent
                                             <RequiredRule message={this.t("validDesign")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrintPop" + this.tabIndex}
@@ -452,8 +384,8 @@ export default class purchaseInvList extends React.PureComponent
                                             }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div>
                 </ScrollView>
