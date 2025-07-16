@@ -1,14 +1,13 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls,quickDescCls } from '../../../../core/cls/doc.js';
+import { docCls } from '../../../../core/cls/doc.js';
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import Toolbar,{ Item } from 'devextreme-react/toolbar';
 import ContextMenu from 'devextreme-react/context-menu';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -20,12 +19,14 @@ import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 import { NdLayout,NdLayoutItem } from '../../../../core/react/devex/layout';
 import NdAccessEdit from '../../../../core/react/devex/accesEdit.js';
-
+import { NdForm, NdItem, NdLabel } from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 export default class itemEntryOutDoc extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
@@ -34,7 +35,7 @@ export default class itemEntryOutDoc extends React.PureComponent
         this.docInObj = new docCls();
         this.docOutObj = new docCls();
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
 
         this.combineControl = true
         this.combineNew = false  
@@ -181,7 +182,7 @@ export default class itemEntryOutDoc extends React.PureComponent
 
         App.instance.setState({isExecute:false})
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == "ITEM_CODE")
         {
@@ -205,38 +206,38 @@ export default class itemEntryOutDoc extends React.PureComponent
                         }
                     }
                 }}
-                onValueChanged={(v)=>
-                {
-                    e.value = v.value
-                }}
+                onValueChanged={(v)=>{e.value = v.value}}
                 onChange={(async(r)=>
                 {
                     if(typeof r.event.isTrusted == 'undefined')
                     {
                         this.combineControl = true
-                        this.combineNew = false  
+                        this.combineNew = false 
+
                         let tmpQuery = 
                         {
-                            query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                            query : `SELECT 
+                                    ITEMS.GUID,
+                                    ITEMS.CODE,
+                                    ITEMS.NAME,
+                                    ITEMS.VAT,
+                                    ITEMS.COST_PRICE 
+                                    FROM ITEMS_VW_04 AS ITEMS 
+                                    INNER JOIN ITEM_BARCODE_VW_01 AS BARCODE ON ITEMS.GUID = BARCODE.ITEM_GUID 
+                                    WHERE CODE = @CODE OR BARCODE.BARCODE = @CODE`,
                             param : ['CODE:string|50'],
                             value : [r.component._changedValue]
                         }
+
                         let tmpData = await this.core.sql.execute(tmpQuery) 
+                        
                         if(tmpData.result.recordset.length > 0)
                         {
-                            
                             await this.addItem(tmpData.result.recordset[0],e.rowIndex)
                         }
                         else
                         {
-                            let tmpConfObj =
-                            {
-                                id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                                button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                            }
-                
-                            await dialog(tmpConfObj);
+                            this.toast.show({message:this.t("msgItemNotFound.msg"),type:"warning"})
                         }
                     }
                 }).bind(this)}
@@ -262,14 +263,14 @@ export default class itemEntryOutDoc extends React.PureComponent
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
     }
     async addItem(pData,pIndex,pQuantity)
     {
         let tmpIndex = 0
+
         if(typeof pIndex == 'undefined')
         {
             this.InOutDt.push({...this.empty})
@@ -284,29 +285,26 @@ export default class itemEntryOutDoc extends React.PureComponent
         {
             pQuantity = 1
         }
+
         App.instance.setState({isExecute:true})
+        
         if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
         {
             let tmpCheckQuery = 
             {
-                query :"SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,dbo.GETDATE()) AS QUANTITY ",
+                query : `SELECT [dbo].[FN_DEPOT_QUANTITY](@GUID,@DEPOT,dbo.GETDATE()) AS QUANTITY`,
                 param : ['GUID:string|50','DEPOT:string|50'],
                 value : [pData.GUID,this.InOutDt[0].DEPOT]
             }
+
             let tmpQuantity = await this.core.sql.execute(tmpCheckQuery) 
+            
             if(tmpQuantity.result.recordset.length > 0)
             {
                 if(tmpQuantity.result.recordset[0].QUANTITY < 1)
                 {
                     App.instance.setState({isExecute:false})
-                    let tmpConfObj =
-                    {
-                        id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
-                        button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg")}</div>)
-                    }
-        
-                    await dialog(tmpConfObj);
+                    this.toast.show({message:this.t("msgNotQuantity.msg"),type:"warning"})
                     await this.grdList.devGrid.deleteRow(0)
                     return
                 }
@@ -316,6 +314,7 @@ export default class itemEntryOutDoc extends React.PureComponent
                 }
             }
         }
+
         for (let i = 0; i < this.InOutDt.length; i++) 
         {
             if(this.InOutDt[i].ITEM_CODE == pData.CODE)
@@ -324,6 +323,7 @@ export default class itemEntryOutDoc extends React.PureComponent
                 {
                     let tmpCombineBtn = ''
                     App.instance.setState({isExecute:false})
+
                     await this.msgCombineItem.show().then(async (e) =>
                     {
                         if(e == 'btn01')
@@ -404,6 +404,7 @@ export default class itemEntryOutDoc extends React.PureComponent
             tmpDocIn.OUTPUT = '00000000-0000-0000-0000-000000000000'
             this.docInObj.addEmpty(tmpDocIn);
         }
+
         for (let i = 0; i < tmpInDt.length; i++) 
         {
             let tmpItem = {}
@@ -448,6 +449,7 @@ export default class itemEntryOutDoc extends React.PureComponent
             tmpDocOut.OUTPUT = tmpOutDt[0].DEPOT
             this.docOutObj.addEmpty(tmpDocOut);
         }
+
         for (let i = 0; i < tmpOutDt.length; i++) 
         {
             let tmpItem = {}
@@ -497,7 +499,7 @@ export default class itemEntryOutDoc extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -528,11 +530,7 @@ export default class itemEntryOutDoc extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    <NdButton id="btnNew" parent={this} icon="file" type="default" onClick={()=>{this.init()}}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmFrom" + this.tabIndex}
@@ -545,84 +543,66 @@ export default class itemEntryOutDoc extends React.PureComponent
 
                                         if(typeof this.InOutDt[0] == 'undefined')
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgNotRow',showTitle:true,title:this.lang.t("msgNotRow.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.lang.t("msgNotRow.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgNotRow.msg")}</div>)
-                                            }
-
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.lang.t("msgNotRow.msg"),type:"warning"})
                                             this.getDoc(this.InOutDt[0].REF,this.InOutDt[0].REF_NO)
                                             return
                                         }
+
                                         let tmpDatas = this.prmObj.filter({ID:'descriptionControl',USERS:this.user.CODE}).getValue()
+                                        
                                         if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
                                         {
                                             for (let i = 0; i < this.InOutDt.length; i++) 
                                             {
                                                 if(this.InOutDt[i].DESCRIPTION == '')
                                                 {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgEmpDescription',showTitle:true,title:this.t("msgEmpDescription.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgEmpDescription.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgEmpDescription.msg")}</div>)
-                                                    }
-                                        
-                                                    await dialog(tmpConfObj);
+                                                    this.toast.show({message:this.t("msgEmpDescription.msg"),type:"warning"})
                                                     return
                                                 }
                                             }
                                         }
+
                                         if(this.InOutDt[this.InOutDt.length - 1].ITEM_CODE == '')
                                         {
                                             await this.grdList.devGrid.deleteRow(0)
                                         }
+
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
-                                                
                                                 this.docMerge()
 
                                                 if((await this.docInObj.save()) == 0 && (await this.docOutObj.save()) == 0)
-                                                {                                                    
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
+                                                {
+                                                    this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
                                                 }
                                                 else
                                                 {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    let tmpConfObj1 =
+                                                    {
+                                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    }
                                                     await dialog(tmpConfObj1);
                                                 }
                                             }
                                         }                              
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgSaveValid.msg"),type:"warning"})
                                         }                                                 
                                     }}/>
                                 </Item>
@@ -632,12 +612,13 @@ export default class itemEntryOutDoc extends React.PureComponent
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
                                         
                                         let pResult = await dialog(tmpConfObj);
+
                                         if(pResult == 'btn01')
                                         {
                                             if(this.docInObj.dt().length > 0)
@@ -652,7 +633,6 @@ export default class itemEntryOutDoc extends React.PureComponent
                                             }
                                             this.init(); 
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -667,12 +647,13 @@ export default class itemEntryOutDoc extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -704,15 +685,18 @@ export default class itemEntryOutDoc extends React.PureComponent
                                                     {
                                                         let tmpQuery = 
                                                         {
-                                                            query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE IN (0,1) AND DOC_TYPE = 0 AND REF = @REF ",
+                                                            query : `SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE IN (0,1) AND DOC_TYPE = 0 AND REF = @REF`,
                                                             param : ['REF:string|25'],
                                                             value : [this.txtRef.value]
                                                         }
+
                                                         let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                        
                                                         if(tmpData.result.recordset.length > 0)
                                                         {
                                                             this.txtRefno.value = tmpData.result.recordset[0].REF_NO
                                                         }
+
                                                         this.checkRow()
                                                     }).bind(this)}
                                                     param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -764,15 +748,15 @@ export default class itemEntryOutDoc extends React.PureComponent
                                                     </NdTextBox>
                                                 </div>
                                                 {/*EVRAK SEÇİM */}
-                                                <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
+                                                <NdPopGrid id={"pg_Docs"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                                 visible={false}
-                                                position={{of:'#root'}} 
+                                                position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                                 showTitle={true} 
                                                 showBorders={true}
                                                 width={'90%'}
                                                 height={'90%'}
                                                 title={this.t("pg_Docs.title")} 
-                                                data={{source:{select:{query : "SELECT REF,REF_NO,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE IN (0,1) AND DOC_TYPE = 0 AND REBATE = 0 GROUP BY REF,REF_NO,DOC_DATE_CONVERT,DOC_DATE ORDER BY DOC_DATE DESC"},sql:this.core.sql}}}
+                                                data={{source:{select:{query : `SELECT REF,REF_NO,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE IN (0,1) AND DOC_TYPE = 0 AND REBATE = 0 GROUP BY REF,REF_NO,DOC_DATE_CONVERT,DOC_DATE ORDER BY DOC_DATE DESC`},sql:this.core.sql}}}
                                                 >
                                                     <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150}/>
                                                     <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} />
@@ -798,10 +782,7 @@ export default class itemEntryOutDoc extends React.PureComponent
                                             data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
                                             param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
-                                            onValueChanged={(async()=>
-                                            {
-                                                this.checkRow()
-                                            }).bind(this)}
+                                            onValueChanged={(async()=>{this.checkRow()}).bind(this)}
                                             >
                                                 <Validator validationGroup={"frmFrom" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validDepot")} />
@@ -818,10 +799,7 @@ export default class itemEntryOutDoc extends React.PureComponent
                                         </div>
                                         <div className="col-8 p-0">
                                             <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
-                                            onValueChanged={(async()=>
-                                            {
-                                                this.checkRow()
-                                            }).bind(this)}>
+                                            onValueChanged={(async()=>{this.checkRow()}).bind(this)}>
                                                 <Validator validationGroup={"frmFrom" + this.tabIndex}>
                                                     <RequiredRule message={this.t("validDocDate")} />
                                                 </Validator> 
@@ -848,14 +826,7 @@ export default class itemEntryOutDoc extends React.PureComponent
                                                         {
                                                             if(this.cmbDepot.value == '')
                                                             {
-                                                                let tmpConfObj =
-                                                                {
-                                                                    id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                    button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                                                }
-                                                                
-                                                                await dialog(tmpConfObj);
+                                                                this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
                                                                 this.txtBarcode.setState({value:""})
                                                                 return
                                                             }
@@ -886,25 +857,28 @@ export default class itemEntryOutDoc extends React.PureComponent
                                             {
                                                 if(this.cmbDepot.value == '')
                                                 {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                                    }
-                                                    
-                                                    await dialog(tmpConfObj);
+                                                    this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
                                                     this.txtBarcode.setState({value:""})
                                                     return
                                                 }
+
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE ORDER BY ITEM_BARCODE_VW_01.CDATE DESC",
+                                                    query : `SELECT 
+                                                            ITEMS.GUID,
+                                                            ITEMS.CODE,
+                                                            ITEMS.NAME,
+                                                            ITEMS.COST_PRICE 
+                                                            FROM ITEMS_VW_04 AS ITEMS
+                                                            INNER JOIN ITEM_BARCODE_VW_01 AS BARCODE ON ITEMS.GUID = BARCODE.ITEM_GUID 
+                                                            WHERE CODE = @CODE OR BARCODE.BARCODE = @CODE ORDER BY BARCODE.CDATE DESC`,
                                                     param : ['CODE:string|50'],
                                                     value : [this.txtBarcode.value]
                                                 }
+
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 this.txtBarcode.setState({value:""})
+                                                
                                                 if(tmpData.result.recordset.length > 0)
                                                 {
                                                     this.combineControl = true
@@ -919,21 +893,12 @@ export default class itemEntryOutDoc extends React.PureComponent
                                                 }
                                                 else
                                                 {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                                                    }
-                                        
-                                                    await dialog(tmpConfObj);
+                                                    this.toast.show({message:this.t("msgItemNotFound.msg"),type:"warning"})
                                                 }
-                                                
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
-                                            >
-                                            </NdTextBox>
+                                            />
                                         </div>
                                     </div>
                                 </NdLayoutItem>
@@ -973,16 +938,9 @@ export default class itemEntryOutDoc extends React.PureComponent
                                                 {
                                                     if(this.quantityControl == true)
                                                     {
-                                                        let rowIndex = e.component.getRowIndexByKey(e.key)
                                                         if(typeof e.newData.QUANTITY != 'undefined' && e.key.DEPOT_QUANTITY < e.newData.QUANTITY)
                                                         {
-                                                            let tmpConfObj =
-                                                            {
-                                                                id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                                button:[{id:"btn01",caption:this.t("msgNotQuantity.btn01"),location:'after'}],
-                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotQuantity.msg") + e.oldData.DEPOT_QUANTITY}</div>)
-                                                            }
-                                                            await dialog(tmpConfObj);
+                                                            this.toast.show({message:this.t("msgNotQuantity.msg") + e.oldData.DEPOT_QUANTITY,type:"warning"})
                                                             e.key.QUANTITY = e.oldData.DEPOT_QUANTITY
                                                         }
                                                     }
@@ -997,7 +955,7 @@ export default class itemEntryOutDoc extends React.PureComponent
                                                     <Column dataField="TYPE" caption={this.t("grdList.clmType")} width={100}>
                                                         <Lookup dataSource={[{ID:0,VALUE:this.t("cmbType.input")},{ID:1,VALUE:this.t("cmbType.output")}]} displayExpr="VALUE"valueExpr="ID"/>
                                                     </Column>
-                                                    <Column dataField="ITEM_CODE" caption={this.t("grdList.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
+                                                    <Column dataField="ITEM_CODE" caption={this.t("grdList.clmItemCode")} width={150} editCellRender={this.cellRoleRender}/>
                                                     <Column dataField="ITEM_NAME" caption={this.t("grdList.clmItemName")} width={500} />
                                                     <Column dataField="QUANTITY" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={150}/>
                                                     <Column dataField="DESCRIPTION" caption={this.t("grdList.clmDescription")} />
@@ -1017,17 +975,18 @@ export default class itemEntryOutDoc extends React.PureComponent
 
                                                             let tmpQuery = 
                                                             {
-                                                                query : "SELECT 0 AS TYPE,'" + this.t("cmbType.input") + "' AS TYPE_NAME, PRODUCED_ITEM_GUID AS ITEM_GUID,PRODUCED_ITEM_CODE AS ITEM_CODE,PRODUCED_ITEM_NAME AS ITEM_NAME,PRODUCED_QTY AS QUANTITY,0 AS INPUT FROM PRODUCT_RECIPE_VW_01 " +
-                                                                        "WHERE PRODUCED_ITEM_GUID = @ITEM " +
-                                                                        "GROUP BY PRODUCED_DATE,PRODUCED_ITEM_GUID,PRODUCED_ITEM_CODE,PRODUCED_ITEM_NAME,PRODUCED_QTY " +
-                                                                        "UNION ALL " +
-                                                                        "SELECT 1 AS TYPE,'" + this.t("cmbType.output") + "' AS TYPE_NAME, RAW_ITEM_GUID AS ITEM_GUID,RAW_ITEM_CODE AS ITEM_CODE,RAW_ITEM_NAME AS ITEM_NAME,RAW_QTY AS QUANTITY,0 AS INPUT FROM PRODUCT_RECIPE_VW_01 " +
-                                                                        "WHERE PRODUCED_ITEM_GUID = @ITEM",
+                                                                query : `SELECT 0 AS TYPE,'${this.t("cmbType.input")}' AS TYPE_NAME, PRODUCED_ITEM_GUID AS ITEM_GUID,PRODUCED_ITEM_CODE AS ITEM_CODE,PRODUCED_ITEM_NAME AS ITEM_NAME,PRODUCED_QTY AS QUANTITY,0 AS INPUT FROM PRODUCT_RECIPE_VW_01 
+                                                                        WHERE PRODUCED_ITEM_GUID = @ITEM 
+                                                                        GROUP BY PRODUCED_DATE,PRODUCED_ITEM_GUID,PRODUCED_ITEM_CODE,PRODUCED_ITEM_NAME,PRODUCED_QTY 
+                                                                        UNION ALL 
+                                                                        SELECT 1 AS TYPE,'${this.t("cmbType.output")}' AS TYPE_NAME, RAW_ITEM_GUID AS ITEM_GUID,RAW_ITEM_CODE AS ITEM_CODE,RAW_ITEM_NAME AS ITEM_NAME,RAW_QTY AS QUANTITY,0 AS INPUT FROM PRODUCT_RECIPE_VW_01 
+                                                                        WHERE PRODUCED_ITEM_GUID = @ITEM`,
                                                                 param : ['ITEM:string|50'],
                                                                 value : [pRData[0].PRODUCED_ITEM_GUID]
                                                             }
                                                             
                                                             let tmpData = await this.core.sql.execute(tmpQuery) 
+
                                                             if(tmpData.result.recordset.length > 0)
                                                             {   
                                                                 await this.popRecipeDetail.setData(tmpData.result.recordset)
@@ -1036,6 +995,7 @@ export default class itemEntryOutDoc extends React.PureComponent
                                                             {
                                                                 await this.popRecipeDetail.setData([])
                                                             }
+
                                                             this.popRecipeDetail.onClick = async(pRdData)=>
                                                             {
                                                                 for (let i = 0; i < pRdData.length; i++) 
@@ -1050,7 +1010,6 @@ export default class itemEntryOutDoc extends React.PureComponent
                                                                             NAME : pRdData[i].ITEM_NAME,
                                                                             COST_PRICE : 0,
                                                                         }
-                                                                        
                                                                         await this.addItem(tmpEmpty,undefined,pRdData[i].INPUT)
                                                                     }
                                                                 }
@@ -1066,149 +1025,122 @@ export default class itemEntryOutDoc extends React.PureComponent
                         </div>
                     </div>
                     {/* ACCESS COMPONENT */}
-                    <div>
-                        <NdAccessEdit id={"accesComp"} parent={this}/>
-                    </div>
+                    <NdAccessEdit id={"accesComp"} parent={this}/>
                     {/* Stok Seçim */}
-                    <div>
-                        <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        title={this.t("pg_txtItemsCode.title")} //
-                        search={true}
-                        data = 
-                        {{
-                            source:
-                            {
-                                select:
-                                {
-                                    query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
-                                    param : ['VAL:string|50']
-                                },
-                                sql:this.core.sql
-                            }
-                        }}
-                        >
-                            <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
-                            <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
-                        </NdPopGrid>
-                    </div>
-                    {/* Yönetici PopUp */}
-                    <div>
-                        <NdPopUp parent={this} id={"popPassword"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popPassword.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'200'}
-                        position={{of:'#root'}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popPassword.Password")} alignment="right" />
-                                    <NdTextBox id="txtPassword" mode="password" parent={this} simple={true}
-                                            maxLength={32}
-
-                                    ></NdTextBox>
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("popPassword.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            onClick={async ()=>
-                                            {       
-                                                let tmpPass = btoa(this.txtPassword.value);
-                                                let tmpQuery = 
-                                                {
-                                                    query : "SELECT TOP 1 * FROM USERS WHERE PWD = @PWD AND ROLE = 'Administrator' AND STATUS = 1", 
-                                                    param : ['PWD:string|50'],
-                                                    value : [tmpPass],
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgPasswordSucces',showTitle:true,title:this.t("msgPasswordSucces.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgPasswordSucces.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPasswordSucces.msg")}</div>)
-                                                    }
-                                        
-                                                    await dialog(tmpConfObj);
-                                                    this.popPassword.hide();  
-                                                }
-                                                else
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgPasswordWrong',showTitle:true,title:this.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgPasswordWrong.btn01"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPasswordWrong.msg")}</div>)
-                                                    }
-                                        
-                                                    await dialog(tmpConfObj);
-                                                }
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popPassword.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div>
-                    {/* Hızlı Açıklama Ekle PopUp */}
-                    <div>
-                        <NdPopGrid id={"pg_quickDesc"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        selection={{mode:"single"}}
-                        title={this.t("pg_quickDesc.title")} //
-                        data = 
-                        {{
-                            source:
-                            {
-                                select:
-                                {
-                                    query : "SELECT GUID,DESCRIPTION FROM [dbo].[QUICK_DESCRIPTION] WHERE PAGE = 'stk_02_003' ",
-                                },
-                                sql:this.core.sql
-                            }
-                        }}
-                        button=
+                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
+                    visible={false}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_txtItemsCode.title")} //
+                    search={true}
+                    data = 
+                    {{
+                        source:
                         {
-                            [
-                                {
-                                    id:'01',
-                                    icon:'add',
-                                    onClick:()=>
-                                    {
-                                        this.txtQdescAdd.value = ''
-                                        this.popQDescAdd.show()
-                                        this.pg_quickDesc.hide()
-                                    }
-                                }
-                            ]
+                            select:
+                            {
+                                query : `SELECT GUID,CODE,NAME,VAT,COST_PRICE FROM ITEMS_VW_04 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)`,
+                                param : ['VAL:string|50']
+                            },
+                            sql:this.core.sql
                         }
-                        >
-                            <Column dataField="DESCRIPTION" caption={this.t("pg_quickDesc.clmDesc")} width={150} />
-                        </NdPopGrid>
-                    </div>
+                    }}
+                    >
+                        <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={150} />
+                        <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
+                    </NdPopGrid>
+                    {/* Yönetici PopUp */}
+                    <NdPopUp parent={this} id={"popPassword"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.t("popPassword.title")}
+                    container={'#' + this.props.data.id + this.tabIndex} 
+                    width={'500'}
+                    height={'200'}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    >
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("popPassword.Password")} alignment="right" />
+                                <NdTextBox id="txtPassword" mode="password" parent={this} simple={true} maxLength={32}/>
+                            </NdItem>
+                            <NdItem>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.t("popPassword.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {       
+                                            let tmpPass = btoa(this.txtPassword.value);
+                                            let tmpQuery = 
+                                            {
+                                                query : `SELECT TOP 1 * FROM USERS WHERE PWD = @PWD AND ROLE = 'Administrator' AND STATUS = 1`, 
+                                                param : ['PWD:string|50'],
+                                                value : [tmpPass],
+                                            }
+
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            
+                                            if(tmpData.result.recordset.length > 0)
+                                            {
+                                                this.toast.show({message:this.t("msgPasswordSucces.msg"),type:"success"})
+                                                this.popPassword.hide();  
+                                            }
+                                            else
+                                            {
+                                                this.toast.show({message:this.t("msgPasswordWrong.msg"),type:"warning"})
+                                            }
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'} onClick={()=>{this.popPassword.hide()}}/>
+                                    </div>
+                                </div>
+                            </NdItem>
+                        </NdForm>
+                    </NdPopUp>
+                    {/* Hızlı Açıklama Ekle PopUp */}
+                    <NdPopGrid id={"pg_quickDesc"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
+                    visible={false}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    selection={{mode:"single"}}
+                    title={this.t("pg_quickDesc.title")} //
+                    data = 
+                    {{
+                        source:
+                        {
+                            select:
+                            {
+                                query : `SELECT GUID,DESCRIPTION FROM [dbo].[QUICK_DESCRIPTION] WHERE PAGE = 'stk_02_003'`,
+                            },
+                            sql:this.core.sql
+                        }
+                    }}
+                    button=
+                    {
+                        [
+                            {
+                                id:'01',
+                                icon:'add',
+                                onClick:()=>
+                                {
+                                    this.txtQdescAdd.value = ''
+                                    this.popQDescAdd.show()
+                                    this.pg_quickDesc.hide()
+                                }
+                            }
+                        ]
+                    }
+                    >
+                        <Column dataField="DESCRIPTION" caption={this.t("pg_quickDesc.clmDesc")} width={150} />
+                    </NdPopGrid>
                     {/* Açıklama Ekle PopUp */}
                     <div>
                         <NdPopUp parent={this} id={"popQDescAdd"} 
@@ -1216,19 +1148,17 @@ export default class itemEntryOutDoc extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popQDescAdd.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'200'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popQDescAdd.description")} alignment="right" />
-                                    <NdTextBox id="txtQdescAdd" parent={this} simple={true}
-                                            maxLength={32}
-                                    ></NdTextBox>
-                                </Item>
-                                <Item>
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popQDescAdd.description")} alignment="right" />
+                                    <NdTextBox id="txtQdescAdd" parent={this} simple={true} maxLength={32}/>
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popQDescAdd.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
@@ -1244,189 +1174,170 @@ export default class itemEntryOutDoc extends React.PureComponent
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popQDescAdd.hide();  
-                                            }}/>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'} onClick={()=>{this.popQDescAdd.hide()}}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
                     </div> 
                     {/* combineItem Dialog  */}
-                    <div>
-                        <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        title={this.t("msgCombineItem.title")} 
-                        showCloseButton={false}
-                        width={"500px"}
-                        height={"250px"}
-                        button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
-                        >
-                            <div className="row">
-                                <div className="col-12 py-2">
-                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
-                                </div>
-                                <div className="col-12 py-2">
-                                <Form>
+                    <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={this.t("msgCombineItem.title")} 
+                    showCloseButton={false}
+                    width={"500px"}
+                    height={"250px"}
+                    button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
+                            </div>
+                            <div className="col-12 py-2">
+                                <NdForm>
                                     {/* checkCustomer */}
-                                    <Item>
-                                        <Label text={this.lang.t("checkAll")} alignment="right" />
-                                        <NdCheckBox id="checkCombine" parent={this} simple={true}  
-                                        value ={false}
-                                        >
-                                        </NdCheckBox>
-                                    </Item>
-                                </Form>
+                                    <NdItem>
+                                        <NdLabel text={this.lang.t("checkAll")} alignment="right" />
+                                        <NdCheckBox id="checkCombine" parent={this} simple={true} value ={false}/>
+                                    </NdItem>
+                                </NdForm>
                             </div>
-                            </div>
-                            <div className='row'>
-                        
-                            </div>
-                        </NdDialog>
-                    </div>
+                        </div>
+                    </NdDialog>
                     {/* Barkod PopUp */}
-                    <div>
-                        <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        title={this.t("pg_txtBarcode.title")} //
-                        search={true}
-                        data = 
-                        {{
-                            source:
-                            {
-                                select:
-                                {
-                                    query :"SELECT ITEMS_VW_01.GUID,CODE,NAME,COST_PRICE,ITEM_BARCODE_VW_01.BARCODE AS BARCODE FROM ITEMS_VW_01 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_01.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE ITEM_BARCODE_VW_01.BARCODE LIKE '%'+ @BARCODE ORDER BY ITEM_BARCODE_VW_01.CDATE DESC",
-                                    param : ['BARCODE:string|50'],
-                                },
-                                sql:this.core.sql
-                            }
-                        }}
-                        >
-                            <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
-                            <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
-                            <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
-                        </NdPopGrid>
-                    </div>
-                    {/* Miktar Dialog  */}
-                    <div>
-                        <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        title={this.t("msgQuantity.title")} 
-                        showCloseButton={false}
-                        width={"500px"}
-                        height={"250px"}
-                        button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgQuantity.btn02"),location:'after'}]}
-                        onShowed={()=>
+                    <NdPopGrid id={"pg_txtBarcode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
+                    visible={false}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_txtBarcode.title")} //
+                    search={true}
+                    data = 
+                    {{
+                        source:
                         {
-                            this.txtQuantity.setState({value:1})
-                            setTimeout(() => {
-                                this.txtQuantity.focus()
-                            }, 500);
-                        }}
-                        >
-                            <div className="row">
-                                <div className="col-12 py-2">
-                                    <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
-                                </div>
-                                <div className="col-12 py-2">
-                                <Form>
+                            select:
+                            {
+                                query : `SELECT 
+                                        ITEMS.GUID,
+                                        ITEMS.CODE,
+                                        ITEMS.NAME,
+                                        ITEMS.COST_PRICE,
+                                        BARCODE.BARCODE AS BARCODE 
+                                        FROM ITEMS_VW_04 AS ITEMS 
+                                        INNER JOIN ITEM_BARCODE_VW_01 AS BARCODE ON ITEMS.GUID = BARCODE.ITEM_GUID WHERE BARCODE.BARCODE LIKE '%'+ @BARCODE ORDER BY BARCODE.CDATE DESC`,
+                                param : ['BARCODE:string|50'],
+                            },
+                            sql:this.core.sql
+                        }
+                    }}
+                    >
+                        <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
+                        <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
+                        <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
+                    </NdPopGrid>
+                    {/* Miktar Dialog  */}
+                    <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
+                    position={{of:'#root'}} 
+                    showTitle={true} 
+                    title={this.t("msgQuantity.title")} 
+                    showCloseButton={false}
+                    width={"500px"}
+                    height={"250px"}
+                    button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgQuantity.btn02"),location:'after'}]}
+                    onShowed={()=>
+                    {
+                        this.txtQuantity.setState({value:1})
+                        setTimeout(() => {this.txtQuantity.focus()}, 500);
+                    }}
+                    >
+                        <div className="row">
+                            <div className="col-12 py-2">
+                                <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
+                            </div>
+                            <div className="col-12 py-2">
+                                <NdForm>
                                     {/* txtQuantity */}
-                                    <Item>
-                                        <Label text={this.t("txtQuantity")} alignment="right" />
+                                    <NdItem>
+                                        <NdLabel text={this.t("txtQuantity")} alignment="right" />
                                         <NdTextBox id="txtQuantity" parent={this} simple={true}  
                                         param={this.param.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'txtQuantity',USERS:this.user.CODE})}
                                         value ={1}
-                                        onFocusIn={(async(e)=>
-                                        {
-                                            
-                                        }).bind(this)}
-                                        >
-                                        </NdTextBox>
-                                    </Item>
-                                </Form>
-                                </div>
+                                        />
+                                    </NdItem>
+                                </NdForm>
                             </div>
-                        </NdDialog>
-                    </div>
+                        </div>
+                    </NdDialog>
                     {/* Urun Recete PopUp */}
-                    <div>
-                        <NdPopGrid id={"popRecipe"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        selection={{mode:"single"}}
-                        title={this.t("popRecipe.title")} //
-                        deferRendering={true}
-                        data = 
-                        {{
-                            source:
-                            {
-                                select:
-                                {
-                                    query : "SELECT PRODUCED_DATE,PRODUCED_ITEM_GUID,PRODUCED_ITEM_CODE,PRODUCED_ITEM_NAME,PRODUCED_QTY FROM PRODUCT_RECIPE_VW_01 GROUP BY PRODUCED_DATE,PRODUCED_ITEM_GUID,PRODUCED_ITEM_CODE,PRODUCED_ITEM_NAME,PRODUCED_QTY",
-                                },
-                                sql:this.core.sql
-                            }
-                        }}
-                        >
-                            <Column dataField="PRODUCED_DATE" caption={this.t("popRecipe.clmDate")}  width={110} dataType={'date'} format={'dd/MM/yyyy'} defaultSortOrder="asc"/>
-                            <Column dataField="PRODUCED_ITEM_CODE" caption={this.t("popRecipe.clmCode")} width={200}/>
-                            <Column dataField="PRODUCED_ITEM_NAME" caption={this.t("popRecipe.clmName")} width={450} />
-                            <Column dataField="PRODUCED_QTY" caption={this.t("popRecipe.clmQuantity")} width={200} />
-                        </NdPopGrid>
-                    </div>
-                    {/* Urun Recete Detay PopUp */}
-                    <div>
-                        <NdPopGrid id={"popRecipeDetail"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        selection={{mode:"multiple"}}
-                        title={this.t("popRecipeDetail.title")} //
-                        deferRendering={true}
-                        dbApply={false}
-                        onRowUpdated={async(e)=>
+                    <NdPopGrid id={"popRecipe"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
+                    visible={false}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    selection={{mode:"single"}}
+                    title={this.t("popRecipe.title")} //
+                    data = 
+                    {{
+                        source:
                         {
-                            let tmpIndex = e.component.getRowIndexByKey(e.key)
-                            let tmpData = e.component.getDataSource().items()
-                            let tmpX =  e.data.INPUT / tmpData[tmpIndex].QUANTITY
-
-                            for (let i = 0; i < tmpData.length; i++) 
+                            select:
                             {
-                                if(tmpIndex != i)
-                                {
-                                    tmpData[i].INPUT = Number(tmpX * tmpData[i].QUANTITY).round(3)
-                                }
+                                query : `SELECT PRODUCED_DATE,PRODUCED_ITEM_GUID,PRODUCED_ITEM_CODE,PRODUCED_ITEM_NAME,PRODUCED_QTY 
+                                        FROM PRODUCT_RECIPE_VW_01 GROUP BY PRODUCED_DATE,PRODUCED_ITEM_GUID,PRODUCED_ITEM_CODE,
+                                        PRODUCED_ITEM_NAME,PRODUCED_QTY`,
+                            },
+                            sql:this.core.sql
+                        }
+                    }}
+                    >
+                        <Column dataField="PRODUCED_DATE" caption={this.t("popRecipe.clmDate")}  width={110} dataType={'date'} format={'dd/MM/yyyy'} defaultSortOrder="asc"/>
+                        <Column dataField="PRODUCED_ITEM_CODE" caption={this.t("popRecipe.clmCode")} width={200}/>
+                        <Column dataField="PRODUCED_ITEM_NAME" caption={this.t("popRecipe.clmName")} width={450} />
+                        <Column dataField="PRODUCED_QTY" caption={this.t("popRecipe.clmQuantity")} width={200} />
+                    </NdPopGrid>
+                    {/* Urun Recete Detay PopUp */}
+                    <NdPopGrid id={"popRecipeDetail"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
+                    visible={false}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    selection={{mode:"multiple"}}
+                    title={this.t("popRecipeDetail.title")} //
+                    dbApply={false}
+                    onRowUpdated={async(e)=>
+                    {
+                        let tmpIndex = e.component.getRowIndexByKey(e.key)
+                        let tmpData = e.component.getDataSource().items()
+                        let tmpX =  e.data.INPUT / tmpData[tmpIndex].QUANTITY
+
+                        for (let i = 0; i < tmpData.length; i++) 
+                        {
+                            if(tmpIndex != i)
+                            {
+                                tmpData[i].INPUT = Number(tmpX * tmpData[i].QUANTITY).round(3)
                             }
-                            e.component.refresh()
-                        }}
-                        >
-                            <Editing mode="cell" allowUpdating={true}/>
-                            <Column dataField="TYPE_NAME" caption={this.t("popRecipeDetail.clmType")} width={80} allowEditing={false}/>
-                            <Column dataField="ITEM_CODE" caption={this.t("popRecipeDetail.clmCode")} width={200} allowEditing={false}/>
-                            <Column dataField="ITEM_NAME" caption={this.t("popRecipeDetail.clmName")} width={600} allowEditing={false}/>
-                            <Column dataField="QUANTITY" caption={this.t("popRecipeDetail.clmQuantity")} width={100} allowEditing={false}/>
-                            <Column dataField="INPUT" caption={this.t("popRecipeDetail.clmEntry")} width={100} allowEditing={true}/>
-                        </NdPopGrid>
-                    </div>
+                        }
+                        e.component.refresh()
+                    }}
+                    >
+                        <Editing mode="cell" allowUpdating={true}/>
+                        <Column dataField="TYPE_NAME" caption={this.t("popRecipeDetail.clmType")} width={80} allowEditing={false}/>
+                        <Column dataField="ITEM_CODE" caption={this.t("popRecipeDetail.clmCode")} width={200} allowEditing={false}/>
+                        <Column dataField="ITEM_NAME" caption={this.t("popRecipeDetail.clmName")} width={600} allowEditing={false}/>
+                        <Column dataField="QUANTITY" caption={this.t("popRecipeDetail.clmQuantity")} width={100} allowEditing={false}/>
+                        <Column dataField="INPUT" caption={this.t("popRecipeDetail.clmEntry")} width={100} allowEditing={true}/>
+                    </NdPopGrid>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>                
             </div>
         )
