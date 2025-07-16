@@ -90,8 +90,10 @@ export default class PropertyCard extends React.PureComponent
     }
     async getProperty(pCode)
     {
+        console.log('pCode',pCode)
         this.propertyObj.clearAll()
         await this.propertyObj.load({CODE:pCode});
+        console.log('this.propertyObj', this.propertyObj);
 
         if(this.propertyObj.dt().length > 0)
         {
@@ -163,7 +165,6 @@ export default class PropertyCard extends React.PureComponent
                 {
                     duplicateItems.push(data[0].NAME);
                 }
-                
             }
             
             if(duplicateItems.length > 0)
@@ -171,22 +172,23 @@ export default class PropertyCard extends React.PureComponent
                 this.toast.show({message:this.t("msgDuplicateItems.msg") + " " + duplicateItems.join(", "),type:"warning"})
                 return
             }
-            else
+        }
+        
+        if(data.length > 0)
+        {
+            let tmpEmpty = 
             {
-            if(data.length > 0)
-                {
-                    let tmpEmpty = 
-                    {
-                        CUSER : this.user.CODE,
-                        LUSER : this.user.CODE,
-                        ITEM : data[0].GUID,
-                        PROPERTY : this.propertyObj.dt()[0].GUID,
-                        ITEM_NAME : data[0].NAME
-                    }
-
-                    this.propertyObj.dt('REST_ITEM_PROPERTY').push(tmpEmpty)
-                }
+                CUSER : this.user.CODE,
+                LUSER : this.user.CODE,
+                ITEM : data[0].GUID,
+                PROPERTY : this.propertyObj.dt()[0].GUID,
+                ITEM_NAME : data[0].NAME
             }
+
+            this.propertyObj.dt('REST_ITEM_PROPERTY').push(tmpEmpty)
+            
+            // Grid'i yenile
+            await this.grdList.dataRefresh({source:this.propertyObj.dt('REST_ITEM_PROPERTY')})
         }
         
         return [];
@@ -543,8 +545,7 @@ export default class PropertyCard extends React.PureComponent
                         showBorders={true}
                         width={'90%'}
                         height={'90%'}
-                        title={this.t("pgProduct.title")} 
-                        deferRendering={true}
+                        title={this.t("pgProduct.title")}
                         data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM ITEMS WHERE DELETED = 0"},sql:this.core.sql}}}                                   
                         >
                             <Column dataField="CODE" caption={this.t("pgProduct.clmCode")} width={150} />
