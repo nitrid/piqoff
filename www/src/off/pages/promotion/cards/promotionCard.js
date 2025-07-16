@@ -1,25 +1,24 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import {promoCls} from '../../../../core/cls/promotion.js'
-import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem,GroupItem } from 'devextreme-react/form';
-import { Button } from 'devextreme-react/button';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
+import NdTextBox, { Validator,  RequiredRule, RangeRule} from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing, Scrolling} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import { datatable } from '../../../../core/core.js';
+import { NdForm, NdItem, NdLabel, NdGroupItem } from '../../../../core/react/devex/form.js';
+import {NdToast} from '../../../../core/react/devex/toast.js';
 
 export default class promotionCard extends React.PureComponent
 {
@@ -125,7 +124,7 @@ export default class promotionCard extends React.PureComponent
                         title:this.t("msgRef.title"),
                         showCloseButton:true,
                         width:'500px',
-                        height:'200px',
+                        height:'auto',
                         button:[{id:"btn01",caption:this.t("msgRef.btn01"),location:'before'},{id:"btn02",caption:this.t("msgRef.btn02"),location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRef.msg")}</div>)
                     }
@@ -311,9 +310,10 @@ export default class promotionCard extends React.PureComponent
                                             this["pop_PrmItemList" + pItem.WITHAL].show()
                                         }}></NdButton> 
                                         {/* SEÇİM POPUP */}
-                                        <NdPopGrid id={"pg_txtPrmItem" + pItem.WITHAL} parent={this} container={"#root"} 
+                                        <NdPopGrid id={"pg_txtPrmItem" + pItem.WITHAL} parent={this} 
+                                        container={"#" + this.props.data.id + this.tabIndex}     
                                         visible={false}
-                                        position={{of:'#root'}} 
+                                        position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                         showTitle={true} 
                                         showBorders={true}
                                         width={'90%'}
@@ -343,8 +343,9 @@ export default class promotionCard extends React.PureComponent
                                             <Column dataField="PRICE" caption={this.t("pg_Grid.clmPrice")} width={100}/>
                                         </NdPopGrid>
                                         {/* SEÇİM LİSTE POPUP */}
-                                        <NdPopUp parent={this} id={"pop_PrmItemList" + pItem.WITHAL} container={"#root"}
-                                        position={{of:'#root'}}
+                                        <NdPopUp parent={this} id={"pop_PrmItemList" + pItem.WITHAL} 
+                                        container={"#" + this.props.data.id + this.tabIndex}
+                                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                                         showCloseButton={false}
                                         showTitle={true}
                                         title={this.t("pg_Grid.title")}
@@ -366,7 +367,7 @@ export default class promotionCard extends React.PureComponent
                                                             {
                                                                 let tmpConfObj =
                                                                 {
-                                                                    id:'msgItemAlert',showTitle:true,title:this.t("msgItemAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                    id:'msgItemAlert',showTitle:true,title:this.t("msgItemAlert.title"),showCloseButton:true,width:'500px',height:'auto',
                                                                     button:[{id:"btn01",caption:this.t("msgItemAlert.btn01"),location:'after'}],
                                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemAlert.msg")}</div>)
                                                                 }
@@ -438,7 +439,7 @@ export default class promotionCard extends React.PureComponent
                                                 {
                                                     let tmpConfObj1 =
                                                     {
-                                                        id:'msgDeleteAll',showTitle:true,title:this.t("msgDeleteAll.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        id:'msgDeleteAll',showTitle:true,title:this.t("msgDeleteAll.title"),showCloseButton:true,width:'500px',height:'auto',
                                                         button:[{id:"btn01",caption:this.t("msgDeleteAll.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDeleteAll.btn02"),location:'after'}],
                                                         content:(<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgDeleteAll.msg")}</div>)
                                                     }
@@ -750,9 +751,10 @@ export default class promotionCard extends React.PureComponent
                                         >     
                                         </NdTextBox> 
                                         {/* SEÇİM POPUP */}
-                                        <NdPopGrid id={"pg_txtRstItem" + pItem.WITHAL} parent={this} container={"#root"} 
+                                        <NdPopGrid id={"pg_txtRstItem" + pItem.WITHAL} parent={this}    
+                                        container={"#" + this.props.data.id + this.tabIndex} 
                                         visible={false}
-                                        position={{of:'#root'}} 
+                                        position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                         showTitle={true} 
                                         showBorders={true}
                                         width={'90%'}
@@ -852,8 +854,9 @@ export default class promotionCard extends React.PureComponent
                         </Form>
                         {/* ISKONTO POPUP */}
                         <div>
-                            <NdPopUp parent={this} id={"popDiscount" + pItem.WITHAL} container={"#root"}
-                            position={{of:'#root'}}
+                            <NdPopUp parent={this} id={"popDiscount" + pItem.WITHAL} 
+                            container={"#" + this.props.data.id + this.tabIndex}
+                            position={{of:'#' + this.props.data.id + this.tabIndex}}
                             showCloseButton={true}
                             showTitle={true}
                             title={this.t("popDiscount.title")}
@@ -883,7 +886,7 @@ export default class promotionCard extends React.PureComponent
 
                                                     let tmpConfObj =
                                                     {
-                                                        id:'msgDiscRate',showTitle:true,title:this.t("msgDiscRate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        id:'msgDiscRate',showTitle:true,title:this.t("msgDiscRate.title"),showCloseButton:true,width:'500px',height:'auto',
                                                         button:[{id:"btn01",caption:this.t("msgDiscRate.btn01"),location:'after'}],
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscRate.msg")}</div>)
                                                     }
@@ -907,7 +910,7 @@ export default class promotionCard extends React.PureComponent
 
                                                     let tmpConfObj =
                                                     {
-                                                        id:'msgDiscRate',showTitle:true,title:this.t("msgDiscRate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        id:'msgDiscRate',showTitle:true,title:this.t("msgDiscRate.title"),showCloseButton:true,width:'500px',height:'auto',
                                                         button:[{id:"btn01",caption:this.t("msgDiscRate.btn01"),location:'after'}],
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscRate.msg")}</div>)
                                                     }
@@ -951,7 +954,8 @@ export default class promotionCard extends React.PureComponent
     render()
     {
         return (
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
+                <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -962,7 +966,7 @@ export default class promotionCard extends React.PureComponent
                                     {
                                             let tmpConfObj =
                                             {
-                                                id:'msgNewPage',showTitle:true,title:this.t("msgNewPage.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgNewPage',showTitle:true,title:this.t("msgNewPage.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgNewPage.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewPage.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewPage.msg")}</div>)
                                             }
@@ -979,20 +983,14 @@ export default class promotionCard extends React.PureComponent
                                     {
                                         if(this.condDt[0].AMOUNT == 0 && this.condDt[0].QUANTITY == 0)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgQuantityOrAmount',showTitle:true,title:this.t("msgQuantityOrAmount.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgQuantityOrAmount.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantityOrAmount.msg")}</div>)
-                                            }
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgQuantityOrAmount.msg"),type:"warning"})
                                             return
                                         }
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
@@ -1002,7 +1000,7 @@ export default class promotionCard extends React.PureComponent
                                             {
                                                 let tmpConfObj1 =
                                                 {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
@@ -1141,15 +1139,13 @@ export default class promotionCard extends React.PureComponent
                                                 })
 
                                                 this.promo.cond.dt()._deleteList = this["itemList" + this.condDt[0].WITHAL]._deleteList
-                                                console.log(this["itemList" + this.condDt[0].WITHAL]._deleteList)
                                                 await this.core.util.waitUntil(0)
                                                 
                                                 if((await this.promo.save()) == 0)
                                                 {                                                    
                                                     this.getPromotion(this.txtCode.value)
 
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
+                                                    this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
                                                 }
                                                 else
                                                 {
@@ -1162,7 +1158,7 @@ export default class promotionCard extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
                                             }
@@ -1177,7 +1173,7 @@ export default class promotionCard extends React.PureComponent
                                     {                                        
                                         let tmpConfObj =
                                         {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
@@ -1187,6 +1183,7 @@ export default class promotionCard extends React.PureComponent
                                         {
                                             this.promo.dt().removeAt(0)
                                             await this.promo.dt().delete();
+                                            this.toast.show({message:this.t("msgDeleteResult.msgSuccess"),type:"success"})
                                             this.init(); 
                                         }
                                     }}/>
@@ -1203,7 +1200,7 @@ export default class promotionCard extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -1221,12 +1218,12 @@ export default class promotionCard extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2"> 
                         <div className="col-12">
-                            <Form colCount={3} id={"frmPromo"  + this.tabIndex}>
-                                <GroupItem colSpan={3}>
-                                    <GroupItem colCount={3}>
+                            <NdForm colCount={3} id={"frmPromo"  + this.tabIndex}>
+                                <NdGroupItem colSpan={3}>
+                                    <NdGroupItem colCount={3}>
                                         {/* txtCode */}
-                                        <Item>                                    
-                                            <Label text={this.t("txtCode")} alignment="right" />
+                                        <NdItem>                                    
+                                            <NdLabel text={this.t("txtCode")} alignment="right" />
                                             <NdTextBox id="txtCode" parent={this} simple={true} tabIndex={this.tabIndex} 
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             dt={{data:this.promo.dt(),field:"CODE"}}
@@ -1267,9 +1264,10 @@ export default class promotionCard extends React.PureComponent
                                                 </Validator>  
                                             </NdTextBox>  
                                             {/* PROMOSYON SEÇİM POPUP */}
-                                            <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"} 
+                                            <NdPopGrid id={"pg_txtCode"} parent={this} 
+                                            container={"#" + this.props.data.id + this.tabIndex} 
                                             visible={false}
-                                            position={{of:'#root'}} 
+                                            position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                             showTitle={true} 
                                             showBorders={true}
                                             width={'90%'}
@@ -1296,29 +1294,29 @@ export default class promotionCard extends React.PureComponent
                                                 <Column dataField="FINISH_DATE" caption={this.t("pg_Grid.clmFinishDate")} width={150} dataType="datetime" format={"dd/MM/yyyy"}/>
                                                 <Column dataField="ITEM" caption={this.t("pg_Grid.clmItem")} width={350} defaultSortOrder="asc" />
                                             </NdPopGrid>    
-                                        </Item>
+                                        </NdItem>
                                         {/* txtName */}
-                                        <Item colSpan={2}>                                    
-                                            <Label text={this.t("txtName")} alignment="right" />
+                                        <NdItem colSpan={2}>                                    
+                                            <NdLabel text={this.t("txtName")} alignment="right" />
                                             <NdTextBox id="txtName" parent={this} simple={true} 
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             placeholder={this.t("txtNamePlace")}
                                             dt={{data:this.promo.dt(),field:"NAME"}}
                                             />     
-                                        </Item>
+                                        </NdItem>
                                         {/* dtStartDate */}
-                                        <Item>
-                                            <Label text={this.t("dtStartDate")} alignment="right" />
+                                        <NdItem>
+                                            <NdLabel text={this.t("dtStartDate")} alignment="right" />
                                             <NdDatePicker simple={true}  parent={this} id={"dtStartDate"} dt={{data:this.promo.dt(),field:"START_DATE"}}/>
-                                        </Item>
+                                        </NdItem>
                                         {/* dtFinishDate */}
-                                        <Item>
-                                            <Label text={this.t("dtFinishDate")} alignment="right" />
+                                        <NdItem>
+                                            <NdLabel text={this.t("dtFinishDate")} alignment="right" />
                                             <NdDatePicker simple={true}  parent={this} id={"dtFinishDate"} dt={{data:this.promo.dt(),field:"FINISH_DATE"}}/>
-                                        </Item>
+                                        </NdItem>
                                         {/* cmbDepot */}
-                                        <Item>
-                                            <Label text={this.t("cmbDepot")} alignment="right" />
+                                        <NdItem>
+                                            <NdLabel text={this.t("cmbDepot")} alignment="right" />
                                             <NdSelectBox simple={true} parent={this} id="cmbDepot"
                                             dt={{data:this.promo.dt(),field:"DEPOT_GUID",display:"DEPOT_NAME"}}
                                             displayExpr="DEPOT_NAME"                       
@@ -1328,10 +1326,10 @@ export default class promotionCard extends React.PureComponent
                                             {
                                             }}
                                             />
-                                        </Item>
+                                        </NdItem>
                                         {/* txtCustomerCode */}
-                                        <Item>                                    
-                                            <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                        <NdItem>                                    
+                                            <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                             <NdTextBox id="txtCustomerCode" parent={this} simple={true} 
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             dt={{data:this.promo.dt(),field:"CUSTOMER_CODE"}}
@@ -1365,8 +1363,8 @@ export default class promotionCard extends React.PureComponent
                                             >     
                                             </NdTextBox>      
                                             <NdPopGrid id={"pg_txtCustomerCode"} parent={this} 
-                                            container={"root"} 
-                                            position={{of:'#root'}} 
+                                            container={"#" + this.props.data.id + this.tabIndex} 
+                                            position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                             showTitle={true} 
                                             showBorders={true}
                                             width={'75%'}
@@ -1392,23 +1390,23 @@ export default class promotionCard extends React.PureComponent
                                             <Column dataField="TITLE" caption={this.t("pg_Grid.clmName")} width={650} defaultSortOrder="asc" />
                                             <Column dataField="CODE" caption={this.t("pg_Grid.clmCode")} width={150} />
                                             </NdPopGrid>
-                                        </Item>
+                                        </NdItem>
                                         {/* txtCustomerName */}
-                                        <Item colSpan={2}>                                    
-                                            <Label text={this.t("txtCustomerName")} alignment="right" />
+                                        <NdItem colSpan={2}>                                    
+                                            <NdLabel text={this.t("txtCustomerName")} alignment="right" />
                                             <NdTextBox id="txtCustomerName" parent={this} simple={true} readOnly={true}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             dt={{data:this.promo.dt(),field:"CUSTOMER_NAME"}}
                                             />     
-                                        </Item>
-                                        <Item>
-                                            <Label text={this.t("chkLoyalty")} alignment="right" />
+                                        </NdItem>
+                                        <NdItem>
+                                            <NdLabel text={this.t("chkLoyalty")} alignment="right" />
                                             <NdCheckBox id="chkLoyalty" parent={this} simple={true} value={false} dt={{data:this.promo.dt(),field:"LOYALTY"}}/>
-                                        </Item>
-                                    </GroupItem>
-                                </GroupItem>
-                                <GroupItem colSpan={3}>
-                                    <Item>
+                                        </NdItem>
+                                    </NdGroupItem>
+                                </NdGroupItem>
+                                <NdGroupItem colSpan={3}>
+                                    <NdItem>
                                         <NdListBox id={"lstPromo"} parent={this}
                                         allowItemDeleting={true}
                                         itemDeleteMode={"static"}
@@ -1438,9 +1436,9 @@ export default class promotionCard extends React.PureComponent
                                         }}
                                         >
                                         </NdListBox>
-                                    </Item>
-                                </GroupItem>
-                            </Form>
+                                    </NdItem>
+                                </NdGroupItem>
+                            </NdForm>
                         </div>
                     </div>                    
                 </ScrollView>               

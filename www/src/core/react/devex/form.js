@@ -261,6 +261,53 @@ export class NdLabel extends React.PureComponent
         );
     }
 }
+export class NdGroupItem extends React.PureComponent 
+{
+    render() 
+    {
+        const { children,  className, style, colSpan = 1, caption, colCount = 1, captionStyle, groupStyle } = this.props;
+        
+        // Gruplar arası mesafeyi artırmak için marginBottom ekliyoruz
+        const groupWrapperStyle = 
+        {
+            gridColumn: `span ${colSpan}`,
+            marginBottom: '18px', // Burada mesafeyi biraz açtık (varsayılan 10px idi)
+            ...style
+        };
+        
+        const captionWrapperStyle = 
+        {
+            fontSize: '14px',
+            fontWeight: 'bold',
+            color: '#333',
+            marginBottom: '10px',
+            ...captionStyle
+        };
+        
+        const contentStyle = 
+        {
+            display: 'grid',
+            gridTemplateColumns: `repeat(${colCount}, 1fr)`,
+            gap: '10px',
+            '--label-width': 'var(--label-width, 150px)',
+            ...groupStyle
+        };
+        
+        return (
+            <div className={`nd-group-item ${className || ''}`} style={groupWrapperStyle}>
+                {caption && (
+                    <div style={captionWrapperStyle}>
+                        {caption}
+                    </div>
+                )}
+                <div style={contentStyle}>
+                    {children}
+                </div>
+            </div>
+        );
+    }
+}
+
 export class NdEmptyItem extends React.PureComponent 
 {
     render() 
