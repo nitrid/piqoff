@@ -14,7 +14,6 @@ import { Button } from 'devextreme-react/button';
 import NdTextBox, { Validator, RequiredRule, RangeRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -23,7 +22,6 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form';
 import {NdToast} from '../../../../core/react/devex/toast';
-
 export default class branchSaleInvoice extends DocBase
 {
     constructor(props)
@@ -34,7 +32,7 @@ export default class branchSaleInvoice extends DocBase
         this.docType = 22;
         this.rebate = 0;
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
 
@@ -49,21 +47,16 @@ export default class branchSaleInvoice extends DocBase
     {
         await this.core.util.waitUntil(0)
         await this.init()
+
         if(typeof this.pagePrm != 'undefined')
         {
             if(typeof this.pagePrm.GUID != 'undefined')
             {
-                setTimeout(() => 
-                {
-                    this.getDoc(this.pagePrm.GUID,'',-1)
-                }, 1000);
+                setTimeout(() => {this.getDoc(this.pagePrm.GUID,'',-1)}, 1000);
             }
             else if(typeof this.pagePrm.piqx != 'undefined')
             {
-                setTimeout(() => 
-                    {
-                        this.initPiqX()
-                    }, 1000);
+                setTimeout(() => {this.initPiqX()}, 1000);
             }
         }
     }
@@ -76,7 +69,7 @@ export default class branchSaleInvoice extends DocBase
         {
             let tmpCustQuery = 
             {
-                query : "SELECT * FROM CUSTOMERS WHERE TAX_NO = @TAX_NO",
+                query : "SELECT GUID,CODE,TITLE,VAT_ZERO FROM CUSTOMERS WHERE TAX_NO = @TAX_NO",
                 param : ['TAX_NO:string|25'],
                 value : [this.piqX[0].DOC_FROM_NO]
             }
@@ -92,12 +85,15 @@ export default class branchSaleInvoice extends DocBase
                 {
                     this.frmDocItems.option('disabled',false)
                 }
+
                 this.docObj.dt()[0].OUTPUT = tmpCustData.result.recordset[0].GUID
                 this.docObj.docCustomer.dt()[0].OUTPUT = tmpCustData.result.recordset[0].GUID
                 this.docObj.dt()[0].OUTPUT_CODE = tmpCustData.result.recordset[0].CODE
                 this.docObj.dt()[0].OUTPUT_NAME = tmpCustData.result.recordset[0].TITLE
                 this.docObj.dt()[0].VAT_ZERO = tmpCustData.result.recordset[0].VAT_ZERO
+                
                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                
                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                 {
                     this.txtRef.value = tmpCustData.result.recordset[0].CODE
@@ -109,7 +105,9 @@ export default class branchSaleInvoice extends DocBase
                     param : ['CUSTOMER:string|50'],
                     value : [tmpCustData.result.recordset[0].GUID]
                 }
+
                 let tmpAdressData = await this.core.sql.execute(tmpAdrQuery) 
+                
                 if(tmpAdressData.result.recordset.length > 1)
                 {
                     this.docObj.dt()[0].ADDRESS = tmpAdressData[0].ADRESS_NO
@@ -138,17 +136,17 @@ export default class branchSaleInvoice extends DocBase
 
                 let tmpItemQuery = 
                 {
-                    query : "SELECT " + 
-                            "I.GUID AS ITEM, " + 
-                            "I.CODE AS ITEM_CODE, " + 
-                            "I.NAME AS ITEM_NAME, " + 
-                            "I.UNIT AS UNIT, " + 
-                            "I.COST_PRICE AS COST_PRICE, " +
-                            "I.VAT AS VAT " +
-                            "FROM ITEM_MULTICODE AS M " + 
-                            "INNER JOIN ITEMS_VW_04 AS I ON " + 
-                            "M.ITEM = I.GUID " + 
-                            "WHERE M.CODE = @CODE AND M.CUSTOMER = @CUSTOMER",
+                    query : `SELECT 
+                            I.GUID AS ITEM, 
+                            I.CODE AS ITEM_CODE, 
+                            I.NAME AS ITEM_NAME, 
+                            I.UNIT AS UNIT, 
+                            I.COST_PRICE AS COST_PRICE, 
+                            I.VAT AS VAT 
+                            FROM ITEM_MULTICODE AS M 
+                            INNER JOIN ITEMS_VW_04 AS I ON 
+                            M.ITEM = I.GUID 
+                            WHERE M.CODE = @CODE AND M.CUSTOMER = @CUSTOMER`,
                     param : ['CODE:string|50','CUSTOMER:string|50'],
                     value : [jData[i].ITEM_CODE,this.docObj.dt()[0].OUTPUT]
                 }
@@ -180,7 +178,6 @@ export default class branchSaleInvoice extends DocBase
                     button:[{id:"btn01",caption:this.t("msgMissItemCode.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",wordWrap:"break-word",fontSize:"20px"}}>{this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes}</div>)
                 }
-            
                 await dialog(tmpConfObj);
             }
         }
@@ -199,6 +196,7 @@ export default class branchSaleInvoice extends DocBase
     async init()
     {
         await super.init()
+
         this.grid = this["grdSlsInv"+this.tabIndex]
         this.grid.devGrid.clearFilter("row")
         this.dtDocDate.value = moment(new Date())
@@ -224,7 +222,7 @@ export default class branchSaleInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS FROM ITEMS_VW_04 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))" ,
+                        query : `SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS FROM ITEMS_VW_04 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))`,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -238,9 +236,11 @@ export default class branchSaleInvoice extends DocBase
                 source:
                 {
                     select:
-                    {   query : "SELECT ITEMS_VW_04.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_04.VAT,ITEMS_VW_04.UNIT,BARCODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
-                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_04.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                "FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE ITEMS_VW_04.STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
+                    {   query : `SELECT ITEMS_VW_04.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_04.VAT,ITEMS_VW_04.UNIT,BARCODE,
+                                ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND ITEM_MULTICODE.CUSTOMER = '${this.docObj.dt()[0].OUTPUT}' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, 
+                                ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_04.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME 
+                                FROM ITEMS_VW_04 
+                                INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE ITEMS_VW_04.STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)`,
                         param : ['BARCODE:string|50'],
                     },
                     sql:this.core.sql
@@ -255,8 +255,9 @@ export default class branchSaleInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],VAT_ZERO,EXPIRY_DAY,TAX_NO,ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE " +
-                                "FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND GENUS = 3",
+                        query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],VAT_ZERO,EXPIRY_DAY,TAX_NO,
+                                ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE 
+                                FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND GENUS = 3`,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -279,7 +280,7 @@ export default class branchSaleInvoice extends DocBase
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
         this.docObj.docCustomer.dt()[0].ROUND = 0
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == "ITEM_CODE")
         {
@@ -288,49 +289,53 @@ export default class branchSaleInvoice extends DocBase
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
                 onKeyDown={async(k)=>
-                    {
-                        if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
-                        { 
-                            this.pg_txtItemsCode.onClick = async(data) =>
-                            {
-                                this.checkboxReset()
-
-                                this.grid.devGrid.beginUpdate()
-                                for (let i = 0; i < data.length; i++) 
-                                {
-                                    await this.addItem(data[i],e.rowIndex)
-                                }
-                                this.grid.devGrid.endUpdate()
-                            }
-                            this.pg_txtItemsCode.setVal(e.value)
-                        }
-                    }}
-                    onValueChanged={(v)=>
-                    {
-                        e.value = v.value
-                    }}
-                onChange={(async(r)=>
-                    {
-                        if(typeof r.event.isTrusted == 'undefined')
+                {
+                    if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
+                    { 
+                        this.pg_txtItemsCode.onClick = async(data) =>
                         {
-                            let tmpQuery = 
+                            this.checkboxReset()
+
+                            this.grid.devGrid.beginUpdate()
+                            for (let i = 0; i < data.length; i++) 
                             {
-                                query :"SELECT ITEMS_VW_04.GUID,CODE,NAME,ITEMS_VW_04.VAT,COST_PRICE,ITEMS_VW_04.UNIT FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
-                                param : ['CODE:string|50'],
-                                value : [r.component._changedValue]
+                                await this.addItem(data[i],e.rowIndex)
                             }
-                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                            if(tmpData.result.recordset.length > 0)
-                            {
-                                this.checkboxReset()
-                                await this.addItem(tmpData.result.recordset[0],e.rowIndex)
-                            }
-                            else
-                            {
-                                this.toast.show({message:this.t("msgItemNotFound.msg"),type:"error"})
-                            }
+                            this.grid.devGrid.endUpdate()
                         }
-                    }).bind(this)}
+                        this.pg_txtItemsCode.setVal(e.value)
+                    }
+                }}
+                onValueChanged={(v)=>
+                {
+                    e.value = v.value
+                }}
+                onChange={(async(r)=>
+                {
+                    if(typeof r.event.isTrusted == 'undefined')
+                    {
+                        let tmpQuery = 
+                        {
+                            query : `SELECT ITEMS_VW_04.GUID,CODE,NAME,ITEMS_VW_04.VAT,COST_PRICE,ITEMS_VW_04.UNIT 
+                                    FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID 
+                                    WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE`,
+                            param : ['CODE:string|50'],
+                            value : [r.component._changedValue]
+                        }
+
+                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                        
+                        if(tmpData.result.recordset.length > 0)
+                        {
+                            this.checkboxReset()
+                            await this.addItem(tmpData.result.recordset[0],e.rowIndex)
+                        }
+                        else
+                        {
+                            this.toast.show({message:this.t("msgItemNotFound.msg"),type:"error"})
+                        }
+                    }
+                }).bind(this)}
                 button=
                 {
                     [
@@ -354,8 +359,7 @@ export default class branchSaleInvoice extends DocBase
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
         if(e.column.dataField == "QUANTITY")
@@ -381,6 +385,7 @@ export default class branchSaleInvoice extends DocBase
 
                                 e.key.UNIT = this.cmbUnit.value
                                 e.key.UNIT_FACTOR = this.txtUnitFactor.value
+
                                 if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
                                 {
                                     e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
@@ -389,7 +394,9 @@ export default class branchSaleInvoice extends DocBase
                                 {
                                     e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
                                 }
+
                                 e.data.QUANTITY = this.txtTotalQuantity.value
+                                
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
@@ -409,8 +416,7 @@ export default class branchSaleInvoice extends DocBase
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
         if(e.column.dataField == "DISCOUNT")
@@ -445,6 +451,7 @@ export default class branchSaleInvoice extends DocBase
                                 e.data.DISCOUNT_2 = this.txtDiscount2.value
                                 e.data.DISCOUNT_3 = this.txtDiscount3.value
                                 e.data.DISCOUNT = (parseFloat(this.txtDiscount1.value) + parseFloat(this.txtDiscount2.value) + parseFloat(this.txtDiscount3.value))
+                                
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
@@ -453,7 +460,8 @@ export default class branchSaleInvoice extends DocBase
                                 {
                                     e.data.VAT = 0
                                     e.data.VAT_RATE = 0
-                                }   
+                                }
+
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
                                 e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
                                 e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
@@ -463,8 +471,7 @@ export default class branchSaleInvoice extends DocBase
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
         if(e.column.dataField == "DISCOUNT_RATE")
@@ -498,6 +505,7 @@ export default class branchSaleInvoice extends DocBase
                                 e.data.DISCOUNT_2 = Number(e.data.AMOUNT-e.data.DISCOUNT_1).rateInc(this.txtDiscountPer2.value,4) 
                                 e.data.DISCOUNT_3 = Number(e.data.AMOUNT-e.data.DISCOUNT_1-e.data.DISCOUNT_2).rateInc(this.txtDiscountPer3.value,4) 
                                 e.data.DISCOUNT = (e.data.DISCOUNT_1 + e.data.DISCOUNT_2 + e.data.DISCOUNT_3)
+                                
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
@@ -506,7 +514,8 @@ export default class branchSaleInvoice extends DocBase
                                 {
                                     e.data.VAT = 0
                                     e.data.VAT_RATE = 0
-                                }        
+                                }
+                                        
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
                                 e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
                                 e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
@@ -534,15 +543,17 @@ export default class branchSaleInvoice extends DocBase
             {
                 let tmpCheckQuery = 
                 {
-                    query :"SELECT CODE AS MULTICODE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0",
+                    query : `SELECT CODE AS MULTICODE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0`,
                     param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                     value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
                 }
+
                 let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
-                console.log(tmpCheckData)
+                
                 if(tmpCheckData.result.recordset.length == 0)
                 {   
                     let tmpCustomerBtn = ''
+
                     if(this.customerClear == true)
                     {
                         resolve()
@@ -566,6 +577,7 @@ export default class branchSaleInvoice extends DocBase
                             resolve()
                             return
                         }
+                        
                         if(e == 'btn02')
                         {
                             tmpCustomerBtn = e
@@ -577,6 +589,7 @@ export default class branchSaleInvoice extends DocBase
                             return 
                         }
                     })
+
                     if(tmpCustomerBtn == 'btn02')
                     {
                         resolve()
@@ -586,10 +599,12 @@ export default class branchSaleInvoice extends DocBase
             }
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
             let tmpMergDt = await this.mergeItem(pData.CODE)
+
             if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
             {
                 tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
                 tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+            
                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                 {
                     tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
@@ -632,12 +647,16 @@ export default class branchSaleInvoice extends DocBase
             
             let tmpGrpQuery = 
             {
-                query :"SELECT ORGINS,UNIT_SHORT,PARTILOT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
-                 "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_GRP_VW_01 WHERE GUID = @GUID ",
+                query : `SELECT ORGINS,UNIT_SHORT,PARTILOT,
+                        ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, 
+                        ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL 
+                        FROM ITEMS_GRP_VW_01 WHERE GUID = @GUID `,
                 param : ['GUID:string|50'],
                 value : [pData.GUID]
             }
+
             let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
+            
             if(tmpGrpData.result.recordset.length > 0)
             {
                 this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
@@ -654,7 +673,9 @@ export default class branchSaleInvoice extends DocBase
                     param : ['GUID:string|50'],
                     value : [pData.GUID]
                 }
+
                 let tmpType = await this.core.sql.execute(tmpTypeQuery) 
+                
                 if(tmpType.result.recordset.length > 0)
                 {
                     pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
@@ -672,15 +693,18 @@ export default class branchSaleInvoice extends DocBase
             this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
             this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
             this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+            
             if(typeof pPrice == 'undefined')
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT COST_PRICE AS PRICE FROM ITEMS_VW_04 WHERE GUID = @GUID",
+                    query : `SELECT COST_PRICE AS PRICE FROM ITEMS_VW_04 WHERE GUID = @GUID`,
                     param : ['GUID:string|50'],
                     value : [pData.GUID]
                 }
+
                 let tmpData = await this.core.sql.execute(tmpQuery) 
+                
                 if(tmpData.result.recordset.length > 0)
                 {
                     this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
@@ -701,11 +725,13 @@ export default class branchSaleInvoice extends DocBase
                 this.docObj.docItems.dt()[pIndex].TOTAL = Number((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                 this.calculateTotal()
             }
+
             if(this.docObj.dt()[0].VAT_ZERO == 1)
             {
                 this.docObj.docItems.dt()[pIndex].VAT = 0
                 this.docObj.docItems.dt()[pIndex].VAT_RATE = 0
             }
+            
             if(typeof pData.PARTILOT_GUID != 'undefined')
             {
                 this.docObj.docItems.dt()[pIndex].PARTILOT_GUID = pData.PARTILOT_GUID
@@ -720,12 +746,13 @@ export default class branchSaleInvoice extends DocBase
                     {
                         select:
                         {
-                            query : "SELECT GUID,LOT_CODE,SKT FROM ITEM_PARTI_LOT_VW_01 WHERE UPPER(LOT_CODE) LIKE UPPER(@VAL) AND ITEM = '" + pData.GUID + "'",
+                            query : `SELECT GUID,LOT_CODE,SKT FROM ITEM_PARTI_LOT_VW_01 WHERE UPPER(LOT_CODE) LIKE UPPER(@VAL) AND ITEM = '${pData.GUID}'`,
                             param : ['VAL:string|50']
                         },
                         sql:this.core.sql
                     }
                 }
+
                 this.pg_partiLot.setSource(tmpSource)
                 this.pg_partiLot.onClick = async(data) =>
                 {
@@ -745,8 +772,9 @@ export default class branchSaleInvoice extends DocBase
     {
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE OUTPUT = @OUTPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND " +
-                    "TYPE = 0 AND REBATE = 0 AND DOC_TYPE IN (42)",
+            query : `SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS 
+                    FROM DOC_ITEMS_VW_01 WHERE OUTPUT = @OUTPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND 
+                    TYPE = 0 AND REBATE = 0 AND DOC_TYPE IN (42)`,
             param : ['OUTPUT:string|50'],
             value : [this.docObj.dt()[0].OUTPUT]
         }
@@ -756,7 +784,9 @@ export default class branchSaleInvoice extends DocBase
     {
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE OUTPUT = @OUTPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(60)",
+            query : `SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS 
+                    FROM DOC_ORDERS_VW_01 WHERE OUTPUT = @OUTPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' 
+                    AND TYPE = 0 AND DOC_TYPE IN(60)`,
             param : ['OUTPUT:string|50'],
             value : [this.docObj.dt()[0].OUTPUT]
         }
@@ -776,6 +806,7 @@ export default class branchSaleInvoice extends DocBase
             }
 
             let pResult = await dialog(tmpConfObj);
+
             if(pResult == 'btn01')
             {
                 this.multiItemData.clear()
@@ -787,13 +818,15 @@ export default class branchSaleInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,ITEMS_VW_04.UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_04 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE " ,
+                    query : `SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,ITEMS_VW_04.UNIT,
+                            ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].OUTPUT}'),'') AS MULTICODE
+                            FROM ITEMS_VW_04 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].OUTPUT}'),'') = @VALUE `,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
+
                 let tmpData = await this.core.sql.execute(tmpQuery) 
+                
                 if(tmpData.result.recordset.length > 0)
                 {
                     if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
@@ -811,13 +844,15 @@ export default class branchSaleInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,ITEMS_VW_04.UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_04 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
+                    query : `SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,ITEMS_VW_04.UNIT,
+                            ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].OUTPUT}'),'') AS MULTICODE
+                            FROM ITEMS_VW_04 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) `,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
+
                 let tmpData = await this.core.sql.execute(tmpQuery) 
+                
                 if(tmpData.result.recordset.length > 0)
                 {
                     if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
@@ -831,8 +866,8 @@ export default class branchSaleInvoice extends DocBase
                     tmpMissCodes.push("'" +this.tagItemCode.value[i] + "'")
                 }
             }
-            
         }
+
         if(tmpMissCodes.length > 0)
         {
             let tmpConfObj =
@@ -844,6 +879,7 @@ export default class branchSaleInvoice extends DocBase
         
             await dialog(tmpConfObj);
         }
+
         let tmpConfObj =
         {
             id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -851,8 +887,7 @@ export default class branchSaleInvoice extends DocBase
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiCodeCount.msg") + ' ' +tmpCounter}</div>)
         }
     
-         await dialog(tmpConfObj);
-
+        await dialog(tmpConfObj);
     }
     async multiItemSave()
     {
@@ -873,14 +908,17 @@ export default class branchSaleInvoice extends DocBase
         }
         
         let pResult = await dialog(tmpConfObj);
+
         if(pResult == 'btn01')
         {
             let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
+
             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
             {
                 App.instance.setState({isExecute:true})
                 this.newPrice.clear()
                 this.newVat.clear()
+            
                 for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                 {
                     if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
@@ -889,7 +927,9 @@ export default class branchSaleInvoice extends DocBase
                         {
                             let tmpQuery = 
                             {
-                                query : "SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,VAT AS VAT,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT_RATE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER",
+                                query : `SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,VAT AS VAT,
+                                        CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT_RATE 
+                                        FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER`,
                                 param : ['ITEM:string|50','CUSTOMER:string|50'],
                                 value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT]
                             }
@@ -897,24 +937,7 @@ export default class branchSaleInvoice extends DocBase
                             if(tmpData.result.recordset.length > 0)
                             {
                                 let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
-                                // if(tmpTaxSucre == 1)
-                                // {
-                                //     let tmpQuery2 = 
-                                //     {
-                                //         query : "SELECT MAIN_GUID FROM ITEMS_VW_01 WHERE GUID = @ITEM",
-                                //         param : ['ITEM:string|50'],
-                                //         value : [this.docObj.docItems.dt()[i].ITEM]
-                                //     }
-                                //     let tmpData2 = await this.core.sql.execute(tmpQuery2)
-                                //     if(tmpData2.result.recordset.length > 0)
-                                //     {
-                                //         let tmpData = this.prmObj.filter({ID:'taxSugarGroupValidation'}).getValue()
-                                //         if((typeof tmpData != 'undefined' && Array.isArray(tmpData) && typeof tmpData.find(x => x == tmpData2.result.recordset[0].MAIN_GUID) != 'undefined'))
-                                //         {
-                                            
-                                //         }
-                                //     }
-                                // }
+                                
                                 tmpItemData[0].SALE_PRICE_GUID = tmpData.result.recordset[0].PRICE_GUID
                                 tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
                                 tmpItemData[0].ITEM_VAT = tmpData.result.recordset[0].VAT
@@ -942,48 +965,49 @@ export default class branchSaleInvoice extends DocBase
                         {
                             this.updatePriceData.insertCmd = 
                             {
-                                query : "EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] " + 
-                                "@PRICE_GUID = @PPRICE_GUID, " +
-                                "@NEW_CUSER = @PNEW_CUSER, " + 
-                                "@NEW_PRICE = @PNEW_PRICE, " +
-                                "@UPDATE_ITEM = @PUPDATE_ITEM, " +
-                                "@CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, " +
-                                "@COST_PRICE = @PCOST_PRICE ", 
-                                param : ['PPRICE_GUID:string|50','PNEW_CUSER:string|25','PNEW_PRICE:float','PUPDATE_ITEM:string|50','PCUSTOMER_PRICE_GUID:string|50','PCOST_PRICE:float'],
+                                query : `EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] 
+                                        @PRICE_GUID = @PPRICE_GUID, 
+                                        @NEW_CUSER = @PNEW_CUSER, 
+                                        @NEW_PRICE = @PNEW_PRICE, 
+                                        @UPDATE_ITEM = @PUPDATE_ITEM, 
+                                        @CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, 
+                                        @COST_PRICE = @PCOST_PRICE `, 
+                                param : ['PPRICE_GUID:string|50','PNEW_CUSER:string|25','PNEW_PRICE:float','PUPDATE_ITEM:string|50',
+                                        'PCUSTOMER_PRICE_GUID:string|50','PCOST_PRICE:float'],
                                 dataprm : ['SALE_PRICE_GUID','CUSER','SALE_PRICE','ITEM','CUSTOMER_PRICE_GUID','PRICE']
                             } 
                             this.updatePriceData.updateCmd = 
                             {
-                                query : "EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] " + 
-                                "@PRICE_GUID = @PPRICE_GUID, " +
-                                "@NEW_CUSER = @PNEW_CUSER, " + 
-                                "@NEW_PRICE = @PNEW_PRICE, " +
-                                "@UPDATE_ITEM = @PUPDATE_ITEM, " +
-                                "@CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, " +
-                                "@COST_PRICE = @PCOST_PRICE ", 
-                                param : ['PPRICE_GUID:string|50','PNEW_CUSER:string|25','PNEW_PRICE:float','PUPDATE_ITEM:string|50','PCUSTOMER_PRICE_GUID:string|50','PCOST_PRICE:float'],
+                                query : `EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] 
+                                        @PRICE_GUID = @PPRICE_GUID, 
+                                        @NEW_CUSER = @PNEW_CUSER, 
+                                        @NEW_PRICE = @PNEW_PRICE, 
+                                        @UPDATE_ITEM = @PUPDATE_ITEM, 
+                                        @CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, 
+                                        @COST_PRICE = @PCOST_PRICE `, 
+                                param : ['PPRICE_GUID:string|50','PNEW_CUSER:string|25','PNEW_PRICE:float','PUPDATE_ITEM:string|50',
+                                        'PCUSTOMER_PRICE_GUID:string|50','PCOST_PRICE:float'],
                                 dataprm : ['SALE_PRICE_GUID','CUSER','SALE_PRICE','ITEM','CUSTOMER_PRICE_GUID','PRICE']
                             } 
+
                             App.instance.setState({isExecute:true})
+                            
                             for (let i = 0; i < this.grdNewPrice.getSelectedData().length; i++) 
                             {
                                 this.updatePriceData.push(this.grdNewPrice.getSelectedData()[i])
                             }
+
                             await this.updatePriceData.update()
                             App.instance.setState({isExecute:false})
                             this.updatePriceData.clear()
                         }
                     })
                 }    
+
                 if(this.newVat.length > 0)
                 {
                     await this.msgNewVat.show().then(async (e) =>
                     {
-            
-                        if(e == 'btn01')
-                        {
-                            
-                        }
                         if(e == 'btn02')
                         {
                             App.instance.setState({isExecute:true})
@@ -991,7 +1015,7 @@ export default class branchSaleInvoice extends DocBase
                             {
                                 let tmpQuery = 
                                 {
-                                    query :"UPDATE ITEMS SET VAT = @VAT WHERE GUID = @GUID",
+                                    query : `UPDATE ITEMS SET VAT = @VAT WHERE GUID = @GUID`,
                                     param : ['GUID:string|50','VAT:float'],
                                     value : [this.grdNewVat.getSelectedData()[i].ITEM,this.grdNewVat.getSelectedData()[i].VAT_RATE]
                                 }
@@ -1012,13 +1036,16 @@ export default class branchSaleInvoice extends DocBase
             }
             
             let pResult = await dialog(tmpConfObj);
+
             if(pResult == 'btn01')
             {
                 let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
+                
                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                 {
                     App.instance.setState({isExecute:true})
                     this.newPriceDate.clear()
+                    
                     for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                     {
                         if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
@@ -1027,11 +1054,15 @@ export default class branchSaleInvoice extends DocBase
                             {
                                 let tmpQuery = 
                                 {
-                                    query : "SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,VAT AS VAT,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT_RATE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER",
+                                    query : `SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,VAT AS VAT,
+                                            CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT_RATE 
+                                            FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER`,
                                     param : ['ITEM:string|50','CUSTOMER:string|50'],
                                     value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT]
                                 }
+
                                 let tmpData = await this.core.sql.execute(tmpQuery)
+                                
                                 if(tmpData.result.recordset.length > 0)
                                 {
                                     let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
@@ -1049,7 +1080,6 @@ export default class branchSaleInvoice extends DocBase
                                     tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
                                     tmpItemData[0].MARGIN = ((tmpMargin / tmpExVat) * 100); 
                                     tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID
-                                    console.log(tmpItemData[0])
                                     this.newPriceDate.push(tmpItemData[0])
                                 } 
                             }
@@ -1059,30 +1089,27 @@ export default class branchSaleInvoice extends DocBase
                     {
                         await this.msgNewPriceDate.show().then(async (e) =>
                         {
-                
-                            if(e == 'btn01')
-                            {
-                                
-                            }
                             if(e == 'btn02')
                             {
                                 this.updatePriceData.insertCmd = 
                                 {
-                                    query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " + 
-                                    "@GUID =  @PCUSTOMER_PRICE_GUID," +
-                                    "@CUSER = @PNEW_CUSER ", 
+                                    query : `EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] 
+                                            @GUID =  @PCUSTOMER_PRICE_GUID,
+                                            @CUSER = @PNEW_CUSER `, 
                                     param : ['PNEW_CUSER:string|25','PCUSTOMER_PRICE_GUID:string|50'],
                                     dataprm : ['CUSER','CUSTOMER_PRICE_GUID']
                                 } 
                                 this.updatePriceData.updateCmd = 
                                 {
-                                    query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " + 
-                                    "@GUID =  @PCUSTOMER_PRICE_GUID," +
-                                    "@CUSER = @PNEW_CUSER ", 
+                                    query : `EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] 
+                                            @GUID =  @PCUSTOMER_PRICE_GUID,
+                                            @CUSER = @PNEW_CUSER `, 
                                     param : ['PNEW_CUSER:string|25','PCUSTOMER_PRICE_GUID:string|50'],
                                     dataprm : ['CUSER','CUSTOMER_PRICE_GUID']
-                                } 
+                                }
+
                                 App.instance.setState({isExecute:true})
+                                
                                 for (let i = 0; i < this.grdNewPriceDate.getSelectedData().length; i++) 
                                 {
                                     this.updatePriceData.push(this.grdNewPriceDate.getSelectedData()[i])
@@ -1096,11 +1123,6 @@ export default class branchSaleInvoice extends DocBase
                     App.instance.setState({isExecute:false})
                 }
             }
-            let tmpConfObj1 =
-            {
-                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
-                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-            }
             
             if((await this.docObj.save()) == 0)
             {                                                    
@@ -1108,6 +1130,7 @@ export default class branchSaleInvoice extends DocBase
                 {
                     this.core.socket.emit('piqXInvoiceSetStatus',{invoiceId:this.piqX[0].GUID,user:this.core.auth.data.CODE,status:1})
                 }
+
                 this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
                 
                 this.btnSave.setState({disabled:true});
@@ -1115,7 +1138,12 @@ export default class branchSaleInvoice extends DocBase
             }
             else
             {
-                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                let tmpConfObj1 =
+                {
+                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
+                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                    content : (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                }
                 await dialog(tmpConfObj1);
             }
         }
@@ -1131,17 +1159,13 @@ export default class branchSaleInvoice extends DocBase
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                        onClick={()=>
-                                        {
-                                            this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
-                                        }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnNew" parent={this} icon="file" type="default"
                                     onClick={()=>
                                     {
-                                        this.init(); 
+                                        this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
                                     }}/>
+                                </Item>
+                                <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnNew" parent={this} icon="file" type="default" onClick={()=>{this.init()}}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmDocItems"  + this.tabIndex}
@@ -1152,15 +1176,18 @@ export default class branchSaleInvoice extends DocBase
                                             this.toast.show({message:this.t("msgDocLocked.msg"),type:"warning"})
                                             return
                                         }
+
                                         if(typeof this.docObj.docItems.dt()[0] == 'undefined')
                                         {
                                             this.toast.show({message:this.lang.t("msgNotRow.msg"),type:"warning"})
                                             return
                                         }
+
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                         {
                                             await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                         }
+
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             this.saveDoc()
@@ -1181,14 +1208,16 @@ export default class branchSaleInvoice extends DocBase
                                             this.toast.show({message:this.t("msgGetLocked.msg"),type:"warning"})
                                             return
                                         }
+
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
-                                        
+
                                         let pResult = await dialog(tmpConfObj);
+                                        
                                         if(pResult == 'btn01')
                                         {
                                             if(this.sysParam.filter({ID:'docDeleteDesc',USERS:this.user.CODE}).getValue().value == true)
@@ -1202,7 +1231,6 @@ export default class branchSaleInvoice extends DocBase
                                                 this.init(); 
                                             }
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -1214,19 +1242,21 @@ export default class branchSaleInvoice extends DocBase
                                             this.toast.show({message:this.lang.t("msgNotRow.msg"),type:"warning"})
                                             return
                                         }
+
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
                                             this.docLocked = true
+
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
 
-                                             //***** TICKET İMZALAMA *****/
-                                             let tmpSignedData = await this.nf525.signatureDoc(this.docObj.dt()[0],this.docObj.docItems.dt())                
-                                             this.docObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
-                                             this.docObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
+                                            //***** TICKET İMZALAMA *****/
+                                            let tmpSignedData = await this.nf525.signatureDoc(this.docObj.dt()[0],this.docObj.docItems.dt())                
+                                            this.docObj.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
+                                            this.docObj.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
 
                                             if((await this.docObj.save()) == 0)
                                             {                                                    
@@ -1235,17 +1265,14 @@ export default class branchSaleInvoice extends DocBase
                                             }
                                             else
                                             {
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                await dialog(tmpConfObj1);
+                                                this.toast.show({message:this.t("msgSaveResult.msgFailed"),type:"error"})
                                             }
-                                            
                                         }
                                         else
                                         {
                                             await this.popPassword.show()
                                             this.txtPassword.value = ''
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -1255,21 +1282,26 @@ export default class branchSaleInvoice extends DocBase
                                         await this.popDetail.show()
                                         this.numDetailCount.value = this.docObj.docItems.dt().length
                                         this.numDetailQuantity.value =  this.docObj.docItems.dt().sum("QUANTITY",2)
+
                                         let tmpQuantity2 = 0
+                                        
                                         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                                         {
                                             let tmpQuery = 
                                             {
-                                                query :"SELECT [dbo].[FN_UNIT2_QUANTITY](@ITEM) AS QUANTITY",
+                                                query : `SELECT [dbo].[FN_UNIT2_QUANTITY](@ITEM) AS QUANTITY`,
                                                 param : ['ITEM:string|50'],
                                                 value : [this.docObj.docItems.dt()[i].ITEM]
                                             }
+
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
+
                                             if(tmpData.result.recordset.length > 0)
                                             {
                                                 tmpQuantity2 = tmpQuantity2 + (tmpData.result.recordset[0].QUANTITY * this.docObj.docItems.dt()[i].QUANTITY)
                                             }
                                         }
+
                                         this.numDetailQuantity2.value = tmpQuantity2.toFixed(3)
                                     }}/>
                                 </Item>
@@ -1277,7 +1309,6 @@ export default class branchSaleInvoice extends DocBase
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
                                     onClick={async()=>
                                     {
-                                        console.log(this.docObj.isSaved)                             
                                         if(this.docObj.isSaved == false)
                                         {
                                             this.toast.show({message:this.t("isMsgSave.msg"),type:"warning"})
@@ -1307,6 +1338,7 @@ export default class branchSaleInvoice extends DocBase
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+                                            
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -1333,7 +1365,9 @@ export default class branchSaleInvoice extends DocBase
                                             {
                                                 this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
                                                 this.checkRow()
+
                                                 let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                
                                                 if(tmpResult == 3)
                                                 {
                                                     this.txtRef.value = "";
@@ -1341,8 +1375,7 @@ export default class branchSaleInvoice extends DocBase
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
-                                            >
-                                            </NdTextBox>
+                                            />
                                         </div>
                                         <div className="col-6 ps-0">
                                             <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
@@ -1368,37 +1401,42 @@ export default class branchSaleInvoice extends DocBase
                                                 }
                                             ]}
                                             onChange={(async()=>
+                                            {
+                                                let tmpQuery = 
                                                 {
-                                                    let tmpQuery = 
+                                                    query : `SELECT DELETED FROM DOC WHERE REF = @REF AND REF_NO = @REF_NO AND  TYPE = 0 AND DOC_TYPE = 22 AND REBATE = 0 `,
+                                                    param : ['REF:string|50','REF_NO:int'],
+                                                    value : [this.txtRef.value,this.txtRefno.value]
+                                                }
+
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                
+                                                if(tmpData.result.recordset.length > 0)
+                                                {   
+                                                    if(tmpData.result.recordset[0].DELETED == 1)
                                                     {
-                                                        query : "SELECT DELETED FROM DOC WHERE REF = @REF AND REF_NO = @REF_NO AND  TYPE = 0 AND DOC_TYPE = 22 AND REBATE = 0 ",
-                                                        param : ['REF:string|50','REF_NO:int'],
-                                                        value : [this.txtRef.value,this.txtRefno.value]
-                                                    }
-                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    if(tmpData.result.recordset.length > 0)
-                                                    {   
-                                                        if(tmpData.result.recordset[0].DELETED == 1)
+                                                        let tmpConfObj =
                                                         {
-                                                            let tmpConfObj =
-                                                            {
-                                                                id:'msgDocDeleted',showTitle:true,title:this.lang.t("msgDocDeleted.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                                button:[{id:"btn01",caption:this.lang.t("msgDocDeleted.btn01"),location:'after'}],
-                                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDocDeleted.msg")}</div>)
-                                                            }
-                                                            this.txtRefno.value = 0
-                                                            await dialog(tmpConfObj);
-                                                            return
+                                                            id:'msgDocDeleted',showTitle:true,title:this.lang.t("msgDocDeleted.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                            button:[{id:"btn01",caption:this.lang.t("msgDocDeleted.btn01"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDocDeleted.msg")}</div>)
                                                         }
+                                                        this.txtRefno.value = 0
+                                                        await dialog(tmpConfObj);
+                                                        return
                                                     }
-                                                    this.docObj.docCustomer.dt()[0].REF_NO = this.txtRefno.value
-                                                    this.checkRow()
-                                                    let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
-                                                    if(tmpResult == 3)
-                                                    {
-                                                        this.txtRefno.value = "";
-                                                    }
-                                                }).bind(this)}
+                                                }
+
+                                                this.docObj.docCustomer.dt()[0].REF_NO = this.txtRefno.value
+                                                this.checkRow()
+                                                
+                                                let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                
+                                                if(tmpResult == 3)
+                                                {
+                                                    this.txtRefno.value = "";
+                                                }
+                                            }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
@@ -1420,14 +1458,15 @@ export default class branchSaleInvoice extends DocBase
                                     value=""
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
+                                    {
+                                        this.checkRow()
+                                        this.docObj.docCustomer.dt()[0].INPUT = this.cmbDepot.value
+
+                                        if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                         {
-                                            this.checkRow()
-                                            this.docObj.docCustomer.dt()[0].INPUT = this.cmbDepot.value
-                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
-                                            {
-                                                this.frmDocItems.option('disabled',false)
-                                            }
-                                        }).bind(this)}
+                                            this.frmDocItems.option('disabled',false)
+                                        }
+                                    }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
@@ -1445,11 +1484,10 @@ export default class branchSaleInvoice extends DocBase
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_NO"}} 
                                     readOnly={false}
                                     onFocusOut={()=>
-                                        {
-                                            this.checkDocNo(this.txtDocNo.value)
-                                        }}
-                                    >
-                                    </NdTextBox>
+                                    {
+                                        this.checkDocNo(this.txtDocNo.value)
+                                    }}
+                                    />
                                 </NdItem>
                                 {/* txtCustomerCode */}
                                 <NdItem>
@@ -1464,6 +1502,7 @@ export default class branchSaleInvoice extends DocBase
                                             this.toast.show({message:this.t("msgCustomerLock.msg"),type:"warning"})
                                             return;
                                         }
+
                                         this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
@@ -1473,6 +1512,7 @@ export default class branchSaleInvoice extends DocBase
                                                 {
                                                     this.frmDocItems.option('disabled',false)
                                                 }
+
                                                 this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                 this.docObj.docCustomer.dt()[0].OUTPUT = data[0].GUID
                                                 this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
@@ -1481,22 +1521,28 @@ export default class branchSaleInvoice extends DocBase
                                                 this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
                                                 this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                 this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
+                                                
                                                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
                                                     this.txtRef.value = data[0].CODE
                                                 }
+
                                                 if(this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
                                                     this.frmDocItems.option('disabled',false)
                                                 }
+
                                                 let tmpQuery = 
                                                 {
-                                                    query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                    query : `SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER`,
                                                     param : ['CUSTOMER:string|50'],
                                                     value : [ data[0].GUID]
                                                 }
+
                                                 let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                
                                                 if(tmpAdressData.result.recordset.length > 1)
                                                 {
                                                     this.pg_adress.onClick = async(pdata) =>
@@ -1526,6 +1572,7 @@ export default class branchSaleInvoice extends DocBase
                                                         this.toast.show({message:this.t("msgCustomerLock.msg"),type:"warning"})
                                                         return;
                                                     }
+
                                                     this.pg_txtCustomerCode.show()
                                                     this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {
@@ -1535,6 +1582,7 @@ export default class branchSaleInvoice extends DocBase
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
                                                             }
+
                                                             this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.docCustomer.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
@@ -1543,22 +1591,28 @@ export default class branchSaleInvoice extends DocBase
                                                             this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
                                                             this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                             this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
+                                                            
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                            
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.value = data[0].CODE
                                                             }
+                                                            
                                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
                                                             }
+                                                            
                                                             let tmpQuery = 
                                                             {
                                                                 query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
                                                                 param : ['CUSTOMER:string|50'],
                                                                 value : [ data[0].GUID]
                                                             }
+                                                            
                                                             let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                            
                                                             if(tmpAdressData.result.recordset.length > 1)
                                                             {
                                                                 this.pg_adress.onClick = async(pdata) =>
@@ -1595,8 +1649,7 @@ export default class branchSaleInvoice extends DocBase
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem> 
                                 {/* Boş */}
                                 <NdEmptyItem />
@@ -1609,7 +1662,6 @@ export default class branchSaleInvoice extends DocBase
                                     {
                                         this.checkRow()
                                         this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtDocDate.value
- 
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmDocItems"  + this.tabIndex}>
@@ -1622,10 +1674,7 @@ export default class branchSaleInvoice extends DocBase
                                     <NdLabel text={this.t("dtShipDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtShipDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
-                                    onValueChanged={(async()=>
-                                    {
-                                        this.checkRow()
-                                    }).bind(this)}
+                                    onValueChanged={(async()=>{this.checkRow()}).bind(this)}
                                     >
                                         <Validator validationGroup={"frmDocItems"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
@@ -1655,7 +1704,7 @@ export default class branchSaleInvoice extends DocBase
                                                     }
                                                   
                                                     this.pg_txtBarcode.onClick = async(data) =>
-                                                        {
+                                                    {
                                                         this.txtBarcode.setState({value:""})
                                                         await this.core.util.waitUntil(100)
 
@@ -1663,10 +1712,12 @@ export default class branchSaleInvoice extends DocBase
                                                         {
                                                             this.checkboxReset()
                                                             this.grid.devGrid.beginUpdate()
+
                                                             for (let i = 0; i < data.length; i++) 
                                                             {
                                                                 await this.addItem(data[i],null)
                                                             }
+
                                                             this.grid.devGrid.endUpdate()
                                                         }
                                                     }
@@ -1683,11 +1734,14 @@ export default class branchSaleInvoice extends DocBase
                                             this.txtBarcode.value = ''
                                             return
                                         }
+
                                         let tmpQuery = 
-                                        {   query : "SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE,PARTILOT_GUID,LOT_CODE  FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER))",
+                                        {   query : `SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE,PARTILOT_GUID,LOT_CODE  
+                                                    FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER))`,
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].OUTPUT]
                                         }
+
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                         
                                         if(tmpData.result.recordset.length > 0)
@@ -1701,6 +1755,7 @@ export default class branchSaleInvoice extends DocBase
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
                                                 this.checkboxReset()
+
                                                 if(data.length == 1)
                                                 {
                                                     this.msgQuantity.tmpData = data[0]
@@ -1710,21 +1765,24 @@ export default class branchSaleInvoice extends DocBase
                                                 else if(data.length > 1)
                                                 {
                                                     this.grid.devGrid.beginUpdate()
+                                                
                                                     for (let i = 0; i < data.length; i++) 
                                                     {
                                                         await this.addItem(data[i],null)
                                                     }
+
                                                     this.grid.devGrid.endUpdate()
                                                 }
                                             }
+                                            
                                             this.pg_txtItemsCode.setVal(this.txtBarcode.value)
                                         }
+
                                         this.txtBarcode.value = ''
                                     }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* Vade Tarih */}
                                 <NdItem>
@@ -1743,10 +1801,7 @@ export default class branchSaleInvoice extends DocBase
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>
-                            {
-                                this.frmDocItems = e.component
-                            }}>
+                            <Form colCount={1} onInitialized={(e)=>{this.frmDocItems = e.component}}>
                                 <Item location="after">
                                     <Button icon="add"
                                     validationGroup={"frmDocItems"  + this.tabIndex}
@@ -1778,10 +1833,12 @@ export default class branchSaleInvoice extends DocBase
                                                 this.checkboxReset()
 
                                                 this.grid.devGrid.beginUpdate()
+
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
+
                                                 this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_txtItemsCode.show()
@@ -1791,7 +1848,7 @@ export default class branchSaleInvoice extends DocBase
                                             this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
                                         }
                                     }}/>
-                                      <Button icon="add" text={this.t("serviceAdd")}
+                                    <Button icon="add" text={this.t("serviceAdd")}
                                     validationGroup={"frmDocItems"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
@@ -1805,12 +1862,15 @@ export default class branchSaleInvoice extends DocBase
                                                     {
                                                         this.checkboxReset()
                                                         this.grid.devGrid.beginUpdate()
+
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
+
                                                         this.grid.devGrid.endUpdate()
                                                     }
+
                                                     this.pg_service.show()
                                                     return
                                                 }
@@ -1824,8 +1884,10 @@ export default class branchSaleInvoice extends DocBase
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
+
                                                 this.grid.devGrid.endUpdate()
                                             }
+
                                             this.pg_service.show()
                                         }
                                         else
@@ -1841,6 +1903,7 @@ export default class branchSaleInvoice extends DocBase
                                         {
                                             await this.popMultiItem.show()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+
                                             if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
@@ -1877,18 +1940,22 @@ export default class branchSaleInvoice extends DocBase
                                             {
                                                 e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
                                             }
+
                                             if(typeof e.data.SUB_FACTOR != 'undefined')
                                             {
                                                 e.key.QUANTITY = e.key.SUB_QUANTITY * e.data.SUB_FACTOR
                                             }
+
                                             if(typeof e.data.PRICE != 'undefined')
                                             {
                                                 e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
                                             }
+
                                             if(typeof e.data.SUB_PRICE != 'undefined')
                                             {
                                                 e.key.PRICE = e.data.SUB_PRICE * e.key.SUB_FACTOR
                                             }
+
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
                                                 console.log(Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4))
@@ -1897,6 +1964,7 @@ export default class branchSaleInvoice extends DocBase
                                                 e.key.DISCOUNT_2 = 0
                                                 e.key.DISCOUNT_3 = 0
                                             }
+
                                             if(typeof e.data.DISCOUNT != 'undefined')
                                             {
                                                 e.key.DISCOUNT_1 = e.data.DISCOUNT
@@ -1906,6 +1974,7 @@ export default class branchSaleInvoice extends DocBase
                                             }
                                             
                                             e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
+                                            
                                             if(this.docObj.dt()[0].VAT_ZERO != 1)
                                             {
                                                 e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
@@ -1922,6 +1991,7 @@ export default class branchSaleInvoice extends DocBase
                                             let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                             let tmpMarginRate = ((tmpMargin) * 100) / e.key.QUANTITY
                                             e.key.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+                                            
                                             if(e.key.DISCOUNT == 0)
                                             {
                                                 e.key.DISCOUNT_RATE = 0
@@ -1929,16 +1999,14 @@ export default class branchSaleInvoice extends DocBase
                                                 e.key.DISCOUNT_2 = 0
                                                 e.key.DISCOUNT_3 = 0
                                             }
+
                                             if(typeof e.data.DISCOUNT_RATE == 'undefined')
                                             {
-                                            e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
+                                                e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
                                             }
                                             this.calculateTotal()
                                         }}
-                                        onRowRemoved={async (e)=>
-                                        {
-                                            this.calculateTotal()
-                                        }}
+                                        onRowRemoved={async (e)=>{this.calculateTotal()}}
                                         onReady={async()=>
                                         {
                                             await this["grdSlsInv" + this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
@@ -1955,15 +2023,15 @@ export default class branchSaleInvoice extends DocBase
                                             <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
                                             <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsInv.clmCreateDate")} width={80} allowEditing={false}/>
                                             <Column dataField="CUSER_NAME" caption={this.t("grdSlsInv.clmCuser")} width={90} allowEditing={false}/>
-                                            <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={100} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={100} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={330}/>
-                                            <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="SUB_FACTOR" caption={this.t("grdSlsInv.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsInv.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                             <Column dataField="SUB_PRICE" caption={this.t("grdSlsInv.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
-                                            <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} width={60} editCellRender={this._cellRoleRender} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                                            <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsInv.clmDiscountRate")} width={60} dataType={'number'} format={'##0.00'} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} width={60} editCellRender={this.cellRoleRender} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                            <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsInv.clmDiscountRate")} width={60} dataType={'number'} format={'##0.00'} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="MARGIN" caption={this.t("grdSlsInv.clmMargin")} width={80} allowEditing={false}/>
                                             <Column dataField="VAT" caption={this.t("grdSlsInv.clmVat")} width={75} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                             <Column dataField="VAT_RATE" caption={this.t("grdSlsInv.clmVatRate")} width={50} allowEditing={false}/>
@@ -2006,8 +2074,7 @@ export default class branchSaleInvoice extends DocBase
                                                     <Label text={this.t("txtAmount")} alignment="right" />
                                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
                                                     maxLength={32}
-                                                
-                                                    ></NdTextBox>
+                                                    />
                                                 </Item>
                                                 <Item>
                                                     <Label text={this.t("txtDiscount")} alignment="right" />
@@ -2022,6 +2089,7 @@ export default class branchSaleInvoice extends DocBase
                                                                 onClick:async()=>
                                                                 {
                                                                     await this.popDiscount.show()
+                                                                   
                                                                     if(this.docObj.dt()[0].DISCOUNT > 0 )
                                                                     {
                                                                         this.txtDiscountPercent1.value  = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_1",3),3)
@@ -2044,7 +2112,7 @@ export default class branchSaleInvoice extends DocBase
                                                             },
                                                         ]
                                                     }
-                                                    ></NdTextBox>
+                                                    />
                                                 </Item>
                                                 {/* İndirim */}
                                                 <EmptyItem colSpan={2}/>
@@ -2052,7 +2120,7 @@ export default class branchSaleInvoice extends DocBase
                                                     <Label text={this.t("txtSubTotal")} alignment="right" />
                                                     <NdTextBox id="txtSubTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"SUBTOTAL"}}
                                                     maxLength={32}
-                                                    ></NdTextBox>
+                                                    />
                                                 </Item>
                                                 <Item>
                                                     <Label text={this.t("txtDocDiscount")} alignment="right" />
@@ -2067,6 +2135,7 @@ export default class branchSaleInvoice extends DocBase
                                                                 onClick:async()=>
                                                                 {
                                                                     await this.popDocDiscount.show()
+
                                                                     if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
                                                                     {
                                                                         this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)
@@ -2089,7 +2158,7 @@ export default class branchSaleInvoice extends DocBase
                                                             },
                                                         ]
                                                     }
-                                                    ></NdTextBox>
+                                                    />
                                                 </Item>
                                                 {/* KDV */}
                                                 <EmptyItem colSpan={2}/>
@@ -2097,7 +2166,7 @@ export default class branchSaleInvoice extends DocBase
                                                     <Label text={this.t("txtTotalHt")} alignment="right" />
                                                     <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}
                                                     maxLength={32}
-                                                    ></NdTextBox>
+                                                    />
                                                 </Item>
                                                 <Item>
                                                     <Label text={this.t("txtVat")} alignment="right" />
@@ -2113,6 +2182,7 @@ export default class branchSaleInvoice extends DocBase
                                                                 {
                                                                     await this.popVatRate.show()
                                                                     this.vatRate.clear()
+
                                                                     for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
                                                                     {
                                                                         let tmpTotalHt  =  parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2) -this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("DOC_DISCOUNT",2))
@@ -2120,21 +2190,21 @@ export default class branchSaleInvoice extends DocBase
                                                                         let tmpData = {"RATE":this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat,"TOTALHT":tmpTotalHt}
                                                                         this.vatRate.push(tmpData)
                                                                     }
+
                                                                     await this.grdVatRate.dataRefresh({source:this.vatRate})
                                                                 }
                                                             },
                                                         ]
                                                     }
-                                                    ></NdTextBox>
+                                                    />   
                                                 </Item>
                                                 {/* KDV */}
                                                 <EmptyItem colSpan={3}/>
-                                                
                                                 <Item>
                                                     <Label text={this.t("txtTotal")} alignment="right" />
                                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
                                                     maxLength={32}
-                                                    ></NdTextBox>
+                                                    />
                                                 </Item>
                                             </Form>
                                         </div>
@@ -2174,15 +2244,14 @@ export default class branchSaleInvoice extends DocBase
                                     </NdSelectBox>
                                 </NdItem>
                                 <NdItem>
-                                <NdLabel text={this.t("popDesign.lang")} alignment="right" />
-                                <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
+                                    <NdLabel text={this.t("popDesign.lang")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbDesignLang" notRefresh = {true}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
                                     data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
-                                    >
-                                    </NdSelectBox>
+                                    />
                                 </NdItem>
                                 <NdItem>
                                     <div className='row'>
@@ -2194,32 +2263,38 @@ export default class branchSaleInvoice extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH 
+                                                                FROM [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO`,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
+
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:true})
+                                                    
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
                                                     {
                                                         App.instance.setState({isExecute:false})
+
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                             let tmpLastSignature = await this.nf525.signaturePosDuplicate(this.docObj.dt()[0])
+
                                                             let tmpExtra = {...this.extraObj.empty}
                                                             tmpExtra.DOC = this.docObj.dt()[0].GUID
                                                             tmpExtra.DESCRIPTION = ''
                                                             tmpExtra.TAG = 'PRINT'
                                                             tmpExtra.SIGNATURE = tmpLastSignature
+
                                                             this.extraObj.addEmpty(tmpExtra);
                                                             this.extraObj.save()
+
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+
                                                             mywindow.onload = function() 
                                                             {
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                             } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         }
                                                     });
                                                     this.popDesign.hide();  
@@ -2227,11 +2302,7 @@ export default class branchSaleInvoice extends DocBase
                                             }}/>
                                         </div>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popDesign.hide();  
-                                            }}/>
+                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'} onClick={()=>{this.popDesign.hide()}}/>
                                         </div>
                                     </div>
                                     <div className='row py-2'>
@@ -2240,34 +2311,28 @@ export default class branchSaleInvoice extends DocBase
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
-                                                
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH 
+                                                                FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO`,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
-                                                    console.log(tmpQuery)
-                                                    console.log(1)
+
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
+
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
-                                                        console.log(tmpData.result.recordset[0].PATH)
-                                                        console.log(pResult.split('|')[0])
-                                                        console.log(tmpData.result.recordset)
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                            console.log(mywindow)
                                                             mywindow.onload = function() 
                                                             {
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                             } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         }
                                                     });
                                                 }
@@ -2281,11 +2346,13 @@ export default class branchSaleInvoice extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0",
+                                                        query : `SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0`,
                                                         param:  ['GUID:string|50'],
                                                         value:  [this.docObj.dt()[0].OUTPUT]
                                                     }
+
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
                                                         await this.popMailSend.show()
@@ -2319,15 +2386,11 @@ export default class branchSaleInvoice extends DocBase
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
                                     <Label text={this.t("popDetail.count")} alignment="right" />
-                                    <NdNumberBox id="numDetailCount" parent={this} simple={true} readOnly={true}
-                                    maxLength={32}
-                                    ></NdNumberBox>
+                                    <NdNumberBox id="numDetailCount" parent={this} simple={true} readOnly={true} maxLength={32}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popDetail.quantity")} alignment="right" />
-                                    <NdNumberBox id="numDetailQuantity" parent={this} simple={true} readOnly={true}
-                                    maxLength={32}
-                                    ></NdNumberBox>
+                                    <NdNumberBox id="numDetailQuantity" parent={this} simple={true} readOnly={true} maxLength={32}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popDetail.quantity2")} alignment="right" />
@@ -2341,30 +2404,31 @@ export default class branchSaleInvoice extends DocBase
                                         {
                                             let tmpQuery = 
                                             {
-                                                query : "SELECT " +
-                                                        "NAME,ROUND(SUM(UNIT_FACTOR * QUANTITY),2) AS UNIT_FACTOR " +
-                                                        "FROM ( " +
-                                                        "SELECT ITEM_CODE,QUANTITY, " +
-                                                        "(SELECT TOP 1 NAME FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS NAME, " +
-                                                        "(SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS UNIT_FACTOR " +
-                                                        "FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID ) AS TMP GROUP BY NAME ",
+                                                query : `SELECT NAME,ROUND(SUM(UNIT_FACTOR * QUANTITY),2) AS UNIT_FACTOR 
+                                                        FROM (SELECT ITEM_CODE,QUANTITY, 
+                                                        (SELECT TOP 1 NAME FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS NAME, 
+                                                        (SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS UNIT_FACTOR 
+                                                        FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID ) AS TMP GROUP BY NAME`,
                                                 param : ['DOC_GUID:string|50'],
                                                 value : [this.docObj.dt()[0].GUID]
                                             }
+
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
                                             this.unitDetailData.clear()
+                                            
                                             if(tmpData.result.recordset.length > 0)
                                             {   
                                                 for (let i = 0; i < tmpData.result.recordset.length; i++) 
                                                 {
                                                     this.unitDetailData.push(tmpData.result.recordset[i])
                                                 }
+
                                                 await this.popUnit2.show()
                                                 await this.grdUnit2.dataRefresh({source:this.unitDetailData})
                                             }
                                         }
                                     }]}
-                                    ></NdTextBox>
+                                    />
                                 </Item>
                             </Form>
                         </NdPopUp>
