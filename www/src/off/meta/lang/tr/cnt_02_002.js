@@ -60,6 +60,10 @@ const cnt_02_002 =
         msgSuccess: "Kayıt işleminiz başarılı !",
         msgFailed: "Kayıt işleminiz başarısız !"
     },
+    msgDeleteResult:
+    {
+        msg: "Kayıt silme işleminiz başarılı !"
+    },
     msgSaveValid:
     {
         title: "Dikkat",

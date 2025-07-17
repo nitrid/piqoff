@@ -2,12 +2,13 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import {contractCls} from '../../../../core/cls/contract.js'
 
-import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
-import {NdToast} from '../../../../core/react/devex/toast.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import { Button } from 'devextreme-react/button';
+
+import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
+import {NdToast} from '../../../../core/react/devex/toast.js';
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -27,10 +28,10 @@ export default class purchaseContract extends React.PureComponent
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.contractObj = new contractCls();
-        this.tabIndex = props.data.tabkey
-        this.isUnmounted = false; // Unmount durumunu takip etmek iç
 
-        //this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.tabIndex = props.data.tabkey
+        this.isUnmounted = false; 
+
         this.getItems = this.getItems.bind(this)
         this.multiItemData = new datatable
         this.checkboxReset = this.checkboxReset.bind(this)
@@ -116,9 +117,9 @@ export default class purchaseContract extends React.PureComponent
             {
                 select:
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.txtCustomerCode.GUID+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
+                    query : `SELECT GUID,CODE,NAME,VAT,
+                             ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '${this.txtCustomerCode.GUID}'),'') AS MULTICODE
+                             FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) `,
                     param : ['VAL:string|50']
                 },
                 sql:this.core.sql
@@ -153,12 +154,14 @@ export default class purchaseContract extends React.PureComponent
 
         let tmpCheckQuery = 
         {
-            query :"SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER",
+            query :`SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE 
+                    FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER`,
             param : ['ITEM:string|50','CUSTOMER:string|50','QUANTITY:float'],
             value : [pData.GUID,this.txtCustomerCode.GUID,1]
         }
 
-        let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+        let tmpCheckData = await this.core.sql.execute(tmpCheckQuery)
+
         if(tmpCheckData.result.recordset.length > 0)
         {  
             tmpEmpty.PRICE = tmpCheckData.result.recordset[0].PRICE
@@ -167,7 +170,7 @@ export default class purchaseContract extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT COST_PRICE,VAT FROM ITEMS WHERE ITEMS.GUID = @GUID",
+                query :`SELECT COST_PRICE,VAT FROM ITEMS WHERE ITEMS.GUID = @GUID`,
                 param : ['GUID:string|50'],
                 value : [pData.GUID]
             }
@@ -178,11 +181,12 @@ export default class purchaseContract extends React.PureComponent
             }
         }
         
-        // Eğer bileşen hala mount durumundaysa ekle
         if(!this.isUnmounted)
         {
             this.contractObj.itemPrice.addEmpty(tmpEmpty);
         }
+        App.instance.setState({isExecute:false})
+
     }
     async checkboxReset()
     {
@@ -201,6 +205,10 @@ export default class purchaseContract extends React.PureComponent
     {
         let tmpMissCodes = []
         let tmpCounter = 0
+        if(this.tagItemCode.value == [] || this.tagItemCode.value == null)
+        {
+            return
+        }
         if(this.multiItemData.length > 0)
         {
             let tmpConfObj =
@@ -214,6 +222,7 @@ export default class purchaseContract extends React.PureComponent
             if(pResult == 'btn01')
             {
                 this.multiItemData.clear()
+                this.toast.show({message:this.t("msgMultiData.msg"),type:"warning"});
             }
         }
         for (let i = 0; i < this.tagItemCode.value.length; i++) 
@@ -222,9 +231,9 @@ export default class purchaseContract extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY," + 
-                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.txtCustomerCode.GUID + "'),'') AS MULTICODE "+
-                            "FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '" + this.txtCustomerCode.GUID + "'),'') = @VALUE " ,
+                    query : `SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,
+                            ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '${this.txtCustomerCode.GUID}'),'') AS MULTICODE 
+                            FROM ITEMS_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '${this.txtCustomerCode.GUID}'),'') = @VALUE `,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -246,12 +255,13 @@ export default class purchaseContract extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY," + 
-                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '"+this.txtCustomerCode.GUID+"'),'') AS MULTICODE " +
-                            "FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
+                    query : `SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,
+                            ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_01.GUID AND CUSTOMER_GUID = '${this.txtCustomerCode.GUID}'),'') AS MULTICODE 
+                            FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) `,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
+
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
@@ -268,12 +278,14 @@ export default class purchaseContract extends React.PureComponent
             }
             
         }
+
         if(tmpMissCodes.length > 0)
         {
             this.toast.show({type:"warning",message:this.t("msgMissItemCode.msg") + ' ' +tmpMissCodes})
         }
         this.toast.show({type:"warning",message:this.t("msgMultiCodeCount.msg") + ' ' +tmpCounter})
     }
+
     async multiItemSave()
     {
         this.checkboxReset()
@@ -282,12 +294,12 @@ export default class purchaseContract extends React.PureComponent
         for (let i = 0; i < this.multiItemData.length; i++) 
         {                        
             await this.addItem(this.multiItemData[i])
-            // Her ekleme arasında kısa bir bekleme
             await this.core.util.waitUntil(50)
         }
         
         this.popMultiItem.hide()
     }
+
     render()
     {
         return(
@@ -308,10 +320,7 @@ export default class purchaseContract extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=>{this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmPurcContract"  + this.tabIndex}
@@ -356,7 +365,7 @@ export default class purchaseContract extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
-                                    onClick={async()=>
+                                     onClick={async()=>
                                     {
                                         let tmpConfObj =
                                         {
@@ -370,6 +379,7 @@ export default class purchaseContract extends React.PureComponent
                                         {
                                             this.contractObj.dt().removeAll()
                                             this.contractObj.itemPrice.dt().removeAll()
+                                            this.toast.show({message:this.t("msgDeleteResult.msg"),type:"success"});
                                             await this.contractObj.dt().delete();
                                             await this.contractObj.itemPrice.dt().delete();
                                             this.init(); 
@@ -379,10 +389,7 @@ export default class purchaseContract extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
-                                    }}/>
+                                     onClick={()=>{this.popDesign.show() }}/>
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -420,7 +427,7 @@ export default class purchaseContract extends React.PureComponent
                                 <NdItem>
                                     <NdLabel text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} dt={{data:this.contractObj.dt('CONTRACT'),field:"CODE"}}
-                                    button=
+                                     button=
                                     {
                                         [
                                             {
@@ -444,21 +451,10 @@ export default class purchaseContract extends React.PureComponent
                                             {
                                                 id:'02',
                                                 icon:'arrowdown',
-                                                onClick:()=>
-                                                {
-                                                    this.txtCode.value = Math.floor(Date.now() / 1000)
-                                                }
+                                                onClick:()=>{ this.txtCode.value = Math.floor(Date.now() / 1000)}
                                             }
                                         ]
                                     }
-                                    onChange={(async()=>
-                                    {
-                                        // let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtCode.value)
-                                        // if(tmpResult == 3)
-                                        // {
-                                        //     this.txtCode.value = "";
-                                        // }
-                                    }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCode',USERS:this.user.CODE})}
                                     >
@@ -475,7 +471,9 @@ export default class purchaseContract extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT CODE,NAME,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME FROM CONTRACT_VW_01 WHERE TYPE = 1 GROUP BY CODE,NAME,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE,NAME,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME 
+                                                                    FROM CONTRACT_VW_01 WHERE TYPE = 1 GROUP BY CODE,NAME,CUSTOMER
+                                                                    CUSTOMER_CODE,CUSTOMER_NAME`},sql:this.core.sql}}}
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_Docs.clmCode")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="NAME" caption={this.t("pg_Docs.clmName")} width={300} defaultSortOrder="asc" />
@@ -490,23 +488,17 @@ export default class purchaseContract extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     maxLength={32}
                                     param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}/>
                                 </NdItem>
                                 {/* cmbDepot */}
                                 <NdItem>
                                     <NdLabel text={this.t("cmbDepot")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbDepot"
-                                    displayExpr="NAME"                       
-                                    valueExpr="GUID"
-                                    value=""
-                                    searchEnabled={true}
+                                    <NdSelectBox simple={true} parent={this} id="cmbDepot" displayExpr="NAME"                       
+                                    valueExpr="GUID" value="" searchEnabled={true}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN (0,2) AND STATUS = 1"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
-                                    >
-                                    </NdSelectBox>
+                                    />
                                 </NdItem>
                                 {/* txtCustomerCode */}
                                 <NdItem>
@@ -577,23 +569,14 @@ export default class purchaseContract extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] 
+                                                         FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) 
+                                                         LIKE UPPER(@VAL)) AND STATUS = 1`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
@@ -611,8 +594,7 @@ export default class purchaseContract extends React.PureComponent
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                     />
                                 </NdItem> 
                                 {/* docDate */}
                                 <NdItem>
@@ -624,39 +606,30 @@ export default class purchaseContract extends React.PureComponent
                                     <NdLabel text={this.t("startDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"startDate"}
                                     dt={{data:this.contractObj.dt('CONTRACT'),field:"START_DATE"}}
-                                    onValueChanged={(async(e)=>
-                                    {
-                                    }).bind(this)}
                                     >
-                                    <Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
-                                        <RequiredRule message={this.t("validDocDate")} />
-                                    </Validator> 
+                                        <Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDocDate")} />
+                                        </Validator> 
                                     </NdDatePicker>
                                 </NdItem>
                                 {/* finishDate */}
                                 <NdItem>
                                     <NdLabel text={this.t("finishDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"finishDate"}
-                                    dt={{data:this.contractObj.dt('CONTRACT'),field:"FINISH_DATE"}}
-                                    onValueChanged={(async()=>
-                                    {
-                                    }).bind(this)}
-                                    >
-                                    <Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
-                                        <RequiredRule message={this.t("validDocDate")} />
-                                    </Validator> 
+                                    dt={{data:this.contractObj.dt('CONTRACT'),field:"FINISH_DATE"}} >
+                                        <Validator validationGroup={"frmPurcContract"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validDocDate")} />
+                                        </Validator> 
                                     </NdDatePicker>
                                 </NdItem>
                                 {/* cmbVatType */}
                                 <NdItem>
                                     <NdLabel text={this.t("cmbVatType.title")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbVatType" height='fit-content' dt={{data:this.contractObj.dt(),field:"VAT_TYPE"}}
-                                    displayExpr="NAME"                       
-                                    valueExpr="ID"
+                                    displayExpr="NAME" valueExpr="ID"
                                     data={{source:[{ID:0,NAME:this.t("cmbVatType.vatInc")},{ID:1,NAME:this.t("cmbVatType.vatExt")}]}}
                                     param={this.param.filter({ELEMENT:'cmbVatType',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbVatType',USERS:this.user.CODE})}
-                                    />
+                                    access={this.access.filter({ELEMENT:'cmbVatType',USERS:this.user.CODE})}/>
                                 </NdItem>
                             </NdForm>
                         </div>
@@ -664,10 +637,8 @@ export default class purchaseContract extends React.PureComponent
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdForm colCount={1} onInitialized={(e)=>
-                            {
-                                this.frmPurcContract = e.component
-                            }}>
+                            <NdForm colCount={1} 
+                            onInitialized={(e)=>{ this.frmPurcContract = e.component }}>
                                 <NdItem location="after">
                                     <Button icon="add"
                                     validationGroup={"frmPurcContract"  + this.tabIndex}
@@ -718,7 +689,7 @@ export default class purchaseContract extends React.PureComponent
                                             this.toast.show({type:"warning",message:this.t("msgContractValid.msg")})
                                         }
                                     }}/>
-                                      <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
+                                    <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
                                     validationGroup={"frmPurcContract"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
@@ -755,8 +726,6 @@ export default class purchaseContract extends React.PureComponent
                                             e.key.PRICE = (e.key.PRICE_VAT_EXT + ((e.key.PRICE_VAT_EXT * e.key.VAT_RATE) / 100))
                                         }
                                     }}
-                                    onRowRemoved={async (e)=>{
-                                    }}
                                     >
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
@@ -789,7 +758,7 @@ export default class purchaseContract extends React.PureComponent
                                     <NdLabel text={this.t("popItems.txtPopItemsCode")} alignment="right" />
                                     <NdTextBox id={"txtPopItemsCode"} parent={this} simple={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                   onEnterKey={(async()=>
+                                    onEnterKey={(async()=>
                                         {
                                                 await this.pg_txtPopItemsCode.setVal(this.txtPopItemsCode.value)
                                                 this.pg_txtPopItemsCode.show()
@@ -830,7 +799,6 @@ export default class purchaseContract extends React.PureComponent
                                             <RequiredRule message={this.t("validItemsCode")} />
                                     </Validator>                                 
                                     </NdTextBox>
-                                    
                                 </NdItem>
                                 <NdItem>
                                     <NdLabel text={this.t("popItems.txtPopItemsName")} alignment="right" />
@@ -924,10 +892,7 @@ export default class purchaseContract extends React.PureComponent
                                         valueExpr="TAG"
                                         value=""
                                         searchEnabled={true}
-                                        onValueChanged={(async()=>
-                                            {
-                                            }).bind(this)}
-                                        data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '30'"},sql:this.core.sql}}}
+                                        data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '30'`},sql:this.core.sql}}}
                                         param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                         >
@@ -943,11 +908,7 @@ export default class purchaseContract extends React.PureComponent
                                             valueExpr="ID"
                                             value={localStorage.getItem('lang').toUpperCase()}
                                             searchEnabled={true}
-                                            onValueChanged={(async()=>
-                                                {
-                                                }).bind(this)}
-                                           data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
-                                            
+                                            data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                         ></NdSelectBox>
                                 </NdItem>
                                 <NdItem>
@@ -982,10 +943,7 @@ export default class purchaseContract extends React.PureComponent
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popDesign.hide();  
-                                            }}/>
+                                            onClick={()=>{ this.popDesign.hide() }}/>
                                         </div>
                                     </div>
                                 </NdItem>
@@ -1018,25 +976,18 @@ export default class purchaseContract extends React.PureComponent
                             displayExpr="VALUE"                       
                             valueExpr="ID"
                             value={0}
-                            data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}
-                            />
+                            data={{source:[{ID:0,VALUE:this.t("cmbMultiItemType.customerCode")},{ID:1,VALUE:this.t("cmbMultiItemType.ItemCode")}]}}/>
                         </NdItem>   
                         <NdEmptyItem />   
                         <NdItem>
                             <div className='row'>
                                 <div className='col-6'>
                                     <NdButton text={this.t("popMultiItem.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                    onClick={async (e)=>
-                                    {       
-                                        this.multiItemAdd()
-                                    }}/>
+                                    onClick={async (e)=> { this.multiItemAdd() }}/>
                                 </div>
                                 <div className='col-6'>
                                     <NdButton text={this.t("popMultiItem.btnClear")} type="normal" stylingMode="contained" width={'100%'}
-                                    onClick={()=>
-                                    {
-                                        this.multiItemData.clear()
-                                    }}/>
+                                    onClick={()=>{ this.multiItemData.clear() }}/>
                                 </div>
                             </div>
                         </NdItem>
@@ -1051,9 +1002,6 @@ export default class purchaseContract extends React.PureComponent
                                 height={400} 
                                 width={'100%'}
                                 dbApply={false}
-                                onRowRemoved={async (e)=>{
-                                    
-                                }}
                                 >
                                     <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                     <Scrolling mode="standart" />
@@ -1073,10 +1021,7 @@ export default class purchaseContract extends React.PureComponent
                                 </div>
                                 <div className='col-6'>
                                     <NdButton text={this.t("popMultiItem.btnSave")} type="success" stylingMode="contained" width={'100%'}
-                                    onClick={()=>
-                                    {
-                                        this.multiItemSave()
-                                    }}/>
+                                    onClick={()=>{ this.multiItemSave() }}/>
                                 </div>
                             </div>
                         </NdItem>

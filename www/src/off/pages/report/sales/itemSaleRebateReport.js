@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox, { Validator,  RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
@@ -18,7 +20,7 @@ export default class itemSaleRebateReport extends React.PureComponent
         super(props)
 
         this.core = App.instance.core;
-        this.groupList = [];
+
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
@@ -26,10 +28,9 @@ export default class itemSaleRebateReport extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
+        setTimeout(async () => { }, 1000);
     }
+
     loadState()
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
@@ -41,6 +42,7 @@ export default class itemSaleRebateReport extends React.PureComponent
         tmpSave.setValue(e)
         tmpSave.save()
     }
+
     async btnGetirClick()
     {
        
@@ -51,26 +53,25 @@ export default class itemSaleRebateReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT ITEM, " +
-                    "ITEM_CODE, " +
-                    "INPUT, " +
-                    "INPUT_NAME, " +
-                    "INPUT_CODE, " +
-                    "ISNULL((SELECT SUM(QUANTITY) FROM DOC_ITEMS WHERE DOC_ITEMS.INPUT = DOC_ITEMS_VW_01.INPUT AND DELETED = 0 AND TYPE = 1 AND DOC_TYPE = 40 AND REBATE = 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND DOC_ITEMS.ITEM = DOC_ITEMS_VW_01.ITEM),0) AS DISPATCH, " +
-                    "ISNULL((SELECT SUM(QUANTITY) FROM DOC_ITEMS_VW_01 AS FACTURE WHERE FACTURE.INPUT = DOC_ITEMS_VW_01.INPUT AND FACTURE.TYPE = 1 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND (FACTURE.DOC_TYPE = 20 OR (FACTURE.DOC_TYPE = 40 AND FACTURE.INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) AND FACTURE.REBATE = 0 AND FACTURE.ITEM = DOC_ITEMS_VW_01.ITEM),0) AS INVOICE, " +
-                    "ISNULL((SELECT SUM(QUANTITY) FROM DOC_ITEMS WHERE DOC_ITEMS.INPUT = DOC_ITEMS_VW_01.INPUT AND DELETED = 0 AND TYPE = 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND DOC_TYPE IN(40,20) AND REBATE = 1 AND DOC_ITEMS.ITEM = DOC_ITEMS_VW_01.ITEM),0) AS REBATE " +
-                    "FROM DOC_ITEMS_VW_01 " +
-                    "WHERE TYPE = 1 AND DOC_TYPE IN(40,20) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ITEM_CODE = @ITEM_CODE " +
-                    "GROUP BY ITEM,INPUT,INPUT_NAME,ITEM_CODE,INPUT_CODE ",
+                    query : 
+                        `SELECT ITEM, 
+                        ITEM_CODE, 
+                        INPUT, 
+                        INPUT_NAME, 
+                        INPUT_CODE, 
+                        ISNULL((SELECT SUM(QUANTITY) FROM DOC_ITEMS WHERE DOC_ITEMS.INPUT = DOC_ITEMS_VW_01.INPUT AND DELETED = 0 AND TYPE = 1 AND DOC_TYPE = 40 AND REBATE = 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND DOC_ITEMS.ITEM = DOC_ITEMS_VW_01.ITEM),0) AS DISPATCH, 
+                        ISNULL((SELECT SUM(QUANTITY) FROM DOC_ITEMS_VW_01 AS FACTURE WHERE FACTURE.INPUT = DOC_ITEMS_VW_01.INPUT AND FACTURE.TYPE = 1 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND (FACTURE.DOC_TYPE = 20 OR (FACTURE.DOC_TYPE = 40 AND FACTURE.INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) AND FACTURE.REBATE = 0 AND FACTURE.ITEM = DOC_ITEMS_VW_01.ITEM),0) AS INVOICE, 
+                        ISNULL((SELECT SUM(QUANTITY) FROM DOC_ITEMS WHERE DOC_ITEMS.INPUT = DOC_ITEMS_VW_01.INPUT AND DELETED = 0 AND TYPE = 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND DOC_TYPE IN(40,20) AND REBATE = 1 AND DOC_ITEMS.ITEM = DOC_ITEMS_VW_01.ITEM),
+                        FROM DOC_ITEMS_VW_01 
+                        WHERE TYPE = 1 AND DOC_TYPE IN(40,20) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ITEM_CODE = @ITEM_CODE 
+                        GROUP BY ITEM,INPUT,INPUT_NAME,ITEM_CODE,INPUT_CODE `,
                     param : ['FIRST_DATE:date','LAST_DATE:date','ITEM_CODE:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.txtItemCode.CODE]
                 },
                 sql : this.core.sql
             }
         }
-
         await this.grdListe.dataRefresh(tmpSource)
-      
     }
     render()
     {
@@ -98,6 +99,7 @@ export default class itemSaleRebateReport extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -158,9 +160,9 @@ export default class itemSaleRebateReport extends React.PureComponent
                                         ]
                                     }
                                     >
-                                    <Validator validationGroup={"itemSaleRebate" + this.tabIndex}>
-                                        <RequiredRule message={this.t("validCode")} />
-                                    </Validator>  
+                                        <Validator validationGroup={"itemSaleRebate" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validCode")} />
+                                        </Validator>  
                                     </NdTextBox>
                                     {/*Stok SECIMI POPUP */}
                                     <NdPopGrid id={"pg_txtItemCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}  
@@ -178,24 +180,13 @@ export default class itemSaleRebateReport extends React.PureComponent
                                         {
                                             select:
                                             {  
-                                                query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT, " 
-                                                        + "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                query : `SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT, 
+                                                        ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtItemCode.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_txtItemCode.clmName")} width={500} defaultSortOrder="asc" />
@@ -211,14 +202,12 @@ export default class itemSaleRebateReport extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                      
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" validationGroup={"itemSaleRebate" + this.tabIndex} 
-                             onClick={async (e)=>
+                            onClick={async (e)=>
                             {
                                 if(e.validationGroup.validate().status == "valid")
                                 {

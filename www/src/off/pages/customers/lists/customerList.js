@@ -1,16 +1,15 @@
 import React from 'react';
 import App from '../../../lib/app.js';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export,StateStoring} from '../../../../core/react/devex/grid.js';
+
+import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { NdForm, NdItem, NdLabel, NdEmptyItem} from '../../../../core/react/devex/form.js';
+import { NdForm, NdItem, NdLabel} from '../../../../core/react/devex/form.js';
 import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class customerList extends React.PureComponent
@@ -18,7 +17,9 @@ export default class customerList extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
+
         this.groupList = [];
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.loadState = this.loadState.bind(this)
@@ -26,10 +27,7 @@ export default class customerList extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-
-        }, 1000);
+        setTimeout(async () => {}, 1000)
     }
     loadState()
     {
@@ -51,8 +49,7 @@ export default class customerList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID, CODE, TITLE, TYPE_NAME, GENUS_NAME, CUSTOMER_TYPE, GENUS, MAIN_GROUP,ADRESS, STATUS FROM CUSTOMER_VW_02 WHERE (((TITLE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) OR ((CODE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) ) AND " +
-                            "((GENUS = @GENUS) OR (@GENUS = -1)) AND ((MAIN_GROUP = @MAIN_GROUP) OR (@MAIN_GROUP = '00000000-0000-0000-0000-000000000000'))",
+                    query : `SELECT GUID, CODE, TITLE, TYPE_NAME, GENUS_NAME, CUSTOMER_TYPE, GENUS, MAIN_GROUP,ADRESS, STATUS FROM CUSTOMER_VW_02 WHERE (((TITLE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) OR ((CODE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) ) AND ((GENUS = @GENUS) OR (@GENUS = -1)) AND ((MAIN_GROUP = @MAIN_GROUP) OR (@MAIN_GROUP = '00000000-0000-0000-0000-000000000000'))`,
                     param : ['CUSTOMER_NAME:string|250','GENUS:string|25','MAIN_GROUP:string|50'],
                     value : [this.txtCustomerName.value,this.cmbGenus.value,this.cmbMainGrp.value]
                 },

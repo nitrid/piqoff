@@ -1,11 +1,13 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Button from 'devextreme-react/button';
 import { docCls } from '../../../../core/cls/doc.js';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem,StateStoring} from '../../../../core/react/devex/grid.js';
+
+import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export, Summary, TotalItem,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -13,7 +15,7 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
+import {NdForm,NdItem,NdLabel} from '../../../../core/react/devex/form.js';
 import { NdToast} from '../../../../core/react/devex/toast.js';
 
 export default class incompleteShippedOrdersReport extends React.PureComponent
@@ -22,9 +24,9 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
     {
         super(props)
 
-        this.printGuid = ''
         this.core = App.instance.core;
-        this.groupList = [];
+
+        this.printGuid = ''
         this.btnGetClick = this.btnGetClick.bind(this)        
         this.btnGrdPrint = this.btnGrdPrint.bind(this)
         this.loadState = this.loadState.bind(this)
@@ -33,10 +35,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
     async Init()
     {
@@ -44,6 +43,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
     }
+
     loadState()
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
@@ -55,22 +55,21 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
         tmpSave.setValue(e)
         tmpSave.save()
     }
+
     async btnGetClick()
     {
-       
         let tmpSource =
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT MAX(GUID) AS GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,ITEM_NAME,DOC_DATE,QUANTITY,COMP_QUANTITY,PEND_QUANTITY " +
-                            "FROM DOC_ORDERS_VW_01    " +
-                            "WHERE  ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND     " +
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))    " +
-                            "AND TYPE = 1 AND DOC_TYPE = 60 AND CLOSED = 0  AND PEND_QUANTITY > 0 " +
-                            "GROUP BY REF,REF_NO,INPUT_CODE,INPUT_NAME,ITEM_NAME,DOC_DATE,QUANTITY,COMP_QUANTITY,PEND_QUANTITY   ",
+                    query : `SELECT MAX(GUID) AS GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,ITEM_NAME,DOC_DATE,QUANTITY,COMP_QUANTITY,PEND_QUANTITY 
+                            FROM DOC_ORDERS_VW_01   
+                            WHERE  ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND    
+                            ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))   
+                            AND TYPE = 1 AND DOC_TYPE = 60 AND CLOSED = 0  AND PEND_QUANTITY > 0 
+                            GROUP BY REF,REF_NO,INPUT_CODE,INPUT_NAME,ITEM_NAME,DOC_DATE,QUANTITY,COMP_QUANTITY,PEND_QUANTITY   `,
                             param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                             value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },
@@ -129,7 +128,8 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
 
             let tmpQuery = 
             {
-                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 40 --AND REF = @REF ",
+                query :`SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC 
+                        WHERE TYPE = 1 AND DOC_TYPE = 40 --AND REF = @REF `,
             }
 
             let tmpData = await this.core.sql.execute(tmpQuery) 
@@ -142,7 +142,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
             
             let tmpLineQuery = 
             {
-                query :"SELECT * FROM DOC_ORDERS WHERE DOC_GUID = @DOC_GUID ",
+                query :`SELECT * FROM DOC_ORDERS WHERE DOC_GUID = @DOC_GUID `,
                 param : ['DOC_GUID:string|50'],
                 value : [this.grdSlsOrdList.getSelectedData()[i].GUID]
             }
@@ -205,11 +205,13 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
         {
             let tmpPrintQuery = 
             {
-                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) WHERE APPROVED_QUANTITY > 0 ORDER BY LINE_NO " ,
+                query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) WHERE APPROVED_QUANTITY > 0 ORDER BY LINE_NO ` ,
                 param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                 value:  [this.grdSlsOrdList.getSelectedData()[i].GUID,this.cmbAllDesignList.value,'']
             }
+
             let tmpData = await this.core.sql.execute(tmpPrintQuery) 
+
             this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
             {
                 var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
@@ -256,10 +258,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                     {
                                         type: 'default',
                                         icon: 'detailslayout',
-                                        onClick: async () => 
-                                        {
-                                            this.convertDispatch()
-                                        }
+                                        onClick: async () =>  { this.convertDispatch() }
                                     }    
                                 } />
                                 <Item location="after" locateInMenu="auto">
@@ -305,9 +304,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                 {/* dtFirst */}
                                 <NdItem>
                                     <NdLabel text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
-                                    >
-                                    </NdDatePicker>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"} />
                                 </NdItem>
                                 {/* dtLast */}
                                 <NdItem>
@@ -364,7 +361,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                     showBorders={true}
                                     width={'90%'}
                                     height={'90%'}
-                                    title={this.t("pg_txtCustomerCode.title")} //
+                                    title={this.t("pg_txtCustomerCode.title")} 
                                     search={true}
                                     data = 
                                     {{
@@ -372,23 +369,13 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 
+                                                        WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
@@ -403,12 +390,11 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3"> 
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -439,7 +425,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                 <Column dataField="COMP_QUANTITY" caption={this.t("grdSlsOrdList.clmCompQuantity")} visible={true} width={100} /> 
                                 <Column dataField="PEND_QUANTITY" caption={this.t("grdSlsOrdList.clmPendQuantity")} visible={true} width={125} />              
                                 <Column type="buttons" width={70}>
-                                    <Button hint="Clone" icon="print" onClick={this._btnGrdPrint} />
+                                    <Button hint="Clone" icon="print" onClick={this.btnGrdPrint} />
                                 </Column>
                                 <Summary>
                                     <TotalItem
@@ -508,7 +494,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
+                                                    query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO ` ,
                                                     param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                     value:  [this.printGuid,this.cmbDesignList.value]
                                                 }
@@ -530,10 +516,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                     </div>
                                     <div className='col-6'>
                                         <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                        onClick={()=>
-                                        {
-                                            this.popDesign.hide();  
-                                        }}/>
+                                        onClick={()=> { this.popDesign.hide(); }}/>
                                     </div>
                                 </div>
                                 <div className='row py-2'>
@@ -545,13 +528,15 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
+                                                    query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO ` ,
                                                     param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                     value:  [this.printGuid,this.cmbDesignList.value]
                                                 }
+
                                                 App.instance.setState({isExecute:true})
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
                                                 App.instance.setState({isExecute:false})
+
                                                 this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                 {
                                                     if(pResult.split('|')[0] != 'ERR')
@@ -601,24 +586,18 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                                 valueExpr="TAG"
                                 value=""
                                 searchEnabled={true}
-                                data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '11'"},sql:this.core.sql}}}
+                                data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '11'`},sql:this.core.sql}}}
                                 />
                             </NdItem>
                             <NdItem>
                                 <div className='row'>
                                     <div className='col-6'>
                                         <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmSlsOrderMail" + this.tabIndex}
-                                        onClick={async (e)=>
-                                        {       
-                                            this.printOrders()
-                                        }}/>
+                                        onClick={async (e)=> { this.printOrders()}}/>
                                     </div>
                                     <div className='col-6'>
                                         <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                        onClick={()=>
-                                        {
-                                            this.popAllDesign.hide();  
-                                        }}/>
+                                        onClick={()=> { this.popAllDesign.hide(); }}/>
                                     </div>
                                 </div>
                             </NdItem>

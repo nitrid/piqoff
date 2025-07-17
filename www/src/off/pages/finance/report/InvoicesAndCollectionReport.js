@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
@@ -18,7 +20,9 @@ export default class InvoicesAndCollectionReport extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
+        
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
         this.btnGetirClick = this.btnGetirClick.bind(this)
@@ -52,25 +56,27 @@ export default class InvoicesAndCollectionReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query :"SELECT   " +
-                    "CASE WHEN TYPE = 0  " +
-                    "THEN OUTPUT_NAME  " +
-                    "WHEN TYPE = 1  " +
-                    "THEN INPUT_NAME END AS CUSTOMER_NAME,  " +
-                    "CASE WHEN TYPE = 0  " +
-                    "THEN OUTPUT_CODE  " +
-                    "WHEN TYPE = 1  " +
-                    "THEN INPUT_CODE END AS CUSTOMER_CODE,  " +
-                    "DOC_DATE,  " +
-                    "REF,  " +
-                    "REF_NO,  " +
-                    "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME,   " +
-                    "CASE TYPE WHEN 0 THEN (AMOUNT * -1) ELSE AMOUNT END AS DEBIT,   " +
-                    "CASE TYPE WHEN 1 THEN AMOUNT ELSE 0 END AS RECEIVE,   " +
-                    "CASE TYPE WHEN 0 THEN (AMOUNT * -1) WHEN 1 THEN AMOUNT END AS BALANCE   " +
-                    "FROM DOC_CUSTOMER_VW_01   " +
-                    "WHERE ((INPUT = @CUSTOMER OR OUTPUT = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) AND TYPE IN (0,1)  " +
-                    "AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE  ORDER BY DOC_DATE ASC" ,
+                    query : 
+                        `SELECT
+                        CASE WHEN TYPE = 0
+                            THEN OUTPUT_NAME
+                            WHEN TYPE = 1
+                            THEN INPUT_NAME END AS CUSTOMER_NAME,
+                        CASE WHEN TYPE = 0
+                            THEN OUTPUT_CODE
+                            WHEN TYPE = 1
+                            THEN INPUT_CODE END AS CUSTOMER_CODE,
+                        DOC_DATE,
+                        REF,
+                        REF_NO,
+                        (SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME,
+                        CASE TYPE WHEN 0 THEN (AMOUNT * -1) ELSE AMOUNT END AS DEBIT,
+                        CASE TYPE WHEN 1 THEN AMOUNT ELSE 0 END AS RECEIVE,
+                        CASE TYPE WHEN 0 THEN (AMOUNT * -1) WHEN 1 THEN AMOUNT END AS BALANCE
+                        FROM DOC_CUSTOMER_VW_01
+                        WHERE ((INPUT = @CUSTOMER OR OUTPUT = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) AND TYPE IN (0,1)
+                        AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE
+                        ORDER BY DOC_DATE ASC`,
                     param : ['CUSTOMER:string|50','LANG:string|10','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.GUID,localStorage.getItem('lang'),this.dtDate.startDate,this.dtDate.endDate]
                 },
@@ -80,8 +86,7 @@ export default class InvoicesAndCollectionReport extends React.PureComponent
         App.instance.setState({isExecute:true})
         await this.grdListe.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
-        
-           
+
     }
     render()
     {
@@ -93,10 +98,7 @@ export default class InvoicesAndCollectionReport extends React.PureComponent
                             <Toolbar>
                             <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={async()=>
-                                    {
-                                        this.popDesign.show()
-                                    }}/>
+                                    onClick={async()=> { this.popDesign.show() }}/>
                                 </Item>
                                  <Item location="after"
                                 locateInMenu="auto"
@@ -193,23 +195,12 @@ export default class InvoicesAndCollectionReport extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],(SELECT [dbo].[FN_CUSTOMER_BALANCE](GUID,dbo.GETDATE())) AS BALANCE FROM CUSTOMER_VW_03 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],(SELECT [dbo].[FN_CUSTOMER_BALANCE](GUID,dbo.GETDATE())) AS BALANCE FROM CUSTOMER_VW_03 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
@@ -233,7 +224,7 @@ export default class InvoicesAndCollectionReport extends React.PureComponent
                         <div className="col-3">   
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -250,7 +241,6 @@ export default class InvoicesAndCollectionReport extends React.PureComponent
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
                             >                            
-                                
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
@@ -298,7 +288,7 @@ export default class InvoicesAndCollectionReport extends React.PureComponent
                                 valueExpr="TAG"
                                 value=""
                                 searchEnabled={true}
-                                data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '1400'"},sql:this.core.sql}}}
+                                data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '1400'`},sql:this.core.sql}}}
                                 >
                                 </NdSelectBox>
                             </NdItem>
@@ -311,36 +301,39 @@ export default class InvoicesAndCollectionReport extends React.PureComponent
                                           
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT   " +
-                                                    "CASE WHEN TYPE = 0  " +
-                                                    "THEN OUTPUT_NAME  " +
-                                                    "WHEN TYPE = 1  " +
-                                                    "THEN INPUT_NAME END AS CUSTOMER_NAME,  " +
-                                                    "CASE WHEN TYPE = 0  " +
-                                                    "THEN OUTPUT_CODE  " +
-                                                    "WHEN TYPE = 1  " +
-                                                    "THEN INPUT_CODE END AS CUSTOMER_CODE,  " +
-                                                    "DOC_DATE,  " +
-                                                    "REF,  " +
-                                                    "REF_NO,  " +
-                                                    "CASE WHEN TYPE = 0  " +
-                                                    "THEN INPUT_NAME  " +
-                                                    "WHEN TYPE = 1  " +
-                                                    "THEN OUTPUT_NAME END AS ACCOUNT_NAME,  " +
-                                                    "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME,   " +
-                                                    "CASE TYPE WHEN 0 THEN (AMOUNT * -1) ELSE AMOUNT END AS DEBIT,   " +
-                                                    "CASE TYPE WHEN 1 THEN AMOUNT ELSE 0 END AS RECEIVE,   " +
-                                                    "CASE TYPE WHEN 0 THEN (AMOUNT * -1) WHEN 1 THEN AMOUNT END AS BALANCE,   " +
-                                                    "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH " +
-                                                    "FROM DOC_CUSTOMER_VW_01   " +
-                                                    "WHERE ((INPUT = @CUSTOMER OR OUTPUT = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) AND TYPE IN (0,1)  " +
-                                                    "AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE  ORDER BY DOC_DATE ASC" ,
+                                                    query : 
+                                                        `SELECT
+                                                        CASE WHEN TYPE = 0
+                                                            THEN OUTPUT_NAME
+                                                            WHEN TYPE = 1
+                                                            THEN INPUT_NAME END AS CUSTOMER_NAME,
+                                                        CASE WHEN TYPE = 0
+                                                            THEN OUTPUT_CODE
+                                                            WHEN TYPE = 1
+                                                            THEN INPUT_CODE END AS CUSTOMER_CODE,
+                                                        DOC_DATE,
+                                                        REF,
+                                                        REF_NO,
+                                                        CASE WHEN TYPE = 0
+                                                            THEN INPUT_NAME
+                                                            WHEN TYPE = 1
+                                                            THEN OUTPUT_NAME END AS ACCOUNT_NAME,
+                                                        (SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME,
+                                                        CASE TYPE WHEN 0 THEN (AMOUNT * -1) ELSE AMOUNT END AS DEBIT,
+                                                        CASE TYPE WHEN 1 THEN AMOUNT ELSE 0 END AS RECEIVE,
+                                                        CASE TYPE WHEN 0 THEN (AMOUNT * -1) WHEN 1 THEN AMOUNT END AS BALANCE,
+                                                        ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH
+                                                        FROM DOC_CUSTOMER_VW_01
+                                                        WHERE ((INPUT = @CUSTOMER OR OUTPUT = @CUSTOMER) OR (@CUSTOMER = '00000000-0000-0000-0000-000000000000')) AND TYPE IN (0,1)
+                                                        AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE
+                                                        ORDER BY DOC_DATE ASC`,
                                                     param : ['CUSTOMER:string|50','LANG:string|10','FIRST_DATE:date','LAST_DATE:date','DESIGN:string|25'],
                                                     value : [this.txtCustomerCode.GUID,localStorage.getItem('lang'),this.dtDate.startDate,this.dtDate.endDate,this.cmbDesignList.value]
                                                 }
                                                 let tmpData = await this.core.sql.execute(tmpQuery)
-                                                console.log(JSON.stringify(tmpData.result.recordset)) 
+
                                                 App.instance.setState({isExecute:true})
+
                                                 if(tmpData.result.recordset.length > 0)
                                                 {
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
@@ -363,10 +356,7 @@ export default class InvoicesAndCollectionReport extends React.PureComponent
                                     </div>
                                     <div className='col-6'>
                                         <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                        onClick={()=>
-                                        {
-                                            this.popDesign.hide();  
-                                        }}/>
+                                        onClick={()=> { this.popDesign.hide() }}/>
                                     </div>
                                 </div>
                             </NdItem>

@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export, StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -17,7 +19,9 @@ export default class customerBalanceReport extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
+
         this.groupList = [];
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.saveState = this.saveState.bind(this)
@@ -27,10 +31,7 @@ export default class customerBalanceReport extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.txtCustomerCode.CODE = ''
-        }, 1000);
+        setTimeout(async () => { this.txtCustomerCode.CODE = '' }, 1000)
     }
     loadState() 
     {
@@ -54,7 +55,7 @@ export default class customerBalanceReport extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT * FROM CUSTOMER_BALANCE_VW_01 WHERE ((CODE = @CODE) OR (@CODE = '')) ",
+                        query : `SELECT BALANCE, UPDATE_TIME, TITLE, CODE FROM CUSTOMER_BALANCE_VW_01 WHERE ((CODE = @CODE) OR (@CODE = ''))`,
                         param : ['CODE:string|50'],
                         value : [this.txtCustomerCode.CODE]
                     },
@@ -75,7 +76,7 @@ export default class customerBalanceReport extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT * FROM CUSTOMER_BALANCE_VW_01 WHERE ((CODE = @CODE) OR (@CODE = '')) AND BALANCE <> 0",
+                        query : `SELECT BALANCE, UPDATE_TIME, TITLE, CODE FROM CUSTOMER_BALANCE_VW_01 WHERE ((CODE = @CODE) OR (@CODE = '')) AND BALANCE <> 0`,
                         param : ['CODE:string|50'],
                         value : [this.txtCustomerCode.CODE]
                     },
@@ -193,23 +194,12 @@ export default class customerBalanceReport extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],(SELECT [dbo].[FN_CUSTOMER_BALANCE](GUID,dbo.GETDATE())) AS BALANCE FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],(SELECT [dbo].[FN_CUSTOMER_BALANCE](GUID,dbo.GETDATE())) AS BALANCE FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)`,
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql
                                     }
                                 }}
-                                button=
-                                {
-                                    {
-                                        id:'01',
-                                        icon:'more',
-                                        onClick:()=>
-                                        {
-                                            console.log(1111)
-                                        }
-                                    }
-                                }
                                 >
                                     <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
@@ -225,13 +215,12 @@ export default class customerBalanceReport extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            <NdCheckBox id="chkZeroBalance" parent={this} text={this.t("chkZeroBalance")}  value={false} ></NdCheckBox>
+                            <NdCheckBox id="chkZeroBalance" parent={this} text={this.t("chkZeroBalance")}  value={false} />
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -265,7 +254,6 @@ export default class customerBalanceReport extends React.PureComponent
                                     {
                                         return e.text
                                     }
-                                    
                                     return
                                 }}/>
                             </NdGrid>
@@ -275,8 +263,7 @@ export default class customerBalanceReport extends React.PureComponent
                         <NdEmptyItem colSpan={3}></NdEmptyItem>
                         <NdItem>
                             <NdLabel text={this.t("txtTotalBalance")} alignment="right" />
-                                <NdTextBox id="txtTotalBalance" parent={this} simple={true} readOnly={true}
-                                />
+                            <NdTextBox id="txtTotalBalance" parent={this} simple={true} readOnly={true}/>
                         </NdItem>
                     </NdForm>
                     <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>

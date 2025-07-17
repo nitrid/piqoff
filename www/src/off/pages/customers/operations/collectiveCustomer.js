@@ -1,9 +1,12 @@
 import React from 'react';
 import App from '../../../lib/app.js';
+
 import { customersCls } from '../../../../core/cls/customers.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import { Item } from 'devextreme-react/form';
+
 import NdTextBox, { Validator, NumericRule, EmailRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
@@ -19,13 +22,16 @@ export default class collectiveCustomer extends React.PureComponent
     constructor(props)
     {
         super(props)
+        
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+        this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
+
         this.customerObj = new customersCls();
+
         this.prevCode = "";
         this.state={officalVisible:true}
         this.tabIndex = props.data.tabkey
-        this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
         this.btnRun = this.btnRun.bind(this)
         
     }
@@ -37,8 +43,6 @@ export default class collectiveCustomer extends React.PureComponent
     async init()
     {
         this.customerObj.clearAll();
-
-
     }
     async checkZipcode(pCode)
     {
@@ -47,14 +51,13 @@ export default class collectiveCustomer extends React.PureComponent
             if(pCode !== '')
             {
                 let tmpQuery = {
-                    query :"SELECT COUNTRY_CODE, PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE ",
+                    query : `SELECT COUNTRY_CODE, PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE`,
                     param : ['ZIPCODE:string|50'],
                     value : [pCode]
                 }
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    
                     this.cmbPopCity.value = tmpData.result.recordset[0].PLACE
                     this.cmbPopCountry.value = tmpData.result.recordset[0].COUNTRY_CODE
                     resolve(1)
@@ -84,10 +87,7 @@ export default class collectiveCustomer extends React.PureComponent
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -127,10 +127,6 @@ export default class collectiveCustomer extends React.PureComponent
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     data={{source:[{ID:0,VALUE:this.t("cmbTypeData.individual")},{ID:1,VALUE:this.t("cmbTypeData.company")}]}}
-                                    onValueChanged={(async(e)=>
-                                        {
-                                                
-                                        }).bind(this)}
                                     param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     />
@@ -154,8 +150,7 @@ export default class collectiveCustomer extends React.PureComponent
                                     maxLength={32}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    >                                      
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* txtCustomerLastname */}
                                 <NdItem>
@@ -166,8 +161,7 @@ export default class collectiveCustomer extends React.PureComponent
                                         maxLength={32}
                                         param={this.param.filter({ELEMENT:'txtCustomerLastname',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'txtCustomerLastname',USERS:this.user.CODE})}
-                                        >                                      
-                                    </NdTextBox>
+                                        />
                                 </NdItem>
                                  {/* txtPhone1 */}
                                  <NdItem>
@@ -276,7 +270,7 @@ export default class collectiveCustomer extends React.PureComponent
                                     showClearButton={true}
                                     pageSize={50}
                                     notRefresh={true}
-                                    data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE]`},sql:this.core.sql}}}
                                     />
                                 </NdItem>
                                 <NdItem>
@@ -289,7 +283,7 @@ export default class collectiveCustomer extends React.PureComponent
                                     showClearButton={true}
                                     pageSize ={50}
                                     notRefresh = {true}
-                                    data={{source:{select:{query : "SELECT COUNTRY_CODE, ZIPCODE, PLACE, PLACE + ' ' + ZIPCODE AS CITYNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT COUNTRY_CODE, ZIPCODE, PLACE, PLACE + ' ' + ZIPCODE AS CITYNAME  FROM [dbo].[ZIPCODE]`},sql:this.core.sql}}}
                                     />
                                 </NdItem>
                                 <NdItem>
@@ -300,7 +294,7 @@ export default class collectiveCustomer extends React.PureComponent
                                     value="FR"
                                     searchEnabled={true}
                                     showClearButton={true}
-                                    data={{source:{select:{query : "SELECT CODE, NAME FROM COUNTRY ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE, NAME FROM COUNTRY ORDER BY NAME ASC`},sql:this.core.sql}}}
                                     />
                                 </NdItem>
                             </NdForm>
@@ -308,15 +302,13 @@ export default class collectiveCustomer extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                          
-                        </div>
-                        <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                        <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnRun}></NdButton>
+                        </div>
+                        <div className="col-3">
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnRun}/>
                         </div>
                     </div>
                     {/* Ayar PopUp */}
@@ -349,7 +341,7 @@ export default class collectiveCustomer extends React.PureComponent
                                 </NdItem>
                                 <NdItem>
                                     <NdLabel text={this.t("popSettingCustomer.chkDigit")} alignment="right" />
-                                        <NdCheckBox id="chkDigit" parent={this} value={false} ></NdCheckBox>
+                                    <NdCheckBox id="chkDigit" parent={this} value={false} />
                                 </NdItem>
                                 <NdItem>
                                     <div className='row'>
@@ -436,10 +428,7 @@ export default class collectiveCustomer extends React.PureComponent
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popSettingCustomer.hide();  
-                                            }}/>
+                                            onClick={()=> { this.popSettingCustomer.hide() }}/>
                                         </div>
                                     </div>
                                 </NdItem>

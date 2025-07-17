@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
@@ -17,7 +19,7 @@ export default class virement extends React.PureComponent
     constructor(props)
     {
         super(props)
-        this.groupList = [];
+
         this.btnGetClick = this.btnGetClick.bind(this)
         this.core = App.instance.core;
         this.loadState = this.loadState.bind(this)
@@ -25,10 +27,7 @@ export default class virement extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
     async Init()
     {
@@ -57,13 +56,12 @@ export default class virement extends React.PureComponent
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT REF,REF_NO,OUTPUT_NAME,INPUT_NAME,AMOUNT,DOC_DATE FROM DOC_CUSTOMER_VW_01 " +
-                            "WHERE ((INPUT = @BANK) OR (OUTPUT = @BANK)) AND  "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND  DOC_TYPE IN(200,201) ",
+                    query : `SELECT REF,REF_NO,OUTPUT_NAME,INPUT_NAME,AMOUNT,DOC_DATE FROM DOC_CUSTOMER_VW_01 
+                            WHERE ((INPUT = @BANK) OR (OUTPUT = @BANK)) AND 
+                            ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  
+                            AND  DOC_TYPE IN(200,201) `,
                     param : ['BANK:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.cmbBank.value,this.dtFirst.value,this.dtLast.value]
                 },
@@ -76,17 +74,18 @@ export default class virement extends React.PureComponent
 
         let tmpQuery = 
         {
-            query :"SELECT [dbo].[FN_BANK_AMOUNT](@BANK,dbo.GETDATE()) AS TOTAL",
+            query : `SELECT [dbo].[FN_BANK_AMOUNT](@BANK,dbo.GETDATE()) AS TOTAL`,
             param : ['BANK:string|50'],
             value : [this.cmbBank.value]
         }
+
         let tmpData = await this.core.sql.execute(tmpQuery) 
+
         if(tmpData.result.recordset.length > 0)
         {
             let txtTotal = tmpData.result.recordset[0].TOTAL
             this.txtAmount.setState({value:txtTotal + ' ' + Number.money.sign});
         }
-      
     }
     render()
     {
@@ -149,14 +148,12 @@ export default class virement extends React.PureComponent
                                 {/* dtFirst */}
                                 <NdItem>
                                     <NdLabel text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}>
-                                    </NdDatePicker>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"} />  
                                 </NdItem>
                                 {/* dtLast */}
                                 <NdItem>
                                     <NdLabel text={this.t("dtLast")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"}>
-                                    </NdDatePicker>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"} />  
                                 </NdItem>
                                  {/* cmbBank */}
                                  <NdItem>
@@ -166,15 +163,10 @@ export default class virement extends React.PureComponent
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT * FROM BANK_VW_01`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBank',USERS:this.user.CODE})}
-                                    >
-                                       
-                                    </NdSelectBox>
+                                    />
                                 </NdItem>
                             </NdForm>
                         </div>
@@ -183,10 +175,8 @@ export default class virement extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
@@ -236,8 +226,7 @@ export default class virement extends React.PureComponent
                                 <NdEmptyItem />
                                 <NdItem>
                                 <NdLabel text={this.t("txtAmount")} alignment="right" />
-                                    <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true}
-                                    ></NdTextBox>
+                                    <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true}/>
                                 </NdItem>
                             </NdForm>
                         </div>

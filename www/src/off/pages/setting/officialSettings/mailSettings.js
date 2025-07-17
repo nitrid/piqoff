@@ -1,7 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import ScrollView from 'devextreme-react/scroll-view';
-import { Label,Item,EmptyItem } from 'devextreme-react/form';
+import { Item } from 'devextreme-react/form';
 import { datatable } from '../../../../core/core.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,Pager,KeyboardNavigation,Popup,Lookup,Form} from '../../../../core/react/devex/grid.js';
 
@@ -10,46 +10,48 @@ export default class mailSettings extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+
         this.mailDt = new datatable();
         this.mailDt.selectCmd = 
         {
-            query: "SELECT * FROM MAIL_SETTINGS",
+            query: `SELECT * FROM MAIL_SETTINGS`,
         }
         this.mailDt.insertCmd = 
         {
-            query: "EXEC [dbo].[PRD_MAIL_SETTINGS_INSERT]" +
-                    "@GUID = @PGUID," +
-                    "@CUSER = @PCUSER," +
-                    "@MAIL_SERVICE = @PMAIL_SERVICE," +
-                    "@MAIL_ADDRESS = @PMAIL_ADDRESS," +
-                    "@MAIL_PASSWORD = @PMAIL_PASSWORD," +
-                    "@MAIL_SMTP = @PMAIL_SMTP," +
-                    "@MAIL_PORT = @PMAIL_PORT, " +
-                    "@MASTER = @PMASTER ",
+            query: `EXEC [dbo].[PRD_MAIL_SETTINGS_INSERT]
+                    @GUID = @PGUID,
+                    @CUSER = @PCUSER,
+                    @MAIL_SERVICE = @PMAIL_SERVICE,
+                    @MAIL_ADDRESS = @PMAIL_ADDRESS,
+                    @MAIL_PASSWORD = @PMAIL_PASSWORD,
+                    @MAIL_SMTP = @PMAIL_SMTP,
+                    @MAIL_PORT = @PMAIL_PORT, 
+                    @MASTER = @PMASTER `,
             param : ['PGUID:string|50','PCUSER:string|25','PMAIL_SERVICE:string|40','PMAIL_ADDRESS:string|70','PMAIL_PASSWORD:string|70',
                     'PMAIL_SMTP:string|25','PMAIL_PORT:int','PMASTER:int'],
             dataprm : ['GUID','CUSER','MAIL_SERVICE','MAIL_ADDRESS','MAIL_PASSWORD','MAIL_SMTP','MAIL_PORT','MASTER']   
         }
         this.mailDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_MAIL_SETTINGS_UPDATE]" +
-                    "@GUID = @PGUID," +
-                    "@CUSER = @PCUSER," +
-                    "@MAIL_SERVICE = @PMAIL_SERVICE," +
-                    "@MAIL_ADDRESS = @PMAIL_ADDRESS," +
-                    "@MAIL_PASSWORD = @PMAIL_PASSWORD," +
-                    "@MAIL_SMTP = @PMAIL_SMTP," +
-                    "@MAIL_PORT = @PMAIL_PORT, " +
-                    "@MASTER = @PMASTER ",
+            query : `EXEC [dbo].[PRD_MAIL_SETTINGS_UPDATE]
+                    @GUID = @PGUID,
+                    @CUSER = @PCUSER,
+                    @MAIL_SERVICE = @PMAIL_SERVICE,
+                    @MAIL_ADDRESS = @PMAIL_ADDRESS,
+                    @MAIL_PASSWORD = @PMAIL_PASSWORD,
+                    @MAIL_SMTP = @PMAIL_SMTP,
+                    @MAIL_PORT = @PMAIL_PORT, 
+                    @MASTER = @PMASTER `,
             param : ['PGUID:string|50','PCUSER:string|25','PMAIL_SERVICE:string|40','PMAIL_ADDRESS:string|70','PMAIL_PASSWORD:string|70',
                     'PMAIL_SMTP:string|25','PMAIL_PORT:int','PMASTER:int'],
             dataprm : ['GUID','CUSER','MAIL_SERVICE','MAIL_ADDRESS','MAIL_PASSWORD','MAIL_SMTP','MAIL_PORT','MASTER']   
         }
         this.mailDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_MAIL_SETTINGS_DELETE] @GUID = @PGUID", 
+            query : `EXEC [dbo].[PRD_MAIL_SETTINGS_DELETE] @GUID = @PGUID`, 
             param : ['PGUID:string|50'],
             dataprm : ['GUID']
         }

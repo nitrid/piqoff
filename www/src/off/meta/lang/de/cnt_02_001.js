@@ -213,5 +213,9 @@ const cnt_02_001 =
         msgSuccess: "E-Mail-Versand erfolgreich!",
         msgFailed: "E-Mail-Versand fehlgeschlagen!"
     },
+    msgDeleteResult:
+    {
+        msg: "Eintrag erfolgreich gelöscht !"
+    },
 }
 export default cnt_02_001

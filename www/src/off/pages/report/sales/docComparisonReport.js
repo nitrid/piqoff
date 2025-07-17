@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export, Summary, TotalItem,StateStoring} from '../../../../core/react/devex/grid.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -16,17 +18,16 @@ export default class docComparisonReport extends React.PureComponent
         super(props)
 
         this.core = App.instance.core;
-        this.groupList = [];
+
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
+        setTimeout(async () => { }, 1000);
     }
+
     loadState()
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
@@ -38,6 +39,7 @@ export default class docComparisonReport extends React.PureComponent
         tmpSave.setValue(e)
         tmpSave.save()
     }
+
     async btnGetirClick()
     {
        
@@ -45,27 +47,25 @@ export default class docComparisonReport extends React.PureComponent
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT   " +
-                            "INPUT_NAME,  " +
-                            "INPUT_CODE,  " +
-                            "INPUT,  " +
-                            "ISNULL((SELECT SUM(TOTAL) FROM DOC_VW_01 AS ORDERS WHERE ORDERS.DOC_TYPE=60 AND ORDERS.TYPE=1 AND ORDERS.INPUT = DOC_VW_01.INPUT AND ORDERS.REBATE = 0 AND ORDERS.DOC_DATE >= @FIRST_DATE AND ORDERS.DOC_DATE <= @LAST_DATE),0) AS ORDERS, " +
-                            "ISNULL((SELECT SUM(TOTAL) FROM DOC_VW_01 AS DISPATCH WHERE DISPATCH.DOC_TYPE=40 AND DISPATCH.TYPE=1 AND DISPATCH.INPUT = DOC_VW_01.INPUT AND DISPATCH.REBATE = 0 AND DISPATCH.DOC_DATE >= @FIRST_DATE AND DISPATCH.DOC_DATE <= @LAST_DATE),0) AS DISPATCH, " +
-                            "ISNULL((SELECT SUM(TOTAL) FROM DOC_VW_01 AS INVOICE WHERE INVOICE.DOC_TYPE=20 AND INVOICE.TYPE=1 AND INVOICE.INPUT = DOC_VW_01.INPUT AND INVOICE.REBATE = 0 AND INVOICE.DOC_DATE >= @FIRST_DATE AND INVOICE.DOC_DATE <= @LAST_DATE),0) AS INVOICE, " +
-                            "ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS PAYMENT WHERE PAYMENT.TYPE = 0 AND PAYMENT.OUTPUT = DOC_VW_01.INPUT AND PAYMENT.DOC_TYPE = 200 AND PAYMENT.DOC_DATE >= @FIRST_DATE AND PAYMENT.DOC_DATE <= @LAST_DATE),0) AS COLLECTION " +
-                            "FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE IN(60,61,20,40) AND REBATE = 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE GROUP BY INPUT_NAME,INPUT_CODE,INPUT " ,
+                    query : 
+                            `SELECT  
+                            INPUT_NAME, 
+                            INPUT_CODE, 
+                            INPUT, 
+                            ISNULL((SELECT SUM(TOTAL) FROM DOC_VW_01 AS ORDERS WHERE ORDERS.DOC_TYPE=60 AND ORDERS.TYPE=1 AND ORDERS.INPUT = DOC_VW_01.INPUT AND ORDERS.REBATE = 0 AND ORDERS.DOC_DATE >= @FIRST_DATE AND ORDERS.DOC_DATE <= @LAST_DATE),0) AS ORDERS, 
+                            ISNULL((SELECT SUM(TOTAL) FROM DOC_VW_01 AS DISPATCH WHERE DISPATCH.DOC_TYPE=40 AND DISPATCH.TYPE=1 AND DISPATCH.INPUT = DOC_VW_01.INPUT AND DISPATCH.REBATE = 0 AND DISPATCH.DOC_DATE >= @FIRST_DATE AND DISPATCH.DOC_DATE <= @LAST_DATE),0) AS DISPATCH, 
+                            ISNULL((SELECT SUM(TOTAL) FROM DOC_VW_01 AS INVOICE WHERE INVOICE.DOC_TYPE=20 AND INVOICE.TYPE=1 AND INVOICE.INPUT = DOC_VW_01.INPUT AND INVOICE.REBATE = 0 AND INVOICE.DOC_DATE >= @FIRST_DATE AND INVOICE.DOC_DATE <= @LAST_DATE),0) AS INVOICE, 
+                            ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS PAYMENT WHERE PAYMENT.TYPE = 0 AND PAYMENT.OUTPUT = DOC_VW_01.INPUT AND PAYMENT.DOC_TYPE = 200 AND PAYMENT.DOC_DATE >= @FIRST_DATE AND PAYMENT.DOC_DATE <= @LAST_DATE),0) AS COLLECTION 
+                            FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE IN(60,61,20,40) AND REBATE = 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE GROUP BY INPUT_NAME,INPUT_CODE,INPUT ` ,
                     param : ['FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
                 sql : this.core.sql
             }
         }
-
         await this.grdListe.dataRefresh(tmpSource)
-      
     }
     render()
     {
@@ -75,7 +75,7 @@ export default class docComparisonReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                 <Item location="after"
+                                <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
                                 options=
@@ -93,6 +93,7 @@ export default class docComparisonReport extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -106,25 +107,22 @@ export default class docComparisonReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdForm colCount={2} id="frmKriter">
-                            <NdItem>
-                                <NdLabel text={this.t("dtDate")} alignment="right" />
-                                <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('month')} endDate={moment().endOf('month')}/>
-                            </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("dtDate")} alignment="right" />
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('month')} endDate={moment().endOf('month')}/>
+                                </NdItem>
                             </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                      
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -158,15 +156,15 @@ export default class docComparisonReport extends React.PureComponent
                                     column="ORDERS"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                                     <TotalItem
+                                    <TotalItem
                                     column="DISPATCH"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                                       <TotalItem
+                                    <TotalItem
                                     column="INVOICE"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                                      <TotalItem
+                                    <TotalItem
                                     column="COLLECTION"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />

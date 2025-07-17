@@ -28,6 +28,10 @@ const set_02_001 =
         btn02: "Abandonner",
         msg: "Êtes-vous sûr(e) de vouloir enregistrer? "
     },
+    msgDeleteResult:
+    {
+        msgSuccess: "Enregistrement réussi !"
+    },
     msgSaveResult:
     {
         title: "Attention",

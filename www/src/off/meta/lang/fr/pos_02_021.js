@@ -3,7 +3,7 @@ const pos_02_021 =
 {
     productAnalysis : {
         topSellingProducts : "Meilleurs Produits",
-        worstSellingProducts : "Pires Produits",
+        worstSellingProducts : "Défavorables Produits",
         topSellingProductGroups : "Groupes de Produits",
         topSellingProductsInGroup : "Top 20 Produits du Groupe",
     }

@@ -1,6 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item } from 'devextreme-react/form';
@@ -22,12 +23,17 @@ export default class multipleSaleContract extends React.PureComponent
     constructor(props)
     {
         super(props) 
+
+        this.state = 
+        {
+            contractsLoaded: false
+        }
                
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+
         this.tabIndex = props.data.tabkey
         this.grdData = new datatable()
-
         this.cellRoleRender = this.cellRoleRender.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
@@ -52,6 +58,8 @@ export default class multipleSaleContract extends React.PureComponent
     {
         this.txtCode.value = ""
         this.docDate.value = moment(new Date()).format("YYYY-MM-DD")
+        this.setState({ contractsLoaded: false });
+
         this.grdData = new datatable()
         await this.grdContracts.dataRefresh({source:this.grdData});
 
@@ -61,7 +69,7 @@ export default class multipleSaleContract extends React.PureComponent
             {
                 select:
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT,MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) " ,
+                    query : `SELECT GUID,CODE,NAME,VAT,MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) ` ,
                     param : ['VAL:string|50']
                 },
                 sql:this.core.sql
@@ -71,43 +79,47 @@ export default class multipleSaleContract extends React.PureComponent
     }
     async btnGetContracts()
     {
+        App.instance.setState({isExecute:true})
         let tmpContDt = new datatable()
 
         for (let i = 0; i < this.txtCode.value.split(',').length; i++)
         {            
             tmpContDt.selectCmd = 
             {
-                query : "SELECT " +
-                        "C.GUID AS GUID," +
-                        "C.DOC_DATE AS DOC_DATE," +
-                        "C.CODE AS CODE," +
-                        "C.NAME AS NAME," +
-                        "C.START_DATE AS START_DATE," +
-                        "C.FINISH_DATE AS FINISH_DATE," +
-                        "C.CUSTOMER AS CUSTOMER," +
-                        "C.DEPOT AS DEPOT," +
-                        "M.GUID AS ITEM," +
-                        "M.CODE AS ITEM_CODE," +
-                        "M.NAME AS ITEM_NAME," +
-                        "M.VAT AS VAT_RATE," +
-                        "M.ORGINS_NAME AS ORGINS_NAME," +
-                        "C.QUANTITY AS QUANTITY," +
-                        "C.PRICE AS PRICE," +
-                        "M.PRICE_SALE_VAT_EXT AS PRICE_VAT_EXT," +
-                        "M.MAIN_GRP_NAME AS MAIN_GRP_NAME," +
-                        "M.UNIT_NAME AS UNIT_NAME," +
-                        "M.UNIT_FACTOR AS UNIT_FACTOR," +
-                        "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_CODE = M.CODE AND TYPE = 0),'') AS UNIT_SYMBOL, " +
-                        "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_CODE = M.CODE AND TYPE = 1),1) AS UNDER_UNIT_FACTOR, " +
-                        "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_CODE = M.CODE AND TYPE = 1),1) AS UNDER_UNIT_SYMBOL " +
-                        "FROM CONTRACT_VW_01 C " +
-                        "INNER JOIN ITEMS_BARCODE_MULTICODE_VW_01 M ON C.ITEM_CODE = M.CODE " +
-                        "WHERE C.CODE = @CODE AND C.TYPE = 1 " +
-                        "ORDER BY M.CODE ASC" ,
+                query : `
+                        SELECT 
+                        C.GUID AS GUID,
+                        C.DOC_DATE AS DOC_DATE,
+                        C.CODE AS CODE,
+                        C.NAME AS NAME,
+                        C.START_DATE AS START_DATE,
+                        C.FINISH_DATE AS FINISH_DATE,
+                        C.CUSTOMER AS CUSTOMER,
+                        C.DEPOT AS DEPOT,
+                        M.GUID AS ITEM,
+                        M.CODE AS ITEM_CODE,
+                        M.NAME AS ITEM_NAME,
+                        M.VAT AS VAT_RATE,
+                        M.ORGINS_NAME AS ORGINS_NAME,
+                        C.QUANTITY AS QUANTITY,
+                        C.PRICE AS PRICE,
+                        M.PRICE_SALE_VAT_EXT AS PRICE_VAT_EXT,
+                        M.MAIN_GRP_NAME AS MAIN_GRP_NAME,
+                        M.UNIT_NAME AS UNIT_NAME,
+                        M.UNIT_FACTOR AS UNIT_FACTOR,
+                        ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_CODE = M.CODE AND TYPE = 0),'') AS UNIT_SYMBOL,
+                        ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_CODE = M.CODE AND TYPE = 1),1) AS UNDER_UNIT_FACTOR,
+                        ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_CODE = M.CODE AND TYPE = 1),1) AS UNDER_UNIT_SYMBOL
+                    FROM CONTRACT_VW_01 C
+                    INNER JOIN ITEMS_BARCODE_MULTICODE_VW_01 M ON C.ITEM_CODE = M.CODE
+                    WHERE C.CODE = @CODE AND C.TYPE = 1
+                    ORDER BY M.CODE ASC`,
                 param : ['CODE:string|50'],
                 value : [this.txtCode.code.split(',')[i]]
             } 
             await tmpContDt.refresh()
+
+            this.setState({ contractsLoaded: true })
             
             for (let x = 0; x < tmpContDt.length; x++) 
             {
@@ -128,16 +140,17 @@ export default class multipleSaleContract extends React.PureComponent
         }
         
         await this.grdContracts.dataRefresh({source:this.grdData});
+        App.instance.setState({isExecute:false})
     }
     async addItem(pData)
     {
         App.instance.setState({isExecute:true})
         let tmpCheckQuery = 
         {
-            query :"SELECT CODE,NAME,VAT,PRICE_SALE AS PRICE,UNIT_GUID,UNIT_NAME,UNIT_FACTOR,MAIN_GRP_NAME,ORGINS_NAME, " + 
-                   "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_BARCODE_MULTICODE_VW_01.GUID AND TYPE = 1),1) AS UNDER_UNIT_FACTOR, " +
-                   "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_BARCODE_MULTICODE_VW_01.GUID AND TYPE = 1),1) AS UNDER_UNIT_SYMBOL " +
-                   "FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE ITEMS_BARCODE_MULTICODE_VW_01.GUID = @GUID",
+            query : `SELECT CODE,NAME,VAT,PRICE_SALE AS PRICE,UNIT_GUID,UNIT_NAME,UNIT_FACTOR,MAIN_GRP_NAME,ORGINS_NAME, 
+                    ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_BARCODE_MULTICODE_VW_01.GUID AND TYPE = 1),1) AS UNDER_UNIT_FACTOR, 
+                    ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_BARCODE_MULTICODE_VW_01.GUID AND TYPE = 1),1) AS UNDER_UNIT_SYMBOL 
+                    FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE ITEMS_BARCODE_MULTICODE_VW_01.GUID = @GUID`,
             param : ['GUID:string|50'],
             value : [pData.GUID]
         }
@@ -192,29 +205,29 @@ export default class multipleSaleContract extends React.PureComponent
                 let tmpPrice = this.grdData[x]["P" + i] * ((this.grdData[x].VAT_RATE / 100) + 1)
                 let tmpInsUpQuery = 
                 {
-                    query : "DECLARE @TMPGUID AS NVARCHAR(50) " +
-                            "SELECT @TMPGUID = ISNULL(GUID,'00000000-0000-0000-0000-000000000000') FROM [dbo].[CONTRACT_VW_01] WHERE CODE = @PCODE AND ITEM = @PITEM AND TYPE = 1 " +
-                            "IF @TMPGUID <> '00000000-0000-0000-0000-000000000000' " +
-                            "BEGIN " +
-                            "EXEC [dbo].[PRD_CONTRACT_UPDATE] @GUID = @TMPGUID, @DOC_DATE = @PDOC_DATE, @PRICE = @PPRICE, @UNIT = @PUNIT, @QUANTITY = @PQUANTITY " +
-                            "END " +
-                            "ELSE " +
-                            "BEGIN " +
-                            "EXEC [dbo].[PRD_CONTRACT_INSERT] " +
-                            "@CUSER = @PCUSER, " +
-                            "@DOC_DATE = @PDOC_DATE, " +
-                            "@CODE = @PCODE, " +
-                            "@NAME = @PNAME, " +
-                            "@TYPE = @PTYPE, " +
-                            "@START_DATE = @PSTART_DATE, " +
-                            "@FINISH_DATE = @PFINISH_DATE, " +
-                            "@CUSTOMER = @PCUSTOMER, " +
-                            "@DEPOT = @PDEPOT, " +
-                            "@ITEM = @PITEM, " +
-                            "@QUANTITY = @PQUANTITY, " +
-                            "@PRICE = @PPRICE, " +
-                            "@UNIT = @PUNIT " +
-                            "END",
+                    query : `DECLARE @TMPGUID AS NVARCHAR(50) 
+                            SELECT @TMPGUID = ISNULL(GUID,'00000000-0000-0000-0000-000000000000') FROM [dbo].[CONTRACT_VW_01] WHERE CODE = @PCODE AND ITEM = @PITEM AND TYPE = 1 
+                            IF @TMPGUID <> '00000000-0000-0000-0000-000000000000' 
+                            BEGIN 
+                            EXEC [dbo].[PRD_CONTRACT_UPDATE] @GUID = @TMPGUID, @DOC_DATE = @PDOC_DATE, @PRICE = @PPRICE, @UNIT = @PUNIT, @QUANTITY = @PQUANTITY 
+                            END 
+                            ELSE 
+                            BEGIN 
+                            EXEC [dbo].[PRD_CONTRACT_INSERT] 
+                            @CUSER = @PCUSER, 
+                            @DOC_DATE = @PDOC_DATE, 
+                            @CODE = @PCODE, 
+                            @NAME = @PNAME, 
+                            @TYPE = @PTYPE, 
+                            @START_DATE = @PSTART_DATE, 
+                            @FINISH_DATE = @PFINISH_DATE, 
+                            @CUSTOMER = @PCUSTOMER, 
+                            @DEPOT = @PDEPOT, 
+                            @ITEM = @PITEM, 
+                            @QUANTITY = @PQUANTITY, 
+                            @PRICE = @PPRICE, 
+                            @UNIT = @PUNIT 
+                            END`,
                     param : ['PCUSER:string|25','PDOC_DATE:date','PCODE:string|25','PNAME:string|250','PTYPE:int','PSTART_DATE:date','PFINISH_DATE:date',
                             'PCUSTOMER:string|50','PDEPOT:string|50','PITEM:string|50','PQUANTITY:float','PPRICE:float','PUNIT:string|50'],
                     value : [this.core.auth.data.CODE,this.docDate.value,this.txtCode.code.split(',')[i],this.txtCode.value.split(',')[i],1,
@@ -223,11 +236,10 @@ export default class multipleSaleContract extends React.PureComponent
                 }
                 await this.core.sql.execute(tmpInsUpQuery) 
             }            
-        } 
-
+        }
         App.instance.setState({isExecute:false})
   
-            this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
+        this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
     }
     cellRoleRender(e)
     {
@@ -245,7 +257,8 @@ export default class multipleSaleContract extends React.PureComponent
                         {
                             let tmpQuery = 
                             {
-                                query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                                query: `SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE 
+                                        FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE` ,
                                 param:  ['ITEM:string|50'],
                                 value:  [e.data.ITEM]
                             }
@@ -265,7 +278,6 @@ export default class multipleSaleContract extends React.PureComponent
                                 {
                                     this.txtUnitPrice.value = parseFloat((e.data.PRICE_VAT_EXT * e.data.UNIT_FACTOR).toFixed(3))
                                 }
-                                
                             }
                             await this.msgUnit.show().then(async () =>
                             {
@@ -305,17 +317,11 @@ export default class multipleSaleContract extends React.PureComponent
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmContract"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        this.save();
-                                    }}/>
+                                    onClick={async (e)=> { this.save() }}/>
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -329,7 +335,7 @@ export default class multipleSaleContract extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -390,7 +396,9 @@ export default class multipleSaleContract extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT CODE,NAME,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME FROM CONTRACT_VW_01 WHERE TYPE = 1 GROUP BY CODE,NAME,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE,NAME,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME 
+                                                                    FROM CONTRACT_VW_01 WHERE TYPE = 1 GROUP BY CODE,NAME,CUSTOMER,CUSTOMER_CODE,
+                                                                    CUSTOMER_NAME`},sql:this.core.sql}}}
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_Docs.clmCode")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="NAME" caption={this.t("pg_Docs.clmName")} width={300} defaultSortOrder="asc" />
@@ -413,15 +421,18 @@ export default class multipleSaleContract extends React.PureComponent
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>
-                            {
-                                this.frmContract = e.component
-                            }}>
+                            <Form colCount={1} onInitialized={(e)=> { this.frmContract = e.component }}>
                                 <Item location="after">
                                     <Button icon="add"
+                                    disabled={!this.state.contractsLoaded}
                                     validationGroup={"frmContract"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
+                                        if (!this.state.contractsLoaded) {
+                                            this.toast.show({ message: this.t("msgWarning"),  type: "warning" });
+                                            return;
+                                        }
+                                        
                                         this.pg_txtPopItemsCode.show()
                                         this.pg_txtPopItemsCode.onClick = async(data) =>
                                         {
@@ -471,12 +482,12 @@ export default class multipleSaleContract extends React.PureComponent
                                         {
                                             let tmpDelQuery = 
                                             {
-                                                query : "DECLARE @TMPGUID AS NVARCHAR(50) " +
-                                                        "SELECT @TMPGUID = ISNULL(GUID,'00000000-0000-0000-0000-000000000000') FROM [dbo].[CONTRACT_VW_01] WHERE CODE = @PCODE AND ITEM = @PITEM AND TYPE = 1 " +
-                                                        "IF @TMPGUID <> '00000000-0000-0000-0000-000000000000' " + 
-                                                        "BEGIN " +
-                                                        "EXEC [dbo].[PRD_CONTRACT_DELETE] @CUSER = @PCUSER, @UPDATE = 1, @GUID = @TMPGUID " +
-                                                        "END" ,
+                                                query : `DECLARE @TMPGUID AS NVARCHAR(50) 
+                                                        SELECT @TMPGUID = ISNULL(GUID,'00000000-0000-0000-0000-000000000000') FROM [dbo].[CONTRACT_VW_01] WHERE CODE = @PCODE AND ITEM = @PITEM AND TYPE = 1 
+                                                        IF @TMPGUID <> '00000000-0000-0000-0000-000000000000' 
+                                                        BEGIN 
+                                                        EXEC [dbo].[PRD_CONTRACT_DELETE] @CUSER = @PCUSER, @UPDATE = 1, @GUID = @TMPGUID 
+                                                        END` ,
                                                 param : ['PCUSER:string|25','PCODE:string|25','PITEM:string|50'],
                                                 value : [this.core.auth.data.CODE,this.txtCode.code.split(',')[i],e.data.ITEM]
                                             }
@@ -484,10 +495,7 @@ export default class multipleSaleContract extends React.PureComponent
                                             await this.core.sql.execute(tmpDelQuery)
                                         }
                                     }}
-                                    onReady={async()=>
-                                    {
-                                        await this.grdContracts.dataRefresh({source:this.grdData});
-                                    }}
+                                    onReady={async()=> { await this.grdContracts.dataRefresh({source:this.grdData}) }}
                                     >
                                         <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "grdContracts"}/>
                                         <ColumnChooser enabled={true} />
@@ -496,8 +504,6 @@ export default class multipleSaleContract extends React.PureComponent
                                         {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                         <Editing mode="batch" allowUpdating={true} allowDeleting={true} />
-                                        <Paging defaultPageSize={10} />
-                                        <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <Export fileName={this.lang.t("menuOff.cnt_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="ITEM_CODE" caption={this.t("grdContracts.clmItemCode")} width={150} allowEditing={false}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdContracts.clmItemName")} width={300} allowEditing={false}/>
@@ -547,10 +553,7 @@ export default class multipleSaleContract extends React.PureComponent
                                 <Label text={this.t("msgUnit.txtUnitQuantity")} alignment="right" />
                                 <NdNumberBox id="txtUnitQuantity" parent={this} simple={true}
                                 maxLength={32}
-                                onValueChanged={(async(e)=>
-                                {
-                                    this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value)
-                                }).bind(this)}
+                                onValueChanged={(async(e)=> { this.txtTotalQuantity.value = Number(this.txtUnitQuantity.value * this.txtUnitFactor.value)  }).bind(this)}
                                 />
                             </Item>
                             <Item>
@@ -561,12 +564,8 @@ export default class multipleSaleContract extends React.PureComponent
                                 <Label text={this.t("msgUnit.txtUnitPrice")} alignment="right" />
                                 <NdNumberBox id="txtUnitPrice" parent={this} simple={true} 
                                 maxLength={32}
-                                onEnterKey={(async(e)=>
-                                {
-                                    this.msgUnit._onClick()
-                                }).bind(this)}
-                                >
-                                </NdNumberBox>
+                                onEnterKey={(async(e)=> { this.msgUnit._onClick() }).bind(this)}
+                                />
                             </Item>
                         </Form>
                     </NdDialog>

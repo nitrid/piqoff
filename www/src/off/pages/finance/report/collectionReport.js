@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, Scrolling,Editing} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
@@ -79,14 +81,12 @@ export default class collectionReport extends React.PureComponent
                                 {/* dtFirst */}
                                 <NdItem>
                                     <NdLabel text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}>
-                                    </NdDatePicker>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"} />  
                                 </NdItem>
                                 {/* dtLast */}
                                 <NdItem>
                                     <NdLabel text={this.t("dtLast")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"}>
-                                    </NdDatePicker>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"} />  
                                 </NdItem>
                                 <NdItem>
                                     <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
@@ -147,29 +147,17 @@ export default class collectionReport extends React.PureComponent
                                         {
                                             select:
                                             {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                            console.log(11)
-                                        }
-                                        }
-                                    }
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                                    
                                     </NdPopGrid>
                                 </NdItem>
                             </NdForm>
@@ -182,55 +170,77 @@ export default class collectionReport extends React.PureComponent
                             {
                                 let tmpQuery = 
                                 {
-                                    query :"SELECT " +
-                                            "FACT.DOC_DATE AS FACT_DATE," +
-                                            "FACT.REF  AS FACT_REF," +
-                                            "FACT.REF_NO AS FACT_REF_NO," +
-                                            "FACT.PAY_TYPE AS FACT_PAY_TYPE," +
-                                            "FACT.INPUT_CODE AS CUSTOMER_CODE," +
-                                            "FACT.INPUT_NAME AS CUSTOMER_NAME," +
-                                            "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](FACT.TYPE,FACT.DOC_TYPE,FACT.REBATE,FACT.PAY_TYPE)) AND LANG = 'FR') AS  FACT_TYPE_NAME," +
-                                            "ISNULL((SELECT AMOUNT - (DISCOUNT + DOC_DISCOUNT_1 + DOC_DISCOUNT_2 + DOC_DISCOUNT_3) FROM DOC WHERE DOC.GUID = FACT.DOC_GUID),0) AS FACT_AMOUNT," +
-                                            "ISNULL((SELECT VAT FROM DOC WHERE DOC.GUID = FACT.DOC_GUID),0) AS FACT_VAT," +
-                                            "ISNULL((SELECT TOTAL FROM DOC WHERE DOC.GUID = FACT.DOC_GUID),0) AS FACT_TOTAL," +
-                                            "TAH.DOC_DATE AS TAH_DATE," +
-                                            "TAH.GUID AS TAH_GUID," +
-                                            "TAH.REF AS TAH_REF," +
-                                            "TAH.REF_NO AS TAH_REF_NO," +
-                                            "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TAH.TYPE,TAH.DOC_TYPE,TAH.REBATE,TAH.PAY_TYPE)) AND LANG = @LANG) AS  TAH_PAY_TYPE," +
-                                            "TAH.INPUT_NAME AS BANK_NAME," +
-                                            "TAH.DESCRIPTION AS DESCRIPTION," +
-                                            "TAH.AMOUNT " +
-                                            "FROM DEPT_CREDIT_MATCHING AS DEPTH " +
-                                            "INNER JOIN DOC_CUSTOMER_VW_01 AS FACT ON " +
-                                            "DEPTH.PAYING_DOC = FACT.GUID " +
-                                            "INNER JOIN DOC_CUSTOMER_VW_01 AS TAH ON " +
-                                            "DEPTH.PAID_DOC = TAH.GUID WHERE " +
-                                            "((FACT.INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND " +
-                                            "((TAH.DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((TAH.DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) " +
-                                            "AND TAH.TYPE = 0 AND TAH.DOC_TYPE = 200 " +
-                                            "UNION ALL " +
-                                            "SELECT " +
-                                            "DOC_DATE AS FACT_DATE," +
-                                            "REF  AS FACT_REF," +
-                                            "REF_NO AS FACT_REF_NO," +
-                                            "PAY_TYPE AS FACT_PAY_TYPE," +
-                                            "OUTPUT_CODE AS CUSTOMER_CODE," +
-                                            "OUTPUT_NAME AS CUSTOMER_NAME," +
-                                            "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS  FACT_TYPE_NAME," +
-                                            "ISNULL((SELECT (AMOUNT - (DISCOUNT + DOC_DISCOUNT_1 + DOC_DISCOUNT_2 + DOC_DISCOUNT_3)) * -1 FROM DOC WHERE DOC.GUID = DOC_GUID),0) AS FACT_AMOUNT," +
-                                            "ISNULL((SELECT VAT * -1 FROM DOC WHERE DOC.GUID = DOC_GUID),0) AS FACT_VAT," +
-                                            "ISNULL((SELECT TOTAL * -1 FROM DOC WHERE DOC.GUID = DOC_GUID),0) AS FACT_TOTAL," +
-                                            "(SELECT TOP 1 DOC_DATE FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_DATE," +
-                                            "(SELECT TOP 1 GUID FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_GUID," +
-                                            "(SELECT TOP 1 REF FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_REF," +
-                                            "(SELECT TOP 1 REF_NO FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_REF_NO," +
-                                            "'' AS TAH_PAY_TYPE," +
-                                            "'' AS BANK_NAME," +
-                                            "''  AS DESCRIPTION," +
-                                            "(SELECT TOP 1 AMOUNT FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS AMOUNT " +
-                                            "FROM DOC_CUSTOMER_VW_01 WHERE ((OUTPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND GUID IN (SELECT PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT1 WHERE DEPT1.PAID_DOC IN ( SELECT PAID_DOC FROM DEPT_CREDIT_MATCHING WHERE PAYING_DOC IN (SELECT GUID FROM DOC_CUSTOMER_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 200 AND ((DOC_CUSTOMER_VW_01.DOC_DATE >= @FIRST_DATE) " +
-                                            "OR (@FIRST_DATE = '19700101')) AND ((DOC_CUSTOMER_VW_01.DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')))) AND ISNULL((SELECT TOP 1 TYPE FROM  DOC_CUSTOMER_VW_01 where DOC_CUSTOMER_VW_01.DOC_TYPE < 199 AND DOC_CUSTOMER_VW_01.GUID = DEPT1.PAYING_DOC),1) = 0)", 
+                                    query : `
+                                        SELECT 
+                                            FACT.DOC_DATE AS FACT_DATE,
+                                            FACT.REF  AS FACT_REF,
+                                            FACT.REF_NO AS FACT_REF_NO,
+                                            FACT.PAY_TYPE AS FACT_PAY_TYPE,
+                                            FACT.INPUT_CODE AS CUSTOMER_CODE,
+                                            FACT.INPUT_NAME AS CUSTOMER_NAME,
+                                            (SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](FACT.TYPE,FACT.DOC_TYPE,FACT.REBATE,FACT.PAY_TYPE)) AND LANG = 'FR') AS FACT_TYPE_NAME,
+                                            ISNULL((SELECT AMOUNT - (DISCOUNT + DOC_DISCOUNT_1 + DOC_DISCOUNT_2 + DOC_DISCOUNT_3) FROM DOC WHERE DOC.GUID = FACT.DOC_GUID),0) AS FACT_AMOUNT,
+                                            ISNULL((SELECT VAT FROM DOC WHERE DOC.GUID = FACT.DOC_GUID),0) AS FACT_VAT,
+                                            ISNULL((SELECT TOTAL FROM DOC WHERE DOC.GUID = FACT.DOC_GUID),0) AS FACT_TOTAL,
+                                            TAH.DOC_DATE AS TAH_DATE,
+                                            TAH.GUID AS TAH_GUID,
+                                            TAH.REF AS TAH_REF,
+                                            TAH.REF_NO AS TAH_REF_NO,
+                                            (SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TAH.TYPE,TAH.DOC_TYPE,TAH.REBATE,TAH.PAY_TYPE)) AND LANG = @LANG) AS TAH_PAY_TYPE,
+                                            TAH.INPUT_NAME AS BANK_NAME,
+                                            TAH.DESCRIPTION AS DESCRIPTION,
+                                            TAH.AMOUNT 
+                                        FROM DEPT_CREDIT_MATCHING AS DEPTH 
+                                        INNER JOIN DOC_CUSTOMER_VW_01 AS FACT ON 
+                                            DEPTH.PAYING_DOC = FACT.GUID 
+                                        INNER JOIN DOC_CUSTOMER_VW_01 AS TAH ON 
+                                            DEPTH.PAID_DOC = TAH.GUID 
+                                        WHERE 
+                                            ((FACT.INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND 
+                                            ((TAH.DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND 
+                                            ((TAH.DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) 
+                                            AND TAH.TYPE = 0 AND TAH.DOC_TYPE = 200 
+                                        UNION ALL 
+                                        SELECT 
+                                            DOC_DATE AS FACT_DATE,
+                                            REF  AS FACT_REF,
+                                            REF_NO AS FACT_REF_NO,
+                                            PAY_TYPE AS FACT_PAY_TYPE,
+                                            OUTPUT_CODE AS CUSTOMER_CODE,
+                                            OUTPUT_NAME AS CUSTOMER_NAME,
+                                            (SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS FACT_TYPE_NAME,
+                                            ISNULL((SELECT (AMOUNT - (DISCOUNT + DOC_DISCOUNT_1 + DOC_DISCOUNT_2 + DOC_DISCOUNT_3)) * -1 FROM DOC WHERE DOC.GUID = DOC_GUID),0) AS FACT_AMOUNT,
+                                            ISNULL((SELECT VAT * -1 FROM DOC WHERE DOC.GUID = DOC_GUID),0) AS FACT_VAT,
+                                            ISNULL((SELECT TOTAL * -1 FROM DOC WHERE DOC.GUID = DOC_GUID),0) AS FACT_TOTAL,
+                                            (SELECT TOP 1 DOC_DATE FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_DATE,
+                                            (SELECT TOP 1 GUID FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_GUID,
+                                            (SELECT TOP 1 REF FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_REF,
+                                            (SELECT TOP 1 REF_NO FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS TAH_REF_NO,
+                                            '' AS TAH_PAY_TYPE,
+                                            '' AS BANK_NAME,
+                                            ''  AS DESCRIPTION,
+                                            (SELECT TOP 1 AMOUNT FROM DOC_CUSTOMER_VW_01 AS CUST WHERE GUID = (SELECT TOP 1 PAYING_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_FAC WHERE DEPT_FAC.PAID_DOC =(SELECT TOP 1 PAID_DOC FROM DEPT_CREDIT_MATCHING AS DEPT_RETURN WHERE DEPT_RETURN.PAYING_DOC = DOC_CUSTOMER_VW_01.GUID) AND DEPT_FAC.PAYING_DOC <> DOC_CUSTOMER_VW_01.GUID)) AS AMOUNT 
+                                        FROM DOC_CUSTOMER_VW_01 
+                                        WHERE 
+                                            ((OUTPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) 
+                                            AND GUID IN (
+                                                SELECT PAYING_DOC 
+                                                FROM DEPT_CREDIT_MATCHING AS DEPT1 
+                                                WHERE DEPT1.PAID_DOC IN ( 
+                                                    SELECT PAID_DOC 
+                                                    FROM DEPT_CREDIT_MATCHING 
+                                                    WHERE PAYING_DOC IN (
+                                                        SELECT GUID 
+                                                        FROM DOC_CUSTOMER_VW_01 
+                                                        WHERE TYPE = 0 
+                                                        AND DOC_TYPE = 200 
+                                                        AND ((DOC_CUSTOMER_VW_01.DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) 
+                                                        AND ((DOC_CUSTOMER_VW_01.DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))
+                                                    )
+                                                ) 
+                                                AND ISNULL((SELECT TOP 1 TYPE FROM DOC_CUSTOMER_VW_01 WHERE DOC_CUSTOMER_VW_01.DOC_TYPE < 199 AND DOC_CUSTOMER_VW_01.GUID = DEPT1.PAYING_DOC),1) = 0
+                                            )
+                                    `,
                                             param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','LANG:string|50'],
                                             value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,localStorage.getItem('lang')]
                                 }
@@ -290,11 +300,6 @@ export default class collectionReport extends React.PureComponent
                                     height={350} 
                                     width={'100%'}
                                     dbApply={false}
-                                    onRowDblClick={async(e)=>
-                                    {
-                                    }}
-                                    onRowRemoved={async (e)=>{
-                                    }}
                                     >
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={false} allowDeleting={false} />

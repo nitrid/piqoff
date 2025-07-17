@@ -1,26 +1,22 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { additionalTax,interfelCls } from '../../../../core/cls/additionalTax.js';
-import moment from 'moment';
 
 
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import Form, { EmptyItem, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-import { Button } from 'devextreme-react/button';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
-import tr from '../../../meta/lang/devexpress/tr.js';
-
+import { NdToast } from '../../../../core/react/devex/toast.js';
 export default class interfel extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.interfelObj = new interfelCls();
@@ -29,10 +25,7 @@ export default class interfel extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.init()
-        }, 500);
+        setTimeout(async () =>  { this.init() }, 500);
     }
     async init()
     {
@@ -103,10 +96,7 @@ export default class interfel extends React.PureComponent
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                         <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                            onClick={()=>
-                                            {
-                                                this.getDoc()
-                                            }}/>
+                                        onClick={()=> { this.getDoc() }}/>
                                     </Item>
                                     <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" 
@@ -123,23 +113,21 @@ export default class interfel extends React.PureComponent
                                         if(pResult == 'btn01')
                                         {
                                             let Data = {data:this.interfelObj.dt().toArray()}
-                                            console.log(this.addTaxObj.dt()[0].JSON )
-                                            this.addTaxObj.dt()[0].JSON = JSON.stringify(Data)
 
-                                            let tmpConfObj1 =
-                                            {
-                                                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                            }
+                                            this.addTaxObj.dt()[0].JSON = JSON.stringify(Data)
                                             
                                             if((await this.addTaxObj.save()) == 0)
                                             {                       
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                await dialog(tmpConfObj1);
+                                                this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"});
                                                 this.btnSave.setState({disabled:true});
                                             }
                                             else
                                             {
+                                                let tmpConfObj1 =
+                                                {
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                }
                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                 await dialog(tmpConfObj1);
                                             }
@@ -177,15 +165,12 @@ export default class interfel extends React.PureComponent
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} onInitialized={(e)=>
-                            {
-                                this.frmTrnsfItems = e.component
-                            }}>
+                            <Form colCount={2} onInitialized={(e)=> { this.frmTrnsfItems = e.component }}>
                                 <Item>
                                     <Label text={this.t("txtFrRate")} alignment="right" />
                                     <NdNumberBox id="txtFrRate" parent={this} simple={true} step={0.001}
                                     maxLength={32} dt={{data:this.interfelObj.dt('INTERFEL_TABLE'),field:"FR"}}
-                                    ></NdNumberBox>
+                                    />
                                 </Item>
                                 <EmptyItem/>
                                 <Item>
@@ -193,12 +178,13 @@ export default class interfel extends React.PureComponent
                                     <NdNumberBox id="txtNotFrRate" parent={this} simple={true}
                                     maxLength={32} dt={{data:this.interfelObj.dt('INTERFEL_TABLE'),field:"NOTFR"}} 
                                     step={0.001}
-                                    ></NdNumberBox>
+                                    />
                                 </Item>
                             </Form>
                                {/* TaxSugar PopUp */}
                         </div>
                     </div>
+                    <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )

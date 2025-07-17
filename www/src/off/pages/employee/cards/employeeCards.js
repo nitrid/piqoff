@@ -1,11 +1,13 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { employeesCls } from '../../../../core/cls/employees.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item} from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
+
 import NdTextBox, { Validator, NumericRule, RequiredRule, EmailRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -22,17 +24,17 @@ export default class EmployeeCard extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.employeeObj = new employeesCls();
+
         this.prevCode = "";
         this.state={officalVisible:true}
         this.tabIndex = props.data.tabkey
         this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
 
         this.onItemRendered  = this.onItemRendered .bind(this)
-       
-        
     }
     async componentDidMount()
     {
@@ -103,19 +105,15 @@ export default class EmployeeCard extends React.PureComponent
             this.btnPrint.setState({disabled:false});
         })
 
-        
-
         this.employeeObj.addEmpty();
         this.txtCode.value = ''
         this.setState({officalVisible:false})
-      
-        
+
     }
     async getEmployee(pCode)
     {
         this.employeeObj.clearAll()
         await this.employeeObj.load({CODE:pCode});
-        console.log(this.employeeObj.dt())
     }
 
     async checkEmployee(pCode)
@@ -169,14 +167,13 @@ export default class EmployeeCard extends React.PureComponent
             if(pCode !== '')
             {
                 let tmpQuery = {
-                    query :"SELECT COUNTRY_CODE,PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE ",
+                    query : `SELECT COUNTRY_CODE,PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE`,
                     param : ['ZIPCODE:string|50'],
                     value : [pCode]
                 }
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    
                     this.cmbPopCity.value = tmpData.result.recordset[0].PLACE
                     this.cmbPopCountry.value = tmpData.result.recordset[0].COUNTRY_CODE
                     resolve(1)
@@ -192,10 +189,6 @@ export default class EmployeeCard extends React.PureComponent
             }
         });
     }
-    async _onEmployeeRendered(e)
-    {
-        await this.core.util.waitUntil(10)
-    }
     async onItemRendered (e)
     {
         await this.core.util.waitUntil(10)
@@ -208,9 +201,7 @@ export default class EmployeeCard extends React.PureComponent
             {        
                 await this.grdAttendance.dataRefresh({source:this.employeeObj.employeeAttendance.dt('EMPLOYEE_ATTENDANCE')});
             }
-       
     }
-
     render()
     {
         return(
@@ -231,16 +222,12 @@ export default class EmployeeCard extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmEmployees"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
-                                        console.log(this.employeeObj.employeeAttendance.dt())
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
@@ -309,18 +296,11 @@ export default class EmployeeCard extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
-                                        
-                                    }}/>
+                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
-                                    }}/>
+                                    onClick={()=> { this.popDesign.show() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto" widget="dxButton"
                                 options=
@@ -355,10 +335,7 @@ export default class EmployeeCard extends React.PureComponent
                                 <NdItem>
                                     <NdLabel text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"CODE"}} 
-                                    onEnterKey={()=>
-                                    {
-                                        this.getEmployee(this.txtCode.value)
-                                    }}
+                                    onEnterKey={()=> { this.getEmployee(this.txtCode.value) }}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
                                     {
@@ -381,10 +358,7 @@ export default class EmployeeCard extends React.PureComponent
                                             {
                                                 id:'02',
                                                 icon:'arrowdown',
-                                                onClick:()=>
-                                                {
-                                                    this.txtCode.value = Math.floor(Date.now() / 1000)
-                                                }
+                                                onClick:()=> { this.txtCode.value = Math.floor(Date.now() / 1000) }
                                             }
                                         ]
                                     }
@@ -419,7 +393,7 @@ export default class EmployeeCard extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT * FROM EMPLOYEE_VW_01 WHERE (((NAME like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) OR ((CODE like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) )",
+                                                query : `SELECT CODE, INSURANCE_NO, NAME, LAST_NAME FROM EMPLOYEE_VW_01 WHERE (((NAME like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) OR ((CODE like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) )`,
                                                 param : ['EMPLOYEE_NAME:string|50']
                                             },
                                             sql:this.core.sql
@@ -441,8 +415,7 @@ export default class EmployeeCard extends React.PureComponent
                                     maxLength={32}
                                     param={this.param.filter({ELEMENT:'txtEmployeeName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtEmployeeName',USERS:this.user.CODE})}
-                                    >                                      
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* txtEmployeeLastname */}
                                 <NdItem>
@@ -453,8 +426,7 @@ export default class EmployeeCard extends React.PureComponent
                                     maxLength={32}
                                     param={this.param.filter({ELEMENT:'txtEmployeeLastname',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtEmployeeLastname',USERS:this.user.CODE})}
-                                    >                                      
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* txtPhone1 */}
                                 <NdItem>
@@ -546,9 +518,7 @@ export default class EmployeeCard extends React.PureComponent
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
                                         access={this.access.filter({ELEMENT:'txtAge',USERS:this.user.CODE})}
-                                    >
-                                     
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* txtInsuranceNo */}
                                 <NdItem>
@@ -560,8 +530,7 @@ export default class EmployeeCard extends React.PureComponent
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
                                         access={this.access.filter({ELEMENT:'txtInsuranceNo',USERS:this.user.CODE})}
-                                    >                                  
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* txtGender */}
                                 <NdItem>
@@ -573,8 +542,7 @@ export default class EmployeeCard extends React.PureComponent
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
                                         access={this.access.filter({ELEMENT:'txtGender',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* txtMarialStatus */}
                                 <NdItem>
@@ -586,9 +554,7 @@ export default class EmployeeCard extends React.PureComponent
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={100}
                                         access={this.access.filter({ELEMENT:'txtMarialStatus',USERS:this.user.CODE})}
-                                    >
-                                       
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                  {/* txtWage */}
                                  <NdItem>
@@ -600,9 +566,7 @@ export default class EmployeeCard extends React.PureComponent
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={32}
                                         access={this.access.filter({ELEMENT:'txtWage',USERS:this.user.CODE})}
-                                    >
-                                     
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                             </NdForm>
                         </div>
@@ -662,11 +626,7 @@ export default class EmployeeCard extends React.PureComponent
                                                 <Toolbar>
                                                     <Item location="after">
                                                         <Button icon="add"
-                                                        onClick={async ()=>
-                                                        {
-                                                           
-                                                            this.popAttendance.show();
-                                                        }}/>
+                                                        onClick={()=> { this.popAttendance.show() }}/>
                                                     </Item>
                                                 </Toolbar>
                                             </div>
@@ -724,12 +684,12 @@ export default class EmployeeCard extends React.PureComponent
                                     value="FR"
                                     searchEnabled={true}
                                     showClearButton={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC`},sql:this.core.sql}}}
                                     onValueChanged={(async()=>
                                     {
                                         let tmpQuery = 
                                         {
-                                            query : "SELECT [ZIPCODE], ZIPCODE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY ZIPCODE",
+                                            query : `SELECT [ZIPCODE], ZIPCODE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY ZIPCODE`,
                                             param : ['COUNTRY_CODE:string|5'],
                                             value : [this.cmbPopCountry.value]
                                         }
@@ -744,7 +704,7 @@ export default class EmployeeCard extends React.PureComponent
                                         }
                                         let tmpCityQuery = 
                                         {
-                                            query : "SELECT [PLACE] FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY PLACE",
+                                            query : `SELECT [PLACE] FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY PLACE`,
                                             param : ['COUNTRY_CODE:string|5'],
                                             value : [this.cmbPopCountry.value]
                                         }
@@ -757,7 +717,6 @@ export default class EmployeeCard extends React.PureComponent
                                         {
                                             await this.cmbPopCity.setData([])
                                         }
-
                                     }).bind(this)}
                                     />
                                 </Item>
@@ -765,7 +724,6 @@ export default class EmployeeCard extends React.PureComponent
                                     <Label text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopZipcode" 
                                     acceptCustomValue={true}
-                                   
                                     displayExpr="ZIPNAME"                       
                                     valueExpr="ZIPCODE"
                                     value=""
@@ -779,19 +737,22 @@ export default class EmployeeCard extends React.PureComponent
                                             e.customItem = null;
                                             return;
                                         }
-                                     
                                         const { component, text } = e;
                                         const currentItems = component.option('items');
                                      
-                                        const newItem = {
+                                        const newItem = 
+                                        {
                                             ZIPCODE: text.trim(),
                                             ZIPNAME: text.trim(),
                                         };
                                      
                                         const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
-                                        if (itemInDataSource) {
+                                        if (itemInDataSource) 
+                                        {
                                             e.customItem = itemInDataSource;
-                                        } else {    
+                                        } 
+                                        else 
+                                        {    
                                             currentItems.push(newItem);
                                             component.option('items', currentItems);
                                             e.customItem = newItem;
@@ -813,7 +774,8 @@ export default class EmployeeCard extends React.PureComponent
                                     notRefresh = {true}
                                     onCustomItemCreating={async(e)=>
                                     {
-                                        if (!e.text) {
+                                        if (!e.text)    
+                                        {
                                             e.customItem = null;
                                             return;
                                         }
@@ -821,15 +783,18 @@ export default class EmployeeCard extends React.PureComponent
                                         const { component, text } = e;
                                         const currentItems = component.option('items');
                                         
-                                        const newItem = {
-                                            PLACE: text.trim(),
-                                            PLACE: text.trim(),
+                                        const newItem = 
+                                        {
+                                            PLACE: text.trim()
                                         };
                                         
                                         const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
-                                        if (itemInDataSource) {
+                                        if (itemInDataSource) 
+                                        {
                                             e.customItem = itemInDataSource;
-                                        } else {    
+                                        } 
+                                        else 
+                                        {    
                                             currentItems.push(newItem);
                                             component.option('items', currentItems);
                                             e.customItem = newItem;
@@ -846,7 +811,6 @@ export default class EmployeeCard extends React.PureComponent
                                             {
                                                 let tmpEmpty = {...this.employeeObj.employeeAdress.empty};
                                                
-                                                
                                                 tmpEmpty.ADRESS_NO = this.employeeObj.employeeAdress.dt().length
                                                 tmpEmpty.ADRESS = this.txtPopAdress.value
                                                 tmpEmpty.ZIPCODE = this.cmbPopZipcode.value
@@ -856,15 +820,11 @@ export default class EmployeeCard extends React.PureComponent
 
                                                 this.employeeObj.employeeAdress.addEmpty(tmpEmpty);    
                                                 this.popAdress.hide(); 
-                                                
                                             }}/>
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popAdress.hide();  
-                                            }}/>
+                                            onClick={()=> { this.popAdress.hide() }}/>
                                         </div>
                                     </div>
                                 </Item>
@@ -942,10 +902,7 @@ export default class EmployeeCard extends React.PureComponent
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popAttendance.hide();  
-                                            }}/>
+                                            onClick={()=> { this.popAttendance.hide() }}/>
                                         </div>
                                     </div>
                                 </Item>

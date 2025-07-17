@@ -52,6 +52,10 @@ const cnt_04_001 =
         btn01: "OK",
         msgSuccess: "Enregistré avec succès !",
         msgFailed: "Enregistrement échoué !"
+    },  
+    msgDeleteResult:
+    {
+        msg: "Enregistrement supprimé avec succès !"
     },
 }
 export default cnt_04_001

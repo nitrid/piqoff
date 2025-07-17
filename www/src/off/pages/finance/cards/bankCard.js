@@ -1,10 +1,12 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { bankCls} from '../../../../core/cls/finance.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import {Column} from '../../../../core/react/devex/grid.js';
 import { Item } from 'devextreme-react/form';
+
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -18,9 +20,11 @@ export default class bankCard extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.bankObj = new bankCls();
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
     }
@@ -102,7 +106,7 @@ export default class bankCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE FROM BANK_VW_01 WHERE CODE = @CODE",
+                    query : `SELECT GUID,CODE FROM BANK_VW_01 WHERE CODE = @CODE`,
                     param : ['CODE:string|50'],
                     value : [pCode]
                 }
@@ -164,11 +168,7 @@ export default class bankCard extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        console.log(132)
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmBank"  + this.tabIndex}
@@ -234,24 +234,18 @@ export default class bankCard extends React.PureComponent
                                         {
                                             this.bankObj.dt('BANK').removeAt(0)
                                             await this.bankObj.dt('BANK').delete();
+                                            this.toast.show({message:this.t("msgDelete.msgSuccess"),type:"success"})
                                             this.init(); 
                                         }
                                         
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
-                                        
-                                    }}/>
+                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default" />
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
-                                    }}/>
+                                    onClick={()=> { this.popDesign.show() }}/>
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -269,7 +263,6 @@ export default class bankCard extends React.PureComponent
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
-                                            
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
@@ -310,10 +303,7 @@ export default class bankCard extends React.PureComponent
                                             {
                                                 id:'02',
                                                 icon:'arrowdown',
-                                                onClick:()=>
-                                                {
-                                                    this.txtCode.value = Math.floor(Date.now() / 1000)
-                                                }
+                                                onClick:()=> { this.txtCode.value = Math.floor(Date.now() / 1000) }
                                             }
                                         ]
                                     }
@@ -341,17 +331,7 @@ export default class bankCard extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} //
-                                    data={{source:{select:{query : "SELECT CODE,NAME,IBAN FROM BANK_VW_01"},sql:this.core.sql}}}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                            }
-                                        }
-                                    }
+                                    data={{source:{select:{query : `SELECT CODE,NAME,IBAN FROM BANK_VW_01`},sql:this.core.sql}}}
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
@@ -363,14 +343,9 @@ export default class bankCard extends React.PureComponent
                                     <NdLabel text={this.t("txtName")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 <NdEmptyItem />
                                {/* txtIban */}
@@ -378,10 +353,6 @@ export default class bankCard extends React.PureComponent
                                     <NdLabel text={this.t("txtIban")} alignment="right" />
                                     <NdTextBox id="txtIban" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"IBAN"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtIban',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtIban',USERS:this.user.CODE})}
                                     >
@@ -395,12 +366,7 @@ export default class bankCard extends React.PureComponent
                                     <NdLabel text={this.t("txtSwift")} alignment="right" />
                                     <NdTextBox id="txtSwift" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"SWIFT"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 <NdEmptyItem />
                                 {/* cmbCurrentyType */}
@@ -409,11 +375,7 @@ export default class bankCard extends React.PureComponent
                                     <NdSelectBox simple={true} parent={this} id="cmbCurrentyType" height='fit-content' dt={{data:this.bankObj.dt('BANK'),field:"CURRENCY"}}
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
-                                    data={{source:{select:{query : "SELECT * FROM CURRENCY_TYPE"},sql:this.core.sql}}}
-                                    onValueChanged={(async()=>
-                                            {
-                                               
-                                        }).bind(this)}
+                                    data={{source:{select:{query : `SELECT * FROM CURRENCY_TYPE`},sql:this.core.sql}}}
                                     />
                                 </NdItem>
                                  {/* txtOffical */}
@@ -421,12 +383,7 @@ export default class bankCard extends React.PureComponent
                                     <NdLabel text={this.t("txtOffical")} alignment="right" />
                                     <NdTextBox id="txtOffical" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"OFFICAL"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 <NdEmptyItem />
                                 {/* txtAdress */}
@@ -434,12 +391,7 @@ export default class bankCard extends React.PureComponent
                                     <NdLabel text={this.t("txtAdress")} alignment="right" />
                                     <NdTextBox id="txtAdress" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"ADRESS"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 <NdEmptyItem />
                                  {/* txtPhone */}
@@ -447,12 +399,7 @@ export default class bankCard extends React.PureComponent
                                     <NdLabel text={this.t("txtPhone")} alignment="right" />
                                     <NdTextBox id="txtPhone" parent={this} simple={true} dt={{data:this.bankObj.dt('BANK'),field:"PHONE"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                             </NdForm>
                         </div>

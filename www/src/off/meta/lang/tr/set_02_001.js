@@ -35,6 +35,10 @@ const set_02_001 =
         msgSuccess: "Kayıt işleminiz başarılı !",
         msgFailed: "Kayıt işleminiz başarısız !"
     },
+    msgDeleteResult:
+    {
+        msgSuccess: "Kayıt işleminiz başarılı !",
+    },
     msgSaveValid:
     {
         title: "Dikkat",

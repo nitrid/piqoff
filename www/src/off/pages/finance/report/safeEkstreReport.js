@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column,ColumnChooser,Paging,Pager,Scrolling,Export,Summary,TotalItem,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
@@ -15,17 +17,16 @@ export default class safeEkstreReport extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
-        this.groupList = [];
+
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
     loadState()
     {
@@ -48,7 +49,7 @@ export default class safeEkstreReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *,CASE WHEN INPUT = @SAFE THEN AMOUNT ELSE (AMOUNT * -1) END AS DOC_AMOUNT FROM DOC_CUSTOMER_VW_01 WHERE ((INPUT = @SAFE) OR (OUTPUT  = @SAFE)) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE" ,
+                    query : `SELECT *,CASE WHEN INPUT = @SAFE THEN AMOUNT ELSE (AMOUNT * -1) END AS DOC_AMOUNT FROM DOC_CUSTOMER_VW_01 WHERE ((INPUT = @SAFE) OR (OUTPUT  = @SAFE)) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE`,
                     param : ['FIRST_DATE:date','LAST_DATE:date','SAFE:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbSafe.value]
                 },
@@ -57,7 +58,6 @@ export default class safeEkstreReport extends React.PureComponent
         }
 
         await this.grdListe.dataRefresh(tmpSource)
-      
     }
     render()
     {
@@ -106,11 +106,7 @@ export default class safeEkstreReport extends React.PureComponent
                                     value=""
                                     searchEnabled={true}
                                     notRefresh={true}
-                                    onValueChanged={(async()=>
-                                        {
-
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM SAFE_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT * FROM SAFE_VW_01`},sql:this.core.sql}}}
                                     >
                                     </NdSelectBox>
                                 </NdItem>
@@ -129,7 +125,7 @@ export default class safeEkstreReport extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

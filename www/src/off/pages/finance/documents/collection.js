@@ -666,7 +666,7 @@ export default class collection extends React.PureComponent
                                     <NdButton id="btnCopy" parent={this} icon="copy" type="default"/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default" onClick={()=>{this.popDesign.show()}}/>
+                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"/>
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -705,7 +705,7 @@ export default class collection extends React.PureComponent
                                 <NdItem>
                                     <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
-                                        <div className="col-4 pe-0">
+                                        <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
@@ -735,7 +735,7 @@ export default class collection extends React.PureComponent
                                                 </Validator>  
                                             </NdTextBox>
                                         </div>
-                                        <div className="col-5 ps-0">
+                                        <div className="col-6 ps-0">
                                             <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             readOnly={true}
                                             button=
@@ -1172,7 +1172,7 @@ export default class collection extends React.PureComponent
                                             onClick={async ()=>
                                             {   
                                                 this.deptCreditMatchingObj.popUpList = [];
-                                                await this.deptCreditMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT)
+                                                await this.deptCreditMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT,this.props.data.id + this.tabIndex)
                                                 let totalRemainder = Number(this.deptCreditMatchingObj.popUpList.sum('REMAINDER')).round(2)
                                                 this.numCash.value = totalRemainder
                                             }}/>
@@ -1182,7 +1182,7 @@ export default class collection extends React.PureComponent
                                             onClick={async (e)=>
                                             {  
                                                 this.payPlanMatchingObj.clearAll();
-                                                await this.payPlanMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT)
+                                                await this.payPlanMatchingObj.showPopUp(this.docObj.dt()[0].OUTPUT,this.props.data.id + this.tabIndex)
                                                 this.numCash.value = Number(this.payPlanMatchingObj.popUpList[0].AMOUNT)
                                                 this.numCash.readOnly = true
 

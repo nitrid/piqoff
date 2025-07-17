@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import { NdForm, NdItem, NdLabel}from '../../../../core/react/devex/form.js';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdButton from '../../../../core/react/devex/button.js';
@@ -19,6 +21,7 @@ export default class invoiceAgingReport extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
+
         this.btnGetClick = this.btnGetClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
@@ -26,10 +29,7 @@ export default class invoiceAgingReport extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () => { this.Init() }, 1000)
     }
     async Init()
     {
@@ -57,12 +57,9 @@ export default class invoiceAgingReport extends React.PureComponent
 
         tmpAllDt.selectCmd = 
         {
-            query : "SELECT *, " + 
-                    "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_TYPE_NAME](PAID.TYPE,PAID.DOC_TYPE,PAID.REBATE)) AND LANG = @LANG) AS TYPE_NAME, " +
-                    "0 AS BALANCE " +
-                    "FROM DEPT_CREDIT_MATCHING_VW_01 AS PAID " +
-                    "WHERE ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND "+ 
-                    "((DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) ORDER BY DATE ASC",
+            query : `SELECT *, (SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_TYPE_NAME](PAID.TYPE,PAID.DOC_TYPE,PAID.REBATE)) AND LANG = @LANG) AS TYPE_NAME, 
+                    0 AS BALANCE FROM DEPT_CREDIT_MATCHING_VW_01 AS PAID WHERE ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) 
+                    AND ((DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) ORDER BY DATE ASC`,
             param : ['LANG:string|50','CUSTOMER_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
             value : [this.lang.language.toUpperCase(),this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
         }
@@ -99,7 +96,6 @@ export default class invoiceAgingReport extends React.PureComponent
                 )
             }
         }
-        
         App.instance.setState({isExecute:true})
         await this.grdList.dataRefresh({source : tmpDt})
         App.instance.setState({isExecute:false})
@@ -146,16 +142,12 @@ export default class invoiceAgingReport extends React.PureComponent
                                 {/* dtFirst */}
                                 <NdItem>
                                     <NdLabel text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
-                                    >
-                                    </NdDatePicker>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"} />
                                 </NdItem>
                                 {/* dtLast */}
                                 <NdItem>
                                     <NdLabel text={this.t("dtLast")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"}
-                                    >
-                                    </NdDatePicker>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"} />
                                 </NdItem>
                                 <NdItem>
                                 <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
@@ -216,7 +208,7 @@ export default class invoiceAgingReport extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql
@@ -238,7 +230,6 @@ export default class invoiceAgingReport extends React.PureComponent
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                     <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                     <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                                    
                                 </NdPopGrid>
                                 </NdItem> 
                             </NdForm>
@@ -246,16 +237,13 @@ export default class invoiceAgingReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -278,6 +266,57 @@ export default class invoiceAgingReport extends React.PureComponent
                                 else if(e.rowType == 'data' && e.data.TYPE == 1)
                                 {
                                     e.rowElement.style.color = "Green"
+                                }
+                            }}
+                            onRowDblClick={async(e)=>
+                            {
+                                if(e.data.DOC_GUID != '00000000-0000-0000-0000-000000000000')
+                                {
+                                    if(e.data.TYPE == 0 && e.data.DOC_TYPE == 20 && e.data.REBATE == 0)    
+                                    {
+                                        App.instance.menuClick({
+                                            id: 'ftr_02_001',
+                                            text: e.data.TYPE_NAME,
+                                            path: 'invoices/documents/purchaseInvoice.js',
+                                            pagePrm:{GUID:e.data.DOC_GUID}
+                                        });
+                                    }
+                                    else if(e.data.TYPE == 1 && e.data.DOC_TYPE == 20 && e.data.REBATE == 0)
+                                    {
+                                        App.instance.menuClick({
+                                            id: 'ftr_02_002',
+                                            text: e.data.TYPE_NAME,
+                                            path: 'invoices/documents/salesInvoice.js',
+                                            pagePrm:{GUID:e.data.DOC_GUID}
+                                        });
+                                    }
+                                    else if(e.data.TYPE == 0 && e.data.DOC_TYPE == 20 && e.data.REBATE == 1)
+                                    {
+                                        App.instance.menuClick({
+                                            id: 'ftr_02_007',
+                                            text: e.data.TYPE_NAME,
+                                            path: 'invoices/documents/rebatePurcInvoice.js',
+                                            pagePrm:{GUID:e.data.DOC_GUID}
+                                        });
+                                    }
+                                    else if(e.data.TYPE == 1 && e.data.DOC_TYPE == 20 && e.data.REBATE == 1)
+                                    {
+                                        App.instance.menuClick({
+                                            id: 'ftr_02_003',
+                                            text: e.data.TYPE_NAME,
+                                            path: 'invoices/documents/rebateInvoice.js',
+                                            pagePrm:{GUID:e.data.DOC_GUID}
+                                        });
+                                    }
+                                    else if(e.data.TYPE == 0 && e.data.DOC_TYPE == 200 && e.data.REBATE == 0)
+                                    {
+                                        App.instance.menuClick({
+                                            id: 'fns_02_002',
+                                            text: e.data.TYPE_NAME,
+                                            path: 'finance/documents/collection.js',
+                                            pagePrm:{GUID:e.data.DOC_GUID}
+                                        }); 
+                                    }
                                 }
                             }}
                             >

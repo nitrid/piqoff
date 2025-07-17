@@ -39,15 +39,13 @@ export default class NbPosPopGrid extends NbBase
         let tmpQuery = {...this.data}
         tmpQuery.source.select.value = []
         tmpQuery.source.select.value.push(this["txt" + this.props.id].value.replaceAll('*','%') + '%')
-        console.log(1)
+        
         await this["grd" + this.props.id].dataRefresh(tmpQuery)
-        console.log(2)
     }
     async show()
     {
-        //this["txt" + this.props.id].value = ""
-        //await this["grd" + this.props.id].dataRefresh({source:[]})
         await this[this.props.id].show()
+
         if(this.props.selectAll == true)
         {
             this["txt" + this.props.id].value = ''
@@ -59,8 +57,6 @@ export default class NbPosPopGrid extends NbBase
     }
     async clear()
     {
-        console.log("this.props.selectAll", this["txt" + this.props.id])
-
         if(this["txt" + this.props.id] !== undefined)
         {
             this["txt" + this.props.id].value = ''

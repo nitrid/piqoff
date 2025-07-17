@@ -30,6 +30,10 @@ const set_02_008 =
         txtMulticode : "Tedarikçi Kodu",
         txtCustoms : "Gümrük Kodu",
         txtOrigin :"Menşei"
+    },
+    msgDeleteResult:
+    {
+        msgSuccess: "Kayıt işleminiz başarılı !",
     }
 }
 

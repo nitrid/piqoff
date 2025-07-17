@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar from 'devextreme-react/toolbar';
 import Form, {Item, Label,} from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, ColumnChooser,StateStoring,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
@@ -20,23 +22,22 @@ export default class itemGrpSalesReport extends React.PureComponent
     constructor(props)
     {
         super(props)
-        this.state = {dataSource : {}} 
+       
         this.core = App.instance.core;
-        this.groupList = [];
+
         this.btnGetClick = this.btnGetClick.bind(this)
         this.getDetail = this.getDetail.bind(this)
         this.btnAnalysis = this.btnAnalysis.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
         this.tabIndex = props.data.tabkey
+        this.state = {dataSource : {}} 
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-           
-        }, 1000);
+        setTimeout(async () => { }, 1000);
     }
+
     loadState() 
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdSlsOrderState',USERS:this.user.CODE})
@@ -53,34 +54,35 @@ export default class itemGrpSalesReport extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query :"SELECT COUNT(GUID) AS TICKET,ISNULL(AVG(TOTAL),0) AS AVGTOTAL FROM POS_VW_01 WHERE STATUS = 1 AND  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE ",
+            query :`SELECT COUNT(GUID) AS TICKET,ISNULL(AVG(TOTAL),0) AS AVGTOTAL FROM POS_VW_01 WHERE STATUS = 1 AND  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE `,
             param : ['FISRT_DATE:date','LAST_DATE:date'],
             value : [this.dtDate.startDate,this.dtDate.endDate]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
+
         if(tmpData.result.recordset.length > 0)
         {
             this.txtTotalTicket.value = tmpData.result.recordset[0].TICKET
             this.txtTicketAvg.value = tmpData.result.recordset[0].AVGTOTAL.toLocaleString('fr-FR', {style: 'currency',currency: 'EUR'});
         }
+
         if(this.chkTicket.value == true)
         {
             let tmpSource =
             {
                 source : 
                 {
-                    groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT ITEM_GRP_NAME,ITEM_GRP_CODE, " +
-                        "(SELECT COUNT(*) FROM (SELECT COUNT(POS_GUID) AS POS_GUID FROM POS_SALE_VW_01 AS PS WHERE PS.ITEM_GRP_NAME = POS_SALE_DATEIL_REPORT_VW_01.ITEM_GRP_NAME AND PS.DOC_DATE >= @FISRT_DATE AND PS.DOC_DATE <= @LAST_DATE GROUP BY POS_GUID) AS TMP) AS TICKET,  " +
-                        "ROUND(SUM(TOTAL),2) AS TOTAL,  " +
-                        "ROUND(SUM(FAMOUNT),2) AS FAMOUNT,  " +
-                        "ROUND(SUM(QUANTITY),2) AS QUANTITY,  " +
-                        "ROUND(SUM(VAT),2) AS VAT,  " +
-                        "ROUND(SUM(COST_PRICE * QUANTITY),2) AS TOTAL_COST,  " +
-                        "(SUM(FAMOUNT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL  " +
-                        "FROM POS_SALE_DATEIL_REPORT_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE GROUP BY ITEM_GRP_NAME,ITEM_GRP_CODE ORDER BY ITEM_GRP_CODE ",
+                        query : `SELECT ITEM_GRP_NAME,ITEM_GRP_CODE, 
+                                (SELECT COUNT(*) FROM (SELECT COUNT(POS_GUID) AS POS_GUID FROM POS_SALE_VW_01 AS PS WHERE PS.ITEM_GRP_NAME = POS_SALE_DATEIL_REPORT_VW_01.ITEM_GRP_NAME AND PS.DOC_DATE >= @FISRT_DATE AND PS.DOC_DATE <= @LAST_DATE GROUP BY POS_GUID) AS TMP) AS TICKET,  
+                                ROUND(SUM(TOTAL),2) AS TOTAL,  
+                                ROUND(SUM(FAMOUNT),2) AS FAMOUNT,  
+                                ROUND(SUM(QUANTITY),2) AS QUANTITY,  
+                                ROUND(SUM(VAT),2) AS VAT,  
+                                ROUND(SUM(COST_PRICE * QUANTITY),2) AS TOTAL_COST,  
+                                (SUM(FAMOUNT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL  
+                                FROM POS_SALE_DATEIL_REPORT_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE GROUP BY ITEM_GRP_NAME,ITEM_GRP_CODE ORDER BY ITEM_GRP_CODE `,
                         param : ['FISRT_DATE:date','LAST_DATE:date'],
                         value : [this.dtDate.startDate,this.dtDate.endDate]
                     },
@@ -90,9 +92,11 @@ export default class itemGrpSalesReport extends React.PureComponent
             App.instance.setState({isExecute:true})
             await this.grdGroupSalesReport.dataRefresh(tmpSource)
             App.instance.setState({isExecute:false})
+
             this.setState({dataSource:{}})
+
             let tmpData = await this.core.sql.execute(tmpSource.source.select) 
-            console.log(tmpData)
+
             if(tmpData.result.recordset.length > 0)
             {
                 this.setState({dataSource:tmpData.result.recordset})
@@ -108,18 +112,17 @@ export default class itemGrpSalesReport extends React.PureComponent
             {
                 source : 
                 {
-                    groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT ITEM_GRP_NAME,ITEM_GRP_CODE, " +
-                        "'' AS TICKET,  " +
-                        "ROUND(SUM(TOTAL),2) AS TOTAL,  " +
-                        "ROUND(SUM(FAMOUNT),2) AS FAMOUNT,  " +
-                        "ROUND(SUM(QUANTITY),2) AS QUANTITY,  " +
-                        "ROUND(SUM(VAT),2) AS VAT,  " +
-                        "ROUND(SUM(COST_PRICE * QUANTITY),2) AS TOTAL_COST,  " +
-                        "(SUM(FAMOUNT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL  " +
-                        "FROM POS_SALE_DATEIL_REPORT_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE GROUP BY ITEM_GRP_NAME,ITEM_GRP_CODE ORDER BY ITEM_GRP_CODE ",
+                        query : `SELECT ITEM_GRP_NAME,ITEM_GRP_CODE, 
+                                '' AS TICKET,  
+                                ROUND(SUM(TOTAL),2) AS TOTAL,  
+                                ROUND(SUM(FAMOUNT),2) AS FAMOUNT,  
+                                ROUND(SUM(QUANTITY),2) AS QUANTITY,  
+                                ROUND(SUM(VAT),2) AS VAT,  
+                                ROUND(SUM(COST_PRICE * QUANTITY),2) AS TOTAL_COST,  
+                                (SUM(FAMOUNT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL  
+                                FROM POS_SALE_DATEIL_REPORT_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE GROUP BY ITEM_GRP_NAME,ITEM_GRP_CODE ORDER BY ITEM_GRP_CODE `,
                         param : ['FISRT_DATE:date','LAST_DATE:date'],
                         value : [this.dtDate.startDate,this.dtDate.endDate]
                     },
@@ -129,7 +132,9 @@ export default class itemGrpSalesReport extends React.PureComponent
             App.instance.setState({isExecute:true})
             await this.grdGroupSalesReport.dataRefresh(tmpSource)
             App.instance.setState({isExecute:false}) 
+
             this.setState({dataSource:{}})
+
             let tmpData = await this.core.sql.execute(tmpSource.source.select) 
 
             if(tmpData.result.recordset.length > 0)
@@ -148,20 +153,19 @@ export default class itemGrpSalesReport extends React.PureComponent
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query :"SELECT  " +
-                   "ITEM_CODE, " +
-                   "ITEM_NAME, " +
-                   "SUM(QUANTITY) AS QUANTITY, " +
-                   "ROUND(SUM(TOTAL),2) AS TOTAL, " +
-                   "ROUND(SUM(FAMOUNT),2) AS FAMOUNT, " +
-                   "ROUND(SUM(VAT),2) AS VAT, " +
-                   "ROUND(SUM(COST_PRICE * QUANTITY),2) AS COST_PRICE, " +
-                   "(SUM(FAMOUNT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL " +
-                   "FROM POS_SALE_DATEIL_REPORT_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND ITEM_GRP_NAME = @ITEM_GRP_NAME " +
-                   " GROUP BY  ITEM_CODE,ITEM_NAME ORDER BY ITEM_NAME " ,
+                    query :`SELECT 
+                            ITEM_CODE, 
+                            ITEM_NAME, 
+                            SUM(QUANTITY) AS QUANTITY, 
+                            ROUND(SUM(TOTAL),2) AS TOTAL, 
+                            ROUND(SUM(FAMOUNT),2) AS FAMOUNT, 
+                            ROUND(SUM(VAT),2) AS VAT, 
+                            ROUND(SUM(COST_PRICE * QUANTITY),2) AS COST_PRICE, 
+                            (SUM(FAMOUNT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL 
+                            FROM POS_SALE_DATEIL_REPORT_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND ITEM_GRP_NAME = @ITEM_GRP_NAME 
+                            GROUP BY  ITEM_CODE,ITEM_NAME ORDER BY ITEM_NAME `,
                    param : ['FISRT_DATE:date','LAST_DATE:date','ITEM_GRP_NAME:string|50'],
                    value : [this.dtDate.startDate,this.dtDate.endDate,pGrp]
                 },
@@ -171,6 +175,7 @@ export default class itemGrpSalesReport extends React.PureComponent
         App.instance.setState({isExecute:true})
         await this.grpGrpDetail.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
+
         this.popGrpDetail.show()
     }
     btnPointPopup()
@@ -237,15 +242,12 @@ export default class itemGrpSalesReport extends React.PureComponent
                             <Form>
                                 <Item>
                                     <Label text={this.t("chkTicket")} alignment="right" />
-                                    <NdCheckBox id="chkTicket" parent={this} defaultValue={false}
-                                    onValueChanged={(e)=>
-                                    {
-                                    }}/>
+                                    <NdCheckBox id="chkTicket" parent={this} defaultValue={false}/>
                                 </Item>
                             </Form>
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -253,13 +255,11 @@ export default class itemGrpSalesReport extends React.PureComponent
                             <Form colCount={4} parent={this} id="frmPurcoffer">
                                 <Item  >
                                     <Label text={this.t("txtTotalTicket")} alignment="right" />
-                                    <NdTextBox id="txtTotalTicket" parent={this} simple={true} readOnly={true} 
-                                    maxLength={32}></NdTextBox>
+                                    <NdTextBox id="txtTotalTicket" parent={this} simple={true} readOnly={true} maxLength={32}/>
                                 </Item>
                                 <Item  >
                                     <Label text={this.t("txtTicketAvg")} alignment="right" />
-                                    <NdTextBox id="txtTicketAvg" parent={this} simple={true} readOnly={true} 
-                                    maxLength={32}></NdTextBox>
+                                    <NdTextBox id="txtTicketAvg" parent={this} simple={true} readOnly={true}  maxLength={32}/>
                                 </Item>
                             </Form>
                         </div>
@@ -329,7 +329,6 @@ export default class itemGrpSalesReport extends React.PureComponent
                         <div className="col-6">
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGetAnalysis")} type="danger" width="100%" onClick={this.btnAnalysis}></NdButton>

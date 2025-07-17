@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export, Summary, TotalItem,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -19,6 +21,7 @@ export default class customerExtreReport extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
+
         this.groupList = [];
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.saveState = this.saveState.bind(this)
@@ -27,10 +30,7 @@ export default class customerExtreReport extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.txtCustomerCode.GUID = ''
-        }, 500);
+        setTimeout(async () => { this.txtCustomerCode.GUID = '' }, 500)
     }
     loadState() 
     {
@@ -55,36 +55,39 @@ export default class customerExtreReport extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT " +
-                        "CONVERT(DATETIME,@FIRST_DATE) - 1 AS DOC_DATE,  " +
-                        "'' AS REF,  " +
-                        "0 AS REF_NO,  " +
-                        "'00000000-0000-0000-0000-000000000000' AS DOC_GUID,  " +
-                        "0 AS TYPE, " +
-                        "0 AS DOC_TYPE, " +
-                        "0 AS REBATE, " +
-                        "0 AS PAY_TYPE, " +
-                        "'' AS TYPE_NAME,  " +
-                        "CASE WHEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) < 0 THEN  (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) ELSE 0 END AS DEBIT,  " +
-                        "CASE WHEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) > 0 THEN  (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) ELSE 0  END AS RECEIVE,  " +
-                        "(SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) AS BALANCE  " +
-                        "UNION ALL " +
-                        "SELECT  " +
-                        "DOC_DATE, " +
-                        "REF, " +
-                        "REF_NO, " +
-                        "DOC_GUID, " +
-                        "TYPE, " +
-                        "DOC_TYPE, " +
-                        "REBATE, " +
-                        "PAY_TYPE, " +
-                        "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME,  " +
-                        "CASE TYPE WHEN 0 THEN (AMOUNT * -1) ELSE 0 END AS DEBIT,  " +
-                        "CASE TYPE WHEN 1 THEN AMOUNT ELSE 0 END AS RECEIVE,  " +
-                        "CASE TYPE WHEN 0 THEN (AMOUNT * -1) WHEN 1 THEN AMOUNT END AS BALANCE  " +
-                        "FROM DOC_CUSTOMER_VW_01  " +
-                        "WHERE (INPUT = @CUSTOMER OR OUTPUT = @CUSTOMER)  " +
-                        "AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE  ORDER BY DOC_DATE ASC" ,
+                        query : `
+                            SELECT 
+                                CONVERT(DATETIME,@FIRST_DATE) - 1 AS DOC_DATE,
+                                '' AS REF,
+                                0 AS REF_NO,
+                                '00000000-0000-0000-0000-000000000000' AS DOC_GUID,
+                                0 AS TYPE,
+                                0 AS DOC_TYPE,
+                                0 AS REBATE,
+                                0 AS PAY_TYPE,
+                                '' AS TYPE_NAME,
+                                CASE WHEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) < 0 THEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) ELSE 0 END AS DEBIT,
+                                CASE WHEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) > 0 THEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) ELSE 0 END AS RECEIVE,
+                                (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) AS BALANCE
+                            UNION ALL
+                            SELECT
+                                DOC_DATE,
+                                REF,
+                                REF_NO,
+                                DOC_GUID,
+                                TYPE,
+                                DOC_TYPE,
+                                REBATE,
+                                PAY_TYPE,
+                                (SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME,
+                                CASE TYPE WHEN 0 THEN (AMOUNT * -1) ELSE 0 END AS DEBIT,
+                                CASE TYPE WHEN 1 THEN AMOUNT ELSE 0 END AS RECEIVE,
+                                CASE TYPE WHEN 0 THEN (AMOUNT * -1) WHEN 1 THEN AMOUNT END AS BALANCE
+                            FROM DOC_CUSTOMER_VW_01
+                            WHERE (INPUT = @CUSTOMER OR OUTPUT = @CUSTOMER)
+                            AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE
+                            ORDER BY DOC_DATE ASC
+                            `,
                         param : ['CUSTOMER:string|50','LANG:string|10','FIRST_DATE:date','LAST_DATE:date'],
                         value : [this.txtCustomerCode.GUID,localStorage.getItem('lang'),this.dtDate.startDate,this.dtDate.endDate]
                     },
@@ -92,28 +95,26 @@ export default class customerExtreReport extends React.PureComponent
                 }
             }
             App.instance.setState({isExecute:true})
+
             await this.grdListe.dataRefresh(tmpSource)
+
             App.instance.setState({isExecute:false})
+
             let tmpBalance = this.grdListe.data.datatable.sum("BALANCE",2)
+
             this.txtTotalBalance.setState({value:tmpBalance})
             let tmpLineBalance = 0;
+
             for (let i = 0; i < this.grdListe.data.datatable.length; i++) 
             {
                 tmpLineBalance += this.grdListe.data.datatable[i].BALANCE;
                 this.grdListe.data.datatable[i].BALANCE = tmpLineBalance.toFixed(2);
-                
             }
             await this.grdListe.dataRefresh(this.grdListe.data.datatable)
         }
         else
         {
-            let tmpConfObj =
-            {
-                id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:true,width:'500px',height:'auto',
-                button:[{id:"btn01",caption:this.t("msgNotCustomer.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotCustomer.msg")}</div>)
-            }
-            await dialog(tmpConfObj);
+            this.toast.show({type:"warning",message:this.t("msgNotCustomer.msg")})
         }
            
     }
@@ -213,7 +214,7 @@ export default class customerExtreReport extends React.PureComponent
                                     showBorders={true}
                                     width={'90%'}
                                     height={'90%'}
-                                    title={this.t("pg_txtCustomerCode.title")} //
+                                    title={this.t("pg_txtCustomerCode.title")} 
                                     search={true}
                                     data = 
                                     {{
@@ -221,23 +222,12 @@ export default class customerExtreReport extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],(SELECT [dbo].[FN_CUSTOMER_BALANCE](GUID,dbo.GETDATE())) AS BALANCE FROM CUSTOMER_VW_03 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],(SELECT [dbo].[FN_CUSTOMER_BALANCE](GUID,dbo.GETDATE())) AS BALANCE FROM CUSTOMER_VW_03 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
@@ -257,10 +247,8 @@ export default class customerExtreReport extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-
                         </div>
-                        <div className="col-3">
-                            
+                        <div className="col-3"> 
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
@@ -373,20 +361,16 @@ export default class customerExtreReport extends React.PureComponent
                                 <Column dataField="REF" caption={this.t("grdListe.clmRef")} visible={true} width={100}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdListe.clmRefNo")} visible={true} width={80}/> 
                                 <Column dataField="DEBIT" caption={this.t("grdListe.clmDebit")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true} 
-                                cellRender={(e) => {
-                                    return e.value ? e.text : ' ';
-                                }}/> 
+                                 cellRender={e => e.value ? e.text : ' '}/> 
                                 <Column dataField="RECEIVE" caption={this.t("grdListe.clmReceive")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}
-                                cellRender={(e) => {
-                                    return e.value ? e.text : ' ';
-                                }}/> 
+                                cellRender={e => e.value ? e.text : ' '}/> 
                                 <Column dataField="BALANCE" caption={this.t("grdListe.clmBalance")} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/>
                                 <Summary>
                                     <TotalItem
                                     column="DEBIT"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                                     <TotalItem
+                                    <TotalItem
                                     column="RECEIVE"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
@@ -398,8 +382,7 @@ export default class customerExtreReport extends React.PureComponent
                         <NdEmptyItem colSpan={3}></NdEmptyItem>
                         <NdItem>
                             <NdLabel text={this.t("txtTotalBalance")} alignment="right" />
-                                <NdTextBox id="txtTotalBalance" parent={this} simple={true} readOnly={true}
-                                />
+                            <NdTextBox id="txtTotalBalance" parent={this} simple={true} readOnly={true}/>
                         </NdItem>
                     </NdForm>
                     <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>

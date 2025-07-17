@@ -1,11 +1,13 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { customersCls } from '../../../../core/cls/customers.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import { Item } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
+
 import NdTextBox, { Validator, RequiredRule} from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -24,10 +26,10 @@ export default class customerAddressCard extends React.PureComponent
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.customerObj = new customersCls();
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
         
-
         this.onItemRendered = this.onItemRendered.bind(this)
         
     }
@@ -149,7 +151,7 @@ export default class customerAddressCard extends React.PureComponent
             if(pCode !== '')
             {
                 let tmpQuery = {
-                    query :"SELECT COUNTRY_CODE,PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE ",
+                    query : `SELECT COUNTRY_CODE,PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE`,
                     param : ['ZIPCODE:string|50'],
                     value : [pCode]
                 }
@@ -172,6 +174,7 @@ export default class customerAddressCard extends React.PureComponent
             }
         });
     }
+
     async onItemRendered(e)
     {
         await this.core.util.waitUntil(10)
@@ -225,10 +228,7 @@ export default class customerAddressCard extends React.PureComponent
                                             let customers = this.customerObj.dt('CUSTOMERS');
                                             if (!customers || customers.length === 0 || !customers[0] || !customers[0].GUID) 
                                             {
-                                                this.toast.show({
-                                                    type: "error",
-                                                    message: this.t("codeFailedMsg")
-                                                });
+                                                this.toast.show({ type: "error", message: this.t("codeFailedMsg") });
                                                 return;
                                             }
                                             let tmpConfObj =
@@ -261,7 +261,13 @@ export default class customerAddressCard extends React.PureComponent
                                         }                              
                                         else
                                         {
-                                            this.toast.show({type:"warning",message:this.t("msgSaveValid.msg")})
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
+                                            }
+                                            await dialog(tmpConfObj);
                                         }                                                 
                                     }}/>
                                 </Item>
@@ -269,7 +275,6 @@ export default class customerAddressCard extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
-                                        
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -289,13 +294,6 @@ export default class customerAddressCard extends React.PureComponent
                                         {
                                             this.toast.show({type:"error",message:this.t("msgDelete.msgFailed")})
                                         }
-                                        
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
                                         
                                     }}/>
                                 </Item>
@@ -350,10 +348,7 @@ export default class customerAddressCard extends React.PureComponent
                                             {
                                                 id:'02',
                                                 icon:'arrowdown',
-                                                onClick:()=>
-                                                {
-                                                    this.txtCode.value = Math.floor(Date.now() / 1000)
-                                                }
+                                                onClick:()=>  { this.txtCode.value = Math.floor(Date.now() / 1000)  }
                                             }
                                         ]
                                     }
@@ -395,23 +390,12 @@ export default class customerAddressCard extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
                                          <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCode.clmTitle")} width={300} defaultSortOrder="asc" />
@@ -423,14 +407,8 @@ export default class customerAddressCard extends React.PureComponent
                                  <NdItem>
                                     <NdLabel text={this.t("txtTitle")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TITLE"}}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtTitle',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtTitle',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    access={this.access.filter({ELEMENT:'txtTitle',USERS:this.user.CODE})} />
                                 </NdItem>
                             </NdForm>
                         </div>
@@ -505,12 +483,12 @@ export default class customerAddressCard extends React.PureComponent
                                     valueExpr="CODE"
                                     value="FR"
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC`},sql:this.core.sql}}}
                                     onValueChanged={(async()=>
                                     {
                                         let tmpQuery = 
                                         {
-                                            query : "SELECT [ZIPCODE], ZIPCODE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY ZIPCODE",
+                                            query : `SELECT [ZIPCODE], ZIPCODE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY ZIPCODE`,
                                             param : ['COUNTRY_CODE:string|5'],
                                             value : [this.cmbPopCountry.value]
                                         }
@@ -525,7 +503,7 @@ export default class customerAddressCard extends React.PureComponent
                                         }
                                         let tmpCityQuery = 
                                         {
-                                            query : "SELECT [PLACE] FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY PLACE",
+                                            query : `SELECT [PLACE] FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY PLACE`,
                                             param : ['COUNTRY_CODE:string|5'],
                                             value : [this.cmbPopCountry.value]
                                         }
@@ -550,10 +528,6 @@ export default class customerAddressCard extends React.PureComponent
                                     value=""
                                     acceptCustomValue={true}
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                    {
-                                           
-                                    }).bind(this)}
                                     pageSize ={50}
                                     notRefresh = {true}
                                     onCustomItemCreating={async(e)=>
@@ -611,7 +585,6 @@ export default class customerAddressCard extends React.PureComponent
                                         let newItem =   
                                         {
                                             PLACE: text.trim(),
-                                            PLACE: text.trim(),
                                         };
                                         
                                         let itemInDataSource = currentItems.find((item) => item.text === newItem.text)
@@ -635,8 +608,7 @@ export default class customerAddressCard extends React.PureComponent
                                             onClick={async ()=>
                                             {
                                                 let tmpEmpty = {...this.customerObj.customerAdress.empty};
-                                               
-
+                                            
                                                 tmpEmpty.ADRESS_NO = this.customerObj.customerAdress.dt().length
                                                 tmpEmpty.ADRESS = this.txtPopAdress.value
                                                 tmpEmpty.ZIPCODE = this.cmbPopZipcode.value

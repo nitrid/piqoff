@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { areaCls} from '../../../../core/cls/customers.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import { Item } from 'devextreme-react/form';
+
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import {Column} from '../../../../core/react/devex/grid.js';
@@ -17,9 +19,12 @@ export default class areaCard extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
+
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.areaObj = new areaCls();
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
     }
@@ -93,7 +98,7 @@ export default class areaCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT * FROM CUSTOMER_AREA_VW_01 WHERE CODE = @CODE",
+                    query : `SELECT CODE, NAME FROM CUSTOMER_AREA_VW_01 WHERE CODE = @CODE`,
                     param : ['CODE:string|50'],
                     value : [pCode]
                 }
@@ -155,11 +160,7 @@ export default class areaCard extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        console.log(132)
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmArea"  + this.tabIndex}
@@ -173,7 +174,6 @@ export default class areaCard extends React.PureComponent
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
-                                            
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
@@ -204,7 +204,6 @@ export default class areaCard extends React.PureComponent
                                                 button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
                                             }
-                                            
                                             await dialog(tmpConfObj);
                                         }                                                 
                                     }}/>
@@ -288,10 +287,7 @@ export default class areaCard extends React.PureComponent
                                             {
                                                 id:'02',
                                                 icon:'arrowdown',
-                                                onClick:()=>
-                                                {
-                                                    this.txtCode.value = Math.floor(Date.now() / 1000)
-                                                }
+                                                onClick:()=> { this.txtCode.value = Math.floor(Date.now() / 1000) }
                                             }
                                         ]
                                     }
@@ -319,18 +315,7 @@ export default class areaCard extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} //
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM CUSTOMER_AREA_VW_01"},sql:this.core.sql}}}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM CUSTOMER_AREA_VW_01`},sql:this.core.sql}}}
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
@@ -341,10 +326,6 @@ export default class areaCard extends React.PureComponent
                                     <NdLabel text={this.t("txtName")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.areaObj.dt(),field:"NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     >

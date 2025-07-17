@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar from 'devextreme-react/toolbar';
 import Form, {Item, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
@@ -20,9 +22,10 @@ export default class posSalesReport extends React.PureComponent
     constructor(props)
     {
         super(props)
-        this.btnGetDetail = this.btnGetDetail.bind(this)
-        
+
         this.core = App.instance.core;
+
+        this.btnGetDetail = this.btnGetDetail.bind(this)
     }
     async componentDidMount()
     {
@@ -39,7 +42,7 @@ export default class posSalesReport extends React.PureComponent
     {
         this.lastPosSaleDt.selectCmd = 
         {
-            query :  "SELECT CONVERT(NVARCHAR,CDATE,108) AS TIME,* FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID ",
+            query :  `SELECT CONVERT(NVARCHAR,CDATE,108) AS TIME,* FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID `,
             param : ['POS_GUID:string|50'],
             value : [pGuid]
         }
@@ -49,48 +52,56 @@ export default class posSalesReport extends React.PureComponent
         
         this.lastPosPayDt.selectCmd = 
         {
-            query :  "SELECT (AMOUNT-CHANGE) AS LINE_TOTAL,* FROM POS_PAYMENT_VW_01  WHERE POS_GUID = @POS_GUID ",
+            query :  `SELECT (AMOUNT-CHANGE) AS LINE_TOTAL,* FROM POS_PAYMENT_VW_01  WHERE POS_GUID = @POS_GUID `,
             param : ['POS_GUID:string|50'],
             value : [pGuid]
         }
+        
         this.lastPosPayDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@POS = @PPOS, " +
-                    "@TYPE = @PTYPE, " +
-                    "@LINE_NO = @PLINE_NO, " +
-                    "@AMOUNT = @PAMOUNT, " + 
-                    "@CHANGE = @PCHANGE ", 
+            query : 
+                    `EXEC [dbo].[PRD_POS_PAYMENT_INSERT] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @POS = @PPOS, 
+                    @TYPE = @PTYPE, 
+                    @LINE_NO = @PLINE_NO, 
+                    @AMOUNT = @PAMOUNT, 
+                    @CHANGE = @PCHANGE `, 
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
             dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
         } 
         this.lastPosPayDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@POS = @PPOS, " +
-                    "@TYPE = @PTYPE, " +
-                    "@LINE_NO = @PLINE_NO, " +
-                    "@AMOUNT = @PAMOUNT, " + 
-                    "@CHANGE = @PCHANGE ", 
+            query : 
+                    `EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @POS = @PPOS, 
+                    @TYPE = @PTYPE, 
+                    @LINE_NO = @PLINE_NO, 
+                    @AMOUNT = @PAMOUNT, 
+                    @CHANGE = @PCHANGE `, 
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
             dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
         } 
+
         this.lastPosPayDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_POS_PAYMENT_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 1, " +
-                    "@GUID = @PGUID, " + 
-                    "@POS_GUID = @PPOS_GUID ", 
+            query : 
+                    `EXEC [dbo].[PRD_POS_PAYMENT_DELETE] 
+                    @CUSER = @PCUSER, 
+                    @UPDATE = 1, 
+                    @GUID = @PGUID, 
+                    @POS_GUID = @PPOS_GUID `, 
             param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
             dataprm : ['CUSER','GUID','POS_GUID']
         }
+
         await this.lastPosPayDt.refresh()
+
         await this.grdSaleTicketPays.dataRefresh({source:this.lastPosPayDt});
+
         await this.grdLastTotalPay.dataRefresh({source:this.lastPosPayDt});
 
         this.popDetail.show()
@@ -150,17 +161,11 @@ export default class posSalesReport extends React.PureComponent
                             <Form colCount={4} parent={this} id="frmPurcoffer">
                                 <Item >
                                     <Label text={this.t("txtTotalTicket")} alignment="right" />
-                                    <NdTextBox id="txtTotalTicket" parent={this} simple={true} readOnly={true} 
-                                    maxLength={32}
-                                   
-                                    ></NdTextBox>
+                                    <NdTextBox id="txtTotalTicket" parent={this} simple={true} readOnly={true} maxLength={32}/>
                                 </Item>
                                 <Item  >
                                     <Label text={this.lang.t("txtTicketAvg")} alignment="right" />
-                                    <NdTextBox id="txtTicketAvg" parent={this} simple={true} readOnly={true} 
-                                    maxLength={32}
-                                   
-                                    ></NdTextBox>
+                                    <NdTextBox id="txtTicketAvg" parent={this} simple={true} readOnly={true} maxLength={32}/>
                                 </Item>
                             </Form>
                         </div>
@@ -171,59 +176,64 @@ export default class posSalesReport extends React.PureComponent
                             onClick={async (e)=>
                             {
                                 let tmpTicketQuery = {
-                                    query :"SELECT COUNT(GUID) AS TICKET,ISNULL(AVG(TOTAL),0) AS AVGTOTAL FROM POS_VW_01 WHERE STATUS = 1 AND  LDATE >= @FISRT_DATE AND LDATE <= @LAST_DATE ",
+                                    query :`SELECT COUNT(GUID) AS TICKET,ISNULL(AVG(TOTAL),0) AS AVGTOTAL FROM POS_VW_01 WHERE STATUS = 1 AND  LDATE >= @FISRT_DATE AND LDATE <= @LAST_DATE `,
                                     param : ['FISRT_DATE:datetime','LAST_DATE:datetime'],
                                     value : [this.dtFirst.value,this.dtLast.value]
                                 }
+
                                 let tmpTicketData = await this.core.sql.execute(tmpTicketQuery) 
+
                                 if(tmpTicketData.result.recordset.length > 0)
                                 {
                                     this.txtTotalTicket.value = tmpTicketData.result.recordset[0].TICKET
                                     this.txtTicketAvg.value = tmpTicketData.result.recordset[0].AVGTOTAL.toLocaleString('fr-FR', {style: 'currency',currency: 'EUR'});
                                 }
+
                                 let tmpQuery = 
                                 {
-                                    query : "SELECT " +
-                                    "DATEADD(HOUR, DATEPART(HOUR, (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID)), CAST(CAST((SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) AS DATE) AS DATETIME)) AS DOC_DATE, " +
-                                    "POS.DEVICE AS DEVICE,   " +
-                                    "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE,   " +
-                                    "'SALES' AS TITLE,   " +
-                                    "'HT' AS TYPE,   " +
-                                    "POS.VAT_RATE AS VAT_RATE,   " +
-                                    "CASE WHEN POS.TYPE = 0 THEN SUM(POS.FAMOUNT) ELSE SUM(POS.FAMOUNT) * -1 END AS AMOUNT   " +
-                                    "FROM POS_SALE_VW_01 AS POS   " +
-                                    "WHERE POS.STATUS = 1 AND (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID)>= @START AND (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0   " +
-                                    "GROUP BY POS.DOC_DATE,POS_GUID,POS.TYPE,POS.VAT_RATE,POS.DEVICE,DATEADD(HOUR, DATEPART(HOUR, LDATE), CAST(CAST(LDATE AS DATE) AS DATETIME)) " +
-                                    "UNION ALL " +
-                                    "SELECT " +
-                                    "DATEADD(HOUR, DATEPART(HOUR, (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID)), CAST(CAST((SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) AS DATE) AS DATETIME)) AS DOC_DATE, " +
-                                    "POS.DEVICE AS DEVICE,   " +
-                                    "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE,   " +
-                                    "'SALES' AS TITLE,   " +
-                                    "'TVA' AS TYPE,   " +
-                                    "POS.VAT_RATE AS VAT_RATE,   " +
-                                    "CASE WHEN POS.TYPE = 0 THEN SUM(POS.VAT) ELSE SUM(POS.VAT) * -1 END AS AMOUNT   " +
-                                    "FROM POS_SALE_VW_01 AS POS   " +
-                                    "WHERE POS.STATUS = 1 AND  (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) >= @START AND (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 " + 
-                                    "GROUP BY POS.DOC_DATE,POS_GUID,POS.TYPE,POS.VAT_RATE,POS.DEVICE,DATEADD(HOUR, DATEPART(HOUR, LDATE), CAST(CAST(LDATE AS DATE) AS DATETIME))" + 
-                                    "UNION ALL " +
-                                    "SELECT " +
-                                    "DATEADD(HOUR, DATEPART(HOUR, (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID)), CAST(CAST((SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) AS DATE) AS DATETIME)) AS DOC_DATE, " +
-                                    "POS.DEVICE AS DEVICE,  " +
-                                    "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
-                                    "'PAYMENT' AS TITLE, " +
-                                    "PAY_TYPE_NAME AS TYPE, " +
-                                    "0 AS VAT_RATE, " +
-                                    "CASE WHEN POS.TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT - CHANGE) * -1 END AS AMOUNT  " +
-                                    "FROM POS_PAYMENT_VW_01 AS POS " +
-                                    "WHERE POS.STATUS = 1 AND (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) >= @START AND (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) <= @END AND POS.DEVICE <> '9999' " +
-                                    "GROUP BY POS.GUID,POS_GUID,POS.DOC_DATE,POS.TYPE,POS.PAY_TYPE_NAME,POS.PAY_TYPE,POS.DEVICE",
+                                    query : `SELECT 
+                                    DATEADD(HOUR, DATEPART(HOUR, (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID)), CAST(CAST((SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) AS DATE) AS DATETIME)) AS DOC_DATE, 
+                                    POS.DEVICE AS DEVICE,  
+                                    CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE,  
+                                    'SALES' AS TITLE,  
+                                    'HT' AS TYPE,  
+                                    POS.VAT_RATE AS VAT_RATE,  
+                                    CASE WHEN POS.TYPE = 0 THEN SUM(POS.FAMOUNT) ELSE SUM(POS.FAMOUNT) * -1 END AS AMOUNT  
+                                    FROM POS_SALE_VW_01 AS POS  
+                                    WHERE POS.STATUS = 1 AND (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID)>= @START AND (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0  
+                                    GROUP BY POS.DOC_DATE,POS_GUID,POS.TYPE,POS.VAT_RATE,POS.DEVICE,DATEADD(HOUR, DATEPART(HOUR, LDATE), CAST(CAST(LDATE AS DATE) AS DATETIME)) 
+                                    UNION ALL 
+                                    SELECT 
+                                    DATEADD(HOUR, DATEPART(HOUR, (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID)), CAST(CAST((SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) AS DATE) AS DATETIME)) AS DOC_DATE, 
+                                    POS.DEVICE AS DEVICE,  
+                                    CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE,  
+                                    'SALES' AS TITLE,  
+                                    'TVA' AS TYPE,  
+                                    POS.VAT_RATE AS VAT_RATE,  
+                                    CASE WHEN POS.TYPE = 0 THEN SUM(POS.VAT) ELSE SUM(POS.VAT) * -1 END AS AMOUNT  
+                                    FROM POS_SALE_VW_01 AS POS  
+                                    WHERE POS.STATUS = 1 AND  (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) >= @START AND (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 
+                                    GROUP BY POS.DOC_DATE,POS_GUID,POS.TYPE,POS.VAT_RATE,POS.DEVICE,DATEADD(HOUR, DATEPART(HOUR, LDATE), CAST(CAST(LDATE AS DATE) AS DATETIME))
+                                    UNION ALL 
+                                    SELECT 
+                                    DATEADD(HOUR, DATEPART(HOUR, (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID)), CAST(CAST((SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) AS DATE) AS DATETIME)) AS DOC_DATE, 
+                                    POS.DEVICE AS DEVICE, 
+                                    CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, 
+                                    'PAYMENT' AS TITLE, 
+                                    PAY_TYPE_NAME AS TYPE, 
+                                    0 AS VAT_RATE, 
+                                    CASE WHEN POS.TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT - CHANGE) * -1 END AS AMOUNT 
+                                    FROM POS_PAYMENT_VW_01 AS POS 
+                                    WHERE POS.STATUS = 1 AND (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) >= @START AND (SELECT TOP 1 LDATE FROM POS_VW_01 AS POS_VW_01 WHERE POS_VW_01.GUID = POS.POS_GUID) <= @END AND POS.DEVICE <> '9999' 
+                                    GROUP BY POS.GUID,POS_GUID,POS.DOC_DATE,POS.TYPE,POS.PAY_TYPE_NAME,POS.PAY_TYPE,POS.DEVICE`,
                                     param : ['START:datetime','END:datetime'],
                                     value : [this.dtFirst.value,this.dtLast.value]
                                 }
+
                                 App.instance.setState({isExecute:true})
                                 let tmpData = await this.core.sql.execute(tmpQuery)
                                 App.instance.setState({isExecute:false})
+
                                 if(tmpData.result.recordset.length > 0)
                                 {
                                     this.pvtData.setDataSource(tmpData.result.recordset)
@@ -373,56 +383,6 @@ export default class posSalesReport extends React.PureComponent
                             </NdPivot>
                         </div>
                     </div>
-                    {/* PDF cikti
-                     <Item>
-                        <NdGrid parent={this} id={"pdfExportGrid"} 
-                                showBorders={true} 
-                                columnsAutoWidth={true} 
-                                allowColumnReordering={true} 
-                                allowColumnResizing={true} 
-                                filterRow={{visible:true}}
-                                height={350} 
-                                width={'100%'}
-                                dbApply={false}
-                                onClick={async (e)=>
-                                {
-                                    const onExporting = React.useCallback(({ component }) => 
-                                    {
-                                    const docObj = new jsPDF();
-                                    exportDataGrid
-                                    (
-                                        {
-                                        jsPDFDocument: docObj,
-                                    
-                                        onRowExporting: (e) => {
-                                          const isHeader = e.rowCells[0].text === 'data';
-                                          if (!isHeader) {
-                                            e.rowHeight = 40;
-                                          }
-                                        },
-                                        }).then(() => {
-                                        docObj.save('DataGrid.pdf');
-                                      });
-                                    },);
-                                    onExporting={onExporting}
-                                }}
-                                onRowDblClick={async(e)=>
-                                {
-                                    this.btnGetDetail(e.data.GUID)
-                                    this.setState({ticketId:e.data.TICKET_ID})
-                                }}
-                                >
-                                    <Scrolling mode="standart" />
-                                    <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                    <Export enabled={true} formats={exportFormats} />
-                                    <Column dataField="CUSER_NAME" caption={this.lang.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
-                                    <Column dataField="DEVICE" caption={this.lang.t("grdOpenTike.clmDevice")} width={60}  headerFilter={{visible:true}}/>
-                                    <Column dataField="DATE" caption={this.lang.t("grdOpenTike.clmDate")} width={90} allowEditing={false} />
-                                    <Column dataField="TICKET_ID" caption={this.lang.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
-                                    <Column dataField="TOTAL" caption={this.lang.t("grdOpenTike.clmTotal")} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}} headerFilter={{visible:true}}/>
-                                    <Column dataField="DESCRIPTION" caption={this.lang.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
-                        </NdGrid>
-                    </Item> */}
                 </ScrollView>
             </div>
         )

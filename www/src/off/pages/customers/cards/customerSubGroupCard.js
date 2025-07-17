@@ -1,10 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { subGroupCls} from '../../../../core/cls/customers.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
-import { NdForm, NdItem, NdLabel, NdEmptyItem }from '../../../../core/react/devex/form.js';
+import { NdForm, NdItem }from '../../../../core/react/devex/form.js';
 import { NdToast } from '../../../../core/react/devex/toast.js';
-import NdTreeList,{Column,RowDragging,Editing,Button,ValidationRule,Popup,Form,Item} from '../../../../core/react/devex/treelist.js';
+import NdTreeList,{Column,RowDragging,Editing,Button,ValidationRule,Popup} from '../../../../core/react/devex/treelist.js';
 import { datatable } from '../../../../core/core.js';
 
 export default class customerSubGroupCard extends React.PureComponent
@@ -12,9 +13,12 @@ export default class customerSubGroupCard extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+
         this.subGrpObj = new subGroupCls();
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
     }
@@ -30,7 +34,7 @@ export default class customerSubGroupCard extends React.PureComponent
     }
     calculateDepth(itemId, items, depth = 0) 
     {
-        const item = items.find(x => x.GUID === itemId);
+        let item = items.find(x => x.GUID === itemId);
         if (!item || item.PARENT === '00000000-0000-0000-0000-000000000000') 
         {
             return depth;

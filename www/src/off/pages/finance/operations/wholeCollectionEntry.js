@@ -3,11 +3,13 @@ import App from '../../../lib/app.js';
 import { docCls } from '../../../../core/cls/doc.js';
 import moment from 'moment';
 import * as xlsx from 'xlsx'
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item} from 'devextreme-react/form';
 import ContextMenu from 'devextreme-react/context-menu';
 import { Button } from 'devextreme-react/button';
+
 import NdTextBox, { Validator, RequiredRule, RangeRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
@@ -27,10 +29,12 @@ export default class wholeCollectionEntry extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
+
         this.tabIndex = props.data.tabkey
         this.payDt = new datatable()
         this.loadState = this.loadState.bind(this)
@@ -83,10 +87,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                         }
                     }
                 }}
-                onValueChanged={(v)=>
-                {
-                    e.value = v.value
-                }}
+                onValueChanged={(v)=> { e.value = v.value }}
                 button=
                 {
                     [
@@ -134,7 +135,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                 let tmpOutput = '00000000-0000-0000-0000-000000000000'
                 let tmpOutputCode = ''
                 let tmpOutputName = ''
-                let tmpQuery = {query : "SELECT * FROM CUSTOMER_VW_01 WHERE CODE = '" + pData[i][tmpShema.OUTPUT_CODE] + "'"}
+                let tmpQuery = {query : `SELECT * FROM CUSTOMER_VW_01 WHERE CODE = '${pData[i][tmpShema.OUTPUT_CODE]}'`}
                 let tmpCustomerData = await this.core.sql.execute(tmpQuery)
                 if(tmpCustomerData.result.recordset.length > 0)
                 {
@@ -142,7 +143,6 @@ export default class wholeCollectionEntry extends React.PureComponent
                     tmpOutputCode = tmpCustomerData.result.recordset[0].CODE
                     tmpOutputName = tmpCustomerData.result.recordset[0].TITLE
                 }
-                
 
                 let tmpData =
                 {
@@ -172,10 +172,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmCollection"  + this.tabIndex}
@@ -312,10 +309,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdForm colCount={1} onInitialized={(e)=>
-                            {
-                                this.frmCollection = e.component
-                            }}>
+                            <NdForm colCount={1} onInitialized={(e)=> { this.frmCollection = e.component }}>
                                 <NdItem location="after">
                                     <NdButton icon="add"
                                     validationGroup={"frmCollection"  + this.tabIndex}
@@ -438,27 +432,27 @@ export default class wholeCollectionEntry extends React.PureComponent
                                         let tmpQuery
                                         if(e.value == 0)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : `SELECT * FROM SAFE_VW_01 WHERE TYPE = 0`}
                                         }
                                         else if(e.value == 1)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 1"}
+                                            tmpQuery = {query : `SELECT * FROM SAFE_VW_01 WHERE TYPE = 1`}
                                         }
                                         else if(e.value == 2)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : `SELECT * FROM BANK_VW_01 WHERE TYPE = 0`}
                                         }
                                         else if(e.value == 3)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : `SELECT * FROM BANK_VW_01 WHERE TYPE = 0`}
                                         }
                                         else if(e.value == 4)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : `SELECT * FROM SAFE_VW_01 WHERE TYPE = 0`}
                                         }
                                         else if(e.value == 5)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : `SELECT * FROM SAFE_VW_01 WHERE TYPE = 0`}
                                         }
                                 
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
@@ -494,10 +488,6 @@ export default class wholeCollectionEntry extends React.PureComponent
                                     value=""
                                     searchEnabled={true}
                                     notRefresh={true}
-                                    onValueChanged={(async()=>
-                                        {
-
-                                        }).bind(this)}
                                     param={this.param.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     >
@@ -573,8 +563,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* cashDescription */}
                                 <NdItem>
@@ -585,8 +574,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                                         maxLength={32}                                        
                                         param={this.param.filter({ELEMENT:'cashDescription',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'cashDescription',USERS:this.user.CODE})}
-                                        >
-                                        </NdTextBox>
+                                        />
                                     </div>
                                 </NdItem>
                                 <NdItem>
@@ -629,10 +617,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.t("popCash.btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popCash.hide();  
-                                            }}/>
+                                            onClick={()=> { this.popCash.hide() }}/>
                                         </div>
                                     </div>
                                 </NdItem>
@@ -660,8 +645,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                                         maxLength={32}                                        
                                         param={this.param.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'checkReference',USERS:this.user.CODE})}
-                                        >
-                                        </NdTextBox>
+                                        />
                                     </div>
                                 </Item>
                                 <Item>
@@ -691,10 +675,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popCheck.hide();  
-                                            }}/>
+                                            onClick={()=> { this.popCheck.hide() }}/>
                                         </div>
                                     </div>
                                 </Item>
@@ -718,25 +699,17 @@ export default class wholeCollectionEntry extends React.PureComponent
                             {
                                 select:
                                 {
-                                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                    query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                     param : ['VAL:string|50']
                                 },
                                 sql:this.core.sql
                             }
                         }}
-                        button=
-                        {
-                            {
-                                id:'01',
-                                icon:'more',
-                            }
-                        }
                         >
                             <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                             <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                             <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                             <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                            
                         </NdPopGrid>
                     </div>
                     {/* Excel PopUp */}
@@ -767,27 +740,27 @@ export default class wholeCollectionEntry extends React.PureComponent
                                         let tmpQuery
                                         if(e.value == 0)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : `SELECT * FROM SAFE_VW_01 WHERE TYPE = 0`}
                                         }
                                         else if(e.value == 1)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 1"}
+                                            tmpQuery = {query : `SELECT * FROM SAFE_VW_01 WHERE TYPE = 1`}
                                         }
                                         else if(e.value == 2)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : `SELECT * FROM BANK_VW_01 WHERE TYPE = 0`}
                                         }
                                         else if(e.value == 3)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM BANK_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : `SELECT * FROM BANK_VW_01 WHERE TYPE = 0`}
                                         }
                                         else if(e.value == 4)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : `SELECT * FROM SAFE_VW_01 WHERE TYPE = 0`}
                                         }
                                         else if(e.value == 5)
                                         {
-                                            tmpQuery = {query : "SELECT * FROM SAFE_VW_01 WHERE TYPE = 0"}
+                                            tmpQuery = {query : `SELECT * FROM SAFE_VW_01 WHERE TYPE = 0`}
                                         }
                                 
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
@@ -803,8 +776,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                                     data={{source:[{ID:0,VALUE:this.t("cmbPayType.cash")},{ID:1,VALUE:this.t("cmbPayType.check")},{ID:2,VALUE:this.t("cmbPayType.bankTransfer")},{ID:3,VALUE:this.t("cmbPayType.otoTransfer")},{ID:4,VALUE:this.t("cmbPayType.foodTicket")},{ID:5,VALUE:this.t("cmbPayType.bill")}]}}
                                     param={this.param.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
-                                    >
-                                    </NdSelectBox>
+                                    />
                                 </NdItem>
                                 {/* cmbCashSafe */}
                                 <NdItem>
@@ -817,8 +789,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                                     notRefresh={true}
                                     param={this.param.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbCashSafe',USERS:this.user.CODE})}
-                                    >
-                                    </NdSelectBox>
+                                    />
                                 </NdItem>
                                 <NdItem>
                                     <NdLabel text={this.t("popExcel.clmDate")} alignment="right" />

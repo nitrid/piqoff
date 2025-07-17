@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { sectorCls} from '../../../../core/cls/customers.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import { Item } from 'devextreme-react/form';
+
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import {Column} from '../../../../core/react/devex/grid.js';
@@ -17,8 +19,10 @@ export default class sectorCard extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+
         this.sectorObj = new sectorCls();
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
@@ -93,7 +97,7 @@ export default class sectorCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT * FROM CUSTOMER_SECTOR_VW_01 WHERE CODE = @CODE",
+                    query : `SELECT CODE, NAME FROM CUSTOMER_SECTOR_VW_01 WHERE CODE = @CODE`,
                     param : ['CODE:string|50'],
                     value : [pCode]
                 }
@@ -155,11 +159,7 @@ export default class sectorCard extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        console.log(132)
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmSector"  + this.tabIndex}
@@ -288,10 +288,7 @@ export default class sectorCard extends React.PureComponent
                                             {
                                                 id:'02',
                                                 icon:'arrowdown',
-                                                onClick:()=>
-                                                {
-                                                    this.txtCode.value = Math.floor(Date.now() / 1000)
-                                                }
+                                                onClick:()=> { this.txtCode.value = Math.floor(Date.now() / 1000) }
                                             }
                                         ]
                                     }
@@ -320,17 +317,6 @@ export default class sectorCard extends React.PureComponent
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} //
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM CUSTOMER_SECTOR_VW_01"},sql:this.core.sql}}}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
@@ -341,14 +327,8 @@ export default class sectorCard extends React.PureComponent
                                     <NdLabel text={this.t("txtName")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.sectorObj.dt(),field:"NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}/>
                                 </NdItem>
                                 <NdEmptyItem />
                             </NdForm>

@@ -1,9 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { posPayTypeCls} from '../../../../core/cls/pos';
+
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import Toolbar, {Item} from 'devextreme-react/toolbar';
+
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
@@ -18,7 +19,9 @@ export default class posPayTypeCard extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
+
         this.payTypeObj = new posPayTypeCls();
         this.tabIndex = props.data.tabkey
     }
@@ -31,7 +34,6 @@ export default class posPayTypeCard extends React.PureComponent
     {
         this.payTypeObj.clearAll()
         await this.payTypeObj.load({GUID:pCode});
-        console.log(pCode)
     }
     async init()
     {
@@ -48,10 +50,7 @@ export default class posPayTypeCard extends React.PureComponent
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmPayType" + this.tabIndex}
@@ -159,7 +158,7 @@ export default class posPayTypeCard extends React.PureComponent
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT ISNULL(MAX(TYPE),0) + 1 AS TYPE FROM POS_PAY_TYPE",
+                                                        query : `SELECT ISNULL(MAX(TYPE),0) + 1 AS TYPE FROM POS_PAY_TYPE`,
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                    
@@ -169,10 +168,6 @@ export default class posPayTypeCard extends React.PureComponent
                                             }
                                         ]
                                     }
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmPayType" + this.tabIndex}>
                                             <RequiredRule message={this.t("validName")}/>
@@ -186,17 +181,7 @@ export default class posPayTypeCard extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} 
-                                    data={{source:{select:{query : "SELECT * FROM POS_PAY_TYPE"},sql:this.core.sql}}}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                            }
-                                        }
-                                    }
+                                    data={{source:{select:{query : `SELECT * FROM POS_PAY_TYPE`},sql:this.core.sql}}}
                                     >
                                         <Column dataField="TYPE" caption={this.t("pg_txtCode.clmCode")} width={300} defaultSortOrder="asc"/>
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300}  />
@@ -207,10 +192,6 @@ export default class posPayTypeCard extends React.PureComponent
                                     <NdTextBox id="txtPayTypeName" parent={this} simple={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.payTypeObj.dt('POS_PAY_TYPE'),field:"NAME"}}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmPayType" + this.tabIndex}>
                                             <RequiredRule message={this.t("validName")}/>
@@ -221,10 +202,6 @@ export default class posPayTypeCard extends React.PureComponent
                                     <NdLabel text={this.t("txtPayTypeRate")} alignment="right" />
                                     <NdNumberBox id="txtPayTypeRate" parent={this} simple={true}
                                     dt={{data:this.payTypeObj.dt('POS_PAY_TYPE'),field:"RATE"}}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmPayType" + this.tabIndex}>
                                             <RequiredRule message={this.t("validName")}/>
@@ -236,17 +213,12 @@ export default class posPayTypeCard extends React.PureComponent
                                     <NdTextBox id="txtPayTypeIcon" parent={this} simple={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.payTypeObj.dt('POS_PAY_TYPE'),field:"ICON"}}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     />
                                 </NdItem>
                                 <NdEmptyItem/>
                                 <NdItem>
                                     <NdCheckBox id="chkPayTypeVisible" parent={this} value={false} text={this.t("chkPayTypeVisible")}
-                                    dt={{data:this.payTypeObj.dt('POS_PAY_TYPE'),field:"TOTAL_VISIBLE"}}
-                                    />
+                                    dt={{data:this.payTypeObj.dt('POS_PAY_TYPE'),field:"TOTAL_VISIBLE"}}/>
                                 </NdItem>
                             </NdForm>
                         </div>

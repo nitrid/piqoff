@@ -1,7 +1,9 @@
 import React from 'react';
 import App from '../../../lib/app.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Form, { Label,Item } from 'devextreme-react/form';
+
 import NdButton from '../../../../core/react/devex/button.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox';
 import {ItemBuild,ItemSet,ItemGet} from '../../../../admin/tools/itemOp';
@@ -14,8 +16,10 @@ export default class piqPoidDeviceCard extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
         this.prmData = null
@@ -266,7 +270,7 @@ export default class piqPoidDeviceCard extends React.PureComponent
                                     valueExpr="CODE"
                                     value={""}
                                     showClearButton={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM BALANCE_DEVICES ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM BALANCE_DEVICES ORDER BY NAME ASC`},sql:this.core.sql}}}
                                     onValueChanged={async(e)=>
                                     {
                                         await this.prmData.load({APP:'POID'})

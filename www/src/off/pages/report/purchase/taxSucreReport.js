@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export, Summary, StateStoring, TotalItem} from '../../../../core/react/devex/grid.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -13,19 +15,19 @@ export default class taxSucreReport extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
-        this.groupList = [];
+        this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE})
+
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
-        this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE})
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
+        setTimeout(async () => { }, 1000);
     }
+
    loadState()
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
@@ -37,6 +39,7 @@ export default class taxSucreReport extends React.PureComponent
         tmpSave.setValue(e)
         tmpSave.save()
     }
+
     async btnGetirClick()
     {
         let tmpSource =
@@ -46,24 +49,25 @@ export default class taxSucreReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query :"SELECT " + 
-                    "(SELECT TOP 1 CODE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM) AS ITEM_CODE, " +
-                    "REF AS REF, " +
-                    "REF_NO AS REF_NO, " +
-                    "DOC_DATE AS DOC_DATE, " +
-                    "MAX(ITEM_NAME) AS ITEM_NAME, " +
-                    "OUTPUT_CODE AS OUTPUT_CODE, " +
-                    "OUTPUT_NAME AS OUTPUT_NAME, " +
-                    "(SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS.ITEM AND ITEM_UNIT_VW_01.ID = '005') AS UNIT_LITRE, " +
-                    "((SELECT TOP 1 FACTOR / 100 FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = DOC_ITEMS.ITEM AND TYPE = 1)*(SELECT TOP 1 PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE DOC_ITEMS.DOC_DATE>= START_DATE AND DOC_ITEMS.DOC_DATE<= END_DATE AND MIN_VALUE <= (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ) AND MAX_VALUE >=  (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ))) * SUM(QUANTITY) AS AMOUNT, " +
-                    "ROUND(SUM(QUANTITY),3) AS QUANTITY, " +
-                    "ITEM FROM  DOC_ITEMS_VW_01 AS DOC_ITEMS  " +
-                    "WHERE TYPE = 0 AND DOC_TYPE IN(20,40) AND  REBATE = 0  AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND " +
-                    "((SELECT TOP 1 FACTOR / 100 FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = DOC_ITEMS.ITEM AND TYPE = 1)*(SELECT TOP 1 PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE DOC_ITEMS.DOC_DATE>= START_DATE AND DOC_ITEMS.DOC_DATE<= END_DATE  AND MIN_VALUE <= (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ) AND MAX_VALUE >=  (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM )))  IS NOT NULL AND " +
-                    "(SELECT TOP 1 TAX_SUGAR FROM ITEMS_SHOP WHERE ITEMS_SHOP.ITEM = DOC_ITEMS.ITEM) = 1   " +
-                    " AND  " +
-                    "(SELECT TOP 1 TAX_SUCRE FROM CUSTOMERS WHERE CUSTOMERS.GUID = DOC_ITEMS.OUTPUT ) = 1  " +
-                    "GROUP BY ITEM,REF,REF_NO,DOC_DATE,OUTPUT_CODE,OUTPUT_NAME HAVING ((SELECT TOP 1 FACTOR / 100 FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = DOC_ITEMS.ITEM AND TYPE = 1)*(SELECT TOP 1 PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE MIN_VALUE <= (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ) AND MAX_VALUE >=  (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ))) * SUM(QUANTITY) <> 0",
+                    query :
+                        `SELECT 
+                        (SELECT TOP 1 CODE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM) AS ITEM_CODE, 
+                        REF AS REF, 
+                        REF_NO AS REF_NO, 
+                        DOC_DATE AS DOC_DATE, 
+                        MAX(ITEM_NAME) AS ITEM_NAME, 
+                        OUTPUT_CODE AS OUTPUT_CODE, 
+                        OUTPUT_NAME AS OUTPUT_NAME, 
+                        (SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS.ITEM AND ITEM_UNIT_VW_01.ID = '005') AS UNIT_LITRE, 
+                        ((SELECT TOP 1 FACTOR / 100 FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = DOC_ITEMS.ITEM AND TYPE = 1)*(SELECT TOP 1 PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE DOC_ITEMS.DOC_DATE>= START_DATE AND DOC_ITEMS.DOC_DATE<= END_DATE AND MIN_VALUE <= (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ) AND MAX_VALUE >=  (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ))) * SUM(QUANTITY) AS AMOUNT, 
+                        ROUND(SUM(QUANTITY),3) AS QUANTITY, 
+                        ITEM FROM  DOC_ITEMS_VW_01 AS DOC_ITEMS  
+                        WHERE TYPE = 0 AND DOC_TYPE IN(20,40) AND  REBATE = 0  AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND 
+                        ((SELECT TOP 1 FACTOR / 100 FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = DOC_ITEMS.ITEM AND TYPE = 1)*(SELECT TOP 1 PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE DOC_ITEMS.DOC_DATE>= START_DATE AND DOC_ITEMS.DOC_DATE<= END_DATE  AND MIN_VALUE <= (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ) AND MAX_VALUE >=  (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM )))  IS NOT NULL AND 
+                        (SELECT TOP 1 TAX_SUGAR FROM ITEMS_SHOP WHERE ITEMS_SHOP.ITEM = DOC_ITEMS.ITEM) = 1   
+                        AND  
+                        (SELECT TOP 1 TAX_SUCRE FROM CUSTOMERS WHERE CUSTOMERS.GUID = DOC_ITEMS.OUTPUT ) = 1  
+                        GROUP BY ITEM,REF,REF_NO,DOC_DATE,OUTPUT_CODE,OUTPUT_NAME HAVING ((SELECT TOP 1 FACTOR / 100 FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = DOC_ITEMS.ITEM AND TYPE = 1)*(SELECT TOP 1 PRICE FROM TAX_SUGAR_TABLE_VW_01 WHERE MIN_VALUE <= (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ) AND MAX_VALUE >=  (SELECT TOP 1 SUGAR_RATE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS.ITEM ))) * SUM(QUANTITY) <> 0`,
                     param : ['FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
@@ -81,7 +85,7 @@ export default class taxSucreReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                 <Item location="after"
+                                <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
                                 options=
@@ -99,6 +103,7 @@ export default class taxSucreReport extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -112,25 +117,22 @@ export default class taxSucreReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdForm colCount={2} id="frmKriter">
-                            <NdItem>
-                                <NdLabel text={this.t("grdListe.clmDocDate")}/>
-                                <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('year')} endDate={moment().endOf('year')}/>
-                            </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("grdListe.clmDocDate")}/>
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('year')} endDate={moment().endOf('year')}/>
+                                </NdItem>
                             </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-
                         </div>
                         <div className="col-3">
-                      
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

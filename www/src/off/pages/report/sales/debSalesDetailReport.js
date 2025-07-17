@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -20,15 +22,12 @@ export default class debReport extends React.PureComponent
 
    
         this.core = App.instance.core;
-       
-        this.groupList = [];
+
         this.btnGetirClick = this.btnGetirClick.bind(this)
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
+        setTimeout(async () => { }, 1000);
     }
     async btnGetirClick()
     {
@@ -37,33 +36,33 @@ export default class debReport extends React.PureComponent
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 { 
-                    query : "SELECT " +
-                    "(SELECT TOP 1  CASE WHEN LEN(CUSTOMS_CODE) = 7 THEN '0'+ CUSTOMS_CODE ELSE CUSTOMS_CODE END FROM ITEMS_GRP WHERE ITEMS_GRP.ITEM = DOC_ITEMS_VW_01.ITEM) AS CUSTOMS_NO,   " +
-                    "(SELECT TOP 1 ORGINS FROM ITEMS_GRP WHERE ITEMS_GRP.ITEM = DOC_ITEMS_VW_01.ITEM) AS ORIGIN,   " +
-                    "(SELECT TOP 1 SECTOR_NO FROM COMPANY) AS REGIME,   " +
-                    "TOTALHT AS QUANTITY, " +
-                    "QUANTITY AS LINGE,   " +
-                    "ROUND(QUANTITY * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE (ID = '002' OR ID = '005') AND ITEM_UNIT.ITEM = DOC_ITEMS_VW_01.ITEM AND DELETED = 0),0),3) AS KG,   " +
-                    "'11' AS NATURE,   " +
-                    "'3' AS TRANSPORT,   " +
-                    "(SELECT TOP 1 SUBSTRING(ZIPCODE,0,3) FROM COMPANY) AS ZIPCODE,   " +
-                    "(SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER_ADRESS.ADRESS_NO = 0 AND CUSTOMER_ADRESS.CUSTOMER = DOC_ITEMS_VW_01.OUTPUT AND DELETED = 0) AS COUNTRY,   " +
-                    "REF_NO,   " +
-                    "(SELECT TOP 1  TITLE FROM CUSTOMER_VW_02 WHERE CUSTOMER_VW_02.GUID = DOC_ITEMS_VW_01.OUTPUT) AS CUSTOMER_NAME,   " +
-                    "(SELECT TOP 1  MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID = DOC_ITEMS_VW_01.ITEM) AS MAIN_GRP_NAME,   " +
-                    "DOC_DATE AS DOC_DATE,   " +
-                    "MULTICODE,   " +
-                    "ITEM_BARCODE,   " +
-                    "ITEM_NAME,   " +
-                    "ITEM_CODE,   " +
-                    "DESCRIPTION   " +
-                    "FROM DOC_ITEMS_VW_01   " +
-                    "WHERE    DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND " +
-                    "(SELECT TOP 1 COUNTRY FROM CUSTOMER_VW_02 WHERE CUSTOMER_VW_02.GUID = DOC_ITEMS_VW_01.INPUT) <> 'FR' AND ITEM_TYPE  = 0 AND (SELECT TOP 1 TYPE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS_VW_01.ITEM) = 0 " +
-                    "AND TYPE = 1 AND (DOC_TYPE = 20 OR  (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) AND QUANTITY > 0 ORDER BY OUTPUT" ,
+                    query :
+                        `SELECT 
+                        (SELECT TOP 1  CASE WHEN LEN(CUSTOMS_CODE) = 7 THEN '0'+ CUSTOMS_CODE ELSE CUSTOMS_CODE END FROM ITEMS_GRP WHERE ITEMS_GRP.ITEM = DOC_ITEMS_VW_01.ITEM) AS CUSTOMS_NO,  
+                        (SELECT TOP 1 ORGINS FROM ITEMS_GRP WHERE ITEMS_GRP.ITEM = DOC_ITEMS_VW_01.ITEM) AS ORIGIN,  
+                        (SELECT TOP 1 SECTOR_NO FROM COMPANY) AS REGIME,  
+                        TOTALHT AS QUANTITY, 
+                        QUANTITY AS LINGE,  
+                        ROUND(QUANTITY * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE (ID = '002' OR ID = '005') AND ITEM_UNIT.ITEM = DOC_ITEMS_VW_01.ITEM AND DELETED = 0),0),3) AS KG,  
+                        '11' AS NATURE,  
+                        '3' AS TRANSPORT,  
+                        (SELECT TOP 1 SUBSTRING(ZIPCODE,0,3) FROM COMPANY) AS ZIPCODE,  
+                        (SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER_ADRESS.ADRESS_NO = 0 AND CUSTOMER_ADRESS.CUSTOMER = DOC_ITEMS_VW_01.OUTPUT AND DELETED = 0) AS COUNTRY,  
+                        REF_NO,  
+                        (SELECT TOP 1  TITLE FROM CUSTOMER_VW_02 WHERE CUSTOMER_VW_02.GUID = DOC_ITEMS_VW_01.OUTPUT) AS CUSTOMER_NAME,  
+                        (SELECT TOP 1  MAIN_GRP_NAME FROM ITEMS_VW_01 WHERE ITEMS_VW_01.GUID = DOC_ITEMS_VW_01.ITEM) AS MAIN_GRP_NAME,  
+                        DOC_DATE AS DOC_DATE,  
+                        MULTICODE,  
+                        "ITEM_BARCODE, 
+                        ITEM_NAME,  
+                        ITEM_CODE,  
+                        DESCRIPTION  
+                        FROM DOC_ITEMS_VW_01  
+                        WHERE    DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND 
+                        (SELECT TOP 1 COUNTRY FROM CUSTOMER_VW_02 WHERE CUSTOMER_VW_02.GUID = DOC_ITEMS_VW_01.INPUT) <> 'FR' AND ITEM_TYPE  = 0 AND (SELECT TOP 1 TYPE FROM ITEMS WHERE ITEMS.GUID = DOC_ITEMS_VW_01.ITEM) = 0 
+                        AND TYPE = 1 AND (DOC_TYPE = 20 OR  (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) AND QUANTITY > 0 ORDER BY OUTPUT` ,
                     param : ['FIRST_DATE:date','LAST_DATE:date'], 
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
@@ -124,6 +123,7 @@ export default class debReport extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -137,31 +137,22 @@ export default class debReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdForm colCount={2} id="frmKriter">
-                            <NdItem>
-                                <NdLabel text={this.t("dtDate")} alignment="right" />
-                                <NbDateRange id={"dtDate"} parent={this} startDate={moment().subtract(1, 'month').startOf('month')} endDate={ moment().subtract(1, 'month').endOf('month')}/>
-                            </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("dtDate")} alignment="right" />
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment().subtract(1, 'month').startOf('month')} endDate={ moment().subtract(1, 'month').endOf('month')}/>
+                                </NdItem>
                             </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            {/* <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            /> */}
                         </div>
                         <div className="col-3">
-                      
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

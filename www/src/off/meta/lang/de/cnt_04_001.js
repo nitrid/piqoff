@@ -52,5 +52,9 @@ const cnt_04_001 =
         msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
         msgFailed: "Der Eintrag konnte nicht gespeichert werden!"
     },
+    msgDeleteResult:
+    {
+        msg: "Eintrag erfolgreich gelöscht !"
+    },
 }
 export default cnt_04_001

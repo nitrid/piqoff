@@ -2,11 +2,13 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import { docCls} from '../../../../core/cls/doc.js';
 import moment from 'moment';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import{ Item} from 'devextreme-react/form';
 import ContextMenu from 'devextreme-react/context-menu';
 import { Button } from 'devextreme-react/button';
+
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
@@ -24,6 +26,7 @@ export default class virement extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
@@ -32,7 +35,6 @@ export default class virement extends React.PureComponent
         this.calculateTotal = this.calculateTotal.bind(this)
         this.addVirement = this.addVirement.bind(this)
        
-
         this.docLocked = false;        
         this.tabIndex = props.data.tabkey
     }
@@ -101,8 +103,6 @@ export default class virement extends React.PureComponent
         tmpDoc.OUTPUT = '00000000-0000-0000-0000-000000000000'
         this.docObj.addEmpty(tmpDoc);
 
-        
-
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.docLocked = false
@@ -114,7 +114,9 @@ export default class virement extends React.PureComponent
     {
         this.docObj.clearAll()
         App.instance.setState({isExecute:true})
+
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:2,DOC_TYPE:201});
+        
         App.instance.setState({isExecute:false})
 
         this.txtRef.readOnly = true
@@ -234,7 +236,6 @@ export default class virement extends React.PureComponent
 
             this.docObj.docCustomer.addEmpty(tmpDocCustomer)
 
-          
             this.calculateTotal()
     }
     render()
@@ -248,17 +249,11 @@ export default class virement extends React.PureComponent
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                        onClick={()=>
-                                        {
-                                            this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
-                                        }}/>
+                                        onClick={()=> { this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO) }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmVirement"  + this.tabIndex}
@@ -281,11 +276,6 @@ export default class virement extends React.PureComponent
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
                                                 
                                                 if((await this.docObj.save()) == 0)
                                                 {                                                    
@@ -295,6 +285,11 @@ export default class virement extends React.PureComponent
                                                 }
                                                 else
                                                 {
+                                                    let tmpConfObj1 =
+                                                    {
+                                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                    }
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                     await dialog(tmpConfObj1);
                                                 }
@@ -352,7 +347,6 @@ export default class virement extends React.PureComponent
                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                 await dialog(tmpConfObj1);
                                             }
-                                            
                                         }
                                         else
                                         {
@@ -363,18 +357,10 @@ export default class virement extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
-                                        
-                                    }}/>
+                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default" />
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
-                                    }}/>
+                                    <NdButton id="btnPrint" parent={this} icon="print" type="default" />
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -412,7 +398,7 @@ export default class virement extends React.PureComponent
                                 <NdItem>
                                     <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
-                                        <div className="col-4 pe-0">
+                                        <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
@@ -421,11 +407,12 @@ export default class virement extends React.PureComponent
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 2 AND DOC_TYPE = 201 AND REF = @REF ",
+                                                    query : `SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 2 AND DOC_TYPE = 201 AND REF = @REF `,
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                let tmpData = await this.core.sql.execute(tmpQuery)
+                                                 
                                                 if(tmpData.result.recordset.length > 0)
                                                 {
                                                     this.txtRefno.value = tmpData.result.recordset[0].REF_NO
@@ -434,12 +421,12 @@ export default class virement extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmVirement"  + this.tabIndex}>
+                                                <Validator validationGroup={"frmVirement"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
                                         </div>
-                                        <div className="col-5 ps-0">
+                                        <div className="col-6 ps-0">
                                             <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             readOnly={true}
                                             button=
@@ -458,7 +445,6 @@ export default class virement extends React.PureComponent
                                                                     this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
                                                                 }
                                                             }
-                                                                   
                                                         }
                                                     },
                                                     {
@@ -482,7 +468,7 @@ export default class virement extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmVirement"  + this.tabIndex}>
+                                                <Validator validationGroup={"frmVirement"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -497,21 +483,7 @@ export default class virement extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 201"},sql:this.core.sql}}}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                   
-                                                }
-                                            }
-                                        ]
-                                        
-                                    }
+                                    data={{source:{select:{query : `SELECT GUID,REF,REF_NO,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 201`},sql:this.core.sql}}}
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
@@ -524,10 +496,6 @@ export default class virement extends React.PureComponent
                                     <NdLabel text={this.t("dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
-                                    onValueChanged={(async()=>
-                                        {
-                                            
-                                    }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmVirement"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
@@ -658,10 +626,9 @@ export default class virement extends React.PureComponent
                                     height={'500'} 
                                     width={'100%'}
                                     dbApply={false}
-                                    onRowUpdated={async(e)=>{
-                                        this.calculateTotal()
-                                    }}
-                                    onRowRemoved={async (e)=>{
+                                    onRowUpdated={async(e)=> { this.calculateTotal() }}
+                                    onRowRemoved={async (e)=>
+                                    {
                                         this.calculateTotal()
                                         await this.docObj.save()
                                     }}
@@ -682,9 +649,7 @@ export default class virement extends React.PureComponent
                                     dataSource={this.rightItems}
                                     width={200}
                                     target="#grdDocVirement"
-                                    onItemClick={(async(e)=>
-                                    {
-                                    }).bind(this)} />
+                                    />
                                 </React.Fragment>     
                                 </NdItem>
                             </NdForm>
@@ -729,14 +694,14 @@ export default class virement extends React.PureComponent
                                     searchEnabled={true}
                                     notRefresh={true}
                                     onValueChanged={(async()=>
+                                    {
+                                        if(this.cmbSafeToSafe.value == this.cmbSafeToSafe2.value)
                                         {
-                                            if(this.cmbSafeToSafe.value == this.cmbSafeToSafe2.value)
-                                            {
-                                                this.toast.show({type:"warning",message:this.t("msgDblAccount.msg")})
-                                                this.cmbSafeToSafe.setState({value:''});
-                                            }
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM SAFE_VW_01"},sql:this.core.sql}}}
+                                            this.toast.show({type:"warning",message:this.t("msgDblAccount.msg")})
+                                            this.cmbSafeToSafe.setState({value:''});
+                                        }
+                                    }).bind(this)}
+                                    data={{source:{select:{query : `SELECT * FROM SAFE_VW_01`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbSafeToSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbSafeToSafe',USERS:this.user.CODE})}
                                     >
@@ -755,14 +720,14 @@ export default class virement extends React.PureComponent
                                     searchEnabled={true}
                                     notRefresh={true}
                                     onValueChanged={(async()=>
+                                    {
+                                        if(this.cmbSafeToSafe.value == this.cmbSafeToSafe2.value)
                                         {
-                                            if(this.cmbSafeToSafe.value == this.cmbSafeToSafe2.value)
-                                            {
-                                                this.toast.show({type:"warning",message:this.t("msgDblAccount.msg")})
-                                                this.cmbSafeToSafe2.setState({value:''});
-                                            }
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM SAFE_VW_01"},sql:this.core.sql}}}
+                                            this.toast.show({type:"warning",message:this.t("msgDblAccount.msg")})
+                                            this.cmbSafeToSafe2.setState({value:''});
+                                        }
+                                    }).bind(this)}
+                                    data={{source:{select:{query : `SELECT * FROM SAFE_VW_01`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbSafeToSafe2',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbSafeToSafe2',USERS:this.user.CODE})}
                                     >
@@ -779,9 +744,9 @@ export default class virement extends React.PureComponent
                                         param={this.param.filter({ELEMENT:'safeToSafeAmount',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'safeToSafeAmount',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmCaseToCase"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("ValidAmount")} />
-                                        </Validator>  
+                                            <Validator validationGroup={"frmCaseToCase"  + this.tabIndex}>
+                                                <RequiredRule message={this.t("ValidAmount")} />
+                                            </Validator>  
                                         </NdNumberBox>
                                     </div>
                                 </NdItem>
@@ -793,8 +758,7 @@ export default class virement extends React.PureComponent
                                         maxLength={32}                                        
                                         param={this.param.filter({ELEMENT:'safeToSafeDescription',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'safeToSafeDescription',USERS:this.user.CODE})}
-                                        >
-                                        </NdTextBox>
+                                        />
                                     </div>
                                 </NdItem>
                                 <NdItem>
@@ -804,18 +768,13 @@ export default class virement extends React.PureComponent
                                             validationGroup={"frmCaseToCase"  + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
-                                               
-                                                    this.addVirement(20)
-                                                    this.popSafeToSafe.hide(); 
-                                                
+                                                this.addVirement(20)
+                                                this.popSafeToSafe.hide(); 
                                             }}/>
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popSafeToSafe.hide();  
-                                            }}/>
+                                            onClick={()=> { this.popSafeToSafe.hide() }}/>
                                         </div>
                                     </div>
                                 </NdItem>
@@ -852,7 +811,7 @@ export default class virement extends React.PureComponent
                                                 this.cmbSafeToBank.setState({value:''});
                                             }
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM SAFE_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT * FROM SAFE_VW_01`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbSafeToBank',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbSafeToBank',USERS:this.user.CODE})}
                                     >
@@ -871,14 +830,14 @@ export default class virement extends React.PureComponent
                                     searchEnabled={true}
                                     notRefresh={true}
                                     onValueChanged={(async()=>
+                                    {
+                                        if(this.cmbSafeToBank.value == this.cmbSafeToBank2.value)
                                         {
-                                            if(this.cmbSafeToBank.value == this.cmbSafeToBank2.value)
-                                            {
-                                                this.toast.show({type:"warning",message:this.t("msgDblAccount.msg")})
-                                                this.cmbSafeToBank2.setState({value:''});
-                                            }
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01"},sql:this.core.sql}}}
+                                            this.toast.show({type:"warning",message:this.t("msgDblAccount.msg")})
+                                            this.cmbSafeToBank2.setState({value:''});
+                                        }
+                                    }).bind(this)}
+                                    data={{source:{select:{query : `SELECT * FROM BANK_VW_01`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbSafeToBank2',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbSafeToBank2',USERS:this.user.CODE})}
                                     >
@@ -895,9 +854,9 @@ export default class virement extends React.PureComponent
                                         param={this.param.filter({ELEMENT:'safeToBankAmount',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'safeToBankAmount  ',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmSafeToBank" + this.tabIndex}>
-                                            <RequiredRule message={this.t("ValidAmount")} />
-                                        </Validator>  
+                                            <Validator validationGroup={"frmSafeToBank" + this.tabIndex}>
+                                                <RequiredRule message={this.t("ValidAmount")} />
+                                            </Validator>  
                                         </NdNumberBox>
                                     </div>
                                 </NdItem>
@@ -909,8 +868,7 @@ export default class virement extends React.PureComponent
                                         maxLength={32}                                        
                                         param={this.param.filter({ELEMENT:'safeToBankDescription',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'safeToBankDescription',USERS:this.user.CODE})}
-                                        >
-                                        </NdTextBox>
+                                       />
                                     </div>
                                 </NdItem>
                                 <NdItem>
@@ -926,10 +884,7 @@ export default class virement extends React.PureComponent
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popSafeToBank.hide();  
-                                            }}/>
+                                            onClick={()=> { this.popSafeToBank.hide() }}/>
                                         </div>
                                     </div>
                                 </NdItem>
@@ -959,14 +914,14 @@ export default class virement extends React.PureComponent
                                     searchEnabled={true}
                                     notRefresh={true}
                                     onValueChanged={(async()=>
+                                    {
+                                        if(this.cmbBankToSafe.value == this.cmbBankToSafe2.value)
                                         {
-                                            if(this.cmbBankToSafe.value == this.cmbBankToSafe2.value)
-                                            {
-                                                this.toast.show({type:"warning",message:this.t("msgDblAccount.msg")})
-                                                this.cmbBankToSafe.setState({value:''});
-                                            }
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01"},sql:this.core.sql}}}
+                                            this.toast.show({type:"warning",message:this.t("msgDblAccount.msg")})
+                                            this.cmbBankToSafe.setState({value:''});
+                                        }
+                                    }).bind(this)}
+                                    data={{source:{select:{query : `SELECT * FROM BANK_VW_01`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbBankToSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBankToSafe',USERS:this.user.CODE})}
                                     >
@@ -985,14 +940,14 @@ export default class virement extends React.PureComponent
                                     searchEnabled={true}
                                     notRefresh={true}
                                     onValueChanged={(async()=>
+                                    {
+                                        if(this.cmbBankToSafe.value == this.cmbBankToSafe2.value)
                                         {
-                                            if(this.cmbBankToSafe.value == this.cmbBankToSafe2.value)
-                                            {
-                                                this.toast.show({type:"warning",message:this.t("msgDblAccount.msg")})
-                                                this.cmbBankToSafe2.setState({value:''});
-                                            }
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM SAFE_VW_01"},sql:this.core.sql}}}
+                                            this.toast.show({type:"warning",message:this.t("msgDblAccount.msg")})
+                                            this.cmbBankToSafe2.setState({value:''});
+                                        }
+                                    }).bind(this)}
+                                    data={{source:{select:{query : `SELECT * FROM SAFE_VW_01`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbBankToSafe2',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBankToSafe2',USERS:this.user.CODE})}
                                     >
@@ -1009,9 +964,9 @@ export default class virement extends React.PureComponent
                                         param={this.param.filter({ELEMENT:'bankToSafeAmount',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'bankToSafeAmount  ',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmBankToSafe" + this.tabIndex}>
-                                            <RequiredRule message={this.t("ValidAmount")} />
-                                        </Validator>  
+                                            <Validator validationGroup={"frmBankToSafe" + this.tabIndex}>
+                                                <RequiredRule message={this.t("ValidAmount")} />
+                                            </Validator>  
                                         </NdNumberBox>
                                     </div>
                                 </NdItem>
@@ -1023,8 +978,7 @@ export default class virement extends React.PureComponent
                                         maxLength={32}                                        
                                         param={this.param.filter({ELEMENT:'bankToSafeDescription',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'bankToSafeDescription',USERS:this.user.CODE})}
-                                        >
-                                        </NdTextBox>
+                                        />
                                     </div>
                                 </NdItem>
                                 <NdItem>
@@ -1040,10 +994,7 @@ export default class virement extends React.PureComponent
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popBankToSafe.hide();  
-                                            }}/>
+                                            onClick={()=> { this.popBankToSafe.hide() }}/>
                                         </div>
                                     </div>
                                 </NdItem>
@@ -1073,14 +1024,14 @@ export default class virement extends React.PureComponent
                                     searchEnabled={true}
                                     notRefresh={true}
                                     onValueChanged={(async()=>
+                                    {
+                                        if(this.cmbBankToBank.value == this.cmbBankToBank2.value)
                                         {
-                                            if(this.cmbBankToBank.value == this.cmbBankToBank2.value)
-                                            {
-                                                this.toast.show({type:"warning",message:this.t("msgDblAccount.msg")})
-                                                this.cmbBankToBank.setState({value:''});
-                                            }
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01"},sql:this.core.sql}}}
+                                            this.toast.show({type:"warning",message:this.t("msgDblAccount.msg")})
+                                            this.cmbBankToBank.setState({value:''});
+                                        }
+                                    }).bind(this)}
+                                    data={{source:{select:{query : `SELECT * FROM BANK_VW_01`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbBankToBank',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBankToBank',USERS:this.user.CODE})}
                                     >
@@ -1099,14 +1050,14 @@ export default class virement extends React.PureComponent
                                     searchEnabled={true}
                                     notRefresh={true}
                                     onValueChanged={(async()=>
+                                    {
+                                        if(this.cmbBankToBank.value == this.cmbBankToBank2.value)
                                         {
-                                            if(this.cmbBankToBank.value == this.cmbBankToBank2.value)
-                                            {
-                                                this.toast.show({type:"warning",message:this.t("msgDblAccount.msg")})
-                                                this.cmbBankToBank2.setState({value:''});
-                                            }
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01"},sql:this.core.sql}}}
+                                            this.toast.show({type:"warning",message:this.t("msgDblAccount.msg")})
+                                            this.cmbBankToBank2.setState({value:''});
+                                        }
+                                    }).bind(this)}
+                                    data={{source:{select:{query : `SELECT * FROM BANK_VW_01`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbBankToBank2',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbBankToBank2',USERS:this.user.CODE})}
                                     >
@@ -1123,9 +1074,9 @@ export default class virement extends React.PureComponent
                                         param={this.param.filter({ELEMENT:'bankToBankAmount',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'bankToBankAmount  ',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmBankToBank" + this.tabIndex}>
-                                            <RequiredRule message={this.t("ValidAmount")} />
-                                        </Validator>  
+                                            <Validator validationGroup={"frmBankToBank" + this.tabIndex}>
+                                                <RequiredRule message={this.t("ValidAmount")} />
+                                            </Validator>  
                                         </NdNumberBox>
                                     </div>
                                 </NdItem>
@@ -1137,8 +1088,7 @@ export default class virement extends React.PureComponent
                                         maxLength={32}                                        
                                         param={this.param.filter({ELEMENT:'bankToBankDescription',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'bankToBankDescription',USERS:this.user.CODE})}
-                                        >
-                                        </NdTextBox>
+                                        />
                                     </div>
                                 </NdItem>
                                 <NdItem>
@@ -1147,19 +1097,14 @@ export default class virement extends React.PureComponent
                                             <NdButton text={this.t("popBankToBank.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
                                             validationGroup={"frmCollCheck" + this.tabIndex}
                                             onClick={async (e)=>
-                                            {       
-                                              
+                                            {      
                                                 this.addVirement(23)
                                                 this.popBankToBank.hide(); 
-                                                
                                             }}/>
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popBankToBank.hide();  
-                                            }}/>
+                                            onClick={()=> { this.popBankToBank.hide() }}/>
                                         </div>
                                     </div>
                                 </NdItem>

@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
@@ -19,7 +21,7 @@ export default class safeList extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
-        this.groupList = [];
+
         this.btnGetClick = this.btnGetClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)  
@@ -27,15 +29,12 @@ export default class safeList extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
     async Init()
     {
-        this.dtFirst.value=moment(new Date()).format("YYYY-MM-DD");
-        this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
+        this.dtFirst.value = moment(new Date()).format("YYYY-MM-DD");
+        this.dtLast.value = moment(new Date()).format("YYYY-MM-DD");
     }
     loadState()
     {
@@ -62,10 +61,10 @@ export default class safeList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM DOC_CUSTOMER_VW_01 " +
-                            "WHERE ((INPUT = @SAFE) OR (OUTPUT = @SAFE)) AND  "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND  DOC_TYPE IN(200,201) ",
+                    query : `SELECT * FROM DOC_CUSTOMER_VW_01 
+                            WHERE ((INPUT = @SAFE) OR (OUTPUT = @SAFE)) AND 
+                            ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  
+                            AND  DOC_TYPE IN(200,201) `,
                     param : ['SAFE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.cmbSafe.value,this.dtFirst.value,this.dtLast.value]
                 },
@@ -78,7 +77,7 @@ export default class safeList extends React.PureComponent
 
         let tmpQuery = 
         {
-            query :"SELECT [dbo].[FN_SAFE_AMOUNT](@SAFE,dbo.GETDATE()) AS TOTAL",
+            query : `SELECT [dbo].[FN_SAFE_AMOUNT](@SAFE,dbo.GETDATE()) AS TOTAL`,
             param : ['SAFE:string|50'],
             value : [this.cmbSafe.value]
         }
@@ -165,15 +164,10 @@ export default class safeList extends React.PureComponent
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM SAFE_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT * FROM SAFE_VW_01`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbSafe',USERS:this.user.CODE})}
-                                    >
-                                       
-                                    </NdSelectBox>
+                                    />
                                 </NdItem>
                             </NdForm>
                         </div>
@@ -182,10 +176,8 @@ export default class safeList extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
@@ -222,7 +214,6 @@ export default class safeList extends React.PureComponent
                                     {
                                         return moment(e.value).format("YYYY-MM-DD")
                                     }
-                                    
                                     return
                                 }}/> 
                             </NdGrid>

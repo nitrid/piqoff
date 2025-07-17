@@ -1,13 +1,15 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem, StateStoring} from '../../../../core/react/devex/grid.js';
+
+import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export, Summary, TotalItem, StateStoring} from '../../../../core/react/devex/grid.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { NdForm,NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
+import { NdForm,NdItem, NdLabel } from '../../../../core/react/devex/form.js';
 
 export default class itemSalesReport extends React.PureComponent
 {
@@ -16,7 +18,7 @@ export default class itemSalesReport extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
-        this.groupList = [];
+
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
@@ -24,9 +26,7 @@ export default class itemSalesReport extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
+        setTimeout(async () =>  {},1000)
     }
     loadState() 
     {
@@ -41,32 +41,23 @@ export default class itemSalesReport extends React.PureComponent
     }
     async btnGetirClick()
     {
-       
         let tmpSource =
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT ITEM_NAME,ITEM_CODE,CDATE,TICKET_NO,QUANTITY,PRICE,AMOUNT,TICKET_DATE,STATUS,WEIGHER_NAME, " +
-                    "ISNULL((SELECT TOP 1 DESCRIPTION + '/' FROM BALANCE_COUNTER_EXTRA WHERE BALANCE_COUNTER_EXTRA.BALANCE = BC.GUID AND TAG = 'PRICE'),'') + ' ' + ISNULL((SELECT TOP 1 DESCRIPTION + '/' FROM BALANCE_COUNTER_EXTRA WHERE BALANCE_COUNTER_EXTRA.BALANCE = BC.GUID AND TAG = 'QUANTITY'),'') + ''+ ISNULL((SELECT CASE WHEN COUNT(TAG) = 0 THEN '' ELSE CONVERT(NVARCHAR,COUNT(TAG)) + ' Réimprimé' END FROM BALANCE_COUNTER_EXTRA WHERE BALANCE_COUNTER_EXTRA.BALANCE = BC.GUID AND TAG = 'REPRINT'),'')  AS DESCRIPTIONS ," +
-                    "CONVERT(NVARCHAR, CDATE , 108) AS TIME " +
-                    "FROM BALANCE_COUNTER_VW_01 AS BC WHERE (CONVERT(NVARCHAR,CDATE,112) >= @FIRST_DATE AND CONVERT(NVARCHAR,CDATE,112) <= @LAST_DATE) AND TICKET_DATE <> '19700101' ORDER BY TICKET_NO ASC" ,
+                    query : `SELECT ITEM_NAME,ITEM_CODE,CDATE,TICKET_NO,QUANTITY,PRICE,AMOUNT,TICKET_DATE,STATUS,WEIGHER_NAME, 
+                            ISNULL((SELECT TOP 1 DESCRIPTION + '/' FROM BALANCE_COUNTER_EXTRA WHERE BALANCE_COUNTER_EXTRA.BALANCE = BC.GUID AND TAG = 'PRICE'),'') + ' ' + ISNULL((SELECT TOP 1 DESCRIPTION + '/' FROM BALANCE_COUNTER_EXTRA WHERE BALANCE_COUNTER_EXTRA.BALANCE = BC.GUID AND TAG = 'QUANTITY'),'') + ''+ ISNULL((SELECT CASE WHEN COUNT(TAG) = 0 THEN '' ELSE CONVERT(NVARCHAR,COUNT(TAG)) + ' Réimprimé' END FROM BALANCE_COUNTER_EXTRA WHERE BALANCE_COUNTER_EXTRA.BALANCE = BC.GUID AND TAG = 'REPRINT'),'')  AS DESCRIPTIONS ,
+                            CONVERT(NVARCHAR, CDATE , 108) AS TIME 
+                            FROM BALANCE_COUNTER_VW_01 AS BC WHERE (CONVERT(NVARCHAR,CDATE,112) >= @FIRST_DATE AND CONVERT(NVARCHAR,CDATE,112) <= @LAST_DATE) AND TICKET_DATE <> '19700101' ORDER BY TICKET_NO ASC` ,
                     param : ['FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
                 sql : this.core.sql
             }
         }
-
-        if([])
-        {
-
-        }
-
         await this.grdListe.dataRefresh(tmpSource)
-      
     }
     render()
     {
@@ -76,7 +67,7 @@ export default class itemSalesReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                 <Item location="after"
+                                <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
                                 options=
@@ -94,13 +85,15 @@ export default class itemSalesReport extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
                                             }
                                         }
                                     }    
-                                } />
+                                }
+                                />
                             </Toolbar>
                         </div>
                     </div>
@@ -118,13 +111,11 @@ export default class itemSalesReport extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                      
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

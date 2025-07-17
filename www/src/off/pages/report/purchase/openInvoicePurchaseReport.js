@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import { Item } from 'devextreme-react/form';
+
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdGrid,{Column,Paging,Pager,Scrolling,Export,Summary,TotalItem,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -19,7 +21,7 @@ export default class openInvoicePurchaseReport extends React.PureComponent
         super(props)
        
         this.core = App.instance.core;
-        this.groupList = [];
+
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
@@ -28,11 +30,10 @@ export default class openInvoicePurchaseReport extends React.PureComponent
 
     async componentDidMount()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
+        setTimeout(async () =>  { }, 1000);
     }
-   loadState()
+
+    loadState()
     {
         let tmpLoad =  this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
         return tmpLoad.getValue()
@@ -43,6 +44,7 @@ export default class openInvoicePurchaseReport extends React.PureComponent
         tmpSave.setValue(e)
         tmpSave.save()
     }
+
     async calculateTotal()
     {
         this.docObj.dt()[0].AMOUNT = this.docObj.docCustomer.dt().sum("AMOUNT",2)
@@ -58,23 +60,23 @@ export default class openInvoicePurchaseReport extends React.PureComponent
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT " +
-                                "TYPE," +
-                                "DOC_DATE," +
-                                "DOC_TYPE," +
-                                "OUTPUT_CODE," +
-                                "OUTPUT_NAME," +
-                                "DOC_REF," +
-                                "DOC_REF_NO," +
-                                "DOC_TOTAL," +
-                                "PAYING_AMOUNT, " +
-                                "ROUND((DOC_TOTAL -  PAYING_AMOUNT),2) AS REMAINDER " +
-                            "FROM DEPT_CREDIT_MATCHING_VW_03 " +
-                            "WHERE TYPE = 0 AND DOC_TYPE = 20 AND ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ((DOC_TOTAL - PAYING_AMOUNT) > 0) " +
-                            "GROUP BY DOC_TYPE,TYPE,DOC_DATE,OUTPUT_NAME,DOC_REF_NO,DOC_REF,PAYING_AMOUNT,OUTPUT_CODE,DOC_TOTAL",
+                    query :
+                            `SELECT 
+                                TYPE,
+                                DOC_DATE,
+                                DOC_TYPE,
+                                OUTPUT_CODE,
+                                OUTPUT_NAME,
+                                DOC_REF,
+                                DOC_REF_NO,
+                                DOC_TOTAL,
+                                PAYING_AMOUNT, 
+                                ROUND((DOC_TOTAL -  PAYING_AMOUNT),2) AS REMAINDER 
+                            FROM DEPT_CREDIT_MATCHING_VW_03 
+                            WHERE TYPE = 0 AND DOC_TYPE = 20 AND ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ((DOC_TOTAL - PAYING_AMOUNT) > 0) 
+                            GROUP BY DOC_TYPE,TYPE,DOC_DATE,OUTPUT_NAME,DOC_REF_NO,DOC_REF,PAYING_AMOUNT,OUTPUT_CODE,DOC_TOTAL`,
                     param : ['FIRST_DATE:date','LAST_DATE:date','OUTPUT_CODE:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.txtCustomerCode.CODE],
                 },
@@ -83,9 +85,7 @@ export default class openInvoicePurchaseReport extends React.PureComponent
         }
 
         await this.grdListe.dataRefresh(tmpSource)
-      
     } 
-
     render(){
         return (
             <div id={this.props.data.id + this.tabIndex}>
@@ -112,6 +112,7 @@ export default class openInvoicePurchaseReport extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+                                            
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -188,9 +189,9 @@ export default class openInvoicePurchaseReport extends React.PureComponent
                                         ]
                                     }
                                     >
-                                    <Validator validationGroup={"customerSaleRebate" + this.tabIndex}>
-                                        <RequiredRule message={this.t("validCode")} />
-                                    </Validator>  
+                                        <Validator validationGroup={"customerSaleRebate" + this.tabIndex}>
+                                            <RequiredRule message={this.t("validCode")} />
+                                        </Validator>  
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
                                     <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}  
@@ -208,29 +209,17 @@ export default class openInvoicePurchaseReport extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
-                                        
                                     </NdPopGrid>
                                 </NdItem> 
                             </NdForm>
@@ -240,13 +229,11 @@ export default class openInvoicePurchaseReport extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                      
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import Form, { Label,Item } from 'devextreme-react/form';
+
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -14,8 +16,10 @@ export default class printDescription extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
 
@@ -35,7 +39,7 @@ export default class printDescription extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query :"SELECT PRINT_DESCRIPTION FROM COMPANY_VW_01",
+            query : `SELECT PRINT_DESCRIPTION FROM COMPANY_VW_01`,
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
@@ -47,7 +51,7 @@ export default class printDescription extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query :"UPDATE  COMPANY SET PRINT_DESCRIPTION = @PRINT_DESCRIPTION WHERE((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000'))",
+            query : `UPDATE COMPANY SET PRINT_DESCRIPTION = @PRINT_DESCRIPTION WHERE((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000'))`,
             param : ['PRINT_DESCRIPTION:string|max','GUID:string|50'],
             value : [this.txtDescription.value,this.cmbFirm.value]
         }
@@ -103,18 +107,14 @@ export default class printDescription extends React.PureComponent
                                         showClearButton={false}
                                         pageSize ={50}
                                         notRefresh={true}
-                                        data={{source:{select:{query : "SELECT  '00000000-0000-0000-0000-000000000000' AS GUID,'ALL' AS NAME  UNION ALL SELECT GUID,NAME FROM COMPANY_VW_01"},sql:this.core.sql}}}
-                                        onValueChanged={async (e)=>
-                                        {
-                                           this.getDescription()
-                                        }}/>
+                                        data={{source:{select:{query : `SELECT  '00000000-0000-0000-0000-000000000000' AS GUID,'ALL' AS NAME  UNION ALL SELECT GUID,NAME FROM COMPANY_VW_01`},sql:this.core.sql}}}
+                                        onValueChanged={async ()=> { this.getDescription() }}/>
                                 </Item>
                                 <Item>
-                                    <NdButton text={this.t("btnSave")} type="success" width="100%" onClick={this.btnSave} ></NdButton>
+                                    <NdButton text={this.t("btnSave")} type="success" width="100%" onClick={this.btnSave} />
                                 </Item>
                                 <Item colSpan={2}>
-                                    <NdTextArea simple={true} parent={this} id="txtDescription" height='300px' placeholder={this.t("txtDescriptionPlaceHolder")}
-                                    />
+                                    <NdTextArea simple={true} parent={this} id="txtDescription" height='300px' placeholder={this.t("txtDescriptionPlaceHolder")}/>
                                 </Item>
                             </Form>
                         </div>

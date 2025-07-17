@@ -16,17 +16,16 @@ export default class itemInvoicePurchaseReport extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
-        this.groupList = [];
+
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
+        setTimeout(async () => { }, 1000);
     }
+    
     loadState() 
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
@@ -38,18 +37,19 @@ export default class itemInvoicePurchaseReport extends React.PureComponent
         tmpSave.setValue(e)
         tmpSave.save()
     }
+
     async btnGetirClick()
     {
-       
         let tmpSource =
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT ITEM_CODE,MAX(ITEM_NAME) AS ITEM_NAME,SUM(QUANTITY) AS QUANTITY,ROUND(SUM(TOTALHT),2) AS AMOUNT,ROUND(SUM(VAT),2) AS VAT,ROUND(SUM(TOTAL),2) AS TOTAL " +
-                            " FROM DOC_ITEMS_VW_01 WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND REBATE = 0 AND TYPE = 0 AND (DOC_TYPE =20 OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000'))  GROUP BY  ITEM_CODE",
+                    query : `SELECT ITEM_CODE,MAX(ITEM_NAME) AS ITEM_NAME,SUM(QUANTITY) AS QUANTITY,ROUND(SUM(TOTALHT),2) AS AMOUNT,ROUND(SUM(VAT),2) AS VAT,ROUND(SUM(TOTAL),2) AS TOTAL 
+                            FROM DOC_ITEMS_VW_01 
+                            WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND REBATE = 0 AND TYPE = 0 AND (DOC_TYPE =20 OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) 
+                            GROUP BY  ITEM_CODE`,
                     param : ['FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
@@ -58,7 +58,6 @@ export default class itemInvoicePurchaseReport extends React.PureComponent
         }
 
         await this.grdListe.dataRefresh(tmpSource)
-      
     }
     render()
     {
@@ -86,6 +85,7 @@ export default class itemInvoicePurchaseReport extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -99,10 +99,10 @@ export default class itemInvoicePurchaseReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdForm colCount={2} id="frmKriter">
-                            <NdItem>
-                                <NdLabel text={this.t("dtDate")} alignment="right" />
-                                <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
-                            </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("dtDate")} alignment="right" />
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                                </NdItem>
                             </NdForm>
                         </div>
                     </div>
@@ -110,13 +110,11 @@ export default class itemInvoicePurchaseReport extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                      
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

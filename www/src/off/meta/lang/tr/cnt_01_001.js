@@ -32,6 +32,10 @@ const cnt_01_001 =
         clmUser : "Kullanıcı",
         clmDepotName : "Depo",
     },
+    msgDeleteResult:
+    {
+        msg: "Kayıt silme işleminiz başarılı !"
+    },
 }
 
 export default cnt_01_001

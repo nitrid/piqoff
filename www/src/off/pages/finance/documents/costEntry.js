@@ -2,11 +2,12 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import { docCls } from '../../../../core/cls/doc.js';     
 import moment from 'moment';
+
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-import { Item} from 'devextreme-react/form';
+import Toolbar, { Item} from 'devextreme-react/toolbar';
 import ContextMenu from 'devextreme-react/context-menu';
 import { Button } from 'devextreme-react/button';
+
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
@@ -28,6 +29,7 @@ export default class costEntry extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
+
         this.calculateTotal = this.calculateTotal.bind(this)
         this.addCost = this.addCost.bind(this)
         this.docLocked = false;        
@@ -96,8 +98,6 @@ export default class costEntry extends React.PureComponent
         tmpDoc.DOC_TYPE = 202
         tmpDoc.INPUT = '00000000-0000-0000-0000-000000000000'
         this.docObj.addEmpty(tmpDoc);
-
-        
 
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
@@ -201,7 +201,6 @@ export default class costEntry extends React.PureComponent
 
             this.docObj.docCustomer.addEmpty(tmpDocCustomer)
 
-          
             this.calculateTotal()
     }
     render()
@@ -222,10 +221,7 @@ export default class costEntry extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmVirement"  + this.tabIndex}
@@ -303,6 +299,7 @@ export default class costEntry extends React.PureComponent
                                         {
                                             this.docObj.dt('DOC').removeAt(0)
                                             await this.docObj.dt('DOC').delete();
+                                            this.toast.show({message:this.t("msgDelete.msgSuccess"),type:"success"})
                                             this.init(); 
                                         }
                                         
@@ -324,29 +321,20 @@ export default class costEntry extends React.PureComponent
                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                 await dialog(tmpConfObj1);
                                             }
-                                            
                                         }
                                         else
                                         {
                                             this.popPassword.show()
                                             this.txtPassword.value = ''
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
-                                        
-                                    }}/>
+                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default" />
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
-                                    }}/>
+                                    onClick={()=> { this.popDesign.show() }}/>
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -384,7 +372,7 @@ export default class costEntry extends React.PureComponent
                                 <NdItem>
                                     <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
-                                        <div className="col-4 pe-0">
+                                        <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
@@ -393,11 +381,13 @@ export default class costEntry extends React.PureComponent
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 202 AND REF = @REF ",
+                                                    query : `SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 202 AND REF = @REF `,
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
+
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
+
                                                 if(tmpData.result.recordset.length > 0)
                                                 {
                                                     this.txtRefno.value = tmpData.result.recordset[0].REF_NO
@@ -411,7 +401,7 @@ export default class costEntry extends React.PureComponent
                                                 </Validator>  
                                             </NdTextBox>
                                         </div>
-                                        <div className="col-5 ps-0">
+                                        <div className="col-6 ps-0">
                                             <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             readOnly={true}
                                             button=
@@ -454,7 +444,7 @@ export default class costEntry extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmVirement"  + this.tabIndex}>
+                                                <Validator validationGroup={"frmVirement"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -469,21 +459,7 @@ export default class costEntry extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT GUID,REF,REF_NO,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 202"},sql:this.core.sql}}}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                   
-                                                }
-                                            }
-                                        ]
-                                        
-                                    }
+                                    data={{source:{select:{query : `SELECT GUID,REF,REF_NO,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 202`},sql:this.core.sql}}}
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150} defaultSortOrder="asc"/>
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={300} defaultSortOrder="asc" />
@@ -496,10 +472,6 @@ export default class costEntry extends React.PureComponent
                                     <NdLabel text={this.t("dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
-                                    onValueChanged={(async()=>
-                                        {
-                                            
-                                    }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmVirement"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
@@ -512,10 +484,7 @@ export default class costEntry extends React.PureComponent
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdForm colCount={4} onInitialized={(e)=>
-                            {
-                                this.frmPayment = e.component
-                            }}>
+                            <NdForm colCount={4} onInitialized={(e)=> { this.frmPayment = e.component }}>
                                 <NdItem location="after">
                                     <Button icon="add" text={this.t("btnSafeToSafe")}
                                     validationGroup={"frmVirement"  + this.tabIndex}
@@ -552,15 +521,8 @@ export default class costEntry extends React.PureComponent
                                     height={'500'} 
                                     width={'100%'}
                                     dbApply={false}
-                                    onRowUpdated={async(e)=>
-                                    {
-                                        this.calculateTotal()
-                                    }}
-                                    onRowRemoved={async (e)=>
-                                    {
-                                        this.calculateTotal()
-                                        await this.docObj.save()
-                                    }}
+                                    onRowUpdated={async(e)=> { this.calculateTotal() }}
+                                    onRowRemoved={async (e)=> { this.calculateTotal() }}
                                     >
                                         {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                         {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
@@ -620,7 +582,7 @@ export default class costEntry extends React.PureComponent
                                     value=""
                                     searchEnabled={true}
                                     notRefresh={true}
-                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT GUID, CODE, NAME FROM BANK_VW_01`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbSafeToSafe',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbSafeToSafe',USERS:this.user.CODE})}
                                     >
@@ -637,8 +599,7 @@ export default class costEntry extends React.PureComponent
                                         maxLength={32}                                        
                                         param={this.param.filter({ELEMENT:'txtCostDescription',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'txtCostDescription',USERS:this.user.CODE})}
-                                        >
-                                        </NdTextBox>
+                                        />
                                     </div>
                                 </NdItem>
                                 <NdItem>
@@ -664,15 +625,11 @@ export default class costEntry extends React.PureComponent
                                             {       
                                                 this.addCost(30)
                                                 this.popCostEntry.hide(); 
-                                                
                                             }}/>
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popCostEntry.hide();  
-                                            }}/>
+                                            onClick={()=> { this.popCostEntry.hide() }}/>
                                         </div>
                                     </div>
                                 </NdItem>

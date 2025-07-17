@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export, Summary, TotalItem, StateStoring} from '../../../../core/react/devex/grid.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -16,17 +18,16 @@ export default class purchaseInvoiceReport extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
-        this.groupList = [];
+
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
+        setTimeout(async () =>  { }, 1000);
     }
+
     async loadState()
     {
         let tmpLoad = await this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
@@ -38,17 +39,19 @@ export default class purchaseInvoiceReport extends React.PureComponent
         await tmpSave.setValue(e)
         await tmpSave.save()
     }
+
     async btnGetirClick()
     {
-       
         let tmpSource =
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT DOC_DATE,OUTPUT_CODE,OUTPUT_NAME,REF +'-'+ CONVERT(NVARCHAR,REF_NO) AS REF,AMOUNT,DISCOUNT,TOTALHT,VAT,TOTAL FROM DOC_VW_01 WHERE TYPE = 0 AND DOC_TYPE = 20 AND REBATE = 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE" ,
+                    query : `SELECT DOC_DATE,OUTPUT_CODE,OUTPUT_NAME,REF +'-'+ CONVERT(NVARCHAR,REF_NO) AS REF,AMOUNT,DISCOUNT,TOTALHT,VAT,TOTAL 
+                            FROM DOC_VW_01 
+                            WHERE TYPE = 0 AND DOC_TYPE = 20 AND REBATE = 0 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE 
+                            ORDER BY DOC_DATE`,
                     param : ['FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
@@ -57,7 +60,6 @@ export default class purchaseInvoiceReport extends React.PureComponent
         }
 
         await this.grdListe.dataRefresh(tmpSource)
-      
     }
     render()
     {
@@ -67,7 +69,7 @@ export default class purchaseInvoiceReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                 <Item location="after"
+                                <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
                                 options=
@@ -85,6 +87,7 @@ export default class purchaseInvoiceReport extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -109,13 +112,11 @@ export default class purchaseInvoiceReport extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                      
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

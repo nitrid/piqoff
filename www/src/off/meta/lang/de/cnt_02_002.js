@@ -1,4 +1,4 @@
-// "Satış Anlaşması"
+        // "Satış Anlaşması"
 const cnt_02_002 = 
 {
     validDate: "Bitte Datum auswählen.",
@@ -224,6 +224,10 @@ const cnt_02_002 =
         btn01: "OK",
         msgSuccess: "E-Mail erfolgreich gesendet!",
         msgFailed: "E-Mail konnte nicht gesendet werden!"
+    },
+    msgDeleteResult:
+    {
+        msg: "Eintrag erfolgreich gelöscht !"
     },
 }
 export default cnt_02_002

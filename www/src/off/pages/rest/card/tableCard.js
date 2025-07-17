@@ -3,9 +3,9 @@ import App from '../../../lib/app.js';
 import { restTableCls } from '../../../../core/cls/rest.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import NdTextBox, { Validator, NumericRule, RequiredRule } from '../../../../core/react/devex/textbox.js'
+import Toolbar, { Item } from 'devextreme-react/toolbar';
+
+import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import {Column} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -17,9 +17,11 @@ export default class TableCard extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.tableObj = new restTableCls();
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
     }
@@ -93,7 +95,7 @@ export default class TableCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID, CODE, NAME FROM REST_TABLE_VW_01 WHERE CODE = @CODE",
+                    query :`SELECT GUID, CODE, NAME FROM REST_TABLE_VW_01 WHERE CODE = @CODE`,
                     param : ['CODE:string|50'],
                     value : [pCode]
                 }
@@ -114,6 +116,7 @@ export default class TableCard extends React.PureComponent
                     }
     
                     let pResult = await dialog(tmpConfObj);
+
                     if(pResult == 'btn01')
                     {
                         this.getTable(pCode)
@@ -155,10 +158,7 @@ export default class TableCard extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmDepot"  + this.tabIndex}
@@ -174,6 +174,7 @@ export default class TableCard extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 let tmpConfObj1 =
@@ -224,6 +225,7 @@ export default class TableCard extends React.PureComponent
                                         {
                                             this.tableObj.dt().removeAt(0)
                                             await this.tableObj.dt().delete();
+
                                             this.toast.show({message:this.t("msgDeleteResult.msgSuccess"),type:"success"})
                                             this.init(); 
                                         }
@@ -319,7 +321,7 @@ export default class TableCard extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} //
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM REST_TABLE_VW_01"},sql:this.core.sql}}}                                   
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM REST_TABLE_VW_01`},sql:this.core.sql}}}                                   
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
@@ -332,8 +334,7 @@ export default class TableCard extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}                                    
                                     param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>    
                                 {/* txtGrp */}
                                 <NdItem>
@@ -342,8 +343,7 @@ export default class TableCard extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}                                    
                                     param={this.param.filter({ELEMENT:'txtGrp',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtGrp',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>    
                             </NdForm>
                         </div>
