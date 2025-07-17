@@ -1,7 +1,6 @@
 import React from "react";
 import NbBase from "../../core/react/bootstrap/base.js";
 import NbButton from "../../core/react/bootstrap/button.js";
-import NdGrid,{Paging,Pager,Column} from "../../core/react/devex/grid.js";
 import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import NdTextBox from "../../core/react/devex/textbox.js";
 import NdPopUp from "../../core/react/devex/popup.js";
