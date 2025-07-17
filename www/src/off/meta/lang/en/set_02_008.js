@@ -30,7 +30,11 @@ const set_02_008 =
         txtMulticode : "Supplier Code",
         txtCustoms : "Customs Code",
         txtOrigin :"Origin"
-    }
+    },
+    msgDeleteResult:
+    {
+        msgSuccess: "Enregistrement réussi !"
+    },
 }
 
 export default set_02_008

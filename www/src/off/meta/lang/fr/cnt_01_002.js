@@ -66,6 +66,10 @@ const cnt_01_002 =
         btn02: "Abandonner",
         msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
     },
+    msgDeleteResult:
+    {
+        msg: "Enregistrement supprimé avec succès !"
+    },
     msgSaveValid:
     {
         title: "Attention",

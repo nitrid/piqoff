@@ -30,5 +30,9 @@ const set_02_008 =
         btn01: "OK",
         msg: "Choix Fournisseur !!"
     },
+    msgDeleteResult:
+    {
+        msgSuccess: "Enregistrement réussi !"
+    },
 }
 export default set_02_008

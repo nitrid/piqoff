@@ -30,6 +30,10 @@ const cnt_01_002 =
         clmFinishDate: "Enddatum",
         clmDepot: "Depot",
         clmUser: "Benutzer"
-    }
+    },
+    msgDeleteResult:
+    {
+        msg: "Eintrag erfolgreich gelöscht !"
+    },
 }
 export default cnt_01_002

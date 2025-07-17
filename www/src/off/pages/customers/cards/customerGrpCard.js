@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { customerGrpCls } from '../../../../core/cls/customers.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import { Item} from 'devextreme-react/form';
+
 import NdTextBox, { Validator,  RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import {Column} from '../../../../core/react/devex/grid.js';
@@ -19,7 +21,9 @@ export default class customerGrpCard extends React.PureComponent
         super(props)
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+
         this.customerGrpObj = new customerGrpCls();
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
     }
@@ -93,7 +97,7 @@ export default class customerGrpCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT * FROM CUSTOMER_GROUP_VW_01 WHERE CODE = @CODE",
+                    query : `SELECT * FROM CUSTOMER_GROUP_VW_01 WHERE CODE = @CODE`,
                     param : ['CODE:string|50'],
                     value : [pCode]
                 }
@@ -155,10 +159,7 @@ export default class customerGrpCard extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmArea"  + this.tabIndex}
@@ -280,10 +281,7 @@ export default class customerGrpCard extends React.PureComponent
                                             {
                                                 id:'02',
                                                 icon:'arrowdown',
-                                                onClick:()=>
-                                                {
-                                                    this.txtCode.value = Math.floor(Date.now() / 1000)
-                                                }
+                                                onClick:()=> { this.txtCode.value = Math.floor(Date.now() / 1000) }
                                             }
                                         ]
                                     }
@@ -311,7 +309,7 @@ export default class customerGrpCard extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} //
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM CUSTOMER_GROUP_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM CUSTOMER_GROUP_VW_01`},sql:this.core.sql}}}
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />

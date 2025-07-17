@@ -18,16 +18,13 @@ export default class bankEkstreReport extends React.PureComponent
 
         this.core = App.instance.core;
 
-        this.groupList = [];
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
     loadState()
     {
@@ -50,10 +47,10 @@ export default class bankEkstreReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *,CASE WHEN INPUT = @BANK THEN AMOUNT ELSE (AMOUNT * -1) END AS DOC_AMOUNT, " + 
-                    "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME " + 
-                    " FROM DOC_CUSTOMER_VW_01 WHERE ((INPUT = @BANK) OR (OUTPUT  = @BANK)) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE" ,
-                    param : ['FIRST_DATE:date','LAST_DATE:date','BANK:string|50','LANG:string|50'],
+                    query : `SELECT *,CASE WHEN INPUT = @BANK THEN AMOUNT ELSE (AMOUNT * -1) END AS DOC_AMOUNT, 
+                            (SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME 
+                            FROM DOC_CUSTOMER_VW_01 WHERE ((INPUT = @BANK) OR (OUTPUT  = @BANK)) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE`,
+                            param : ['FIRST_DATE:date','LAST_DATE:date','BANK:string|50','LANG:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbBank.value,localStorage.getItem('lang')]
                 },
                 sql : this.core.sql
@@ -110,13 +107,8 @@ export default class bankEkstreReport extends React.PureComponent
                                     value=""
                                     searchEnabled={true}
                                     notRefresh={true}
-                                    onValueChanged={(async()=>
-                                        {
-
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM BANK_VW_01"},sql:this.core.sql}}}
-                                    >
-                                    </NdSelectBox>
+                                    data={{source:{select:{query : `SELECT * FROM BANK_VW_01`},sql:this.core.sql}}}
+                                    />
                                 </NdItem>
                                 <NdItem>
                                     <NdLabel text={this.t("dtDate")} alignment="right" />
@@ -130,7 +122,7 @@ export default class bankEkstreReport extends React.PureComponent
                         <div className="col-3"></div>
                         <div className="col-3"></div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -161,7 +153,6 @@ export default class bankEkstreReport extends React.PureComponent
                                     {
                                         return e.text
                                     }
-                                    
                                     return
                                 }}/>
                                 <Column dataField="TYPE_NAME" caption={this.t("grdListe.clmTypeName")} width={120} visible={true}/> 

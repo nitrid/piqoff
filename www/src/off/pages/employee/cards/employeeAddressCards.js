@@ -1,11 +1,13 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { employeesCls} from '../../../../core/cls/employees.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
+
 import NdTextBox, { Validator, RequiredRule} from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -21,9 +23,12 @@ export default class employeeAddressCards extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+
         this.employeeObj = new employeesCls();
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
         this.onItemRendered = this.onItemRendered .bind(this)
@@ -147,7 +152,7 @@ export default class employeeAddressCards extends React.PureComponent
             if(pCode !== '')
             {
                 let tmpQuery = {
-                    query :"SELECT COUNTRY_CODE,PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE ",
+                    query : `SELECT COUNTRY_CODE,PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE`,
                     param : ['ZIPCODE:string|50'],
                     value : [pCode]
                 }
@@ -169,10 +174,6 @@ export default class employeeAddressCards extends React.PureComponent
                 resolve(0) //PARAMETRE BOŞ
             }
         });
-    }
-    async _onEmployeeRendered(e)
-    {
-        await this.core.util.waitUntil(10)
     }
     async onItemRendered (e)
     {
@@ -202,10 +203,7 @@ export default class employeeAddressCards extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmEmployeeAddress"  + this.tabIndex}
@@ -279,11 +277,7 @@ export default class employeeAddressCards extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
-                                        
-                                    }}/>
+                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"/>
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -342,10 +336,7 @@ export default class employeeAddressCards extends React.PureComponent
                                             {
                                                 id:'02',
                                                 icon:'arrowdown',
-                                                onClick:()=>
-                                                {
-                                                    this.txtCode.value = Math.floor(Date.now() / 1000)
-                                                }
+                                                onClick:()=> { this.txtCode.value = Math.floor(Date.now() / 1000) }
                                             }
                                         ]
                                     }
@@ -392,23 +383,12 @@ export default class employeeAddressCards extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT * FROM EMPLOYEE_VW_01 WHERE (((NAME like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) OR ((CODE like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) )",
+                                                query : `SELECT CODE, INSURANCE_NO, NAME, LAST_NAME FROM EMPLOYEE_VW_01 WHERE (((NAME like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) OR ((CODE like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) )`,
                                                 param : ['EMPLOYEE_NAME:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
                                          <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="INSURANCE_NO" caption={this.t("pg_txtCode.clmInsuranceNo")} width={300} defaultSortOrder="asc" />
@@ -494,7 +474,7 @@ export default class employeeAddressCards extends React.PureComponent
                                     {
                                         let tmpQuery = 
                                         {
-                                            query : "SELECT [ZIPCODE], ZIPCODE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY ZIPCODE",
+                                            query : `SELECT [ZIPCODE], ZIPCODE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY ZIPCODE`,
                                             param : ['COUNTRY_CODE:string|5'],
                                             value : [this.cmbPopCountry.value]
                                         }
@@ -509,7 +489,7 @@ export default class employeeAddressCards extends React.PureComponent
                                         }
                                         let tmpCityQuery = 
                                         {
-                                            query : "SELECT [PLACE] FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY PLACE",
+                                            query : `SELECT [PLACE] FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY PLACE`,
                                             param : ['COUNTRY_CODE:string|5'],
                                             value : [this.cmbPopCountry.value]
                                         }
@@ -523,7 +503,6 @@ export default class employeeAddressCards extends React.PureComponent
                                             await this.cmbPopCity.setData([])
                                         }
                                     }).bind(this)}
-                                  
                                     />
                                 </Item>
                                 <Item>
@@ -534,10 +513,6 @@ export default class employeeAddressCards extends React.PureComponent
                                     value=""
                                     acceptCustomValue={true}
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                    {
-                                           
-                                    }).bind(this)}
                                     pageSize ={50}
                                     notRefresh = {true}
                                     onCustomItemCreating={async(e)=>
@@ -550,15 +525,19 @@ export default class employeeAddressCards extends React.PureComponent
                                         const { component, text } = e;
                                         const currentItems = component.option('items');
                                         
-                                        const newItem = {
+                                        const newItem = 
+                                        {
                                             ZIPNAME: text.trim(),
-                                            ZIPCODE: text.trim(),
+                                            ZIPCODE: text.trim()
                                         };
                                         
                                         const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
-                                        if (itemInDataSource) {
+                                        if (itemInDataSource) 
+                                        {
                                             e.customItem = itemInDataSource;
-                                        } else {    
+                                        } 
+                                        else 
+                                        {    
                                             currentItems.push(newItem);
                                             component.option('items', currentItems);
                                             e.customItem = newItem;
@@ -586,15 +565,17 @@ export default class employeeAddressCards extends React.PureComponent
                                         const { component, text } = e;
                                         const currentItems = component.option('items');
                                         
-                                        const newItem = {
-                                            PLACE: text.trim(),
-                                            PLACE: text.trim(),
+                                        const newItem = 
+                                        {
+                                            PLACE: text.trim()
                                         };
-                                        
                                         const itemInDataSource = currentItems.find((item) => item.text === newItem.text)
-                                        if (itemInDataSource) {
+                                        if (itemInDataSource) 
+                                        {
                                             e.customItem = itemInDataSource;
-                                        } else {    
+                                        } 
+                                        else 
+                                        {    
                                             currentItems.push(newItem);
                                             component.option('items', currentItems);
                                             e.customItem = newItem;
@@ -610,7 +591,6 @@ export default class employeeAddressCards extends React.PureComponent
                                             {
                                                 let tmpEmpty = {...this.employeeObj.employeeAdress.empty};
                                                
-                                                
                                                 tmpEmpty.ADRESS_NO = this.employeeObj.employeeAdress.dt().length
                                                 tmpEmpty.ADRESS = this.txtPopAdress.value
                                                 tmpEmpty.ZIPCODE = this.cmbPopZipcode.value

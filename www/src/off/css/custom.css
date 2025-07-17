@@ -7,7 +7,7 @@
 }
 .main-toolbar
 {
-    background: linear-gradient(90deg, rgba(72,46,112,1) 0%, rgba(72,46,112,1) 100%);
+    background: linear-gradient(90deg, rgba(72,46,112,1) 0%, rgba(72,46,112,1) 0%);
     padding: 5px 10px;
     border-bottom: 1px solid #bdc3c7
 }
@@ -368,4 +368,3 @@
 .dx-tab-selected {
     background-color: rgba(251, 237, 223, 0.8)  !important;
 }
-

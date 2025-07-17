@@ -1,15 +1,17 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import ReactWizard from 'react-bootstrap-wizard';
+
 import moment from 'moment';
 import { posEnddayCls } from '../../../../core/cls/pos.js';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import { NdForm,NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
+
+import { NdForm,NdItem, NdLabel} from '../../../../core/react/devex/form.js';
 import { Validator, RangeRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { docCls} from "../../../../core/cls/doc.js"
@@ -22,12 +24,15 @@ export default class endOfDay extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls()
         this.enddayObj = new posEnddayCls()
+
         this.btnGetDetail = this.btnGetDetail.bind(this)
+
         this.message = ''
         this.Advance = 0
         this.lastPosSaleDt = new datatable();
@@ -114,13 +119,14 @@ export default class endOfDay extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID, " + 
-                    "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID =POS_VW_01.GUID AND TAG = 'PARK DESC' ),'') AS DESCRIPTION FROM POS_VW_01 WHERE STATUS IN (0,2) ORDER BY DOC_DATE "
+                    query : `SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID,  
+                            ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID =POS_VW_01.GUID AND TAG = 'PARK DESC' ),'') AS DESCRIPTION FROM POS_VW_01 WHERE STATUS IN (0,2) ORDER BY DOC_DATE`,
                 },
                 sql : this.core.sql
             }
         }
         await this.grdOpenTike.dataRefresh(tmpSource)
+
         if(this.grdOpenTike.data.datatable.length > 0)
         {
             this.popOpenTike.show()
@@ -130,7 +136,7 @@ export default class endOfDay extends React.PureComponent
     {
         this.lastPosSaleDt.selectCmd = 
         {
-            query :  "SELECT * FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID ",
+            query :  `SELECT * FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID `,
             param : ['POS_GUID:string|50'],
             value : [pGuid]
         }
@@ -140,46 +146,49 @@ export default class endOfDay extends React.PureComponent
         
         this.lastPosPayDt.selectCmd = 
         {
-            query :  "SELECT (AMOUNT-CHANGE) AS LINE_TOTAL,* FROM POS_PAYMENT_VW_01  WHERE POS_GUID = @POS_GUID ",
+            query :  `SELECT (AMOUNT-CHANGE) AS LINE_TOTAL,* FROM POS_PAYMENT_VW_01  WHERE POS_GUID = @POS_GUID `,
             param : ['POS_GUID:string|50'],
             value : [pGuid]
         }
         this.lastPosPayDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@POS = @PPOS, " +
-                    "@TYPE = @PTYPE, " +
-                    "@LINE_NO = @PLINE_NO, " +
-                    "@AMOUNT = @PAMOUNT, " + 
-                    "@CHANGE = @PCHANGE ", 
+            query : `EXEC [dbo].[PRD_POS_PAYMENT_INSERT] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @POS = @PPOS, 
+                    @TYPE = @PTYPE, 
+                    @LINE_NO = @PLINE_NO, 
+                    @AMOUNT = @PAMOUNT, 
+                    @CHANGE = @PCHANGE `,
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
             dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
         } 
+        
         this.lastPosPayDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@POS = @PPOS, " +
-                    "@TYPE = @PTYPE, " +
-                    "@LINE_NO = @PLINE_NO, " +
-                    "@AMOUNT = @PAMOUNT, " + 
-                    "@CHANGE = @PCHANGE ", 
+            query : `EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @POS = @PPOS, 
+                    @TYPE = @PTYPE, 
+                    @LINE_NO = @PLINE_NO, 
+                    @AMOUNT = @PAMOUNT, 
+                    @CHANGE = @PCHANGE `,
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
             dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
-        } 
+        }
+
         this.lastPosPayDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_POS_PAYMENT_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 1, " +
-                    "@GUID = @PGUID, " + 
-                    "@POS_GUID = @PPOS_GUID ", 
+            query : `EXEC [dbo].[PRD_POS_PAYMENT_DELETE] 
+                    @CUSER = @PCUSER, 
+                    @UPDATE = 1, 
+                    @GUID = @PGUID, 
+                    @POS_GUID = @PPOS_GUID `,
             param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
             dataprm : ['CUSER','GUID','POS_GUID']
         }
+
         await this.lastPosPayDt.refresh()
         await this.grdSaleTicketPays.dataRefresh({source:this.lastPosPayDt});
 
@@ -191,16 +200,17 @@ export default class endOfDay extends React.PureComponent
         this.Advance = this.txtAdvance.value
         let tmpQuery = 
         {
-            query : "SELECT   " +
-                    "MAX(DOC_DATE) AS DOC_DATE,PAY_TYPE AS PAY_TYPE,TYPE AS TYPE,  " +
-                    "PAY_TYPE_NAME AS PAY_TYPE_NAME,   " +
-                    "CASE WHEN TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT) * -1 END AS AMOUNT   " +
-                    "FROM POS_PAYMENT_VW_01 WHERE DOC_DATE = @DOC_DATE AND DEVICE = @DEVICE AND STATUS = 1   " +
-                    "GROUP BY PAY_TYPE_NAME,PAY_TYPE,TYPE " ,
+            query : `SELECT  
+                    MAX(DOC_DATE) AS DOC_DATE,PAY_TYPE AS PAY_TYPE,TYPE AS TYPE,  
+                    PAY_TYPE_NAME AS PAY_TYPE_NAME,  
+                    CASE WHEN TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT) * -1 END AS AMOUNT  
+                    FROM POS_PAYMENT_VW_01 WHERE DOC_DATE = @DOC_DATE AND DEVICE = @DEVICE AND STATUS = 1  
+                    GROUP BY PAY_TYPE_NAME,PAY_TYPE,TYPE `,
             param : ['DOC_DATE:date','DEVICE:string|50'],
             value : [this.dtDocDate.value,this.cmbSafe.value]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
+
         if(tmpData.result.recordset.length > 0)
         {
             this.paymentData.clear()
@@ -209,6 +219,7 @@ export default class endOfDay extends React.PureComponent
                 this.paymentData.push(tmpData.result.recordset[i])
             }
         }
+
         if(parseFloat(this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT').toFixed(2)) ==  parseFloat((this.txtCash.value - this.txtAdvance.value).toFixed(2)))
         {
             this.color.cash = "green"
@@ -233,6 +244,7 @@ export default class endOfDay extends React.PureComponent
             this.Cash = tmpCashValue
             this.setState({Cash:tmpCashValue})
         }
+
         if((Number(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')).round(2) + Number(this.paymentData.where({'PAY_TYPE':9}).sum('AMOUNT')).round(2)) ==  Number(this.txtCreditCard.value).round(2))
         {
             this.color.card = "green"
@@ -256,6 +268,7 @@ export default class endOfDay extends React.PureComponent
             this.DebitCard = tmpDebitValue
             this.setState({DebitCard:tmpDebitValue})
         }
+
         if(parseFloat((this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT')).toFixed(2)) ==  this.txtCheck.value)
         {
             this.color.check = "green"
@@ -289,7 +302,9 @@ export default class endOfDay extends React.PureComponent
         else 
         {
             let tmpTikcet = parseFloat((this.txtRestorant.value - parseFloat(this.paymentData.where({'PAY_TYPE':3}).sum('AMOUNT'))).toFixed(2))
+          
             let tmpTicketValue
+           
             if(tmpTikcet > 0)
             {
                 this.color.rest = "blue"
@@ -318,8 +333,8 @@ export default class endOfDay extends React.PureComponent
                         {
                             let tmpQuery = 
                             {
-                                query : "SELECT ROUND((SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)),2) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN " + 
-                                        "WHERE INPUT_CODE = @INPUT_CODE AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT", 
+                                query : `SELECT ROUND((SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)),2) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN 
+                                        WHERE INPUT_CODE = @INPUT_CODE AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT`, 
                                 param : ['INPUT_CODE:string|50'],
                                 value : [this.cmbSafe.value]
                             }
@@ -340,19 +355,21 @@ export default class endOfDay extends React.PureComponent
                     valueExpr="CODE"
                     showClearButton={true}
                     value=""
-                    data={{source:{select:{query : "SELECT NAME,CODE,GUID FROM [dbo].[SAFE_VW_01] WHERE TYPE = 2"},sql:this.core.sql}}}
+                    data={{source:{select:{query :  `SELECT NAME,CODE,GUID FROM [dbo].[SAFE_VW_01] WHERE TYPE = 2`},sql:this.core.sql}}}
                     param={this.param.filter({ELEMENT:'cmbSafe',USERS:this.user.CODE})}
                     access={this.access.filter({ELEMENT:'cmbSafe',USERS:this.user.CODE})}
                     onValueChanged={(async(e)=>
                     {
                         let tmpQuery = 
                         {
-                            query : "SELECT ROUND((SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)),2) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN " + 
-                                    "WHERE INPUT_CODE = @INPUT_CODE  AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT", 
+                            query : `SELECT ROUND((SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)),2) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN 
+                                    WHERE INPUT_CODE = @INPUT_CODE  AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT`, 
                             param : ['INPUT_CODE:string|50'],
                             value : [this.cmbSafe.value]
                         }
+                        
                         let tmpData = await this.core.sql.execute(tmpQuery) 
+
                         if(tmpData.result.recordset.length > 0)
                         {
                             this.txtAdvance.value = tmpData.result.recordset[0].AMOUNT 

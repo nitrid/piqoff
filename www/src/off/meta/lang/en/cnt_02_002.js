@@ -75,6 +75,10 @@ const cnt_02_002 =
         btn02: "Cancel",
         msg: "Are you sure you want to delete the record ?"
     },
+    msgDeleteResult:
+    {
+        msg: "Record deleted successfully !"
+    },
     msgNotCustomer:
     {
         title: "Attention",

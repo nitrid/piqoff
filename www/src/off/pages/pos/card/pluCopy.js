@@ -1,10 +1,12 @@
 import React from 'react';
 import App from '../../../lib/app.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import Form, { Label,Item } from 'devextreme-react/form';
+
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { NdToast } from '../../../../core/react/devex/toast.js';
@@ -15,7 +17,9 @@ export default class pluCopy extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
+
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
@@ -40,7 +44,7 @@ export default class pluCopy extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query :"SELECT * FROM USERS WHERE STATUS = 1",
+                    query : `SELECT CODE, NAME FROM USERS WHERE STATUS = 1 ORDER BY CODE ASC`,
                 },
                 sql : this.core.sql
             }
@@ -75,9 +79,7 @@ export default class pluCopy extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query : "EXEC [dbo].[PRD_PLU_COPY] " +
-                    "@NEW_USER =@PNEW_USER, " +
-                    "@COPY_USER = @PCOPY_USER " ,
+                    query : `EXEC [dbo].[PRD_PLU_COPY] @NEW_USER =@PNEW_USER, @COPY_USER = @PCOPY_USER`,
                     param : ['PNEW_USER:string|50','PCOPY_USER:string|50'],
                     value : [this.grdUserList.getSelectedData()[i].CODE,this.cmbUser.value]
                 }
@@ -136,14 +138,11 @@ export default class pluCopy extends React.PureComponent
                                         showClearButton={true}
                                         pageSize ={50}
                                         notRefresh={true}
-                                        data={{source:{select:{query : "SELECT CODE,NAME FROM USERS WHERE STATUS = 1 ORDER BY CODE ASC"},sql:this.core.sql}}}
-                                        onValueChanged={async (e)=>
-                                        {
-                                           
-                                        }}/>
+                                        data={{source:{select:{query : `SELECT CODE,NAME FROM USERS WHERE STATUS = 1 ORDER BY CODE ASC`},sql:this.core.sql}}}
+                                    />
                                 </Item>
                                 <Item>
-                                    <NdButton text={this.t("btnSave")} type="success" width="100%" onClick={this.btnSave} ></NdButton>
+                                    <NdButton text={this.t("btnSave")} type="success" width="100%" onClick={this.btnSave} />
                                 </Item>
                                 <Item colSpan={2}>
                                     <NdGrid id="grdUserList" parent={this} onSelectionChanged={this.onSelectionChanged} 

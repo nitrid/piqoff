@@ -1,6 +1,8 @@
 import React from 'react';
 import App from '../../../lib/app.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox';
 import NdTextArea from '../../../../core/react/devex/textarea';
 import NdButton from '../../../../core/react/devex/button';
@@ -11,6 +13,7 @@ export default class posDeviceCard extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.tabIndex = props.data.tabkey
         this.deviceData = []
@@ -31,7 +34,7 @@ export default class posDeviceCard extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query : "SELECT CODE,NAME FROM POS_DEVICE_VW_01 ORDER BY CODE ASC"
+            query : `SELECT CODE,NAME FROM POS_DEVICE_VW_01 ORDER BY CODE ASC`
         }
 
         let tmpResult = await this.core.sql.execute(tmpQuery)
@@ -65,8 +68,7 @@ export default class posDeviceCard extends React.PureComponent
             keyExpr={'CODE'}
             value={this.state.deviceSelectValue}
             onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
+            />
         )
     }
     render()

@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import Toolbar from 'devextreme-react/toolbar';
+
 import Form, {Item, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, Paging,Pager,Scrolling,Export,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdButton from '../../../../core/react/devex/button.js';
@@ -14,6 +16,7 @@ export default class employeeList extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
+
         this.groupList = [];
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.loadState = this.loadState.bind(this)
@@ -21,10 +24,7 @@ export default class employeeList extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-
-        }, 1000);
+        setTimeout(async () => { }, 1000)
     }
     loadState()
     {
@@ -46,7 +46,7 @@ export default class employeeList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM EMPLOYEE_VW_01 WHERE (((NAME like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) OR ((CODE like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) )" ,
+                    query : `SELECT * FROM EMPLOYEE_VW_01 WHERE (((NAME like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) OR ((CODE like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) )` ,
                     param : ['EMPLOYEE_NAME:string|250'],
                     value : [this.txtEmployeeName.value]
                 },
@@ -101,7 +101,6 @@ export default class employeeList extends React.PureComponent
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
-                                            
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
@@ -128,13 +127,11 @@ export default class employeeList extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -188,7 +185,6 @@ export default class employeeList extends React.PureComponent
                                 <Column dataField="GENDER" caption={this.t("grdListe.clmGender")} visible={true}/>
                                 <Column dataField="MARIAL_STATUS" caption={this.t("grdListe.clmMarıalStatus")} visible={true}/>
                                 <Column dataField="WAGE" caption={this.t("grdListe.clmWage")} visible={true} dataType={'number'} allowEditing={true} format={{ style: "currency", currency:Number.money.code,precision: 2}}/>
- 
                             </NdGrid>
                         </div>
                     </div>

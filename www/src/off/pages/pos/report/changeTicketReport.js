@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar from 'devextreme-react/toolbar';
 import Form, {Item,  Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
@@ -18,8 +20,6 @@ import { datatable } from "../../../../core/core.js";
 import { posExtraCls} from "../../../../core/cls/pos.js";
 import { NdToast } from '../../../../core/react/devex/toast.js';
 
-
-
 export default class salesOrdList extends React.PureComponent
 {
     constructor(props)
@@ -27,7 +27,7 @@ export default class salesOrdList extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
-        this.groupList = [];
+
         this.btnGetClick = this.btnGetClick.bind(this)
         this.btnGetDetail = this.btnGetDetail.bind(this)
         this.lastPosSaleDt = new datatable();
@@ -36,15 +36,11 @@ export default class salesOrdList extends React.PureComponent
         
         Number.money = this.sysParam.filter({ID:'MoneySymbol',TYPE:0}).getValue()
 
-
         this.tabIndex = props.data.tabkey
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
     async Init()
     {
@@ -58,14 +54,14 @@ export default class salesOrdList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID," + 
-                    "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID =POS_VW_01.GUID AND TAG = 'PARK DESC' ),'') AS DESCRIPTION FROM POS_VW_01 WHERE STATUS IN (0,2) ORDER BY DOC_DATE "
+                    query : `SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID,
+                            ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID =POS_VW_01.GUID AND TAG = 'PARK DESC' ),'') AS DESCRIPTION FROM POS_VW_01 WHERE STATUS IN (0,2) ORDER BY DOC_DATE `,
                 },
                 sql : this.core.sql
             }
         }
         await this.grdOpenTike.dataRefresh(tmpSource)
-        console.log(this.grdOpenTike)
+
         if(this.grdOpenTike.data.datatable.length > 0)
         {
           this.popOpenTike.show()
@@ -77,10 +73,9 @@ export default class salesOrdList extends React.PureComponent
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT POS_GUID,LUSER_NAME, SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,25) AS TICKET_ID,(SELECT TOTAL FROM POS WHERE GUID = POS_GUID) AS TOTAL,CONVERT(NVARCHAR,(SELECT TOP 1 DOC_DATE FROM POS WHERE POS.GUID = POS_EXTRA_VW_01.POS_GUID),104) AS DATE,CONVERT(NVARCHAR,CDATE,108) AS HOUR,DESCRIPTION FROM POS_EXTRA_VW_01 WHERE (SELECT TOP 1 DOC_DATE FROM POS WHERE POS.GUID = POS_EXTRA_VW_01.POS_GUID) >=@FIRST_DATE AND (SELECT TOP 1 DOC_DATE FROM POS WHERE POS.GUID = POS_EXTRA_VW_01.POS_GUID) <= @LAST_DATE AND TAG = @TAG" ,
+                    query : `SELECT POS_GUID,LUSER_NAME, SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,25) AS TICKET_ID,(SELECT TOTAL FROM POS WHERE GUID = POS_GUID) AS TOTAL,CONVERT(NVARCHAR,(SELECT TOP 1 DOC_DATE FROM POS WHERE POS.GUID = POS_EXTRA_VW_01.POS_GUID),104) AS DATE,CONVERT(NVARCHAR,CDATE,108) AS HOUR,DESCRIPTION FROM POS_EXTRA_VW_01 WHERE (SELECT TOP 1 DOC_DATE FROM POS WHERE POS.GUID = POS_EXTRA_VW_01.POS_GUID) >=@FIRST_DATE AND (SELECT TOP 1 DOC_DATE FROM POS WHERE POS.GUID = POS_EXTRA_VW_01.POS_GUID) <= @LAST_DATE AND TAG = @TAG` ,
                     param : ['FIRST_DATE:date','LAST_DATE:date','TAG:string|50'],
                     value : [this.dtFirst.value,this.dtLast.value,this.cmbType.value]
                 },
@@ -95,16 +90,16 @@ export default class salesOrdList extends React.PureComponent
     {
         this.lastPosSaleDt.selectCmd = 
         {
-            query :  "SELECT ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.GUID = POS_SALE.BARCODE),'') AS BARCODE,  " +
-            "ISNULL((SELECT TOP 1 NAME FROM ITEMS WHERE ITEMS.GUID = POS_SALE.ITEM),'') AS ITEM_NAME,  " +
-            "ISNULL((SELECT TOP 1 DATA FROM POS_EXTRA WHERE POS_EXTRA.LINE_GUID = POS_SALE.GUID AND TAG = 'PRICE DESC'),'') AS LAST_DATA,  " +
-            "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.LINE_GUID = POS_SALE.GUID ORDER BY TAG DESC),ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID = POS_SALE.POS AND TAG = 'FULL DELETE' ORDER BY TAG DESC),'')) AS DESCRIPTION,  " +
-            "QUANTITY AS QUANTITY,  " +
-            "CONVERT(NVARCHAR,CDATE,108) AS HOUR, " +
-            "PRICE AS PRICE,  " +
-            "TOTAL AS TOTAL,  " +
-            "DELETED AS DELETED  " +
-            "FROM POS_SALE WHERE POS = @POS_GUID ",
+            query :  `SELECT ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.GUID = POS_SALE.BARCODE),'') AS BARCODE, 
+                    ISNULL((SELECT TOP 1 NAME FROM ITEMS WHERE ITEMS.GUID = POS_SALE.ITEM),'') AS ITEM_NAME, 
+                    ISNULL((SELECT TOP 1 DATA FROM POS_EXTRA WHERE POS_EXTRA.LINE_GUID = POS_SALE.GUID AND TAG = 'PRICE DESC'),'') AS LAST_DATA, 
+                    ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.LINE_GUID = POS_SALE.GUID ORDER BY TAG DESC),ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID = POS_SALE.POS AND TAG = 'FULL DELETE' ORDER BY TAG DESC),'')) AS DESCRIPTION, 
+                    QUANTITY AS QUANTITY, 
+                    CONVERT(NVARCHAR,CDATE,108) AS HOUR, 
+                    PRICE AS PRICE, 
+                    TOTAL AS TOTAL, 
+                    DELETED AS DELETED  
+                    FROM POS_SALE WHERE POS = @POS_GUID `,
             param : ['POS_GUID:string|50'],
             value : [pGuid]
         }
@@ -114,48 +109,54 @@ export default class salesOrdList extends React.PureComponent
         
         this.lastPosPayDt.selectCmd = 
         {
-            query :  "SELECT (AMOUNT-CHANGE) AS LINE_TOTAL,* FROM POS_PAYMENT_VW_01  WHERE POS_GUID = @POS_GUID ",
+            query :  `SELECT (AMOUNT-CHANGE) AS LINE_TOTAL,* FROM POS_PAYMENT_VW_01  WHERE POS_GUID = @POS_GUID `,
             param : ['POS_GUID:string|50'],
             value : [pGuid]
         }
+        
         this.lastPosPayDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@POS = @PPOS, " +
-                    "@TYPE = @PTYPE, " +
-                    "@LINE_NO = @PLINE_NO, " +
-                    "@AMOUNT = @PAMOUNT, " + 
-                    "@CHANGE = @PCHANGE ", 
+            query : `EXEC [dbo].[PRD_POS_PAYMENT_INSERT] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @POS = @PPOS, 
+                    @TYPE = @PTYPE, 
+                    @LINE_NO = @PLINE_NO, 
+                    @AMOUNT = @PAMOUNT, 
+                    @CHANGE = @PCHANGE `, 
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
             dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
         } 
+
         this.lastPosPayDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@POS = @PPOS, " +
-                    "@TYPE = @PTYPE, " +
-                    "@LINE_NO = @PLINE_NO, " +
-                    "@AMOUNT = @PAMOUNT, " + 
-                    "@CHANGE = @PCHANGE ", 
+            query : `EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @POS = @PPOS, 
+                    @TYPE = @PTYPE, 
+                    @LINE_NO = @PLINE_NO, 
+                    @AMOUNT = @PAMOUNT, 
+                    @CHANGE = @PCHANGE `, 
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
             dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
-        } 
+        }
+
         this.lastPosPayDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_POS_PAYMENT_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 1, " +
-                    "@GUID = @PGUID, " + 
-                    "@POS_GUID = @PPOS_GUID ", 
+            query : `EXEC [dbo].[PRD_POS_PAYMENT_DELETE] 
+                    @CUSER = @PCUSER, 
+                    @UPDATE = 1, 
+                    @GUID = @PGUID, 
+                    @POS_GUID = @PPOS_GUID `, 
             param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
             dataprm : ['CUSER','GUID','POS_GUID']
         }
+
         await this.lastPosPayDt.refresh()
+
         await this.grdSaleTicketPays.dataRefresh({source:this.lastPosPayDt});
+
         await this.grdLastTotalPay.dataRefresh({source:this.lastPosPayDt});
 
         this.popDetail.show()
@@ -202,16 +203,12 @@ export default class salesOrdList extends React.PureComponent
                                 {/* dtFirst */}
                                 <Item>
                                     <Label text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
-                                    >
-                                    </NdDatePicker>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"} />
                                 </Item>
                                 {/* dtLast */}
                                 <Item>
                                     <Label text={this.t("dtLast")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"}
-                                    >
-                                    </NdDatePicker>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"} />
                                 </Item>
                                 {/* cmbType */}
                                 <Item>
@@ -233,13 +230,11 @@ export default class salesOrdList extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -256,11 +251,10 @@ export default class salesOrdList extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             onRowDblClick={async(e)=>
-                                {
-                                  this.btnGetDetail(e.data.POS_GUID)
-                                  this.setState({ticketId:e.data.POS_ID})
-
-                                }}
+                            {
+                                this.btnGetDetail(e.data.POS_GUID)
+                                this.setState({ticketId:e.data.POS_ID})
+                            }}
                             >                            
                                 <Scrolling mode="standart" />
                                 <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
@@ -283,15 +277,16 @@ export default class salesOrdList extends React.PureComponent
                         height={'100%'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
-                           <div className="row">
-                         <div className="col-1 pe-0"></div>
+                        <div className="row">
+                        <div className="col-1 pe-0"></div>
                             <div className="col-7 pe-0">
-                            {this.t("TicketId")} : {this.state.ticketId}
+                                {this.t("TicketId")} : {this.state.ticketId}
                             </div>
-                         </div>
-                          <div className="row">
-                          <div className="col-1 pe-0"></div>
-                            <div className="col-7 pe-0">
+                        </div>
+                        <div className="row">
+                        <div className="col-1 pe-0">
+                        </div>
+                        <div className="col-7 pe-0">
                             <NdGrid id="grdSaleTicketItems" parent={this}
                                 selection={{mode:"single"}} 
                                 showBorders={true}
@@ -329,8 +324,8 @@ export default class salesOrdList extends React.PureComponent
                                     <Column dataField="LAST_DATA" caption={this.t("grdSaleTicketItems.clmLastData")} visible={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                     <Column dataField="DESCRIPTION" caption={this.t("grdSaleTicketItems.clmDescription")} visible={true} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                             </NdGrid>
-                            </div>
-                            <div className="col-3 ps-0">
+                        </div>
+                        <div className="col-3 ps-0">
                             <NdGrid id="grdSaleTicketPays" parent={this} 
                                 selection={{mode:"single"}} 
                                 showBorders={true}
@@ -357,11 +352,11 @@ export default class salesOrdList extends React.PureComponent
                                     <Column dataField="PAY_TYPE_NAME" caption={this.t("grdSaleTicketPays.clmPayName")} visible={true} width={155}/> 
                                     <Column dataField="LINE_TOTAL" caption={this.t("grdSaleTicketPays.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150}/> 
                             </NdGrid>
-                            </div>
-                            </div>
+                        </div>
+                        </div>
                     </NdPopUp>
                     <div>
-                    <NdPopUp parent={this} id={"popLastTotal"} 
+                        <NdPopUp parent={this} id={"popLastTotal"} 
                     visible={false}                        
                     showCloseButton={true}
                     showTitle={true}
@@ -655,7 +650,7 @@ export default class salesOrdList extends React.PureComponent
                                              
                             </div>
                         </div>
-                    </NdPopUp>
+                        </NdPopUp>
                         {/* Açık Fişler PopUp */}
                         <div>
                             <NdPopUp parent={this} id={"popOpenTike"} 
@@ -684,8 +679,6 @@ export default class salesOrdList extends React.PureComponent
                                             this.btnGetDetail(e.data.GUID)
                                             this.setState({ticketId:e.data.TICKET_ID})
                                         }}
-                                        onRowRemoved={async (e)=>{
-                                        }}
                                         >
                                             <Scrolling mode="standart" />
                                             <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
@@ -698,10 +691,10 @@ export default class salesOrdList extends React.PureComponent
                                     </NdGrid>
                                 </Item>
                             </Form>
-                        </NdPopUp>
-                    </div> 
+                            </NdPopUp>
+                        </div> 
                     <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>       
-                </div>
+                    </div>
                 </ScrollView>
             </div>
         )

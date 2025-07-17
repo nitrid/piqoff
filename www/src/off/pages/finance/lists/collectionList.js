@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import Form, { Label} from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import { NdForm, NdItem, NdLabel, NdEmptyItem }from '../../../../core/react/devex/form.js';
 import { NdToast } from '../../../../core/react/devex/toast.js';
 import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export,StateStoring} from '../../../../core/react/devex/grid.js';
@@ -22,18 +24,16 @@ export default class collectionList extends React.PureComponent
         super(props)
 
         this.core = App.instance.core;
-        this.groupList = [];
+
         this.btnGetClick = this.btnGetClick.bind(this)
+
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
         this.tabIndex = props.data.tabkey
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
     async Init()
     {
@@ -58,15 +58,34 @@ export default class collectionList extends React.PureComponent
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *, " +
-                            "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,(SELECT TOP 1 PAY_TYPE FROM DOC_CUSTOMER_VW_01 WHERE DOC_GUID = DOC_VW_01.GUID))) AND (LANG = '" + localStorage.getItem('lang') + "')) AS PAY_TYPE_NAME " +
-                            "FROM DOC_VW_01 " +
-                            "WHERE ((DOC_VW_01.OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
-                            "((DOC_VW_01.DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_VW_01.DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            "AND DOC_VW_01.TYPE = 0 AND DOC_VW_01.DOC_TYPE = 200 ",
+                    query : 
+                        `SELECT *, 
+                        (
+                            SELECT TOP 1 VALUE 
+                            FROM DB_LANGUAGE 
+                            WHERE TAG = (
+                                SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](
+                                    TYPE,
+                                    DOC_TYPE,
+                                    REBATE,
+                                    (
+                                        SELECT TOP 1 PAY_TYPE 
+                                        FROM DOC_CUSTOMER_VW_01 
+                                        WHERE DOC_GUID = DOC_VW_01.GUID
+                                    )
+                                )
+                            ) 
+                            AND (LANG = '${localStorage.getItem('lang')}')
+                        ) AS PAY_TYPE_NAME 
+                        FROM DOC_VW_01 
+                        WHERE 
+                            ((DOC_VW_01.OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) 
+                            AND ((DOC_VW_01.DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) 
+                            AND ((DOC_VW_01.DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  
+                            AND DOC_VW_01.TYPE = 0 
+                            AND DOC_VW_01.DOC_TYPE = 200`,
                     param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },
@@ -110,10 +129,7 @@ export default class collectionList extends React.PureComponent
                                 } />
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={async()=>
-                                    {
-                                        this.popDesign.show()
-                                    }}/>
+                                    onClick={async()=> { this.popDesign.show() }}/>
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -149,14 +165,12 @@ export default class collectionList extends React.PureComponent
                                 {/* dtFirst */}
                                 <NdItem>
                                     <NdLabel text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}>
-                                    </NdDatePicker>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"} />  
                                 </NdItem>
                                 {/* dtLast */}
                                 <NdItem>
                                     <NdLabel text={this.t("dtLast")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"}>
-                                    </NdDatePicker>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"} />  
                                 </NdItem>
                                 <NdItem>
                                 <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
@@ -217,29 +231,18 @@ export default class collectionList extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql
                                     }
                                 }}
-                                button=
-                                {
-                                    {
-                                        id:'01',
-                                        icon:'more',
-                                        onClick:()=>
-                                        {
-                                            console.log(1111)
-                                        }
-                                    }
-                                }
+                                
                                 >
                                     <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                     <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                     <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                                    
                                 </NdPopGrid>
                                 </NdItem> 
                             </NdForm>
@@ -249,10 +252,8 @@ export default class collectionList extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
@@ -307,7 +308,7 @@ export default class collectionList extends React.PureComponent
                                     maxLength={32}
                                     param={this.param.filter({ELEMENT:'txtTotal',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtTotal',USERS:this.user.CODE})}
-                                    ></NdTextBox>
+                                    />
                                 </NdItem>
                             </NdForm>
                         </div>
@@ -332,7 +333,7 @@ export default class collectionList extends React.PureComponent
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '1200'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '1200'`},sql:this.core.sql}}}
                                     >
                                         <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />
@@ -416,9 +417,7 @@ export default class collectionList extends React.PureComponent
                                                                 {
                                                                     mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                                 } 
-                                                                // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                                // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                                                            }
+                                                             }
                                                         });
                                                     }
                                                     this.popDesign.hide();  
@@ -427,10 +426,7 @@ export default class collectionList extends React.PureComponent
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popDesign.hide();  
-                                            }}/>
+                                            onClick={()=> { this.popDesign.hide() }}/>
                                         </div>
                                     </div>
                                 </Item>

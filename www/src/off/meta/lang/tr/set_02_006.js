@@ -13,6 +13,10 @@ const set_02_006 =
         msgSuccess: "Gönderme işleminiz başarılı !",
         msgFailed: "Gönderme işleminiz başarısız !"
     },
+    msgDeleteResult:
+    {
+        msgSuccess: "Kayıt işleminiz başarılı !",
+    }
 }
 
 export default set_02_006

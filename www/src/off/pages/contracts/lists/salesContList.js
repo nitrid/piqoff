@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, ColumnChooser,Paging,Pager,Scrolling,Export,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdButton from '../../../../core/react/devex/button.js';
@@ -16,9 +18,12 @@ export default class salesContList extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core
+
         this.tabIndex = props.data.tabkey
         this.groupList = [];
+        
         this.btnGetClick = this.btnGetClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
@@ -26,10 +31,7 @@ export default class salesContList extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () =>  { this.Init() }, 1000);
     }
     async Init()
     {
@@ -56,9 +58,9 @@ export default class salesContList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT CDATE_FORMAT,LUSER_NAME,ITEM_CODE,ITEM_NAME,CUSTOMER_NAME,PRICE,QUANTITY,START_DATE FROM ITEM_PRICE_VW_01 " +
-                            "WHERE ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND "+ 
-                            " TYPE = 0 AND CONTRACT_GUID <> '00000000-0000-0000-0000-000000000000' ORDER BY CUSTOMER_CODE,ITEM_CODE",
+                    query : `SELECT CDATE_FORMAT,LUSER_NAME,ITEM_CODE,ITEM_NAME,CUSTOMER_NAME,PRICE,QUANTITY,START_DATE 
+                            FROM ITEM_PRICE_VW_01 WHERE ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND 
+                            TYPE = 0 AND CONTRACT_GUID <> '00000000-0000-0000-0000-000000000000' ORDER BY CUSTOMER_CODE,ITEM_CODE`,
                     param : ['CUSTOMER_CODE:string|50'],
                     value : [this.txtCustomerCode.CODE]
                 },
@@ -109,7 +111,7 @@ export default class salesContList extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -187,29 +189,19 @@ export default class salesContList extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] 
+                                                     FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE 
+                                                     UPPER(@VAL)) AND STATUS = 1`,
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql
                                     }
                                 }}
-                                button=
-                                {
-                                    {
-                                        id:'01',
-                                        icon:'more',
-                                        onClick:()=>
-                                        {
-                                            console.log(1111)
-                                        }
-                                    }
-                                }
                                 >
                                     <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                     <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                     <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                                    
                                 </NdPopGrid>
                                 </NdItem> 
                             </NdForm>
@@ -219,10 +211,8 @@ export default class salesContList extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
@@ -262,7 +252,6 @@ export default class salesContList extends React.PureComponent
                                     {
                                         return e.text
                                     }
-                                    
                                     return
                                 }}/>  
                                 <Column dataField="FINISH_DATE" caption={this.t("grdSlsContList.clmFinishDate")} visible={false} 
@@ -273,7 +262,6 @@ export default class salesContList extends React.PureComponent
                                     {
                                         return e.text
                                     }
-                                    
                                     return
                                 }}/>  
                                 <Column dataField="DEPOT_NAME" caption={this.t("grdSlsContList.clmDepotName")} visible={false} />              

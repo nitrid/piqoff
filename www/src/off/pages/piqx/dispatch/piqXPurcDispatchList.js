@@ -1,9 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
-import NdGrid,{Column,Paging,Pager,Export,Button,Scrolling,Editing} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Button,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -23,10 +24,7 @@ export default class piqXPurcFactList extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
     async Init()
     {
@@ -35,7 +33,7 @@ export default class piqXPurcFactList extends React.PureComponent
 
         let tmpCompQuery = 
         {
-            query : "SELECT TOP 1 TAX_NO FROM COMPANY"
+            query : `SELECT TOP 1 TAX_NO FROM COMPANY`
         }
 
         let tmpCompData = await this.core.sql.execute(tmpCompQuery) 

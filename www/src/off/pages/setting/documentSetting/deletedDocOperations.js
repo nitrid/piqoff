@@ -1,28 +1,16 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js';
-import moment from 'moment';
+import { docCls } from '../../../../core/cls/doc.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import ContextMenu from 'devextreme-react/context-menu';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
+import Form, { Label,Item} from 'devextreme-react/form';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,Pager,KeyboardNavigation} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
-import tr from '../../../meta/lang/devexpress/tr.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class rebateOperation extends React.PureComponent
 {
@@ -34,8 +22,8 @@ export default class rebateOperation extends React.PureComponent
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
        
-        this._btnGetClick = this._btnGetClick.bind(this)
-        this._btnSave = this._btnSave.bind(this)
+        this.btnGetClick = this.btnGetClick.bind(this)
+        this.btnSave = this.btnSave.bind(this)
         this.tabIndex = props.data.tabkey
     }
     componentDidMount()
@@ -49,7 +37,7 @@ export default class rebateOperation extends React.PureComponent
     {
         this.docObj.clearAll()
     }
-    async _btnGetClick()
+    async btnGetClick()
     {
         let tmpType
         let tmpDocType
@@ -154,11 +142,11 @@ export default class rebateOperation extends React.PureComponent
         await this.grdDeleteList.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
     }
-    async _btnSave()
+    async btnSave()
     {
         let tmpConfObj =
         {
-            id:'mgsUnlock',showTitle:true,title:this.t("mgsUnlock.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'mgsUnlock',showTitle:true,title:this.t("mgsUnlock.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("mgsUnlock.btn01"),location:'before'},{id:"btn02",caption:this.t("mgsUnlock.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("mgsUnlock.msg")}</div>)
         }
@@ -173,20 +161,15 @@ export default class rebateOperation extends React.PureComponent
                 value : [this.core.auth.data.CODE,this.grdDeleteList.getSelectedData()[0].GUID]
             }
             await this.core.sql.execute(tmpQuery) 
-            let tmpConfObj =
-            {
-                id:'msgSuccess',showTitle:true,title:this.t("msgSuccess.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgSuccess.btn01"),location:'before'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSuccess.msg")}</div>)
-            }
-            this._btnGetClick()
+            this.toast.show({message:this.t("msgSuccess.msg"),type:"success"});
+            this.btnGetClick()
         }
     }
     render()
     {
-        
         return(
             <div>
+                <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 <ScrollView>
                 <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -203,7 +186,7 @@ export default class rebateOperation extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -231,14 +214,11 @@ export default class rebateOperation extends React.PureComponent
                                     value={0}
                                     searchEnabled={true}
                                     notRefresh = {true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                     data={{source:[{ID:0,VALUE:this.t("cmbTypeData.purchaseDispatch")},{ID:1,VALUE:this.t("cmbTypeData.salesDispatch")},{ID:2,VALUE:this.t("cmbTypeData.rebateDispatch")}
-                                                    ,{ID:3,VALUE:this.t("cmbTypeData.branchSaleDispatch")},{ID:4,VALUE:this.t("cmbTypeData.purchaseInvoice")}
-                                                    ,{ID:5,VALUE:this.t("cmbTypeData.salesInvoice")},{ID:6,VALUE:this.t("cmbTypeData.priceDifferenceInvoice")},{ID:7,VALUE:this.t("cmbTypeData.rebateInvoice")}
-                                                    ,{ID:8,VALUE:this.t("cmbTypeData.branchSaleInvoice")},{ID:9,VALUE:this.t("cmbTypeData.purchaseOrder")},{ID:10,VALUE:this.t("cmbTypeData.salesOrder")}
-                                                    ,{ID:11,VALUE:this.t("cmbTypeData.purchaseOffer")},{ID:12,VALUE:this.t("cmbTypeData.salesOffer")}]}}
+                                    ,{ID:3,VALUE:this.t("cmbTypeData.branchSaleDispatch")},{ID:4,VALUE:this.t("cmbTypeData.purchaseInvoice")}
+                                    ,{ID:5,VALUE:this.t("cmbTypeData.salesInvoice")},{ID:6,VALUE:this.t("cmbTypeData.priceDifferenceInvoice")},{ID:7,VALUE:this.t("cmbTypeData.rebateInvoice")}
+                                    ,{ID:8,VALUE:this.t("cmbTypeData.branchSaleInvoice")},{ID:9,VALUE:this.t("cmbTypeData.purchaseOrder")},{ID:10,VALUE:this.t("cmbTypeData.salesOrder")}
+                                    ,{ID:11,VALUE:this.t("cmbTypeData.purchaseOffer")},{ID:12,VALUE:this.t("cmbTypeData.salesOffer")}]}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
@@ -249,7 +229,7 @@ export default class rebateOperation extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                         <div className="col-3">
                             
@@ -258,7 +238,7 @@ export default class rebateOperation extends React.PureComponent
                             
                         </div>
                         <div className="col-3">
-                           <NdButton text={this.t("btnUnlock")} type="default" width="100%" onClick={()=>{this._btnSave()}}></NdButton>
+                           <NdButton text={this.t("btnUnlock")} type="default" width="100%" onClick={()=>{this.btnSave()}}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -275,7 +255,6 @@ export default class rebateOperation extends React.PureComponent
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-
                                 <Column dataField="REF" caption={this.t("grdDeleteList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdDeleteList.clmRefNo")} visible={true} width={300}/> 
                                 <Column dataField="CUSTOMER" caption={this.t("grdDeleteList.clmCustomer")} visible={true}/> 

@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { posDeviceCls} from '../../../../core/cls/pos';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import { Item } from 'devextreme-react/form';
+
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -11,14 +13,16 @@ import { Column} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { NdToast } from '../../../../core/react/devex/toast.js';
-import { NdForm,NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
+import { NdForm,NdItem, NdLabel } from '../../../../core/react/devex/form.js';
 export default class posDeviceCard extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+
         this.deviceObj = new posDeviceCls();
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
@@ -97,7 +101,7 @@ export default class posDeviceCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT * FROM [POS_DEVICE_VW_01] WHERE CODE = @CODE",
+                    query : `SELECT * FROM [POS_DEVICE_VW_01] WHERE CODE = @CODE`,
                     param : ['CODE:string|50'],
                     value : [pCode]
                 }
@@ -159,10 +163,7 @@ export default class posDeviceCard extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmDevice"  + this.tabIndex}
@@ -180,18 +181,17 @@ export default class posDeviceCard extends React.PureComponent
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
-                                                
                                                 if((await this.deviceObj.save()) == 0)
                                                 {                                                    
                                                     this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
                                                 }
                                                 else
                                                 {
+                                                    let tmpConfObj1 =
+                                                    {
+                                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                    }
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                     await dialog(tmpConfObj1);
                                                 }
@@ -230,15 +230,10 @@ export default class posDeviceCard extends React.PureComponent
                                             this.toast.show({message:this.t("msgDeleteResult.msgSuccess"),type:"success"})
                                             this.init(); 
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
-                                        
-                                    }}/>
+                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"/>
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -328,17 +323,7 @@ export default class posDeviceCard extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} //
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM POS_DEVICE_VW_01"},sql:this.core.sql}}}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                            }
-                                        }
-                                    }
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM POS_DEVICE_VW_01`},sql:this.core.sql}}}
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={300} />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
@@ -349,69 +334,43 @@ export default class posDeviceCard extends React.PureComponent
                                     <NdLabel text={this.t("txtName")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* txtLcdPort */}
                                 <NdItem>
                                     <NdLabel text={this.t("txtLcdPort")} alignment="right" />
                                     <NdTextBox id="txtLcdPort" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"LCD_PORT"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtLcdPort',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtLcdPort',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* txtScalePort */}
                                 <NdItem>
                                     <NdLabel text={this.t("txtScalePort")} alignment="right" />
                                     <NdTextBox id="txtScalePort" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"SCALE_PORT"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* txtPayCardPort */}
                                 <NdItem>
                                     <NdLabel text={this.t("txtPayCardPort")} alignment="right" />
                                     <NdTextBox id="txtPayCardPort" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"PAY_CARD_PORT"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* txtPrintDesing */}
                                 <NdItem>
                                     <NdLabel text={this.t("txtPrintDesing")} alignment="right" />
                                     <NdTextBox id="txtPrintDesing" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"PRINT_DESING"}}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* txtMacId */}
                                 <NdItem>
                                     <NdLabel text={this.t("txtMacId")} alignment="right" />
-                                    <NdTextBox id="txtMacId" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"MACID"}}>
-                                    </NdTextBox>
+                                    <NdTextBox id="txtMacId" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"MACID"}}/>
                                 </NdItem>
                                 {/* cmbDepot */}
                                 <NdItem>
@@ -425,7 +384,7 @@ export default class posDeviceCard extends React.PureComponent
                                     showClearButton={true}
                                     pageSize ={50}
                                     notRefresh={true}
-                                    data={{source:{select:{query : "SELECT '00000000-0000-0000-0000-000000000000' AS GUID, 'GENERAL' AS NAME UNION ALL SELECT GUID,NAME FROM DEPOT_VW_01 WHERE  STATUS = 1 ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT '00000000-0000-0000-0000-000000000000' AS GUID, 'GENERAL' AS NAME UNION ALL SELECT GUID,NAME FROM DEPOT_VW_01 WHERE  STATUS = 1 ORDER BY NAME ASC`},sql:this.core.sql}}}
                                     />
                                 </NdItem>
                                 {/* txtPrinterPort */}
@@ -433,15 +392,13 @@ export default class posDeviceCard extends React.PureComponent
                                     <NdLabel text={this.t("txtPrinterPort")} alignment="right" />
                                     <NdTextBox id="txtPrinterPort" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"PRINTER_PORT"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 <NdItem>
                                     <NdLabel text={this.t("txtScannerPort")} alignment="right" />
                                     <NdTextBox id="txtScannerPort" parent={this} simple={true} dt={{data:this.deviceObj.dt('POS_DEVICE'),field:"SCANNER_PORT"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                             </NdForm>
                         </div>

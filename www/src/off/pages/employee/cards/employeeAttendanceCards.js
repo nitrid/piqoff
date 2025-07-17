@@ -1,11 +1,13 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { employeesCls} from '../../../../core/cls/employees.js';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
+
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -22,13 +24,13 @@ export default class employeeAttendanceCards extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.employeeObj = new employeesCls();
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
-        
-
         this.onItemRendered  = this.onItemRendered .bind(this)
         
     }
@@ -150,14 +152,13 @@ export default class employeeAttendanceCards extends React.PureComponent
             if(pCode !== '')
             {
                 let tmpQuery = {
-                    query :"SELECT COUNTRY_CODE,PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE ",
+                    query : `SELECT COUNTRY_CODE,PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE`,
                     param : ['ZIPCODE:string|50'],
                     value : [pCode]
                 }
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    
                     this.cmbPopCity.value = tmpData.result.recordset[0].PLACE
                     this.cmbPopCountry.value = tmpData.result.recordset[0].COUNTRY_CODE
                     resolve(1)
@@ -172,10 +173,6 @@ export default class employeeAttendanceCards extends React.PureComponent
                 resolve(0) //PARAMETRE BOŞ
             }
         });
-    }
-    async _onEmployeeRendered(e)
-    {
-        await this.core.util.waitUntil(10)
     }
     async onItemRendered (e)
     {
@@ -205,10 +202,7 @@ export default class employeeAttendanceCards extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmEmployeeAttendance"  + this.tabIndex}
@@ -262,7 +256,6 @@ export default class employeeAttendanceCards extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
-                                        
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -282,11 +275,7 @@ export default class employeeAttendanceCards extends React.PureComponent
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
-                                        
-                                    }}/>
+                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"/>
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -345,10 +334,7 @@ export default class employeeAttendanceCards extends React.PureComponent
                                             {
                                                 id:'02',
                                                 icon:'arrowdown',
-                                                onClick:()=>
-                                                {
-                                                    this.txtCode.value = Math.floor(Date.now() / 1000)
-                                                }
+                                                onClick:()=> { this.txtCode.value = Math.floor(Date.now() / 1000)}
                                             }
                                         ]
                                     }
@@ -395,25 +381,14 @@ export default class employeeAttendanceCards extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT * FROM EMPLOYEE_VW_01 WHERE (((NAME like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) OR ((CODE like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) )",
+                                                query : `SELECT CODE, INSURANCE_NO, NAME, LAST_NAME FROM EMPLOYEE_VW_01 WHERE (((NAME like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) OR ((CODE like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) )`,
                                                 param : ['EMPLOYEE_NAME:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
-                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
+                                        <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="INSURANCE_NO" caption={this.t("pg_txtCode.clmInsuranceNo")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="LAST_NAME" caption={this.t("pg_txtCode.clmLastName")} width={300} defaultSortOrder="asc" />
@@ -431,11 +406,7 @@ export default class employeeAttendanceCards extends React.PureComponent
                                                 <Toolbar>
                                                     <Item location="after">
                                                         <Button icon="add"
-                                                        onClick={async ()=>
-                                                        {
-                                                           
-                                                            this.popAttendance.show();
-                                                        }}/>
+                                                        onClick={()=> { this.popAttendance.show() }}/>
                                                     </Item>
                                                 </Toolbar>
                                             </div>
@@ -466,8 +437,7 @@ export default class employeeAttendanceCards extends React.PureComponent
                                 </TabPanel>
                             </div>
                         </div>  
-                       
-                        </div> 
+                    </div> 
                      {/* PERSONEL BİLGİ POPUP */}
                      <div>
                         <NdPopUp parent={this} id={"popAttendance"} 
@@ -513,8 +483,7 @@ export default class employeeAttendanceCards extends React.PureComponent
                                     ]}
                                     displayExpr="text"  
                                     valueExpr="id"      
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                />
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popAttendance.cmbPopAbsent_Reason")} alignment="right" />
@@ -529,7 +498,6 @@ export default class employeeAttendanceCards extends React.PureComponent
                                             {
                                                 let tmpEmpty = {...this.employeeObj.employeeAttendance.empty};
                                                
-                                                
                                                 tmpEmpty.ATTENDANCE_DATE = this.txtPopAttendance_Date.value
                                                 tmpEmpty.CHECK_IN_TIME = this.cmbPopCheck_In_Tıme.value
                                                 tmpEmpty.CHECK_OUT_TIME = this.cmbPopCheck_Out_Tıme.value

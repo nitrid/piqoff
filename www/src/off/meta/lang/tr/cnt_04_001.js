@@ -1,4 +1,4 @@
-// "Çoklu Satış Anlaşması"
+        // "Çoklu Satış Anlaşması"
 const cnt_04_001 =
 {
     txtCode : 'Kodu',
@@ -52,6 +52,10 @@ const cnt_04_001 =
         btn01: "Tamam",
         msgSuccess: "Kayıt işleminiz başarılı !",
         msgFailed: "Kayıt işleminiz başarısız !"
+    },
+    msgDeleteResult:
+    {
+        msg: "Kayıt silme işleminiz başarılı !"
     },
 }
 

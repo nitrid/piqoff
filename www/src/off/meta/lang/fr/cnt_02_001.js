@@ -58,6 +58,10 @@ const cnt_02_001 =
         msgSuccess: "Enregistré avec succès !",
         msgFailed: "Enregistrement échoué !"
     },
+    msgDeleteResult:
+    {
+        msg: "Enregistrement supprimé avec succès !"
+    },
     msgSaveValid:
     {
         title: "Attention",

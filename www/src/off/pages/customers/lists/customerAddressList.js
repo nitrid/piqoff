@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
-import { NdForm, NdItem, NdLabel }from '../../../../core/react/devex/form.js';
+
+import { NdForm, NdItem, NdLabel, NdEmptyItem }from '../../../../core/react/devex/form.js';
 import NdGrid,{Column, ColumnChooser, Paging,Pager,Scrolling,Export,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
@@ -14,7 +16,9 @@ export default class barcodeList extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
+
         this.groupList = [];
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.loadState = this.loadState.bind(this)
@@ -23,9 +27,7 @@ export default class barcodeList extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
+        setTimeout(async () => {}, 1000)
     }
     loadState()
     {
@@ -48,8 +50,7 @@ export default class barcodeList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID, CODE, TITLE, TYPE_NAME, GENUS_NAME, CUSTOMER_TYPE, GENUS, ADRESS,CITY, COUNTRY, ZIPCODE, STATUS  FROM CUSTOMER_VW_02 WHERE ((TITLE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) AND " +
-                            " ((GENUS = @GENUS) OR (@GENUS = -1))  ",
+                    query : `SELECT GUID, CODE, TITLE, TYPE_NAME, GENUS_NAME, CUSTOMER_TYPE, GENUS, ADRESS,CITY, COUNTRY, ZIPCODE, STATUS  FROM CUSTOMER_VW_02 WHERE ((TITLE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) AND ((GENUS = @GENUS) OR (@GENUS = -1))`,
                     param : ['CUSTOMER_NAME:string|250','GENUS:string|25'],
                     value : [this.txtCustomerName.value,this.cmbGenus.value]
                 },
@@ -133,7 +134,7 @@ export default class barcodeList extends React.PureComponent
                                     data={{source:[{ID:-1,VALUE:this.t("cmbGenusData.allGenus")},{ID:0,VALUE:this.t("cmbGenusData.Customer")},{ID:1,VALUE:this.t("cmbGenusData.supplier")},{ID:2,VALUE:this.t("cmbGenusData.both")}]}}
                                     />
                                 </NdItem>       
-                                <NdItem> </NdItem>
+                                <NdEmptyItem />
                             </NdForm>
                         </div>
                     </div>
@@ -141,13 +142,11 @@ export default class barcodeList extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

@@ -32,6 +32,10 @@ const cnt_01_001 =
         clmUser : "User",
         clmDepotName : "Depot",
     },
+    msgDeleteResult:
+    {
+        msg: "Record deleted successfully !"
+    },
 }
 
 export default cnt_01_001

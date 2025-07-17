@@ -1,21 +1,16 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { additionalTax,interfelCls } from '../../../../core/cls/additionalTax.js';
-import moment from 'moment';
 
 
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import Form, { EmptyItem, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-import { Button } from 'devextreme-react/button';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
-import tr from '../../../meta/lang/devexpress/tr.js';
-
+import { NdToast } from '../../../../core/react/devex/toast.js';
 export default class interfel extends React.PureComponent
 {
     constructor(props)
@@ -134,8 +129,7 @@ export default class interfel extends React.PureComponent
                                             
                                             if((await this.addTaxObj.save()) == 0)
                                             {                       
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                await dialog(tmpConfObj1);
+                                                this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"});
                                                 this.btnSave.setState({disabled:true});
                                             }
                                             else
@@ -199,6 +193,7 @@ export default class interfel extends React.PureComponent
                                {/* TaxSugar PopUp */}
                         </div>
                     </div>
+                    <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )

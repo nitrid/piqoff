@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column,ColumnChooser,Paging,Pager,Scrolling,Export,Summary,TotalItem,StateStoring} from '../../../../core/react/devex/grid.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -14,16 +16,16 @@ export default class installmentReport extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
+
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
         this.btnGetirClick = this.btnGetirClick.bind(this)
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
     async btnGetirClick()
     {
@@ -34,7 +36,7 @@ export default class installmentReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM [DOC_INSTALLMENT_VW_01] WHERE INSTALLMENT_DATE >= @FIRST_DATE AND INSTALLMENT_DATE <= @LAST_DATE ORDER BY INSTALLMENT_DATE" ,
+                    query : `SELECT * FROM [DOC_INSTALLMENT_VW_01] WHERE INSTALLMENT_DATE >= @FIRST_DATE AND INSTALLMENT_DATE <= @LAST_DATE ORDER BY INSTALLMENT_DATE` ,
                     param : ['FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
@@ -50,7 +52,7 @@ export default class installmentReport extends React.PureComponent
     }
     saveState(e)
     {
-        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id, APP:"OFF"})
         tmpSave.setValue(e)
         tmpSave.save()
     }
@@ -108,7 +110,7 @@ export default class installmentReport extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -141,7 +143,6 @@ export default class installmentReport extends React.PureComponent
                                     {
                                         return e.text
                                     }
-                                    
                                     return
                                 }}/>
                                 <Column dataField="INSTALLMENT_NO" caption={this.t("grdListe.clmInstallmentNo")} width={90} visible={true}/> 

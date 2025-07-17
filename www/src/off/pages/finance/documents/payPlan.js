@@ -3,9 +3,11 @@ import App from '../../../lib/app.js';
 import { docCls } from '../../../../core/cls/doc.js';
 import { payPlanCls } from '../../../../core/cls/payPlan.js';
 import moment from 'moment';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import  { Item } from 'devextreme-react/form';
+
 import NdTextBox, { Validator, RequiredRule, RangeRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
@@ -25,9 +27,11 @@ export default class payPlan extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
+
         this.docObj = new docCls();
         this.payPlanObj = new payPlanCls();
 
@@ -198,7 +202,7 @@ export default class payPlan extends React.PureComponent
         
         this.grdInstallment.dataRefresh({source:this.payPlanObj.dt()})  
     }
-    async _btnGetClick()
+    async btnGetClick()
     {
         let tmpSource =
         {
@@ -207,12 +211,14 @@ export default class payPlan extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query: "SELECT * FROM DOC_CUSTOMER_VW_01 " +
-                    "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                    "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                    "AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 " +
-                    "AND INSTALLMENT_STATUS = 0 " +
-                    "ORDER BY DOC_DATE DESC,REF_NO DESC",
+                    query: 
+                        `SELECT * FROM DOC_CUSTOMER_VW_01 
+                        WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) 
+                        AND ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) 
+                        AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  
+                        AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 
+                        AND INSTALLMENT_STATUS = 0 
+                        ORDER BY DOC_DATE DESC,REF_NO DESC`,
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.value,this.dtFirst.startDate,this.dtFirst.endDate]
                 },
@@ -256,11 +262,6 @@ export default class payPlan extends React.PureComponent
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
                                                 
                                                 if((await this.payPlanObj.save()) == 0 && this.txtRefno.value != '')
                                                 {
@@ -271,6 +272,11 @@ export default class payPlan extends React.PureComponent
                                                 }
                                                 else
                                                 {
+                                                    let tmpConfObj1 =
+                                                    {
+                                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                    }
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                     await dialog(tmpConfObj1);
                                                 }
@@ -309,7 +315,6 @@ export default class payPlan extends React.PureComponent
                                             this.toast.show({type:"success",message:this.t("msgDelete.msgSuccess")})
                                             this.init()
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -366,7 +371,7 @@ export default class payPlan extends React.PureComponent
                                 <NdItem>
                                     <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
-                                        <div className="col-4 pe-0">
+                                        <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.payPlanObj.dt(),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
@@ -375,7 +380,7 @@ export default class payPlan extends React.PureComponent
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC_INSTALLMENT_VW_01  WHERE REF = @REF GROUP BY REF ",
+                                                    query : `SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC_INSTALLMENT_VW_01  WHERE REF = @REF GROUP BY REF `,
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
@@ -388,18 +393,15 @@ export default class payPlan extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmPayPlan"  + this.tabIndex}>
+                                                <Validator validationGroup={"frmPayPlan"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
                                         </div>
-                                        <div className="col-5 ps-0">
+                                        <div className="col-6 ps-0">
                                             <NdTextBox id="txtRefno" mode="number" parent={this} simple={true} dt={{data:this.payPlanObj.dt(),field:"REF_NO"}}
                                             readOnly={false}
-                                            onValueChanged={(async(e)=>
-                                            {
-                                                await this.checkRow()
-                                            }).bind(this)}
+                                            onValueChanged={async(e)=> { await this.checkRow() }}
                                             button=
                                             {
                                                 [
@@ -441,7 +443,7 @@ export default class payPlan extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmPayPlan"  + this.tabIndex}>
+                                                <Validator validationGroup={"frmPayPlan"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -456,21 +458,7 @@ export default class payPlan extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : "SELECT DOC_GUID,FAC_GUID,REF,REF_NO,MIN(INSTALLMENT_DATE) AS DATE,TOTAL,MAX(INSTALLMENT_NO) AS PAY_PLAN,CUSTOMER_NAME,CUSTOMER_CODE FROM DOC_INSTALLMENT_VW_01 GROUP BY DOC_GUID,FAC_GUID,REF,REF_NO,TOTAL,CUSTOMER_NAME,CUSTOMER_CODE"},sql:this.core.sql}}}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                
-                                                }
-                                            }
-                                        ]
-                                        
-                                    }
+                                    data={{source:{select:{query : `SELECT DOC_GUID,FAC_GUID,REF,REF_NO,MIN(INSTALLMENT_DATE) AS DATE,TOTAL,MAX(INSTALLMENT_NO) AS PAY_PLAN,CUSTOMER_NAME,CUSTOMER_CODE FROM DOC_INSTALLMENT_VW_01 GROUP BY DOC_GUID,FAC_GUID,REF,REF_NO,TOTAL,CUSTOMER_NAME,CUSTOMER_CODE`},sql:this.core.sql}}}
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={120} />
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={120} />
@@ -486,10 +474,7 @@ export default class payPlan extends React.PureComponent
                                     <NdLabel text={this.t("dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.payPlanObj.dt(),field:"DOC_DATE"}}
-                                    onValueChanged={(async()=>
-                                    {
-                                        await this.checkRow()
-                                    }).bind(this)}
+                                    onValueChanged={async()=> { await this.checkRow() }}
                                     >
                                         <Validator validationGroup={"frmPayPlan" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
@@ -564,7 +549,7 @@ export default class payPlan extends React.PureComponent
                                     data = {{
                                         source:{
                                             select:{
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -623,7 +608,6 @@ export default class payPlan extends React.PureComponent
                                     }}
                                     />
                                 </NdItem>
-                                       
                             </NdForm>
                         </div>
                     </div>
@@ -637,10 +621,7 @@ export default class payPlan extends React.PureComponent
                                 height={'500'} 
                                 width={'100%'}
                                 dbApply={false}
-                                onRowInserted={async(e)=>
-                                {
-                                    this.grdInstallment.dataRefresh()
-                                }}
+                                onRowInserted={async(e)=> { this.grdInstallment.dataRefresh() }}
                                 >
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
@@ -654,16 +635,16 @@ export default class payPlan extends React.PureComponent
                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdInstallment.clmCustomerName")} width={200} allowEditing={false}/>
                                 <Column dataField="INSTALLMENT_NO" caption={this.t("grdInstallment.clmInstallmentNo")} width={100} allowEditing={false} sortOrder={"asc"}/>
                                 <Column dataField="INSTALLMENT_DATE" caption={this.t("grdInstallment.clmInstallmentDate")} width={200} allowEditing={true} dataType="datetime" format={"dd/MM/yyyy"}
-                                    editorOptions={{value:null}}
-                                    cellRender={(e) => 
+                                editorOptions={{value:null}}
+                                cellRender={(e) => 
+                                {
+                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
                                     {
-                                        if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
-                                        {
-                                            return e.text
-                                        }
-                                        
-                                        return
-                                    }}/>
+                                        return e.text
+                                    }
+                                    
+                                    return
+                                }}/>
                                 <Column dataField="AMOUNT" caption={this.t("grdInstallment.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
                                 <Column dataField="VAT" caption={this.t("grdInstallment.clmVat")} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                 <Column dataField="TOTAL" caption={this.t("grdInstallment.clmTotal")} format={{ style: "currency", currency: Number.money.code,precision: 2}}  allowEditing={false}/>
@@ -681,10 +662,7 @@ export default class payPlan extends React.PureComponent
                             width={'1200'}
                             height={'800'}
                             position={{of:'#' + this.props.data.id + this.tabIndex}}
-                            onShowing={async()=>
-                            {
-                                await this._btnGetClick()
-                            }}
+                            onShowing={async()=> { await this.btnGetClick() }}
                             >
                                 <NdForm colCount={1} height={'fit-content'}>
                                     <NdItem>
@@ -697,11 +675,7 @@ export default class payPlan extends React.PureComponent
                                                             parent={this} 
                                                             startDate={moment(new Date())} 
                                                             endDate={moment(new Date())}
-                                                            onApply={(e)=>
-                                                            {
-                                                                this._btnGetClick()
-                                                            }}
-                                                            
+                                                            onApply={()=> { this.btnGetClick() }}
                                                         />
                                                     </NdItem>
                                                 </NdForm>
@@ -762,16 +736,12 @@ export default class payPlan extends React.PureComponent
                                         <NdLabel text={this.t("installmentPeriod")} alignment="right" />
                                         <NdNumberBox id="installmentPeriod" parent={this} simple={true} width={200} 
                                         min={3} max={24} step={3}
-                                        onValueChanged={(e)=>
-                                        {
-                                            console.log(e.value)
-                                        }}
                                         param={this.param.filter({ELEMENT:'installmentPeriod',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'installmentPeriod',USERS:this.user.CODE})}
                                         >
-                                        <Validator validationGroup={"frmInstallmentPeriod"  + this.tabIndex}>
-                                        <RangeRule min={3} max={24} step={3} message={this.t("ValidInstallmentPeriod")} />
-                                        </Validator>  
+                                            <Validator validationGroup={"frmInstallmentPeriod"  + this.tabIndex}>
+                                                <RangeRule min={3} max={24} step={3} message={this.t("ValidInstallmentPeriod")} />
+                                            </Validator>  
                                         </NdNumberBox>
                                     </NdItem>
                                     <NdItem>
@@ -846,7 +816,7 @@ export default class payPlan extends React.PureComponent
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '25'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '25'`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
@@ -879,8 +849,7 @@ export default class payPlan extends React.PureComponent
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_PAY_PLAN_FOR_PRINT](@DOC_GUID,@LANG)"+
-                                                               " ORDER BY INSTALLMENT_NO",
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_PAY_PLAN_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY INSTALLMENT_NO`,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.payPlanObj.dt()[0].DOC_GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
@@ -906,10 +875,7 @@ export default class payPlan extends React.PureComponent
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popDesign.hide();  
-                                            }}/>
+                                            onClick={()=> { this.popDesign.hide() }}/>
                                         </div>
                                     </div>
                                     <div className='row py-2'>
@@ -921,8 +887,7 @@ export default class payPlan extends React.PureComponent
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_PAY_PLAN_FOR_PRINT](@DOC_GUID,@LANG)"+
-                                                               " ORDER BY INSTALLMENT_NO",
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_PAY_PLAN_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY INSTALLMENT_NO`,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.payPlanObj.dt()[0].DOC_GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
@@ -953,7 +918,7 @@ export default class payPlan extends React.PureComponent
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT EMAIL FROM CUSTOMER_VW_02 WHERE CODE = @CODE",
+                                                        query : `SELECT EMAIL FROM CUSTOMER_VW_02 WHERE CODE = @CODE`,
                                                         param:  ['CODE:string|50'],
                                                         value:  [this.txtCustomerCode.value]
                                                     }

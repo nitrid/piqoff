@@ -2,14 +2,13 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
-import { NdForm,NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
+import { NdForm,NdItem, NdLabel } from '../../../../core/react/devex/form.js';
 
 export default class posLottery extends React.PureComponent
 {
@@ -18,7 +17,9 @@ export default class posLottery extends React.PureComponent
         super(props)
 
         this.core = App.instance.core;
+
         this.countDown = React.createRef()
+
         this.state = 
         {
             listItem : []
@@ -31,7 +32,7 @@ export default class posLottery extends React.PureComponent
         let tmpPosDt = new datatable()
         tmpPosDt.selectCmd = 
         {
-            query : "SELECT GUID,CUSTOMER_CODE,DEVICE,REF,CUSTOMER_GUID,CUSTOMER_NAME FROM POS_VW_01 WHERE CUSTOMER_NAME <> '' AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND STATUS = 1",
+            query : `SELECT GUID,CUSTOMER_CODE,DEVICE,REF,CUSTOMER_GUID,CUSTOMER_NAME FROM POS_VW_01 WHERE CUSTOMER_NAME <> '' AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND STATUS = 1`,
             param : ['FIRST_DATE:date','LAST_DATE:date'],
             value : [this.dtDate.startDate,this.dtDate.endDate]
         }
@@ -69,14 +70,14 @@ export default class posLottery extends React.PureComponent
 
                 let tmpInsertExtra = 
                 {
-                    query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@TAG = 'LOTTERY', " +
-                    "@POS_GUID = @PPOS_GUID, " +
-                    "@LINE_GUID = '00000000-0000-0000-0000-000000000000', " +
-                    "@DATA = '', " +
-                    "@APP_VERSION = '', " +
-                    "@DESCRIPTION = '' ", 
+                    query : `EXEC [dbo].[PRD_POS_EXTRA_INSERT] 
+                    @CUSER = @PCUSER, 
+                    @TAG = 'LOTTERY', 
+                    @POS_GUID = @PPOS_GUID, 
+                    @LINE_GUID = '00000000-0000-0000-0000-000000000000', 
+                    @DATA = '', 
+                    @APP_VERSION = '', 
+                    @DESCRIPTION = '' `, 
                     param : ['PCUSER:string|25','PPOS_GUID:string|50'],
                     value : [this.user.CODE,tmpPosDt[tmpRandIndex].GUID]
                 }
@@ -84,14 +85,14 @@ export default class posLottery extends React.PureComponent
 
                 let tmpInsertPoint = 
                 {
-                    query : "EXEC [dbo].[PRD_CUSTOMER_POINT_INSERT] " + 
-                            "@GUID = @PGUID, " + 
-                            "@CUSER = @PCUSER, " + 
-                            "@TYPE = @PTYPE, " +
-                            "@CUSTOMER = @PCUSTOMER, " +
-                            "@DOC = @PDOC, " +
-                            "@POINT = @PPOINT, " +
-                            "@DESCRIPTION = 'LOTTERY' ", 
+                    query : `EXEC [dbo].[PRD_CUSTOMER_POINT_INSERT] 
+                            @GUID = @PGUID, 
+                            @CUSER = @PCUSER, 
+                            @TYPE = @PTYPE, 
+                            @CUSTOMER = @PCUSTOMER, 
+                            @DOC = @PDOC, 
+                            @POINT = @PPOINT, 
+                            @DESCRIPTION = 'LOTTERY' `, 
                     param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:int'],
                     value : [datatable.uuidv4(),this.user.CODE,0,tmpPosDt[tmpRandIndex].CUSTOMER_GUID,tmpPosDt[tmpRandIndex].GUID,this.txtPoint.value]
                 }
