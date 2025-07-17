@@ -19,9 +19,11 @@ export default class transportTypeCard extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.transportObj = new transportTypeCls();
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
     }
@@ -95,7 +97,7 @@ export default class transportTypeCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT * FROM TRANSPORT_TYPE_VW_01 WHERE TYPE_NO = @TYPE_NO",
+                    query :`SELECT * FROM TRANSPORT_TYPE_VW_01 WHERE TYPE_NO = @TYPE_NO`,
                     param : ['TYPE_NO:string|50'],
                     value : [pCode]
                 }
@@ -116,6 +118,7 @@ export default class transportTypeCard extends React.PureComponent
                     }
     
                     let pResult = await dialog(tmpConfObj);
+
                     if(pResult == 'btn01')
                     {
                         this.getTransport(pCode)
@@ -158,11 +161,7 @@ export default class transportTypeCard extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        console.log(132)
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> {this.init()  }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmSector"  + this.tabIndex}
@@ -180,11 +179,7 @@ export default class transportTypeCard extends React.PureComponent
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
+                                                
                                                 
                                                 if((await this.transportObj.save()) == 0)
                                                 {                                      
@@ -194,6 +189,11 @@ export default class transportTypeCard extends React.PureComponent
                                                 }
                                                 else
                                                 {
+                                                    let tmpConfObj1 =
+                                                    {
+                                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                    }
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                     await dialog(tmpConfObj1);
                                                 }
@@ -231,7 +231,6 @@ export default class transportTypeCard extends React.PureComponent
                                             this.toast.show({message:this.t("msgDeleteResult.msgSuccess"),type:"success"});
                                             this.init(); 
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after"
@@ -323,18 +322,7 @@ export default class transportTypeCard extends React.PureComponent
                                     width={'90%'}
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")} //
-                                    data={{source:{select:{query : "SELECT TYPE_NO,TYPE_NAME FROM TRANSPORT_TYPE_VW_01"},sql:this.core.sql}}}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
+                                    data={{source:{select:{query : `SELECT TYPE_NO,TYPE_NAME FROM TRANSPORT_TYPE_VW_01`},sql:this.core.sql}}}
                                     >
                                         <Column dataField="TYPE_NO" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
@@ -345,14 +333,9 @@ export default class transportTypeCard extends React.PureComponent
                                     <NdLabel text={this.t("txtName")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} dt={{data:this.transportObj.dt('TRANSPORT_TYPE'),field:"TYPE_NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />    
                                 </NdItem>
                                 <NdEmptyItem />
                             </NdForm>

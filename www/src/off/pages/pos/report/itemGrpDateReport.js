@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar from 'devextreme-react/toolbar';
-import Form, {Item, Label } from 'devextreme-react/form';
+import {Item, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPivot,{FieldChooser,Export} from '../../../../core/react/devex/pivot.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -25,10 +27,6 @@ export default class itemGrpDateReport extends React.PureComponent
     {
         await this.core.util.waitUntil(0)
         this.init()
-    }
-    async init()
-    {
-       
     }
     render()
     {
@@ -78,7 +76,6 @@ export default class itemGrpDateReport extends React.PureComponent
                             onClick={async (e)=>
                             {
                                 let lang = ''
-                                console.log(localStorage.getItem('lang').toUpperCase())
                                 if(localStorage.getItem('lang').toUpperCase() == "FR")
                                 {
                                     lang = "french"
@@ -113,10 +110,11 @@ export default class itemGrpDateReport extends React.PureComponent
                                     param : ['LANG:string','START:date','END:date'],
                                     value : [lang,this.dtDate.startDate,this.dtDate.endDate]
                                 }
-                                console.log(lang)
+                                
                                 App.instance.setState({isExecute:true})
                                 let tmpData = await this.core.sql.execute(tmpQuery)
                                 App.instance.setState({isExecute:false})
+
                                 if(tmpData.result.recordset.length > 0)
                                 {
                                     this.pvtData.setDataSource(tmpData.result.recordset)

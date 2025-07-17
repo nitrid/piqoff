@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar from 'devextreme-react/toolbar';
 import Form,  {Item, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column,Editing,ColumnChooser,StateStoring,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
 import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
@@ -30,7 +32,7 @@ export default class salesOrdList extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
-        this.groupList = [];
+
         this.btnGetClick = this.btnGetClick.bind(this)
         this.sendMail = this.sendMail.bind(this)
         this.btnGetDetail = this.btnGetDetail.bind(this)
@@ -53,10 +55,7 @@ export default class salesOrdList extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
     async Init()
     {
@@ -64,20 +63,22 @@ export default class salesOrdList extends React.PureComponent
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
         this.txtPayChangeDesc.value = this.t("txtPayChangeDesc")
+
         let tmpSource =
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID," + 
-                    "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID =POS_VW_01.GUID AND TAG = 'PARK DESC' ),'') AS DESCRIPTION FROM POS_VW_01 WHERE STATUS IN (0,2) ORDER BY DOC_DATE DESC "
+                    query : `SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID,
+                    ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID =POS_VW_01.GUID AND TAG = 'PARK DESC' ),'') AS DESCRIPTION 
+                    FROM POS_VW_01 WHERE STATUS IN (0,2) ORDER BY DOC_DATE DESC `
                 },
                 sql : this.core.sql
             }
         }
         await this.grdOpenTike.dataRefresh(tmpSource)
+
         if(this.grdOpenTike.data.datatable.length > 0)
         {
           this.popOpenTike.show()
@@ -85,16 +86,17 @@ export default class salesOrdList extends React.PureComponent
          //** FIRMA GETIR ******************************/
          this.firm.selectCmd = 
          {
-             query : "SELECT TOP 1 * FROM COMPANY_VW_01",
+             query : `SELECT TOP 1 * FROM COMPANY_VW_01`,
              local : 
              {
                  type : "select",
-                 query : "SELECT * FROM COMPANY_VW_01 LIMIT 1;",
+                 query : `SELECT * FROM COMPANY_VW_01 LIMIT 1;`,
                  values : []
              }
          }
          await this.firm.refresh();
     }
+
     loadState()
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdAdvanceDataState',USERS:this.user.CODE})
@@ -106,6 +108,7 @@ export default class salesOrdList extends React.PureComponent
         tmpSave.setValue(e)
         tmpSave.save()
     }
+
     async btnGetClick()
     {
         if(this.chkDeletedTicket.value == false || this.chkDeletedTicket.value == undefined)
@@ -117,70 +120,72 @@ export default class salesOrdList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query :  "SELECT "  +
-                        " MAX(ITEM_CODE) AS ITEM_CODE,  "  +
-                        " MAX(ITEM_NAME) AS ITEM_NAME,  "  +
-                        " MAX(TIME) AS TIME,  "  +
-                        " MAX(DATE) AS DATE,  "  +
-                        " MAX(DEVICE) AS DEVICE,  "  +
-                        " MAX(USERS) AS USERS, "  +
-                        " SUBSTRING(CONVERT(NVARCHAR(50),SALE_POS_GUID),20,25) AS POS_ID, "  +
-                        " SALE_POS_GUID AS POS_GUID, " +
-                        " MAX(SALE_TYPE) AS SALE_TYPE,  "  +
-                        " COUNT(PAYMENT_TYPE) AS PAY_COUNT,  "  +
-                        " MAX(CUSTOMER) AS CUSTOMER,  "  +
-                        " MAX(DISCOUNT) AS DISCOUNT,  "  +
-                        " MAX(LOYALTY) AS LOYALTY,  "  +
-                        " MAX(HT) AS HT,  "  +
-                        " MAX(TVA) AS TVA,  "  +
-                        " MAX(TTC) AS TTC,  "  +
-                        " MAX(CUSTOMER_NAME) AS CUSTOMER_NAME,  "  +
-                        " MAX(PAYMENT_TYPE) AS PAYMENT_TYPE,  "  +
-                        " MAX(CUSTOMER_MAIL) AS CUSTOMER_MAIL, "+
-                        " MAX(FACT_REF) AS FACT_REF, "+
-                        " MAX(PAYMENT) AS PAYMENT,  "  +
-                        " MAX(REF) AS REF " +
-                        " FROM (  "  +
-                        " SELECT  "  +
-                        " SALE.POS_GUID AS SALE_POS_GUID, "  +
-                        " PAYMENT.POS_GUID AS PAYMENT_POS_GUID, "  +
-                        " MAX(SALE.ITEM_CODE) AS ITEM_CODE,  "  +
-                        " MAX(SALE.ITEM_NAME) AS ITEM_NAME,  "  +
-                        " MAX(SALE.CDATE) AS DATE,   "  +
-                        " CONVERT(NVARCHAR,MAX(SALE.CDATE),108) AS TIME,   "  +
-                        " MAX(SALE.DEVICE) AS DEVICE,  "  +
-                        " ISNULL((SELECT NAME FROM USERS WHERE CODE = MAX(SALE.LUSER)),'') AS USERS,  "  +
-                        " SALE.TYPE AS SALE_TYPE,  "  +
-                        " PAYMENT.TYPE AS PAYMENT_TYPE,  "  +
-                        " PAYMENT.PAY_TYPE_NAME AS PAY_TYPE_NAME, "  +
-                        " MAX(SALE.CUSTOMER_CODE) AS CUSTOMER,  "  +
-                        " MAX(SALE.GRAND_DISCOUNT) DISCOUNT,  "  +
-                        " MAX(SALE.GRAND_LOYALTY) LOYALTY,  "  +
-                        " MAX(SALE.GRAND_AMOUNT) HT, "  +
-                        " MAX(SALE.GRAND_VAT) TVA, "  +
-                        " MAX(SALE.GRAND_TOTAL) TTC,  "  +
-                        " MAX(SALE.CUSTOMER_NAME) AS CUSTOMER_NAME,  "  +
-                        " ISNULL((SELECT TOP 1 CUSTOMER_MAIL FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),'') AS CUSTOMER_MAIL," +
-                        " ISNULL((SELECT TOP 1 FACT_REF FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),0) AS FACT_REF," +
-                        " ISNULL((SELECT TOP 1 REF FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),0) AS REF," +
-                        " (SELECT SUM(AMOUNT) FROM [POS_PAYMENT_VW_01] AS PAY WHERE PAY.POS_GUID = SALE.POS_GUID ) AS PAYMENT   "  +
-                        " FROM [dbo].[POS_SALE_VW_01] AS SALE  "  +
-                        " INNER JOIN [dbo].[POS_PAYMENT_VW_01] AS PAYMENT ON  "  +
-                        " PAYMENT.POS_GUID = SALE.POS_GUID AND PAYMENT.STATUS = 1  "  +
-                        " WHERE SALE.DOC_DATE >= @FIRST_DATE AND SALE.DOC_DATE <= @LAST_DATE AND   "  +
-                        " ((SALE.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND  "  +
-                        " ((SALE.DEVICE = @DEVICE) OR (@DEVICE = '')) AND  "  +
-                        " ((PAYMENT.PAY_TYPE = @PAY_TYPE) OR (@PAY_TYPE = -1)) AND "  +
-                        " ((ITEM_CODE = @ITEM_CODE OR SALE.INPUT =  @ITEM_CODE) OR (@ITEM_CODE = '')) AND  ((SUBSTRING(CONVERT(NVARCHAR(50),SALE.POS_GUID),20,25) = @TICKET_ID) OR (@TICKET_ID = '')) AND "  +
-                        " ((SALE.LUSER = @LUSER) OR (@LUSER = '')) AND SALE.STATUS = 1 AND SALE.DEVICE <> '9999' "  +
-                        " GROUP BY SALE.TYPE,PAYMENT.TYPE,PAYMENT.PAY_TYPE_NAME,PAYMENT.POS_GUID,SALE.POS_GUID) AS TMP  "  +
-                        " GROUP BY SALE_POS_GUID,PAYMENT_POS_GUID HAVING COUNT(PAYMENT_TYPE) >= @PAY_COUNT AND  ((MAX(TTC) >= @FIRST_AMOUNT) OR (@FIRST_AMOUNT = 0)) AND ((MAX(TTC) <= @LAST_AMOUNT) OR (@LAST_AMOUNT = 0)) ORDER BY DATE,TIME",
+                        query : 
+                            `SELECT 
+                            MAX(ITEM_CODE) AS ITEM_CODE,  
+                            MAX(ITEM_NAME) AS ITEM_NAME,  
+                            MAX(TIME) AS TIME,  
+                            MAX(DATE) AS DATE,  
+                            MAX(DEVICE) AS DEVICE,  
+                            MAX(USERS) AS USERS, 
+                            SUBSTRING(CONVERT(NVARCHAR(50),SALE_POS_GUID),20,25) AS POS_ID, 
+                            SALE_POS_GUID AS POS_GUID, 
+                            MAX(SALE_TYPE) AS SALE_TYPE,  
+                            COUNT(PAYMENT_TYPE) AS PAY_COUNT,  
+                            MAX(CUSTOMER) AS CUSTOMER,  
+                            MAX(DISCOUNT) AS DISCOUNT,  
+                            MAX(LOYALTY) AS LOYALTY,  
+                            MAX(HT) AS HT,  
+                            MAX(TVA) AS TVA,  
+                            MAX(TTC) AS TTC,  
+                            MAX(CUSTOMER_NAME) AS CUSTOMER_NAME,  
+                            MAX(PAYMENT_TYPE) AS PAYMENT_TYPE,  
+                            MAX(CUSTOMER_MAIL) AS CUSTOMER_MAIL, 
+                            MAX(FACT_REF) AS FACT_REF, 
+                            MAX(PAYMENT) AS PAYMENT, 
+                            MAX(REF) AS REF 
+                            FROM (  
+                            SELECT  
+                            SALE.POS_GUID AS SALE_POS_GUID, 
+                            PAYMENT.POS_GUID AS PAYMENT_POS_GUID, 
+                            MAX(SALE.ITEM_CODE) AS ITEM_CODE, 
+                            MAX(SALE.ITEM_NAME) AS ITEM_NAME, 
+                            MAX(SALE.CDATE) AS DATE,  
+                            CONVERT(NVARCHAR,MAX(SALE.CDATE),108) AS TIME,  
+                            MAX(SALE.DEVICE) AS DEVICE, 
+                            ISNULL((SELECT NAME FROM USERS WHERE CODE = MAX(SALE.LUSER)),'') AS USERS, 
+                            SALE.TYPE AS SALE_TYPE, 
+                            PAYMENT.TYPE AS PAYMENT_TYPE, 
+                            PAYMENT.PAY_TYPE_NAME AS PAY_TYPE_NAME, 
+                            MAX(SALE.CUSTOMER_CODE) AS CUSTOMER, 
+                            MAX(SALE.GRAND_DISCOUNT) DISCOUNT, 
+                            MAX(SALE.GRAND_LOYALTY) LOYALTY, 
+                            MAX(SALE.GRAND_AMOUNT) HT, 
+                            MAX(SALE.GRAND_VAT) TVA, 
+                            MAX(SALE.GRAND_TOTAL) TTC, 
+                            MAX(SALE.CUSTOMER_NAME) AS CUSTOMER_NAME, 
+                            ISNULL((SELECT TOP 1 CUSTOMER_MAIL FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),'') AS CUSTOMER_MAIL,
+                            ISNULL((SELECT TOP 1 FACT_REF FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),0) AS FACT_REF,
+                            ISNULL((SELECT TOP 1 REF FROM POS_VW_01 WHERE POS_VW_01.GUID = SALE.POS_GUID),0) AS REF,
+                            (SELECT SUM(AMOUNT) FROM [POS_PAYMENT_VW_01] AS PAY WHERE PAY.POS_GUID = SALE.POS_GUID ) AS PAYMENT  
+                            FROM [dbo].[POS_SALE_VW_01] AS SALE 
+                            INNER JOIN [dbo].[POS_PAYMENT_VW_01] AS PAYMENT ON 
+                            PAYMENT.POS_GUID = SALE.POS_GUID AND PAYMENT.STATUS = 1 
+                            WHERE SALE.DOC_DATE >= @FIRST_DATE AND SALE.DOC_DATE <= @LAST_DATE AND  
+                            ((SALE.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND 
+                            ((SALE.DEVICE = @DEVICE) OR (@DEVICE = '')) AND 
+                            ((PAYMENT.PAY_TYPE = @PAY_TYPE) OR (@PAY_TYPE = -1)) AND 
+                            ((ITEM_CODE = @ITEM_CODE OR SALE.INPUT =  @ITEM_CODE) OR (@ITEM_CODE = '')) AND  ((SUBSTRING(CONVERT(NVARCHAR(50),SALE.POS_GUID),20,25) = @TICKET_ID) OR (@TICKET_ID = '')) AND 
+                            ((SALE.LUSER = @LUSER) OR (@LUSER = '')) AND SALE.STATUS = 1 AND SALE.DEVICE <> '9999' 
+                            GROUP BY SALE.TYPE,PAYMENT.TYPE,PAYMENT.PAY_TYPE_NAME,PAYMENT.POS_GUID,SALE.POS_GUID) AS TMP 
+                            GROUP BY SALE_POS_GUID,PAYMENT_POS_GUID HAVING COUNT(PAYMENT_TYPE) >= @PAY_COUNT AND  ((MAX(TTC) >= @FIRST_AMOUNT) OR (@FIRST_AMOUNT = 0)) AND ((MAX(TTC) <= @LAST_AMOUNT) OR (@LAST_AMOUNT = 0)) ORDER BY DATE,TIME`,
                         param : ['FIRST_DATE:date','LAST_DATE:date','CUSTOMER_CODE:string|50','DEVICE:string|25','PAY_TYPE:int','ITEM_CODE:string|50','TICKET_ID:string|50','LUSER:string|50','PAY_COUNT:string|50','FIRST_AMOUNT:float','LAST_AMOUNT:float'],
                         value : [this.dtFirst.value,this.dtLast.value,this.txtCustomerCode.value,this.cmbDevice.value,this.cmbPayType.value,this.txtItem.value,this.txtTicketno.value,this.cmbUser.value,this.ckhDoublePay.value ? 2 : 1,this.numFirstTicketAmount.value,this.numLastTicketAmount.value]
                     },
                     sql : this.core.sql
                 }
             }
+
             App.instance.setState({isExecute:true})
             await this.grdSaleTicketReport.dataRefresh(tmpSource)
             App.instance.setState({isExecute:false})
@@ -194,44 +199,46 @@ export default class salesOrdList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT " +
-                        " ITEM_CODE, " +
-                        " ITEM_NAME, " +
-                        " CONVERT(NVARCHAR,CDATE,108) AS TIME, " +
-                        " CDATE AS DATE, " +
-                        " DEVICE, " +
-                        " ISNULL((SELECT NAME FROM USERS WHERE CODE = LUSER),'') AS USERS, " +
-                        " SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,25) AS POS_ID, " +
-                        " POS_GUID, " +
-                        " TYPE AS SALE_TYPE, " +
-                        " 1 AS PAY_COUNT, " +
-                        " CUSTOMER_CODE AS CUSTOMER, " +
-                        " GRAND_DISCOUNT AS DISCOUNT, " +
-                        " GRAND_LOYALTY AS LOYALTY, " +
-                        " GRAND_AMOUNT AS HT, " +
-                        " GRAND_VAT AS TVA, " +
-                        " GRAND_TOTAL AS TTC, " +
-                        " CUSTOMER_NAME, " +
-                        " 0 AS PAYMENT_TYPE, " +
-                        " '' AS CUSTOMER_MAIL, " +
-                        " ISNULL((SELECT TOP 1 FACT_REF FROM POS_VW_03 WHERE GUID = POS_GUID),0) AS FACT_REF, " +
-                        " 0 AS PAYMENT, " +
-                        " ISNULL((SELECT TOP 1 REF FROM POS_VW_03 WHERE GUID = POS_GUID),0) AS REF " +
-                        " FROM POS_SALE_VW_02 " +
-                        " WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
-                        " AND ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) " +
-                        " AND ((DEVICE = @DEVICE) OR (@DEVICE = '')) " +
-                        " AND ((ITEM_CODE = @ITEM_CODE OR INPUT = @ITEM_CODE) OR (@ITEM_CODE = '')) " +
-                        " AND ((SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,25) = @TICKET_ID) OR (@TICKET_ID = '')) " +
-                        " AND ((LUSER = @LUSER) OR (@LUSER = '')) " +
-                        " AND DEVICE <> '9999' " +
-                        " ORDER BY DATE, TIME",
+                        query : 
+                            `SELECT 
+                            ITEM_CODE, 
+                            ITEM_NAME, 
+                            CONVERT(NVARCHAR,CDATE,108) AS TIME, 
+                            CDATE AS DATE, 
+                            DEVICE, 
+                            ISNULL((SELECT NAME FROM USERS WHERE CODE = LUSER),'') AS USERS, 
+                            SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,25) AS POS_ID, 
+                            POS_GUID, 
+                            TYPE AS SALE_TYPE, 
+                            1 AS PAY_COUNT, 
+                            CUSTOMER_CODE AS CUSTOMER, 
+                            GRAND_DISCOUNT AS DISCOUNT, 
+                            GRAND_LOYALTY AS LOYALTY, 
+                            GRAND_AMOUNT AS HT, 
+                            GRAND_VAT AS TVA, 
+                            GRAND_TOTAL AS TTC, 
+                            CUSTOMER_NAME, 
+                            0 AS PAYMENT_TYPE, 
+                            '' AS CUSTOMER_MAIL, 
+                            ISNULL((SELECT TOP 1 FACT_REF FROM POS_VW_03 WHERE GUID = POS_GUID),0) AS FACT_REF, 
+                            0 AS PAYMENT, 
+                            ISNULL((SELECT TOP 1 REF FROM POS_VW_03 WHERE GUID = POS_GUID),0) AS REF 
+                            FROM POS_SALE_VW_02 
+                            WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE 
+                            AND ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) 
+                            AND ((DEVICE = @DEVICE) OR (@DEVICE = '')) 
+                            AND ((ITEM_CODE = @ITEM_CODE OR INPUT = @ITEM_CODE) OR (@ITEM_CODE = '')) 
+                            AND ((SUBSTRING(CONVERT(NVARCHAR(50),POS_GUID),20,25) = @TICKET_ID) OR (@TICKET_ID = '')) 
+                            AND ((LUSER = @LUSER) OR (@LUSER = '')) 
+                            AND DEVICE <> '9999' 
+                            ORDER BY DATE, TIME`,
                         param : ['FIRST_DATE:date','LAST_DATE:date','CUSTOMER_CODE:string|50','DEVICE:string|25','ITEM_CODE:string|50','TICKET_ID:string|50','LUSER:string|50'],
                         value : [this.dtFirst.value,this.dtLast.value,this.txtCustomerCode.value,this.cmbDevice.value,this.txtItem.value,this.txtTicketno.value,this.cmbUser.value]
                     },
                     sql : this.core.sql
                 }
             }
+
             App.instance.setState({isExecute:true})
             await this.grdSaleTicketReport.dataRefresh(tmpSource)
             App.instance.setState({isExecute:false})
@@ -241,7 +248,7 @@ export default class salesOrdList extends React.PureComponent
     {
         this.lastPosSaleDt.selectCmd = 
         {
-            query :  "SELECT CONVERT(NVARCHAR,CDATE,108) AS TIME,* FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID ",
+            query :  `SELECT CONVERT(NVARCHAR,CDATE,108) AS TIME,* FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID `,
             param : ['POS_GUID:string|50'],
             value : [pGuid]
         }
@@ -251,57 +258,62 @@ export default class salesOrdList extends React.PureComponent
         
         this.lastPosPayDt.selectCmd = 
         {
-            query :  "SELECT (AMOUNT-CHANGE) AS LINE_TOTAL,* FROM POS_PAYMENT_VW_01  WHERE POS_GUID = @POS_GUID ",
+            query :  `SELECT (AMOUNT-CHANGE) AS LINE_TOTAL,* FROM POS_PAYMENT_VW_01  WHERE POS_GUID = @POS_GUID `,
             param : ['POS_GUID:string|50'],
             value : [pGuid]
         }
         this.lastPosPayDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
-            "@GUID = @PGUID, " +
-            "@CUSER = @PCUSER, " + 
-            "@POS = @PPOS, " +
-            "@TYPE = @PTYPE, " +
-            "@TYPE_NAME = @PTYPE_NAME, " +
-            "@LINE_NO = @PLINE_NO, " +
-            "@AMOUNT = @PAMOUNT, " + 
-            "@CHANGE = @PCHANGE ", 
+            query : `EXEC [dbo].[PRD_POS_PAYMENT_INSERT] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @POS = @PPOS, 
+                    @TYPE = @PTYPE, 
+                    @TYPE_NAME = @PTYPE_NAME, 
+                    @LINE_NO = @PLINE_NO, 
+                    @AMOUNT = @PAMOUNT, 
+                    @CHANGE = @PCHANGE `, 
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PTYPE_NAME:string|50','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
             dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','PAY_TYPE_NAME','LINE_NO','AMOUNT','CHANGE']
         } 
         this.lastPosPayDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
-            "@GUID = @PGUID, " +
-            "@CUSER = @PCUSER, " + 
-            "@POS = @PPOS, " +
-            "@TYPE = @PTYPE, " +
-            "@TYPE_NAME = @PTYPE_NAME, " +
-            "@LINE_NO = @PLINE_NO, " +
-            "@AMOUNT = @PAMOUNT, " + 
-            "@CHANGE = @PCHANGE ", 
+            query : `EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @POS = @PPOS, 
+                    @TYPE = @PTYPE, 
+                    @TYPE_NAME = @PTYPE_NAME, 
+                    @LINE_NO = @PLINE_NO, 
+                    @AMOUNT = @PAMOUNT, 
+                    @CHANGE = @PCHANGE `, 
             param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PTYPE_NAME:string|50','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
             dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','PAY_TYPE_NAME','LINE_NO','AMOUNT','CHANGE']
         } 
         this.lastPosPayDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_POS_PAYMENT_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 1, " +
-                    "@GUID = @PGUID, " + 
-                    "@POS_GUID = @PPOS_GUID ", 
+            query : `EXEC [dbo].[PRD_POS_PAYMENT_DELETE] 
+                    @CUSER = @PCUSER, 
+                    @UPDATE = 1, 
+                    @GUID = @PGUID, 
+                    @POS_GUID = @PPOS_GUID `, 
             param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
             dataprm : ['CUSER','GUID','POS_GUID']
         }
+
         await this.lastPosPayDt.refresh()
+
         let tmpPayData = new datatable();
+
         tmpPayData.selectCmd = 
         {
-            query :  "SELECT (AMOUNT-CHANGE) AS LINE_TOTAL,* FROM POS_PAYMENT  WHERE POS = @POS_GUID ORDER BY DELETED ASC",
+            query :  `SELECT (AMOUNT-CHANGE) AS LINE_TOTAL,* FROM POS_PAYMENT  WHERE POS = @POS_GUID ORDER BY DELETED ASC`,
             param : ['POS_GUID:string|50'],
             value : [pGuid]
         }
+
         await tmpPayData.refresh()
+
         await this.grdSaleTicketPays.dataRefresh({source:tmpPayData});
         await this.grdLastTotalPay.dataRefresh({source:this.lastPosPayDt});
 
@@ -312,10 +324,12 @@ export default class salesOrdList extends React.PureComponent
         for (let i = 0; i < this.grdSaleTicketReport.getSelectedData().length; i++) 
         {
             App.instance.setState({isExecute:true})
+
             let tmpLastPos = new datatable(); 
+
             tmpLastPos.selectCmd = 
             {
-                query:  "SELECT * FROM POS_VW_01 WHERE GUID = @GUID ",
+                query:  `SELECT * FROM POS_VW_01 WHERE GUID = @GUID `,
                 param:  ["GUID:string|50"],
                 value:  [this.grdSaleTicketReport.getSelectedData()[i].POS_GUID]
             }
@@ -324,7 +338,7 @@ export default class salesOrdList extends React.PureComponent
     
             this.lastPosSaleDt.selectCmd = 
             {
-                query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
+                query:  `SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC`,
                 param:  ["GUID:string|50"],
                 value:  [this.grdSaleTicketReport.getSelectedData()[i].POS_GUID]
             }
@@ -333,7 +347,7 @@ export default class salesOrdList extends React.PureComponent
     
             this.lastPosPromoDt.selectCmd = 
             {
-                query : "SELECT * FROM [dbo].[POS_PROMO_VW_01] WHERE POS_GUID = @POS_GUID",
+                query : `SELECT * FROM [dbo].[POS_PROMO_VW_01] WHERE POS_GUID = @POS_GUID`,
                 param : ['POS_GUID:string|50'],
                 value:  [this.grdSaleTicketReport.getSelectedData()[i].POS_GUID]
             } 
@@ -342,43 +356,43 @@ export default class salesOrdList extends React.PureComponent
     
             this.lastPosPayDt.selectCmd = 
             {
-                query:  "SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
+                query:  `SELECT * FROM POS_PAYMENT_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC`,
                 param:  ["GUID:string|50"],
                 value:  [this.grdSaleTicketReport.getSelectedData()[i].POS_GUID]
             }
             this.lastPosPayDt.insertCmd = 
             {
-                query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
-                        "@GUID = @PGUID, " +
-                        "@CUSER = @PCUSER, " + 
-                        "@POS = @PPOS, " +
-                        "@TYPE = @PTYPE, " +
-                        "@LINE_NO = @PLINE_NO, " +
-                        "@AMOUNT = @PAMOUNT, " + 
-                        "@CHANGE = @PCHANGE ", 
+                query : `EXEC [dbo].[PRD_POS_PAYMENT_INSERT] 
+                        @GUID = @PGUID, 
+                        @CUSER = @PCUSER, 
+                        @POS = @PPOS, 
+                        @TYPE = @PTYPE, 
+                        @LINE_NO = @PLINE_NO, 
+                        @AMOUNT = @PAMOUNT, 
+                        @CHANGE = @PCHANGE `, 
                 param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
                 dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
             } 
             this.lastPosPayDt.updateCmd = 
             {
-                query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
-                        "@GUID = @PGUID, " +
-                        "@CUSER = @PCUSER, " + 
-                        "@POS = @PPOS, " +
-                        "@TYPE = @PTYPE, " +
-                        "@LINE_NO = @PLINE_NO, " +
-                        "@AMOUNT = @PAMOUNT, " + 
-                        "@CHANGE = @PCHANGE ", 
+                query : `EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] 
+                        @GUID = @PGUID, 
+                        @CUSER = @PCUSER, 
+                        @POS = @PPOS, 
+                        @TYPE = @PTYPE, 
+                        @LINE_NO = @PLINE_NO, 
+                        @AMOUNT = @PAMOUNT, 
+                        @CHANGE = @PCHANGE `, 
                 param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float'],
                 dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE']
             } 
             this.lastPosPayDt.deleteCmd = 
             {
-                query : "EXEC [dbo].[PRD_POS_PAYMENT_DELETE] " + 
-                        "@CUSER = @PCUSER, " + 
-                        "@UPDATE = 1, " +
-                        "@GUID = @PGUID, " + 
-                        "@POS_GUID = @PPOS_GUID ", 
+                query : `EXEC [dbo].[PRD_POS_PAYMENT_DELETE] 
+                        @CUSER = @PCUSER, 
+                        @UPDATE = 1, 
+                        @GUID = @PGUID, 
+                        @POS_GUID = @PPOS_GUID `, 
                 param : ['PCUSER:string|25','PGUID:string|50','PPOS_GUID:string|50'],
                 dataprm : ['CUSER','GUID','POS_GUID']
             }
@@ -427,10 +441,12 @@ export default class salesOrdList extends React.PureComponent
         for (let i = 0; i < this.grdSaleTicketReport.getSelectedData().length; i++) 
         {
             App.instance.setState({isExecute:true})
+
             let tmpLastPos = new datatable(); 
+
             tmpLastPos.selectCmd = 
             {
-                query:  "SELECT * FROM POS_VW_01 WHERE GUID = @GUID ",
+                query:  `SELECT * FROM POS_VW_01 WHERE GUID = @GUID `,
                 param:  ["GUID:string|50"],
                 value:  [this.grdSaleTicketReport.getSelectedData()[i].POS_GUID]
             }
@@ -448,7 +464,7 @@ export default class salesOrdList extends React.PureComponent
             }
             this.lastPosSaleDt.selectCmd = 
             {
-                query:  "SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC",
+                query:  `SELECT * FROM POS_SALE_VW_01 WHERE POS_GUID = @GUID ORDER BY LDATE DESC`,
                 param:  ["GUID:string|50"],
                 value:  [this.grdSaleTicketReport.getSelectedData()[i].POS_GUID]
             }
@@ -463,13 +479,13 @@ export default class salesOrdList extends React.PureComponent
     
                 let tmpInsertQuery = 
                 {
-                    query : "EXEC [dbo].[PRD_POS_FACTURE_INSERT] " + 
-                            "@CUSER = @PCUSER, " + 
-                            "@POS = @PPOS, " +
-                            "@REF = @PREF, " +
-                            "@SIGNATURE = @PSIGNATURE, " +
-                            "@SIGNATURE_SUM = @PSIGNATURE_SUM, " +
-                            "@APP_VERSION = @PAPP_VERSION ", 
+                    query : `EXEC [dbo].[PRD_POS_FACTURE_INSERT] 
+                            @CUSER = @PCUSER, 
+                            @POS = @PPOS, 
+                            @REF = @PREF, 
+                            @SIGNATURE = @PSIGNATURE, 
+                            @SIGNATURE_SUM = @PSIGNATURE_SUM, 
+                            @APP_VERSION = @PAPP_VERSION `, 
                     param : ['PCUSER:string|25','PPOS:string|50','PREF:int','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max','PAPP_VERSION:string|25'],
                     value : [tmpLastPos[0].CUSER,tmpLastPos[0].GUID,tmpFactRef,tmpSignedData.SIGNATURE,tmpSignedData.SIGNATURE_SUM,this.core.appInfo.version],
                 }
@@ -488,26 +504,6 @@ export default class salesOrdList extends React.PureComponent
             {
                 let tmpPrint = e.print(pData)
 
-                // let tmpArr = [];
-                // for (let i = 0; i < tmpPrint.length; i++) 
-                // {
-                //     let tmpObj = tmpPrint[i]
-                //     if(typeof tmpPrint[i] == 'function')
-                //     {
-                //         tmpObj = tmpPrint[i]()
-                //     }
-                //     if(Array.isArray(tmpObj))
-                //     {
-                //         tmpArr.push(...tmpObj)
-                //     }
-                //     else if(typeof tmpObj == 'object')
-                //     {
-                //         tmpArr.push(tmpObj)
-                //     }
-                // }
-                // console.log(JSON.stringify(tmpArr))
-
-               
                 await this.posDevice.pdfPrint(tmpPrint,this.txtSendMail.value,this.txtMailSubject.value,this.htmlEditor.value)
                 resolve()
             })
@@ -523,10 +519,7 @@ export default class salesOrdList extends React.PureComponent
                             <Toolbar>
                             <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnFacture" parent={this} icon="textdocument" type="default"
-                                    onClick={async ()=>
-                                    {
-                                        this.factureInsert()
-                                    }}/>
+                                    onClick={async ()=> { this.factureInsert() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnMailSend" parent={this} icon="message" type="default"
@@ -534,17 +527,12 @@ export default class salesOrdList extends React.PureComponent
                                     {
                                         this.txtSendMail.value = this.grdSaleTicketReport.getSelectedData()[0].CUSTOMER_MAIL
                                         this.htmlEditor.value = this.sysParam.filter({ID:'MailExplanation',USERS:this.user.CODE}).getValue()
-                                        await this.mailPopup.show().then(async (e) =>
-                                        {
-                                        });
+                                        await this.mailPopup.show();
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.popDesign.show()
-                                    }}/>
+                                    onClick={()=> { this.popDesign.show() }}/>
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -580,16 +568,12 @@ export default class salesOrdList extends React.PureComponent
                                 {/* dtFirst */}
                                 <Item>
                                     <Label text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
-                                    >
-                                    </NdDatePicker>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}/>
                                 </Item>
                                 {/* dtLast */}
                                 <Item>
                                     <Label text={this.t("dtLast")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"}
-                                    >
-                                    </NdDatePicker>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"}/>
                                 </Item>
                                 <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -647,23 +631,12 @@ export default class salesOrdList extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql
                                     }
                                 }}
-                                button=
-                                {
-                                    {
-                                        id:'01',
-                                        icon:'more',
-                                        onClick:()=>
-                                        {
-                                            console.log(1111)
-                                        }
-                                    }
-                                }
                                 >
                                     <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
@@ -753,12 +726,7 @@ export default class salesOrdList extends React.PureComponent
                                     <Label text={this.t("txtTicketno")} alignment="right" />
                                     <NdTextBox id="txtTicketno" title={this.t("txtTicketno")} parent={this} simple={true} 
                                         param={this.param.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'txtTicketno',USERS:this.user.CODE})}
-                                        onValueChanged={(e)=>
-                                        {
-                                        
-                                        }}>
-                                    </NdTextBox>
+                                    />
                                 </Item>
                                 {/* txtItem */}
                                 <Item>                                    
@@ -805,13 +773,12 @@ export default class salesOrdList extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,NAME FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL",
+                                                query : `SELECT GUID,CODE,NAME FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                  
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtItem.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_txtItem.clmName")} width={650} defaultSortOrder="asc" />
@@ -838,13 +805,11 @@ export default class salesOrdList extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -897,14 +862,14 @@ export default class salesOrdList extends React.PureComponent
                         height={'100%'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
-                           <div className="row">
-                         <div className="col-1 pe-0"></div>
+                        <div className="row">
+                            <div className="col-1 pe-0"></div>
                             <div className="col-7 pe-0">
-                            {this.t("TicketId")} : {this.state.ticketId}
+                                {this.t("TicketId")} : {this.state.ticketId}
                             </div>
-                         </div>
-                          <div className="row">
-                          <div className="col-1 pe-0"></div>
+                        </div>
+                        <div className="row">
+                            <div className="col-1 pe-0"></div>
                             <div className="col-7 pe-0">
                             <NdGrid id="grdSaleTicketItems" parent={this} 
                                 selection={{mode:"multiple"}} 
@@ -915,7 +880,6 @@ export default class salesOrdList extends React.PureComponent
                                 columnAutoWidth={true}
                                 allowColumnReordering={true}
                                 allowColumnResizing={true}
-                               
                                 >                            
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
@@ -1051,10 +1015,6 @@ export default class salesOrdList extends React.PureComponent
                                                         e.rowElement.style.fontSize = "16px";
                                                         e.rowElement.style.fontWeight = "bold";
                                                     }}
-                                                    onRowRemoved={async (e) =>
-                                                    {
-                                                        
-                                                    }}
                                                     >
                                                         <Editing confirmDelete={false}/>
                                                         <Column dataField="PAY_TYPE_NAME" width={200} alignment={"center"}/>
@@ -1072,8 +1032,7 @@ export default class salesOrdList extends React.PureComponent
                                             {/* txtPopLastTotal */}
                                             <div className="row pt-1">
                                                 <div className="col-12">
-                                                    <NdTextBox id="txtPopLastTotal" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}>     
-                                                    </NdTextBox> 
+                                                    <NdTextBox id="txtPopLastTotal" parent={this} simple={true} elementAttr={{style:"font-size:15pt;font-weight:bold;border:3px solid #428bca;"}}/> 
                                                 </div>
                                             </div>                                        
                                         </div>
@@ -1088,10 +1047,11 @@ export default class salesOrdList extends React.PureComponent
                                                     {
                                                         if(this.lastPosPayDt.where({PAY_TYPE:4}).length > 0)
                                                         {
-                                                            let tmpDt = new datatable(); 
+                                                            let tmpDt = new datatable();
+                                                            
                                                             tmpDt.selectCmd = 
                                                             {
-                                                                query : "SELECT AMOUNT AS AMOUNT,COUNT(AMOUNT) AS COUNT FROM CHEQPAY_VW_01 WHERE DOC = @DOC GROUP BY AMOUNT",
+                                                                query : `SELECT AMOUNT AS AMOUNT,COUNT(AMOUNT) AS COUNT FROM CHEQPAY_VW_01 WHERE DOC = @DOC GROUP BY AMOUNT`,
                                                                 param : ['DOC:string|50'],
                                                                 local : 
                                                                 {
@@ -1331,10 +1291,7 @@ export default class salesOrdList extends React.PureComponent
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                    {
-                                    }).bind(this)}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '71'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '71'`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
@@ -1350,10 +1307,7 @@ export default class salesOrdList extends React.PureComponent
                                     valueExpr="ID"
                                     value={localStorage.getItem('lang').toUpperCase()}
                                     searchEnabled={true}
-                                    onValueChanged={(async()=>
-                                    {
-                                    }).bind(this)}
-                                   data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
+                                    data={{source:[{ID:"FR",VALUE:"FR"},{ID:"DE",VALUE:"DE"},{ID:"TR",VALUE:"TR"}]}}
                                     >
                                     </NdSelectBox>
                                 </Item>
@@ -1368,7 +1322,7 @@ export default class salesOrdList extends React.PureComponent
                                                     App.instance.setState({isExecute:true})
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM POS_SALE_VW_01 WHERE POS_GUID = @POS_GUID ORDER BY LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM POS_SALE_VW_01 WHERE POS_GUID = @POS_GUID ORDER BY LINE_NO ` ,
                                                         param:  ['POS_GUID:string|50','DESIGN:string|25'],
                                                         value:  [this.grdSaleTicketReport.devGrid.getSelectedRowsData()[0].POS_GUID,this.cmbDesignList.value]
                                                     }
@@ -1415,7 +1369,6 @@ export default class salesOrdList extends React.PureComponent
                         height={'600'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={false}
-                       
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -1427,7 +1380,7 @@ export default class salesOrdList extends React.PureComponent
                                     searchEnabled={true}
                                     data={{source:{select:{query : "SELECT * FROM MAIL_SETTINGS "},sql:this.core.sql}}}
                                     >
-                                         <Validator validationGroup={"frmMailsend" + this.tabIndex}>
+                                        <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                             <RequiredRule message={this.t("validMail")} />
                                         </Validator> 
                                     </NdSelectBox>
@@ -1460,10 +1413,7 @@ export default class salesOrdList extends React.PureComponent
                                     <div className='row'>
                                         <div className="col-12 px-1">
                                             <NbButton id={"btnMailSend"} parent={this} className="form-group btn btn-success btn-block my-1" style={{height:"70px",width:"100%"}}
-                                            onClick={async()=>
-                                            {
-                                                this.sendMail()
-                                            }}>
+                                            onClick={async()=> { this.sendMail() }}>
                                                 <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
                                             </NbButton>
                                         </div> 

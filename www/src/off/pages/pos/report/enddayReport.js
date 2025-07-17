@@ -1,6 +1,7 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar from 'devextreme-react/toolbar';
 import Form, {Item, Label} from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
@@ -17,59 +18,89 @@ export default class enddayReport extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
-        this.groupList = [];
+        
         this.btnGetClick = this.btnGetClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
+
     async Init()
     {
         this.dtFirst.value =  moment(new Date()).format("YYYY-MM-DD")
         this.dtLast.value =  moment(new Date()).format("YYYY-MM-DD")
     }
+
     loadState()
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdEnddaDataState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
+
     saveState(e)
     {
         let tmpSave = this.access.filter({ELEMENT:'grdEnddaDataState',USERS:this.user.CODE, PAGE:this.props.data.id, APP:"OFF"})
         tmpSave.setValue(e)
         tmpSave.save()
     }
+    
     async btnGetClick()
     {
         
         let tmpSource =
         {
             source : 
-            {
-                groupBy : this.groupList,
-                select : 
+            {                select : 
                 {
-                    query : "SELECT *, " +
-                           " ROUND(ISNULL((SELECT SUM(AMOUNT -CHANGE)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 0),0) " +
-                           " - ISNULL((SELECT SUM(AMOUNT -CHANGE)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 1  AND PAY_TYPE = 0),0),2) " +
-                           " AS POS_CASH,  " +
-                           " CASH - (ROUND(ISNULL((SELECT SUM(AMOUNT -CHANGE)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 0),0) " +
-                           " - ISNULL((SELECT SUM(AMOUNT -CHANGE)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 1  AND PAY_TYPE = 0),0),2) + ADVANCE) " +
-                           " AS DIFF_CASH, " +
-                           " ISNULL((SELECT ROUND(SUM(AMOUNT -CHANGE),2)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND (PAY_TYPE = 1 OR PAY_TYPE = 9)),0) AS POS_CREDIT,  " +
-                           " CREDIT  - ISNULL((SELECT ROUND(SUM(AMOUNT -CHANGE),2)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND (PAY_TYPE = 1 OR PAY_TYPE = 9)),0) AS DIFF_CREDIT,  " +
-                           " ISNULL((SELECT ROUND(SUM(AMOUNT -CHANGE),2)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 2),0) AS POS_CHECK,  " +
-                           " [CHECK] - ISNULL((SELECT ROUND(SUM(AMOUNT -CHANGE),2)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 2),0) AS DIFF_CHECK,  " +
-                           " ISNULL((SELECT ROUND(SUM(AMOUNT -CHANGE),2)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 3),0) AS POS_TICKET,  " +
-                           " TICKET -ISNULL((SELECT ROUND(SUM(AMOUNT -CHANGE),2)  FROM POS_PAYMENT_VW_01 AS PAY1 WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE AND DOC_DATE = CONVERT(NVARCHAR,ENDDAY_DATA_VW_01.CDATE,112) AND TYPE = 0 AND PAY_TYPE = 3),0)  AS DIFF_TICKET  " +
-                            " FROM ENDDAY_DATA_VW_01 WHERE ((SAFE_CODE = @SAFE_CODE) OR (@SAFE_CODE = '')) AND ((CONVERT(NVARCHAR,CDATE,112) >= @START_DATE) OR (@START_DATE = '19700101')) " +
-                            "AND ((CONVERT(NVARCHAR,CDATE,112) <= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) ORDER BY CDATE DESC",
+                    query : `SELECT *, 
+                            ROUND(ISNULL((SELECT SUM(AMOUNT - CHANGE) FROM POS_PAYMENT_VW_01 AS PAY1 
+                                WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE 
+                                AND DOC_DATE = CONVERT(NVARCHAR, ENDDAY_DATA_VW_01.CDATE, 112) 
+                                AND TYPE = 0 AND PAY_TYPE = 0), 0) 
+                            - ISNULL((SELECT SUM(AMOUNT - CHANGE) FROM POS_PAYMENT_VW_01 AS PAY1 
+                                WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE 
+                                AND DOC_DATE = CONVERT(NVARCHAR, ENDDAY_DATA_VW_01.CDATE, 112) 
+                                AND TYPE = 1 AND PAY_TYPE = 0), 0), 2) AS POS_CASH,  
+                            CASH - (ROUND(ISNULL((SELECT SUM(AMOUNT - CHANGE) FROM POS_PAYMENT_VW_01 AS PAY1 
+                                WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE 
+                                AND DOC_DATE = CONVERT(NVARCHAR, ENDDAY_DATA_VW_01.CDATE, 112) 
+                                AND TYPE = 0 AND PAY_TYPE = 0), 0) 
+                            - ISNULL((SELECT SUM(AMOUNT - CHANGE) FROM POS_PAYMENT_VW_01 AS PAY1 
+                                WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE 
+                                AND DOC_DATE = CONVERT(NVARCHAR, ENDDAY_DATA_VW_01.CDATE, 112) 
+                                AND TYPE = 1 AND PAY_TYPE = 0), 0), 2) + ADVANCE) AS DIFF_CASH, 
+                            ISNULL((SELECT ROUND(SUM(AMOUNT - CHANGE), 2) FROM POS_PAYMENT_VW_01 AS PAY1 
+                                WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE 
+                                AND DOC_DATE = CONVERT(NVARCHAR, ENDDAY_DATA_VW_01.CDATE, 112) 
+                                AND TYPE = 0 AND (PAY_TYPE = 1 OR PAY_TYPE = 9)), 0) AS POS_CREDIT,  
+                            CREDIT - ISNULL((SELECT ROUND(SUM(AMOUNT - CHANGE), 2) FROM POS_PAYMENT_VW_01 AS PAY1 
+                                WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE 
+                                AND DOC_DATE = CONVERT(NVARCHAR, ENDDAY_DATA_VW_01.CDATE, 112) 
+                                AND TYPE = 0 AND (PAY_TYPE = 1 OR PAY_TYPE = 9)), 0) AS DIFF_CREDIT,  
+                            ISNULL((SELECT ROUND(SUM(AMOUNT - CHANGE), 2) FROM POS_PAYMENT_VW_01 AS PAY1 
+                                WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE 
+                                AND DOC_DATE = CONVERT(NVARCHAR, ENDDAY_DATA_VW_01.CDATE, 112) 
+                                AND TYPE = 0 AND PAY_TYPE = 2), 0) AS POS_CHECK,  
+                            [CHECK] - ISNULL((SELECT ROUND(SUM(AMOUNT - CHANGE), 2) FROM POS_PAYMENT_VW_01 AS PAY1 
+                                WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE 
+                                AND DOC_DATE = CONVERT(NVARCHAR, ENDDAY_DATA_VW_01.CDATE, 112) 
+                                AND TYPE = 0 AND PAY_TYPE = 2), 0) AS DIFF_CHECK,  
+                            ISNULL((SELECT ROUND(SUM(AMOUNT - CHANGE), 2) FROM POS_PAYMENT_VW_01 AS PAY1 
+                                WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE 
+                                AND DOC_DATE = CONVERT(NVARCHAR, ENDDAY_DATA_VW_01.CDATE, 112) 
+                                AND TYPE = 0 AND PAY_TYPE = 3), 0) AS POS_TICKET,  
+                            TICKET - ISNULL((SELECT ROUND(SUM(AMOUNT - CHANGE), 2) FROM POS_PAYMENT_VW_01 AS PAY1 
+                                WHERE PAY1.DEVICE = ENDDAY_DATA_VW_01.SAFE_CODE 
+                                AND DOC_DATE = CONVERT(NVARCHAR, ENDDAY_DATA_VW_01.CDATE, 112) 
+                                AND TYPE = 0 AND PAY_TYPE = 3), 0) AS DIFF_TICKET  
+                            FROM ENDDAY_DATA_VW_01 
+                            WHERE ((SAFE_CODE = @SAFE_CODE) OR (@SAFE_CODE = '')) 
+                            AND ((CONVERT(NVARCHAR, CDATE, 112) >= @START_DATE) OR (@START_DATE = '19700101')) 
+                            AND ((CONVERT(NVARCHAR, CDATE, 112) <= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) 
+                            ORDER BY CDATE DESC`,
                     param : ['SAFE_CODE:string|50','START_DATE:date','FINISH_DATE:date'],
                     value : [this.cmbDevice.value,this.dtFirst.value,this.dtLast.value]
                 },
@@ -129,7 +160,7 @@ export default class enddayReport extends React.PureComponent
                                 valueExpr="CODE"
                                 showClearButton={true}
                                 notRefresh={true}
-                                data={{source:{select:{query:"SELECT CODE + '-' + NAME AS DISPLAY,CODE,NAME FROM SAFE_VW_01 WHERE TYPE = 2 ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                data={{source:{select:{query:`SELECT CODE + '-' + NAME AS DISPLAY,CODE,NAME FROM SAFE_VW_01 WHERE TYPE = 2 ORDER BY CODE ASC`},sql:this.core.sql}}}
                                 param={this.param.filter({ELEMENT:'cmbDevice',USERS:this.user.CODE})}
                                 access={this.access.filter({ELEMENT:'cmbDevice',USERS:this.user.CODE})}
                                 />
@@ -137,14 +168,12 @@ export default class enddayReport extends React.PureComponent
                             {/* dtFirst */}
                             <Item>
                                 <Label text={this.t("dtFirst")} alignment="right" />
-                                <NdDatePicker simple={true}  parent={this} id={"dtFirst"} >
-                                </NdDatePicker>
+                                <NdDatePicker simple={true}  parent={this} id={"dtFirst"}/ >
                             </Item>
                             {/* dtLast */}
                             <Item>
                                 <Label text={this.t("dtLast")} alignment="right" />
-                                <NdDatePicker simple={true}  parent={this} id={"dtLast"}>
-                                </NdDatePicker>
+                                <NdDatePicker simple={true}  parent={this} id={"dtLast"} />
                             </Item>
                             </Form>
                         </div>
@@ -153,10 +182,8 @@ export default class enddayReport extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>

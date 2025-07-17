@@ -2,7 +2,7 @@ import React from 'react';
 import App from '../../../lib/app.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import Form, { Item} from 'devextreme-react/form';
 
 import NdGrid,{Column,Editing,Scrolling} from '../../../../core/react/devex/grid.js';
 import { datatable } from '../../../../core/core.js';
@@ -12,8 +12,10 @@ export default class ProductExtraProperty extends React.PureComponent
     constructor(props)
     {
         super(props)
+        
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+
         this.itemObj = new datatable()
         this.tabIndex = props.data.tabkey
     }
@@ -33,7 +35,8 @@ export default class ProductExtraProperty extends React.PureComponent
         }
         this.itemObj.updateCmd =
         {
-            query : `DECLARE @ISCHECK AS BIT
+            query : 
+                    `DECLARE @ISCHECK AS BIT
                     SET @ISCHECK = ISNULL((SELECT TOP 1 1 FROM ITEMS_REST WHERE ITEMS_REST.ITEM = @ITEM),0)
                     IF @ISCHECK = 0
                     BEGIN 

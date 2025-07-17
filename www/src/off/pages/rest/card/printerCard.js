@@ -20,9 +20,11 @@ export default class PrinterCard extends React.PureComponent
     constructor(props)
     {
         super(props)
+        
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.printerObj = new restPrinterCls();
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
     }
@@ -98,7 +100,7 @@ export default class PrinterCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID, CODE, NAME FROM REST_PRINTER WHERE CODE = @CODE AND DELETED = 0",
+                    query : `SELECT GUID, CODE, NAME FROM REST_PRINTER WHERE CODE = @CODE AND DELETED = 0`,
                     param : ['CODE:string|50'],
                     value : [pCode]
                 }
@@ -140,7 +142,8 @@ export default class PrinterCard extends React.PureComponent
             }
         });
     }
-    async searchSameItems(data) {
+    async searchSameItems(data) 
+    {
         let duplicateItems = [];
         
         if(this.printerObj.dt('REST_PRINT_ITEM').length > 0)
@@ -198,10 +201,7 @@ export default class PrinterCard extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                        onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmDepot"  + this.tabIndex}
@@ -383,8 +383,7 @@ export default class PrinterCard extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}                                    
                                     param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 <NdEmptyItem/>
                                 {/* txtDesignPath */}
@@ -394,8 +393,7 @@ export default class PrinterCard extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}                                    
                                     param={this.param.filter({ELEMENT:'txtDesignPath',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtDesignPath',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* txtPrinterPath */}
                                 <NdItem>
@@ -404,8 +402,7 @@ export default class PrinterCard extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}                                    
                                     param={this.param.filter({ELEMENT:'txtPrinterPath',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtPrinterPath',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* txtLang */}
                                 <NdItem>
@@ -414,8 +411,7 @@ export default class PrinterCard extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}                                    
                                     param={this.param.filter({ELEMENT:'txtLang',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtLang',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                             </NdForm>
                         </div>
@@ -489,7 +485,7 @@ export default class PrinterCard extends React.PureComponent
                         height={'90%'}
                         title={this.t("pgProduct.title")} 
                         deferRendering={true}
-                        data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM ITEMS WHERE DELETED = 0"},sql:this.core.sql}}}                                   
+                        data={{source:{select:{query : `SELECT GUID,CODE,NAME FROM ITEMS WHERE DELETED = 0`},sql:this.core.sql}}}                                   
                         >
                             <Column dataField="CODE" caption={this.t("pgProduct.clmCode")} width={150} />
                             <Column dataField="NAME" caption={this.t("pgProduct.clmName")} width={300} defaultSortOrder="asc" />

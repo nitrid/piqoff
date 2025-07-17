@@ -19,14 +19,15 @@ export default class CompanyCard extends React.PureComponent
     constructor(props)
     {
         super(props)
+        
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.companyObj = new companyCls();
+        this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
+
         this.prevCode = "";
         this.state={officalVisible:true}
         this.tabIndex = props.data.tabkey
-        this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
-
     }
     async componentDidMount()
     {
@@ -68,30 +69,37 @@ export default class CompanyCard extends React.PureComponent
                 pData.rowData.CUSER = this.user.CODE
             }                 
         })
+
         this.companyObj.ds.on('onRefresh',(pTblName) =>
         {            
             this.btnBack.setState({disabled:true});
             this.btnSave.setState({disabled:false});         
         })
+
         this.companyObj.ds.on('onDelete',(pTblName) =>
         {            
             this.btnBack.setState({disabled:false});
             this.btnSave.setState({disabled:false});
         })
+
         await this.companyObj.load()
+        
         if(this.companyObj.dt().length == 0)
         {
             this.companyObj.addEmpty();
         }
+
         if(this.companyObj.dt().length > 0)
         {
             let tmpQuery = 
             {
-                query : "SELECT [ZIPCODE], ZIPCODE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY ZIPCODE",
+                query : `SELECT [ZIPCODE], ZIPCODE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY ZIPCODE`,
                 param : ['COUNTRY_CODE:string|5'],
                 value : [this.companyObj.dt()[0].COUNTRY]
             }
+
             let tmpData = await this.core.sql.execute(tmpQuery) 
+
             if(tmpData.result.recordset.length > 0)
             {   
                 await this.cmbZipCode.setData(tmpData.result.recordset)
@@ -100,13 +108,16 @@ export default class CompanyCard extends React.PureComponent
             {
                 await this.cmbZipCode.setData([])
             }
+
             let tmpCityQuery = 
             {
-                query : "SELECT [PLACE] FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY PLACE",
+                query : `SELECT [PLACE] FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY PLACE`,
                 param : ['COUNTRY_CODE:string|5'],
                 value : [this.companyObj.dt()[0].COUNTRY]
             }
+
             let tmpCityData = await this.core.sql.execute(tmpCityQuery) 
+
             if(tmpCityData.result.recordset.length > 0)
             {   
                 await this.cmbCity.setData(tmpCityData.result.recordset)
@@ -132,11 +143,7 @@ export default class CompanyCard extends React.PureComponent
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                        onClick={()=>
-                                        {
-                                            this.init()
-                                        }}/>
+                                    <NdButton id="btnBack" parent={this} icon="revert" type="default" onClick={()=> {this.init()}}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmCompany"  + this.tabIndex}
@@ -154,11 +161,6 @@ export default class CompanyCard extends React.PureComponent
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
                                                 if((await this.companyObj.save()) == 0)
                                                 {          
                                                     let tmpJetData =
@@ -177,6 +179,11 @@ export default class CompanyCard extends React.PureComponent
                                                 }
                                                 else
                                                 {
+                                                    let tmpConfObj1 =
+                                                    {
+                                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                    }
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                                                     await dialog(tmpConfObj1);
                                                 }
@@ -231,10 +238,6 @@ export default class CompanyCard extends React.PureComponent
                                     <NdLabel text={this.t("txtTitle")} alignment="right" />
                                     <NdTextBox id="txtTitle" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.companyObj.dt('COMPANY'),field:"NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmCompany"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validation.notValid")} />
@@ -248,8 +251,7 @@ export default class CompanyCard extends React.PureComponent
                                     dt={{data:this.companyObj.dt('COMPANY'),field:"BRAND_NAME"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     maxLength={50}
-                                    >
-                                    </NdTextBox>
+                                   />
                                 </NdItem>
                                 {/* txtCustomerName */}
                                 <NdItem>
@@ -282,10 +284,6 @@ export default class CompanyCard extends React.PureComponent
                                     <NdLabel text={this.t("txtAddress1")} alignment="right" />
                                     <NdTextBox id="txtAddress1" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.companyObj.dt('COMPANY'),field:"ADDRESS1"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmCompany"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validation.notValid")} />
@@ -297,10 +295,6 @@ export default class CompanyCard extends React.PureComponent
                                     <NdLabel text={this.t("txtAddress2")} alignment="right" />
                                     <NdTextBox id="txtAddress2" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.companyObj.dt('COMPANY'),field:"ADDRESS2"}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
                                     >
                                     </NdTextBox>
                                 </NdItem>
@@ -314,16 +308,18 @@ export default class CompanyCard extends React.PureComponent
                                     value="FR"
                                     searchEnabled={true}
                                     showClearButton={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC`},sql:this.core.sql}}}
                                     onValueChanged={(async()=>
                                         {
                                             let tmpQuery = 
                                             {
-                                                query : "SELECT [ZIPCODE], ZIPCODE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY ZIPCODE",
+                                                query : `SELECT [ZIPCODE], ZIPCODE AS ZIPNAME  FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY ZIPCODE`,
                                                 param : ['COUNTRY_CODE:string|5'],
                                                 value : [this.cmbCountry.value]
                                             }
+
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
+
                                             if(tmpData.result.recordset.length > 0)
                                             {   
                                                 await this.cmbZipCode.setData(tmpData.result.recordset)
@@ -332,13 +328,16 @@ export default class CompanyCard extends React.PureComponent
                                             {
                                                 await this.cmbZipCode.setData([])
                                             }
+
                                             let tmpCityQuery = 
                                             {
-                                                query : "SELECT [PLACE] FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY PLACE",
+                                                query : `SELECT [PLACE] FROM [dbo].[ZIPCODE] WHERE COUNTRY_CODE = @COUNTRY_CODE GROUP BY PLACE`,
                                                 param : ['COUNTRY_CODE:string|5'],
                                                 value : [this.cmbCountry.value]
                                             }
+
                                             let tmpCityData = await this.core.sql.execute(tmpCityQuery) 
+
                                             if(tmpCityData.result.recordset.length > 0)
                                             {   
                                                 await this.cmbCity.setData(tmpCityData.result.recordset)
@@ -465,7 +464,7 @@ export default class CompanyCard extends React.PureComponent
                                 <NdItem>
                                     <NdLabel text={this.t("txtEmail")} alignment="right" />
                                     <NdTextBox id="txtEmail" upper={false} parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"MAIL"}} maxLength={50} >
-                                    <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmCompany"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validation.notValid")} />
                                         </Validator> 
                                     </NdTextBox>
@@ -474,7 +473,7 @@ export default class CompanyCard extends React.PureComponent
                                 <NdItem>
                                     <NdLabel text={this.t("txtWeb")} alignment="right" />
                                     <NdTextBox id="txtWeb" upper={false} parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"WEB"}} maxLength={50}>
-                                    <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmCompany"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validation.notValid")} />
                                         </Validator> 
                                     </NdTextBox>
@@ -521,7 +520,7 @@ export default class CompanyCard extends React.PureComponent
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={50}
                                         >
-                                             <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmCompany"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validation.notValid")} />
                                         </Validator> 
                                     </NdTextBox>
@@ -532,7 +531,7 @@ export default class CompanyCard extends React.PureComponent
                                         <NdTextBox id="txtIntVatNo" parent={this} simple={true} dt={{data:this.companyObj.dt('COMPANY'),field:"INT_VAT_NO"}} 
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         maxLength={50}>
-                                             <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmCompany"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validation.notValid")} />
                                         </Validator> 
                                     </NdTextBox>
@@ -544,7 +543,7 @@ export default class CompanyCard extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     maxLength={50}
                                     >
-                                         <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmCompany"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validation.notValid")} />
                                         </Validator> 
                                     </NdTextBox>
@@ -556,7 +555,7 @@ export default class CompanyCard extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     maxLength={50}
                                     >
-                                            <Validator validationGroup={"frmCompany"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmCompany"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validation.notValid")} />
                                         </Validator> 
                                     </NdTextBox>

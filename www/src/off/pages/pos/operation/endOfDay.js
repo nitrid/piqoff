@@ -116,7 +116,6 @@ export default class endOfDay extends React.PureComponent
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
                     query : `SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID,  
@@ -367,7 +366,7 @@ export default class endOfDay extends React.PureComponent
                             param : ['INPUT_CODE:string|50'],
                             value : [this.cmbSafe.value]
                         }
-                        
+
                         let tmpData = await this.core.sql.execute(tmpQuery) 
 
                         if(tmpData.result.recordset.length > 0)

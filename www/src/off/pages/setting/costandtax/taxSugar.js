@@ -5,7 +5,7 @@ import moment from 'moment';
 
 
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label, Item } from 'devextreme-react/form';
+import Form, { Item } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import { Button } from 'devextreme-react/button';
 
@@ -24,6 +24,7 @@ export default class taxSugar extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.taxSugarObj = new taxSugarCls();
@@ -33,10 +34,7 @@ export default class taxSugar extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.init()
-        }, 500);
+        setTimeout(async () =>  { this.init() }, 500);
     }
     async init()
     {
@@ -74,10 +72,10 @@ export default class taxSugar extends React.PureComponent
         })
 
         let tmpAdd = {...this.addTaxObj.empty}
-        tmpAdd.TYPE = 0
-        this.addTaxObj.addEmpty(tmpAdd);
 
-      
+        tmpAdd.TYPE = 0
+
+        this.addTaxObj.addEmpty(tmpAdd);
 
         await this.grdTaxSugar.dataRefresh({source:this.taxSugarObj.dt('TAX_SUGAR_TABLE')});
     }
@@ -85,19 +83,17 @@ export default class taxSugar extends React.PureComponent
     {
         this.addTaxObj.clearAll()
         this.taxSugarObj.clearAll()
+
         await this.addTaxObj.load({TYPE:0});
+
         if(this.addTaxObj.dt().length == 0)
         {
             let tmpAdd = {...this.addTaxObj.empty}
             tmpAdd.TYPE = 0
             this.addTaxObj.addEmpty(tmpAdd);
         }
-        await this.taxSugarObj.load({TYPE:0});
 
-    }
-    formatRender(pValue)
-    {
-        console.log(pValue)
+        await this.taxSugarObj.load({TYPE:0});
     }
     render()
     {
@@ -108,13 +104,10 @@ export default class taxSugar extends React.PureComponent
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
-                                        <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                            onClick={()=>
-                                            {
-                                                this.getDoc()
-                                            }}/>
-                                    </Item>
-                                    <Item location="after" locateInMenu="auto">
+                                    <NdButton id="btnBack" parent={this} icon="revert" type="default"
+                                    onClick={()=>  { this.getDoc() }}/>
+                                </Item>
+                                <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" 
                                     onClick={async(e)=>
                                     {
@@ -126,6 +119,7 @@ export default class taxSugar extends React.PureComponent
                                         }
                                         
                                         let pResult = await dialog(tmpConfObj);
+
                                         if(pResult == 'btn01')
                                         {
                                             let Data = {data:this.taxSugarObj.dt().toArray()}
@@ -182,10 +176,7 @@ export default class taxSugar extends React.PureComponent
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>
-                            {
-                                this.frmTrnsfItems = e.component
-                            }}>
+                            <Form colCount={1} onInitialized={(e)=> { this.frmTrnsfItems = e.component }}>
                                 <Item location="after">
                                     <Button icon="add" text={this.t("btnAdd")}
                                     onClick={async (e)=>
@@ -268,104 +259,93 @@ export default class taxSugar extends React.PureComponent
                                     </NdGrid>
                                 </Item>
                             </Form>
-                        {/* TaxSugar PopUp */}
-                        <div>
-                            <NdPopUp parent={this} 
-                            id={"popTaxSugar"} 
-                            visible={false}
-                            showCloseButton={true}
-                            showTitle={true}
-                            title={this.t("popTaxSugar.title")}
-                            container={"#" + this.props.data.id + this.tabIndex} 
-                            width={'500'}
-                            height={'600'}
-                            position={{of:'#' + this.props.data.id + this.tabIndex}}
-                            >
-                            <NdForm colCount={1} height={'fit-content'}>
-                                <NdItem>
-                                    <NdLabel text={this.t("popTaxSugar.minValue")} alignment="right" />
-                                    <div className="col-4 pe-0">
-                                        <NdNumberBox id="minValue" parent={this} simple={true}
-                                        maxLength={32} format={"##0.00"}
-                                        >
-                                        <Validator validationGroup={"frmPopTaxSugar"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validValue")} />
-                                            <RangeRule min={0.001} message={this.t("zeroValid")} />
-                                        </Validator>  
-                                        </NdNumberBox>
-                                    </div>
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popTaxSugar.maxValue")} alignment="right" />
-                                    <div className="col-12 pe-0">
-                                        <NdNumberBox id="maxValue" parent={this} simple={true} width={500}
-                                        maxLength={32} format={"##0.00"}                                       
-                                        param={this.param.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
-                                        access={this.access.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
-                                        >
-                                        <Validator validationGroup={"frmPopTaxSugar"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validValue")}/>
-                                            <RangeRule min={0.001} message={this.t("zeroValid")} />
-                                        </Validator>  
-                                        </NdNumberBox>
-                                    </div>
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popTaxSugar.price")} alignment="right" />
-                                    <div className="col-12 pe-0">
-                                        <NdNumberBox id="price" parent={this} simple={true} width={500}
-                                        maxLength={32}  format={"##0.00"}                                      
-                                        >
-                                        <Validator validationGroup={"frmPopTaxSugar"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validValue")}/>
-                                            <RangeRule min={0.001} message={this.t("zeroValid")} />
-                                        </Validator>  
-                                        </NdNumberBox>
-                                    </div>
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popTaxSugar.date")} alignment="right" />
-                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}
-                                        onApply={async()=>{
-                                        }}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("popTaxSugar.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                            validationGroup={"frmPopTaxSugar"  + this.tabIndex}
-                                            onClick={async (e)=>
-                                            {       
-                                                if(e.validationGroup.validate().status == "valid")
-                                                {
-                                                    let tmpDocItems = {...this.taxSugarObj.empty}
-                                                    tmpDocItems.MIN_VALUE = this.minValue.value
-                                                    tmpDocItems.MAX_VALUE = this.maxValue.value
-                                                    tmpDocItems.PRICE =this.price.value
-                                                    tmpDocItems.START_DATE = this.dtDate.startDate.format("YYYY-MM-DD")
-                                                    tmpDocItems.END_DATE = this.dtDate.endDate.format("YYYY-MM-DD")
-                                                    tmpDocItems.DATE = this.dtDate.startDate.format("YYYY-MM-DD") +'/' + this.dtDate.endDate.format("YYYY-MM-DD")
+                            {/* TaxSugar PopUp */}
+                            <div>
+                                <NdPopUp parent={this} 
+                                id={"popTaxSugar"} 
+                                visible={false}
+                                showCloseButton={true}
+                                showTitle={true}
+                                title={this.t("popTaxSugar.title")}
+                                container={"#" + this.props.data.id + this.tabIndex} 
+                                width={'500'}
+                                height={'600'}
+                                position={{of:'#' + this.props.data.id + this.tabIndex}}
+                                >
+                                    <NdForm colCount={1} height={'fit-content'}>
+                                        <NdItem>
+                                            <NdLabel text={this.t("popTaxSugar.minValue")} alignment="right" />
+                                            <div className="col-4 pe-0">
+                                                <NdNumberBox id="minValue" parent={this} simple={true} maxLength={32} format={"##0.00"} >
+                                                    <Validator validationGroup={"frmPopTaxSugar"  + this.tabIndex}>
+                                                        <RequiredRule message={this.t("validValue")} />
+                                                        <RangeRule min={0.001} message={this.t("zeroValid")} />
+                                                    </Validator>  
+                                                </NdNumberBox>
+                                            </div>
+                                        </NdItem>
+                                        <NdItem>
+                                            <NdLabel text={this.t("popTaxSugar.maxValue")} alignment="right" />
+                                            <div className="col-12 pe-0">
+                                                <NdNumberBox id="maxValue" parent={this} simple={true} width={500}
+                                                maxLength={32} format={"##0.00"}                                       
+                                                param={this.param.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
+                                                access={this.access.filter({ELEMENT:'numCash',USERS:this.user.CODE})}
+                                                >
+                                                    <Validator validationGroup={"frmPopTaxSugar"  + this.tabIndex}>
+                                                        <RequiredRule message={this.t("validValue")}/>
+                                                        <RangeRule min={0.001} message={this.t("zeroValid")} />
+                                                    </Validator>  
+                                                </NdNumberBox>
+                                            </div>
+                                        </NdItem>
+                                        <NdItem>
+                                            <NdLabel text={this.t("popTaxSugar.price")} alignment="right" />
+                                            <div className="col-12 pe-0">
+                                                <NdNumberBox id="price" parent={this} simple={true} width={500} maxLength={32}  format={"##0.00"} >
+                                                    <Validator validationGroup={"frmPopTaxSugar"  + this.tabIndex}>
+                                                        <RequiredRule message={this.t("validValue")}/>
+                                                        <RangeRule min={0.001} message={this.t("zeroValid")} />
+                                                    </Validator>  
+                                                </NdNumberBox>
+                                            </div>
+                                        </NdItem>
+                                        <NdItem>
+                                            <NdLabel text={this.t("popTaxSugar.date")} alignment="right" />
+                                            <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                                        </NdItem>
+                                        <NdItem>
+                                            <div className='row'>
+                                                <div className='col-6'>
+                                                    <NdButton text={this.t("popTaxSugar.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                                    validationGroup={"frmPopTaxSugar"  + this.tabIndex}
+                                                    onClick={async (e)=>
+                                                    {       
+                                                        if(e.validationGroup.validate().status == "valid")
+                                                        {
+                                                            let tmpDocItems = {...this.taxSugarObj.empty}
+                                                            tmpDocItems.MIN_VALUE = this.minValue.value
+                                                            tmpDocItems.MAX_VALUE = this.maxValue.value
+                                                            tmpDocItems.PRICE =this.price.value
+                                                            tmpDocItems.START_DATE = this.dtDate.startDate.format("YYYY-MM-DD")
+                                                            tmpDocItems.END_DATE = this.dtDate.endDate.format("YYYY-MM-DD")
+                                                            tmpDocItems.DATE = this.dtDate.startDate.format("YYYY-MM-DD") +'/' + this.dtDate.endDate.format("YYYY-MM-DD")
 
-                                                    this.taxSugarObj.addEmpty(tmpDocItems)
-                                                    this.popTaxSugar.hide();  
-                                                }
-                                                
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popTaxSugar.hide();  
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </NdItem>
-                                </NdForm>
-                            </NdPopUp>
-                        </div> 
-                           
+                                                            this.taxSugarObj.addEmpty(tmpDocItems)
+                                                            this.popTaxSugar.hide();  
+                                                        }
+                                                        
+                                                    }}/>
+                                                </div>
+                                                <div className='col-6'>
+                                                    <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                                    onClick={()=> { this.popTaxSugar.hide() }}/>
+                                                </div>
+                                            </div>
+                                        </NdItem>
+                                    </NdForm>
+                                </NdPopUp>
+                            </div> 
                         </div>
                     </div>
                     <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>

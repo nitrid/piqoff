@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar from 'devextreme-react/toolbar';
 import Form, {Item,  Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import { Chart, Series, CommonSeriesSettings, Legend, ValueAxis, Title, Tooltip, Border, ArgumentAxis, CommonAxisSettings, Grid, Margin, Label as ChartLabel, Format, Strips, Strip, ZoomAndPan } from 'devextreme-react/chart';
 import PieChart, { Legend as PieLegend, Series as PieSeries, Tooltip as PieTooltip, Label as PieLabel , Connector as PieConnector, LoadingIndicator as PieLoadingIndicator} from 'devextreme-react/pie-chart';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js'
@@ -219,6 +221,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     title: this.lang.t("worst10Days"),
                     rank: index + 1
                 }))
+                
             analysisData.worst10Days = worst10Days
             
             // Ortalama üstü günler

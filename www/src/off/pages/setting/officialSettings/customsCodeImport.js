@@ -4,7 +4,7 @@ import { transportTypeCls} from '../../../../core/cls/doc.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import Form, { Label,Item } from 'devextreme-react/form';
 import { Button } from 'devextreme-react/button';
 import * as xlsx from 'xlsx'
 
@@ -22,9 +22,11 @@ export default class customsCodeImport extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.transportObj = new transportTypeCls();
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
         this.customsData = new datatable
@@ -45,24 +47,29 @@ export default class customsCodeImport extends React.PureComponent
     {
         this.customsData.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_ITEMS_CUSTOMS_DATA_INSERT] " + 
-            "@MULTICODE = @PMULTICODE, " +
-            "@NAME = @PNAME, " + 
-            "@CUSTOMS = @PCUSTOMS, " +
-            "@ORIGIN = @PORIGIN, " +
-            "@CUSTOMER = @PCUSTOMER ", 
+            query : `EXEC [dbo].[PRD_ITEMS_CUSTOMS_DATA_INSERT] 
+                    @MULTICODE = @PMULTICODE, 
+                    @NAME = @PNAME, 
+                    @CUSTOMS = @PCUSTOMS, 
+                    @ORIGIN = @PORIGIN, 
+                    @CUSTOMER = @PCUSTOMER `, 
             param : ['PMULTICODE:string|50','PNAME:string|max','PCUSTOMS:string|50','PORIGIN:string|50','PCUSTOMER:string|50'],
             dataprm : ['MULTICODE','NAME','CUSTOMS','ORIGIN','CUSTOMER','CUSTOMER']
         } 
         App.instance.setState({isExecute:true})
+
         for (let i = 0; i < pData.length; i++) 
         {
             pData[i].CUSTOMER = this.customerGuid
             this.customsData.push(pData[i])
         }
+
         await this.customsData.update()
+
         App.instance.setState({isExecute:false})
+
         this.customsData.clear()
+
         this.toast.show({message:this.t("msgSucces.msg"),type:"success"});
 
     }
@@ -169,29 +176,17 @@ export default class customsCodeImport extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
-                                        
                                     </NdPopGrid>
                                 </NdItem> 
                                 {/* txtCustomerName */}
@@ -200,8 +195,7 @@ export default class customsCodeImport extends React.PureComponent
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     readOnly={true}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem> 
                                 <NdEmptyItem />
                                 <NdItem>
@@ -236,22 +230,19 @@ export default class customsCodeImport extends React.PureComponent
                                     <Label text={this.t("popExcel.txtMulticode")} alignment="right" />
                                     <NdTextBox id="txtPopMulticode" parent={this} simple={true}  notRefresh = {true} readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popExcel.txtCustoms")} alignment="right" />
                                     <NdTextBox id="txtPopCustoms" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popExcel.txtOrigin")} alignment="right" />
                                     <NdTextBox id="txtPopOrigin" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </Item>
                             </Form>
                             <Form colCount={2}>

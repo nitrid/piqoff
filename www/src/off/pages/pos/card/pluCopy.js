@@ -41,7 +41,6 @@ export default class pluCopy extends React.PureComponent
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
                     query : `SELECT CODE, NAME FROM USERS WHERE STATUS = 1 ORDER BY CODE ASC`,

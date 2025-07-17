@@ -2,8 +2,10 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import Toolbar from 'devextreme-react/toolbar';
 import moment from 'moment';
+
 import Form, {Item, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, ColumnChooser,StateStoring,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -17,22 +19,16 @@ export default class enddayReport extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
-        this.groupList = [];
+
         this.btnGetClick = this.btnGetClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () => { }, 1000);
     }
-    async Init()
-    {
-         
-    }
+
     loadState()
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdAdvanceDataState',USERS:this.user.CODE})
@@ -44,18 +40,12 @@ export default class enddayReport extends React.PureComponent
         tmpSave.setValue(e)
         tmpSave.save()
     }
+
     async btnGetClick()
     {
         if(this.cmbDevice.value == '')
         {
-            let tmpConfObj =
-            {
-              id:'msgDeviceSelect',showTitle:true,title:this.t("msgDeviceSelect.title"),showCloseButton:true,width:'500px',height:'auto',
-              button:[{id:"btn01",caption:this.t("msgDeviceSelect.btn01"),location:'before'}],
-              content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDeviceSelect.msg")}</div>)
-            }
-            
-            await dialog(tmpConfObj);
+            this.toast.show({message:this.t("msgDeviceSelect.msg"),type:"warning"})
             return
         }
         let tmpSource =
@@ -65,8 +55,8 @@ export default class enddayReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM DOC_CUSTOMER_VW_01 WHERE REF= 'POS' AND PAY_TYPE =20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND ((CONVERT(NVARCHAR,CDATE,112) >= @START_DATE) OR (@START_DATE = '19700101')) " +
-                            "AND ((CONVERT(NVARCHAR,CDATE,112) <= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) ORDER BY CDATE DESC",
+                    query : `SELECT * FROM DOC_CUSTOMER_VW_01 WHERE REF= 'POS' AND PAY_TYPE =20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND ((CONVERT(NVARCHAR,CDATE,112) >= @START_DATE) OR (@START_DATE = '19700101')) 
+                            AND ((CONVERT(NVARCHAR,CDATE,112) <= @FINISH_DATE) OR (@FINISH_DATE = '19700101')) ORDER BY CDATE DESC`,
                     param : ['INPUT_CODE:string|50','START_DATE:date','FINISH_DATE:date'],
                     value : [this.cmbDevice.value, this.dtDate.startDate,this.dtDate.endDate]
                 },
@@ -135,7 +125,6 @@ export default class enddayReport extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("dtFirst")} alignment="right" />
                                     <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
-                                
                                 </Item>
                             </Form>
                         </div>
@@ -144,13 +133,11 @@ export default class enddayReport extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

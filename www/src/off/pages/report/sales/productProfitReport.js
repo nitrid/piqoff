@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import  {Item } from 'devextreme-react/form';
+
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdGrid,{Column,Paging,Pager,Scrolling,Export,Summary,StateStoring,ColumnChooser,TotalItem} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -16,14 +18,16 @@ export default class productProfitReport extends React.PureComponent
     constructor(props)
     {
         super(props)
+
+        this.core = App.instance.core;
+
         this.state = 
         {
             itemOptions: [],
             noDataMessage: ''
         }
-        this.core = App.instance.core;
-        this.cmbItem = null;
 
+        this.cmbItem = null;
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
@@ -32,6 +36,19 @@ export default class productProfitReport extends React.PureComponent
     {
         await this.core.util.waitUntil(0)
     }
+
+    loadState() 
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
+    
     render(){
         return (
             <div>
@@ -57,6 +74,7 @@ export default class productProfitReport extends React.PureComponent
                                                 }
                                                 
                                                 let pResult = await dialog(tmpConfObj);
+
                                                 if(pResult == 'btn01')
                                                 {
                                                     App.instance.panel.closePage()
@@ -71,9 +89,7 @@ export default class productProfitReport extends React.PureComponent
                         <NdForm id="frmReport" parent={this} width="100%" colCount={2}>
                             <NdItem>
                                 <NdLabel text={this.t("dtDate")}/>
-                                <NbDateRange id={"dtDate"} parent={this} 
-                                startDate={moment().startOf('month')} 
-                                endDate={moment().endOf('month')}/>
+                                <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('month')} endDate={moment().endOf('month')}/>
                             </NdItem>
                             <NdItem>
                                 <NdLabel text={this.t("cmbMainGrp")}/>
@@ -83,11 +99,13 @@ export default class productProfitReport extends React.PureComponent
                                 valueExpr="CODE"
                                 placeholder={this.t("selectMainGrp")}
                                 showClearButton={true}
-                                data={{
-                                    source:{
-                                        select:{
-                                            query: "SELECT NAME,CODE FROM ITEM_GROUP " +
-                                                    "ORDER BY NAME",
+                                data=
+                                {{
+                                    source:
+                                    {
+                                        select:
+                                        {
+                                            query: `SELECT NAME,CODE FROM ITEM_GROUP ORDER BY NAME`,
                                         },
                                         sql: this.core.sql
                                     }
@@ -98,21 +116,17 @@ export default class productProfitReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-6">
-                            
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                                
                         </div>
                         <div className="col-3">
-                                
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -155,7 +169,8 @@ export default class productProfitReport extends React.PureComponent
                                     <Column dataField="TOTAL_PROFIT" caption={this.t("grdListe.clmTotalProfit")} width={100} visible={true}
                                     format={{ style: "currency", currency: "EUR", precision: 3}}/>
                                     <Column dataField="PROFIT_PERCENT" caption={this.t("grdListe.clmProfitPercent")} width={100} visible={true}
-                                    cellRender={((e) => {
+                                    cellRender={((e) => 
+                                    {
                                         const value = e.value != null ? e.value : 0;
                                         return (
                                             <div style={{color: value >= 0 ? '#28a745' : '#dc3545', textAlign: 'right'}}>
@@ -185,27 +200,28 @@ export default class productProfitReport extends React.PureComponent
             this.setState({ noDataMessage: '' });
             
             let tmpQuery = {
-                query: "SELECT " +
-                       "ROW_NUMBER() OVER(ORDER BY MAIN_GRP_NAME, ITEM_NAME) AS ROW_NO, " +
-                       "MAIN_GRP_NAME, " +
-                       "ITEM_NAME, " +
-                       "ITEM_CODE, " +
-                       "SUM(QUANTITY) AS TOTAL_QUANTITY, " +
-                       "ROUND(AVG(COST_PRICE), 2) AS AVG_COST_PRICE, " +
-                       "ROUND(SUM(TOTAL_COST), 2) AS TOTAL_COST, " +
-                       "ROUND(SUM(TOTALHT), 2) AS TOTALHT, " +
-                       "ROUND((SUM(TOTALHT) - SUM(TOTAL_COST)), 2) AS TOTAL_PROFIT, " +
-                       "ROUND(AVG(TOTALHT / NULLIF(QUANTITY, 0)), 2) AS AVG_SELL_PRICE,  " +
-                       "CASE WHEN SUM(TOTAL_COST) > 0 THEN " +
-                       "ROUND(((SUM(TOTALHT) - SUM(TOTAL_COST)) / SUM(TOTAL_COST)) * 100, 2) " +
-                       "ELSE 0 END AS PROFIT_PERCENT " +
-                       "FROM DOC_ITEMS_DETAIL_VW_01 " +
-                       "WHERE TYPE = 1 AND REBATE= 0 AND " +
-                       "(DOC_TYPE = 20 OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) " +
-                       "AND (MAIN_CODE = @MAIN_CODE OR @MAIN_CODE = '') " +
-                       "AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
-                       "GROUP BY MAIN_GRP_NAME, ITEM_NAME,ITEM_CODE " +
-                       "ORDER BY MAIN_GRP_NAME, ITEM_NAME",
+                query: 
+                       `SELECT 
+                       ROW_NUMBER() OVER(ORDER BY MAIN_GRP_NAME, ITEM_NAME) AS ROW_NO, 
+                       MAIN_GRP_NAME, 
+                       ITEM_NAME, 
+                       ITEM_CODE, 
+                       SUM(QUANTITY) AS TOTAL_QUANTITY, 
+                       ROUND(AVG(COST_PRICE), 2) AS AVG_COST_PRICE, 
+                       ROUND(SUM(TOTAL_COST), 2) AS TOTAL_COST, 
+                       ROUND(SUM(TOTALHT), 2) AS TOTALHT, 
+                       ROUND((SUM(TOTALHT) - SUM(TOTAL_COST)), 2) AS TOTAL_PROFIT, 
+                       ROUND(AVG(TOTALHT / NULLIF(QUANTITY, 0)), 2) AS AVG_SELL_PRICE, 
+                       CASE WHEN SUM(TOTAL_COST) > 0 THEN 
+                       ROUND(((SUM(TOTALHT) - SUM(TOTAL_COST)) / SUM(TOTAL_COST)) * 100, 2) 
+                       ELSE 0 END AS PROFIT_PERCENT 
+                       FROM DOC_ITEMS_DETAIL_VW_01 
+                       WHERE TYPE = 1 AND REBATE= 0 AND 
+                       (DOC_TYPE = 20 OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) 
+                       AND (MAIN_CODE = @MAIN_CODE OR @MAIN_CODE = '') 
+                       AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE 
+                       GROUP BY MAIN_GRP_NAME, ITEM_NAME,ITEM_CODE 
+                       ORDER BY MAIN_GRP_NAME, ITEM_NAME`,
                 param : ['FIRST_DATE:date','LAST_DATE:date','MAIN_CODE:string|50'],
                 value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbMainGrp.value]
             };
@@ -222,27 +238,17 @@ export default class productProfitReport extends React.PureComponent
                 }
                 await this.grdListe.dataRefresh(tmpSource);
             }
-            else {
+            else 
+            {
                 // Veri bulunamadığında mesajı güncelleyelim
                 this.setState({ noDataMessage: this.lang.t("msgNoData")});
                 console.log("Seçilen kriterlere uygun veri bulunamadı.");
             }
         }
-        catch(err) {
+        catch(err) 
+        {
             console.error("Veri yüklenirken bir hata oluştu:", err.message);
         }
-    }
-
-    loadState() 
-    {
-        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
-        return tmpLoad.getValue()
-    }
-    saveState(e)
-    {
-        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
-        tmpSave.setValue(e)
-        tmpSave.save()
     }
 }
 

@@ -20,9 +20,11 @@ export default class PropertyCard extends React.PureComponent
     constructor(props)
     {
         super(props)
+        
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.propertyObj = new restPropertyCls();
+
         this.propData = []
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
@@ -90,10 +92,9 @@ export default class PropertyCard extends React.PureComponent
     }
     async getProperty(pCode)
     {
-        console.log('pCode',pCode)
         this.propertyObj.clearAll()
+
         await this.propertyObj.load({CODE:pCode});
-        console.log('this.propertyObj', this.propertyObj);
 
         if(this.propertyObj.dt().length > 0)
         {
@@ -112,7 +113,7 @@ export default class PropertyCard extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID, CODE, NAME FROM REST_PROPERTY WHERE CODE = @CODE AND DELETED = 0",
+                    query :`SELECT GUID, CODE, NAME FROM REST_PROPERTY WHERE CODE = @CODE AND DELETED = 0`,
                     param : ['CODE:string|50'],
                     value : [pCode]
                 }
@@ -133,6 +134,7 @@ export default class PropertyCard extends React.PureComponent
                     }
     
                     let pResult = await dialog(tmpConfObj);
+
                     if(pResult == 'btn01')
                     {
                         this.getProperty(pCode)
@@ -213,10 +215,7 @@ export default class PropertyCard extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=>  { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmDepot"  + this.tabIndex}
@@ -237,6 +236,7 @@ export default class PropertyCard extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 let tmpConfObj1 =
@@ -291,8 +291,11 @@ export default class PropertyCard extends React.PureComponent
                                         if(pResult == 'btn01')
                                         {
                                             this.propertyObj.dt("REST_ITEM_PROPERTY").removeAll()
+
                                             this.propertyObj.dt().removeAt(0)
+
                                             await this.propertyObj.dt().delete();
+
                                             await this.propertyObj.dt("REST_ITEM_PROPERTY").delete();
                                             this.toast.show({message:this.t("msgDeleteResult.msgSuccess"),type:"success"})
                                             this.init(); 
@@ -390,7 +393,7 @@ export default class PropertyCard extends React.PureComponent
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")}
                                     deferRendering={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM REST_PROPERTY WHERE DELETED = 0"},sql:this.core.sql}}}                                   
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM REST_PROPERTY WHERE DELETED = 0`},sql:this.core.sql}}}                                   
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
@@ -403,8 +406,7 @@ export default class PropertyCard extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}                                    
                                     param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* txtSelection */}
                                 <NdItem>
@@ -413,8 +415,7 @@ export default class PropertyCard extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}                                    
                                     param={this.param.filter({ELEMENT:'txtSelection',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtSelection',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                             </NdForm>
                         </div>
@@ -436,7 +437,6 @@ export default class PropertyCard extends React.PureComponent
                                             width={'100%'}
                                             dbApply={false}
                                             loadPanel={{enabled:true}}
-                                            
                                             >
                                                 <Scrolling mode="standart" />
                                                 <Column dataField="ITEM_NAME" 
@@ -449,7 +449,8 @@ export default class PropertyCard extends React.PureComponent
                                                             text = text.replace(/^[.\s]+/, '');
                                                             
                                                             // SAYI ILE BASLIYORSA
-                                                            if(/^\d+/.test(text)) {
+                                                            if(/^\d+/.test(text)) 
+                                                            {
                                                                 let number = text.match(/^\d+/)[0];
                                                                 let paddedNumber = number.padStart(10, '0');
                                                                 return 'zzz' + paddedNumber + text.substring(number.length);
@@ -546,7 +547,7 @@ export default class PropertyCard extends React.PureComponent
                         width={'90%'}
                         height={'90%'}
                         title={this.t("pgProduct.title")}
-                        data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM ITEMS WHERE DELETED = 0"},sql:this.core.sql}}}                                   
+                        data={{source:{select:{query : `SELECT GUID,CODE,NAME FROM ITEMS WHERE DELETED = 0`},sql:this.core.sql}}}                                   
                         >
                             <Column dataField="CODE" caption={this.t("pgProduct.clmCode")} width={150} />
                             <Column dataField="NAME" caption={this.t("pgProduct.clmName")} width={300} defaultSortOrder="asc" />

@@ -19,6 +19,7 @@ export default class rebateOperation extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
@@ -30,10 +31,7 @@ export default class rebateOperation extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () => {this.Init() }, 1000);
     }
     async Init()
     {
@@ -44,6 +42,7 @@ export default class rebateOperation extends React.PureComponent
         let tmpType
         let tmpDocType
         let tmpRebate
+
         if(this.cmbType.value == 0)
         {
             tmpType = 0
@@ -133,10 +132,11 @@ export default class rebateOperation extends React.PureComponent
                     {
                         select : 
                         { 
-                            query :"SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, " +
-                            "CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS.OUTPUT) " +
-                            "WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS.INPUT) END AS CUSTOMER " +
-                            " FROM DOC_ORDERS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND DELETED = 1 ORDER BY CDATE DESC",
+                            query :
+                                `SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, 
+                                CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS.OUTPUT) 
+                                WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS.INPUT) END AS CUSTOMER 
+                                FROM DOC_ORDERS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND DELETED = 1 ORDER BY CDATE DESC`,
                             param : ['TYPE:int','DOC_TYPE:int','REBATE:int'],
                             value : [tmpType,tmpDocType,tmpRebate]
                         },
@@ -155,10 +155,11 @@ export default class rebateOperation extends React.PureComponent
                     {
                         select : 
                         { 
-                            query :"SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, " +
-                            "CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_OFFERS.OUTPUT) " +
-                            "WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_OFFERS.INPUT) END AS CUSTOMER " +
-                            " FROM DOC_OFFERS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND DELETED = 1 ORDER BY CDATE DESC",
+                            query :
+                                `SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, 
+                                CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_OFFERS.OUTPUT) 
+                                WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_OFFERS.INPUT) END AS CUSTOMER 
+                                FROM DOC_OFFERS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND DELETED = 1 ORDER BY CDATE DESC`,
                             param : ['TYPE:int','DOC_TYPE:int','REBATE:int'],
                             value : [tmpType,tmpDocType,tmpRebate]
                         },
@@ -178,10 +179,11 @@ export default class rebateOperation extends React.PureComponent
                     {
                         select : 
                         { 
-                            query :"SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, " +
-                            "CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ITEMS.OUTPUT) " +
-                            "WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ITEMS.INPUT) END AS CUSTOMER " +
-                            " FROM DOC_ITEMS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND REBATE = @REBATE AND DELETED = 1 ORDER BY CDATE DESC",
+                            query :
+                                `SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, 
+                                CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ITEMS.OUTPUT) 
+                                WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ITEMS.INPUT) END AS CUSTOMER 
+                                FROM DOC_ITEMS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND REBATE = @REBATE AND DELETED = 1 ORDER BY CDATE DESC`,
                             param : ['TYPE:int','DOC_TYPE:int','REBATE:int'],
                             value : [tmpType,tmpDocType,tmpRebate]
                         },
@@ -203,11 +205,12 @@ export default class rebateOperation extends React.PureComponent
                     {
                         select : 
                         { 
-                            query :"SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, " +
-                            "CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS.OUTPUT) " +
-                            "WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS.INPUT) END AS CUSTOMER " +
-                            " FROM DOC_ORDERS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND " + 
-                            " DELETED = 1 AND ISNULL((SELECT TOP 1 DELETED FROM DOC WHERE DOC.GUID = DOC_ORDERS.DOC_GUID),0) = 0 ORDER BY CDATE DESC",
+                            query :
+                                `SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, 
+                                CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS.OUTPUT) 
+                                WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ORDERS.INPUT) END AS CUSTOMER 
+                                FROM DOC_ORDERS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND 
+                                DELETED = 1 AND ISNULL((SELECT TOP 1 DELETED FROM DOC WHERE DOC.GUID = DOC_ORDERS.DOC_GUID),0) = 0 ORDER BY CDATE DESC`,
                             param : ['TYPE:int','DOC_TYPE:int','REBATE:int'],
                             value : [tmpType,tmpDocType,tmpRebate]
                         },
@@ -226,11 +229,12 @@ export default class rebateOperation extends React.PureComponent
                     {
                         select : 
                         { 
-                            query :"SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, " +
-                            "CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_OFFERS.OUTPUT) " +
-                            "WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_OFFERS.INPUT) END AS CUSTOMER " +
-                            " FROM DOC_OFFERS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND " +
-                             "DELETED = 1 AND ISNULL((SELECT TOP 1 DELETED FROM DOC WHERE DOC.GUID = DOC_OFFERS.DOC_GUID),0) = 0 ORDER BY CDATE DESC",
+                            query :
+                                `SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, 
+                                CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_OFFERS.OUTPUT) 
+                                WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_OFFERS.INPUT) END AS CUSTOMER 
+                                FROM DOC_OFFERS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND 
+                                DELETED = 1 AND ISNULL((SELECT TOP 1 DELETED FROM DOC WHERE DOC.GUID = DOC_OFFERS.DOC_GUID),0) = 0 ORDER BY CDATE DESC`,
                             param : ['TYPE:int','DOC_TYPE:int','REBATE:int'],
                             value : [tmpType,tmpDocType,tmpRebate]
                         },
@@ -249,11 +253,12 @@ export default class rebateOperation extends React.PureComponent
                     {
                         select : 
                         { 
-                            query :"SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, " +
-                            "CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ITEMS.OUTPUT) " +
-                            "WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ITEMS.INPUT) END AS CUSTOMER " +
-                            " FROM DOC_ITEMS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND REBATE = @REBATE AND" +
-                            " DELETED = 1 AND ISNULL((SELECT TOP 1 DELETED FROM DOC WHERE DOC.GUID = DOC_ITEMS.DOC_GUID),0) = 0 ORDER BY CDATE DESC",
+                            query :
+                                `SELECT *,CONVERT(NVARCHAR,CDATE,104) AS DOC_DATE_CONVERT, 
+                                CASE TYPE WHEN 0 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ITEMS.OUTPUT) 
+                                WHEN 1 THEN (SELECT TOP 1 TITLE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_ITEMS.INPUT) END AS CUSTOMER 
+                                FROM DOC_ITEMS WHERE TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE  AND REBATE = @REBATE AND
+                                DELETED = 1 AND ISNULL((SELECT TOP 1 DELETED FROM DOC WHERE DOC.GUID = DOC_ITEMS.DOC_GUID),0) = 0 ORDER BY CDATE DESC`,
                             param : ['TYPE:int','DOC_TYPE:int','REBATE:int'],
                             value : [tmpType,tmpDocType,tmpRebate]
                         },
@@ -265,9 +270,6 @@ export default class rebateOperation extends React.PureComponent
                 App.instance.setState({isExecute:false})
             }
         }
-       
-       
-       
     }
     async btnSave()
     {
@@ -283,7 +285,7 @@ export default class rebateOperation extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "EXEC [dbo].[PRD_DOC_RETURN] @CUSER = @PCUSER,@GUID=@PGUID ",
+                query : `EXEC [dbo].[PRD_DOC_RETURN] @CUSER = @PCUSER,@GUID=@PGUID `,
                 param : ['PCUSER:string|50','PGUID:string|50'],
                 value : [this.core.auth.data.CODE,this.grdDeleteList.getSelectedData()[0].GUID]
             }
@@ -348,27 +350,23 @@ export default class rebateOperation extends React.PureComponent
                                     ,{ID:11,VALUE:this.t("cmbTypeData.purchaseOffer")},{ID:12,VALUE:this.t("cmbTypeData.salesOffer")}]}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
-                                    >
-                                    </NdSelectBox>
+                                    />
                                 </Item>
                                  {/* chkDoc */}
                                  <Item>
                                     <Label text={this.t("chkDoc")} alignment="right" />
-                                    <NdCheckBox id="chkDoc" parent={this} simple={true} value ={false}>
-                                    </NdCheckBox>
+                                    <NdCheckBox id="chkDoc" parent={this} simple={true} value ={false}/>
                                 </Item>
                             </Form>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

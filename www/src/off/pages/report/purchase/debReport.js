@@ -1,8 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
+
 import NdGrid,{Column, Paging,Pager,Scrolling,ColumnChooser,StateStoring,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdButton from '../../../../core/react/devex/button.js';
@@ -14,8 +16,9 @@ export default class debReport extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
-        this.groupList = [];
+        
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
@@ -23,10 +26,9 @@ export default class debReport extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
+        setTimeout(async () => { }, 1000);
     }
+
     loadState()
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
@@ -38,9 +40,9 @@ export default class debReport extends React.PureComponent
         tmpSave.setValue(e)
         tmpSave.save()
     }
+
     async btnGetirClick()
     {
-       
         let tmpSource =
         {
             source : 
@@ -48,13 +50,15 @@ export default class debReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT " +
-                            "OUTPUT_CODE,OUTPUT_NAME," +
-                            "MAX(ADRESS) AS ADRESS ," +
-                            "SUM(TOTALHT) AS TOTALHT," +
-                            "ROUND(SUM(KG),3) AS KG FROM [DEB_ITEMS_VW_01] " +
-                            "WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE " +
-                            "GROUP BY OUTPUT_CODE,OUTPUT_NAME" ,
+                    query : 
+                            `SELECT 
+                            OUTPUT_CODE,OUTPUT_NAME,
+                            MAX(ADRESS) AS ADRESS ,
+                            SUM(TOTALHT) AS TOTALHT,
+                            ROUND(SUM(KG),3) AS KG 
+                            FROM [DEB_ITEMS_VW_01] 
+                            WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE 
+                            GROUP BY OUTPUT_CODE,OUTPUT_NAME`,
                     param : ['FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
@@ -63,7 +67,6 @@ export default class debReport extends React.PureComponent
         }
 
         await this.grdListe.dataRefresh(tmpSource)
-      
     }
     render()
     {
@@ -73,7 +76,7 @@ export default class debReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                 <Item location="after"
+                                <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
                                 options=
@@ -119,7 +122,7 @@ export default class debReport extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

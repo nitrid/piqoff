@@ -1,8 +1,9 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar from 'devextreme-react/toolbar';
-import Form, {Item, Label,EmptyItem } from 'devextreme-react/form';
+import Form, {Item, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import NdGrid,{Column, ColumnChooser,StateStoring,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
@@ -18,22 +19,21 @@ export default class itemDetailSalesReport extends React.PureComponent
         
         this.core = App.instance.core;
 
-        this.groupList = [];
         this.btnGetirClick = this.btnGetirClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
+        setTimeout(async () => { }, 1000);
     }
+
     loadState()
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
+
     saveState(e)
     {
         let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE, PAGE:this.props.data.id, APP:"OFF"})
@@ -51,8 +51,8 @@ export default class itemDetailSalesReport extends React.PureComponent
                    groupBy : this.groupList,
                    select : 
                    {
-                       query : "SELECT ITEM_CODE,ITEM_NAME,SUM(QUANTITY) AS QUANTITY,ROUND(SUM(FAMOUNT),2) AS AMOUNT,ROUND(SUM(VAT),2) AS VAT,ROUND(SUM(TOTAL),2) AS TOTAL,(SELECT CDATE FROM ITEMS WHERE ITEMS.GUID = POS_SALE_VW_01.ITEM_GUID) AS CDATE " +
-                               " FROM POS_SALE_VW_01 WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE GROUP BY  ITEM_CODE,ITEM_NAME, ITEM_GUID",
+                       query : `SELECT ITEM_CODE,ITEM_NAME,SUM(QUANTITY) AS QUANTITY,ROUND(SUM(FAMOUNT),2) AS AMOUNT,ROUND(SUM(VAT),2) AS VAT,ROUND(SUM(TOTAL),2) AS TOTAL,(SELECT CDATE FROM ITEMS WHERE ITEMS.GUID = POS_SALE_VW_01.ITEM_GUID) AS CDATE 
+                               FROM POS_SALE_VW_01 WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE GROUP BY  ITEM_CODE,ITEM_NAME, ITEM_GUID`,
                        param : ['FIRST_DATE:date','LAST_DATE:date'],
                        value : [this.dtDate.startDate,this.dtDate.endDate]
                    },
@@ -60,7 +60,8 @@ export default class itemDetailSalesReport extends React.PureComponent
                }
            }
            await this.grdListe.dataRefresh(tmpSource)
-       }else
+       }
+       else
        {    
             let tmpSource2 =
             {
@@ -69,17 +70,17 @@ export default class itemDetailSalesReport extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT POS_SALE_VW_01.ITEM_CODE, " +
-                                    "POS_SALE_VW_01.ITEM_NAME, " +
-                                    "SUM(POS_SALE_VW_01.QUANTITY) AS QUANTITY, " +
-                                    "ROUND(SUM(POS_SALE_VW_01.FAMOUNT),2) AS AMOUNT, " +
-                                    "ROUND(SUM(POS_SALE_VW_01.VAT),2) AS VAT, " +
-                                    "ROUND(SUM(POS_SALE_VW_01.TOTAL),2) AS TOTAL, " +
-                                    "ITEMS.CDATE " +
-                                "FROM POS_SALE_VW_01 " +
-                                "INNER JOIN ITEMS ON ITEMS.GUID = POS_SALE_VW_01.ITEM_GUID " +
-                                "WHERE ITEMS.CDATE >= @FIRST_DATE AND  ITEMS.CDATE <= @LAST_DATE AND ITEMS.DELETED = 0 " +
-                                "GROUP BY  POS_SALE_VW_01.ITEM_CODE, POS_SALE_VW_01.ITEM_NAME, ITEMS.CDATE",
+                        query : `SELECT POS_SALE_VW_01.ITEM_CODE, 
+                                    POS_SALE_VW_01.ITEM_NAME, 
+                                    SUM(POS_SALE_VW_01.QUANTITY) AS QUANTITY, 
+                                    ROUND(SUM(POS_SALE_VW_01.FAMOUNT),2) AS AMOUNT, 
+                                    ROUND(SUM(POS_SALE_VW_01.VAT),2) AS VAT, 
+                                    ROUND(SUM(POS_SALE_VW_01.TOTAL),2) AS TOTAL, 
+                                    ITEMS.CDATE 
+                                FROM POS_SALE_VW_01 
+                                INNER JOIN ITEMS ON ITEMS.GUID = POS_SALE_VW_01.ITEM_GUID 
+                                WHERE ITEMS.CDATE >= @FIRST_DATE AND  ITEMS.CDATE <= @LAST_DATE AND ITEMS.DELETED = 0 
+                                GROUP BY  POS_SALE_VW_01.ITEM_CODE, POS_SALE_VW_01.ITEM_NAME, ITEMS.CDATE`,
                         param : ['FIRST_DATE:date','LAST_DATE:date'],
                         value : [this.dtDate.startDate,this.dtDate.endDate]
                     },
@@ -88,7 +89,6 @@ export default class itemDetailSalesReport extends React.PureComponent
             }
             await this.grdListe.dataRefresh(tmpSource2)
        }
-      
     }
     render()
     {
@@ -151,7 +151,7 @@ export default class itemDetailSalesReport extends React.PureComponent
 
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -186,15 +186,15 @@ export default class itemDetailSalesReport extends React.PureComponent
                                     column="QUANTITY"
                                     summaryType="sum"
                                     />
-                                     <TotalItem
+                                    <TotalItem
                                     column="AMOUNT"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                                       <TotalItem
+                                    <TotalItem
                                     column="VAT"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                                      <TotalItem
+                                    <TotalItem
                                     column="TOTAL"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />

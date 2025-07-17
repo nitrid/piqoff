@@ -1,19 +1,18 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
+
 import Toolbar from 'devextreme-react/toolbar';
 import Form, {Item,EmptyItem, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-import NdGrid,{Column,Editing,ColumnChooser,StateStoring,Paging,Pager,Scrolling,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
+
+import NdGrid,{Column,ColumnChooser,StateStoring,Paging,Pager,Scrolling,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-
-
-
 
 export default class customerItemSaleReport extends React.PureComponent
 {
@@ -22,6 +21,7 @@ export default class customerItemSaleReport extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
+        
         this.btnGetClick = this.btnGetClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
@@ -31,26 +31,27 @@ export default class customerItemSaleReport extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
+
     loadState()
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
         return tmpLoad.getValue()
     }
+
     saveState(e)
     {
         let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE, PAGE:this.props.data.id, APP:"OFF"})
         tmpSave.setValue(e)
         tmpSave.save()
     }
+
     async Init()
     {
         this.txtCustomer.GUID = '00000000-0000-0000-0000-000000000000'
     }
+
     async btnGetClick()
     {
         if(this.txtCustomer.GUID == '00000000-0000-0000-0000-000000000000')
@@ -71,18 +72,20 @@ export default class customerItemSaleReport extends React.PureComponent
             {
                 select : 
                 {
-                    query : "SELECT CUSER_NAME,LUSER_NAME,DEVICE,REF,DOC_DATE,ITEM_CODE,ITEM_NAME,ITEM_GRP_NAME,BARCODE,QUANTITY,UNIT_SHORT,PRICE,CASE WHEN TYPE = 1 THEN FAMOUNT * -1 ELSE FAMOUNT END AS FAMOUNT, " +
-                            " CASE WHEN TYPE = 1 THEN AMOUNT * -1 ELSE AMOUNT END AS AMOUNT,DISCOUNT, " +
-                            "LOYALTY,CASE WHEN TYPE = 1 THEN VAT * -1 ELSE VAT END AS VAT,VAT_RATE,CASE WHEN TYPE = 1 THEN TOTAL * -1 ELSE TOTAL END AS TOTAL FROM POS_SALE_VW_01 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE" ,
+                    query : `SELECT CUSER_NAME,LUSER_NAME,DEVICE,REF,DOC_DATE,ITEM_CODE,ITEM_NAME,ITEM_GRP_NAME,BARCODE,QUANTITY,UNIT_SHORT,PRICE,CASE WHEN TYPE = 1 THEN FAMOUNT * -1 ELSE FAMOUNT END AS FAMOUNT, 
+                            CASE WHEN TYPE = 1 THEN AMOUNT * -1 ELSE AMOUNT END AS AMOUNT,DISCOUNT, 
+                            LOYALTY,CASE WHEN TYPE = 1 THEN VAT * -1 ELSE VAT END AS VAT,VAT_RATE,CASE WHEN TYPE = 1 THEN TOTAL * -1 ELSE TOTAL END AS TOTAL FROM POS_SALE_VW_01 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE` ,
                     param : ['FIRST_DATE:date','LAST_DATE:date','CUSTOMER_GUID:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.txtCustomer.GUID]
                 },
                 sql : this.core.sql
             }
         }
+
         App.instance.setState({isExecute:true})
         await this.grdList.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
+
         let tmpTotal = this.grdList.data.datatable.sum("TOTAL",2)
         this.txtTotal.value = parseFloat(tmpTotal)
     }
@@ -190,7 +193,7 @@ export default class customerItemSaleReport extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_03 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                query : `SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_03 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -203,7 +206,7 @@ export default class customerItemSaleReport extends React.PureComponent
                                 </Item>
                                 <EmptyItem colSpan={1}/>
                                 <Item>
-                                <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
+                                    <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                                 </Item>
                             </Form>
                         </div>
@@ -266,8 +269,7 @@ export default class customerItemSaleReport extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdNumberBox id="txtTotal" parent={this} simple={true} readOnly={true} 
-                                    maxLength={32} format={{ style: "currency", currency: Number.money.code,precision: 2}}
-                                    ></NdNumberBox>
+                                    maxLength={32} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                 </Item>
                             </Form>
                         </div>

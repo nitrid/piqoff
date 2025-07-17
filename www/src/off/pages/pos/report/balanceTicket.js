@@ -45,7 +45,6 @@ export default class itemSalesReport extends React.PureComponent
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
                     query : `SELECT ITEM_NAME,ITEM_CODE,CDATE,TICKET_NO,QUANTITY,PRICE,AMOUNT,TICKET_DATE,STATUS,WEIGHER_NAME, 

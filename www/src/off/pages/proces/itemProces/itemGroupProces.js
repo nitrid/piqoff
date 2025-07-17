@@ -33,11 +33,9 @@ export default class itemList extends React.PureComponent
     componentDidMount()
     {
         
-        setTimeout(async () => 
-        {
-           
-        }, 1000);
+        setTimeout(async () => {}, 1000);
     }
+
     loadState()
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
@@ -49,6 +47,7 @@ export default class itemList extends React.PureComponent
         tmpSave.setValue(e)
         tmpSave.save()
     }
+
     async updateGroup()
     {
         let tmpConfObj =
@@ -68,7 +67,7 @@ export default class itemList extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"UPDATE ITEMS_GRP SET MAIN_GUID = @MAIN WHERE ITEM = @ITEM ",
+                query :`UPDATE ITEMS_GRP SET MAIN_GUID = @MAIN WHERE ITEM = @ITEM `,
                 param : ['MAIN:string|50','ITEM:string|50'],
                 value : [this.cmbItemGrp.value,this.grdListe.getSelectedData()[i].GUID]
             }
@@ -86,7 +85,6 @@ export default class itemList extends React.PureComponent
             this.txtUrunAdi.setState({value:tmpUrunAdi})
         }
         
-      
         let tmpSource =
         {
             source : 
@@ -94,13 +92,14 @@ export default class itemList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,NAME,SNAME,MAIN_GRP_NAME,VAT,PRICE_SALE,MAIN_UNIT_NAME AS UNIT_NAME " + 
-                            "FROM ITEMS_EDIT_VW_01 " +
-                            "WHERE {0}" +
-                            "((NAME LIKE @NAME +'%') OR (@NAME = '')) AND " +
-                            "((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND " +
-                            "((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) " + 
-                            " GROUP BY  GUID,CODE,NAME,SNAME,MAIN_GRP_NAME,VAT,PRICE_SALE,MAIN_UNIT_NAME",
+                    query : 
+                            `SELECT GUID,CODE,NAME,SNAME,MAIN_GRP_NAME,VAT,PRICE_SALE,MAIN_UNIT_NAME AS UNIT_NAME 
+                            FROM ITEMS_EDIT_VW_01 
+                            WHERE {0}
+                            ((NAME LIKE @NAME +'%') OR (@NAME = '')) AND 
+                            ((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND 
+                            ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) 
+                            GROUP BY  GUID,CODE,NAME,SNAME,MAIN_GRP_NAME,VAT,PRICE_SALE,MAIN_UNIT_NAME`,
                     param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
                     value : [this.txtUrunAdi.value.replaceAll("*", "%"),this.cmbUrunGrup.value,this.cmbTedarikci.value]
                 },
@@ -124,8 +123,10 @@ export default class itemList extends React.PureComponent
                 TmpVal = TmpVal + ",'" + this.txtBarkod.value[i] + "'"
                 
             }
+
             tmpSource.source.select.query = tmpSource.source.select.query.replaceAll("{0}", "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) {1}) AND")
         }
+
         if(this.txtMulticode.value.length == 0)
         {
             
@@ -160,8 +161,11 @@ export default class itemList extends React.PureComponent
             }
             
         }
+
         await this.grdListe.dataRefresh(tmpSource)
+
         let tmpDatas = this.prmObj.filter({ID:'emptyCode',USERS:this.user.CODE}).getValue()
+
         if(typeof tmpDatas != 'undefined' && tmpDatas.value ==  true)
         {
             for (let i = 0; i < this.txtBarkod.value.length; i++) 
@@ -228,8 +232,8 @@ export default class itemList extends React.PureComponent
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
-                                            
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -245,16 +249,14 @@ export default class itemList extends React.PureComponent
                             <Form colCount={2} id="frmKriter">
                                 <Item>
                                     <Label text={this.t("txtBarkod")} alignment="right" />
-                                        <NdTagBox id="txtBarkod" parent={this} simple={true} value={[]} placeholder={this.t("barkodPlaceHolder")}
-                                        />
+                                        <NdTagBox id="txtBarkod" parent={this} simple={true} value={[]} placeholder={this.t("barkodPlaceHolder")}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("cmbCustomer")} alignment="right" />
                                         <NdSelectBox simple={true} parent={this} id="cmbTedarikci" showClearButton={true} notRefresh={true}  searchEnabled={true} 
                                         displayExpr="TITLE"                       
                                         valueExpr="CODE"
-                                        data={{source: {select : {query:"SELECT CODE,TITLE FROM CUSTOMER_VW_03 WHERE GENUS IN(1,2) ORDER BY TITLE ASC"},sql : this.core.sql}}}
-                                        />
+                                        data={{source: {select : {query:`SELECT CODE,TITLE FROM CUSTOMER_VW_03 WHERE GENUS IN(1,2) ORDER BY TITLE ASC`},sql : this.core.sql}}}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtItemName")} alignment="right" />
@@ -266,26 +268,23 @@ export default class itemList extends React.PureComponent
                                         <NdSelectBox simple={true} parent={this} id="cmbUrunGrup" showClearButton={true} notRefresh={true}  searchEnabled={true}
                                         displayExpr="NAME"                       
                                         valueExpr="CODE"
-                                        data={{source: {select : {query:"SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql : this.core.sql}}}
-                                        />
+                                        data={{source: {select : {query:`SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC`},sql : this.core.sql}}}/>
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtMulticode")} alignment="right" />
-                                        <NdTagBox id="txtMulticode" parent={this} simple={true} value={[]} placeholder={this.t("multicodePlaceHolder")}
-                                        />
+                                        <NdTagBox id="txtMulticode" parent={this} simple={true} value={[]} placeholder={this.t("multicodePlaceHolder")}/>
                                 </Item>
                             </Form>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                         <div className="col-3">
                         </div>
                         <div className="col-3">
                               {/* cmbItemGrp */}
-                                
                                 <NdSelectBox id="cmbItemGrp" simple={true} parent={this} text={this.t("chkMasterBarcode")}
                                 displayExpr="NAME"                       
                                 valueExpr="GUID"
@@ -293,12 +292,11 @@ export default class itemList extends React.PureComponent
                                 showClearButton={true}
                                 pageSize ={50}
                                 notRefresh={true}
-                                data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
-                                />
+                                data={{source:{select:{query : `SELECT GUID,CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC`},sql:this.core.sql}}} />
                         </div>
                         <div className="col-3">
-                        <   NdButton text={this.t("btnOk")} type="default" width="100%" onClick={this.updateGroup}></NdButton>
-                        </div>
+                            <NdButton text={this.t("btnOk")} type="default" width="100%" onClick={this.updateGroup}/>
+                        </div>  
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
