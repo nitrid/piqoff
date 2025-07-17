@@ -2014,10 +2014,10 @@ export default class branchSaleInvoice extends DocBase
                                         >
                                             <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsInv"}/>
                                             <ColumnChooser enabled={true} />
-                                            <Paging defaultPageSize={10} />
-                                            <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                            <Scrolling mode="standart" />
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                             <Export fileName={this.lang.t("menuOff.ftr_02_002")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
@@ -2188,6 +2188,7 @@ export default class branchSaleInvoice extends DocBase
                                                                         let tmpTotalHt  =  parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2) -this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("DOC_DISCOUNT",2))
                                                                         let tmpVat = parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
                                                                         let tmpData = {"RATE":this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat,"TOTALHT":tmpTotalHt}
+                                                                        
                                                                         this.vatRate.push(tmpData)
                                                                     }
 
@@ -2220,10 +2221,10 @@ export default class branchSaleInvoice extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDesign.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'auto'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -2377,10 +2378,10 @@ export default class branchSaleInvoice extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDetail.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'auto'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
@@ -2440,10 +2441,10 @@ export default class branchSaleInvoice extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popMailSend.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'600'}
                         height={'auto'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -2482,8 +2483,7 @@ export default class branchSaleInvoice extends DocBase
                                     </NdTextBox>
                                 </NdItem>
                                 <NdItem>
-                                    <NdHtmlEditor id="htmlEditor" parent={this} height={300} placeholder={this.t("placeMailHtmlEditor")}>
-                                    </NdHtmlEditor>
+                                    <NdHtmlEditor id="htmlEditor" parent={this} height={300} placeholder={this.t("placeMailHtmlEditor")}/>
                                 </NdItem>
                                 <NdItem>
                                     <div className='row'>
@@ -2500,20 +2500,28 @@ export default class branchSaleInvoice extends DocBase
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
+
                                                     App.instance.setState({isExecute:true})
+                                                    
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    
                                                     App.instance.setState({isExecute:false})
+                                                    
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         App.instance.setState({isExecute:true})
+                                                    
                                                         let tmpAttach = pResult.split('|')[1]
                                                         let tmpHtml = this.htmlEditor.value
+                                                    
                                                         if(this.htmlEditor.value.length == 0)
                                                         {
                                                             tmpHtml = ''
                                                         }
+                                                    
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
+
                                                         }
                                                         let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
@@ -2528,16 +2536,18 @@ export default class branchSaleInvoice extends DocBase
                                                             if((pResult1) == 0)
                                                             {  
                                                                 this.toast.show({message:this.t("msgMailSendResult.msgSuccess"),type:"success"})
+                                                                
                                                                 this.htmlEditor.value = '',
                                                                 this.txtMailSubject.value = '',
                                                                 this.txtSendMail.value = ''
+                                                                
                                                                 this.popMailSend.hide();  
-
                                                             }
                                                             else
                                                             {
                                                                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgMailSendResult.msgFailed")}</div>)
                                                                 await dialog(tmpConfObj1);
+
                                                                 this.popMailSend.hide(); 
                                                             }
                                                         });
@@ -2548,10 +2558,7 @@ export default class branchSaleInvoice extends DocBase
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popMailSend.hide();  
-                                            }}/>
+                                            onClick={()=>{this.popMailSend.hide()}}/>
                                         </div>
                                     </div>
                                 </NdItem>

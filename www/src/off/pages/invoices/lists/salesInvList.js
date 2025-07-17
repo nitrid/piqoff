@@ -22,8 +22,6 @@ export default class salesInvList extends React.PureComponent
     {
         super(props)
 
-       
-        
         this.core = App.instance.core;
        
         this.btnGetClick = this.btnGetClick.bind(this)
