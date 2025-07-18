@@ -1,9 +1,8 @@
 import React from 'react';
 import App from '../../lib/app';
-import {datatable} from '../../../core/core.js'
-import {docCls,docExtraCls} from '../../../core/cls/doc.js'
+import { datatable } from '../../../core/core.js';
+import { docCls, docExtraCls } from '../../../core/cls/doc.js';
 
-import ScrollView from 'devextreme-react/scroll-view';
 import NbButton from '../../../core/react/bootstrap/button';
 import NdTextBox from '../../../core/react/devex/textbox';
 import NdSelectBox from '../../../core/react/devex/selectbox';
@@ -11,19 +10,19 @@ import NdDatePicker from '../../../core/react/devex/datepicker';
 import NdPopGrid from '../../../core/react/devex/popgrid';
 import NdNumberBox from '../../../core/react/devex/numberbox';
 import NdPopUp from '../../../core/react/devex/popup';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../core/react/devex/grid';
-import NdDialog, { dialog } from '../../../core/react/devex/dialog.js';
+import NdGrid,{ Column, Editing, Paging, Scrolling, KeyboardNavigation } from '../../../core/react/devex/grid';
+import { dialog } from '../../../core/react/devex/dialog.js';
 import NbLabel from '../../../core/react/bootstrap/label';
 
 import { PageBar } from '../../tools/pageBar';
 import { PageView,PageContent } from '../../tools/pageView';
 import moment from 'moment';
-
 export default class purchaseOrder extends React.PureComponent
 {
     constructor(props)
     { 
         super(props) 
+
         this.core = App.instance.core;
         this.docObj = new docCls();
         this.extraObj = new docExtraCls();
@@ -34,23 +33,23 @@ export default class purchaseOrder extends React.PureComponent
         
         this.itemDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE) OR (@CODE = '')",
+            query : `SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE) OR (@CODE = '')`,
             param : ['CODE:string|25'],
         }
         this.unitDt.selectCmd = 
         {
-            query : "SELECT GUID,ID,NAME,SYMBOL,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE <> 1 ORDER BY TYPE ASC",
+            query : `SELECT GUID,ID,NAME,SYMBOL,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE <> 1 ORDER BY TYPE ASC`,
             param : ['ITEM_GUID:string|50'],
         }
         this.priceDt.selectCmd = 
         {
-            query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',0,0,0) AS PRICE",
+            query : `SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',0,0,0) AS PRICE`,
             param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
         }
 
         this.alertContent = 
         {
-            id:'msgAlert',showTitle:true,title:this.t("msgAlert.title"),showCloseButton:true,width:'90%',height:'200px',
+            id:'msgAlert',showTitle:true,title:this.t("msgAlert.title"),showCloseButton:true,width:'90%',height:'auto',
             button:[{id:"btn01",caption:this.t("msgAlert.btn01"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}></div>)
         }
@@ -62,8 +61,8 @@ export default class purchaseOrder extends React.PureComponent
         
         this.dtDocDate.value = moment(new Date())
 
-        await this.cmbOutDepot.dataRefresh({source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}});
-        await this.cmbInDepot.dataRefresh({source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}});
+        await this.cmbOutDepot.dataRefresh({source:{select:{query : `SELECT * FROM DEPOT_VW_01`},sql:this.core.sql}});
+        await this.cmbInDepot.dataRefresh({source:{select:{query : `SELECT * FROM DEPOT_VW_01`},sql:this.core.sql}});
         
         let tmpDoc = {...this.docObj.empty}
 
@@ -88,7 +87,6 @@ export default class purchaseOrder extends React.PureComponent
 
         await this.grdList.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
         await this.cmbUnit.dataRefresh({source : this.unitDt})
-        console.log(this.grdList)
     }
     async componentDidMount()
     {
@@ -165,6 +163,7 @@ export default class purchaseOrder extends React.PureComponent
         {
             this.priceDt.selectCmd.value = [pGuid,pQuantity,(pCustomer == '' ? '00000000-0000-0000-0000-000000000000' : pCustomer)]
             await this.priceDt.refresh()
+            
             if(this.priceDt.length > 0)
             {
                 resolve(this.priceDt[0].PRICE)
@@ -172,37 +171,38 @@ export default class purchaseOrder extends React.PureComponent
             resolve(0)
         });
     }
-    async calcEntry() {
-        // Vérifie si l'une des propriétés a une valeur différente de zéro
-        if (this.txtFactor.value !== 0 || this.txtQuantity.value !== 0 || this.txtPrice.value !== 0) {
-            
-            // Calcule la quantité temporaire en multipliant txtFactor par txtQuantity
+    async calcEntry() 
+    {
+        if(this.itemDt.length == 0)
+        {
+            return
+        }
+
+        if (this.txtFactor.value !== 0 || this.txtQuantity.value !== 0 || this.txtPrice.value !== 0) 
+        {
             let tmpQuantity = this.txtFactor.value * this.txtQuantity.value;
-     
-            // Récupère la limite de quantité depuis les paramètres système
             let prmLimitQuantity = this.sysParam.filter({ USERS: this.user.CODE, ID: 'limitQuantity' }).getValue()?.value;
     
-            // Vérifie si la quantité temporaire dépasse la limite définie
-            if (tmpQuantity > prmLimitQuantity) {
-                // Affiche un message d'alerte et limite la valeur de txtQuantity à la limite définie
+            if (tmpQuantity > prmLimitQuantity) 
+            {
                 this.alertContent.content = (
                     <div style={{ textAlign: "center", fontSize: "20px" }}>
                         {this.t("msgAlert.msgLimitQuantityCheck")}
                     </div>
                 );
+
                 await dialog(this.alertContent);
                 this.txtQuantity.value = prmLimitQuantity;
-                return; // Sort de la fonction si la quantité est limitée
+                return;
             }
     
-            // Si des arguments sont passés ou si aucun argument n'est passé, met à jour la valeur de txtPrice en appelant une fonction asynchrone getPrice
-            if ((arguments.length > 0 && arguments[0]) || arguments.length === 0) {
+            if ((arguments.length > 0 && arguments[0]) || arguments.length === 0) 
+            {
                 this.txtPrice.value = Number(
                     (await this.getPrice(this.itemDt[0].GUID, tmpQuantity, '00000000-0000-0000-0000-000000000000'))
                 ).round(2);
             }
     
-            // Calcule les autres valeurs en fonction de txtPrice et de la quantité temporaire
             this.txtAmount.value = Number(this.txtPrice.value * tmpQuantity).round(2);
             this.txtVat.value = Number(this.txtAmount.value - this.txtDiscount.value).rateInc(this.itemDt[0].VAT, 2);
             this.txtSumAmount.value = Number(this.txtAmount.value - this.txtDiscount.value).rateExc(this.itemDt[0].VAT, 2);
@@ -216,6 +216,7 @@ export default class purchaseOrder extends React.PureComponent
             await dialog(this.alertContent);
             return
         }
+
         if(this.txtQuantity.value == "" || this.txtQuantity.value == 0 || this.txtQuantity.value > 15000000)
         {
             this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgQuantityCheck")}</div>)
@@ -230,10 +231,12 @@ export default class purchaseOrder extends React.PureComponent
             let tmpFnMergeRow = async (i) =>
             {
                 let tmpQuantity = this.orderDt[0].QUANTITY * this.orderDt[0].FACTOR
+
                 this.docObj.docItems.dt()[i].QUANTITY = this.docObj.docItems.dt()[i].QUANTITY + tmpQuantity
                 this.docObj.docItems.dt()[i].VAT = parseFloat((this.docObj.docItems.dt()[i].VAT + (this.docObj.docItems.dt()[i].PRICE * (this.docObj.docItems.dt()[i].VAT_RATE / 100)) * tmpQuantity).toFixed(3))
                 this.docObj.docItems.dt()[i].AMOUNT = parseFloat((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE).toFixed(3))
                 this.docObj.docItems.dt()[i].TOTAL = parseFloat((((this.docObj.docItems.dt()[i].QUANTITY * this.docObj.docItems.dt()[i].PRICE) - this.docObj.docItems.dt()[i].DISCOUNT) + this.docObj.docItems.dt()[i].VAT).toFixed(3))
+                
                 this.clearEntry()
                 await this.save()
             }       
@@ -247,11 +250,13 @@ export default class purchaseOrder extends React.PureComponent
                         document.getElementById("Sound2").play(); 
                         let tmpConfObj = 
                         {
-                            id:'msgCombineItem',showTitle:true,title:this.lang.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
+                            id:'msgCombineItem',showTitle:true,title:this.lang.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'auto',
                             button:[{id:"btn01",caption:this.lang.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCombineItem.btn02"),location:'after'}],
                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCombineItem.msg")}</div>)
                         }
+
                         let pResult = await dialog(tmpConfObj);
+                        
                         if(pResult == 'btn01')
                         {                   
                             tmpFnMergeRow(i)
@@ -296,8 +301,7 @@ export default class purchaseOrder extends React.PureComponent
         tmpDocItems.AMOUNT = this.orderDt[0].AMOUNT
         tmpDocItems.TOTALHT = Number(this.orderDt[0].AMOUNT - this.orderDt[0].DISCOUNT).round(2)
         tmpDocItems.TOTAL = this.orderDt[0].SUM_AMOUNT
-        console.log(this.orderDt)
-        console.log(tmpDocItems)
+        
         this.docObj.docItems.addEmpty(tmpDocItems)
         this.clearEntry()
 
@@ -310,10 +314,12 @@ export default class purchaseOrder extends React.PureComponent
             if(this.docObj.dt().length > 0)
             {
                 let tmpVat = 0
+
                 for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
                 {
                     tmpVat = tmpVat + parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
                 }
+
                 this.docObj.dt()[0].AMOUNT = this.docObj.docItems.dt().sum("AMOUNT",2)
                 this.docObj.dt()[0].DISCOUNT = Number(parseFloat(this.docObj.docItems.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docItems.dt().sum("TOTALHT",2))).round(2)
                 this.docObj.dt()[0].DOC_DISCOUNT_1 = this.docObj.docItems.dt().sum("DOC_DISCOUNT_1",4)
@@ -326,19 +332,14 @@ export default class purchaseOrder extends React.PureComponent
                 this.docObj.dt()[0].TOTAL = Number((parseFloat(this.docObj.dt()[0].TOTALHT)) + parseFloat(this.docObj.dt()[0].VAT)).round(2)
             }
 
-            let tmpConfObj1 =
+            if((await this.docObj.save()) != 0)
             {
-                id:'msgSaveResult',showTitle:true,title:this.lang.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
-                button:[{id:"btn01",caption:this.lang.t("msgSave.btn01"),location:'after'}],
-            }
-            
-            if((await this.docObj.save()) == 0)
-            {                                                    
-               
-            }
-            else
-            {
-                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.lang.t("msgSaveResult.msgFailed")}</div>)
+                let tmpConfObj1 =
+                {
+                    id:'msgSaveResult',showTitle:true,title:this.lang.t("msgSave.title"),showCloseButton:true,width:'350px',height:'auto',
+                    button:[{id:"btn01",caption:this.lang.t("msgSave.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.lang.t("msgSaveResult.msgFailed")}</div>)
+                }
                 await dialog(tmpConfObj1);
             }
             resolve()
@@ -359,13 +360,13 @@ export default class purchaseOrder extends React.PureComponent
             await dialog(this.alertContent);
             return
         }
+
         if(this.docObj.dt()[0].OUTPUT == '')
         {
             this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgOutDepot")}</div>)
             await dialog(this.alertContent);
             return
         }
-
         this.pageView.activePage('Entry')
     }
     async onClickProcessShortcut()
@@ -440,54 +441,28 @@ export default class purchaseOrder extends React.PureComponent
                     onBackClick={()=>{this.pageView.activePage('Main')}}/>
                 </div>
                 <div style={{position:'relative',height:'calc(100vh - 1px)',overflow:'hidden'}}>
-                    <PageView id={"pageView"} parent={this} 
-                    onActivePage={(e)=>
-                    {
-                        this.pageBar.activePage(e)
-                    }}>
+                    <PageView id={"pageView"} parent={this} onActivePage={(e)=>{this.pageBar.activePage(e)}}>
                         <PageContent id={"Main"}>
                             <div className='row px-2'>
                                 <div className='col-12'>
-                                    <div className='card modern-card mb-2' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '6px'
-                                    }}>
+                                    <div className='card modern-card mb-2' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '6px'}}>
                                         <div className='card-body' style={{padding: '0'}}>
-                                            <div className='form-group mb-2' style={{
-                                                background: '#f8f9fa',
-                                                padding: '10px',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label className='form-label' style={{
-                                                    fontSize: '12px',
-                                                    fontWeight: '500',
-                                                    color: '#6c757d',
-                                                    marginBottom: '4px',
-                                                    display: 'block'
-                                                }}>
+                                            <div className='form-group mb-2' style={{background: '#f8f9fa',padding: '10px',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label className='form-label' style={{fontSize: '12px',fontWeight: '500',color: '#6c757d',marginBottom: '4px',display: 'block'}}>
                                                     🔖 {this.t("lblRef")}
                                                 </label>
                                                 <div className='row'>
                                                     <div className='col-4'>
                                                         <div style={{position: 'relative'}}>
                                                             <NdTextBox id="txtRef" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
-                                                            style={{
-                                                                borderRadius: '4px',
-                                                                border: '1px solid #ced4da',
-                                                                fontSize: '12px',
-                                                                padding: '6px'
-                                                            }}
+                                                            style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '6px'}}
                                                             onChange={(async(e)=>
                                                             {
                                                                 try 
                                                                 {
                                                                     let tmpQuery = 
                                                                     {
-                                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 2 AND DOC_TYPE = 2 AND REF = @REF ",
+                                                                        query : `SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 2 AND DOC_TYPE = 2 AND REF = @REF `,
                                                                         param : ['REF:string|25'],
                                                                         value : [typeof e.component == 'undefined' ? e : this.txtRef.value]
                                                                     }
@@ -503,7 +478,6 @@ export default class purchaseOrder extends React.PureComponent
                                                                 {
                                                                     console.log("Hata oluştu: ", error);
                                                                 }
-                                                                
                                                             }).bind(this)}
                                                             />
                                                         </div>
@@ -511,40 +485,32 @@ export default class purchaseOrder extends React.PureComponent
                                                     <div className='col-8'>
                                                         <div style={{position: 'relative'}}>
                                                             <NdTextBox id="txtRefNo" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
-                                                            style={{
-                                                                borderRadius: '4px',
-                                                                border: '1px solid #ced4da',
-                                                                fontSize: '12px',
-                                                                padding: '6px'
-                                                            }}
-                                                            button=
-                                                            {
-                                                                [
+                                                            style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '6px'}}
+                                                            button={[
+                                                                {
+                                                                    id:'01',
+                                                                    icon:'more',
+                                                                    onClick:async()=>
                                                                     {
-                                                                        id:'01',
-                                                                        icon:'more',
-                                                                        onClick:async()=>
+                                                                        this.popDoc.show()
+                                                                        this.popDoc.onClick = (data) =>
                                                                         {
-                                                                            this.popDoc.show()
-                                                                            this.popDoc.onClick = (data) =>
+                                                                            if(data.length > 0)
                                                                             {
-                                                                                if(data.length > 0)
-                                                                                {
-                                                                                    this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
-                                                                                }
+                                                                                this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
                                                                             }
                                                                         }
-                                                                    },
-                                                                    {
-                                                                        id:'02',
-                                                                        icon:'arrowdown',
-                                                                        onClick:()=>
-                                                                        {
-                                                                            this.txtRefNo.value = Math.floor(Date.now() / 1000)
-                                                                        }
                                                                     }
-                                                                ]
-                                                            }/>
+                                                                },
+                                                                {
+                                                                    id:'02',
+                                                                    icon:'arrowdown',
+                                                                    onClick:()=>
+                                                                    {
+                                                                        this.txtRefNo.value = Math.floor(Date.now() / 1000)
+                                                                    }
+                                                                }
+                                                            ]}/>
                                                             {/*EVRAK SEÇİM */}
                                                             <NdPopGrid id={"popDoc"} parent={this} container={"#root"}
                                                             selection={{mode:"single"}}
@@ -561,7 +527,9 @@ export default class purchaseOrder extends React.PureComponent
                                                                 {
                                                                     select:
                                                                     {
-                                                                        query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 0 ORDER BY DOC_DATE DESC"
+                                                                        query : `SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT 
+                                                                                FROM DOC_VW_01 WHERE TYPE = 2 AND DOC_TYPE = 2 AND REBATE = 0 
+                                                                                ORDER BY DOC_DATE DESC`
                                                                     },
                                                                     sql:this.core.sql
                                                                 }
@@ -577,91 +545,35 @@ export default class purchaseOrder extends React.PureComponent
                                                     </div>
                                                 </div>
                                             </div>
-                                            
-                                            <div className='form-group mb-2' style={{
-                                                background: '#f8f9fa',
-                                                padding: '10px',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label className='form-label' style={{
-                                                    fontSize: '12px',
-                                                    fontWeight: '500',
-                                                    color: '#6c757d',
-                                                    marginBottom: '4px',
-                                                    display: 'block'
-                                                }}>
+                                            <div className='form-group mb-2' style={{background: '#f8f9fa',padding: '10px',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label className='form-label' style={{fontSize: '12px',fontWeight: '500',color: '#6c757d',marginBottom: '4px',display: 'block'}}>
                                                     🏢 {this.t("lblDepot1")}
                                                 </label>
                                                 <NdSelectBox simple={true} parent={this} id="cmbOutDepot" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
-                                                style={{
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #ced4da',
-                                                    fontSize: '12px'
-                                                }}
+                                                style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px'}}
                                                 dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}/>
                                             </div>
-                                            
-                                            <div className='form-group mb-2' style={{
-                                                background: '#f8f9fa',
-                                                padding: '10px',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label className='form-label' style={{
-                                                    fontSize: '12px',
-                                                    fontWeight: '500',
-                                                    color: '#6c757d',
-                                                    marginBottom: '4px',
-                                                    display: 'block'
-                                                }}>
+                                            <div className='form-group mb-2' style={{background: '#f8f9fa',padding: '10px',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label className='form-label' style={{fontSize: '12px',fontWeight: '500',color: '#6c757d',marginBottom: '4px',display: 'block'}}>
                                                     🏬 {this.t("lblDepot2")}
                                                 </label>
                                                 <NdSelectBox simple={true} parent={this} id="cmbInDepot" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
-                                                style={{
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #ced4da',
-                                                    fontSize: '12px'
-                                                }}
+                                                style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px'}}
                                                 dt={{data:this.docObj.dt('DOC'),field:"INPUT"}}/>
                                             </div>
-                                            
-                                            <div className='form-group mb-0' style={{
-                                                background: '#f8f9fa',
-                                                padding: '10px',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label className='form-label' style={{
-                                                    fontSize: '12px',
-                                                    fontWeight: '500',
-                                                    color: '#6c757d',
-                                                    marginBottom: '4px',
-                                                    display: 'block'
-                                                }}>
+                                            <div className='form-group mb-0' style={{background: '#f8f9fa',padding: '10px',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label className='form-label' style={{fontSize: '12px',fontWeight: '500',color: '#6c757d',marginBottom: '4px',display: 'block'}}>
                                                     📅 {this.t("lblDate")}
                                                 </label>
                                                 <NdDatePicker simple={true} parent={this} id={"dtDocDate"} pickerType={"rollers"} 
-                                                style={{
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #ced4da',
-                                                    fontSize: '12px'
-                                                }}
+                                                style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px'}}
                                                 dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}/>
                                             </div>
                                         </div>
                                     </div>
-                                    
                                     <div className='row pb-1'>
                                         <div className='col-6 pe-1'>
-                                            <div className='card action-card' style={{
-                                                background: '#007bff',
-                                                borderRadius: '8px',
-                                                boxShadow: '0 2px 8px rgba(0,123,255,0.2)',
-                                                border: 'none',
-                                                height: '70px',
-                                                transition: 'all 0.3s ease'
-                                            }}>
+                                            <div className='card action-card' style={{background: '#007bff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,123,255,0.2)',border: 'none',height: '70px',transition: 'all 0.3s ease'}}>
                                                 <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%",background:"transparent",border:"none"}} 
                                                 onClick={this.onClickBarcodeShortcut.bind(this)}>
                                                     <div className='d-flex align-items-center justify-content-center h-100'>
@@ -674,14 +586,7 @@ export default class purchaseOrder extends React.PureComponent
                                             </div>
                                         </div>
                                         <div className='col-6 ps-1'>
-                                            <div className='card action-card' style={{
-                                                background: '#28a745',
-                                                borderRadius: '8px',
-                                                boxShadow: '0 2px 8px rgba(40,167,69,0.2)',
-                                                border: 'none',
-                                                height: '70px',
-                                                transition: 'all 0.3s ease'
-                                            }}>
+                                            <div className='card action-card' style={{background: '#28a745',borderRadius: '8px',boxShadow: '0 2px 8px rgba(40,167,69,0.2)',border: 'none',height: '70px',transition: 'all 0.3s ease'}}>
                                                 <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%",background:"transparent",border:"none"}} 
                                                 onClick={this.onClickProcessShortcut.bind(this)}>
                                                     <div className='d-flex align-items-center justify-content-center h-100'>
@@ -696,42 +601,29 @@ export default class purchaseOrder extends React.PureComponent
                                     </div>
                                 </div>
                             </div>
-                            
-                            <style>{`
-                                .modern-card {
-                                    transition: all 0.3s ease;
-                                    position: relative;
-                                    overflow: hidden;
-                                }
-                                
-                                .action-card:hover {
-                                    transform: translateY(-1px);
-                                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                                }
-                            `}</style>
+                            <style>
+                                {`
+                                    .modern-card 
+                                    {
+                                        transition: all 0.3s ease;
+                                        position: relative;
+                                        overflow: hidden;
+                                    }
+                                    .action-card:hover 
+                                    {
+                                        transform: translateY(-1px);
+                                        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                                    }
+                                `}
+                            </style>
                         </PageContent>
-                        <PageContent id={"Entry"} onActive={()=>
-                        {
-                            this.txtBarcode.focus();
-                        }}>
+                        <PageContent id={"Entry"} onActive={()=>{this.txtBarcode.focus()}}>
                             <div className='row px-2'>
                                 <div className='col-12'>
                                     {/* Barkod Giriş Kartı */}
-                                    <div className='card entry-card mb-2' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '12px'
-                                    }}>
+                                    <div className='card entry-card mb-2' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '12px'}}>
                                         <NdTextBox id="txtBarcode" parent={this} simple={true} maxLength={32}
-                                        style={{
-                                            borderRadius: '6px',
-                                            border: '1px solid #ced4da',
-                                            fontSize: '14px',
-                                            padding: '10px',
-                                            backgroundColor: '#ffffff'
-                                        }}
+                                        style={{borderRadius: '6px',border: '1px solid #ced4da',fontSize: '14px',padding: '10px',backgroundColor: '#ffffff'}}
                                         onKeyUp={(async(e)=>
                                         {
                                             if(e.event.key == 'Enter')
@@ -739,55 +631,52 @@ export default class purchaseOrder extends React.PureComponent
                                                 await this.getItem(this.txtBarcode.value)
                                             }
                                         }).bind(this)}
-                                        button=
-                                        {
-                                            [
+                                        button={[
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:async()=>
                                                 {
-                                                    id:'01',
-                                                    icon:'more',
-                                                    onClick:async()=>
+                                                    this.popItem.show()
+                                                    this.popItem.onClick = (data) =>
                                                     {
-                                                        this.popItem.show()
-                                                        this.popItem.onClick = (data) =>
+                                                        if(data.length > 0)
                                                         {
-                                                            if(data.length > 0)
-                                                            {
-                                                                this.getItem(data[0].CODE)
-                                                            }
+                                                            this.getItem(data[0].CODE)
                                                         }
-                                                    }
-                                                },
-                                                {
-                                                    id:'02',
-                                                    icon:'photo',
-                                                    onClick:()=>
-                                                    {
-                                                        if(typeof cordova == "undefined")
-                                                        {
-                                                            return;
-                                                        }
-                                                        cordova.plugins.barcodeScanner.scan(
-                                                            async function (result) 
-                                                            {
-                                                                if(result.cancelled == false)
-                                                                {
-                                                                    this.txtBarcode.value = result.text;
-                                                                    this.getItem(result.text)
-                                                                }
-                                                            }.bind(this),
-                                                            function (error) 
-                                                            {
-                                                                
-                                                            },
-                                                            {
-                                                              prompt : "Scan",
-                                                              orientation : "portrait"
-                                                            }
-                                                        );
                                                     }
                                                 }
-                                            ]
-                                        }>
+                                            },
+                                            {
+                                                id:'02',
+                                                icon:'photo',
+                                                onClick:()=>
+                                                {
+                                                    if(typeof cordova == "undefined")
+                                                    {
+                                                        return;
+                                                    }
+                                                    cordova.plugins.barcodeScanner.scan(
+                                                        async function (result) 
+                                                        {
+                                                            if(result.cancelled == false)
+                                                            {
+                                                                this.txtBarcode.value = result.text;
+                                                                this.getItem(result.text)
+                                                            }
+                                                        }.bind(this),
+                                                        function (error) 
+                                                        {
+                                                            
+                                                        },
+                                                        {
+                                                            prompt : "Scan",
+                                                            orientation : "portrait"
+                                                        }
+                                                    );
+                                                }
+                                            }
+                                        ]}>
                                         </NdTextBox>
                                         {/*STOK SEÇİM */}
                                         <NdPopGrid id={"popItem"} parent={this} container={"#root"}
@@ -806,7 +695,7 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 select:
                                                 {
-                                                    query : "SELECT CODE,NAME FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
+                                                    query : `SELECT CODE,NAME FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))`,
                                                     param : ['VAL:string|50']
                                                 },
                                                 sql:this.core.sql
@@ -819,19 +708,8 @@ export default class purchaseOrder extends React.PureComponent
                                     </div>
 
                                     {/* Ürün Bilgileri */}
-                                    <div className='card mb-2' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '12px'
-                                    }}>
-                                        <div style={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center',
-                                            marginBottom: '8px'
-                                        }}>
+                                    <div className='card mb-2' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '12px'}}>
+                                        <div style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center',marginBottom: '8px'}}>
                                             <span style={{fontSize: '14px', fontWeight: '600', color: '#495057'}}>
                                                 📦 {this.t("lblItemName")}
                                             </span>
@@ -839,30 +717,12 @@ export default class purchaseOrder extends React.PureComponent
                                                 {this.t("lblDepotQuantity")}: <strong><NbLabel id="lblDepotQuantity" parent={this} value={0}/></strong>
                                             </span>
                                         </div>
-                                        <div style={{
-                                            background: '#f8f9fa',
-                                            padding: '10px',
-                                            borderRadius: '6px',
-                                            border: '1px solid #dee2e6',
-                                            textAlign: 'center',
-                                            minHeight: '40px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center'
-                                        }}>
-                                            <NbLabel id="lblItemName" parent={this} value={""} 
-                                            style={{fontSize: '14px', fontWeight: '500', color: '#495057'}}/>
+                                        <div style={{background: '#f8f9fa',padding: '10px',borderRadius: '6px',border: '1px solid #dee2e6',textAlign: 'center',minHeight: '40px',display: 'flex',alignItems: 'center',justifyContent: 'center'}}>
+                                            <NbLabel id="lblItemName" parent={this} value={""} style={{fontSize: '14px', fontWeight: '500', color: '#495057'}}/>
                                         </div>
                                     </div>
-
                                     {/* Miktar ve Fiyat */}
-                                    <div className='card mb-2' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '12px'
-                                    }}>
+                                    <div className='card mb-2' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '12px'}}>
                                         {/* Birim */}
                                         <div className='row mb-2'>
                                             <div className='col-4'>
@@ -886,7 +746,6 @@ export default class purchaseOrder extends React.PureComponent
                                                 }}/>
                                             </div>
                                         </div>
-                                        
                                         {/* Miktar */}
                                         <div className='row mb-2'>
                                             <div className='col-4'>
@@ -908,7 +767,6 @@ export default class purchaseOrder extends React.PureComponent
                                                 onEnterKey={this.addItem.bind(this)}/>
                                             </div>
                                         </div>
-                                        
                                         {/* Fiyat */}
                                         <div className='row mb-2'>
                                             <div className='col-4'>
@@ -920,14 +778,8 @@ export default class purchaseOrder extends React.PureComponent
                                                 onEnterKey={this.addItem.bind(this)}/>
                                             </div>
                                         </div>
-                                        
                                         {/* Hesaplanan Değerler */}
-                                        <div style={{
-                                            background: '#f8f9fa',
-                                            padding: '8px',
-                                            borderRadius: '6px',
-                                            border: '1px solid #dee2e6'
-                                        }}>
+                                        <div style={{background: '#f8f9fa',padding: '8px',borderRadius: '6px',border: '1px solid #dee2e6'}}>
                                             <div className='row mb-1'>
                                                 <div className='col-6'>
                                                     <span style={{fontSize: '12px', color: '#6c757d'}}>{this.t("lblAmount")}:</span>
@@ -966,22 +818,9 @@ export default class purchaseOrder extends React.PureComponent
                                             </div>
                                         </div>
                                     </div>
-
                                     {/* Ekleme Butonu */}
-                                    <div style={{
-                                        background: '#28a745',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(40,167,69,0.2)'
-                                    }}>
-                                        <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{
-                                            height: "45px",
-                                            width: "100%",
-                                            background: "transparent",
-                                            border: "none",
-                                            fontSize: "16px",
-                                            fontWeight: "600",
-                                            color: "white"
-                                        }} 
+                                    <div style={{background: '#28a745',borderRadius: '8px',boxShadow: '0 2px 8px rgba(40,167,69,0.2)'}}>
+                                        <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height: "45px",width: "100%",background: "transparent",border: "none",fontSize: "16px",fontWeight: "600",color: "white"}} 
                                         onClick={this.addItem.bind(this)}>
                                             ➕ {this.t("lblAdd")}
                                         </NbButton>
@@ -993,13 +832,7 @@ export default class purchaseOrder extends React.PureComponent
                             <div className='row px-2'>
                                 <div className='col-12'>
                                     {/* Grid Container */}
-                                    <div className='card mb-2' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '4px'
-                                    }}>
+                                    <div className='card mb-2' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '4px'}}>
                                         <NdGrid parent={this} id={"grdList"} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
@@ -1029,7 +862,6 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 await this.save()
                                             }
-                                            
                                         }}
                                         onRowUpdating={async (e)=>
                                         {
@@ -1049,10 +881,12 @@ export default class purchaseOrder extends React.PureComponent
                                                 e.key.PRICE = Number((await this.getPrice(e.key.ITEM,e.data.QUANTITY,'00000000-0000-0000-0000-000000000000'))).round(2)
                                                 await this.save()
                                             }
+
                                             if(typeof e.data.PRICE != 'undefined')
                                             {
                                                 e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
                                             }
+
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
                                                 e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
@@ -1060,6 +894,7 @@ export default class purchaseOrder extends React.PureComponent
                                                 e.key.DISCOUNT_2 = 0
                                                 e.key.DISCOUNT_3 = 0
                                             }
+
                                             if(typeof e.data.DISCOUNT != 'undefined')
                                             {
                                                 e.key.DISCOUNT_1 = e.data.DISCOUNT
@@ -1107,240 +942,95 @@ export default class purchaseOrder extends React.PureComponent
                                             <Column dataField="TOTAL" caption={this.t("grdList.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={100}/>
                                         </NdGrid>
                                     </div>
-
                                     {/* Summary Section */}
-                                    <div className='card' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '2px'
-                                    }}>
-                                        <div className='summary-container' style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: '2px'
-                                        }}>
+                                    <div className='card' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '2px'}}>
+                                        <div className='summary-container' style={{display: 'flex',flexDirection: 'column',gap: '2px'}}>
                                             {/* Amount Row */}
-                                            <div className='summary-row' style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                padding: '2px 4px',
-                                                background: '#f8f9fa',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label style={{
-                                                    fontSize: '13px',
-                                                    fontWeight: '500',
-                                                    color: '#495057',
-                                                    margin: '0'
-                                                }}>
+                                            <div className='summary-row' style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center',padding: '2px 4px',background: '#f8f9fa',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label style={{fontSize: '13px',fontWeight: '500',color: '#495057',margin: '0'}}>
                                                     📊 {this.t("lblAmount")}
                                                 </label>
                                                 <div style={{width: '120px'}}>
                                                     <NdTextBox id="txtCustomerName" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
-                                                    style={{
-                                                        borderRadius: '4px',
-                                                        border: '1px solid #ced4da',
-                                                        fontSize: '12px',
-                                                        padding: '2px',
-                                                        backgroundColor: '#ffffff',
-                                                        textAlign: 'right'
-                                                    }}/>
+                                                    style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '2px',backgroundColor: '#ffffff',textAlign: 'right'}}/>
                                                 </div>
                                             </div>
-
                                             {/* Discount Row */}
-                                            <div className='summary-row' style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                padding: '2px 4px',
-                                                background: '#f8f9fa',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label style={{
-                                                    fontSize: '13px',
-                                                    fontWeight: '500',
-                                                    color: '#495057',
-                                                    margin: '0'
-                                                }}>
+                                            <div className='summary-row' style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center',padding: '2px 4px',background: '#f8f9fa',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label style={{fontSize: '13px',fontWeight: '500',color: '#495057',margin: '0'}}>
                                                     🏷️ {this.t("lblDiscount")}
                                                 </label>
                                                 <div style={{width: '120px'}}>
                                                     <NdTextBox id="txtCustomerName" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
-                                                    style={{
-                                                        borderRadius: '4px',
-                                                        border: '1px solid #ced4da',
-                                                        fontSize: '12px',
-                                                        padding: '2px',
-                                                        backgroundColor: '#ffffff',
-                                                        textAlign: 'right'
-                                                    }}/>
+                                                    style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '2px',backgroundColor: '#ffffff',textAlign: 'right'}}/>
                                                 </div>
                                             </div>
-
                                             {/* Doc Discount Row */}
-                                            <div className='summary-row' style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                padding: '2px 4px',
-                                                background: '#f8f9fa',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label style={{
-                                                    fontSize: '13px',
-                                                    fontWeight: '500',
-                                                    color: '#495057',
-                                                    margin: '0'
-                                                }}>
+                                            <div className='summary-row' style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center',padding: '2px 4px',background: '#f8f9fa',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label style={{fontSize: '13px',fontWeight: '500',color: '#495057',margin: '0'}}>
                                                     📋 {this.t("lblDocDiscount")}
                                                 </label>
                                                 <div style={{width: '120px'}}>
                                                     <NdTextBox id="txtDocDiscount" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"DOC_DISCOUNT"}}
-                                                    style={{
-                                                        borderRadius: '4px',
-                                                        border: '1px solid #ced4da',
-                                                        fontSize: '12px',
-                                                        padding: '2px',
-                                                        backgroundColor: '#ffffff',
-                                                        textAlign: 'right'
-                                                    }}
-                                                    button=
-                                                    {
-                                                        [
+                                                    style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '2px',backgroundColor: '#ffffff',textAlign: 'right'}}
+                                                    button={[
+                                                        {
+                                                            id:'01',
+                                                            icon:'more',
+                                                            onClick:()  =>
                                                             {
-                                                                id:'01',
-                                                                icon:'more',
-                                                                onClick:()  =>
+                                                                if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
                                                                 {
-                                                                    console.log(this.docObj.dt()[0].SUBTOTAL)
-                                                                    console.log(this.docObj.dt()[0].DOC_DISCOUNT_1)
-                                                                    console.log( Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5))
-                                                                    if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
-                                                                    {
-                                                                        this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)
-                                                                        this.txtDocDiscountPrice1.value = this.docObj.dt()[0].DOC_DISCOUNT_1
-                                                                        this.txtDocDiscountPercent2.value  = Number(this.docObj.dt()[0].SUBTOTAL-parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_1)).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_2,5)
-                                                                        this.txtDocDiscountPrice2.value = this.docObj.dt()[0].DOC_DISCOUNT_2
-                                                                        this.txtDocDiscountPercent3.value  = Number(this.docObj.dt()[0].SUBTOTAL-(parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_1)+parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_2))).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_3,5)
-                                                                        this.txtDocDiscountPrice3.value = this.docObj.dt()[0].DOC_DISCOUNT_3
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        this.txtDocDiscountPercent1.value  = 0
-                                                                        this.txtDocDiscountPrice1.value = 0
-                                                                        this.txtDocDiscountPercent2.value  = 0
-                                                                        this.txtDocDiscountPrice2.value = 0
-                                                                        this.txtDocDiscountPercent3.value  = 0
-                                                                        this.txtDocDiscountPrice3.value = 0
-                                                                    }
-                                                                    this.popDocDiscount.show()
+                                                                    this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)
+                                                                    this.txtDocDiscountPrice1.value = this.docObj.dt()[0].DOC_DISCOUNT_1
+                                                                    this.txtDocDiscountPercent2.value  = Number(this.docObj.dt()[0].SUBTOTAL-parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_1)).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_2,5)
+                                                                    this.txtDocDiscountPrice2.value = this.docObj.dt()[0].DOC_DISCOUNT_2
+                                                                    this.txtDocDiscountPercent3.value  = Number(this.docObj.dt()[0].SUBTOTAL-(parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_1)+parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_2))).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_3,5)
+                                                                    this.txtDocDiscountPrice3.value = this.docObj.dt()[0].DOC_DISCOUNT_3
                                                                 }
+                                                                else
+                                                                {
+                                                                    this.txtDocDiscountPercent1.value  = 0
+                                                                    this.txtDocDiscountPrice1.value = 0
+                                                                    this.txtDocDiscountPercent2.value  = 0
+                                                                    this.txtDocDiscountPrice2.value = 0
+                                                                    this.txtDocDiscountPercent3.value  = 0
+                                                                    this.txtDocDiscountPrice3.value = 0
+                                                                }
+                                                                this.popDocDiscount.show()
                                                             }
-                                                        ]
-                                                    }/>
+                                                        }
+                                                    ]}/>
                                                 </div>
                                             </div>
-
                                             {/* Total HT Row */}
-                                            <div className='summary-row' style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                padding: '2px 4px',
-                                                background: '#f8f9fa',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label style={{
-                                                    fontSize: '13px',
-                                                    fontWeight: '500',
-                                                    color: '#495057',
-                                                    margin: '0'
-                                                }}>
+                                            <div className='summary-row' style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center',padding: '2px 4px',background: '#f8f9fa',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label style={{fontSize: '13px',fontWeight: '500',color: '#495057',margin: '0'}}>
                                                     💰 {this.t("lblTotalHt")}
                                                 </label>
                                                 <div style={{width: '120px'}}>
                                                     <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}
-                                                    style={{
-                                                        borderRadius: '4px',
-                                                        border: '1px solid #ced4da',
-                                                        fontSize: '12px',
-                                                        padding: '2px',
-                                                        backgroundColor: '#ffffff',
-                                                        textAlign: 'right'
-                                                    }}/>
+                                                    style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '2px',backgroundColor: '#ffffff',textAlign: 'right'}}/>
                                                 </div>
                                             </div>
-
                                             {/* VAT Row */}
-                                            <div className='summary-row' style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                padding: '2px 4px',
-                                                background: '#f8f9fa',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label style={{
-                                                    fontSize: '13px',
-                                                    fontWeight: '500',
-                                                    color: '#495057',
-                                                    margin: '0'
-                                                }}>
+                                            <div className='summary-row' style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center',padding: '2px 4px',background: '#f8f9fa',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label style={{fontSize: '13px',fontWeight: '500',color: '#495057',margin: '0'}}>
                                                     📈 {this.t("lblVat")}
                                                 </label>
                                                 <div style={{width: '120px'}}>
                                                     <NdTextBox id="txtDocVat" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"VAT"}}
-                                                    style={{
-                                                        borderRadius: '4px',
-                                                        border: '1px solid #ced4da',
-                                                        fontSize: '12px',
-                                                        padding: '2px',
-                                                        backgroundColor: '#ffffff',
-                                                        textAlign: 'right'
-                                                    }}/>
+                                                    style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '2px',backgroundColor: '#ffffff',textAlign: 'right'}}/>
                                                 </div>
                                             </div>
-
                                             {/* Total Row */}
-                                            <div className='summary-row' style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                padding: '2px 4px',
-                                                background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
-                                                borderRadius: '6px',
-                                                border: '2px solid #28a745',
-                                                boxShadow: '0 2px 8px rgba(40,167,69,0.2)'
-                                            }}>
-                                                <label style={{
-                                                    fontSize: '14px',
-                                                    fontWeight: 'bold',
-                                                    color: '#ffffff',
-                                                    margin: '0'
-                                                }}>
+                                            <div className='summary-row' style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center',padding: '2px 4px',background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',borderRadius: '6px',border: '2px solid #28a745',boxShadow: '0 2px 8px rgba(40,167,69,0.2)'}}>
+                                                <label style={{fontSize: '14px',fontWeight: 'bold',color: '#ffffff',margin: '0'}}>
                                                     💎 {this.t("lblGenAmount")}
                                                 </label>
                                                 <div style={{width: '120px'}}>
                                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
-                                                    style={{
-                                                        borderRadius: '4px',
-                                                        border: '2px solid #ffffff',
-                                                        fontSize: '14px',
-                                                        padding: '1px',
-                                                        backgroundColor: '#ffffff',
-                                                        textAlign: 'right',
-                                                        fontWeight: 'bold',
-                                                        color: '#28a745'
-                                                    }}/>
+                                                    style={{borderRadius: '4px',border: '2px solid #ffffff',fontSize: '14px',padding: '1px',backgroundColor: '#ffffff',textAlign: 'right',fontWeight: 'bold',color: '#28a745'}}/>
                                                 </div>
                                             </div>
                                         </div>
@@ -1370,7 +1060,7 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
                                                 }
@@ -1398,7 +1088,7 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
                                                 }
@@ -1426,7 +1116,7 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
                                                 }
@@ -1454,7 +1144,7 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
                                                 }
@@ -1482,7 +1172,7 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
                                                 }
@@ -1510,7 +1200,7 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
                                                 }
@@ -1553,7 +1243,8 @@ export default class purchaseOrder extends React.PureComponent
                                                 await this.save()
                                                 this.popDocDiscount.hide()
                                             }).bind(this)
-                                        }>{this.t("lblAdd")}
+                                        }>
+                                            {this.t("lblAdd")}
                                         </NbButton>
                                     </div>
                                 </div>
