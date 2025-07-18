@@ -1,59 +1,58 @@
 import React from 'react';
 import App from '../../lib/app';
-import {datatable} from '../../../core/core.js'
+import { datatable } from '../../../core/core.js'
 
 import NdTextBox from '../../../core/react/devex/textbox';
 import NdPopGrid from '../../../core/react/devex/popgrid';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../core/react/devex/grid';
-import NdDialog, { dialog } from '../../../core/react/devex/dialog.js';
+import NdGrid,{ Column, Editing, Paging, Scrolling, KeyboardNavigation } from '../../../core/react/devex/grid';
+import { dialog } from '../../../core/react/devex/dialog.js';
 import NbLabel from '../../../core/react/bootstrap/label';
 import NbPopNumber from '../../tools/popnumber';
 
 import { PageBar } from '../../tools/pageBar';
 import { PageView,PageContent } from '../../tools/pageView';
 import moment from 'moment';
-
 export default class priceCheck extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.itemDt = new datatable();
         this.customerDt = new datatable();
         this.priceDt = new datatable();
 
-
         this.itemDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE ) OR (@CODE = '')",
+            query : `SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE ) OR (@CODE = '')`,
             param : ['CODE:string|25'],
         }
         this.customerDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEM_MULTICODE_VW_01 WHERE (ITEM_CODE = @CODE) OR (@CODE = '')",
+            query : `SELECT * FROM ITEM_MULTICODE_VW_01 WHERE (ITEM_CODE = @CODE) OR (@CODE = '')`,
             param : ['CODE:string|25'],
         }
         this.priceDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEM_PRICE_VW_01 WHERE ((ITEM_CODE = @CODE) OR (@CODE = '')) AND TYPE = 0",
+            query : `SELECT * FROM ITEM_PRICE_VW_01 WHERE ((ITEM_CODE = @CODE) OR (@CODE = '')) AND TYPE = 0`,
             param : ['CODE:string|25'],
         }
         this.priceDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " + 
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@TYPE = @PTYPE, " + 
-                    "@LIST_NO = @PLIST_NO, " + 
-                    "@ITEM = @PITEM, " + 
-                    "@DEPOT = @PDEPOT, " + 
-                    "@START_DATE = @PSTART_DATE, " + 
-                    "@FINISH_DATE = @PFINISH_DATE, " + 
-                    "@PRICE = @PPRICE, " + 
-                    "@QUANTITY = @PQUANTITY, " + 
-                    "@CUSTOMER = @PCUSTOMER, " +
-                    "@CONTRACT = @PCONTRACT ",  
+            query : `EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @TYPE = @PTYPE, 
+                    @LIST_NO = @PLIST_NO, 
+                    @ITEM = @PITEM, 
+                    @DEPOT = @PDEPOT, 
+                    @START_DATE = @PSTART_DATE, 
+                    @FINISH_DATE = @PFINISH_DATE, 
+                    @PRICE = @PPRICE, 
+                    @QUANTITY = @PQUANTITY, 
+                    @CUSTOMER = @PCUSTOMER, 
+                    @CONTRACT = @PCONTRACT `,  
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PLIST_NO:int','PITEM:string|50','PDEPOT:string|50','PSTART_DATE:date','PFINISH_DATE:date',
                      'PPRICE:float','PQUANTITY:float','PCUSTOMER:string|50','PCONTRACT:string|50'],
             dataprm : ['GUID','CUSER','TYPE','LIST_NO','ITEM_GUID','DEPOT','START_DATE','FINISH_DATE','PRICE','QUANTITY','CUSTOMER_GUID','CONTRACT_GUID']
@@ -61,7 +60,7 @@ export default class priceCheck extends React.PureComponent
 
         this.alertContent = 
         {
-            id:'msgAlert',showTitle:true,title:this.t("msgAlert.title"),showCloseButton:true,width:'90%',height:'200px',
+            id:'msgAlert',showTitle:true,title:this.t("msgAlert.title"),showCloseButton:true,width:'90%',height:'auto',
             button:[{id:"btn01",caption:this.t("msgAlert.btn01"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}></div>)
         }
@@ -69,6 +68,7 @@ export default class priceCheck extends React.PureComponent
     async init()
     {
         this.clearEntry();
+
         await this.grdPrice.dataRefresh({source:this.priceDt});
         await this.grdCustomer.dataRefresh({source:this.customerDt});
     }
@@ -81,7 +81,6 @@ export default class priceCheck extends React.PureComponent
     clearEntry()
     {
         this.itemDt.clear();
-
         this.lblItemPrice.value = 0
     }
     getItem(pCode)
@@ -98,25 +97,31 @@ export default class priceCheck extends React.PureComponent
                 this.lblItemName.value = this.itemDt[0].NAME
                 this.lblItemPrice.value = this.itemDt[0].PRICE_SALE + ' €'
                 this.txtBarcode.value = ""
+
                 this.customerDt.selectCmd.value = [this.itemDt[0].CODE]
                 await this.customerDt.refresh();  
+                
                 this.priceDt.selectCmd.value = [this.itemDt[0].CODE]
                 await this.priceDt.refresh();  
+                
                 if(this.itemDt[0].STATUS == false)
                 {
                     document.getElementById("Sound2").play(); 
+                    
                     let tmpConfObj = 
                     {
-                        id:'msgPassiveItem',showTitle:true,title:this.lang.t("msgPassiveItem.title"),showCloseButton:true,width:'350px',height:'200px',
+                        id:'msgPassiveItem',showTitle:true,title:this.lang.t("msgPassiveItem.title"),showCloseButton:true,width:'350px',height:'auto',
                         button:[{id:"btn01",caption:this.lang.t("msgPassiveItem.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPassiveItem.btn02"),location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPassiveItem.msg")}</div>)
                     }
+
                     let pResult = await dialog(tmpConfObj);
+                    
                     if(pResult == 'btn01')
                     {  
                         let tmpQuery = 
                         {
-                            query :"UPDATE ITEMS SET STATUS = 1 WHERE GUID = @GUID ",
+                            query : `UPDATE ITEMS SET STATUS = 1 WHERE GUID = @GUID `,
                             param : ['GUID:string|50'],
                             value : [this.itemDt[0].GUID]
                         }
@@ -128,8 +133,10 @@ export default class priceCheck extends React.PureComponent
             else
             {                               
                 document.getElementById("Sound").play(); 
+
                 this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgBarcodeNotFound")}</div>)
                 await dialog(this.alertContent);
+                
                 this.txtBarcode.value = ""
                 this.txtBarcode.focus();
             }
@@ -145,19 +152,13 @@ export default class priceCheck extends React.PureComponent
                     {[
                         {
                             name : 'Main',isBack : false,isTitle : true,
-                            menu :
-                            [
-                            ]
+                            menu :[]
                         },
                     ]}
                     onBackClick={()=>{this.pageView.activePage('Main')}}/>
                 </div>
                 <div style={{position:'relative',top:'1px',height:'calc(100vh - 1px)',overflow:'hidden'}}>
-                    <PageView id={"pageView"} parent={this} 
-                    onActivePage={(e)=>
-                    {
-                        this.pageBar.activePage(e)
-                    }}>
+                    <PageView id={"pageView"} parent={this} onActivePage={(e)=>{this.pageBar.activePage(e)}}>
                         <PageContent id={"Main"}>
                             <div className='row px-2'>
                                 <div className='col-12'>
@@ -171,56 +172,52 @@ export default class priceCheck extends React.PureComponent
                                                     await this.getItem(this.txtBarcode.value)
                                                 }
                                             }).bind(this)}
-                                            button=
-                                            {
-                                                [
+                                            button={[
+                                                {
+                                                    id:'01',
+                                                    icon:'more',
+                                                    onClick:async()=>
                                                     {
-                                                        id:'01',
-                                                        icon:'more',
-                                                        onClick:async()=>
+                                                        this.popItem.show()
+                                                        this.popItem.onClick = (data) =>
                                                         {
-                                                            this.popItem.show()
-                                                            this.popItem.onClick = (data) =>
+                                                            if(data.length > 0)
                                                             {
-                                                                if(data.length > 0)
-                                                                {
-                                                                    this.getItem(data[0].CODE)
-                                                                }
+                                                                this.getItem(data[0].CODE)
                                                             }
-                                                        }
-                                                    },
-                                                    {
-                                                        id:'02',
-                                                        icon:'photo',
-                                                        onClick:()=>
-                                                        {
-                                                            if(typeof cordova == "undefined")
-                                                            {
-                                                                return;
-                                                            }
-                                                            cordova.plugins.barcodeScanner.scan(
-                                                                async function (result) 
-                                                                {
-                                                                    if(result.cancelled == false)
-                                                                    {
-                                                                        this.txtBarcode.value = result.text;
-                                                                        this.getItem(result.text)
-                                                                    }
-                                                                }.bind(this),
-                                                                function (error) 
-                                                                {
-                                                                    
-                                                                },
-                                                                {
-                                                                  prompt : "Scan",
-                                                                  orientation : "portrait"
-                                                                }
-                                                            );
                                                         }
                                                     }
-                                                ]
-                                            }>
-                                            </NdTextBox>
+                                                },
+                                                {
+                                                    id:'02',
+                                                    icon:'photo',
+                                                    onClick:()=>
+                                                    {
+                                                        if(typeof cordova == "undefined")
+                                                        {
+                                                            return;
+                                                        }
+                                                        cordova.plugins.barcodeScanner.scan(
+                                                            async function (result) 
+                                                            {
+                                                                if(result.cancelled == false)
+                                                                {
+                                                                    this.txtBarcode.value = result.text;
+                                                                    this.getItem(result.text)
+                                                                }
+                                                            }.bind(this),
+                                                            function (error) 
+                                                            {
+                                                                
+                                                            },
+                                                            {
+                                                                prompt : "Scan",
+                                                                orientation : "portrait"
+                                                            }
+                                                        );
+                                                    }
+                                                }
+                                            ]}/>
                                             {/*STOK SEÇİM */}
                                             <NdPopGrid id={"popItem"} parent={this} container={"#root"}
                                             selection={{mode:"single"}}
@@ -238,7 +235,8 @@ export default class priceCheck extends React.PureComponent
                                                 {
                                                     select:
                                                     {
-                                                        query : "SELECT CODE,NAME FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
+                                                        query : `SELECT CODE,NAME FROM ITEMS_VW_01 
+                                                                WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))`,
                                                         param : ['VAL:string|50']
                                                     },
                                                     sql:this.core.sql
@@ -280,9 +278,9 @@ export default class priceCheck extends React.PureComponent
                                                 if(e.column.dataField == "PRICE")
                                                 {
                                                     let tmpResult = await this.popNumber.show("PRICE",Number(e.value))
+                                                    
                                                     if(typeof tmpResult != 'undefined' && tmpResult != '' && Number(e.value) != Number(tmpResult))
                                                     {
-                                                      
                                                         e.data.PRICE = Number(tmpResult)
                                                         this.priceDt.update()
                                                     }

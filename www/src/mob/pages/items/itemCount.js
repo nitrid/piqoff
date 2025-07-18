@@ -1,30 +1,29 @@
 import React from 'react';
 import App from '../../lib/app';
-import {datatable} from '../../../core/core.js'
-import {itemCountCls} from '../../../core/cls/count.js'
+import { datatable } from '../../../core/core.js'
+import { itemCountCls } from '../../../core/cls/count.js'
 
-import ScrollView from 'devextreme-react/scroll-view';
 import NbButton from '../../../core/react/bootstrap/button';
 import NdTextBox from '../../../core/react/devex/textbox';
 import NdSelectBox from '../../../core/react/devex/selectbox';
 import NdDatePicker from '../../../core/react/devex/datepicker';
 import NdPopGrid from '../../../core/react/devex/popgrid';
 import NdNumberBox from '../../../core/react/devex/numberbox';
-import NdPopUp from '../../../core/react/devex/popup';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../core/react/devex/grid';
-import NdDialog, { dialog } from '../../../core/react/devex/dialog.js';
+import NdGrid,{ Column, Editing, Paging, Scrolling, KeyboardNavigation } from '../../../core/react/devex/grid';
+import { dialog } from '../../../core/react/devex/dialog.js';
 import NbLabel from '../../../core/react/bootstrap/label';
 
 import { PageBar } from '../../tools/pageBar';
 import { PageView,PageContent } from '../../tools/pageView';
 import moment from 'moment';
-
 export default class itemCount extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+        
         this.core = App.instance.core;
+
         this.countObj = new itemCountCls();
         this.itemDt = new datatable();
         this.unitDt = new datatable();
@@ -32,18 +31,18 @@ export default class itemCount extends React.PureComponent
 
         this.itemDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE) OR (@CODE = '')",
+            query : `SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE) OR (@CODE = '')`,
             param : ['CODE:string|25'],
         }
         this.unitDt.selectCmd = 
         {
-            query : "SELECT GUID,ID,NAME,SYMBOL,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE <> 1 ORDER BY TYPE ASC",
+            query : `SELECT GUID,ID,NAME,SYMBOL,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE <> 1 ORDER BY TYPE ASC`,
             param : ['ITEM_GUID:string|50'],
         }
 
         this.alertContent = 
         {
-            id:'msgAlert',showTitle:true,title:this.t("msgAlert.title"),showCloseButton:true,width:'90%',height:'200px',
+            id:'msgAlert',showTitle:true,title:this.t("msgAlert.title"),showCloseButton:true,width:'90%',height:'auto',
             button:[{id:"btn01",caption:this.t("msgAlert.btn01"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}></div>)
         }
@@ -57,7 +56,7 @@ export default class itemCount extends React.PureComponent
         this.dtDocDate.value = moment(new Date())
         this.cmbDepot.value = '',
 
-        await this.cmbDepot.dataRefresh({source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}});
+        await this.cmbDepot.dataRefresh({source:{select:{query : `SELECT * FROM DEPOT_VW_01`},sql:this.core.sql}});
 
         this.txtRef.readOnly = false
         this.txtRefNo.readOnly = false
@@ -76,13 +75,13 @@ export default class itemCount extends React.PureComponent
     {
         await this.core.util.waitUntil(0)
         this.pageView.activePage('Main')
+        
         this.init()
     }
     clearEntry()
     {
         this.itemDt.clear();
         this.unitDt.clear();
-
 
         this.lblItemName.value = ""
         this.lblDepotQuantity.value = 0
@@ -146,12 +145,7 @@ export default class itemCount extends React.PureComponent
                 }
                 resolve();
             }
-           
         });
-    }
-    async calcEntry()
-    {
-       
     }
     async addItem()
     {
@@ -161,6 +155,7 @@ export default class itemCount extends React.PureComponent
             await dialog(this.alertContent);
             return
         }
+
         if(this.txtQuantity.value == "" || this.txtQuantity.value == 0 || this.txtQuantity.value > 15000000)
         {
             this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgQuantityCheck")}</div>)
@@ -179,6 +174,7 @@ export default class itemCount extends React.PureComponent
                 this.clearEntry()
                 await this.save()
             }
+
             for (let i = 0; i < this.countObj.dt().length; i++) 
             {
                 if(this.countObj.dt()[i].ITEM_CODE == this.itemDt[0].CODE)
@@ -186,13 +182,16 @@ export default class itemCount extends React.PureComponent
                     if(prmRowMerge == 2)
                     {
                         document.getElementById("Sound2").play(); 
+
                         let tmpConfObj = 
                         {
-                            id:'msgCombineItem',showTitle:true,title:this.lang.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
+                            id:'msgCombineItem',showTitle:true,title:this.lang.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'auto',
                             button:[{id:"btn01",caption:this.lang.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCombineItem.btn02"),location:'after'}],
                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCombineItem.msg")}</div>)
                         }
+
                         let pResult = await dialog(tmpConfObj);
+                        
                         if(pResult == 'btn01')
                         {                   
                             tmpFnMergeRow(i)
@@ -224,7 +223,6 @@ export default class itemCount extends React.PureComponent
         tmpDocItems.DOC_DATE = this.dtDocDate.value
         tmpDocItems.QUANTITY = this.countDt[0].QUANTITY * this.countDt[0].FACTOR
 
-        console.log(tmpDocItems)
         this.countObj.addEmpty(tmpDocItems)
         this.clearEntry()
 
@@ -234,7 +232,6 @@ export default class itemCount extends React.PureComponent
     {
         return new Promise(async resolve => 
         {
-           
             if((await this.countObj.save()) == 0)
             {
                 this.txtTotalLine.value = this.countObj.dt().length
@@ -245,6 +242,7 @@ export default class itemCount extends React.PureComponent
                 this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgNotSave")}</div>)
                 await dialog(this.alertContent);
             }
+
             this.txtBarcode.focus()
             resolve()
         })
@@ -252,11 +250,14 @@ export default class itemCount extends React.PureComponent
     async deleteAll()
     {
         let tmpDelete = {...this.countObj.dt('ITEM_COUNT')}
+
         for (let i = 0; i < tmpDelete.length; i++) 
         {
             this.countObj.dt('ITEM_COUNT').removeAt(0)
         }
+
         await this.countObj.dt('ITEM_COUNT').delete();
+        
         this.init(); 
         this.pageView.activePage('Main')
     }
@@ -287,104 +288,71 @@ export default class itemCount extends React.PureComponent
         return(
             <div>
                 <div>
-                <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.stk_05")} content=
-                {[
-                    {
-                        name : 'Main',isBack : false,isTitle : true,
-                        menu :
-                        [
-                            {
-                                icon : "fa-file",
-                                text : this.lang.t("btnNewDoc"),
-                                onClick : ()=>
+                    <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.stk_05")} content=
+                    {[
+                        {
+                            name : 'Main',isBack : false,isTitle : true,
+                            menu :
+                            [
                                 {
-                                    this.init()
-                                }
-                            },
-                            {
-                                icon : "fa-trash",
-                                text : this.lang.t("btnDocDelete"),
-                                onClick : ()=>
+                                    icon : "fa-file",
+                                    text : this.lang.t("btnNewDoc"),
+                                    onClick : ()=>{this.init()}
+                                },
                                 {
-                                    if(this.countObj.dt().length > 0)
+                                    icon : "fa-trash",
+                                    text : this.lang.t("btnDocDelete"),
+                                    onClick : ()=>
                                     {
-                                        this.deleteAll();
+                                        if(this.countObj.dt().length > 0)
+                                        {
+                                            this.deleteAll();
+                                        }
                                     }
                                 }
-                            }
-                        ]
-                    },
-                    {
-                        name : 'Entry',isBack : true,isTitle : false,
-                        menu :
-                        [
-                          
-                        ],
-                        shortcuts :
-                        [
-                            {icon : "fa-file-lines",onClick : this.onClickProcessShortcut.bind(this)}
-                        ]
-                    },
-                    {
-                        name : 'Process',isBack : true,isTitle : false,
-                        shortcuts :
-                        [
-                            {icon : "fa-barcode",onClick : this.onClickBarcodeShortcut.bind(this)}
-                        ]
-                    }
-                ]}
-                onBackClick={()=>{this.pageView.activePage('Main')}}/>
+                            ]
+                        },
+                        {
+                            name : 'Entry',isBack : true,isTitle : false,
+                            menu :[],
+                            shortcuts :
+                            [
+                                {icon : "fa-file-lines",onClick : this.onClickProcessShortcut.bind(this)}
+                            ]
+                        },
+                        {
+                            name : 'Process',isBack : true,isTitle : false,
+                            shortcuts :
+                            [
+                                {icon : "fa-barcode",onClick : this.onClickBarcodeShortcut.bind(this)}
+                            ]
+                        }
+                    ]}
+                    onBackClick={()=>{this.pageView.activePage('Main')}}/>
                 </div>
                 <div style={{position:'relative',top:'5px',height:'calc(100vh - 1px)',overflow:'hidden'}}>
-                    <PageView id={"pageView"} parent={this} 
-                    onActivePage={(e)=>
-                    {
-                        this.pageBar.activePage(e)
-                    }}>
+                    <PageView id={"pageView"} parent={this} onActivePage={(e)=>{this.pageBar.activePage(e)}}>
                         <PageContent id={"Main"}>
                             <div className='row px-2'>
                                 <div className='col-12'>
-                                    <div className='card modern-card mb-2' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '12px'
-                                    }}>
-                                        
+                                    <div className='card modern-card mb-2' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '12px'}}>
                                         <div className='card-body' style={{padding: '0'}}>
-                                            <div className='form-group mb-2' style={{
-                                                background: '#f8f9fa',
-                                                padding: '10px',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label className='form-label' style={{
-                                                    fontSize: '12px',
-                                                    fontWeight: '500',
-                                                    color: '#6c757d',
-                                                    marginBottom: '4px',
-                                                    display: 'block'
-                                                }}>
+                                            <div className='form-group mb-2' style={{background: '#f8f9fa',padding: '10px',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label className='form-label' style={{fontSize: '12px',fontWeight: '500',color: '#6c757d',marginBottom: '4px',display: 'block'}}>
                                                     🔖 {this.t("lblRef")}
                                                 </label>
                                                 <div className='row'>
                                                     <div className='col-4'>
                                                         <div style={{position: 'relative'}}>
                                                             <NdTextBox id="txtRef" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.countObj.dt(),field:"REF"}}
-                                                            style={{
-                                                                borderRadius: '4px',
-                                                                border: '1px solid #ced4da',
-                                                                fontSize: '12px',
-                                                                padding: '6px'
-                                                            }}
+                                                            style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '6px'}}
                                                             onChange={(async(e)=>
                                                             {
                                                                 try 
                                                                 {
                                                                     let tmpQuery = 
                                                                     {
-                                                                        query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM ITEM_COUNT WHERE REF = @REF ",
+                                                                        query : `SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM ITEM_COUNT WHERE REF = @REF `,
                                                                         param : ['REF:string|25'],
                                                                         value : [typeof e.component == 'undefined' ? e : this.txtRef.value]
                                                                     }
@@ -400,7 +368,6 @@ export default class itemCount extends React.PureComponent
                                                                 {
                                                                     console.log("Hata oluştu: ", error);
                                                                 }
-                                                                
                                                             }).bind(this)}
                                                             />
                                                         </div>
@@ -408,40 +375,32 @@ export default class itemCount extends React.PureComponent
                                                     <div className='col-8'>
                                                         <div style={{position: 'relative'}}>
                                                             <NdTextBox id="txtRefNo" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.countObj.dt(),field:"REF_NO"}}
-                                                            style={{
-                                                                borderRadius: '4px',
-                                                                border: '1px solid #ced4da',
-                                                                fontSize: '12px',
-                                                                padding: '6px'
-                                                            }}
-                                                            button=
-                                                            {
-                                                                [
+                                                            style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '6px'}}
+                                                            button={[
+                                                                {
+                                                                    id:'01',
+                                                                    icon:'more',
+                                                                    onClick:async()=>
                                                                     {
-                                                                        id:'01',
-                                                                        icon:'more',
-                                                                        onClick:async()=>
+                                                                        this.popDoc.show()
+                                                                        this.popDoc.onClick = (data) =>
                                                                         {
-                                                                            this.popDoc.show()
-                                                                            this.popDoc.onClick = (data) =>
+                                                                            if(data.length > 0)
                                                                             {
-                                                                                if(data.length > 0)
-                                                                                {
-                                                                                    this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
-                                                                                }
+                                                                                this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
                                                                             }
                                                                         }
-                                                                    },
-                                                                    {
-                                                                        id:'02',
-                                                                        icon:'arrowdown',
-                                                                        onClick:()=>
-                                                                        {
-                                                                            this.txtRefNo.value = Math.floor(Date.now() / 1000)
-                                                                        }
                                                                     }
-                                                                ]
-                                                            }/>
+                                                                },
+                                                                {
+                                                                    id:'02',
+                                                                    icon:'arrowdown',
+                                                                    onClick:()=>
+                                                                    {
+                                                                        this.txtRefNo.value = Math.floor(Date.now() / 1000)
+                                                                    }
+                                                                }
+                                                            ]}/>
                                                             {/*EVRAK SEÇİM */}
                                                             <NdPopGrid id={"popDoc"} parent={this} container={"#root"}
                                                             selection={{mode:"single"}}
@@ -458,7 +417,9 @@ export default class itemCount extends React.PureComponent
                                                                 {
                                                                     select:
                                                                     {
-                                                                        query : "SELECT REF,REF_NO,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE,DEPOT_NAME,SUM(QUANTITY) AS QUANTITY,COUNT(REF) AS TOTAL_LINE  FROM ITEM_COUNT_VW_01 GROUP BY REF,REF_NO,DOC_DATE,DEPOT_NAME ORDER BY DOC_DATE DESC"
+                                                                        query : `SELECT REF,REF_NO,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE,DEPOT_NAME,
+                                                                                SUM(QUANTITY) AS QUANTITY,COUNT(REF) AS TOTAL_LINE 
+                                                                                FROM ITEM_COUNT_VW_01 GROUP BY REF,REF_NO,DOC_DATE,DEPOT_NAME ORDER BY DOC_DATE DESC`
                                                                     },
                                                                     sql:this.core.sql
                                                                 }
@@ -475,70 +436,28 @@ export default class itemCount extends React.PureComponent
                                                     </div>
                                                 </div>
                                             </div>
-                                            
-                                            <div className='form-group mb-2' style={{
-                                                background: '#f8f9fa',
-                                                padding: '10px',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label className='form-label' style={{
-                                                    fontSize: '12px',
-                                                    fontWeight: '500',
-                                                    color: '#6c757d',
-                                                    marginBottom: '4px',
-                                                    display: 'block'
-                                                }}>
+                                            <div className='form-group mb-2' style={{background: '#f8f9fa',padding: '10px',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label className='form-label' style={{fontSize: '12px',fontWeight: '500',color: '#6c757d',marginBottom: '4px',display: 'block'}}>
                                                     🏭 {this.t("lblDepot")}
                                                 </label>
                                                 <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={false}
-                                                style={{
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #ced4da',
-                                                    fontSize: '12px',
-                                                    padding: '6px'
-                                                }}
+                                                style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '6px'}}
                                                 dt={{data:this.countObj.dt('ITEM_COUNT'),field:"DEPOT"}}/>
                                             </div>
-                                            
-                                            <div className='form-group mb-2' style={{
-                                                background: '#f8f9fa',
-                                                padding: '10px',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label className='form-label' style={{
-                                                    fontSize: '12px',
-                                                    fontWeight: '500',
-                                                    color: '#6c757d',
-                                                    marginBottom: '4px',
-                                                    display: 'block'
-                                                }}>
+                                            <div className='form-group mb-2' style={{background: '#f8f9fa',padding: '10px',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label className='form-label' style={{fontSize: '12px',fontWeight: '500',color: '#6c757d',marginBottom: '4px',display: 'block'}}>
                                                     📅 {this.t("lblDate")}
                                                 </label>
                                                 <NdDatePicker simple={true}  parent={this} id={"dtDocDate"} pickerType={"rollers"} 
-                                                style={{
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #ced4da',
-                                                    fontSize: '12px',
-                                                    padding: '6px'
-                                                }}
+                                                style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '6px'}}
                                                 dt={{data:this.countObj.dt('ITEM_COUNT'),field:"DOC_DATE"}}/>
                                             </div>
                                         </div>
                                     </div>
-                                    
                                     {/* Action Buttons */}
                                     <div className='row pb-1'>
                                         <div className='col-6 pe-1'>
-                                            <div className='card action-card' style={{
-                                                background: '#007bff',
-                                                borderRadius: '8px',
-                                                boxShadow: '0 2px 8px rgba(0,123,255,0.2)',
-                                                border: 'none',
-                                                height: '70px',
-                                                transition: 'all 0.3s ease'
-                                            }}>
+                                            <div className='card action-card' style={{background: '#007bff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,123,255,0.2)',border: 'none',height: '70px',transition: 'all 0.3s ease'}}>
                                                 <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%",background:"transparent",border:"none"}} 
                                                 onClick={this.onClickBarcodeShortcut.bind(this)}>
                                                     <div className='d-flex align-items-center justify-content-center h-100'>
@@ -551,14 +470,7 @@ export default class itemCount extends React.PureComponent
                                             </div>
                                         </div>
                                         <div className='col-6 ps-1'>
-                                            <div className='card action-card' style={{
-                                                background: '#28a745',
-                                                borderRadius: '8px',
-                                                boxShadow: '0 2px 8px rgba(40,167,69,0.2)',
-                                                border: 'none',
-                                                height: '70px',
-                                                transition: 'all 0.3s ease'
-                                            }}>
+                                            <div className='card action-card' style={{background: '#28a745',borderRadius: '8px',boxShadow: '0 2px 8px rgba(40,167,69,0.2)',border: 'none',height: '70px',transition: 'all 0.3s ease'}}>
                                                 <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%",background:"transparent",border:"none"}} 
                                                 onClick={this.onClickProcessShortcut.bind(this)}>
                                                     <div className='d-flex align-items-center justify-content-center h-100'>
@@ -574,28 +486,13 @@ export default class itemCount extends React.PureComponent
                                 </div>
                             </div>
                         </PageContent>
-                        <PageContent id={"Entry"} onActive={()=>
-                        {
-                            this.txtBarcode.focus();
-                        }}>
+                        <PageContent id={"Entry"} onActive={()=>{this.txtBarcode.focus()}}>
                             <div className='row px-2'>
                                 <div className='col-12'>
                                     {/* Barkod Giriş Kartı */}
-                                    <div className='card entry-card mb-2' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '12px'
-                                    }}>
+                                    <div className='card entry-card mb-2' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '12px'}}>
                                         <NdTextBox id="txtBarcode" parent={this} simple={true} maxLength={32}
-                                        style={{
-                                            borderRadius: '6px',
-                                            border: '1px solid #ced4da',
-                                            fontSize: '14px',
-                                            padding: '10px',
-                                            backgroundColor: '#ffffff'
-                                        }}
+                                        style={{borderRadius: '6px',border: '1px solid #ced4da',fontSize: '14px',padding: '10px',backgroundColor: '#ffffff'}}
                                         placeholder={this.t("lblBarcode")}
                                         onKeyUp={(async(e)=>
                                         {
@@ -604,56 +501,53 @@ export default class itemCount extends React.PureComponent
                                                 await this.getItem(this.txtBarcode.value)
                                             }
                                         }).bind(this)}
-                                        button=
-                                        {
-                                            [
+                                        button={[
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:async()=>
                                                 {
-                                                    id:'01',
-                                                    icon:'more',
-                                                    onClick:async()=>
+                                                    this.popItem.show()
+                                                    this.popItem.onClick = (data) =>
                                                     {
-                                                        this.popItem.show()
-                                                        this.popItem.onClick = (data) =>
+                                                        if(data.length > 0)
                                                         {
-                                                            if(data.length > 0)
-                                                            {
-                                                                this.getItem(data[0].CODE)
-                                                            }
+                                                            this.getItem(data[0].CODE)
                                                         }
-                                                    }
-                                                },
-                                                {
-                                                    id:'02',
-                                                    icon:'photo',
-                                                    onClick:()=>
-                                                    {
-                                                        if(typeof cordova == "undefined")
-                                                        {
-                                                            return;
-                                                        }
-                                                        cordova.plugins.barcodeScanner.scan(
-                                                            async function (result) 
-                                                            {
-                                                                if(result.cancelled == false)
-                                                                {
-                                                                    this.txtBarcode.value = result.text;
-                                                                    this.getItem(result.text)
-                                                                }
-                                                            }.bind(this),
-                                                            function (error) 
-                                                            {
-                                                                
-                                                            },
-                                                            {
-                                                              prompt : "Scan",
-                                                              orientation : "portrait"
-                                                            }
-                                                        );
                                                     }
                                                 }
-                                            ]
-                                        }>
-                                        </NdTextBox>
+                                            },
+                                            {
+                                                id:'02',
+                                                icon:'photo',
+                                                onClick:()=>
+                                                {
+                                                    if(typeof cordova == "undefined")
+                                                    {
+                                                        return;
+                                                    }
+
+                                                    cordova.plugins.barcodeScanner.scan(
+                                                        async function (result) 
+                                                        {
+                                                            if(result.cancelled == false)
+                                                            {
+                                                                this.txtBarcode.value = result.text;
+                                                                this.getItem(result.text)
+                                                            }
+                                                        }.bind(this),
+                                                        function (error) 
+                                                        {
+                                                            
+                                                        },
+                                                        {
+                                                            prompt : "Scan",
+                                                            orientation : "portrait"
+                                                        }
+                                                    );
+                                                }
+                                            }
+                                        ]}/>
                                         {/*STOK SEÇİM */}
                                         <NdPopGrid id={"popItem"} parent={this} container={"#root"}
                                         selection={{mode:"single"}}
@@ -671,7 +565,8 @@ export default class itemCount extends React.PureComponent
                                             {
                                                 select:
                                                 {
-                                                    query : "SELECT CODE,NAME FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
+                                                    query : `SELECT CODE,NAME FROM ITEMS_VW_01 
+                                                            WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))`,
                                                     param : ['VAL:string|50']
                                                 },
                                                 sql:this.core.sql
@@ -682,21 +577,9 @@ export default class itemCount extends React.PureComponent
                                             <Column dataField="NAME" caption={this.lang.t("popItem.clmName")} width={100} />
                                         </NdPopGrid>
                                     </div>
-
                                     {/* Ürün Bilgileri */}
-                                    <div className='card mb-2' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '12px'
-                                    }}>
-                                        <div style={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center',
-                                            marginBottom: '8px'
-                                        }}>
+                                    <div className='card mb-2' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '12px'}}>
+                                        <div style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center',marginBottom: '8px'}}>
                                             <span style={{fontSize: '14px', fontWeight: '600', color: '#495057'}}>
                                                 📦 {this.t("lblItemName")}
                                             </span>
@@ -704,30 +587,12 @@ export default class itemCount extends React.PureComponent
                                                 {this.t("lblDepotQuantity")}: <strong><NbLabel id="lblDepotQuantity" parent={this} value={0}/></strong>
                                             </span>
                                         </div>
-                                        <div style={{
-                                            background: '#f8f9fa',
-                                            padding: '10px',
-                                            borderRadius: '6px',
-                                            border: '1px solid #dee2e6',
-                                            textAlign: 'center',
-                                            minHeight: '40px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center'
-                                        }}>
-                                            <NbLabel id="lblItemName" parent={this} value={""} 
-                                            style={{fontSize: '14px', fontWeight: '500', color: '#495057'}}/>
+                                        <div style={{background: '#f8f9fa',padding: '10px',borderRadius: '6px',border: '1px solid #dee2e6',textAlign: 'center',minHeight: '40px',display: 'flex',alignItems: 'center',justifyContent: 'center'}}>
+                                            <NbLabel id="lblItemName" parent={this} value={""} style={{fontSize: '14px', fontWeight: '500', color: '#495057'}}/>
                                         </div>
                                     </div>
-
                                     {/* Miktar ve Birim */}
-                                    <div className='card mb-2' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '12px'
-                                    }}>
+                                    <div className='card mb-2' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '12px'}}>
                                         {/* Birim */}
                                         <div className='row mb-2'>
                                             <div className='col-4'>
@@ -742,6 +607,7 @@ export default class itemCount extends React.PureComponent
                                                     if(e.value != null && e.value != "")
                                                     {
                                                         let tmpFactor = this.unitDt.where({GUID:e.value});
+
                                                         if(tmpFactor.length > 0)
                                                         {
                                                             this.txtFactor.value = tmpFactor[0].FACTOR
@@ -751,7 +617,6 @@ export default class itemCount extends React.PureComponent
                                                 }}/>
                                             </div>
                                         </div>
-                                        
                                         {/* Miktar */}
                                         <div className='row mb-2'>
                                             <div className='col-4'>
@@ -772,24 +637,10 @@ export default class itemCount extends React.PureComponent
                                             </div>
                                         </div>
                                     </div>
-
                                     {/* Ekle Butonu */}
-                                    <div className='card action-button' style={{
-                                        background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 4px 12px rgba(40,167,69,0.3)',
-                                        border: 'none',
-                                        overflow: 'hidden'
-                                    }}>
-                                        <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{
-                                            height:"60px",
-                                            width:"100%",
-                                            background:"transparent",
-                                            border:"none",
-                                            color:"#ffffff",
-                                            fontSize:"16px",
-                                            fontWeight:"600"
-                                        }} 
+                                    <div className='card action-button' style={{background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',borderRadius: '8px',boxShadow: '0 4px 12px rgba(40,167,69,0.3)',border: 'none',overflow: 'hidden'}}>
+                                        <NbButton className="form-group btn btn-primary btn-purple btn-block" 
+                                        style={{height:"60px",width:"100%",background:"transparent",border:"none",color:"#ffffff",fontSize:"16px",fontWeight:"600"}} 
                                         onClick={this.addItem.bind(this)}>
                                             <div className='d-flex align-items-center justify-content-center'>
                                                 <i className="fa-solid fa-plus" style={{marginRight: '8px', fontSize: '16px'}}></i>
@@ -804,18 +655,8 @@ export default class itemCount extends React.PureComponent
                             <div className='row px-2'>
                                 <div className='col-12'>
                                     {/* Sayım Listesi */}
-                                    <div className='card mb-2' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '12px'
-                                    }}>
-                                        <div style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            marginBottom: '12px'
-                                        }}>
+                                    <div className='card mb-2' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '12px'}}>
+                                        <div style={{display: 'flex',alignItems: 'center',marginBottom: '12px'}}>
                                             <span style={{fontSize: '14px', fontWeight: '600', color: '#495057'}}>
                                                 📋 {this.t("grdList.title")}
                                             </span>
@@ -829,11 +670,7 @@ export default class itemCount extends React.PureComponent
                                         height={'350'} 
                                         width={'100%'}
                                         dbApply={false}
-                                        style={{
-                                            borderRadius: '6px',
-                                            overflow: 'hidden',
-                                            border: '1px solid #dee2e6'
-                                        }}
+                                        style={{borderRadius: '6px',overflow: 'hidden',border: '1px solid #dee2e6'}}
                                         onRowRemoved={async (e)=>
                                         {
                                             if(this.countObj.dt().length == 0)
@@ -844,7 +681,6 @@ export default class itemCount extends React.PureComponent
                                             {
                                                 await this.save()
                                             }
-                                            
                                         }}
                                         onRowUpdating={async (e)=>
                                         {
@@ -864,37 +700,19 @@ export default class itemCount extends React.PureComponent
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
                                             <Scrolling mode="standart" />
                                             <Paging defaultPageSize={10} />
-                                            {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                             <Column dataField="ITEM_NAME" caption={this.t("grdList.clmItemName")} width={150} />
                                             <Column dataField="QUANTITY" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={40}/>
                                         </NdGrid>
                                     </div>
-
                                     {/* Toplam Bilgileri */}
-                                    <div className='card' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '12px'
-                                    }}>
-                                        <div style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            marginBottom: '12px'
-                                        }}>
+                                    <div className='card' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '12px'}}>
+                                        <div style={{display: 'flex',alignItems: 'center',marginBottom: '12px'}}>
                                             <span style={{fontSize: '14px', fontWeight: '600', color: '#495057'}}>
                                                 📊 Toplam Bilgileri
                                             </span>
                                         </div>
-                                        
-                                        <div className='form-group' style={{
-                                            background: '#f8f9fa',
-                                            padding: '10px',
-                                            borderRadius: '6px',
-                                            marginBottom: '8px'
-                                        }}>
+                                        <div className='form-group' style={{background: '#f8f9fa',padding: '10px',borderRadius: '6px',marginBottom: '8px'}}>
                                             <div className='row align-items-center'>
                                                 <div className='col-8'>
                                                     <label style={{fontSize: '12px', color: '#6c757d', fontWeight: '500', margin: 0}}>
@@ -903,22 +721,11 @@ export default class itemCount extends React.PureComponent
                                                 </div>
                                                 <div className='col-4'>
                                                     <NdTextBox id="txtTotalLine" parent={this} simple={true} readOnly={true} maxLength={32}
-                                                    style={{
-                                                        borderRadius: '4px',
-                                                        border: '1px solid #ced4da',
-                                                        fontSize: '12px',
-                                                        textAlign: 'center',
-                                                        backgroundColor: '#ffffff'
-                                                    }}/>
+                                                    style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',textAlign: 'center',backgroundColor: '#ffffff'}}/>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div className='form-group' style={{
-                                            background: '#f8f9fa',
-                                            padding: '10px',
-                                            borderRadius: '6px'
-                                        }}>
+                                        <div className='form-group' style={{background: '#f8f9fa',padding: '10px',borderRadius: '6px'}}>
                                             <div className='row align-items-center'>
                                                 <div className='col-8'>
                                                     <label style={{fontSize: '12px', color: '#6c757d', fontWeight: '500', margin: 0}}>
@@ -927,13 +734,7 @@ export default class itemCount extends React.PureComponent
                                                 </div>
                                                 <div className='col-4'>
                                                     <NdTextBox id="txtTotalCount" parent={this} simple={true} readOnly={true} maxLength={32}
-                                                    style={{
-                                                        borderRadius: '4px',
-                                                        border: '1px solid #ced4da',
-                                                        fontSize: '12px',
-                                                        textAlign: 'center',
-                                                        backgroundColor: '#ffffff'
-                                                    }}/>
+                                                    style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',textAlign: 'center',backgroundColor: '#ffffff'}}/>
                                                 </div>
                                             </div>
                                         </div>
