@@ -6,6 +6,9 @@ config({ licenseKey: devexLic });
 import 'devextreme/dist/css/dx.light.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/custom.css';
+import 'devextreme/dist/css/dx.light.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../css/custom.css';
 
 import moment from 'moment';
 import io from "socket.io-client";
@@ -82,6 +85,15 @@ export default class App extends React.PureComponent
 
         this.toolbarItems = 
         [
+            {
+                widget : 'dxButton',
+                location : 'before',
+                options : 
+                {
+                    icon : 'menu',
+                    onClick : () => this.setState({opened: !this.state.opened})
+                }
+            },
             {
                 widget : 'dxButton',
                 location : 'after',
@@ -349,6 +361,15 @@ export default class App extends React.PureComponent
         this.setState({toolbarItems:[
             {
                 widget : 'dxButton',
+                location : 'before',
+                options : 
+                {
+                    icon : 'menu',
+                    onClick : () => this.setState({opened: !this.state.opened})
+                }
+            },
+            {
+                widget : 'dxButton',
                 location : 'after',
                 options : 
                 {
@@ -569,18 +590,6 @@ export default class App extends React.PureComponent
                     <Drawer className="main-drawer" opened={opened} openedStateMode={'shrink'} position={'left'} revealMode={'slide'} component={Navigation}>
                         <Panel/>
                     </Drawer>
-                    
-                    {/* Kulak Butonu - Her zaman görünür */}
-                    <div 
-                        className={`menu-ear ${opened ? 'menu-open' : 'menu-closed'}`}
-                        onClick={() => this.setState({opened: !this.state.opened})}
-                        title={opened ? "Menüyü Kapat" : "Menüyü Aç"}
-                    >
-                        {opened 
-                            ? <span className="custom-angle-left" style={{color: '#2980b9'}}></span>
-                            : <span className="custom-angle-right" style={{color: '#4ea4e6'}}></span>
-                        }
-                    </div>
                 </div>
                 <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
                 visible={false}
@@ -731,7 +740,7 @@ export default class App extends React.PureComponent
                     </NdPopUp>
                 </div> 
                 <div>
-                    <NdDialog parent={this} id={"msgConnection"} visible={false} showCloseButton={false} container={"#root"} width={'500'} height={'70'}>
+                    <NdDialog parent={this} id={"msgConnection"} visible={false} showCloseButton={false} container={"#root"} width={'500'} height={'70'} position={{of:'#root'}}>
                         <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgConnection.msg")}</div>
                     </NdDialog>
                 </div>
