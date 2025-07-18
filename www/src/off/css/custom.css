@@ -219,8 +219,7 @@
     border-radius: 6px;
     margin: 1px 0;
     transition: all 0.2s ease;
-    width: calc(90% + 25px);
-    max-width: 265px;
+    width: calc(93% + 2px);
     height: 32px;
     min-height: 32px;
 }
@@ -257,7 +256,7 @@
 .navigation-container #tabPanel .dx-tabpanel-container {
     background: rgba(255, 252, 245, 0.5);
     border-radius: 0;
-    padding: 2px 8px;
+    padding: 6px 8px;
     border: none;
 }
 
@@ -368,3 +367,133 @@
 .dx-tab-selected {
     background-color: rgba(251, 237, 223, 0.8)  !important;
 }
+
+/* Kulak Butonu - Tab Rengi Dış Kutu + Mavi Ok */
+.menu-ear {
+    position: fixed;
+    top : 6.2rem;
+    width: 16px;
+    height:56px;
+    border-radius: 0 20px 20px 0; /* Kulak şekli */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    transition: all 0.3s ease;
+    
+    /* Tab rengi - açık gri/beyaz */
+    background: rgba(251, 237, 223, 0.8);
+    border: 1px solid #dee2e6;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    
+    /* İçindeki ok için - inline renkler için hazır */
+    font-size: 22px; /* Daha büyük ok */
+    font-weight: 900;
+    text-shadow: none;
+}
+/* Menü açık olduğunda */
+.menu-ear.menu-open {
+    left: 284px; /* Navigation'ın sağından çıkıntılı */
+}
+
+/* Menü kapalı olduğunda */
+.menu-ear.menu-closed {
+    left: 0px; /* Sol kenarda */
+}
+
+/* Hover efekti */
+.menu-ear:hover {
+    background: #e9ecef; /* Biraz daha koyu tab rengi */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+/* FontAwesome Force Fix - Tüm CSS'leri ezer */
+.menu-ear i.fas {
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    text-rendering: auto !important;
+    line-height: 1 !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* ULTRA AGRESİF FontAwesome Override */
+.menu-ear .menu-icon-left,
+.menu-ear .menu-icon-left:before,
+.menu-ear .menu-icon-left:after,
+.menu-ear i.fa-angle-left,
+.menu-ear i.fa-angle-left:before,
+.menu-ear i.fa-angle-left:after {
+    content: "\f104" !important;
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    display: inline-block !important;
+    text-rendering: auto !important;
+    -webkit-font-smoothing: antialiased !important;
+}
+
+.menu-ear .menu-icon-right,
+.menu-ear .menu-icon-right:before,
+.menu-ear .menu-icon-right:after,
+.menu-ear i.fa-angle-right,
+.menu-ear i.fa-angle-right:before,
+.menu-ear i.fa-angle-right:after {
+    content: "\f105" !important;
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    display: inline-block !important;
+    text-rendering: auto !important;
+    -webkit-font-smoothing: antialiased !important;
+}
+
+/* Browser cache'i temizlemek için timestamp */
+.menu-ear i[class*="fa-angle"]:before {
+    animation: icon-force 0.1s;
+}
+
+@keyframes icon-force {
+    0% { opacity: 0.99; }
+    100% { opacity: 1; }
+}
+
+/* FontAwesome Style Custom Angle Icons */
+.custom-angle-left,
+.custom-angle-right {
+    display: inline-block;
+    width: 12px;
+    height: 26px;
+    position: relative;
+    font-size: 20px;
+}
+
+/* Basit Sol Angle < */
+.custom-angle-left::before {
+    content: '<';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    font-weight: bold;
+    color: currentColor;
+    font-family: monospace;
+}
+
+/* Basit Sağ Angle > */
+.custom-angle-right::before {
+    content: '>';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    font-weight: bold;
+    color: currentColor;
+    font-family: monospace;
+}
+

@@ -154,17 +154,25 @@ export default class rebateOperation extends React.PureComponent
 
         if(pResult == 'btn01')
         {
-            let tmpQuery = 
+            if(this.grdDeleteList.getSelectedData().length > 0)
             {
-                query : `EXEC [dbo].[PRD_DOC_RETURN] @CUSER = @PCUSER,@GUID=@PGUID `,
-                param : ['PCUSER:string|50','PGUID:string|50'],
-                value : [this.core.auth.data.CODE,this.grdDeleteList.getSelectedData()[0].GUID]
+                let tmpQuery = 
+                {
+                    query : `EXEC [dbo].[PRD_DOC_RETURN] @CUSER = @PCUSER,@GUID=@PGUID `,
+                    param : ['PCUSER:string|50','PGUID:string|50'],
+                    value : [this.core.auth.data.CODE,this.grdDeleteList.getSelectedData()[0].GUID]
+                }
+                await this.core.sql.execute(tmpQuery) 
+
+                this.toast.show({message:this.t("msgSuccess.msg"),type:"success"});
+
+                this.btnGetClick()
             }
-            await this.core.sql.execute(tmpQuery) 
-
-            this.toast.show({message:this.t("msgSuccess.msg"),type:"success"});
-
-            this.btnGetClick()
+            else 
+            {
+                return
+            }
+            
         }
     }
     render()

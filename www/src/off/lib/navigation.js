@@ -249,7 +249,7 @@ export default class Navigation extends React.PureComponent
     render()
     {
         return(
-            <div className="navigation-container" style={this.style.div}>
+            <div className="navigation-container" style={{...this.style.div, position: 'relative'}}>
            
                 <LoadPanel
                 shadingColor="rgba(255,255,255,1)"

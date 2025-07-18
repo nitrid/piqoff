@@ -79,15 +79,6 @@ export default class App extends React.PureComponent
         [
             {
                 widget : 'dxButton',
-                location : 'before',
-                options : 
-                {
-                    icon : 'menu',
-                    onClick : () => this.setState({opened: !this.state.opened})
-                }
-            },
-            {
-                widget : 'dxButton',
                 location : 'after',
                 options : 
                 {
@@ -353,15 +344,6 @@ export default class App extends React.PureComponent
         this.setState({toolbarItems:[
             {
                 widget : 'dxButton',
-                location : 'before',
-                options : 
-                {
-                    icon : 'menu',
-                    onClick : () => this.setState({opened: !this.state.opened})
-                }
-            },
-            {
-                widget : 'dxButton',
                 location : 'after',
                 options : 
                 {
@@ -582,6 +564,18 @@ export default class App extends React.PureComponent
                     <Drawer className="main-drawer" opened={opened} openedStateMode={'shrink'} position={'left'} revealMode={'slide'} component={Navigation}>
                         <Panel/>
                     </Drawer>
+                    
+                    {/* Kulak Butonu - Her zaman görünür */}
+                    <div 
+                        className={`menu-ear ${opened ? 'menu-open' : 'menu-closed'}`}
+                        onClick={() => this.setState({opened: !this.state.opened})}
+                        title={opened ? "Menüyü Kapat" : "Menüyü Aç"}
+                    >
+                        {opened 
+                            ? <span className="custom-angle-left" style={{color: '#2980b9'}}></span>
+                            : <span className="custom-angle-right" style={{color: '#4ea4e6'}}></span>
+                        }
+                    </div>
                 </div>
                 <NdPopGrid id={"pg_users"} parent={this} container={"#root"}
                 visible={false}
