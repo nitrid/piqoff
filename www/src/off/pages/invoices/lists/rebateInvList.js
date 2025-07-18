@@ -290,9 +290,10 @@ export default class rebateInvList extends React.PureComponent
                                 >
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this}
                                 visible={false}
-                                position={{of:'#root'}} 
+                                position={{of:'#' + this.props.data.id + this.props.data.tabkey}} 
+                                container={'#' + this.props.data.id + this.props.data.tabkey} 
                                 showTitle={true} 
                                 showBorders={true}
                                 width={'90%'}
@@ -305,7 +306,7 @@ export default class rebateInvList extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_04 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql
@@ -392,10 +393,10 @@ export default class rebateInvList extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDesign.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.props.data.tabkey} 
                         width={'500'}
                         height={'180'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.props.data.tabkey}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>

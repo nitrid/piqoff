@@ -63,10 +63,9 @@ export default class purchaseInvList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM DOC_VW_01 " +
-                            "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 0 AND DOC_TYPE = 20 AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                    query : `SELECT * FROM DOC_VW_01 WHERE
+                            ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) 
+                            AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  AND TYPE = 0 AND DOC_TYPE = 20 AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC`,
                     param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },
@@ -85,7 +84,7 @@ export default class purchaseInvList extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO ` ,
                 param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                 value:  [this.grdPurcIvcList.getSelectedData()[i].GUID,this.cmbDesignList.value,localStorage.getItem('lang').toUpperCase()]
             }
@@ -117,7 +116,7 @@ export default class purchaseInvList extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.props.data.tabkey}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -237,9 +236,10 @@ export default class purchaseInvList extends React.PureComponent
                                 >
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this}
                                 visible={false}
-                                position={{of:'#root'}} 
+                                position={{of:'#' + this.props.data.id + this.props.data.tabkey}} 
+                                container={'#' + this.props.data.id + this.props.data.tabkey} 
                                 showTitle={true} 
                                 showBorders={true}
                                 width={'90%'}
@@ -344,10 +344,10 @@ export default class purchaseInvList extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDesign.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.props.data.tabkey} 
                         width={'500'}
                         height={'180'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.props.data.tabkey}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -358,7 +358,7 @@ export default class purchaseInvList extends React.PureComponent
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '114'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '114'`},sql:this.core.sql}}}
                                     >
                                         <Validator validationGroup={"frmPrintPop" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDesign")} />

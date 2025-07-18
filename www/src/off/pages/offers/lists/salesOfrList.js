@@ -2,14 +2,12 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
+import Form, { Label,Item } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
 import NdGrid,{Column,Paging,Pager,Export,Scrolling,Editing,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -23,7 +21,7 @@ export default class salesOfrList extends React.PureComponent
         
         this.core = App.instance.core;
         this.groupList = [];
-        this._btnGetClick = this._btnGetClick.bind(this)
+        this.btnGetClick = this.btnGetClick.bind(this)
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
     }
@@ -54,7 +52,7 @@ export default class salesOfrList extends React.PureComponent
         tmpSave.setValue(e)
         tmpSave.save()
     }
-    async _btnGetClick()
+    async btnGetClick()
     {
         
         let tmpSource =
@@ -64,16 +62,17 @@ export default class salesOfrList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM DOC_VW_01 " +
-                            "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 1 AND DOC_TYPE = 61  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                    query : `SELECT * FROM DOC_VW_01 
+                            WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND 
+                            ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  
+                            AND TYPE = 1 AND DOC_TYPE = 61  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC`,
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },
                 sql : this.core.sql
             }
         }
+
         App.instance.setState({isExecute:true})
         await this.grdSlsOfrList.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
@@ -81,7 +80,7 @@ export default class salesOfrList extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.props.data.tabkey}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -123,6 +122,7 @@ export default class salesOfrList extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+                                            
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -140,15 +140,13 @@ export default class salesOfrList extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("dtFirst")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
-                                    >
-                                    </NdDatePicker>
+                                    />
                                 </Item>
                                 {/* dtLast */}
                                 <Item>
                                     <Label text={this.t("dtLast")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtLast"}
-                                    >
-                                    </NdDatePicker>
+                                    />
                                 </Item>
                                 <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -190,8 +188,7 @@ export default class salesOfrList extends React.PureComponent
                                             }
                                         },
                                     ]
-                                }
-                                >
+                                }>
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
                                 <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
@@ -209,7 +206,7 @@ export default class salesOfrList extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql
@@ -222,16 +219,13 @@ export default class salesOfrList extends React.PureComponent
                                         icon:'more',
                                         onClick:()=>
                                         {
-                                            console.log(1111)
                                         }
                                     }
-                                }
-                                >
+                                }>
                                     <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                     <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                     <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                                    
                                 </NdPopGrid>
                                 </Item> 
                             </Form>
@@ -248,7 +242,7 @@ export default class salesOfrList extends React.PureComponent
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -267,7 +261,7 @@ export default class salesOfrList extends React.PureComponent
                                 App.instance.menuClick(
                                 {
                                     id: 'tkf_02_002',
-                                    text: this.t('menu'),
+                                    text: this.t('menuOff.tkf_02_002'),
                                     path: 'offers/documents/salesOffer.js',
                                     pagePrm:{GUID:e.data.GUID}
                                 })
