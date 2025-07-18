@@ -1628,9 +1628,9 @@ export default class salesOrder extends DocBase
                                         >
                                             <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsOrder"}/>
                                             <ColumnChooser enabled={true} />
-                                            <Paging defaultPageSize={10} />
-                                            <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                            <Scrolling mode="standart" />
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                             <Export fileName={this.lang.t("menuOff.sip_02_002")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
