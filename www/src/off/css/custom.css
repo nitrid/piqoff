@@ -468,32 +468,34 @@
     width: 12px;
     height: 26px;
     position: relative;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 /* Basit Sol Angle < */
 .custom-angle-left::before {
-    content: '<';
+    content: '<<';
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 900;
     color: currentColor;
     font-family: monospace;
+    letter-spacing: -3px;
 }
 
 /* Basit Sağ Angle > */
 .custom-angle-right::before {
-    content: '>';
+    content: '>>';
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 900;
     color: currentColor;
     font-family: monospace;
+    letter-spacing: -3px;
 }
 
