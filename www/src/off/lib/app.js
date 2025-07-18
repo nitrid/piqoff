@@ -1,3 +1,8 @@
+import { devexLic } from '../../devex-lic.js'
+import config from 'devextreme/core/config'
+
+config({ licenseKey: devexLic });
+
 import 'devextreme/dist/css/dx.light.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/custom.css';
@@ -38,6 +43,7 @@ import NdDialog,{dialog} from '../../core/react/devex/dialog';
 import IdleTimer from 'react-idle-timer'
 
 import * as appInfo from '../../../package.json'
+
 export default class App extends React.PureComponent
 {
     static instance = null;
@@ -45,7 +51,6 @@ export default class App extends React.PureComponent
     constructor()
     {
         super();
-
         loadMessages(enMessages);
         loadMessages(frMessages);
         loadMessages(trMessages);
