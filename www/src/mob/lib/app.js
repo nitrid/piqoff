@@ -1,3 +1,8 @@
+import { devexLic } from '../../devex-lic.js'
+import config from 'devextreme/core/config'
+
+config({ licenseKey: devexLic });
+
 import React from 'react';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import enMessages from '../meta/lang/devexpress/en.js';
