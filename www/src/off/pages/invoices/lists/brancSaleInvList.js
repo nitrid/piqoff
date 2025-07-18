@@ -19,8 +19,6 @@ export default class salesInvList extends React.PureComponent
     {
         super(props)
 
-       
-        
         this.core = App.instance.core;
         this.groupList = [];
         this.btnGetClick = this.btnGetClick.bind(this)
@@ -61,10 +59,9 @@ export default class salesInvList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM DOC_VW_01 " +
-                            "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 1 AND DOC_TYPE = 22  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                    query : `SELECT * FROM DOC_VW_01 WHERE
+                            ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) 
+                            AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  AND TYPE = 1 AND DOC_TYPE = 22  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC`,
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },
@@ -137,15 +134,13 @@ export default class salesInvList extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("dtFirst")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
-                                    >
-                                    </NdDatePicker>
+                                    />
                                 </Item>
                                 {/* dtLast */}
                                 <Item>
                                     <Label text={this.t("dtLast")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtLast"}
-                                    >
-                                    </NdDatePicker>
+                                    />
                                 </Item>
                                 <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -191,9 +186,10 @@ export default class salesInvList extends React.PureComponent
                                 >
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this}
                                 visible={false}
-                                position={{of:'#root'}} 
+                                position={{of:'#' + this.props.data.id + this.props.data.tabkey}} 
+                                container={'#' + this.props.data.id + this.props.data.tabkey} 
                                 showTitle={true} 
                                 showBorders={true}
                                 width={'90%'}

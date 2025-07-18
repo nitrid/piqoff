@@ -585,7 +585,7 @@ export default class salesInvoice extends DocBase
             {
                 let tmpTypeQuery = 
                 {
-                    query :"SELECT TYPE FROM ITEMS WHERE GUID = @GUID ",
+                    query :`SELECT TYPE FROM ITEMS WHERE GUID = @GUID `,
                     param : ['GUID:string|50'],
                     value : [pData.GUID]
                 }
@@ -629,7 +629,7 @@ export default class salesInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,@DEPOT,@PRICE_LIST_NO,0,0) AS PRICE",
+                    query :`SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,@DEPOT,@PRICE_LIST_NO,0,0) AS PRICE`,
                     param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','PRICE_LIST_NO:int'],
                     value : [pData.GUID,pQuantity,this.docObj.dt()[0].INPUT,this.cmbDepot.value,this.cmbPricingList.value]
                 }
@@ -784,9 +784,9 @@ export default class salesInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_04.GUID AND CUSTOMER = '"+this.docObj.dt()[0].INPUT+"' AND DELETED = 0),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_04 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_04.GUID AND CUSTOMER = '"+this.docObj.dt()[0].INPUT+"' AND DELETED = 0),'') = @VALUE AND ITEMS_VW_04.STATUS = 1" ,
+                    query :`SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT,
+                            ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_04.GUID AND CUSTOMER = '${this.docObj.dt()[0].INPUT}' AND DELETED = 0),'') AS MULTICODE
+                            FROM ITEMS_VW_04 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_04.GUID AND CUSTOMER = '${this.docObj.dt()[0].INPUT}' AND DELETED = 0),'') = @VALUE AND ITEMS_VW_04.STATUS = 1` ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -876,7 +876,7 @@ export default class salesInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT INTERFEL FROM ITEMS_SHOP WHERE ITEM = @ITEM ",
+                    query : `SELECT INTERFEL FROM ITEMS_SHOP WHERE ITEM = @ITEM `,
                     param : ['ITEM:string|50'],
                     value : [this.docObj.docItems.dt()[i].ITEM]
                 }
@@ -895,7 +895,7 @@ export default class salesInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT FR,NOTFR,ISNULL((SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER = @CUSTOMER AND ADRESS_NO = 0 AND DELETED = 0),'') AS COUNTRY FROM INTERFEL_TABLE_VW_01 ",
+                    query : `SELECT FR,NOTFR,ISNULL((SELECT TOP 1 COUNTRY FROM CUSTOMER_ADRESS WHERE CUSTOMER = @CUSTOMER AND ADRESS_NO = 0 AND DELETED = 0),'') AS COUNTRY FROM INTERFEL_TABLE_VW_01 `,
                     param : ['CUSTOMER:string|50'],
                     value : [this.docObj.dt()[0].INPUT]
                 }
@@ -1047,7 +1047,7 @@ export default class salesInvoice extends DocBase
                                                     {
                                                         let tmpQuery = 
                                                         {
-                                                            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                            query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO ` ,
                                                             param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                             value:  [this.docObj.dt()[0].GUID,this.prmObj.filter({ID:'autoMailAdress',USERS:this.user.CODE}).getValue().tag,this.prmObj.filter({ID:'autoMailAdress',USERS:this.user.CODE}).getValue().lang]
                                                         }
@@ -1108,7 +1108,7 @@ export default class salesInvoice extends DocBase
                                         {
                                             let tmpQuery = 
                                             {
-                                                query :"SELECT [dbo].[FN_UNIT2_QUANTITY](@ITEM) AS QUANTITY",
+                                                query :`SELECT [dbo].[FN_UNIT2_QUANTITY](@ITEM) AS QUANTITY`,
                                                 param : ['ITEM:string|50'],
                                                 value : [this.docObj.docItems.dt()[i].ITEM]
                                             }
@@ -1269,7 +1269,7 @@ export default class salesInvoice extends DocBase
                                             this.frmDocItems.option('disabled',false)
                                         }
                                     }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
@@ -2320,7 +2320,7 @@ export default class salesInvoice extends DocBase
                                                     
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO ` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
@@ -2331,14 +2331,7 @@ export default class salesInvoice extends DocBase
                                                     
                                                     let tmpQuery2 = 
                                                     { 
-                                                        query:  "SELECT TOP 5 " +
-                                                                "DOC_DATE AS DOC_DATE, " +
-                                                                "DOC_REF AS REF, " +
-                                                                "DOC_REF_NO AS REF_NO, " +
-                                                                "BALANCE AS BALANCE " +
-                                                                "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @INPUT AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 " +
-                                                                "AND BALANCE <> 0 " +
-                                                                "ORDER BY DOC_DATE DESC" ,
+                                                        query: `SELECT TOP 5 DOC_DATE AS DOC_DATE, DOC_REF AS REF, DOC_REF_NO AS REF_NO, BALANCE AS BALANCE FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @INPUT AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 AND BALANCE <> 0 ORDER BY DOC_DATE DESC` ,
                                                         param:  ['INPUT:string|50'],
                                                         value:  [this.docObj.dt()[0].INPUT]
                                                     }
@@ -2397,7 +2390,7 @@ export default class salesInvoice extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO ` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
@@ -2408,14 +2401,7 @@ export default class salesInvoice extends DocBase
                                                     
                                                     let tmpQuery2 = 
                                                     { 
-                                                        query:  "SELECT TOP 5 " +
-                                                                "DOC_DATE AS DOC_DATE, " +
-                                                                "DOC_REF AS REF, " +
-                                                                "DOC_REF_NO AS REF_NO, " +
-                                                                "BALANCE AS BALANCE " +
-                                                                "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @INPUT AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 " +
-                                                                "AND BALANCE <> 0 " +
-                                                                "ORDER BY DOC_DATE DESC" ,
+                                                        query: `SELECT TOP 5 DOC_DATE AS DOC_DATE, DOC_REF AS REF, DOC_REF_NO AS REF_NO, BALANCE AS BALANCE FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @INPUT AND TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 AND BALANCE <> 0 ORDER BY DOC_DATE DESC` ,
                                                         param:  ['INPUT:string|50'],
                                                         value:  [this.docObj.dt()[0].INPUT]
                                                     }
@@ -2432,8 +2418,6 @@ export default class salesInvoice extends DocBase
                                                             {
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                             } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         }
                                                     });
                                                 }
@@ -2447,7 +2431,7 @@ export default class salesInvoice extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0",
+                                                        query :` SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0`,
                                                         param:  ['GUID:string|50'],
                                                         value:  [this.docObj.dt()[0].INPUT]
                                                     }
@@ -2641,6 +2625,7 @@ export default class salesInvoice extends DocBase
                                                         {
                                                             tmpHtml = ''
                                                         }
+                                                        
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                         }

@@ -199,7 +199,7 @@ export default class DocBase extends React.PureComponent
                 let tmpUnitDt = new datatable()
                 tmpUnitDt.selectCmd = 
                 {
-                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                    query: `SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE` ,
                     param: ['ITEM:string|50'],
                     value: [this.msgQuantity.tmpData.GUID]
                 }
@@ -277,7 +277,7 @@ export default class DocBase extends React.PureComponent
 
                 tmpUnitDt.selectCmd = 
                 {
-                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                    query: `SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE` ,
                     param:  ['ITEM:string|50'],
                     value:  [this.msgUnit.tmpData.ITEM]
                 }
@@ -317,7 +317,8 @@ export default class DocBase extends React.PureComponent
             }
             if(typeof this.txtRef != 'undefined' && typeof this.txtRef.props.onChange != 'undefined')
             {
-                setTimeout(() => {
+                setTimeout(() => 
+                {
                     this.txtRef.props.onChange()
                 }, 1000);
             }
@@ -398,7 +399,6 @@ export default class DocBase extends React.PureComponent
     }
     async getDocs(pType)
     {
-        console.log(this.pg_Docs)
         let tmpQuery = {}
      
         if(pType == 0)
@@ -1400,10 +1400,12 @@ export default class DocBase extends React.PureComponent
             this.docObj.dt()[0].OUTPUT_CODE = tmpData.result.recordset[0].OUTPUT_CODE
             this.docObj.dt()[0].OUTPUT_NAME = tmpData.result.recordset[0].OUTPUT_NAME
             this.docObj.dt()[0].PRICE_LIST_NO = tmpData.result.recordset[0].PRICE_LIST_NO
+            
             if(this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue() != 'undefined' && this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue().value ==  true)
             {
                 this.txtRef.value = tmpData.result.recordset[0].INPUT_CODE;
             }
+            
             if(this.docType != 20)
             {
                 this.txtRef.props.onChange()
@@ -1434,7 +1436,7 @@ export default class DocBase extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 {/* Cari Seçim PopUp */}
                 <div>
                     <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}

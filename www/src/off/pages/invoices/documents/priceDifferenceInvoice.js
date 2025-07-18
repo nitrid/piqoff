@@ -77,7 +77,7 @@ export default class priceDifferenceInvoice extends DocBase
         {
             let tmpCustQuery = 
             {
-                query : "SELECT * FROM CUSTOMERS WHERE TAX_NO = @TAX_NO",
+                query : `SELECT GUID,CODE,TITLE,VAT_ZERO FROM CUSTOMERS WHERE TAX_NO = @TAX_NO`,
                 param : ['TAX_NO:string|25'],
                 value : [this.piqX[0].DOC_FROM_NO]
             }
@@ -93,12 +93,15 @@ export default class priceDifferenceInvoice extends DocBase
                 {
                     this.frmDocItems.option('disabled',false)
                 }
+
                 this.docObj.dt()[0].INPUT = tmpCustData.result.recordset[0].GUID
                 this.docObj.docCustomer.dt()[0].INPUT = tmpCustData.result.recordset[0].GUID
                 this.docObj.dt()[0].INPUT_CODE = tmpCustData.result.recordset[0].CODE
                 this.docObj.dt()[0].INPUT_NAME = tmpCustData.result.recordset[0].TITLE
                 this.docObj.dt()[0].VAT_ZERO = tmpCustData.result.recordset[0].VAT_ZERO
+                
                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                
                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                 {
                     this.txtRef.value = tmpCustData.result.recordset[0].CODE
@@ -110,7 +113,9 @@ export default class priceDifferenceInvoice extends DocBase
                     param : ['CUSTOMER:string|50'],
                     value : [tmpCustData.result.recordset[0].GUID]
                 }
+                
                 let tmpAdressData = await this.core.sql.execute(tmpAdrQuery) 
+                
                 if(tmpAdressData.result.recordset.length > 1)
                 {
                     this.docObj.dt()[0].ADDRESS = tmpAdressData[0].ADRESS_NO
@@ -132,17 +137,17 @@ export default class priceDifferenceInvoice extends DocBase
 
                 let tmpItemQuery = 
                 {
-                    query : "SELECT " + 
-                            "I.GUID AS ITEM, " + 
-                            "I.CODE AS ITEM_CODE, " + 
-                            "I.NAME AS ITEM_NAME, " + 
-                            "I.UNIT AS UNIT, " + 
-                            "I.COST_PRICE AS COST_PRICE, " +
-                            "I.VAT AS VAT " +
-                            "FROM ITEM_MULTICODE AS M " + 
-                            "INNER JOIN ITEMS_VW_04 AS I ON " + 
-                            "M.ITEM = I.GUID " + 
-                            "WHERE M.CODE = @CODE AND M.CUSTOMER = @CUSTOMER",
+                    query : `SELECT 
+                            I.GUID AS ITEM, 
+                            I.CODE AS ITEM_CODE, 
+                            I.NAME AS ITEM_NAME, 
+                            I.UNIT AS UNIT, 
+                            I.COST_PRICE AS COST_PRICE, 
+                            I.VAT AS VAT 
+                            FROM ITEM_MULTICODE AS M 
+                            INNER JOIN ITEMS_VW_04 AS I ON 
+                            M.ITEM = I.GUID 
+                            WHERE M.CODE = @CODE AND M.CUSTOMER = @CUSTOMER`,
                     param : ['CODE:string|50','CUSTOMER:string|50'],
                     value : [jData[i].ITEM_CODE,this.docObj.dt()[0].INPUT]
                 }
@@ -213,9 +218,11 @@ export default class priceDifferenceInvoice extends DocBase
 
         let tmpQuery = 
         {
-            query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 21 ",
+            query :`SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 21 `,
         }
+        
         let tmpData = await this.core.sql.execute(tmpQuery) 
+        
         if(tmpData.result.recordset.length > 0)
         {
             this.txtRefno.value = tmpData.result.recordset[0].REF_NO
@@ -230,7 +237,7 @@ export default class priceDifferenceInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,STATUS FROM ITEMS_VW_04 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
+                        query : `SELECT GUID,CODE,NAME,VAT,UNIT,STATUS FROM ITEMS_VW_04 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))`,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -244,10 +251,10 @@ export default class priceDifferenceInvoice extends DocBase
                 source:
                 {
                     select:
-                    {   query : "SELECT ITEMS_VW_04.GUID,CODE,NAME,COST_PRICE,VAT,BARCODE,ITEMS_VW_04.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND " + 
-                                "ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].INPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
-                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_04.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                "FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
+                    {   query : `SELECT ITEMS_VW_04.GUID,CODE,NAME,COST_PRICE,VAT,BARCODE,ITEMS_VW_04.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND 
+                                ITEM_MULTICODE.CUSTOMER = '${this.docObj.dt()[0].INPUT}' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, 
+                                ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_04.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME 
+                                FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)`,
                         param : ['BARCODE:string|50'],
                     },
                     sql:this.core.sql
@@ -262,9 +269,9 @@ export default class priceDifferenceInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],EXPIRY_DAY,VAT_ZERO,TAX_NO," + 
-                                "ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE " + 
-                                "FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                        query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],EXPIRY_DAY,VAT_ZERO,TAX_NO,
+                                ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE 
+                                FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)`,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -280,6 +287,7 @@ export default class priceDifferenceInvoice extends DocBase
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
+        
         for(let i = 0; i < this.docObj.docItems.dt().length; i++)
         {
             this.docObj.docItems.dt()[i].PURC_PRICE = this.docObj.docItems.dt()[i].CUSTOMER_PRICE + this.docObj.docItems.dt()[i].PRICE
@@ -331,7 +339,9 @@ export default class priceDifferenceInvoice extends DocBase
                                 param : ['CODE:string|50'],
                                 value : [r.component._changedValue]
                             }
+        
                             let tmpData = await this.core.sql.execute(tmpQuery) 
+       
                             if(tmpData.result.recordset.length > 0)
                             {
                                 this.checkboxReset()
@@ -400,6 +410,7 @@ export default class priceDifferenceInvoice extends DocBase
 
                                 e.key.UNIT = this.cmbUnit.value
                                 e.key.UNIT_FACTOR = this.txtUnitFactor.value
+                                
                                 if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
                                 {
                                     e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
@@ -408,7 +419,9 @@ export default class priceDifferenceInvoice extends DocBase
                                 {
                                     e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
                                 }
+                                
                                 e.data.QUANTITY = this.txtTotalQuantity.value
+                                
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
@@ -428,8 +441,7 @@ export default class priceDifferenceInvoice extends DocBase
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
         if(e.column.dataField == "DISCOUNT")
@@ -463,6 +475,7 @@ export default class priceDifferenceInvoice extends DocBase
                                 e.data.DISCOUNT_2 = this.txtDiscount2.value
                                 e.data.DISCOUNT_3 = this.txtDiscount3.value
                                 e.data.DISCOUNT = (parseFloat(this.txtDiscount1.value) + parseFloat(this.txtDiscount2.value) + parseFloat(this.txtDiscount3.value))
+         
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
@@ -482,8 +495,7 @@ export default class priceDifferenceInvoice extends DocBase
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
         if(e.column.dataField == "DISCOUNT_RATE")
@@ -517,6 +529,7 @@ export default class priceDifferenceInvoice extends DocBase
                                 e.data.DISCOUNT_2 = Number(e.data.AMOUNT-e.data.DISCOUNT_1).rateInc(this.txtDiscountPer2.value,4) 
                                 e.data.DISCOUNT_3 = Number(e.data.AMOUNT-e.data.DISCOUNT_1-e.data.DISCOUNT_2).rateInc(this.txtDiscountPer3.value,4) 
                                 e.data.DISCOUNT = (e.data.DISCOUNT_1 + e.data.DISCOUNT_2 + e.data.DISCOUNT_3)
+         
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
@@ -536,8 +549,7 @@ export default class priceDifferenceInvoice extends DocBase
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
     }
@@ -556,10 +568,12 @@ export default class priceDifferenceInvoice extends DocBase
             }
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
             let tmpMergDt = await this.mergeItem(pData.CODE)
+         
             if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
             {
                 tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
                 tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+         
                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                 {
                     tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
@@ -608,7 +622,9 @@ export default class priceDifferenceInvoice extends DocBase
                     param : ['GUID:string|50'],
                     value : [pData.GUID]
                 }
+         
                 let tmpType = await this.core.sql.execute(tmpTypeQuery) 
+         
                 if(tmpType.result.recordset.length > 0)
                 {
                     pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
@@ -624,7 +640,8 @@ export default class priceDifferenceInvoice extends DocBase
             this.docObj.docItems.dt()[pIndex].DISCOUNT = 0
             this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
             this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
-             if(typeof pPrice == 'undefined')
+         
+            if(typeof pPrice == 'undefined')
             {
                 let tmpQuery = 
                 {
@@ -653,6 +670,7 @@ export default class priceDifferenceInvoice extends DocBase
                 this.docObj.docItems.dt()[pIndex].TOTAL = Number((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                 this.calculateTotal()
             }
+         
             if(this.docObj.dt()[0].VAT_ZERO == 1)
             {
                 this.docObj.docItems.dt()[pIndex].VAT = 0
@@ -675,10 +693,12 @@ export default class priceDifferenceInvoice extends DocBase
         }
 
         let tmpData = await this.core.sql.execute(tmpQuery) 
+        
         if(tmpData.result.recordset.length > 0)
         {   
             await this.pg_contractGrid.setData(tmpData.result.recordset)
         }
+        
         this.pg_contractGrid.onClick = async(data) =>
         {
             let tmpItems = []
@@ -692,7 +712,9 @@ export default class priceDifferenceInvoice extends DocBase
                     param : ['DOC_GUID:string|50'],
                     value : [data[i].GUID]
                 }
+        
                 let tmpData = await this.core.sql.execute(tmpQuery) 
+        
                 if(tmpData.result.recordset.length > 0)
                 {
                     tmpItems.push(tmpData.result.recordset)
@@ -709,7 +731,9 @@ export default class priceDifferenceInvoice extends DocBase
                         param : ['ITEM:string|50','CUSTOMER:string|50','QUANTITY:float'],
                         value : [tmpItems[i][x].ITEM,tmpItems[i][x].OUTPUT,tmpItems[i][x].QUANTITY]
                     }
+        
                     let tmpData = await this.core.sql.execute(tmpQuery) 
+        
                     if(tmpData.result.recordset[0].PRICE < tmpItems[i][x].PRICE && tmpData.result.recordset[0].PRICE != 0 &&  tmpItems[i][x].ITEM_TYPE == 0)
                     {
                         let tmpDocItems = {...this.docObj.docItems.empty}
@@ -732,6 +756,7 @@ export default class priceDifferenceInvoice extends DocBase
                         tmpDocItems.DISCOUNT = (((tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE) * tmpItems[i][x].DISCOUNT_RATE / 100) * tmpItems[i][x].QUANTITY)
                         tmpDocItems.PRICE = (tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE)
                         tmpDocItems.AMOUNT = (tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE) * tmpItems[i][x].QUANTITY
+        
                         if(this.docObj.dt()[0].VAT_ZERO != 1)
                         {
                             tmpDocItems.VAT = parseFloat((tmpDocItems.AMOUNT * (tmpItems[i][x].VAT_RATE / 100)).toFixed(6))
@@ -740,6 +765,7 @@ export default class priceDifferenceInvoice extends DocBase
                         {
                             e.key.VAT = 0
                         }
+        
                         tmpDocItems.TOTAL = ((tmpItems[i][x].PRICE - tmpData.result.recordset[0].PRICE) * tmpItems[i][x].QUANTITY) + tmpDocItems.VAT
                         tmpDocItems.INVOICE_DOC_GUID = tmpItems[i][x].GUID
                         tmpDocItems.CONNECT_REF = tmpItems[i][x].REF + '-' +tmpItems[i][x].REF_NO
@@ -758,7 +784,7 @@ export default class priceDifferenceInvoice extends DocBase
     {
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN (121)",
+            query : `SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN (121)`,
             param : ['INPUT:string|50'],
             value : [this.docObj.dt()[0].INPUT]
         }
@@ -768,6 +794,7 @@ export default class priceDifferenceInvoice extends DocBase
     {
         let tmpMissCodes = []
         let tmpCounter = 0
+        
         if(this.multiItemData.length > 0)
         {
             let tmpConfObj =
@@ -778,24 +805,28 @@ export default class priceDifferenceInvoice extends DocBase
             }
 
             let pResult = await dialog(tmpConfObj);
+        
             if(pResult == 'btn01')
             {
                 this.multiItemData.clear()
             }
         }
+        
         for (let i = 0; i < this.tagItemCode.value.length; i++) 
         {
             if(this.cmbMultiItemType.value == 0)
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_04 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') = @VALUE " ,
+                    query :`SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT,
+                            ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].INPUT}'),'') AS MULTICODE
+                            FROM ITEMS_VW_04 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].INPUT}'),'') = @VALUE ` ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
+        
                 let tmpData = await this.core.sql.execute(tmpQuery) 
+        
                 if(tmpData.result.recordset.length > 0)
                 {
                     if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
@@ -813,9 +844,9 @@ export default class priceDifferenceInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_04 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
+                    query :`SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT,
+                            ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].INPUT}'),'') AS MULTICODE
+                            FROM ITEMS_VW_04 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) ` ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -868,7 +899,7 @@ export default class priceDifferenceInvoice extends DocBase
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -897,15 +928,18 @@ export default class priceDifferenceInvoice extends DocBase
                                             this.toast.show({message:this.t("msgDocLocked.msg"),type:"warning"})
                                             return
                                         }
+        
                                         if(typeof this.docObj.docItems.dt()[0] == 'undefined')
                                         {
                                             this.toast.show({message:this.lang.t("msgNotRow.msg"),type:"warning"})
                                             return
                                         }
+        
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                         {
                                             await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                         }
+        
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
@@ -916,6 +950,7 @@ export default class priceDifferenceInvoice extends DocBase
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+        
                                             if(pResult == 'btn01')
                                             {
                                                 let tmpConfObj1 =
@@ -927,9 +962,9 @@ export default class priceDifferenceInvoice extends DocBase
                                                 if((await this.docObj.save()) == 0)
                                                 {
                                                     if(typeof this.piqX != 'undefined')
-                                                        {
-                                                            this.core.socket.emit('piqXInvoiceSetStatus',{invoiceId:this.piqX[0].GUID,user:this.core.auth.data.CODE,status:1})
-                                                        }
+                                                    {
+                                                        this.core.socket.emit('piqXInvoiceSetStatus',{invoiceId:this.piqX[0].GUID,user:this.core.auth.data.CODE,status:1})
+                                                    }
                                                         
                                                     this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
                                                     this.btnSave.setState({disabled:true});
@@ -958,6 +993,7 @@ export default class priceDifferenceInvoice extends DocBase
                                             this.toast.show({message:this.t("msgGetLocked.msg"),type:"warning"})
                                             return
                                         }
+        
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -966,6 +1002,7 @@ export default class priceDifferenceInvoice extends DocBase
                                         }
                                         
                                         let pResult = await dialog(tmpConfObj);
+        
                                         if(pResult == 'btn01')
                                         {
                                             if(this.sysParam.filter({ID:'docDeleteDesc',USERS:this.user.CODE}).getValue().value == true)
@@ -991,10 +1028,12 @@ export default class priceDifferenceInvoice extends DocBase
                                             this.toast.show({message:this.lang.t("msgNotRow.msg"),type:"warning"})
                                             return
                                         }
+        
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
                                             this.docLocked = true
+        
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
@@ -1057,6 +1096,7 @@ export default class priceDifferenceInvoice extends DocBase
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+        
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -1113,7 +1153,9 @@ export default class priceDifferenceInvoice extends DocBase
                                                     param : ['REF:string|50','REF_NO:int'],
                                                     value : [this.txtRef.value,this.txtRefno.value]
                                                 }
+        
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
+        
                                                 if(tmpData.result.recordset.length > 0)
                                                 {   
                                                     if(tmpData.result.recordset[0].DELETED == 1)
@@ -1129,8 +1171,11 @@ export default class priceDifferenceInvoice extends DocBase
                                                         return
                                                     }
                                                 }
+        
                                                 this.docObj.docCustomer.dt()[0].REF_NO = this.txtRefno.value
+        
                                                 let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+        
                                                 if(tmpResult == 3)
                                                 {
                                                     this.txtRefno.value = "";
@@ -1160,6 +1205,7 @@ export default class priceDifferenceInvoice extends DocBase
                                     {
                                         this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
                                         this.checkRow()
+        
                                         if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                         {
                                             this.frmDocItems.option('disabled',false)
@@ -1201,7 +1247,9 @@ export default class priceDifferenceInvoice extends DocBase
                                             this.toast.show({message:this.t("msgCustomerLock.msg"),type:"warning"})
                                             return;
                                         }
+        
                                         await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+        
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
                                             if(data.length > 0)
@@ -1210,6 +1258,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                 {
                                                     this.frmDocItems.option('disabled',false)
                                                 }
+        
                                                 this.docObj.dt()[0].INPUT = data[0].GUID
                                                 this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                 this.docObj.dt()[0].INPUT_CODE = data[0].CODE
@@ -1218,23 +1267,29 @@ export default class priceDifferenceInvoice extends DocBase
                                                 this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
                                                 this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                 this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
+        
                                                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+        
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
                                                     this.txtRef.value=data[0].CODE;
                                                     this.txtRef.props.onValueChanged()
                                                 }
+        
                                                 if(this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
                                                     this.frmDocItems.option('disabled',false)
                                                 }
+        
                                                 let tmpQuery = 
                                                 {
                                                     query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
                                                     param : ['CUSTOMER:string|50'],
                                                     value : [ data[0].GUID]
                                                 }
+        
                                                 let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+        
                                                 if(tmpAdressData.result.recordset.length > 1)
                                                 {
                                                     this.pg_adress.onClick = async(pdata) =>
@@ -1264,6 +1319,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                         this.toast.show({message:this.t("msgCustomerLock.msg"),type:"warning"})
                                                         return;
                                                     }
+        
                                                     this.pg_txtCustomerCode.show()
                                                     this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {
@@ -1273,6 +1329,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
                                                             }
+        
                                                             this.docObj.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.dt()[0].INPUT_CODE = data[0].CODE
@@ -1281,23 +1338,29 @@ export default class priceDifferenceInvoice extends DocBase
                                                             this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
                                                             this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                             this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
+        
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+        
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.value=data[0].CODE
                                                                 this.txtRef.props.onValueChanged()
                                                             }
+        
                                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
                                                             }
+        
                                                             let tmpQuery = 
                                                             {
                                                                 query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
                                                                 param : ['CUSTOMER:string|50'],
                                                                 value : [ data[0].GUID]
                                                             }
+        
                                                             let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+        
                                                             if(tmpAdressData.result.recordset.length > 1)
                                                             {
                                                                 this.pg_adress.onClick = async(pdata) =>
@@ -1334,8 +1397,7 @@ export default class priceDifferenceInvoice extends DocBase
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem> 
                                 {/* Boş */}
                                 <EmptyItem />
@@ -1392,6 +1454,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                     {
                                                         this.txtBarcode.setState({value:""})
                                                         this.checkboxReset()
+                                    
                                                         this.grid.devGrid.beginUpdate()
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
@@ -1412,12 +1475,15 @@ export default class priceDifferenceInvoice extends DocBase
                                             this.txtBarcode.setState({value:""})
                                             return
                                         }
+                                    
                                         let tmpQuery = 
                                         {   query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].INPUT]
                                         }
+                                    
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
+                                    
                                         if(tmpData.result.recordset.length > 0)
                                         {
                                             this.msgQuantity.tmpData = tmpData.result.recordset[0]
@@ -1522,6 +1588,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                     this.pg_service.onClick = async(data) =>
                                                     {
                                                         this.checkboxReset()
+                                    
                                                         if(data.length == 1)
                                                         {
                                                             await this.addItem(data[0],null)
@@ -1573,6 +1640,7 @@ export default class priceDifferenceInvoice extends DocBase
                                         {
                                             await this.popMultiItem.show()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                                    
                                             if( typeof this.docObj.docItems.dt()[0] != 'undefined' && this.docObj.docItems.dt()[0].ITEM_CODE == '')
                                             {
                                                 await this.grdRebtInv.devGrid.deleteRow(0)
@@ -1609,6 +1677,7 @@ export default class priceDifferenceInvoice extends DocBase
                                             {
                                                 e.key.PRICE = Number(e.key.PURC_PRICE - e.key.CUSTOMER_PRICE).toFixed(3)
                                             }
+                                    
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
                                                 e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
@@ -1616,6 +1685,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                 e.key.DISCOUNT_2 = 0
                                                 e.key.DISCOUNT_3 = 0
                                             }
+                                    
                                             if(typeof e.data.DISCOUNT != 'undefined')
                                             {
                                                 e.key.DISCOUNT_1 = e.data.DISCOUNT
@@ -1623,6 +1693,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                 e.key.DISCOUNT_3 = 0
                                                 e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
                                             }
+                                    
                                             if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
                                             {
                                                 let tmpConfObj =
@@ -1641,6 +1712,7 @@ export default class priceDifferenceInvoice extends DocBase
                                             }
 
                                             e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
+                                    
                                             if(this.docObj.dt()[0].VAT_ZERO != 1)
                                             {
                                                 e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
@@ -1657,6 +1729,7 @@ export default class priceDifferenceInvoice extends DocBase
                                             let tmpMargin = (e.key.TOTAL - e.key.VAT) - (e.key.COST_PRICE * e.key.QUANTITY)
                                             let tmpMarginRate = (tmpMargin /(e.key.TOTAL - e.key.VAT)) * 100
                                             e.key.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+                                    
                                             if(e.key.DISCOUNT == 0)
                                             {
                                                 e.key.DISCOUNT_RATE = 0
@@ -1664,6 +1737,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                 e.key.DISCOUNT_2 = 0
                                                 e.key.DISCOUNT_3 = 0
                                             }
+                                    
                                             if(typeof e.data.DISCOUNT_RATE == 'undefined')
                                             {
                                                e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
@@ -1741,8 +1815,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                 <Label text={this.t("txtAmount")} alignment="right" />
                                                 <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
                                                 maxLength={32}
-                                            
-                                                ></NdTextBox>
+                                                />
                                             </Item>
                                             <Item>
                                                 <Label text={this.t("txtDiscount")} alignment="right" />
@@ -1832,7 +1905,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                 <Label text={this.t("txtTotalHt")} alignment="right" />
                                                 <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}
                                                 maxLength={32}
-                                                ></NdTextBox>
+                                                />
                                             </Item>
                                             <Item>
                                                 <Label text={this.t("txtVat")} alignment="right" />
@@ -1860,7 +1933,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                         },
                                                     ]
                                                 }
-                                                ></NdTextBox>
+                                                />
                                             </Item>
                                             {/* KDV */}
                                             <EmptyItem colSpan={3}/>
@@ -1869,7 +1942,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                 <Label text={this.t("txtTotal")} alignment="right" />
                                                 <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
                                                 maxLength={32}
-                                                ></NdTextBox>
+                                                />
                                             </Item>
                                         </Form>
                                     </div>
@@ -1917,7 +1990,7 @@ export default class priceDifferenceInvoice extends DocBase
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '17'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '17'`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
@@ -1947,7 +2020,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO ` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
@@ -1958,21 +2031,22 @@ export default class priceDifferenceInvoice extends DocBase
                                                         {
                                                             let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
                                                             let tmpExtra = {...this.extraObj.empty}
+                                                
                                                             tmpExtra.DOC = this.docObj.dt()[0].GUID
                                                             tmpExtra.DESCRIPTION = ''
                                                             tmpExtra.TAG = 'PRINT'
                                                             tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
                                                             tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
+                                                
                                                             this.extraObj.addEmpty(tmpExtra);
                                                             this.extraObj.save()
+                                                
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
 
                                                             mywindow.onload = function() 
                                                             {
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                             } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         }
                                                     });
                                                     this.popDesign.hide();  
@@ -1996,7 +2070,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO ` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
@@ -2011,8 +2085,6 @@ export default class priceDifferenceInvoice extends DocBase
                                                             {
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                             } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         }
                                                     });
                                                 }
@@ -2026,7 +2098,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0",
+                                                        query :`SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0`,
                                                         param:  ['GUID:string|50'],
                                                         value:  [this.docObj.dt()[0].INPUT]
                                                     }
@@ -2069,7 +2141,7 @@ export default class priceDifferenceInvoice extends DocBase
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT * FROM MAIL_SETTINGS "},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT * FROM MAIL_SETTINGS`},sql:this.core.sql}}}
                                     >
                                          <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                             <RequiredRule message={this.t("validMail")} />
@@ -2111,7 +2183,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO ` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
@@ -2123,6 +2195,7 @@ export default class priceDifferenceInvoice extends DocBase
                                                         App.instance.setState({isExecute:true})
                                                         let tmpAttach = pResult.split('|')[1]
                                                         let tmpHtml = this.htmlEditor.value
+                                    
                                                         if(this.htmlEditor.value.length == 0)
                                                         {
                                                             tmpHtml = ''
@@ -2130,7 +2203,9 @@ export default class priceDifferenceInvoice extends DocBase
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                         }
+                                    
                                                         let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
+                                    
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
                                                             App.instance.setState({isExecute:false})

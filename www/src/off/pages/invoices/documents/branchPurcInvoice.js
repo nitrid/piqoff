@@ -69,7 +69,7 @@ export default class branchSaleInvoice extends DocBase
         {
             let tmpCustQuery = 
             {
-                query : "SELECT GUID,CODE,TITLE,VAT_ZERO FROM CUSTOMERS WHERE TAX_NO = @TAX_NO",
+                query : `SELECT GUID,CODE,TITLE,VAT_ZERO FROM CUSTOMERS WHERE TAX_NO = @TAX_NO`,
                 param : ['TAX_NO:string|25'],
                 value : [this.piqX[0].DOC_FROM_NO]
             }

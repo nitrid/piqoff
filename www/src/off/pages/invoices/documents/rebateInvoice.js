@@ -50,6 +50,7 @@ export default class rebateInvoice extends DocBase
     {
         await this.core.util.waitUntil(0)
         await this.init()
+        
         if(typeof this.pagePrm != 'undefined')
         {
             if(typeof this.pagePrm.GUID != 'undefined')
@@ -76,7 +77,7 @@ export default class rebateInvoice extends DocBase
         {
             let tmpCustQuery = 
             {
-                query : "SELECT * FROM CUSTOMERS WHERE TAX_NO = @TAX_NO",
+                query : `SELECT GUID,CODE,TITLE,VAT_ZERO FROM CUSTOMERS WHERE TAX_NO = @TAX_NO`,
                 param : ['TAX_NO:string|25'],
                 value : [this.piqX[0].DOC_FROM_NO]
             }
@@ -97,7 +98,9 @@ export default class rebateInvoice extends DocBase
                 this.docObj.dt()[0].INPUT_CODE = tmpCustData.result.recordset[0].CODE
                 this.docObj.dt()[0].INPUT_NAME = tmpCustData.result.recordset[0].TITLE
                 this.docObj.dt()[0].VAT_ZERO = tmpCustData.result.recordset[0].VAT_ZERO
+                
                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                
                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                 {
                     this.txtRef.value = tmpCustData.result.recordset[0].CODE
@@ -109,7 +112,9 @@ export default class rebateInvoice extends DocBase
                     param : ['CUSTOMER:string|50'],
                     value : [tmpCustData.result.recordset[0].GUID]
                 }
+                
                 let tmpAdressData = await this.core.sql.execute(tmpAdrQuery) 
+                
                 if(tmpAdressData.result.recordset.length > 1)
                 {
                     this.docObj.dt()[0].ADDRESS = tmpAdressData[0].ADRESS_NO
@@ -131,17 +136,17 @@ export default class rebateInvoice extends DocBase
 
                 let tmpItemQuery = 
                 {
-                    query : "SELECT " + 
-                            "I.GUID AS ITEM, " + 
-                            "I.CODE AS ITEM_CODE, " + 
-                            "I.NAME AS ITEM_NAME, " + 
-                            "I.UNIT AS UNIT, " + 
-                            "I.COST_PRICE AS COST_PRICE, " +
-                            "I.VAT AS VAT " +
-                            "FROM ITEM_MULTICODE AS M " + 
-                            "INNER JOIN ITEMS_VW_04 AS I ON " + 
-                            "M.ITEM = I.GUID " + 
-                            "WHERE M.CODE = @CODE AND M.CUSTOMER = @CUSTOMER",
+                    query : `SELECT 
+                            I.GUID AS ITEM, 
+                            I.CODE AS ITEM_CODE, 
+                            I.NAME AS ITEM_NAME, 
+                            I.UNIT AS UNIT, 
+                            I.COST_PRICE AS COST_PRICE, 
+                            I.VAT AS VAT 
+                            FROM ITEM_MULTICODE AS M 
+                            INNER JOIN ITEMS_VW_04 AS I ON 
+                            M.ITEM = I.GUID 
+                            WHERE M.CODE = @CODE AND M.CUSTOMER = @CUSTOMER`,
                     param : ['CODE:string|50','CUSTOMER:string|50'],
                     value : [jData[i].ITEM_CODE,this.docObj.dt()[0].INPUT]
                 }
@@ -214,7 +219,7 @@ export default class rebateInvoice extends DocBase
         
         let tmpQuery = 
         {
-            query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 1 ",
+            query :`SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 1 `,
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
         if(tmpData.result.recordset.length > 0)
@@ -231,7 +236,7 @@ export default class rebateInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,COST_PRICE,STATUS FROM ITEMS_VW_04 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
+                        query : `SELECT GUID,CODE,NAME,VAT,UNIT,COST_PRICE,STATUS FROM ITEMS_VW_04 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))`,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -246,10 +251,10 @@ export default class rebateInvoice extends DocBase
                 {
                     select:
                     {   
-                        query : "SELECT ITEMS_VW_04.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_04.VAT,BARCODE,ITEMS_VW_04.UNIT,PARTILOT_GUID,LOT_CODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND " + 
-                                "ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].INPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
-                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_04.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                "FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEMS_VW_04.STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
+                        query : `SELECT ITEMS_VW_04.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_04.VAT,BARCODE,ITEMS_VW_04.UNIT,PARTILOT_GUID,LOT_CODE,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND 
+                                ITEM_MULTICODE.CUSTOMER = '${this.docObj.dt()[0].INPUT}' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, 
+                                ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_04.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME 
+                                FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  ITEMS_VW_04.STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)`,
                         param : ['BARCODE:string|50'],
                     },
                     sql:this.core.sql
@@ -264,9 +269,9 @@ export default class rebateInvoice extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],VAT_ZERO,EXPIRY_DAY,TAX_NO," + 
-                                "ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE " + 
-                                "FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                        query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],VAT_ZERO,EXPIRY_DAY,TAX_NO,
+                                ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE 
+                                FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)`,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -325,7 +330,7 @@ export default class rebateInvoice extends DocBase
                     {
                         let tmpQuery = 
                         {
-                            query :"SELECT ITEMS_VW_04.GUID,CODE,NAME,ITEMS_VW_04.VAT,COST_PRICE,ITEMS_VW_04.UNIT FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                            query :`SELECT ITEMS_VW_04.GUID,CODE,NAME,ITEMS_VW_04.VAT,COST_PRICE,ITEMS_VW_04.UNIT FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE`,
                             param : ['CODE:string|50'],
                             value : [r.component._changedValue]
                         }
@@ -353,10 +358,12 @@ export default class rebateInvoice extends DocBase
                                 {
                                     this.checkboxReset()
                                     this.grid.devGrid.beginUpdate()
+                                    
                                     for (let i = 0; i < data.length; i++) 
                                     {
                                         await this.addItem(data[i],e.rowIndex)
                                     }
+                                    
                                     this.grid.devGrid.endUpdate()
                                 }
                                 this.pg_txtItemsCode.show()
@@ -391,6 +398,7 @@ export default class rebateInvoice extends DocBase
 
                                 e.key.UNIT = this.cmbUnit.value
                                 e.key.UNIT_FACTOR = this.txtUnitFactor.value
+                                
                                 if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
                                 {
                                     e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
@@ -399,7 +407,9 @@ export default class rebateInvoice extends DocBase
                                 {
                                     e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
                                 }
+                                
                                 e.data.QUANTITY = this.txtTotalQuantity.value
+                                
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
@@ -409,6 +419,7 @@ export default class rebateInvoice extends DocBase
                                     e.data.VAT = 0
                                     e.data.VAT_RATE = 0
                                 }
+                                
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
                                 e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
                                 e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
@@ -422,7 +433,7 @@ export default class rebateInvoice extends DocBase
                     ]
                 }
                 >  
-                </NdTextBox>
+                </NdTextBox>    
             )
         }
         if(e.column.dataField == "DISCOUNT")
@@ -510,6 +521,7 @@ export default class rebateInvoice extends DocBase
                                 e.data.DISCOUNT_2 = Number(e.data.AMOUNT-e.data.DISCOUNT_1).rateInc(this.txtDiscountPer2.value,4) 
                                 e.data.DISCOUNT_3 = Number(e.data.AMOUNT-e.data.DISCOUNT_1-e.data.DISCOUNT_2).rateInc(this.txtDiscountPer3.value,4) 
                                 e.data.DISCOUNT = (e.data.DISCOUNT_1 + e.data.DISCOUNT_2 + e.data.DISCOUNT_3)
+                
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
@@ -519,6 +531,7 @@ export default class rebateInvoice extends DocBase
                                     e.data.VAT = 0
                                     e.data.VAT_RATE = 0
                                 }
+                
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
                                 e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
                                 e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
@@ -546,13 +559,16 @@ export default class rebateInvoice extends DocBase
             {
                 pQuantity = 1
             }
+            
             let tmpCheckQuery = 
             {
-                query : "SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0",
+                query : `SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0`,
                 param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                 value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
             }
+            
             let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+            
             if(pData.ITEM_TYPE == 0)
             {
 
@@ -577,6 +593,7 @@ export default class rebateInvoice extends DocBase
                                 resolve()
                                 return
                             }
+            
                             if(e == 'btn02')
                             {
                                 tmpCustomerBtn = e
@@ -588,6 +605,7 @@ export default class rebateInvoice extends DocBase
                                 return 
                             }
                         })
+            
                         if(tmpCustomerBtn == 'btn02')
                         {
                             resolve()
@@ -598,10 +616,12 @@ export default class rebateInvoice extends DocBase
             }
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
             let tmpMergDt = await this.mergeItem(pData.CODE)
+            
             if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
             {
                 tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
                 tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+            
                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                 {
                     tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
@@ -638,6 +658,7 @@ export default class rebateInvoice extends DocBase
                 tmpDocItems.INPUT = this.docObj.dt()[0].INPUT
                 tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
                 tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+            
                 this.docObj.docItems.addEmpty(tmpDocItems)
                 pIndex = this.docObj.docItems.dt().length - 1
             }
@@ -648,12 +669,13 @@ export default class rebateInvoice extends DocBase
     
             let tmpGrpQuery = 
             {
-                query :"SELECT ORGINS,UNIT_SHORT,PARTILOT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
-                 "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_GRP_VW_01 WHERE GUID = @GUID ",
+                query :`SELECT ORGINS,UNIT_SHORT,PARTILOT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, 
+                        ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_GRP_VW_01 WHERE GUID = @GUID `,
                 param : ['GUID:string|50'],
                 value : [pData.GUID]
             }
             let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
+            
             if(tmpGrpData.result.recordset.length > 0)
             {
                 this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
@@ -672,7 +694,9 @@ export default class rebateInvoice extends DocBase
                     param : ['GUID:string|50'],
                     value : [pData.GUID]
                 }
+            
                 let tmpType = await this.core.sql.execute(tmpTypeQuery) 
+            
                 if(tmpType.result.recordset.length > 0)
                 {
                     pData.ITEM_TYPE = tmpType.result.recordset[0].TYPE
@@ -690,6 +714,7 @@ export default class rebateInvoice extends DocBase
             this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
             this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
             this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+            
             if(typeof pPrice == 'undefined')
             {
                 if(tmpCheckData.result.recordset.length > 0)
@@ -702,9 +727,11 @@ export default class rebateInvoice extends DocBase
                     this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpCheckData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
                     this.calculateTotal()
                 }
-            }else
+            }
+            else
             {
                 this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(4))
+            
                 if(typeof pDiscountPer != 'undefined')
                 {
                     this.docObj.docItems.dt()[pIndex].DISCOUNT = typeof pDiscountPer == 'undefined' ? 0 : ((this.docObj.docItems.dt()[pIndex].PRICE * pDiscountPer / 100) * pQuantity).toFixed(4)
@@ -722,41 +749,44 @@ export default class rebateInvoice extends DocBase
                 this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((pPrice  * pQuantity)).round(2)
                 this.docObj.docItems.dt()[pIndex].TOTALHT = Number(((pPrice  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
                 this.docObj.docItems.dt()[pIndex].TOTAL = Number((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
+            
                 this.calculateTotal()
             }
+            
             if(this.docObj.dt()[0].VAT_ZERO == 1)
             {
                 this.docObj.docItems.dt()[pIndex].VAT = 0
                 this.docObj.docItems.dt()[pIndex].VAT_RATE = 0
             }
+            
             if(typeof pData.PARTILOT_GUID != 'undefined')
+            {
+                this.docObj.docItems.dt()[pIndex].PARTILOT_GUID = pData.PARTILOT_GUID
+                this.docObj.docItems.dt()[pIndex].LOT_CODE = pData.LOT_CODE
+            }
+
+            if (typeof tmpGrpData.result.recordset[0] != 'undefined' && tmpGrpData.result.recordset[0].PARTILOT == 1 && this.docObj.docItems.dt()[pIndex].PARTILOT_GUID == '00000000-0000-0000-0000-000000000000')
+            {
+                let tmpSource =
                 {
-                    this.docObj.docItems.dt()[pIndex].PARTILOT_GUID = pData.PARTILOT_GUID
-                    this.docObj.docItems.dt()[pIndex].LOT_CODE = pData.LOT_CODE
-                }
-    
-                if (typeof tmpGrpData.result.recordset[0] != 'undefined' && tmpGrpData.result.recordset[0].PARTILOT == 1 && this.docObj.docItems.dt()[pIndex].PARTILOT_GUID == '00000000-0000-0000-0000-000000000000')
-                {
-                    let tmpSource =
+                    source:
                     {
-                        source:
+                        select:
                         {
-                            select:
-                            {
-                                query : "SELECT GUID,LOT_CODE,SKT FROM ITEM_PARTI_LOT_VW_01 WHERE UPPER(LOT_CODE) LIKE UPPER(@VAL) AND ITEM = '" + pData.GUID + "'",
-                                param : ['VAL:string|50']
-                            },
-                            sql:this.core.sql
-                        }
+                            query : `SELECT GUID,LOT_CODE,SKT FROM ITEM_PARTI_LOT_VW_01 WHERE UPPER(LOT_CODE) LIKE UPPER(@VAL) AND ITEM = '${pData.GUID}'`,
+                            param : ['VAL:string|50']
+                        },
+                        sql:this.core.sql
                     }
-                    this.pg_partiLot.setSource(tmpSource)
-                    this.pg_partiLot.onClick = async(data) =>
-                    {
-                        this.docObj.docItems.dt()[pIndex].PARTILOT_GUID = data[0].GUID  
-                        this.docObj.docItems.dt()[pIndex].LOT_CODE = data[0].LOT_CODE
-                    }
-                    this.pg_partiLot.show()
                 }
+                this.pg_partiLot.setSource(tmpSource)
+                this.pg_partiLot.onClick = async(data) =>
+                {
+                    this.docObj.docItems.dt()[pIndex].PARTILOT_GUID = data[0].GUID  
+                    this.docObj.docItems.dt()[pIndex].LOT_CODE = data[0].LOT_CODE
+                }
+                this.pg_partiLot.show()
+            }
             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
             await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
@@ -768,8 +798,8 @@ export default class rebateInvoice extends DocBase
     {
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND " + 
-                    "TYPE = 1 AND REBATE = 1 AND DOC_TYPE IN (40)",
+            query : `SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND 
+                    TYPE = 1 AND REBATE = 1 AND DOC_TYPE IN (40)`,
             param : ['INPUT:string|50'],
             value : [this.docObj.dt()[0].INPUT]
         }
@@ -779,8 +809,8 @@ export default class rebateInvoice extends DocBase
     {
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND " + 
-                    "TYPE = 1 AND DOC_TYPE IN (120) AND REBATE = 1",
+            query : `SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND 
+                    TYPE = 1 AND DOC_TYPE IN (120) AND REBATE = 1`,
             param : ['INPUT:string|50'],
             value : [this.docObj.dt()[0].INPUT]
         }
@@ -790,13 +820,13 @@ export default class rebateInvoice extends DocBase
     {
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS, " +
-                    "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, " +
-                    "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, " +
-                    "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
-                    "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE " + 
-                    " FROM DOC_ITEMS_VW_01 WHERE OUTPUT = @OUTPUT AND REBATE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND " + 
-                    "TYPE = 0 AND (DOC_TYPE IN(20) OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) AND REBATE = 0",
+            query : `SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS, 
+                    ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, 
+                    ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, 
+                    QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, 
+                    PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE 
+                    FROM DOC_ITEMS_VW_01 WHERE OUTPUT = @OUTPUT AND REBATE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND 
+                    TYPE = 0 AND (DOC_TYPE IN(20) OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) AND REBATE = 0`,
             param : ['OUTPUT:string|50','SUB_FACTOR:string|50'],
             value : [this.docObj.dt()[0].INPUT,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
         }
@@ -816,6 +846,7 @@ export default class rebateInvoice extends DocBase
             }
 
             let pResult = await dialog(tmpConfObj);
+            
             if(pResult == 'btn01')
             {
                 this.multiItemData.clear()
@@ -827,13 +858,15 @@ export default class rebateInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_04 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') = @VALUE " ,
+                    query :`SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT,
+                            ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].INPUT}'),'') AS MULTICODE
+                            FROM ITEMS_VW_04 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].INPUT}'),'') = @VALUE `,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
+            
                 let tmpData = await this.core.sql.execute(tmpQuery) 
+            
                 if(tmpData.result.recordset.length > 0)
                 {
                     if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
@@ -851,13 +884,15 @@ export default class rebateInvoice extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].INPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_04 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
+                    query :`SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT,
+                            ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].INPUT}'),'') AS MULTICODE
+                            FROM ITEMS_VW_04 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) `,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
+            
                 let tmpData = await this.core.sql.execute(tmpQuery) 
+            
                 if(tmpData.result.recordset.length > 0)
                 {
                     if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
@@ -897,6 +932,7 @@ export default class rebateInvoice extends DocBase
     async multiItemSave()
     {
         this.checkboxReset()        
+        
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
@@ -935,6 +971,7 @@ export default class rebateInvoice extends DocBase
                                                     {
                                                         this.txtRef.value = e.CustomerCode
                                                     }
+        
                                                     if(this.cmbDepot.value != '' && this.docLocked == false)
                                                     {
                                                         this.frmDocItems.option('disabled',false)
@@ -942,11 +979,13 @@ export default class rebateInvoice extends DocBase
 
                                                     let tmpQuery = 
                                                     {
-                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                        query : `SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER`,
                                                         param : ['CUSTOMER:string|50'],
                                                         value : [e.CustomerGuid]
                                                     }
+        
                                                     let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+        
                                                     if(tmpAdressData.result.recordset.length > 1)
                                                     {
                                                         this.pg_adress.onClick = async(pdata) =>
@@ -956,14 +995,17 @@ export default class rebateInvoice extends DocBase
                                                                 this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
                                                             }
                                                         }
+        
                                                         await this.pg_adress.show()
                                                         await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                     }
                                                 }
+        
                                                 this.dtDocDate.value = moment(e.InvoiceDate)
                                                 this.dtShipDate.value = moment(e.DueDate)
 
                                                 this.grid.devGrid.beginUpdate()
+        
                                                 let tmpMissCodes = []
                                                 for (let i = 0; i < e.Item.length; i++) 
                                                 {
@@ -999,16 +1041,15 @@ export default class rebateInvoice extends DocBase
                                                     await dialog(tmpConfObj);
                                                 }
                                             }
-                                            console.log(e)
                                         }
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                        onClick={()=>
-                                        {
-                                            this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
-                                        }}/>
+                                    onClick={()=>
+                                    {
+                                        this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
+                                    }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
@@ -1026,15 +1067,18 @@ export default class rebateInvoice extends DocBase
                                             this.toast.show({message:this.t("msgDocLocked.msg"),type:"warning"})
                                             return
                                         }
+
                                         if(typeof this.docObj.docItems.dt()[0] == 'undefined')
                                         {
                                             this.toast.show({message:this.t("msgNotRow.msg"),type:"warning"})
                                             return
                                         }
+
                                         if(this.docObj.docItems.dt()[0].ITEM_CODE == '')
                                         {
                                             await this.grid.devGrid.deleteRow(0)
                                         }
+
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
@@ -1045,6 +1089,7 @@ export default class rebateInvoice extends DocBase
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 let tmpConfObj1 =
@@ -1087,6 +1132,7 @@ export default class rebateInvoice extends DocBase
                                             this.toast.show({message:this.t("msgGetLocked.msg"),type:"warning"})
                                             return
                                         }
+
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -1095,6 +1141,7 @@ export default class rebateInvoice extends DocBase
                                         }
                                         
                                         let pResult = await dialog(tmpConfObj);
+
                                         if(pResult == 'btn01')
                                         {
                                            
@@ -1121,10 +1168,12 @@ export default class rebateInvoice extends DocBase
                                             this.toast.show({message:this.t("msgNotRow.msg"),type:"warning"})
                                             return
                                         }
+
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
                                             this.docLocked = true
+
                                             if(this.docObj.docItems.dt()[0].ITEM_CODE == '')
                                             {
                                                 await this.grid.devGrid.deleteRow(0)
@@ -1171,7 +1220,9 @@ export default class rebateInvoice extends DocBase
                                                 param : ['ITEM:string|50'],
                                                 value : [this.docObj.docItems.dt()[i].ITEM]
                                             }
+
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
+
                                             if(tmpData.result.recordset.length > 0)
                                             {
                                                 tmpQuantity2 = tmpQuantity2 + (tmpData.result.recordset[0].QUANTITY * this.docObj.docItems.dt()[i].QUANTITY)
@@ -1213,6 +1264,7 @@ export default class rebateInvoice extends DocBase
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -1269,7 +1321,9 @@ export default class rebateInvoice extends DocBase
                                                     param : ['REF:string|50','REF_NO:int'],
                                                     value : [this.txtRef.value,this.txtRefno.value]
                                                 }
+
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
+
                                                 if(tmpData.result.recordset.length > 0)
                                                 {   
                                                     if(tmpData.result.recordset[0].DELETED == 1)
@@ -1280,13 +1334,16 @@ export default class rebateInvoice extends DocBase
                                                             button:[{id:"btn01",caption:this.lang.t("msgDocDeleted.btn01"),location:'after'}],
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDocDeleted.msg")}</div>)
                                                         }
+
                                                         this.txtRefno.value = 0
                                                         await dialog(tmpConfObj);
                                                         return
                                                     }
                                                 }
                                                 this.docObj.docCustomer.dt()[0].REF_NO = this.txtRefno.value
+                                                
                                                 let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+
                                                 if(tmpResult == 3)
                                                 {
                                                     this.txtRefno.value = "";
@@ -1316,10 +1373,12 @@ export default class rebateInvoice extends DocBase
                                         {
                                             this.checkRow()
                                             this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
+                                            
                                             if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                             {
                                                 this.frmDocItems.option('disabled',false)
                                             }
+
                                         }).bind(this)}
                                     data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
@@ -1357,6 +1416,7 @@ export default class rebateInvoice extends DocBase
                                             this.toast.show({message:this.t("msgCustomerLock.msg"),type:"warning"})
                                             return;
                                         }
+
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
                                             if(data.length > 0)
@@ -1365,6 +1425,7 @@ export default class rebateInvoice extends DocBase
                                                 {
                                                     this.frmDocItems.option('disabled',false)
                                                 }
+
                                                 this.docObj.dt()[0].INPUT = data[0].GUID
                                                 this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                 this.docObj.dt()[0].INPUT_CODE = data[0].CODE
@@ -1373,22 +1434,28 @@ export default class rebateInvoice extends DocBase
                                                 this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
                                                 this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                 this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
+                                                
                                                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
                                                     this.txtRef.value = data[0].CODE
                                                 }
+                                                
                                                 if(this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
                                                     this.frmDocItems.option('disabled',false)
                                                 }
-                                                    let tmpQuery = 
+                                                
+                                                let tmpQuery = 
                                                 {
                                                     query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
                                                     param : ['CUSTOMER:string|50'],
                                                     value : [ data[0].GUID]
                                                 }
+                                                
                                                 let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                
                                                 if(tmpAdressData.result.recordset.length > 1)
                                                 {
                                                     this.pg_adress.onClick = async(pdata) =>
@@ -1419,6 +1486,7 @@ export default class rebateInvoice extends DocBase
                                                         this.toast.show({message:this.t("msgCustomerLock.msg"),type:"warning"})
                                                         return;
                                                     }
+                                                
                                                     this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {
                                                         if(data.length > 0)
@@ -1427,6 +1495,7 @@ export default class rebateInvoice extends DocBase
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
                                                             }
+                                                
                                                             this.docObj.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
                                                             this.docObj.dt()[0].INPUT_CODE = data[0].CODE
@@ -1435,22 +1504,28 @@ export default class rebateInvoice extends DocBase
                                                             this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
                                                             this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                             this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
+                                                
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                                
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.value = data[0].CODE
                                                             } 
+                                                
                                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
                                                             }
+                                                
                                                             let tmpQuery = 
                                                             {
                                                                 query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
                                                                 param : ['CUSTOMER:string|50'],
                                                                 value : [ data[0].GUID]
                                                             }
+                                                
                                                             let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                                
                                                             if(tmpAdressData.result.recordset.length > 1)
                                                             {
                                                                 this.pg_adress.onClick = async(pdata) =>
@@ -1462,6 +1537,7 @@ export default class rebateInvoice extends DocBase
                                                                         this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                                     }
                                                                 }
+                                                
                                                                 await this.pg_adress.show()
                                                                 await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                             }
@@ -1546,6 +1622,7 @@ export default class rebateInvoice extends DocBase
                                                         this.txtBarcode.setState({value:""})
                                                         return
                                                     }
+                                                
                                                     this.pg_txtBarcode.onClick = async(data) =>
                                                     {
                                                         this.txtBarcode.setState({value:""})
@@ -1576,13 +1653,16 @@ export default class rebateInvoice extends DocBase
                                             this.txtBarcode.setState({value:""})
                                             return
                                         }
+                                        
                                         let tmpQuery = 
                                         {   
                                             query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE,PARTILOT_GUID,LOT_CODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE STATUS = 1 AND (BARCODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER)) ORDER BY PARTILOT_GUID ASC",
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].INPUT]
                                         }
+                                        
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        
                                         if(tmpData.result.recordset.length > 0)
                                         {
                                             this.msgQuantity.tmpData = tmpData.result.recordset[0]
@@ -1595,6 +1675,7 @@ export default class rebateInvoice extends DocBase
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
                                                 this.checkboxReset()
+                                        
                                                 if(data.length == 1)
                                                 {
                                                     this.msgQuantity.tmpData = data[0]
@@ -1656,12 +1737,15 @@ export default class rebateInvoice extends DocBase
                                                     {
                                                         this.checkboxReset()
                                                         this.grid.devGrid.beginUpdate()
+                                        
                                                         for (let i = 0; i < data.length; i++) 
                                                         {
                                                             await this.addItem(data[i],null)
                                                         }
+                                        
                                                         this.grid.devGrid.endUpdate()
                                                     }
+                                        
                                                     this.pg_txtItemsCode.show()
                                                     return
                                                 }
@@ -1712,10 +1796,12 @@ export default class rebateInvoice extends DocBase
                                             {
                                                 this.checkboxReset()
                                                 this.grid.devGrid.beginUpdate()
+                                                
                                                 for (let i = 0; i < data.length; i++) 
                                                 {
                                                     await this.addItem(data[i],null)
                                                 }
+                                                
                                                 this.grid.devGrid.endUpdate()
                                             }
                                             this.pg_service.show()   
@@ -1733,6 +1819,7 @@ export default class rebateInvoice extends DocBase
                                         {
                                             await this.popMultiItem.show()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                                            
                                             if( typeof this.docObj.docItems.dt()[0] != 'undefined' && this.docObj.docItems.dt()[0].ITEM_CODE == '')
                                             {
                                                 await this.grid.devGrid.deleteRow(0)
@@ -1778,22 +1865,27 @@ export default class rebateInvoice extends DocBase
                                             {
                                                 e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
                                             }
+                                            
                                             if(typeof e.data.SUB_QUANTITY != 'undefined')
                                             {
                                                 e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
                                             }
+                                            
                                             if(typeof e.data.SUB_FACTOR != 'undefined')
                                             {
                                                 e.key.QUANTITY = e.key.SUB_QUANTITY * e.data.SUB_FACTOR
                                             }
+                                            
                                             if(typeof e.data.PRICE != 'undefined')
                                             {
                                                 e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
                                             }
+                                            
                                             if(typeof e.data.SUB_PRICE != 'undefined')
                                             {
                                                 e.key.PRICE = e.data.SUB_PRICE * e.key.SUB_FACTOR
                                             }
+                                            
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
                                                 e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
@@ -1801,6 +1893,7 @@ export default class rebateInvoice extends DocBase
                                                 e.key.DISCOUNT_2 = 0
                                                 e.key.DISCOUNT_3 = 0
                                             }
+                                            
                                             if(typeof e.data.DISCOUNT != 'undefined')
                                             {
                                                 e.key.DISCOUNT_1 = e.data.DISCOUNT
@@ -1808,6 +1901,7 @@ export default class rebateInvoice extends DocBase
                                                 e.key.DISCOUNT_3 = 0
                                                 e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
                                             }
+                                            
                                             if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
                                             {
                                                 let tmpConfObj =
@@ -1827,6 +1921,7 @@ export default class rebateInvoice extends DocBase
                                             }
 
                                             e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
+                                            
                                             if(this.docObj.dt()[0].VAT_ZERO != 1)
                                             {
                                                 e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
@@ -1836,6 +1931,7 @@ export default class rebateInvoice extends DocBase
                                                 e.key.VAT = 0
                                                 e.key.VAT_RATE = 0
                                             }
+                                            
                                             e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
                                             e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
                                             
@@ -1850,6 +1946,7 @@ export default class rebateInvoice extends DocBase
                                                 e.key.DISCOUNT_2 = 0
                                                 e.key.DISCOUNT_3 = 0
                                             }
+                                            
                                             if(typeof e.data.DISCOUNT_RATE == 'undefined')
                                             {
                                                e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
@@ -2092,7 +2189,7 @@ export default class rebateInvoice extends DocBase
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '18'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '18'`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
@@ -2122,7 +2219,7 @@ export default class rebateInvoice extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO ` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
@@ -2133,11 +2230,13 @@ export default class rebateInvoice extends DocBase
                                                         {
                                                             let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
                                                             let tmpExtra = {...this.extraObj.empty}
+
                                                             tmpExtra.DOC = this.docObj.dt()[0].GUID
                                                             tmpExtra.DESCRIPTION = ''
                                                             tmpExtra.TAG = 'PRINT'
                                                             tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
                                                             tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
+
                                                             this.extraObj.addEmpty(tmpExtra);
                                                             this.extraObj.save()
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
@@ -2146,8 +2245,6 @@ export default class rebateInvoice extends DocBase
                                                             {
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                             } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         }
                                                     });
                                                     this.popDesign.hide();  
@@ -2175,9 +2272,11 @@ export default class rebateInvoice extends DocBase
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
+
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
+
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
@@ -2187,8 +2286,6 @@ export default class rebateInvoice extends DocBase
                                                             {
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                             } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         }
                                                     });
                                                 }
@@ -2206,7 +2303,9 @@ export default class rebateInvoice extends DocBase
                                                         param:  ['GUID:string|50'],
                                                         value:  [this.docObj.dt()[0].INPUT]
                                                     }
+
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
+
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
                                                         await this.popMailSend.show()
@@ -2233,7 +2332,7 @@ export default class rebateInvoice extends DocBase
                         title={this.t("popDetail.title")}
                         container={"#root"} 
                         width={'500'}
-                        height={'250'}
+                        height={'auto'}
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
@@ -2261,13 +2360,13 @@ export default class rebateInvoice extends DocBase
                                         {
                                             let tmpQuery = 
                                             {
-                                                query : "SELECT " +
-                                                        "NAME,ROUND(SUM(UNIT_FACTOR * QUANTITY),2) AS UNIT_FACTOR " +
-                                                        "FROM ( " +
-                                                        "SELECT ITEM_CODE,QUANTITY, " +
-                                                        "(SELECT TOP 1 NAME FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS NAME, " +
-                                                        "(SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS UNIT_FACTOR " +
-                                                        "FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID ) AS TMP GROUP BY NAME ",
+                                                query : `SELECT 
+                                                        NAME,ROUND(SUM(UNIT_FACTOR * QUANTITY),2) AS UNIT_FACTOR 
+                                                        FROM ( 
+                                                        SELECT ITEM_CODE,QUANTITY, 
+                                                        (SELECT TOP 1 NAME FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS NAME, 
+                                                        (SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID= ITEM AND TYPE = 1 ) AS UNIT_FACTOR 
+                                                        FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID ) AS TMP GROUP BY NAME `,
                                                 param : ['DOC_GUID:string|50'],
                                                 value : [this.docObj.dt()[0].GUID]
                                             }
@@ -2279,6 +2378,7 @@ export default class rebateInvoice extends DocBase
                                                 {
                                                     this.unitDetailData.push(tmpData.result.recordset[i])
                                                 }
+
                                                 await this.popUnit2.show()
                                                 await this.grdUnit2.dataRefresh({source:this.unitDetailData})
                                             }
@@ -2298,7 +2398,7 @@ export default class rebateInvoice extends DocBase
                         title={this.t("popMailSend.title")}
                         container={"#root"} 
                         width={'600'}
-                        height={'600'}
+                        height={'auto'}
                         position={{of:'#root'}}
                         deferRendering={true}
                         >
@@ -2351,26 +2451,31 @@ export default class rebateInvoice extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO ` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
+
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         App.instance.setState({isExecute:true})
                                                         let tmpAttach = pResult.split('|')[1]
                                                         let tmpHtml = this.htmlEditor.value
+
                                                         if(this.htmlEditor.value.length == 0)
                                                         {
                                                             tmpHtml = ''
                                                         }
+
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                         }
+
                                                         let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
+
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
                                                             App.instance.setState({isExecute:false})
