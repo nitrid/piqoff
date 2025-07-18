@@ -1,3 +1,8 @@
+import { devexLic } from '../../devex-lic.js'
+import config from 'devextreme/core/config'
+
+config({ licenseKey: devexLic });
+
 import 'devextreme/dist/css/dx.light.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/custom.css';
