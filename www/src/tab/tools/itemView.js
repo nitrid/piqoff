@@ -1,4 +1,5 @@
 import React from "react";
+
 import NbBase from "../../core/react/bootstrap/base.js";
 import NbItemCard from './itemCard';
 import NbItemPopUp from '../tools/itemPopUp';
@@ -14,8 +15,8 @@ export default class NbItemView extends NbBase
             items : []
         }
 
-        this._onValueChange = this._onValueChange.bind(this);
-        this._onClick = this._onClick.bind(this)
+        this.onValueChange = this.onValueChange.bind(this);
+        this.onClicked = this.onClicked.bind(this)
     }
     get items()
     {
@@ -33,7 +34,7 @@ export default class NbItemView extends NbBase
             this[key].setDocItem()
         });
     }    
-    _onValueChange(e)
+    onValueChange(e)
     {
         if(typeof this.props.onValueChange != 'undefined')
         {
@@ -41,7 +42,7 @@ export default class NbItemView extends NbBase
             this.setItemAll()
         }
     }
-    _onClick(e)
+    onClicked(e)
     {
         if(typeof this.props.onClick != 'undefined')
         {
@@ -63,7 +64,7 @@ export default class NbItemView extends NbBase
                                 onTouchEnd={(e) => {e.currentTarget.style.transform = `rotate(${Math.random() * 1.5 - 0.75}deg)`; e.currentTarget.style.boxShadow = '0 6px 12px rgba(21,76,121,0.15)'; e.currentTarget.style.borderColor = 'rgba(127,143,166,0.3)';}}
                                >
                                     <NbItemCard id={'itemCard' + i} parent={this} key={'itemCard' + i} price={object.PRICE} name={object.NAME} prm={object.PRM}
-                                    image={object.IMAGE == '' ? './css/img/noimage.jpg' : object.IMAGE} data={object} dt={this.props.dt} onValueChange={this._onValueChange} onClick={this._onClick}
+                                    image={object.IMAGE == '' ? './css/img/noimage.jpg' : object.IMAGE} data={object} dt={this.props.dt} onValueChange={this.onValueChange} onClick={this.onClicked}
                                     defaultUnit={this.props.defaultUnit} unitLock={this.props.unitLock} />
                                 </div>
                             </div>)
@@ -71,7 +72,7 @@ export default class NbItemView extends NbBase
                 </div>    
                 {/* CARD POPUP */}
                 <div>
-                    <NbItemPopUp id={"itemPopUp"} parent={this} onValueChange={this._onValueChange} listPriceLock={this.props.listPriceLock} />
+                    <NbItemPopUp id={"itemPopUp"} parent={this} onValueChange={this.onValueChange} listPriceLock={this.props.listPriceLock} />
                 </div>             
             </div>
         )

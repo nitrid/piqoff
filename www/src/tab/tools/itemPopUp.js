@@ -1,24 +1,29 @@
 import React from "react";
 import App from "../lib/app.js";
+
+import Form, { Label} from 'devextreme-react/form';
+import Toolbar,{Item} from 'devextreme-react/toolbar';
+import Carousel from 'react-bootstrap/Carousel';
+
 import NbBase from "../../core/react/bootstrap/base.js";
 import NbPopUp from '../../core/react/bootstrap/popup';
 import NbButton from '../../core/react/bootstrap/button';
-import Form, { Label, EmptyItem } from 'devextreme-react/form';
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Carousel from 'react-bootstrap/Carousel';
-import NdTextBox,{ Button } from '../../core/react/devex/textbox'
+import NdTextBox from '../../core/react/devex/textbox'
 import NdSelectBox from '../../core/react/devex/selectbox'
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../core/react/devex/grid'
+import NdGrid,{Column,Paging} from '../../core/react/devex/grid'
 import NdButton from '../../core/react/devex/button.js';
 import NdNumberBox from '../../core/react/devex/numberbox.js'
-import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
-import NbLabel from "../../core/react/bootstrap/label.js";
+import { dialog } from '../../core/react/devex/dialog.js'
+import { NdToast } from '../../core/react/devex/toast.js';
+
 export default class NbItemPopUp extends NbBase
 {
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
+
         this.listPriceLock = this.props.listPriceLock
         this.state =
         {
@@ -33,18 +38,20 @@ export default class NbItemPopUp extends NbBase
     async open(pData)
     {        
         this.data = pData.data
+
         let tmpQuery = 
         {
-            query :"SELECT IMAGE AS IMAGE1,  " +
-                    "(SELECT IMAGE FROM ITEM_IMAGE AS IMG1 WHERE IMG1.ITEM = ITEM_IMAGE.ITEM AND SORT = 1) AS IMAGE2,  " +
-                    "(SELECT IMAGE FROM ITEM_IMAGE AS IMG1 WHERE IMG1.ITEM = ITEM_IMAGE.ITEM AND SORT = 2) AS IMAGE3,  " +
-                    "(SELECT IMAGE FROM ITEM_IMAGE AS IMG1 WHERE IMG1.ITEM = ITEM_IMAGE.ITEM AND SORT = 3) AS IMAGE4,  " +
-                    "(SELECT IMAGE FROM ITEM_IMAGE AS IMG1 WHERE IMG1.ITEM = ITEM_IMAGE.ITEM AND SORT = 4) AS IMAGE5  " +
-                    "FROM ITEM_IMAGE WHERE ITEM = @ITEM AND SORT = 0 ",
+            query : `SELECT IMAGE AS IMAGE1,  
+                    (SELECT IMAGE FROM ITEM_IMAGE AS IMG1 WHERE IMG1.ITEM = ITEM_IMAGE.ITEM AND SORT = 1) AS IMAGE2,  
+                    (SELECT IMAGE FROM ITEM_IMAGE AS IMG1 WHERE IMG1.ITEM = ITEM_IMAGE.ITEM AND SORT = 2) AS IMAGE3,  
+                    (SELECT IMAGE FROM ITEM_IMAGE AS IMG1 WHERE IMG1.ITEM = ITEM_IMAGE.ITEM AND SORT = 3) AS IMAGE4,  
+                    (SELECT IMAGE FROM ITEM_IMAGE AS IMG1 WHERE IMG1.ITEM = ITEM_IMAGE.ITEM AND SORT = 4) AS IMAGE5  
+                    FROM ITEM_IMAGE WHERE ITEM = @ITEM AND SORT = 0`,
             param : ['ITEM:string|50'],
             value : [this.data.GUID],
         }
         let tmpData = await this.core.sql.execute(tmpQuery)
+
         if(tmpData.result.recordset.length > 0)
         {
             this.data.IMAGE1 = tmpData.result.recordset[0].IMAGE1 == '' ? './css/img/noimage.jpg' : tmpData.result.recordset[0].IMAGE1
@@ -76,16 +83,15 @@ export default class NbItemPopUp extends NbBase
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query :  "SELECT *,((DEPOT_QUANTITY + INPUT_RESERVE) - OUTPUT_RESERVE) AS TOTAL_QUANTITY FROM   " +
-                            "( SELECT GUID, " +
-                            "    (SELECT [dbo].[FN_DEPOT_QUANTITY](GUID,'00000000-0000-0000-0000-000000000000',dbo.GETDATE())) AS DEPOT_QUANTITY,  " +
-                            "    (SELECT dbo.FN_ORDER_PEND_QTY(GUID,0,'00000000-0000-0000-0000-000000000000')) AS INPUT_RESERVE,  " +
-                            "    (SELECT dbo.FN_ORDER_PEND_QTY(GUID,1,'00000000-0000-0000-0000-000000000000')) AS OUTPUT_RESERVE  " +
-                            "    FROM ITEMS WHERE GUID = @ITEM  " +
-                            ") AS TMP  " ,
+                    query : `SELECT *,((DEPOT_QUANTITY + INPUT_RESERVE) - OUTPUT_RESERVE) AS TOTAL_QUANTITY FROM  
+                            ( SELECT GUID, 
+                            (SELECT [dbo].[FN_DEPOT_QUANTITY](GUID,'00000000-0000-0000-0000-000000000000',dbo.GETDATE())) AS DEPOT_QUANTITY, 
+                            (SELECT dbo.FN_ORDER_PEND_QTY(GUID,0,'00000000-0000-0000-0000-000000000000')) AS INPUT_RESERVE, 
+                            (SELECT dbo.FN_ORDER_PEND_QTY(GUID,1,'00000000-0000-0000-0000-000000000000')) AS OUTPUT_RESERVE  
+                            FROM ITEMS WHERE GUID = @ITEM  
+                            ) AS TMP  `,
                     param : ['ITEM:string|50'],
                     value : [this.data.GUID]
                 },
@@ -94,7 +100,7 @@ export default class NbItemPopUp extends NbBase
         }
         await this.grdQuantity.dataRefresh(tmpItemsSource)
     }
-    _onValueChange(e)
+    onValueChange(e)
     {
         if(typeof this.props.onValueChange != 'undefined')
         {
@@ -116,7 +122,7 @@ export default class NbItemPopUp extends NbBase
                     {
                         select : 
                         {
-                            query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                            query : `SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID`,
                             param : ['ITEM_GUID:string|50'],
                             value : [this.data.GUID]
                         },
@@ -146,14 +152,14 @@ export default class NbItemPopUp extends NbBase
                                                 id:'msgItemPrice',showTitle:true,title:this.t("msgItemPrice.title"),showCloseButton:true,width:'500px',height:'200px',
                                                 button:[{id:"btn01",caption:this.t("msgItemPrice.btn01"),location:'after'},
                                                         {id:"btn02",caption:this.t("msgItemPrice.btn02"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemPrice.msg")}</div>)
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemPrice.msg")}</div>)
                                                 }
                                                 let pResult = await dialog(tmpConfObj);
+
                                                 if(pResult == 'btn01')
-                                                    {
-                                                        this.popCard.hide();
-                                                    }
-                                                
+                                                {
+                                                    this.popCard.hide();
+                                                }
                                             }
                                             else
                                             {
@@ -239,7 +245,7 @@ export default class NbItemPopUp extends NbBase
                                             readOnly={this.listPriceLock}
                                             displayExpr="LIST_NAME"                       
                                             valueExpr="LIST_NO"
-                                            data={{source: {select : {query:"SELECT DISTINCT LIST_NAME,LIST_NO FROM ITEM_PRICE_VW_01 WHERE TYPE= 0 ORDER BY LIST_NAME ASC"},sql : this.core.sql}}}
+                                            data={{source: {select : {query:`SELECT DISTINCT LIST_NAME,LIST_NO FROM ITEM_PRICE_VW_01 WHERE TYPE= 0 ORDER BY LIST_NAME ASC`},sql : this.core.sql}}}
                                             onValueChanged={async (e)=>
                                             {
                                                 if(e.value)
@@ -251,12 +257,12 @@ export default class NbItemPopUp extends NbBase
                                                         value : [this.data.GUID,0,this.data.QUANTITY == 0 ? 1 : this.data.QUANTITY,'00000000-0000-0000-0000-000000000000',e.value,'00000000-0000-0000-0000-000000000000'],
                                                     }
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    console.log(this)
+                                                    
                                                     if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
                                                     {
                                                         this.txtPrice.value = tmpData.result.recordset[0].PRICE
                                                         this.data.PRICE = this.txtPrice.value
-                                                        this._onValueChange(this.data)
+                                                        this.onValueChange(this.data)
                                                     }
                                                 }
                                             }}
@@ -268,7 +274,7 @@ export default class NbItemPopUp extends NbBase
                                         onValueChanged={(async(e)=>
                                         {
                                             this.data.PRICE = this.txtPrice.value
-                                            this._onValueChange(this.data)
+                                            this.onValueChange(this.data)
                                         }).bind(this)}/>
                                     </Item>
                                     <Item>
@@ -287,7 +293,8 @@ export default class NbItemPopUp extends NbBase
                                                     this.data.UNIT = e.value
                                                     this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
                                                     this.txtFactor.value = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
-                                                    this._onValueChange(this.data)
+
+                                                    this.onValueChange(this.data)
                                                 }
                                             }).bind(this)}
                                             />
@@ -302,9 +309,8 @@ export default class NbItemPopUp extends NbBase
                                         <NdTextBox id={"txtDiscount"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.DISCOUNT}
                                         onChange={(async(e)=>
                                         {
-                                            
                                             this.data.DISCOUNT = this.txtDiscount.value
-                                            this._onValueChange(this.data)
+                                            this.onValueChange(this.data)
                                         }).bind(this)}
                                         button={
                                         [
@@ -317,6 +323,7 @@ export default class NbItemPopUp extends NbBase
                                                     this.popDiscount.show()
                                                     
                                                     await this.core.util.waitUntil(200)
+
                                                     this.txtDiscountPrice1.value = Number(this.data.DISCOUNT).round(2)
                                                     this.txtDiscountPercent1.value = Number(this.data.QUANTITY * this.data.PRICE).rate2Num(this.data.DISCOUNT,3)
                                                 }
@@ -330,7 +337,7 @@ export default class NbItemPopUp extends NbBase
                                         onChange={(async(e)=>
                                         {
                                             this.data.QUANTITY = this.txtQuantity.value
-                                            this._onValueChange(this.data)
+                                            this.onValueChange(this.data)
                                         }).bind(this)}
                                         button={
                                         [
@@ -340,11 +347,9 @@ export default class NbItemPopUp extends NbBase
                                                 location:'before',
                                                 onClick:async()=>
                                                 {
-                                                
                                                     this.txtQuantity.value = Number(this.txtQuantity.value) - 1 
                                                     this.data.QUANTITY = this.txtQuantity.value
-                                                    this._onValueChange(this.data)
-                                                    
+                                                    this.onValueChange(this.data)
                                                 }
                                             },
                                             {
@@ -355,7 +360,7 @@ export default class NbItemPopUp extends NbBase
                                                 {
                                                     this.txtQuantity.value = Number(this.txtQuantity.value) + 1 
                                                     this.data.QUANTITY = this.txtQuantity.value
-                                                    this._onValueChange(this.data)
+                                                    this.onValueChange(this.data)
                                                 }
                                             }                                                    
                                         ]}>
@@ -377,14 +382,7 @@ export default class NbItemPopUp extends NbBase
                                                 {
                                                     if( this.txtDiscountPercent1.value > 100)
                                                     {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                                        }
-                                            
-                                                        await dialog(tmpConfObj);
+                                                        this.toast.show({message:this.t("msgDiscountPercent.msg"),type:"warning"})
                                                         this.txtDiscountPercent1.value = 0;
                                                         this.txtDiscountPrice1.value = 0;
                                                         return
@@ -392,7 +390,7 @@ export default class NbItemPopUp extends NbBase
 
                                                     this.txtDiscountPrice1.value =  Number(this.data.QUANTITY * this.data.PRICE).rateInc(this.txtDiscountPercent1.value,2)
                                                 }).bind(this)}
-                                                ></NdNumberBox>
+                                                />
                                             </Item>
                                             <Item>
                                                 <Label text={this.t("popDiscount.Price1")} alignment="right" />
@@ -402,14 +400,7 @@ export default class NbItemPopUp extends NbBase
                                                 {
                                                     if( this.txtDiscountPrice1.value > this.data.AMOUNT)
                                                     {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                                        }
-                                            
-                                                        await dialog(tmpConfObj);
+                                                        this.toast.show({message:this.t("msgDiscountPrice.msg"),type:"warning"})
                                                         this.txtDiscountPercent1.value = 0;
                                                         this.txtDiscountPrice1.value = 0;
                                                         return
@@ -417,7 +408,7 @@ export default class NbItemPopUp extends NbBase
                                                     
                                                     this.txtDiscountPercent1.value = Number(this.data.QUANTITY * this.data.PRICE).rate2Num(this.txtDiscountPrice1.value,3)
                                                 }).bind(this)}
-                                                ></NdNumberBox>
+                                                />
                                             </Item>
                                             <Item>
                                                 <div className='row'>
@@ -427,16 +418,13 @@ export default class NbItemPopUp extends NbBase
                                                         {
                                                             this.txtDiscount.value = this.txtDiscountPrice1.value
                                                             this.data.DISCOUNT = this.txtDiscountPrice1.value
-                                                            this._onValueChange(this.data)
+                                                            this.onValueChange(this.data)
                                                             this.popDiscount.hide();
                                                         }}/>
                                                     </div>
                                                     <div className='col-6'>
                                                         <NdButton text={this.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                                        onClick={()=>
-                                                        {
-                                                            this.popDiscount.hide();  
-                                                        }}/>
+                                                        onClick={()=> { this.popDiscount.hide() }}/>
                                                     </div>
                                                 </div>
                                             </Item>
@@ -466,6 +454,7 @@ export default class NbItemPopUp extends NbBase
                     </div>
                 </div>
             </NbPopUp>
+            <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>  
             </React.Fragment>
         )
     }
