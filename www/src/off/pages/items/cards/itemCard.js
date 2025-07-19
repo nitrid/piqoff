@@ -1160,7 +1160,9 @@ export default class itemCard extends React.PureComponent
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
+
                                             let pResult = await dialog(tmpConfObj);
+                                            
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -1243,20 +1245,6 @@ export default class itemCard extends React.PureComponent
                                                     sql:this.core.sql
                                                 }
                                             }}
-                                            button=
-                                            {
-                                                [
-                                                    {
-                                                        id:'tst',
-                                                        icon:'more',
-                                                        onClick:()=>
-                                                        {
-                                                            console.log(1111)
-                                                        }
-                                                    }
-                                                ]
-                                            }
-                                            deferRendering={true}
                                             >
                                                 <Column dataField="CODE" caption={this.t("pg_txtRef.clmCode")} width={'20%'} />
                                                 <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={'70%'} defaultSortOrder="asc" />
@@ -2549,7 +2537,6 @@ export default class itemCard extends React.PureComponent
                                         height={'90%'}
                                         title={this.t("pg_subGroup.title")} 
                                         search={false}
-                                        deferRendering={true}
                                         >
                                             <Column dataField="NAME" caption={this.t("pg_subGroup.clmName")} width={'70%'} defaultSortOrder="asc" />
                                         </NdPopGrid>
@@ -2628,7 +2615,6 @@ export default class itemCard extends React.PureComponent
                         width={'500'}
                         height={'600'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
-                        deferRendering={true}
                         >
                             <NdForm colCount={2} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
                                 {/* cmbPopPriListNo */}
@@ -2856,7 +2842,6 @@ export default class itemCard extends React.PureComponent
                         width={'500'}
                         height={'510'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
-                        deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
                                 <NdItem>
@@ -2946,7 +2931,6 @@ export default class itemCard extends React.PureComponent
                         width={'500'}
                         height={'275'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
-                        deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
                                 <NdItem>
@@ -3085,7 +3069,6 @@ export default class itemCard extends React.PureComponent
                         width={'500'}
                         height={'320'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
-                        deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'} id={"frmItemCustomer" + + this.tabIndex}>
                                 <NdItem>
@@ -3159,7 +3142,6 @@ export default class itemCard extends React.PureComponent
                                             sql:this.core.sql
                                         }
                                     }}
-                                    deferRendering={true}
                                     >           
                                         <Scrolling mode="standart" />                         
                                         <Column dataField="TITLE" caption={this.t("pg_txtPopCustomerCode.clmName")} width={650} defaultSortOrder="asc" />
@@ -3261,7 +3243,6 @@ export default class itemCard extends React.PureComponent
                         width={'1200'}
                         height={'700'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
-                        deferRendering={true}
                         >
                             <NdForm colCount={3} height={'fit-content'}>
                                 <NdItem colSpan={2}>
@@ -3435,7 +3416,6 @@ export default class itemCard extends React.PureComponent
                         height={'230'}
                         position={{of:'#root'}}
                         button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
-                        deferRendering={true}
                         >
                             <div className='row py-2'>
                                 <div className='col-5'>
@@ -3476,7 +3456,6 @@ export default class itemCard extends React.PureComponent
                         width={'800'}
                         height={'470'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
-                        deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
                                 <NdItem>
@@ -3552,7 +3531,6 @@ export default class itemCard extends React.PureComponent
                         width={'500'}
                         height={'250'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
-                        deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
                                 <NdItem>
