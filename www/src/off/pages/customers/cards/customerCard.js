@@ -191,6 +191,7 @@ export default class CustomerCard extends React.PureComponent
                     }
     
                     let pResult = await dialog(tmpConfObj);
+
                     if(pResult == 'btn01')
                     {
                         this.getCustomer(pCode)
@@ -223,7 +224,9 @@ export default class CustomerCard extends React.PureComponent
                     param : ['ZIPCODE:string|50'],
                     value : [pCode]
                 }
+
                 let tmpData = await this.core.sql.execute(tmpQuery) 
+                
                 if(tmpData.result.recordset.length > 0)
                 {
                     
@@ -307,17 +310,16 @@ export default class CustomerCard extends React.PureComponent
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                        onClick={()=>
+                                    onClick={()=>
+                                    {
+                                        if(this.prevCode != '')
                                         {
-                                            if(this.prevCode != '')
-                                            {
-                                                this.getCustomer(this.prevCode); 
-                                            }
-                                        }}/>
+                                            this.getCustomer(this.prevCode); 
+                                        }
+                                    }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=> { this.init() }}/>
+                                    <NdButton id="btnNew" parent={this} icon="file" type="default" onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmCustomers"  + this.tabIndex}
@@ -330,6 +332,7 @@ export default class CustomerCard extends React.PureComponent
                                                 this.toast.show({type:"error",message:this.t("msgAdressNotValid.msg")})
                                                 return
                                             }
+
                                             if(this.customerObj.customerAdress.dt()[0].COUNTRY == 'FR')
                                             {
                                                 if(this.customerObj.dt()[0].SIRET_ID == '' || this.customerObj.dt()[0].APE_CODE == '' || this.customerObj.dt()[0].TAX_OFFICE == '' || this.customerObj.dt()[0].TAX_NO == '')
@@ -358,6 +361,7 @@ export default class CustomerCard extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 let tmpConfObj1 =
@@ -394,7 +398,9 @@ export default class CustomerCard extends React.PureComponent
                                             param : ['CUSTOMER:string|50'],
                                             value : [this.customerObj.dt()[0].GUID]
                                         }
+
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        
                                         if(tmpData.result.recordset.length > 0)
                                         {
                                             let tmpConfObj =
@@ -403,7 +409,9 @@ export default class CustomerCard extends React.PureComponent
                                                 button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                             }
+
                                             let pResult = await dialog(tmpConfObj)
+                                            
                                             if(pResult == 'btn01')
                                             {
                                                 this.toast.show({type:"success",message:this.t("msgDelete.msgSuccess")})
@@ -418,6 +426,7 @@ export default class CustomerCard extends React.PureComponent
                                         }
                                         
                                         let pResult = await dialog(tmpConfObj);
+
                                         if(pResult == 'btn01')
                                         {
                                             this.customerObj.dt('CUSTOMERS').removeAt(0)
@@ -425,7 +434,6 @@ export default class CustomerCard extends React.PureComponent
                                             this.toast.show({type:"success",message:this.t("msgDelete.msgSuccess")})
                                             this.init(); 
                                         }
-                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -445,7 +453,9 @@ export default class CustomerCard extends React.PureComponent
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
+
                                             let pResult = await dialog(tmpConfObj);
+                                            
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -533,36 +543,6 @@ export default class CustomerCard extends React.PureComponent
                                             <RequiredRule message={this.t("validation.frmCustomers")}/>
                                         </Validator>  
                                     </NdTextBox>
-                                    {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
-                                    visible={false}
-                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_txtCode.title")} //
-                                    search={true}
-                                    //Customer View degisecek
-                                    data = 
-                                    {{
-                                        source:
-                                        {
-                                            select:
-                                            {
-                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[STATUS] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))`,
-                                                param : ['VAL:string|50']
-                                            },
-                                            sql:this.core.sql
-                                        }
-                                    }}
-                                    >
-                                        <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
-                                        <Column dataField="TITLE" caption={this.t("pg_txtCode.clmTitle")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="LAST_NAME" caption={this.t("pg_txtCode.clmLastName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="STATUS" caption={this.t("pg_txtCode.clmStatus")} width={300} />
-                                    </NdPopGrid>
                                 </NdItem>
                                 {/* txtTitle */}
                                 <NdItem>
@@ -1300,7 +1280,6 @@ export default class CustomerCard extends React.PureComponent
                                         height={'90%'}
                                         title={this.t("pg_subGroup.title")} 
                                         search={false}
-                                        deferRendering={true}
                                         >
                                             <Column dataField="NAME" caption={this.t("pg_subGroup.clmName")} width={'70%'} defaultSortOrder="asc" />
                                         </NdPopGrid>
@@ -1789,8 +1768,40 @@ export default class CustomerCard extends React.PureComponent
                                 </NdItem>
                             </NdForm>
                         </NdPopUp>
-                        <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                     </div>
+                    <div>
+                        {/*CARI SECIMI POPUP */}
+                        <NdPopGrid id={"pg_txtCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
+                        visible={false}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}} 
+                        showTitle={true} 
+                        showBorders={true}
+                        width={'90%'}
+                        height={'90%'}
+                        title={this.t("pg_txtCode.title")} //
+                        search={true}
+                        //Customer View degisecek
+                        data = 
+                        {{
+                            source:
+                            {
+                                select:
+                                {
+                                    query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME],[STATUS] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL))`,
+                                    param : ['VAL:string|50']
+                                },
+                                sql:this.core.sql
+                            }
+                        }}
+                        >
+                            <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
+                            <Column dataField="TITLE" caption={this.t("pg_txtCode.clmTitle")} width={300} defaultSortOrder="asc" />
+                            <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
+                            <Column dataField="LAST_NAME" caption={this.t("pg_txtCode.clmLastName")} width={300} defaultSortOrder="asc" />
+                            <Column dataField="STATUS" caption={this.t("pg_txtCode.clmStatus")} width={300} />
+                        </NdPopGrid>
+                    </div>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )
