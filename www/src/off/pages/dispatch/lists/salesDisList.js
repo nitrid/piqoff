@@ -10,8 +10,6 @@ import { nf525Cls } from '../../../../core/cls/nf525.js';
 
 import NdGrid,{Column,Paging,Pager,Export,Scrolling,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
@@ -71,14 +69,14 @@ export default class salesDisList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT *, " +
-                                "CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, " +
-                                "(SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   " +
-                                "(SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   " +
-                                "FROM DOC_VW_01 " +
-                                "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) " + 
-                                " AND TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                        query : `SELECT *, 
+                                CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, 
+                                (SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   
+                                (SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   
+                                FROM DOC_VW_01 
+                                WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND 
+                                ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) 
+                                AND TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC`,
                         param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
                         value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,this.cmbMainGrp.value]
                     },
@@ -98,14 +96,14 @@ export default class salesDisList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT *, " +
-                                "CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, " +
-                                "(SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   " +
-                                "(SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   " +
-                                "FROM DOC_VW_01 " +
-                                "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) " + 
-                                " AND TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 AND ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                        query : `SELECT *, 
+                                CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, 
+                                (SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   
+                                (SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   
+                                FROM DOC_VW_01 
+                                WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND 
+                                ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) 
+                                AND TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 AND ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) = 0 ORDER BY DOC_DATE DESC,REF_NO DESC`,
                         param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
                         value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,this.cmbMainGrp.value] 
                     },
@@ -126,12 +124,15 @@ export default class salesDisList extends React.PureComponent
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertInvoices.msg")}</div>)
         }
         
+        
         let pResult = await dialog(tmpConfObj);
         if(pResult == 'btn02')
         {
             return
         }
+        
         let tmpDocGuids = []
+        
         App.instance.setState({isExecute:true})
 
         for (let i = 0; i < this.grdSlsDisList.getSelectedData().length; i++) 
@@ -148,13 +149,16 @@ export default class salesDisList extends React.PureComponent
             tmpDoc.REF = this.grdSlsDisList.getSelectedData()[i].REF
             tmpDoc.LOCKED = 1
             tmpDoc.PRICE_LIST_NO = this.grdSlsDisList.getSelectedData()[i].PRICE_LIST_NO
+            
             let tmpAdressQuery = 
             {
-                query :"SELECT TOP 1 ADRESS_NO FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = @INPUT AND FACTURATION = 1 ",
+                query :`SELECT TOP 1 ADRESS_NO FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER_ADRESS_VW_01.CUSTOMER = @INPUT AND FACTURATION = 1 `,
                 param : ['INPUT:string|50'],
                 value : [this.grdSlsDisList.getSelectedData()[i].INPUT]
             }
+            
             let tmpAdressData = await this.core.sql.execute(tmpAdressQuery) 
+            
             if(tmpAdressData.result.recordset.length > 0)
             {
                 tmpDoc.ADRESS_NO = tmpAdressData.result.recordset[0].ADRESS_NO
@@ -163,16 +167,21 @@ export default class salesDisList extends React.PureComponent
             {
                 tmpDoc.ADRESS_NO = 0
             }
+            
             let tmpQuery = 
             {
-                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 --AND REF = @REF ",
+                query :`SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 --AND REF = @REF `,
             }
+           
             let tmpData = await this.core.sql.execute(tmpQuery) 
+           
             if(tmpData.result.recordset.length > 0)
             {
                 tmpDoc.REF_NO = tmpData.result.recordset[0].REF_NO
             }
+           
             tmpDocCls.addEmpty(tmpDoc);   
+           
             let tmpDocCustomer = {...tmpDocCls.docCustomer.empty}
             tmpDocCustomer.DOC_GUID = tmpDocCls.dt()[0].GUID
             tmpDocCustomer.TYPE = 1
@@ -190,19 +199,25 @@ export default class salesDisList extends React.PureComponent
                 param : ['INPUT:string|50'],
                 value : [ tmpDocCls.dt()[0].INPUT]
             }
+           
             let tmpCustomerData = await this.core.sql.execute(tmpCusotmerQuery) 
+           
             if(tmpCustomerData.result.recordset.length > 0)
             {
                 tmpDocCustomer.EXPIRY_DATE =  moment(new Date()).add(tmpCustomerData.result.recordset[0].EXPIRY_DAY, 'days')
             }   
+            
             tmpDocCls.docCustomer.addEmpty(tmpDocCustomer);
+            
             let tmpLineQuery = 
             {
                 query :"SELECT * FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID ",
                 param : ['DOC_GUID:string|50'],
                 value : [this.grdSlsDisList.getSelectedData()[i].GUID]
             }
+            
             let tmpLineData = await this.core.sql.execute(tmpLineQuery) 
+            
             if(tmpLineData.result.recordset.length > 0)
             {
                 for (let x = 0; x < tmpLineData.result.recordset.length; x++) 
@@ -274,6 +289,7 @@ export default class salesDisList extends React.PureComponent
             if(tmpDocCls.docItems.dt().length > 0)
             {
                 let tmpVat = 0
+                
                 for (let i = 0; i < tmpDocCls.docItems.dt().groupBy('VAT_RATE').length; i++) 
                 {
                     if(tmpDocCls.dt()[0].VAT_ZERO != 1)
@@ -281,6 +297,7 @@ export default class salesDisList extends React.PureComponent
                         tmpVat = tmpVat + parseFloat(tmpDocCls.docItems.dt().where({'VAT_RATE':tmpDocCls.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
                     }
                 }
+                
                 tmpDocCls.dt()[0].AMOUNT = tmpDocCls.docItems.dt().sum("AMOUNT",2)
                 tmpDocCls.dt()[0].DISCOUNT = Number(parseFloat(tmpDocCls.docItems.dt().sum("AMOUNT",2)) - parseFloat(tmpDocCls.docItems.dt().sum("TOTALHT",2))).round(2)
                 tmpDocCls.dt()[0].DOC_DISCOUNT_1 = tmpDocCls.docItems.dt().sum("DOC_DISCOUNT_1",4)
@@ -292,20 +309,24 @@ export default class salesDisList extends React.PureComponent
                 tmpDocCls.dt()[0].TOTALHT = parseFloat(parseFloat(tmpDocCls.docItems.dt().sum("TOTALHT",2)) - parseFloat(tmpDocCls.docItems.dt().sum("DOC_DISCOUNT",2))).round(2)
                 tmpDocCls.dt()[0].TOTAL = Number((parseFloat(tmpDocCls.dt()[0].TOTALHT)) + parseFloat(tmpDocCls.dt()[0].VAT)).round(2)
                 tmpDocCls.docCustomer.dt()[0].AMOUNT = tmpDocCls.dt()[0].TOTAL
+                
                 let tmpSignedData = await this.nf525.signatureDoc(tmpDocCls.dt()[0],tmpDocCls.docItems.dt())                
                 tmpDocCls.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
                 tmpDocCls.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
                 
-               await tmpDocCls.save()
+                await tmpDocCls.save()
                 
                 if(this.sysParam.filter({ID:'autoFactureMailSend',USERS:this.user.CODE}).getValue().value == true)
                 {
                     await this.MailSend(tmpDocCls.dt()[0].GUID,tmpDocCls.dt()[0].INPUT,tmpDocCls.dt()[0].REF_NO)
                 }
+        
                 tmpDocGuids.push(tmpDocCls.dt()[0])
             }
         }
+        
         App.instance.setState({isExecute:false})
+        
         let tmpConfObj2 =
         {
             id:'msgConvertSucces',showTitle:true,title:this.t("msgConvertSucces.title"),showCloseButton:true,width:'500px',height:'200px',
@@ -314,10 +335,12 @@ export default class salesDisList extends React.PureComponent
         }
 
         let tmpPrintDialog = await dialog(tmpConfObj2);
+        
         if(tmpPrintDialog == 'btn01')
         {
             let tmpLines = []
             App.instance.setState({isExecute:true})
+            
             for (let i = 0; i < tmpDocGuids.length; i++) 
             {
                 let tmpLastSignature = await this.nf525.signatureDocDuplicate(tmpDocGuids[i])
@@ -387,26 +410,34 @@ export default class salesDisList extends React.PureComponent
             button:[{id:"btn01",caption:this.t("msgPrintDispatch.btn01"),location:'before'},{id:"btn02",caption:this.t("msgPrintDispatch.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPrintDispatch.msg")}</div>)
         }
+
         let tmpDialog = await dialog(tmpConfObj);
+
         if(tmpDialog == 'btn02')
         {
             return
         }
+
         let tmpLines = []
+
         App.instance.setState({isExecute:true})
+
         for (let i = 0; i < this.grdSlsDisList.getSelectedData().length; i++) 
         {
             let tmpQuery = 
             {
-                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO ` ,
                 param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                 value:  [this.grdSlsDisList.getSelectedData()[i].GUID,this.cmbAllDesignList.value,localStorage.getItem('lang').toUpperCase()]
             }
+
             let tmpData = await this.core.sql.execute(tmpQuery) 
+
             for (let x = 0; x < tmpData.result.recordset.length; x++) 
             {
                 tmpLines.push(tmpData.result.recordset[x])
             }
+
             this.core.socket.emit('piqXInvoiceInsert',
             {
                 fromUser : tmpData.result.recordset[0].LUSER,
@@ -429,8 +460,6 @@ export default class salesDisList extends React.PureComponent
        
         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
         {
-            console.log(pResult.split('|')[0])
-            console.log(pResult.split('|')[1])
             if(pResult.split('|')[0] != 'ERR')
             {
                 var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
@@ -446,45 +475,55 @@ export default class salesDisList extends React.PureComponent
     {
         let tmpMAilQuery = 
         {
-            query :"SELECT EMAIL,TITLE FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+            query :`SELECT EMAIL,TITLE FROM CUSTOMER_VW_02 WHERE GUID = @GUID`,
             param:  ['GUID:string|50'],
             value:  [pCustomer]
         }
+       
         let tmpMailAdress = await this.core.sql.execute(tmpMAilQuery) 
+       
         if(tmpMailAdress.result.recordset.length > 0 && tmpMailAdress.result.recordset[0].EMAIL != '')
         {
             let txtSendMail = tmpMailAdress.result.recordset[0].EMAIL
+            
             let tmpQuery = 
             {
-            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
-            param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-            value:  [pGuid,this.sysParam.filter({ID:'autoFactureMailSend',USERS:this.user.CODE}).getValue().design,this.lang.languages[0].toString().toUpperCase()]
+                query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO ` ,
+                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                value:  [pGuid,this.sysParam.filter({ID:'autoFactureMailSend',USERS:this.user.CODE}).getValue().design,this.lang.languages[0].toString().toUpperCase()]
             }
+            
             App.instance.setState({isExecute:true})
             let tmpData = await this.core.sql.execute(tmpQuery)
             App.instance.setState({isExecute:false})
+            
             this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
             {
                 App.instance.setState({isExecute:true})
+            
                 let  tmpHtml = this.sysParam.filter({ID:'MailExplanation',USERS:this.user.CODE}).getValue()
+            
                 if(pResult.split('|')[0] != 'ERR')
                 {
                 }
+            
                 let tmpMailData = {html:tmpHtml,subject:"Facture-" + pRefno ,sendMail:txtSendMail,attachName:"Facture-" + pRefno + ".pdf",attachData:pResult.split('|')[1],text:""}
+            
                 this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                 {
                     if((pResult1) == 0)
                     {  
                         let tmpQuery = 
                         {
-                            query :"EXEC [dbo].[PRD_MAIL_STATUS_INSERT]  " +
-                            "@CUSER = @PCUSER, " +
-                            "@DOC_GUID = @PDOC_GUID, " + 
-                            "@SENDER_MAIL = @PSENDER_MAIL, " +
-                            "@RECIEVER_MAIL = @PRECIEVER_MAIL",
+                            query :`EXEC [dbo].[PRD_MAIL_STATUS_INSERT]  
+                            @CUSER = @PCUSER, 
+                            @DOC_GUID = @PDOC_GUID,  
+                            @SENDER_MAIL = @PSENDER_MAIL, 
+                            @RECIEVER_MAIL = @PRECIEVER_MAIL`,
                             param : ['PCUSER:string|25','PDOC_GUID:string|50','PSENDER_MAIL:string|50','PRECIEVER_MAIL:string|50'],
                             value : [this.user.CODE,pGuid,'',txtSendMail]
                         }
+            
                         await this.core.sql.execute(tmpQuery) 
                     }
                     App.instance.setState({isExecute:false})
@@ -504,7 +543,7 @@ export default class salesDisList extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.props.data.tabkey}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -641,9 +680,9 @@ export default class salesDisList extends React.PureComponent
                                 >
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#" + this.props.data.id + this.props.data.tabkey}
                                 visible={false}
-                                position={{of:'#root'}} 
+                                position={{of:'#' + this.props.data.id + this.props.data.tabkey}} 
                                 showTitle={true} 
                                 showBorders={true}
                                 width={'90%'}
@@ -656,7 +695,7 @@ export default class salesDisList extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql
@@ -760,10 +799,10 @@ export default class salesDisList extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDesign.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.props.data.tabkey} 
                         width={'500'}
                         height={'auto'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.props.data.tabkey}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -773,7 +812,7 @@ export default class salesDisList extends React.PureComponent
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '112'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '112'`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >

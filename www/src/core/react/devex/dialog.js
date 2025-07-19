@@ -195,10 +195,8 @@ export const dialog = function()
                 }
             }}
             >
-                <div className="row">
-                    <div className="col-12 py-2">
-                        {arguments[0].content}
-                    </div>
+                <div style={{padding: '8px'}}>
+                    {arguments[0].content}
                 </div>
             </NdDialog>
         )

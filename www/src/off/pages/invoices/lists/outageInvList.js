@@ -63,10 +63,9 @@ export default class rebateInvList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM DOC_VW_01 " +
-                            "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 0 AND DOC_TYPE = 23  AND REBATE = 1 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                    query : `SELECT * FROM DOC_VW_01 WHERE
+                            ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) 
+                            AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  AND TYPE = 0 AND DOC_TYPE = 23  AND REBATE = 1 ORDER BY DOC_DATE DESC,REF_NO DESC`,
                     param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },
@@ -80,7 +79,7 @@ export default class rebateInvList extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.props.data.tabkey}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -193,9 +192,10 @@ export default class rebateInvList extends React.PureComponent
                                 >
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this}
                                 visible={false}
-                                position={{of:'#root'}} 
+                                position={{of:'#' + this.props.data.id + this.props.data.tabkey}} 
+                                container={'#' + this.props.data.id + this.props.data.tabkey} 
                                 showTitle={true} 
                                 showBorders={true}
                                 width={'90%'}
@@ -208,7 +208,7 @@ export default class rebateInvList extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_04 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql

@@ -50,10 +50,12 @@ export default class docParamMob extends React.PureComponent
     buildItem()
     {
         let tmpItems = []
+        
         this.state.metaPrm.map((pItem) => 
         {
             tmpItems.push(this.ItemBuild(pItem,this))
         });
+        
         return tmpItems
     }
     render()
@@ -71,7 +73,7 @@ export default class docParamMob extends React.PureComponent
                                     valueExpr="CODE"
                                     value={""}
                                     showClearButton={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM USERS ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM USERS ORDER BY NAME ASC`},sql:this.core.sql}}}
                                     onValueChanged={async(e)=>
                                     {
                                         if(e.value == null)
@@ -163,6 +165,7 @@ export default class docParamMob extends React.PureComponent
                                         {
                                             tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{App.instance.lang.t("msgSaveResult.msgFailed")}</div>)
                                         }
+        
                                         await dialog(tmpConfObj);
                                     }}></NdButton>
                                 </Item>
@@ -200,6 +203,7 @@ export default class docParamMob extends React.PureComponent
                                                     )
                                                 }
                                             }
+        
                                             let tmpResult = await this.prmData.save()
                                             await this.prmData.load({APP:'MOB'})
 
@@ -213,6 +217,7 @@ export default class docParamMob extends React.PureComponent
                                             {
                                                 tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{App.instance.lang.t("msgSaveResult.msgFailed")}</div>)
                                             }
+        
                                             await dialog(tmpConfObj);
                                         }
                                     }}></NdButton>
@@ -242,7 +247,7 @@ export default class docParamMob extends React.PureComponent
                             {
                                 select:
                                 {
-                                    query : "SELECT CODE,NAME FROM USERS ORDER BY CODE ASC"
+                                    query : `SELECT CODE,NAME FROM USERS ORDER BY CODE ASC`
                                 },
                                 sql:this.core.sql
                             }

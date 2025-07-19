@@ -31,7 +31,7 @@ export default class branchPurcDispatch extends DocBase
         this.docType = 42;
         this.rebate = 0;
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
         
@@ -46,7 +46,8 @@ export default class branchPurcDispatch extends DocBase
     {
         await this.core.util.waitUntil(0)
         await this.init()
-         if(typeof this.pagePrm != 'undefined')
+        
+        if(typeof this.pagePrm != 'undefined')
         {
             if(typeof this.pagePrm.GUID != 'undefined')
             {
@@ -73,7 +74,7 @@ export default class branchPurcDispatch extends DocBase
         {
             let tmpCustQuery = 
             {
-                query : "SELECT * FROM CUSTOMERS WHERE TAX_NO = @TAX_NO",
+                query : `SELECT * FROM CUSTOMERS WHERE TAX_NO = @TAX_NO`,
                 param : ['TAX_NO:string|25'],
                 value : [this.piqX[0].DOC_FROM_NO]
             }
@@ -89,11 +90,14 @@ export default class branchPurcDispatch extends DocBase
                 {
                     this.frmDocItems.option('disabled',false)
                 }
+        
                 this.docObj.dt()[0].OUTPUT = tmpCustData.result.recordset[0].GUID
                 this.docObj.dt()[0].OUTPUT_CODE = tmpCustData.result.recordset[0].CODE
                 this.docObj.dt()[0].OUTPUT_NAME = tmpCustData.result.recordset[0].TITLE
                 this.docObj.dt()[0].VAT_ZERO = tmpCustData.result.recordset[0].VAT_ZERO
+        
                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+        
                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                 {
                     this.txtRef.value = tmpCustData.result.recordset[0].CODE
@@ -105,7 +109,9 @@ export default class branchPurcDispatch extends DocBase
                     param : ['CUSTOMER:string|50'],
                     value : [tmpCustData.result.recordset[0].GUID]
                 }
+        
                 let tmpAdressData = await this.core.sql.execute(tmpAdrQuery) 
+        
                 if(tmpAdressData.result.recordset.length > 1)
                 {
                     this.docObj.dt()[0].ADDRESS = tmpAdressData[0].ADRESS_NO
@@ -134,17 +140,17 @@ export default class branchPurcDispatch extends DocBase
 
                 let tmpItemQuery = 
                 {
-                    query : "SELECT " + 
-                            "I.GUID AS ITEM, " + 
-                            "I.CODE AS ITEM_CODE, " + 
-                            "I.NAME AS ITEM_NAME, " + 
-                            "I.UNIT AS UNIT, " + 
-                            "I.COST_PRICE AS COST_PRICE, " +
-                            "I.VAT AS VAT " +
-                            "FROM ITEM_MULTICODE AS M " + 
-                            "INNER JOIN ITEMS_VW_04 AS I ON " + 
-                            "M.ITEM = I.GUID " + 
-                            "WHERE M.CODE = @CODE AND M.CUSTOMER = @CUSTOMER",
+                    query : `SELECT  
+                            I.GUID AS ITEM,  
+                            I.CODE AS ITEM_CODE,  
+                            I.NAME AS ITEM_NAME,  
+                            I.UNIT AS UNIT,  
+                            I.COST_PRICE AS COST_PRICE,  
+                            I.VAT AS VAT  
+                            FROM ITEM_MULTICODE AS M  
+                            INNER JOIN ITEMS_VW_04 AS I ON  
+                            M.ITEM = I.GUID  
+                            WHERE M.CODE = @CODE AND M.CUSTOMER = @CUSTOMER`,
                     param : ['CODE:string|50','CUSTOMER:string|50'],
                     value : [jData[i].ITEM_CODE,this.docObj.dt()[0].OUTPUT]
                 }
@@ -216,7 +222,7 @@ export default class branchPurcDispatch extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_04.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_04 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
+                        query : `SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_04.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_04 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))`,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -230,9 +236,11 @@ export default class branchPurcDispatch extends DocBase
                 source:
                 {
                     select:
-                    {   query : "SELECT ITEMS_VW_04.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_04.VAT,BARCODE,ITEMS_VW_04.UNIT,PARTILOT, ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
-                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_04.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                "FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE ITEMS_VW_04.STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
+                    {   query :  `SELECT ITEMS_VW_04.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_04.VAT,ITEMS_VW_04.UNIT,BARCODE,
+                        ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND ITEM_MULTICODE.CUSTOMER = '${this.docObj.dt()[0].OUTPUT}' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, 
+                        ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_04.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME 
+                        FROM ITEMS_VW_04 
+                        INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE ITEMS_VW_04.STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)`,
                         param : ['BARCODE:string|50'],
                     },
                     sql:this.core.sql
@@ -247,7 +255,7 @@ export default class branchPurcDispatch extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND GENUS = 3",
+                        query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND GENUS = 3`,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -293,9 +301,9 @@ export default class branchPurcDispatch extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query : "SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,ITEMS_VW_04.UNIT," + 
-                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE "+
-                            "FROM ITEMS_VW_04 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE " ,
+                    query : `SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,ITEMS_VW_04.UNIT,
+                            ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].OUTPUT}'),'') AS MULTICODE 
+                            FROM ITEMS_VW_04 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].OUTPUT}'),'') = @VALUE ` ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -317,13 +325,15 @@ export default class branchPurcDispatch extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,ITEMS_VW_04.UNIT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_04.GUID ORDER BY CDATE DESC),'') AS BARCODE," + 
-                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                            " FROM ITEMS_VW_04 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
+                    query : `SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,ITEMS_VW_04.UNIT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_04.GUID ORDER BY CDATE DESC),'') AS BARCODE,
+                            ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].OUTPUT}'),'') AS MULTICODE
+                            FROM ITEMS_VW_04 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) ` ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
+                
                 let tmpData = await this.core.sql.execute(tmpQuery) 
+                
                 if(tmpData.result.recordset.length > 0)
                 {
                     if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
@@ -338,6 +348,7 @@ export default class branchPurcDispatch extends DocBase
                 }
             }
         }
+        
         if(tmpMissCodes.length > 0)
         {
             let tmpConfObj =
@@ -349,6 +360,7 @@ export default class branchPurcDispatch extends DocBase
         
             await dialog(tmpConfObj);
         }
+        
         let tmpConfObj =
         {
             id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -368,7 +380,7 @@ export default class branchPurcDispatch extends DocBase
             this.popMultiItem.hide()
         }
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == "ITEM_CODE")
         {
@@ -403,11 +415,13 @@ export default class branchPurcDispatch extends DocBase
                         {
                             let tmpQuery = 
                             {
-                                query :"SELECT ITEMS_VW_04.GUID,CODE,NAME,ITEMS_VW_04.VAT,COST_PRICE,ITEMS_VW_04.UNIT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_04.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                                query : `SELECT ITEMS_VW_04.GUID,CODE,NAME,ITEMS_VW_04.VAT,COST_PRICE,ITEMS_VW_04.UNIT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_04.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE`,
                                 param : ['CODE:string|50'],
                                 value : [r.component._changedValue]
                             }
+        
                             let tmpData = await this.core.sql.execute(tmpQuery) 
+        
                             if(tmpData.result.recordset.length > 0)
                             {
                                 this.checkboxReset()
@@ -470,6 +484,7 @@ export default class branchPurcDispatch extends DocBase
 
                                 e.key.UNIT = this.cmbUnit.value
                                 e.key.UNIT_FACTOR = this.txtUnitFactor.value
+        
                                 if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
                                 {
                                     e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
@@ -478,7 +493,9 @@ export default class branchPurcDispatch extends DocBase
                                 {
                                     e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
                                 }
+        
                                 e.data.QUANTITY = this.txtTotalQuantity.value
+        
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(4));
@@ -534,6 +551,7 @@ export default class branchPurcDispatch extends DocBase
                                 e.data.DISCOUNT_2 = this.txtDiscount2.value
                                 e.data.DISCOUNT_3 = this.txtDiscount3.value
                                 e.data.DISCOUNT = (parseFloat(this.txtDiscount1.value) + parseFloat(this.txtDiscount2.value) + parseFloat(this.txtDiscount3.value))
+        
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
@@ -588,6 +606,7 @@ export default class branchPurcDispatch extends DocBase
                                 e.data.DISCOUNT_2 = Number(e.data.AMOUNT-e.data.DISCOUNT_1).rateInc(this.txtDiscountPer2.value,4) 
                                 e.data.DISCOUNT_3 = Number(e.data.AMOUNT-e.data.DISCOUNT_1-e.data.DISCOUNT_2).rateInc(this.txtDiscountPer3.value,4) 
                                 e.data.DISCOUNT = (e.data.DISCOUNT_1 + e.data.DISCOUNT_2 + e.data.DISCOUNT_3)
+        
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
@@ -629,10 +648,12 @@ export default class branchPurcDispatch extends DocBase
             if(pData.ITEM_TYPE == 0 || typeof pData.ITEM_TYPE == 'undefined')
             {
                 let tmpMergDt = await this.mergeItem(pData.CODE)
+        
                 if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
                 {
                     tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
                     tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+        
                     if(this.docObj.dt()[0].VAT_ZERO != 1)
                     {
                         tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
@@ -676,12 +697,14 @@ export default class branchPurcDispatch extends DocBase
     
             let tmpGrpQuery = 
             {
-                query :"SELECT ORGINS,UNIT_SHORT,PARTILOT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
-                        "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_GRP_VW_01 WHERE GUID = @GUID ",
+                query : `SELECT ORGINS,UNIT_SHORT,PARTILOT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, 
+                        ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_GRP_VW_01 WHERE GUID = @GUID `,
                 param : ['GUID:string|50'],
                 value : [pData.GUID]
             }
+        
             let tmpGrpData = await this.core.sql.execute(tmpGrpQuery) 
+        
             if(tmpGrpData.result.recordset.length > 0)
             {
                 this.docObj.docItems.dt()[pIndex].ORIGIN = tmpGrpData.result.recordset[0].ORGINS
@@ -701,15 +724,18 @@ export default class branchPurcDispatch extends DocBase
             this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
             this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
             this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+        
             if(typeof pPrice == 'undefined')
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT COST_PRICE AS PRICE FROM ITEMS_VW_04 WHERE GUID = @GUID",
+                    query : `SELECT COST_PRICE AS PRICE FROM ITEMS_VW_04 WHERE GUID = @GUID`,
                     param : ['GUID:string|50'],
                     value : [pData.GUID]
                 }
+
                 let tmpData = await this.core.sql.execute(tmpQuery) 
+                
                 if(tmpData.result.recordset.length > 0)
                 {
                 
@@ -731,11 +757,13 @@ export default class branchPurcDispatch extends DocBase
                 this.docObj.docItems.dt()[pIndex].TOTAL = Number((this.docObj.docItems.dt()[pIndex].TOTALHT + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                 this.calculateTotal()
             }
+
             if(this.docObj.dt()[0].VAT_ZERO == 1)
             {
                 this.docObj.docItems.dt()[pIndex].VAT = 0
                 this.docObj.docItems.dt()[pIndex].VAT_RATE = 0
             }
+
             if(typeof pData.PARTILOT_GUID != 'undefined')
             {
                 this.docObj.docItems.dt()[pIndex].PARTILOT_GUID = pData.PARTILOT_GUID
@@ -750,18 +778,20 @@ export default class branchPurcDispatch extends DocBase
                     {
                         select:
                         {
-                            query : "SELECT GUID,LOT_CODE,SKT FROM ITEM_PARTI_LOT_VW_01 WHERE UPPER(LOT_CODE) LIKE UPPER(@VAL) AND ITEM = '" + pData.GUID + "'",
+                            query : `SELECT GUID,LOT_CODE,SKT FROM ITEM_PARTI_LOT_VW_01 WHERE UPPER(LOT_CODE) LIKE UPPER(@VAL) AND ITEM = '${pData.GUID}'`,
                             param : ['VAL:string|50']
                         },
                         sql:this.core.sql
                     }
                 }
+
                 this.pg_partiLot.setSource(tmpSource)
                 this.pg_partiLot.onClick = async(data) =>
                 {
                     this.docObj.docItems.dt()[pIndex].PARTILOT_GUID = data[0].GUID  
                     this.docObj.docItems.dt()[pIndex].LOT_CODE = data[0].LOT_CODE
                 }
+
                 this.pg_partiLot.show()
             }
             //BAĞLI ÜRÜN İÇİN YAPILDI ******************
@@ -775,7 +805,7 @@ export default class branchPurcDispatch extends DocBase
     {
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE OUTPUT = @OUTPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(60)",
+            query : `SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE OUTPUT = @OUTPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(60)`,
             param : ['OUTPUT:string|50'],
             value : [this.docObj.dt()[0].OUTPUT]
         }
@@ -791,9 +821,11 @@ export default class branchPurcDispatch extends DocBase
         }
         
         let pResult = await dialog(tmpConfObj);
+
         if(pResult == 'btn01')
         {
             let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
+
             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
             {
                 App.instance.setState({isExecute:true})
@@ -807,11 +839,13 @@ export default class branchPurcDispatch extends DocBase
                         {
                             let tmpQuery = 
                             {
-                                query : "SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER",
+                                query : `SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER`,
                                 param : ['ITEM:string|50','CUSTOMER:string|50'],
                                 value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT]
                             }
+
                             let tmpData = await this.core.sql.execute(tmpQuery)
+
                             if(tmpData.result.recordset.length > 0)
                             {
                                 let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
@@ -819,13 +853,17 @@ export default class branchPurcDispatch extends DocBase
                                 tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
                                 tmpItemData[0].ITEM_VAT = tmpData.result.recordset[0].VAT
                                 tmpItemData[0].CUSER = this.user.CODE
+
                                 let tmpExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
                                 let tmpMargin = tmpExVat - tmpItemData[0].PRICE;
                                 let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
+
                                 tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+
                                 let tmpNetExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
                                 let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.15;
                                 let tmpNetMarginRate = (((tmpNetMargin / tmpItemData[0].PRICE))) * 100
+
                                 tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
                                 tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID
                                 this.newPrice.push(tmpItemData[0])
@@ -846,25 +884,25 @@ export default class branchPurcDispatch extends DocBase
                         {
                             this.updatePriceData.insertCmd = 
                             {
-                                query : "EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] " + 
-                                "@PRICE_GUID = @PPRICE_GUID, " +
-                                "@NEW_CUSER = @PNEW_CUSER, " + 
-                                "@NEW_PRICE = @PNEW_PRICE, " +
-                                "@UPDATE_ITEM = @PUPDATE_ITEM, " +
-                                "@CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, " +
-                                "@COST_PRICE = @PCOST_PRICE ", 
+                                query : `EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] 
+                                @PRICE_GUID = @PPRICE_GUID, 
+                                @NEW_CUSER = @PNEW_CUSER, 
+                                @NEW_PRICE = @PNEW_PRICE, 
+                                @UPDATE_ITEM = @PUPDATE_ITEM, 
+                                @CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, 
+                                @COST_PRICE = @PCOST_PRICE `, 
                                 param : ['PPRICE_GUID:string|50','PNEW_CUSER:string|25','PNEW_PRICE:float','PUPDATE_ITEM:string|50','PCUSTOMER_PRICE_GUID:string|50','PCOST_PRICE:float'],
                                 dataprm : ['SALE_PRICE_GUID','CUSER','SALE_PRICE','ITEM','CUSTOMER_PRICE_GUID','PRICE']
                             } 
                             this.updatePriceData.updateCmd = 
                             {
-                                query : "EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] " + 
-                                "@PRICE_GUID = @PPRICE_GUID, " +
-                                "@NEW_CUSER = @PNEW_CUSER, " + 
-                                "@NEW_PRICE = @PNEW_PRICE, " +
-                                "@UPDATE_ITEM = @PUPDATE_ITEM, " +
-                                "@CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, " +
-                                "@COST_PRICE = @PCOST_PRICE ", 
+                                query : `EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] 
+                                @PRICE_GUID = @PPRICE_GUID, 
+                                @NEW_CUSER = @PNEW_CUSER, 
+                                @NEW_PRICE = @PNEW_PRICE, 
+                                @UPDATE_ITEM = @PUPDATE_ITEM, 
+                                @CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, 
+                                @COST_PRICE = @PCOST_PRICE `, 
                                 param : ['PPRICE_GUID:string|50','PNEW_CUSER:string|25','PNEW_PRICE:float','PUPDATE_ITEM:string|50','PCUSTOMER_PRICE_GUID:string|50','PCOST_PRICE:float'],
                                 dataprm : ['SALE_PRICE_GUID','CUSER','SALE_PRICE','ITEM','CUSTOMER_PRICE_GUID','PRICE']
                             } 
@@ -872,20 +910,6 @@ export default class branchPurcDispatch extends DocBase
                             for (let i = 0; i < this.grdNewPrice.getSelectedData().length; i++) 
                             {
                                 this.updatePriceData.push(this.grdNewPrice.getSelectedData()[i])
-                                // let tmpMulticodeObj = new itemMultiCodeCls()
-                                // await tmpMulticodeObj.load({ITEM_CODE:this.grdNewPrice.getSelectedData()[i].ITEM_CODE,CUSTOMER_CODE:this.grdNewPrice.getSelectedData()[i].CUSTOMER_CODE});
-                                // tmpMulticodeObj.dt()[0].CUSTOMER_PRICE = this.grdNewPrice.getSelectedData()[i].PRICE
-                                // tmpMulticodeObj.save()
-                                // let tmpQuery = 
-                                // {
-                                //     query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " +
-                                //             "@GUID = @PGUID, " +
-                                //             "@CUSER = @PCUSER, " +
-                                //             "@PRICE = @PPRICE" ,
-                                //     param : ['PGUID:string|50','PCUSER:string|25','PPRICE:float'],
-                                //     value : [this.grdNewPrice.getSelectedData()[i].SALE_PRICE_GUID,this.user.CODE,this.grdNewPrice.getSelectedData()[i].SALE_PRICE]
-                                // }
-                                // await this.core.sql.execute(tmpQuery)
                             }
                             await this.updatePriceData.update()
                             App.instance.setState({isExecute:false})
@@ -907,10 +931,12 @@ export default class branchPurcDispatch extends DocBase
             if(pResult == 'btn01')
             {
                 let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
+
                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                 {
                     App.instance.setState({isExecute:true})
                     this.newPriceDate.clear()
+
                     for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                     {
                         if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
@@ -919,29 +945,33 @@ export default class branchPurcDispatch extends DocBase
                             {
                                 let tmpQuery = 
                                 {
-                                    query : "SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER",
+                                    query : `SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER`,
                                     param : ['ITEM:string|50','CUSTOMER:string|50'],
                                     value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT]
                                 }
+
                                 let tmpData = await this.core.sql.execute(tmpQuery)
+
                                 if(tmpData.result.recordset.length > 0)
                                 {
-                                    console.log(tmpData.result.recordset)
                                     let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
                                     tmpItemData[0].SALE_PRICE_GUID = tmpData.result.recordset[0].PRICE_GUID
                                     tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
                                     tmpItemData[0].ITEM_VAT = tmpData.result.recordset[0].VAT
                                     tmpItemData[0].CUSER = this.user.CODE
+
                                     let tmpExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
                                     let tmpMargin = tmpExVat - tmpItemData[0].PRICE;
                                     let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
+
                                     tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+
                                     let tmpNetExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
                                     let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.15;
                                     let tmpNetMarginRate = (((tmpNetMargin / tmpItemData[0].PRICE))) * 100
+
                                     tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
                                     tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID
-                                    console.log(tmpItemData[0])
                                     this.newPriceDate.push(tmpItemData[0])
                                 } 
                             }
@@ -960,25 +990,27 @@ export default class branchPurcDispatch extends DocBase
                             {
                                 this.updatePriceData.insertCmd = 
                                 {
-                                    query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " + 
-                                    "@GUID =  @PCUSTOMER_PRICE_GUID," +
-                                    "@CUSER = @PNEW_CUSER ", 
+                                    query : `EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] 
+                                    @GUID =  @PCUSTOMER_PRICE_GUID,
+                                    @CUSER = @PNEW_CUSER `, 
                                     param : ['PNEW_CUSER:string|25','PCUSTOMER_PRICE_GUID:string|50'],
                                     dataprm : ['CUSER','CUSTOMER_PRICE_GUID']
                                 } 
                                 this.updatePriceData.updateCmd = 
                                 {
-                                    query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " + 
-                                    "@GUID =  @PCUSTOMER_PRICE_GUID," +
-                                    "@CUSER = @PNEW_CUSER ", 
+                                    query : `EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] 
+                                    @GUID =  @PCUSTOMER_PRICE_GUID,
+                                    @CUSER = @PNEW_CUSER `, 
                                     param : ['PNEW_CUSER:string|25','PCUSTOMER_PRICE_GUID:string|50'],
                                     dataprm : ['CUSER','CUSTOMER_PRICE_GUID']
                                 } 
                                 App.instance.setState({isExecute:true})
+
                                 for (let i = 0; i < this.grdNewPriceDate.getSelectedData().length; i++) 
                                 {
                                     this.updatePriceData.push(this.grdNewPriceDate.getSelectedData()[i])
                                 }
+
                                 await this.updatePriceData.update()
                                 App.instance.setState({isExecute:false})
                                 this.updatePriceData.clear()
@@ -1016,7 +1048,7 @@ export default class branchPurcDispatch extends DocBase
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.props.data.tabkey}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -1045,16 +1077,19 @@ export default class branchPurcDispatch extends DocBase
                                             this.toast.show({message:this.t("msgDocLocked.msg"),type:"error"})
                                             return
                                         }
+
                                         if(typeof this.docObj.docItems.dt()[0] == 'undefined')
                                         {
                                             this.toast.show({message:this.t("msgNotRow.msg"),type:"error"})
                                             this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
                                             return
                                         }
+
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                         {
                                             await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                         }
+
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             this.saveDoc()
@@ -1075,6 +1110,7 @@ export default class branchPurcDispatch extends DocBase
                                             this.toast.show({message:this.t("msgGetLocked.msg"),type:"warning"})
                                             return
                                         }
+
                                         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                                         {
                                             if(this.docObj.docItems.dt()[i].INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')   
@@ -1090,6 +1126,7 @@ export default class branchPurcDispatch extends DocBase
                                                 return
                                             }
                                         }
+
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -1098,6 +1135,7 @@ export default class branchPurcDispatch extends DocBase
                                         }
                                         
                                         let pResult = await dialog(tmpConfObj);
+
                                         if(pResult == 'btn01')
                                         {
                                             if(this.sysParam.filter({ID:'docDeleteDesc',USERS:this.user.CODE}).getValue().value == true)
@@ -1120,16 +1158,19 @@ export default class branchPurcDispatch extends DocBase
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
+
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
+
                                             if((await this.docObj.save()) == 0)
                                             {    
                                                 if(typeof this.piqX != 'undefined')
                                                 {
                                                     this.core.socket.emit('piqXInvoiceSetStatus',{invoiceId:this.piqX[0].GUID,user:this.core.auth.data.CODE,status:1})
                                                 }
+
                                                 this.toast.show({message:this.t("msgLocked.msg"),type:"success"})
                                                 this.frmDocItems.option('disabled',true)
                                             }
@@ -1215,7 +1256,7 @@ export default class branchPurcDispatch extends DocBase
                                 <NdItem>
                                     <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
-                                        <div className="col-4 pe-0">
+                                        <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
@@ -1230,7 +1271,9 @@ export default class branchPurcDispatch extends DocBase
                                                         param : ['REF:string|25'],
                                                         value : [this.txtRef.value]
                                                     }
+
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
+
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
                                                         this.txtRefno.value = tmpData.result.recordset[0].REF_NO
@@ -1242,7 +1285,7 @@ export default class branchPurcDispatch extends DocBase
                                             >
                                             </NdTextBox>
                                         </div>
-                                        <div className="col-5 ps-0">
+                                        <div className="col-6 ps-0">
                                             <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             readOnly={true}
                                             button=
@@ -1271,11 +1314,13 @@ export default class branchPurcDispatch extends DocBase
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query : "SELECT DELETED FROM DOC WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE = 0 AND DOC_TYPE = 42",
+                                                    query : `SELECT DELETED FROM DOC WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE = 0 AND DOC_TYPE = 42`,
                                                     param : ['REF:string|50','REF_NO:int'],
                                                     value : [this.txtRef.value,this.txtRefno.value]
                                                 }
+
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
+
                                                 if(tmpData.result.recordset.length > 0)
                                                 {   
                                                     if(tmpData.result.recordset[0].DELETED == 1)
@@ -1291,7 +1336,9 @@ export default class branchPurcDispatch extends DocBase
                                                         return
                                                     }
                                                 }
+
                                                 let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+
                                                 if(tmpResult == 3)
                                                 {
                                                     this.txtRefno.value = "";
@@ -1320,6 +1367,7 @@ export default class branchPurcDispatch extends DocBase
                                     onValueChanged={(async()=>
                                     {
                                         this.checkRow()
+
                                         if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                         {
                                             this.frmDocItems.option('disabled',false)
@@ -1349,7 +1397,9 @@ export default class branchPurcDispatch extends DocBase
                                                 this.toast.show({message:this.t("msgCustomerLock.msg"),type:"error"})
                                                 return;
                                             }
+
                                             await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                            
                                             this.pg_txtCustomerCode.show()
                                             this.pg_txtCustomerCode.onClick = async(data) =>
                                             {
@@ -1359,28 +1409,35 @@ export default class branchPurcDispatch extends DocBase
                                                     {
                                                         this.frmDocItems.option('disabled',false)
                                                     }
+                                            
                                                     this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                     this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                     this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                     this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
                                                     this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
+                                            
                                                     let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                            
                                                     if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                     {
                                                         this.txtRef.value = data[0].CODE;
                                                         this.txtRef.props.onChange()
                                                     }
+                                            
                                                     if(this.cmbDepot.value != '' && this.docLocked == false)
                                                     {
                                                         this.frmDocItems.option('disabled',false)
                                                     }
-                                                     let tmpQuery = 
+                                            
+                                                    let tmpQuery = 
                                                     {
-                                                        query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                                                        query : `SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER`,
                                                         param : ['CUSTOMER:string|50'],
                                                         value : [ data[0].GUID]
                                                     }
+                                            
                                                     let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                            
                                                     if(tmpAdressData.result.recordset.length > 1)
                                                     {
                                                         this.pg_adress.onClick = async(pdata) =>
@@ -1409,6 +1466,7 @@ export default class branchPurcDispatch extends DocBase
                                                         this.toast.show({message:this.t("msgCustomerLock.msg"),type:"error"})
                                                         return;
                                                     }
+                                            
                                                     this.pg_txtCustomerCode.show()
                                                     this.pg_txtCustomerCode.onClick = async(data) =>
                                                     {
@@ -1418,28 +1476,35 @@ export default class branchPurcDispatch extends DocBase
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
                                                             }
+                                            
                                                             this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                             this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
                                                             this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
+                                            
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                            
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.value = data[0].CODE;
                                                                 this.txtRef.props.onChange()
                                                             }
+                                            
                                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
                                                             }
+                                            
                                                             let tmpQuery = 
                                                             {
                                                                 query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
                                                                 param : ['CUSTOMER:string|50'],
                                                                 value : [ data[0].GUID]
                                                             }
+                                            
                                                             let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                            
                                                             if(tmpAdressData.result.recordset.length > 1)
                                                             {   
                                                                 this.pg_adress.onClick = async(pdata) =>
@@ -1466,9 +1531,10 @@ export default class branchPurcDispatch extends DocBase
                                         </Validator>  
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.props.data.tabkey}} 
+                                    container={'#' + this.props.data.id + this.props.data.tabkey} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -1481,7 +1547,7 @@ export default class branchPurcDispatch extends DocBase
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND GENUS = 3",
+                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND GENUS = 3`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -1503,7 +1569,6 @@ export default class branchPurcDispatch extends DocBase
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
-                                        
                                     </NdPopGrid>
                                 </NdItem> 
                                 {/* txtCustomerName */}
@@ -1515,8 +1580,7 @@ export default class branchPurcDispatch extends DocBase
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem> 
                                 {/* Boş */}
                                 <NdEmptyItem />
@@ -1597,6 +1661,7 @@ export default class branchPurcDispatch extends DocBase
                                             this.txtBarcode.value = ''
                                             return
                                         }
+                                      
                                         let tmpQuery = 
                                         {   query : `SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE,PARTILOT_GUID,LOT_CODE 
                                                      FROM ITEMS_BARCODE_MULTICODE_VW_01 
@@ -1604,7 +1669,9 @@ export default class branchPurcDispatch extends DocBase
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].OUTPUT]
                                         }
+                                      
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
+                                      
                                         if(tmpData.result.recordset.length > 0)
                                         {
                                             this.msgQuantity.tmpData = tmpData.result.recordset[0]
@@ -1630,8 +1697,7 @@ export default class branchPurcDispatch extends DocBase
                                     }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                             </NdForm>
                         </div>
@@ -1694,6 +1760,7 @@ export default class branchPurcDispatch extends DocBase
                                         {
                                             await this.popMultiItem.show()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                                     
                                             if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
@@ -1750,14 +1817,17 @@ export default class branchPurcDispatch extends DocBase
                                             {
                                                 e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
                                             }
+                                     
                                             if(typeof e.data.SUB_FACTOR != 'undefined')
                                             {
                                                 e.key.QUANTITY = e.key.SUB_QUANTITY * e.data.SUB_FACTOR
                                             }
+                                     
                                             if(typeof e.data.PRICE != 'undefined')
                                             {
                                                 e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
                                             }
+                                     
                                             if(typeof e.data.SUB_PRICE != 'undefined')
                                             {
                                                 e.key.PRICE = e.data.SUB_PRICE * e.key.SUB_FACTOR
@@ -1765,7 +1835,6 @@ export default class branchPurcDispatch extends DocBase
 
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
-                                                console.log(Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4))
                                                 e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
                                                 e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
                                                 e.key.DISCOUNT_2 = 0
@@ -1778,6 +1847,7 @@ export default class branchPurcDispatch extends DocBase
                                                 e.key.DISCOUNT_3 = 0
                                                 e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
                                             }
+                                     
                                             if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
                                             {
                                                 let tmpConfObj =
@@ -1797,6 +1867,7 @@ export default class branchPurcDispatch extends DocBase
                                             }
 
                                             e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
+                                     
                                             if(this.docObj.dt()[0].VAT_ZERO != 1)
                                             {
                                                 e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
@@ -1817,9 +1888,10 @@ export default class branchPurcDispatch extends DocBase
                                                 e.key.DISCOUNT_2 = 0
                                                 e.key.DISCOUNT_3 = 0
                                             }
+                                     
                                             if(typeof e.data.DISCOUNT_RATE == 'undefined')
                                             {
-                                            e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
+                                               e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
                                             }
                                             this.calculateTotal()
                                         }}
@@ -1843,17 +1915,17 @@ export default class branchPurcDispatch extends DocBase
                                             <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
                                             <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsDispatch.clmCreateDate")} width={80} allowEditing={false}/>
                                             <Column dataField="CUSER_NAME" caption={this.t("grdSlsDispatch.clmCuser")} width={90} allowEditing={false}/>
-                                            <Column dataField="ITEM_CODE" caption={this.t("grdSlsDispatch.clmItemCode")} width={105} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdSlsDispatch.clmItemCode")} width={105} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="ITEM_NAME" caption={this.t("grdSlsDispatch.clmItemName")} width={260} />
                                             <Column dataField="ITEM_BARCODE" caption={this.t("grdSlsDispatch.clmBarcode")} width={115} allowEditing={false}/>
-                                            <Column dataField="QUANTITY" caption={this.t("grdSlsDispatch.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdSlsDispatch.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="SUB_FACTOR" caption={this.t("grdSlsDispatch.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsDispatch.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="PRICE" caption={this.t("grdSlsDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                             <Column dataField="SUB_PRICE" caption={this.t("grdSlsDispatch.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="AMOUNT" caption={this.t("grdSlsDispatch.clmAmount")} width={90} allowEditing={false} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                                            <Column dataField="DISCOUNT" caption={this.t("grdSlsDispatch.clmDiscount")} width={60} dataType={'number'} editCellRender={this._cellRoleRender} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                                            <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsDispatch.clmDiscountRate")} width={60} dataType={'number'} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="DISCOUNT" caption={this.t("grdSlsDispatch.clmDiscount")} width={60} dataType={'number'} editCellRender={this.cellRoleRender} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                            <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsDispatch.clmDiscountRate")} width={60} dataType={'number'} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="VAT" caption={this.t("grdSlsDispatch.clmVat")} width={75} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                             <Column dataField="VAT_RATE" caption={this.t("grdSlsDispatch.clmVatRate")} width={50} allowEditing={false}/>
                                             <Column dataField="TOTALHT" caption={this.t("grdSlsDispatch.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
@@ -1888,8 +1960,7 @@ export default class branchPurcDispatch extends DocBase
                                     <Label text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
                                     maxLength={32}
-                                
-                                    ></NdTextBox>
+                                    />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtDiscount")} alignment="right" />
@@ -1926,7 +1997,7 @@ export default class branchPurcDispatch extends DocBase
                                             },
                                         ]
                                     }
-                                    ></NdTextBox>
+                                    />
                                 </Item>
                                 {/* İndirim */}
                                 <EmptyItem colSpan={2}/>
@@ -1934,7 +2005,7 @@ export default class branchPurcDispatch extends DocBase
                                     <Label text={this.t("txtSubTotal")} alignment="right" />
                                     <NdTextBox id="txtSubTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"SUBTOTAL"}}
                                     maxLength={32}
-                                    ></NdTextBox>
+                                    />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtDocDiscount")} alignment="right" />
@@ -1949,9 +2020,6 @@ export default class branchPurcDispatch extends DocBase
                                                 onClick:async() =>
                                                 {
                                                     await this.popDocDiscount.show()
-                                                    console.log(this.docObj.dt()[0].SUBTOTAL)
-                                                    console.log(this.docObj.dt()[0].DOC_DISCOUNT_1)
-                                                    console.log( Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5))
                                                     if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
                                                     {
                                                         this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)
@@ -1983,7 +2051,7 @@ export default class branchPurcDispatch extends DocBase
                                     <Label text={this.t("txtTotalHt")} alignment="right" />
                                     <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}
                                     maxLength={32}
-                                    ></NdTextBox>
+                                    ></NdTextBox> 
                                 </Item>
                                 <Item>
                                     <Label text={this.t("txtVat")} alignment="right" />
@@ -1999,6 +2067,7 @@ export default class branchPurcDispatch extends DocBase
                                                 {
                                                     await this.popVatRate.show()
                                                     this.vatRate.clear()
+                                                  
                                                     for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
                                                     {
                                                         let tmpTotalHt  =  parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2) -this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("DOC_DISCOUNT",2))
@@ -2006,6 +2075,7 @@ export default class branchPurcDispatch extends DocBase
                                                         let tmpData = {"RATE":this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat,"TOTALHT":tmpTotalHt}
                                                         this.vatRate.push(tmpData)
                                                     }
+                                                  
                                                     await this.grdVatRate.dataRefresh({source:this.vatRate})
                                                 }
                                             },
@@ -2015,12 +2085,11 @@ export default class branchPurcDispatch extends DocBase
                                 </Item>
                                 {/* KDV */}
                                 <EmptyItem colSpan={3}/>
-                                
                                 <Item>
                                     <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
                                     maxLength={32}
-                                    ></NdTextBox>
+                                    />
                                 </Item>
                             </Form>
                         </div>
@@ -2032,10 +2101,10 @@ export default class branchPurcDispatch extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDesign.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.props.data.tabkey} 
                         width={'500'}
                         height={'auto'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.props.data.tabkey}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -2046,7 +2115,7 @@ export default class branchPurcDispatch extends DocBase
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '42'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '42'`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
@@ -2076,12 +2145,13 @@ export default class branchPurcDispatch extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO ` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
+
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    console.log(JSON.stringify(tmpData.result.recordset)) // BAK
+
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         
@@ -2090,11 +2160,6 @@ export default class branchPurcDispatch extends DocBase
                                                         {
                                                             mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                         } 
-                                                        // if(pResult.split('|')[0] != 'ERR')
-                                                        // {
-                                                        //     let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                        //     mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
-                                                        // }
                                                     });
                                                     this.popDesign.hide();  
                                                 }
@@ -2117,13 +2182,15 @@ export default class branchPurcDispatch extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO ` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
+                                                    
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
+                                                    
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
@@ -2133,8 +2200,6 @@ export default class branchPurcDispatch extends DocBase
                                                             { 
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                             } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         }
                                                     });
                                                 }
@@ -2148,11 +2213,13 @@ export default class branchPurcDispatch extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0",
+                                                        query : `SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0`,
                                                         param:  ['GUID:string|50'],
                                                         value:  [this.docObj.dt()[0].OUTPUT]
                                                     }
+                                                    
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
                                                         await this.popMailSend.show()
@@ -2177,10 +2244,10 @@ export default class branchPurcDispatch extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popMailSend.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.props.data.tabkey} 
                         width={'600'}
                         height={'auto'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.props.data.tabkey}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -2191,7 +2258,7 @@ export default class branchPurcDispatch extends DocBase
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT GUID,MAIL_ADDRESS FROM [dbo].[MAIL_SETTINGS]"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT GUID,MAIL_ADDRESS FROM [dbo].[MAIL_SETTINGS]`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
                                     >
@@ -2232,29 +2299,36 @@ export default class branchPurcDispatch extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO ` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
+                                                    
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
+                                                    
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         App.instance.setState({isExecute:true})
                                                         let tmpAttach = pResult.split('|')[1]
                                                         let tmpHtml = this.htmlEditor.value
+
                                                         if(this.htmlEditor.value.length == 0)
                                                         {
                                                             tmpHtml = ''
                                                         }
+
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                         }
+
                                                         let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"livraison " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:""}
+
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
                                                             App.instance.setState({isExecute:false})
+
                                                             let tmpConfObj1 =
                                                             {
                                                                 id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'auto',

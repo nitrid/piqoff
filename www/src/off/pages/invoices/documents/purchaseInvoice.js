@@ -1485,7 +1485,7 @@ export default class purchaseInvoice extends DocBase
                                         {
                                             if(typeof e != 'undefined')
                                             {
-                                                if(e.CustomerCode != '')
+                                                if(e.CustomerCode != '' && this.docObj.dt()[0].OUTPUT_CODE == '')
                                                 {
                                                     this.docObj.dt()[0].OUTPUT = e.CustomerGuid
                                                     this.docObj.docCustomer.dt()[0].OUTPUT = e.CustomerGuid
@@ -1874,7 +1874,6 @@ export default class purchaseInvoice extends DocBase
                                         searchEnabled={true}
                                         onValueChanged={(async()=>
                                         {
-                                            this.docObj.docCustomer.dt()[0].INPUT = this.cmbDepot.value
                                             this.checkRow()
                                             
                                             if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
@@ -2090,7 +2089,6 @@ export default class purchaseInvoice extends DocBase
                                     onValueChanged={(async()=>
                                     {
                                         this.checkRow()
-                                        this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtDocDate.value
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmDoc"  + this.tabIndex}>

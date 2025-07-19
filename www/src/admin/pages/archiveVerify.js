@@ -27,6 +27,7 @@ export default class deviceChoose extends React.PureComponent
                             {
                                 let tmpTxtSign = ""
                                 let tmpBinary = undefined
+     
                                 for (let i = 0; i < e.target.files.length; i++) 
                                 {
                                     if(e.target.files[i].type == 'text/plain')

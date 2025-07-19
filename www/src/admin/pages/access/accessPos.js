@@ -72,7 +72,7 @@ export default class accessPos extends React.PureComponent
                                 valueExpr="CODE"
                                 value={""}
                                 showClearButton={true}
-                                data={{source:{select:{query : "SELECT CODE,NAME FROM USERS ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                data={{source:{select:{query : `SELECT CODE,NAME FROM USERS ORDER BY NAME ASC`},sql:this.core.sql}}}
                                 onValueChanged={async(e)=>
                                 {
                                     if(e.value == null)
@@ -154,8 +154,10 @@ export default class accessPos extends React.PureComponent
                                             )
                                         }
                                     }
+        
                                     let tmpResult = await this.acsData.save()
                                     await this.acsData.load({APP:'POS'})
+        
                                     App.instance.setState({isExecute:false})
                                     
                                     if(tmpResult == 0)
@@ -166,6 +168,7 @@ export default class accessPos extends React.PureComponent
                                     {
                                         tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{App.instance.lang.t("msgSaveResult.msgFailed")}</div>)
                                     }
+        
                                     await dialog(tmpConfObj);
                                 }}></NdButton>
                             </Item>
@@ -206,6 +209,7 @@ export default class accessPos extends React.PureComponent
                                                 }
                                             }
                                         }
+        
                                         let tmpResult = await this.acsData.save()
                                         await this.acsData.load({APP:'POS'})
                                         App.instance.setState({isExecute:false})
@@ -218,6 +222,7 @@ export default class accessPos extends React.PureComponent
                                         {
                                             tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{App.instance.lang.t("msgSaveResult.msgFailed")}</div>)
                                         }
+        
                                         await dialog(tmpConfObj);
                                     }
                                 }}></NdButton>
@@ -247,7 +252,7 @@ export default class accessPos extends React.PureComponent
                         {
                             select:
                             {
-                                query : "SELECT CODE,NAME FROM USERS ORDER BY CODE ASC"
+                                query : `SELECT CODE,NAME FROM USERS ORDER BY CODE ASC`
                             },
                             sql:this.core.sql
                         }

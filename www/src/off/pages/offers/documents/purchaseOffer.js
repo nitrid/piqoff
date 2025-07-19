@@ -29,7 +29,7 @@ export default class purchaseOffer extends DocBase
         this.docType = 61;
         this.rebate = 0;
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;   
@@ -44,6 +44,7 @@ export default class purchaseOffer extends DocBase
     {
         await this.core.util.waitUntil(0)
         await this.init()
+        
         if(typeof this.pagePrm != 'undefined')
         {
             setTimeout(() => {
@@ -90,10 +91,10 @@ export default class purchaseOffer extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,UNIT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_04.GUID ORDER BY CDATE DESC),'') AS BARCODE, " + 
-                                "ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),COST_PRICE) AS PURC_PRICE, " +
-                                "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE " +
-                                "FROM ITEMS_VW_04 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) " ,
+                        query : `SELECT GUID,CODE,NAME,VAT,UNIT,ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_04.GUID ORDER BY CDATE DESC),'') AS BARCODE, 
+                                ISNULL((SELECT TOP 1 CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].OUTPUT}'),COST_PRICE) AS PURC_PRICE, 
+                                ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].OUTPUT}'),'') AS MULTICODE 
+                                FROM ITEMS_VW_04 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) ` ,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -108,9 +109,9 @@ export default class purchaseOffer extends DocBase
                 {
                     select:
                     {   
-                        query : "SELECT ITEMS_VW_04.GUID,CODE,NAME,COST_PRICE,VAT,BARCODE,ITEMS_VW_04.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND ITEM_MULTICODE.CUSTOMER = '" + this.docObj.dt()[0].OUTPUT + "' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, " + 
-                                "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_04.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                                "FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)",
+                        query : `SELECT ITEMS_VW_04.GUID,CODE,NAME,COST_PRICE,VAT,BARCODE,ITEMS_VW_04.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND ITEM_MULTICODE.CUSTOMER = '${this.docObj.dt()[0].OUTPUT}' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, 
+                                ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_04.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME 
+                                FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE  STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' + @BARCODE)`,
                         param : ['BARCODE:string|50'],
                     },
                     sql:this.core.sql
@@ -125,7 +126,7 @@ export default class purchaseOffer extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                        query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -141,10 +142,9 @@ export default class purchaseOffer extends DocBase
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
-        
         this.frmDocItems.option('disabled',this.docLocked)
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == "ITEM_CODE")
         {
@@ -160,7 +160,6 @@ export default class purchaseOffer extends DocBase
                             {
                                 this.checkboxReset()
                                 await this.addItem(data[0],e.rowIndex)
-                               
                             }
                             await this.pg_txtItemsCode.setVal(e.value)
                         }
@@ -175,11 +174,13 @@ export default class purchaseOffer extends DocBase
                         {
                             let tmpQuery = 
                             {
-                                query :"SELECT ITEMS_VW_04.GUID,CODE,NAME,ITEMS_VW_04.VAT,COST_PRICE,ITEMS_VW_04.UNIT FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                                query : `SELECT ITEMS_VW_04.GUID,CODE,NAME,ITEMS_VW_04.VAT,COST_PRICE,ITEMS_VW_04.UNIT FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE`,
                                 param : ['CODE:string|50'],
                                 value : [r.component._changedValue]
                             }
+
                             let tmpData = await this.core.sql.execute(tmpQuery) 
+
                             if(tmpData.result.recordset.length > 0)
                             {
                                 this.checkboxReset()
@@ -215,8 +216,7 @@ export default class purchaseOffer extends DocBase
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
         if(e.column.dataField == "QUANTITY")
@@ -243,6 +243,7 @@ export default class purchaseOffer extends DocBase
                                 e.data.UNIT = this.cmbUnit.value
                                 e.data.QUANTITY = this.txtTotalQuantity.value
                                 e.data.UNIT_FACTOR = this.txtUnitFactor.value
+
                                 if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
                                 {
                                     e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
@@ -251,7 +252,9 @@ export default class purchaseOffer extends DocBase
                                 {
                                     e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
                                 }
+
                                 e.data.QUANTITY = this.txtTotalQuantity.value
+
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
@@ -262,6 +265,7 @@ export default class purchaseOffer extends DocBase
                                     e.data.VAT = 0
                                     e.data.VAT_RATE = 0
                                 }
+
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY).toFixed(4))
                                 e.data.TOTALHT = parseFloat(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT).toFixed(4))
                                 e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
@@ -270,8 +274,7 @@ export default class purchaseOffer extends DocBase
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
         if(e.column.dataField == "DISCOUNT")
@@ -306,6 +309,7 @@ export default class purchaseOffer extends DocBase
                                 e.data.DISCOUNT_2 = this.txtDiscount2.value
                                 e.data.DISCOUNT_3 = this.txtDiscount3.value
                                 e.data.DISCOUNT = (parseFloat(this.txtDiscount1.value) + parseFloat(this.txtDiscount2.value) + parseFloat(this.txtDiscount3.value))
+
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
@@ -316,17 +320,18 @@ export default class purchaseOffer extends DocBase
                                     e.data.VAT = 0
                                     e.data.VAT_RATE = 0
                                 }
+
                                 e.data.AMOUNT = parseFloat((e.data.PRICE * e.data.QUANTITY)).round(2)
                                 e.data.TOTALHT = Number(((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT)).round(2)
                                 e.data.TOTAL = Number((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT)).round(2)
                                 e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
+
                                 this.calculateTotal()
                             }
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
         if(e.column.dataField == "DISCOUNT_RATE")
@@ -360,6 +365,7 @@ export default class purchaseOffer extends DocBase
                                 e.data.DISCOUNT_2 = Number(e.data.AMOUNT-e.data.DISCOUNT_1).rateInc(this.txtDiscountPer2.value,4) 
                                 e.data.DISCOUNT_3 = Number(e.data.AMOUNT-e.data.DISCOUNT_1-e.data.DISCOUNT_2).rateInc(this.txtDiscountPer3.value,4) 
                                 e.data.DISCOUNT = (e.data.DISCOUNT_1 + e.data.DISCOUNT_2 + e.data.DISCOUNT_3)
+                    
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
@@ -379,8 +385,7 @@ export default class purchaseOffer extends DocBase
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
     }
@@ -399,10 +404,12 @@ export default class purchaseOffer extends DocBase
             }
             //GRID DE AYNI ÜRÜNDEN OLUP OLMADIĞI KONTROL EDİLİYOR VE KULLANICIYA SORULUYOR,CEVAP A GÖRE SATIR BİRLİŞTERİLİYOR.
             let tmpMergDt = await this.mergeItem(pData.CODE)
+            
             if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
             {
                 tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
                 tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+            
                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                 {
                     tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
@@ -412,6 +419,7 @@ export default class purchaseOffer extends DocBase
                     tmpMergDt[0].VAT = 0
                     tmpMergDt[0].VAT_RATE = 0
                 }
+            
                 tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
                 tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
                 tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
@@ -426,17 +434,21 @@ export default class purchaseOffer extends DocBase
           
             let tmpCheckQuery = 
             {
-                query : "SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0",
+                query : `SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0`,
                 param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                 value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
             }
+            
             let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+            
             if(this.customerControl == true)
             {
                 if(tmpCheckData.result.recordset.length == 0)
                 {   
                     App.instance.setState({isExecute:false})
+            
                     let tmpCustomerBtn = ''
+            
                     if(this.customerClear == true)
                     {
                         if(pIndex != null)
@@ -446,6 +458,7 @@ export default class purchaseOffer extends DocBase
                         resolve()
                         return 
                     }
+            
                     this.msgCustomerNotFound.setTitle(pData.NAME)
                    
                     await this.msgCustomerNotFound.show().then(async (e) =>
@@ -456,6 +469,7 @@ export default class purchaseOffer extends DocBase
                             resolve()
                             return
                         }
+            
                         if(e == 'btn02')
                         {
                             tmpCustomerBtn = e
@@ -463,10 +477,12 @@ export default class purchaseOffer extends DocBase
                             {
                                 await this.grid.devGrid.deleteRow(pIndex)
                             }
+            
                             if(this.checkCustomer.value == true)
                             {
                                 this.customerClear = true
                             }
+            
                             resolve()
                             return 
                         }
@@ -491,13 +507,16 @@ export default class purchaseOffer extends DocBase
                 tmpDocOffers.OUTPUT = this.docObj.dt()[0].OUTPUT
                 tmpDocOffers.INPUT = this.docObj.dt()[0].INPUT
                 tmpDocOffers.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+            
                 this.docObj.docOffers.addEmpty(tmpDocOffers)
+            
                 pIndex = this.docObj.docOffers.dt().length - 1
             }
             else
             {
                 pIndex = this.docObj.docOffers.dt().length - pIndex -1
             }
+            
             if(tmpCheckData.result.recordset.length > 0)
             {  
                 this.docObj.docOffers.dt()[pIndex].MULTICODE = tmpCheckData.result.recordset[0].MULTICODE
@@ -513,6 +532,7 @@ export default class purchaseOffer extends DocBase
             this.docObj.docOffers.dt()[pIndex].DISCOUNT_RATE = 0
             this.docObj.docOffers.dt()[pIndex].QUANTITY = pQuantity
             //MÜŞTERİ İNDİRİMİ UYGULAMA...
+            
             let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,pData.GUID)
 
             if(typeof pPrice == 'undefined')
@@ -549,11 +569,13 @@ export default class purchaseOffer extends DocBase
                 this.docObj.docOffers.dt()[pIndex].TOTAL = Number((this.docObj.docOffers.dt()[pIndex].TOTALHT + this.docObj.docOffers.dt()[pIndex].VAT)).round(2)
                 this.calculateTotal()
             }
+            
             if(this.docObj.dt()[0].VAT_ZERO == 1)
             {
                 this.docObj.docOffers.dt()[pIndex].VAT = 0
                 this.docObj.docOffers.dt()[pIndex].VAT_RATE = 0
             }
+            
             App.instance.setState({isExecute:false})
             resolve()
         })
@@ -562,6 +584,7 @@ export default class purchaseOffer extends DocBase
     {
         let tmpMissCodes = []
         let tmpCounter = 0
+        
         if(this.multiItemData.length > 0)
         {
             let tmpConfObj =
@@ -572,24 +595,28 @@ export default class purchaseOffer extends DocBase
             }
 
             let pResult = await dialog(tmpConfObj);
+        
             if(pResult == 'btn01')
             {
                 this.multiItemData.clear()
             }
         }
+        
         for (let i = 0; i < this.tagItemCode.value.length; i++) 
         {
             if(this.cmbMultiItemType.value == 0)
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_GRP_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_GRP_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_GRP_VW_01.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') = @VALUE " ,
+                    query : `SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT,
+                            ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_GRP_VW_01.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].OUTPUT}'),'') AS MULTICODE
+                            FROM ITEMS_GRP_VW_01 WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_GRP_VW_01.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].OUTPUT}'),'') = @VALUE ` ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
+        
                 let tmpData = await this.core.sql.execute(tmpQuery) 
+        
                 if(tmpData.result.recordset.length > 0)
                 {
                     if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
@@ -607,13 +634,15 @@ export default class purchaseOffer extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query :"SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT," + 
-                    "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '"+this.docObj.dt()[0].OUTPUT+"'),'') AS MULTICODE"+
-                    " FROM ITEMS_VW_04 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) " ,
+                    query : `SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT,
+                            ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS_VW_04.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].OUTPUT}'),'') AS MULTICODE
+                            FROM ITEMS_VW_04 WHERE UPPER(CODE) LIKE UPPER(@VALUE) OR UPPER(NAME) LIKE UPPER(@VALUE) ` ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
+        
                 let tmpData = await this.core.sql.execute(tmpQuery) 
+        
                 if(tmpData.result.recordset.length > 0)
                 {
                     if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
@@ -629,6 +658,7 @@ export default class purchaseOffer extends DocBase
             }
             
         }
+        
         if(tmpMissCodes.length > 0)
         {
             let tmpConfObj =
@@ -640,6 +670,7 @@ export default class purchaseOffer extends DocBase
         
             await dialog(tmpConfObj);
         }
+        
         let tmpConfObj =
         {
             id:'msgMultiCodeCount',showTitle:true,title:this.t("msgMultiCodeCount.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -647,12 +678,13 @@ export default class purchaseOffer extends DocBase
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgMultiCodeCount.msg") + ' ' +tmpCounter}</div>)
         }
     
-         await dialog(tmpConfObj);
+        await dialog(tmpConfObj);
 
     }
     async multiItemSave()
     {
         this.checkboxReset()
+        
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
@@ -662,7 +694,7 @@ export default class purchaseOffer extends DocBase
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -670,10 +702,10 @@ export default class purchaseOffer extends DocBase
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                        onClick={()=>
-                                        {
-                                            this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
-                                        }}/>
+                                    onClick={()=>
+                                    {
+                                        this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
+                                    }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
@@ -691,16 +723,19 @@ export default class purchaseOffer extends DocBase
                                             this.toast.show({message:this.t("msgDocLocked.msg"),type:'warning',displayTime:2000})
                                             return
                                         }
+                                        
                                         if(typeof this.docObj.docOffers.dt()[0] == 'undefined')
                                         {
                                             this.toast.show({message:this.t("msgNotRow.msg"),type:'warning',displayTime:2000})
                                             this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
                                             return
                                         }
+                                        
                                         if(this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
                                         {
                                             await this.grid.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
                                         }
+                                        
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             let tmpConfObj =
@@ -711,6 +746,7 @@ export default class purchaseOffer extends DocBase
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+                                        
                                             if(pResult == 'btn01')
                                             {
                                                 let tmpConfObj1 =
@@ -749,14 +785,16 @@ export default class purchaseOffer extends DocBase
 
                                             return
                                         }
+                                        
                                         for (let i = 0; i < this.docObj.docOffers.dt().length; i++)
                                         {
-                                          if(this.docObj.docOffers.dt()[i].ORDER_LINE_GUID != '00000000-0000-0000-0000-000000000000')
-                                          {
-                                            this.toast.show({message:this.t("msgdocNotDelete.msg"),type:'warning',displayTime:2000})
-                                            return
-                                          }
+                                            if(this.docObj.docOffers.dt()[i].ORDER_LINE_GUID != '00000000-0000-0000-0000-000000000000')
+                                            {
+                                                this.toast.show({message:this.t("msgdocNotDelete.msg"),type:'warning',displayTime:2000})
+                                                return
+                                            }
                                         }
+                                        
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -765,6 +803,7 @@ export default class purchaseOffer extends DocBase
                                         }
                                         
                                         let pResult = await dialog(tmpConfObj);
+                                        
                                         if(pResult == 'btn01')
                                         {
                                             if(this.sysParam.filter({ID:'docDeleteDesc',USERS:this.user.CODE}).getValue().value == true)
@@ -787,10 +826,12 @@ export default class purchaseOffer extends DocBase
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
+                                        
                                             if(this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grid.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
                                             }
+                                         
                                             if((await this.docObj.save()) == 0)
                                             {
                                                 this.toast.show({message:this.t("msgLocked.msg"),type:'success',displayTime:2000})
@@ -847,6 +888,7 @@ export default class purchaseOffer extends DocBase
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+                                         
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -865,7 +907,7 @@ export default class purchaseOffer extends DocBase
                                 <NdItem>
                                     <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
-                                        <div className="col-4 pe-0">
+                                        <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
@@ -874,11 +916,13 @@ export default class purchaseOffer extends DocBase
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 61 AND REF = @REF ",
+                                                    query : `SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 0 AND DOC_TYPE = 61 AND REF = @REF `,
                                                     param : ['REF:string|25'],
                                                     value : [this.txtRef.value]
                                                 }
+                                                
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                
                                                 if(tmpData.result.recordset.length > 0)
                                                 {
                                                     this.txtRefno.value = tmpData.result.recordset[0].REF_NO
@@ -886,10 +930,9 @@ export default class purchaseOffer extends DocBase
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
-                                            >
-                                            </NdTextBox>
+                                            />   
                                         </div>
-                                        <div className="col-5 ps-0">
+                                        <div className="col-6 ps-0">
                                             <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             readOnly={true}
                                             button=
@@ -917,11 +960,13 @@ export default class purchaseOffer extends DocBase
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query : "SELECT DELETED FROM DOC WHERE REF = @REF AND REF_NO = @REF_NO AND  TYPE = 0 AND DOC_TYPE = 61 ",
+                                                    query : `SELECT DELETED FROM DOC WHERE REF = @REF AND REF_NO = @REF_NO AND  TYPE = 0 AND DOC_TYPE = 61 `,
                                                     param : ['REF:string|50','REF_NO:int'],
                                                     value : [this.txtRef.value,this.txtRefno.value]
                                                 }
+                                                
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                
                                                 if(tmpData.result.recordset.length > 0)
                                                 {   
                                                     if(tmpData.result.recordset[0].DELETED == 1)
@@ -932,12 +977,15 @@ export default class purchaseOffer extends DocBase
                                                             button:[{id:"btn01",caption:this.lang.t("msgDocDeleted.btn01"),location:'after'}],
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDocDeleted.msg")}</div>)
                                                         }
+                                                
                                                         this.txtRefno.value = 0
                                                         await dialog(tmpConfObj);
                                                         return
                                                     }
                                                 }
+                                                
                                                 let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                                
                                                 if(tmpResult == 3)
                                                 {
                                                     this.txtRefno.value = "";
@@ -965,12 +1013,13 @@ export default class purchaseOffer extends DocBase
                                     onValueChanged={(async()=>
                                     {
                                         this.checkRow()
+                                        
                                         if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                         {
                                             this.frmDocItems.option('disabled',false)
                                         }
                                     }).bind(this)}
-                                    data={{source:{select:{query : "SELECT GUID,CODE,NAME FROM DEPOT_VW_01  WHERE TYPE IN (0,2) AND STATUS = 1"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT GUID,CODE,NAME FROM DEPOT_VW_01  WHERE TYPE IN (0,2) AND STATUS = 1`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
@@ -999,12 +1048,14 @@ export default class purchaseOffer extends DocBase
                                                 this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                 
                                                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                       
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
                                                     this.txtRef.value = data[0].CODE;
                                                     this.txtRef.props.onChange()
                                                     this.checkRow()
                                                 }
+                                       
                                                 if(this.docLocked == false)
                                                 {
                                                     this.frmDocItems.option('disabled',false)
@@ -1029,13 +1080,16 @@ export default class purchaseOffer extends DocBase
                                                             this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
                                                             this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
+                                       
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                       
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.value = data[0].CODE;
                                                                 this.txtRef.props.onChange()
                                                                 this.checkRow()
                                                             }
+                                       
                                                             if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
@@ -1064,8 +1118,7 @@ export default class purchaseOffer extends DocBase
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem> 
                                 {/* Boş */}
                                 <NdEmptyItem />
@@ -1112,13 +1165,16 @@ export default class purchaseOffer extends DocBase
                                             this.txtBarcode.setState({value:""})
                                             return
                                         }
+                                    
                                         let tmpQuery = 
                                         {  
-                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER))",
+                                            query : `SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER))`,
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].OUTPUT]
                                         }
+                                    
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
+                                    
                                         if(tmpData.result.recordset.length > 0)
                                         {
                                             this.txtBarcode.setState({value:""})
@@ -1147,8 +1203,7 @@ export default class purchaseOffer extends DocBase
                                     }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem>
                                 {/* dtDocDate */}
                                 <NdItem>
@@ -1203,7 +1258,6 @@ export default class purchaseOffer extends DocBase
                                                     return
                                                 }
                                             }
-                                           
                                             this.pg_txtItemsCode.onClick = async(data) =>
                                             {
                                                 this.checkboxReset()
@@ -1229,6 +1283,7 @@ export default class purchaseOffer extends DocBase
                                         {
                                             await this.popMultiItem.show()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+
                                             if( typeof this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1] != 'undefined' && this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grdPurcInv.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
@@ -1299,7 +1354,9 @@ export default class purchaseOffer extends DocBase
                                                 param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                                                 value : [e.key.ITEM,this.docObj.dt()[0].OUTPUT,e.data.QUANTITY]
                                             }
+
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
+
                                             if(tmpData.result.recordset.length > 0)
                                             {
                                                 e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(9))
@@ -1307,6 +1364,7 @@ export default class purchaseOffer extends DocBase
                                                 this.calculateTotal()
                                             }
                                         }
+                                        
                                         if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                         {
                                             e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
@@ -1314,6 +1372,7 @@ export default class purchaseOffer extends DocBase
                                             e.key.DISCOUNT_2 = 0
                                             e.key.DISCOUNT_3 = 0
                                         }
+                                       
                                         if(typeof e.data.DISCOUNT != 'undefined')
                                         {
                                             e.key.DISCOUNT_1 = e.data.DISCOUNT
@@ -1340,7 +1399,9 @@ export default class purchaseOffer extends DocBase
                                             return
                                         }
                                         //MÜŞTERİ İNDİRİMİ UYGULAMA...
+                                       
                                         let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,e.key.ITEM)
+                                       
                                         if(e.key.DISCOUNT == 0)
                                         {
                                             e.key.DISCOUNT_RATE = 0
@@ -1364,6 +1425,7 @@ export default class purchaseOffer extends DocBase
                                         }
 
                                         e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
+                                       
                                         if(this.docObj.dt()[0].VAT_ZERO != 1)
                                         {
                                             e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
@@ -1384,6 +1446,7 @@ export default class purchaseOffer extends DocBase
                                             e.key.DISCOUNT_2 = 0
                                             e.key.DISCOUNT_3 = 0
                                         }
+                                       
                                         if(typeof e.data.DISCOUNT_RATE == 'undefined')
                                         {
                                            e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
@@ -1410,15 +1473,15 @@ export default class purchaseOffer extends DocBase
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcoffers.clmCreateDate")} width={80} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdPurcoffers.clmCuser")} width={90} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcoffers.clmItemCode")} width={105} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdPurcoffers.clmItemCode")} width={105} editCellRender={this.cellRoleRender}/>
                                         <Column dataField="MULTICODE" caption={this.t("grdPurcoffers.clmMulticode")} width={105}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdPurcoffers.clmItemName")} width={230} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcoffers.clmBarcode")} width={110} allowEditing={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdPurcoffers.clmQuantity")} width={70} editCellRender={this._cellRoleRender} dataType={'number'}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdPurcoffers.clmQuantity")} width={70} editCellRender={this.cellRoleRender} dataType={'number'}/>
                                         <Column dataField="PRICE" caption={this.t("grdPurcoffers.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdPurcoffers.clmAmount")} width={90} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcoffers.clmDiscount")}  width={60} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcoffers.clmDiscountRate")}  dataType={'number'}  format={'##0.00'} width={60} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdPurcoffers.clmDiscount")}  width={60} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}} editCellRender={this.cellRoleRender}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdPurcoffers.clmDiscountRate")}  dataType={'number'}  format={'##0.00'} width={60} editCellRender={this.cellRoleRender}/>
                                         <Column dataField="VAT" caption={this.t("grdPurcoffers.clmVat")} width={75} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
                                         <Column dataField="VAT_RATE" caption={this.t("grdPurcoffers.clmVatRate")} width={50} allowEditing={false}/>
                                         <Column dataField="TOTALHT" caption={this.t("grdPurcoffers.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
@@ -1438,8 +1501,7 @@ export default class purchaseOffer extends DocBase
                                 <Label text={this.t("txtAmount")} alignment="right" />
                                 <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
                                 maxLength={32}
-                            
-                                ></NdTextBox>
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.t("txtDiscount")} alignment="right" />
@@ -1476,7 +1538,7 @@ export default class purchaseOffer extends DocBase
                                         },
                                     ]
                                 }
-                                ></NdTextBox>
+                                />
                             </Item>
                             {/* İndirim */}
                             <EmptyItem colSpan={2}/>
@@ -1521,7 +1583,7 @@ export default class purchaseOffer extends DocBase
                                         },
                                     ]
                                 }
-                                ></NdTextBox>
+                                />
                             </Item>
                             {/* KDV */}
                             <EmptyItem colSpan={2}/>
@@ -1557,16 +1619,15 @@ export default class purchaseOffer extends DocBase
                                         },
                                     ]
                                 }
-                                ></NdTextBox>
+                                />
                             </Item>
                             {/* KDV */}
                             <EmptyItem colSpan={3}/>
-                            
                             <Item>
                                 <Label text={this.t("txtTotal")} alignment="right" />
                                 <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
                                 maxLength={32}
-                                ></NdTextBox>
+                                />
                             </Item>
                         </Form>
                     </div>
@@ -1578,10 +1639,10 @@ export default class purchaseOffer extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDesign.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.props.data.tabkey} 
                         width={'500'}
-                        height={'250'}
-                        position={{of:'#root'}}
+                        height={'auto'}
+                        position={{of:'#' + this.props.data.id + this.props.data.tabkey}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -1592,7 +1653,7 @@ export default class purchaseOffer extends DocBase
                                     valueExpr="TAG"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '61'"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '61'`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
                                     >
@@ -1622,12 +1683,13 @@ export default class purchaseOffer extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_OFFERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_OFFERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO ` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
+                                                    
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    console.log(JSON.stringify(tmpData.result.recordset)) // BAK
+
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
@@ -1663,30 +1725,24 @@ export default class purchaseOffer extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_OFFERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO" ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_OFFERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
-                                                    console.log(tmpQuery)
-                                                    console.log(1)
+
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
+
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
-                                                        console.log(tmpData.result.recordset[0].PATH)
-                                                        console.log(pResult.split('|')[0])
-                                                        console.log(tmpData.result.recordset)
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                            console.log(mywindow)
                                                             mywindow.onload = function() 
                                                             {
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                             } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         }
                                                     });
                                                 }
@@ -1700,11 +1756,13 @@ export default class purchaseOffer extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0",
+                                                        query : `SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0`,
                                                         param:  ['GUID:string|50'],
                                                         value:  [this.docObj.dt()[0].INPUT]
                                                     }
+                                                    
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
                                                         await this.popMailSend.show()
@@ -1729,10 +1787,10 @@ export default class purchaseOffer extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popMailSend.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.props.data.tabkey} 
                         width={'600'}
-                        height={'600'}
-                        position={{of:'#root'}}
+                        height={'auto'}
+                        position={{of:'#' + this.props.data.id + this.props.data.tabkey}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -1743,7 +1801,7 @@ export default class purchaseOffer extends DocBase
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT MAIL_ADDRESS,GUID FROM MAIL_SETTINGS "},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT MAIL_ADDRESS,GUID FROM MAIL_SETTINGS `},sql:this.core.sql}}}
                                     >
                                          <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                             <RequiredRule message={this.t("validMail")} />
@@ -1784,29 +1842,36 @@ export default class purchaseOffer extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_OFFERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO" ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_OFFERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
+                                       
                                                     App.instance.setState({isExecute:true})
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
                                                     App.instance.setState({isExecute:false})
+                                       
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         App.instance.setState({isExecute:true})
                                                         let tmpAttach = pResult.split('|')[1]
                                                         let tmpHtml = this.htmlEditor.value
+                                       
                                                         if(this.htmlEditor.value.length == 0)
                                                         {
                                                             tmpHtml = ''
                                                         }
+                                       
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                         }
+                                       
                                                         let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
+                                       
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
                                                             App.instance.setState({isExecute:false})
+                                       
                                                             let tmpConfObj1 =
                                                             {
                                                                 id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -1820,7 +1885,6 @@ export default class purchaseOffer extends DocBase
                                                                 this.txtMailSubject.value = '',
                                                                 this.txtSendMail.value = ''
                                                                 this.popMailSend.hide();  
-
                                                             }
                                                             else
                                                             {

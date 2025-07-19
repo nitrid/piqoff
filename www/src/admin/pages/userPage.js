@@ -88,7 +88,7 @@ export default class userPage extends React.Component
                                 
                                 let tmpQuery = 
                                 {
-                                    query :"SELECT GUID,CODE FROM USERS WHERE CODE = @CODE " ,
+                                    query :`SELECT GUID,CODE FROM USERS WHERE CODE = @CODE ` ,
                                     param : ['CODE:string|50'],
                                     value : [e.data.CODE]
                                 }

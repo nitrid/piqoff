@@ -3,7 +3,6 @@ import { access, datatable } from '../../../core/core';
 import App from '../../lib/app';
 import { core,param } from '../../../core/core';
 import Form, { Label,Item } from 'devextreme-react/form';
-import NdTextBox from '../../../core/react/devex/textbox';
 import NdSelectBox from '../../../core/react/devex/selectbox';
 import { acs as acs } from '../../../off/meta/acs';
 import NdButton from '../../../core/react/devex/button';
@@ -54,7 +53,6 @@ export default class accessOff extends React.PureComponent
         let tmpItems = []
         this.state.metaAcs.map((pItem) => 
         {
-            console.log(pItem)
             tmpItems.push(this.ItemBuild(pItem,this))
         });
         return tmpItems
@@ -73,7 +71,7 @@ export default class accessOff extends React.PureComponent
                                 valueExpr="CODE"
                                 value={""}
                                 showClearButton={true}
-                                data={{source:{select:{query : "SELECT CODE,NAME FROM USERS ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                data={{source:{select:{query : `SELECT CODE,NAME FROM USERS ORDER BY NAME ASC`},sql:this.core.sql}}}
                                 onValueChanged={async(e)=>
                                 {
                                     if(e.value == null)
@@ -155,6 +153,7 @@ export default class accessOff extends React.PureComponent
                                             )
                                         }
                                     }
+         
                                     let tmpResult = await this.acsData.save()
                                     await this.acsData.load({APP:'OFF'})
                                     App.instance.setState({isExecute:false})
@@ -167,6 +166,7 @@ export default class accessOff extends React.PureComponent
                                     {
                                         tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{App.instance.lang.t("msgSaveResult.msgFailed")}</div>)
                                     }
+         
                                     await dialog(tmpConfObj);
                                 }}></NdButton>
                             </Item>
@@ -204,6 +204,7 @@ export default class accessOff extends React.PureComponent
                                                 )
                                             }
                                         }
+         
                                         let tmpResult = await this.acsData.save()
                                         await this.acsData.load({APP:'OFF'})
                                         App.instance.setState({isExecute:false})
@@ -216,6 +217,7 @@ export default class accessOff extends React.PureComponent
                                         {
                                             tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{App.instance.lang.t("msgSaveResult.msgFailed")}</div>)
                                         }
+         
                                         await dialog(tmpConfObj);
                                     }
                                 }}></NdButton>
@@ -245,7 +247,7 @@ export default class accessOff extends React.PureComponent
                         {
                             select:
                             {
-                                query : "SELECT CODE,NAME FROM USERS ORDER BY CODE ASC"
+                                query : `SELECT CODE,NAME FROM USERS ORDER BY CODE ASC`
                             },
                             sql:this.core.sql
                         }

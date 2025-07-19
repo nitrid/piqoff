@@ -21,24 +21,10 @@ export default class salesDisList extends React.PureComponent
     {
         super(props)
 
-        this.state = 
-        {
-            columnListValue : ['REF','REF_NO','INPUT_NAME','DOC_DATE','TOTAL']
-        }
+       
         
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "REF",NAME : this.t("grdSlsDisList.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdSlsDisList.clmRefNo")},
-            {CODE : "INPUT_CODE",NAME : this.t("grdSlsDisList.clmInputCode")},                                   
-            {CODE : "INPUT_NAME",NAME : this.t("grdSlsDisList.clmInputName")},
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdSlsDisList.clmOutputName")},
-            {CODE : "DOC_DATE",NAME : this.t("grdSlsDisList.clmDate")},
-            {CODE : "AMOUNT",NAME : this.t("grdSlsDisList.clmAmount")},
-            {CODE : "VAT",NAME : this.t("grdSlsDisList.clmVat")},
-            {CODE : "TOTAL",NAME : this.t("grdSlsDisList.clmTotal")},
-        ]
+        
         this.groupList = [];
         this.btnGetClick = this.btnGetClick.bind(this)
         this.loadState = this.loadState.bind(this)
@@ -48,7 +34,6 @@ export default class salesDisList extends React.PureComponent
     {
         setTimeout(async () => 
         {
-            console.log(this)
             this.Init()
         }, 1000);
     }
@@ -78,10 +63,10 @@ export default class salesDisList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM DOC_VW_01 " +
-                            "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                            " AND TYPE = 1 AND DOC_TYPE = 42  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                    query : `SELECT * FROM DOC_VW_01 
+                            WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND 
+                            ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  
+                            AND TYPE = 1 AND DOC_TYPE = 42  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC`,
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                 },
@@ -95,7 +80,7 @@ export default class salesDisList extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.props.data.tabkey}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -208,9 +193,9 @@ export default class salesDisList extends React.PureComponent
                                 >
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#" + this.props.data.id + this.props.data.tabkey}
                                 visible={false}
-                                position={{of:'#root'}} 
+                                position={{of:'#' + this.props.data.id + this.props.data.tabkey}} 
                                 showTitle={true} 
                                 showBorders={true}
                                 width={'90%'}
@@ -223,7 +208,7 @@ export default class salesDisList extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql

@@ -1,28 +1,17 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { docCls,docItemsCls, docCustomerCls } from '../../../../core/cls/doc.js';
-import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import ContextMenu from 'devextreme-react/context-menu';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
 
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,Pager,KeyboardNavigation,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
-import tr from '../../../meta/lang/devexpress/tr.js';
 import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
 import { NdToast } from '../../../../core/react/devex/toast.js';
 
@@ -36,8 +25,8 @@ export default class orderParsing extends React.PureComponent
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.docObj = new docCls();
        
-        this._btnGetClick = this._btnGetClick.bind(this)
-        this._btnSave = this._btnSave.bind(this)
+        this.btnGetClick = this.btnGetClick.bind(this)
+        this.btnSave = this.btnSave.bind(this)
         this._toGroupByCustomer = this._toGroupByCustomer.bind(this)
         this.txtRef = Math.floor(Date.now() / 1000)
         this.tabIndex = props.data.tabkey
@@ -69,7 +58,7 @@ export default class orderParsing extends React.PureComponent
         this.txtRef = Math.floor(Date.now() / 1000)
         this.txtCustomerCode.CODE = ''
     }
-    async _btnGetClick()
+    async btnGetClick()
     {
         let tmpSource =
         {
@@ -77,22 +66,22 @@ export default class orderParsing extends React.PureComponent
             {
                 select : 
                 { 
-                    query : "SELECT ORDERS.GUID,ORDERS.  " +
-                    "ITEM_CODE,  " +
-                    "ORDERS.ITEM_NAME,  " +
-                    "QUANTITY, " +
-                    "DOC_ORDERS_VW_01.CUSTOMER_PRICE AS CUSTOMER_PRICE, " +
-                    "DOC_ORDERS_VW_01.CUSTOMER_NAME AS CUSTOMER_NAME, " +
-                    "DOC_ORDERS_VW_01.CUSTOMER_GUID AS CUSTOMER_GUID, " +
-					"DOC_ORDERS_VW_01.CUSTOMER_PRICE * QUANTITY AS AMOUNT,   " +
-					"(DOC_ORDERS_VW_01.CUSTOMER_PRICE * (ORDERS.VAT_RATE/100)) * QUANTITY AS VAT,   " +
-					"(DOC_ORDERS_VW_01.CUSTOMER_PRICE * QUANTITY) + ((DOC_ORDERS_VW_01.CUSTOMER_PRICE * (ORDERS.VAT_RATE/100)) * QUANTITY) AS TOTAL   " +
-                    "FROM   " +
-                    "DOC_ORDERS_VW_01 AS ORDERS  " +
-                    "INNER JOIN   " +
-                    "ITEM_MULTICODE_VW_01 AS MULTICODE   " +
-                    "ON ORDERS.ITEM = MULTICODE.ITEM_GUID  " +
-                    "WHERE ORDERS.INPUT = @DEPOT AND OUTPUT = '00000000-0000-0000-0000-000000000000' AND ((MULTICODE.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) " ,
+                    query : `SELECT ORDERS.GUID,ORDERS. 
+                    ITEM_CODE, 
+                    ORDERS.ITEM_NAME, 
+                    QUANTITY, 
+                    DOC_ORDERS_VW_01.CUSTOMER_PRICE AS CUSTOMER_PRICE, 
+                    DOC_ORDERS_VW_01.CUSTOMER_NAME AS CUSTOMER_NAME, 
+                    DOC_ORDERS_VW_01.CUSTOMER_GUID AS CUSTOMER_GUID, 
+					DOC_ORDERS_VW_01.CUSTOMER_PRICE * QUANTITY AS AMOUNT,  
+					(DOC_ORDERS_VW_01.CUSTOMER_PRICE * (ORDERS.VAT_RATE/100)) * QUANTITY AS VAT,  
+					(DOC_ORDERS_VW_01.CUSTOMER_PRICE * QUANTITY) + ((DOC_ORDERS_VW_01.CUSTOMER_PRICE * (ORDERS.VAT_RATE/100)) * QUANTITY) AS TOTAL  
+                    FROM  
+                    DOC_ORDERS_VW_01 AS ORDERS 
+                    INNER JOIN  
+                    ITEM_MULTICODE_VW_01 AS MULTICODE  
+                    ON ORDERS.ITEM = MULTICODE.ITEM_GUID 
+                    WHERE ORDERS.INPUT = @DEPOT AND OUTPUT = '00000000-0000-0000-0000-000000000000' AND ((MULTICODE.CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) ` ,
                     param : ['DEPOT:string|50','CUSTOMER_CODE:string|50'],
                     value : [this.cmbDepot.value,this.txtCustomerCode.CODE]
                 },
@@ -103,7 +92,7 @@ export default class orderParsing extends React.PureComponent
         await this.grdOrderList.dataRefresh(tmpSource)
         App.instance.setState({isExecute:false})
     }
-    async _btnSave(pType)
+    async btnSave(pType)
     {
         for(let i = 0; i < this.grdOrderList.getSelectedData().length; i++)
         {
@@ -120,7 +109,9 @@ export default class orderParsing extends React.PureComponent
                 return
            }
         }
+
         let tmpItem = await this._toGroupByCustomer(this.grdOrderList.getSelectedData(),'ITEM_CODE')
+
         for(let i = 0; i < Object.values(tmpItem).length; i++)
         {
            if(Object.values(tmpItem)[i].length > 1)
@@ -145,6 +136,7 @@ export default class orderParsing extends React.PureComponent
         }
         
         let pResult = await dialog(tmpConfObj);
+
         if(pResult == 'btn02')
         {
             return
@@ -156,13 +148,12 @@ export default class orderParsing extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query:  "SELECT CODE,ISNULL((SELECT (MAX(REF_NO) + 1) FROM DOC_VW_01 WHERE DOC_TYPE = 60 AND REBATE = 0 AND TYPE = 0 AND DOC_VW_01.OUTPUT = CUSTOMERS.GUID),1) AS REF_NO FROM CUSTOMERS WHERE GUID = @GUID ",
+                query:  `SELECT CODE,ISNULL((SELECT (MAX(REF_NO) + 1) FROM DOC_VW_01 WHERE DOC_TYPE = 60 AND REBATE = 0 AND TYPE = 0 AND DOC_VW_01.OUTPUT = CUSTOMERS.GUID),1) AS REF_NO FROM CUSTOMERS WHERE GUID = @GUID `,
                 param:  ['GUID:string|50'],
                 value:  [Object.keys(tmpCustomer)[i]]
             }
 
             let tmpData = await this.core.sql.execute(tmpQuery) 
-           
             let tmpRef = tmpData.result.recordset[0].CODE
             let tmpRefNo = tmpData.result.recordset[0].REF_NO
 
@@ -178,25 +169,26 @@ export default class orderParsing extends React.PureComponent
                 tmpDoc.OUTPUT =Object.keys(tmpCustomer)[i]
                 tmpDoc.INPUT = this.cmbDepot.value
                 this.docObj.addEmpty(tmpDoc);
+
                 for(let x = 0; x < this.grdOrderList.getSelectedData().length; x++)
                 {
                    if(Object.keys(tmpCustomer)[i] == this.grdOrderList.getSelectedData()[x].CUSTOMER_GUID)
                    {    
                         let tmpQuery = 
                         {
-                            query: "EXEC [dbo].[PRD_DOC_ORDERS_UPDATE] " +
-                            "@GUID = @PGUID , " +
-                            "@CUSER = @PCUSER, " +
-                            "@DOC_GUID = @PDOC_GUID, " + 
-                            "@DOC_TYPE = @PDOC_TYPE, " +
-                            "@REF = @PREF, " +
-                            "@REF_NO = @PREF_NO, " +
-                            "@OUTPUT = @POUTPUT, " +
-                            "@PRICE = @PPRICE, " +
-                            "@LINE_NO  = @PLINE_NO, " +
-                            "@VAT = @PVAT, " +
-                            "@AMOUNT = @PAMOUNT, " +
-                            "@TOTAL = @PTOTAL " ,
+                            query: `EXEC [dbo].[PRD_DOC_ORDERS_UPDATE] 
+                                    @GUID = @PGUID , 
+                                    @CUSER = @PCUSER, 
+                                    @DOC_GUID = @PDOC_GUID, 
+                                    @DOC_TYPE = @PDOC_TYPE, 
+                                    @REF = @PREF, 
+                                    @REF_NO = @PREF_NO, 
+                                    @OUTPUT = @POUTPUT, 
+                                    @PRICE = @PPRICE, 
+                                    @LINE_NO  = @PLINE_NO, 
+                                    @VAT = @PVAT, 
+                                    @AMOUNT = @PAMOUNT, 
+                                    @TOTAL = @PTOTAL ` ,
                             param:  ['PGUID:string|50','PCUSER:string|50','PDOC_GUID:string|50','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','POUTPUT:string|50','PPRICE:float','PLINE_NO:int','PVAT:float','PAMOUNT:float','PTOTAL:float'],
                             value:  [this.grdOrderList.getSelectedData()[x].GUID,this.user.CODE,this.docObj.dt()[i].GUID,60,this.docObj.dt()[i].REF,this.docObj.dt()[i].REF_NO,
                             this.docObj.dt()[i].OUTPUT,this.grdOrderList.getSelectedData()[x].CUSTOMER_PRICE,x,this.grdOrderList.getSelectedData()[x].VAT,this.grdOrderList.getSelectedData()[x].AMOUNT,this.grdOrderList.getSelectedData()[x].TOTAL]
@@ -206,17 +198,19 @@ export default class orderParsing extends React.PureComponent
                 }
             }
         }
+        
         let tmpConfObj1 =
         {
             id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
         }
+        
         if((await this.docObj.save()) == 0)
         {                                                    
             this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
             this.docObj.clearAll()
             this.txtRef = Math.floor(Date.now() / 1000)
-            this._btnGetClick()
+            this.btnGetClick()
         }
         else
         {
@@ -264,6 +258,7 @@ export default class orderParsing extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+        
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -289,7 +284,7 @@ export default class orderParsing extends React.PureComponent
                                     onValueChanged={(async()=>
                                         {
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT * FROM DEPOT_VW_01`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
@@ -345,12 +340,11 @@ export default class orderParsing extends React.PureComponent
                                         },
                                     ]
                                 }
-                                >
-                                </NdTextBox>
+                                />
                                 {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#" + this.props.data.id + this.props.data.tabkey}
                                 visible={false}
-                                position={{of:'#root'}} 
+                                position={{of:'#' + this.props.data.id + this.props.data.tabkey}} 
                                 showTitle={true} 
                                 showBorders={true}
                                 width={'90%'}
@@ -363,7 +357,7 @@ export default class orderParsing extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql
@@ -392,14 +386,14 @@ export default class orderParsing extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick} />
                         </div>
                         <div className="col-3">
                         </div>
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnOrder")} type="default" width="100%" onClick={()=>{this._btnSave(0)}}></NdButton>
+                            <NdButton text={this.t("btnOrder")} type="default" width="100%" onClick={()=>{this.btnSave(0)}} />
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -427,7 +421,7 @@ export default class orderParsing extends React.PureComponent
                             </NdGrid>
                         </div>
                     </div>
-                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 73px'}}/>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )

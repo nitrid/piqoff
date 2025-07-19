@@ -1115,7 +1115,7 @@ export default class priceDifferenceInvoice extends DocBase
                                 <NdItem>
                                     <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
-                                        <div className="col-4 pe-0">
+                                        <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
@@ -1129,7 +1129,7 @@ export default class priceDifferenceInvoice extends DocBase
                                             >
                                             </NdTextBox>
                                         </div>
-                                        <div className="col-5 ps-0">
+                                        <div className="col-6 ps-0">
                                             <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             readOnly={true}
                                             button=
@@ -1203,7 +1203,6 @@ export default class priceDifferenceInvoice extends DocBase
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
                                     {
-                                        this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
                                         this.checkRow()
         
                                         if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
@@ -1408,7 +1407,6 @@ export default class priceDifferenceInvoice extends DocBase
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                     onValueChanged={(async()=>
                                     {
-                                        this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtDocDate.value 
                                         this.checkRow()
                                     }).bind(this)}
                                     >

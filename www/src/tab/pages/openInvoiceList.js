@@ -1,18 +1,15 @@
 import React from 'react';
 import App from '../lib/app.js';
 import moment from 'moment';
-import ScrollView from 'devextreme-react/scroll-view';
 import NbButton from '../../core/react/bootstrap/button.js';
-import NdTextBox,{ Button,Validator, NumericRule, RequiredRule, CompareRule } from '../../core/react/devex/textbox.js'
-import NdSelectBox from '../../core/react/devex/selectbox.js'
+import NdTextBox from '../../core/react/devex/textbox.js'
 import NdButton from '../../core/react/devex/button.js'
 import NbPopUp from '../../core/react/bootstrap/popup.js';
-import Form, { Label,Item, EmptyItem } from 'devextreme-react/form';
-import Toolbar from 'devextreme-react/toolbar';
 import { LoadPanel } from 'devextreme-react/load-panel';
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem}from '../../core/react/devex/grid.js';
+import NdGrid,{Column, Paging,Pager,Scrolling,Export, Summary, TotalItem}from '../../core/react/devex/grid.js';
 import NbDateRange from '../../core/react/bootstrap/daterange.js';
 import NdPopUp from '../../core/react/devex/popup.js';
+import { Label } from 'devextreme-react/form';
 
 
 export default class openInvoiceList extends React.PureComponent
@@ -20,53 +17,52 @@ export default class openInvoiceList extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.t = App.instance.lang.getFixedT(null,null,"openInvoiceList")
         this.lang = App.instance.lang;
+
         this.state = 
         {
             isExecute : false
         }
 
-        this._customerSearch = this._customerSearch.bind(this)
-        this._btnGetirClick = this._btnGetirClick.bind(this)
+        this.customerSearch = this.customerSearch.bind(this)
+        this.btnGetirClick = this.btnGetirClick.bind(this)
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        setTimeout(async () => 
-        {
-            this.txtCustomerCode.CODE = ''
-        }, 500);
+        setTimeout(async () =>  { this.txtCustomerCode.CODE = '' }, 500);
         this.init()
     }
     async init()
     {
 
     }
-    async _btnGetirClick()
+    async btnGetirClick()
     {
         let tmpSource =
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT " +
-                    "TYPE," +
-                    "DOC_DATE," +
-                    "DOC_TYPE," +
-                    "INPUT_CODE," +
-                    "INPUT_NAME," +
-                    "DOC_REF," +
-                    "DOC_REF_NO," +
-                    "DOC_TOTAL," +
-                    "PAYING_AMOUNT, " +
-                    "ROUND((DOC_TOTAL -  PAYING_AMOUNT),2) AS REMAINDER " +
-                    "FROM DEPT_CREDIT_MATCHING_VW_03 " +
-                    "WHERE TYPE = 1 AND DOC_TYPE = 20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ((DOC_TOTAL - PAYING_AMOUNT) > 0) " +
-                    "GROUP BY DOC_TYPE,TYPE,DOC_DATE,INPUT_NAME,DOC_REF_NO,DOC_REF,PAYING_AMOUNT,INPUT_CODE,DOC_TOTAL",
+                    query : 
+                        `SELECT 
+                        TYPE,
+                        DOC_DATE,
+                        DOC_TYPE,
+                        INPUT_CODE,
+                        INPUT_NAME,
+                        DOC_REF,
+                        DOC_REF_NO,
+                        DOC_TOTAL,
+                        PAYING_AMOUNT, 
+                        ROUND((DOC_TOTAL -  PAYING_AMOUNT),2) AS REMAINDER 
+                        FROM DEPT_CREDIT_MATCHING_VW_03 
+                        WHERE TYPE = 1 AND DOC_TYPE = 20 AND ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND ((DOC_TOTAL - PAYING_AMOUNT) > 0) 
+                        GROUP BY DOC_TYPE,TYPE,DOC_DATE,INPUT_NAME,DOC_REF_NO,DOC_REF,PAYING_AMOUNT,INPUT_CODE,DOC_TOTAL`,
                     param : ['FIRST_DATE:date','LAST_DATE:date','INPUT_CODE:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.txtCustomerCode.CODE],
                 },
@@ -76,18 +72,18 @@ export default class openInvoiceList extends React.PureComponent
         this.setState({isExecute:true})
         await this.grdListe.dataRefresh(tmpSource)
         this.setState({isExecute:false})
+
         await this.grdListe.dataRefresh(this.grdListe.data.datatable)
     }
-    async _customerSearch()
+    async customerSearch()
     {
         let tmpSource =
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
+                    query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1`,
                     param : ['VAL:string|50'],
                     value : [this.txtCustomerSearch.value]
                 },
@@ -104,10 +100,9 @@ export default class openInvoiceList extends React.PureComponent
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT ITEM_CODE,ITEM_NAME,QUANTITY,PRICE,TOTAL FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID" ,
+                    query : `SELECT ITEM_CODE,ITEM_NAME,QUANTITY,PRICE,TOTAL FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID` ,
                     param : ['DOC_GUID:string|50'],
                     value : [pGuid]
                 },
@@ -129,18 +124,11 @@ export default class openInvoiceList extends React.PureComponent
                 shading={true}
                 showPane={true}
                 />
-                <div style={{
-                    height:'auto',
-                    backgroundColor:'#f5f6fa',
-                    top:'65px',
-                    position:'sticky',
-                    borderBottom:'1px solid #7f8fa6',
-                    padding:'15px 0',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-                }}>
+                <div style={{ height:'auto', backgroundColor:'#f5f6fa', top:'65px', position:'sticky', borderBottom:'1px solid #7f8fa6', padding:'15px 0', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                     <div className="row" style={{margin:'0'}}>
                         <div className="col-12 col-md-6" style={{padding:'0 10px'}}>
                             <div style={{marginBottom:'10px'}}>
+                                <Label>{this.lang.t("txtCustomerCode")}</Label>
                                 <NdTextBox id={"txtCustomerCode"} parent={this} simple={true} placeholder={this.t("txtCustomerCode")} readOnly={true}
                                 button={
                                 [
@@ -148,10 +136,7 @@ export default class openInvoiceList extends React.PureComponent
                                         id:'01',
                                         icon:'more',
                                         location:'after',
-                                        onClick:async()=>
-                                        {
-                                            this.popCustomer.show()
-                                        }
+                                        onClick:async()=> { this.popCustomer.show() }
                                     },
                                     {
                                         id:'02',
@@ -161,7 +146,6 @@ export default class openInvoiceList extends React.PureComponent
                                         {
                                             this.txtCustomerCode.value = ''
                                             this.txtCustomerCode.CODE = ''
-                                            
                                         }
                                     },                                            
                                 ]}
@@ -170,6 +154,7 @@ export default class openInvoiceList extends React.PureComponent
                         </div>
                         <div className="col-12 col-md-6" style={{padding:'0 10px'}}>
                             <div style={{marginBottom:'10px'}}>
+                                <Label>{this.lang.t("txtDate")}</Label>
                                 <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('year')} endDate={moment().endOf('year')}/>
                             </div>
                         </div>
@@ -181,15 +166,8 @@ export default class openInvoiceList extends React.PureComponent
                                     text={this.t("btnGet")} 
                                     type="success" 
                                     width="100%" 
-                                    onClick={this._btnGetirClick}
-                                    style={{
-                                        maxWidth: '200px',
-                                        height: '40px',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                                        marginLeft: 'auto',
-                                        marginRight: '0'
-                                    }}
+                                    onClick={this.btnGetirClick}
+                                    style={{ maxWidth: 'auto', height: '40px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', marginLeft: 'auto', marginRight: '0' }}
                                 />
                             </div>
                         </div>
@@ -255,10 +233,7 @@ export default class openInvoiceList extends React.PureComponent
                                     </div>
                                     <div className='col-2' align={"right"}>
                                         <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px",backgroundColor:"#154c79", color: 'white'}}
-                                        onClick={()=>
-                                        {
-                                            this.popCustomer.hide();
-                                        }}>
+                                        onClick={()=> { this.popCustomer.hide() }}>
                                             <i className="fa-solid fa-xmark fa-1x"></i>
                                         </NbButton>
                                     </div>
@@ -266,19 +241,13 @@ export default class openInvoiceList extends React.PureComponent
                                 <div className='row' style={{paddingTop:"10px"}}>
                                     <div className='col-12'>
                                         <NdTextBox id="txtCustomerSearch" parent={this} simple={true} selectAll={true}
-                                        onEnterKey={(async()=>
-                                            {
-                                                this._customerSearch()
-                                            }).bind(this)}/>
+                                        onEnterKey={(async()=> { this.customerSearch() }).bind(this)}/>
                                     </div>
                                 </div>
                                 <div className='row' style={{paddingTop:"10px"}}>
                                     <div className='col-6'>
                                         <NbButton className="btn btn-block btn-primary" style={{width:"100%", backgroundColor:"#154c79"}}
-                                        onClick={()=>
-                                        {
-                                            this._customerSearch()
-                                        }}>
+                                        onClick={()=> { this.customerSearch() }}>
                                             {this.t('popCustomer.btn01')}
                                         </NbButton>
                                     </div>

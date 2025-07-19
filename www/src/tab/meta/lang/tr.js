@@ -61,13 +61,18 @@ export const langTr =
     },
     sale:  // "Satış"
     {
-        popCustomerExtreReport : "Müşteri Ekstresi",
         btnGet : "Getir",
         loadMore : "Daha Fazla Göster",
         mostSalesFilter: "En çok alınan  ürünler",
         promoProductFilter : "Promosyonlu ürünler",
         popFactNonSolde : "Ödenmemiş Fatura",
         btnMailSend : "Mail Gönder",
+        popCustomerExtreReport :
+        {
+            title : "Müşteri Ekstresi",
+            clmFirstDate : "Başlangıç Tarihi",
+            clmLastDate : "Bitiş Tarihi",
+        },
         popCustomerExtre : 
         {
             title : "Müşteri Ekstresi",

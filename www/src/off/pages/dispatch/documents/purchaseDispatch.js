@@ -50,6 +50,7 @@ export default class purchaseDispatch extends DocBase
     {
         await this.core.util.waitUntil(0)
         await this.init()
+
         if(typeof this.pagePrm != 'undefined')
         {
             if(typeof this.pagePrm.GUID != 'undefined')
@@ -62,9 +63,9 @@ export default class purchaseDispatch extends DocBase
             else if(typeof this.pagePrm.piqx != 'undefined')
             {
                 setTimeout(() => 
-                    {
-                        this.initPiqX()
-                    }, 1000);
+                {
+                    this.initPiqX()
+                }, 1000);
             }
         }
     }
@@ -77,7 +78,7 @@ export default class purchaseDispatch extends DocBase
         {
             let tmpCustQuery = 
             {
-                query : "SELECT * FROM CUSTOMERS WHERE TAX_NO = @TAX_NO",
+                query : `SELECT * FROM CUSTOMERS WHERE TAX_NO = @TAX_NO`,
                 param : ['TAX_NO:string|25'],
                 value : [this.piqX[0].DOC_FROM_NO]
             }
@@ -93,11 +94,14 @@ export default class purchaseDispatch extends DocBase
                 {
                     this.frmDocItems.option('disabled',false)
                 }
+        
                 this.docObj.dt()[0].OUTPUT = tmpCustData.result.recordset[0].GUID
                 this.docObj.dt()[0].OUTPUT_CODE = tmpCustData.result.recordset[0].CODE
                 this.docObj.dt()[0].OUTPUT_NAME = tmpCustData.result.recordset[0].TITLE
                 this.docObj.dt()[0].VAT_ZERO = tmpCustData.result.recordset[0].VAT_ZERO
+        
                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+        
                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                 {
                     this.txtRef.value = tmpCustData.result.recordset[0].CODE
@@ -105,11 +109,13 @@ export default class purchaseDispatch extends DocBase
 
                 let tmpAdrQuery = 
                 {
-                    query : "SELECT ADRESS_NO FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
+                    query : `SELECT ADRESS_NO FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER`,
                     param : ['CUSTOMER:string|50'],
                     value : [tmpCustData.result.recordset[0].GUID]
                 }
+        
                 let tmpAdressData = await this.core.sql.execute(tmpAdrQuery) 
+        
                 if(tmpAdressData.result.recordset.length > 1)
                 {
                     this.docObj.dt()[0].ADDRESS = tmpAdressData[0].ADRESS_NO
@@ -123,6 +129,7 @@ export default class purchaseDispatch extends DocBase
                     button:[{id:"btn01",caption:this.t("msgFourniseurNotFound.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgFourniseurNotFound.msg")}</div>)
                 }
+        
                 await dialog(tmpConfObj);
                 return
             }
@@ -138,17 +145,17 @@ export default class purchaseDispatch extends DocBase
 
                 let tmpItemQuery = 
                 {
-                    query : "SELECT " + 
-                            "I.GUID AS ITEM, " + 
-                            "I.CODE AS ITEM_CODE, " + 
-                            "I.NAME AS ITEM_NAME, " + 
-                            "I.UNIT AS UNIT, " + 
-                            "I.COST_PRICE AS COST_PRICE, " +
-                            "I.VAT AS VAT " +
-                            "FROM ITEM_MULTICODE AS M " + 
-                            "INNER JOIN ITEMS_VW_04 AS I ON " + 
-                            "M.ITEM = I.GUID " + 
-                            "WHERE M.CODE = @CODE AND M.CUSTOMER = @CUSTOMER",
+                    query : `SELECT 
+                            I.GUID AS ITEM, 
+                            I.CODE AS ITEM_CODE, 
+                            I.NAME AS ITEM_NAME, 
+                            I.UNIT AS UNIT, 
+                            I.COST_PRICE AS COST_PRICE,
+                            I.VAT AS VAT
+                            FROM ITEM_MULTICODE AS M 
+                            INNER JOIN ITEMS_VW_04 AS I ON 
+                            M.ITEM = I.GUID 
+                            WHERE M.CODE = @CODE AND M.CUSTOMER = @CUSTOMER`,
                     param : ['CODE:string|50','CUSTOMER:string|50'],
                     value : [jData[i].ITEM_CODE,this.docObj.dt()[0].OUTPUT]
                 }
@@ -227,8 +234,8 @@ export default class purchaseDispatch extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS, ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND ITEM_MULTICODE.CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, "+
-                        "ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_04.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_04 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
+                        query : `SELECT GUID,CODE,NAME,VAT,COST_PRICE,UNIT,STATUS, ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND ITEM_MULTICODE.CUSTOMER = '${this.docObj.dt()[0].OUTPUT}' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, 
+                                 ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE DELETED = 0 AND ITEM_BARCODE.ITEM = ITEMS_VW_04.GUID ORDER BY CDATE DESC),'') AS BARCODE FROM ITEMS_VW_04 WHERE STATUS = 1 AND (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))`,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -240,15 +247,15 @@ export default class purchaseDispatch extends DocBase
             this.pg_txtBarcode.setSource(
             {
                 source:
-            {
-                select:
-                {   query :"SELECT ITEMS_VW_04.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_04.VAT,BARCODE,PARTILOT,ITEMS_VW_04.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND ITEM_MULTICODE.CUSTOMER = '"+this.docObj.dt()[0].OUTPUT+"' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE,  " + 
-                    "ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_04.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME " + 
-                    " FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE ITEMS_VW_04.STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' +@BARCODE)",
-                    param : ['BARCODE:string|50'],
-                },
-                sql:this.core.sql
-            }
+                {
+                    select:
+                    {   query : `SELECT ITEMS_VW_04.GUID,CODE,NAME,COST_PRICE,ITEMS_VW_04.VAT,BARCODE,PARTILOT,ITEMS_VW_04.UNIT,ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS_VW_04.GUID AND ITEM_MULTICODE.CUSTOMER = '${this.docObj.dt()[0].OUTPUT}' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE, 
+                                 ISNULL((SELECT TOP 1 CUSTOMER_NAME FROM ITEM_MULTICODE_VW_01 WHERE ITEM_MULTICODE_VW_01.ITEM_GUID = ITEMS_VW_04.GUID ORDER BY LDATE DESC),'') AS CUSTOMER_NAME 
+                                 FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE ITEMS_VW_04.STATUS = 1 AND (ITEM_BARCODE_VW_01.BARCODE LIKE  '%' +@BARCODE)`,
+                        param : ['BARCODE:string|50'],
+                    },
+                    sql:this.core.sql
+                }
             })
         })
         this.pg_txtCustomerCode.on('showing',()=>
@@ -259,7 +266,7 @@ export default class purchaseDispatch extends DocBase
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND GENUS = 3",
+                        query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],VAT_ZERO,[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
@@ -313,11 +320,13 @@ export default class purchaseDispatch extends DocBase
                     {
                         let tmpQuery = 
                         {
-                            query :"SELECT ITEMS_VW_04.GUID,CODE,NAME,ITEMS_VW_04.VAT,COST_PRICE,ITEMS_VW_04.UNIT FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE",
+                            query : `SELECT ITEMS_VW_04.GUID,CODE,NAME,ITEMS_VW_04.VAT,COST_PRICE,ITEMS_VW_04.UNIT FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE`,
                             param : ['CODE:string|50'],
                             value : [r.component._changedValue]
                         }
+                
                         let tmpData = await this.core.sql.execute(tmpQuery) 
+                
                         if(tmpData.result.recordset.length > 0)
                         {
                             this.checkboxReset()
@@ -341,16 +350,13 @@ export default class purchaseDispatch extends DocBase
                                 {
                                     this.checkboxReset()
                                     await this.addItem(data[0],e.rowIndex)
-                                   
                                 }
                                 this.pg_txtItemsCode.show()
                             }
-                            
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
         if(e.column.dataField == "QUANTITY")
@@ -376,6 +382,7 @@ export default class purchaseDispatch extends DocBase
 
                                 e.key.UNIT = this.cmbUnit.value
                                 e.key.UNIT_FACTOR = this.txtUnitFactor.value
+                               
                                 if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
                                     {
                                         e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
@@ -384,7 +391,9 @@ export default class purchaseDispatch extends DocBase
                                 {
                                     e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
                                 }
+                               
                                 e.data.QUANTITY = this.txtTotalQuantity.value
+                               
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(4));
@@ -400,13 +409,11 @@ export default class purchaseDispatch extends DocBase
                                 e.data.TOTAL = parseFloat((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) +e.data.VAT).toFixed(4))
                                 e.data.DISCOUNT_RATE = Number(e.data.AMOUNT).rate2Num(e.data.DISCOUNT,4)
                                 this.calculateTotal()
-                                
                             }
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
         if(e.column.dataField == "DISCOUNT")
@@ -441,6 +448,7 @@ export default class purchaseDispatch extends DocBase
                                 e.data.DISCOUNT_2 = this.txtDiscount2.value
                                 e.data.DISCOUNT_3 = this.txtDiscount3.value
                                 e.data.DISCOUNT = (parseFloat(this.txtDiscount1.value) + parseFloat(this.txtDiscount2.value) + parseFloat(this.txtDiscount3.value))
+                    
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
@@ -495,6 +503,7 @@ export default class purchaseDispatch extends DocBase
                                 e.data.DISCOUNT_2 = Number(e.data.AMOUNT-e.data.DISCOUNT_1).rateInc(this.txtDiscountPer2.value,4) 
                                 e.data.DISCOUNT_3 = Number(e.data.AMOUNT-e.data.DISCOUNT_1-e.data.DISCOUNT_2).rateInc(this.txtDiscountPer3.value,4) 
                                 e.data.DISCOUNT = (e.data.DISCOUNT_1 + e.data.DISCOUNT_2 + e.data.DISCOUNT_3)
+                    
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
                                     e.data.VAT = parseFloat(((((e.data.PRICE * e.data.QUANTITY) - e.data.DISCOUNT) * (e.data.VAT_RATE) / 100)).toFixed(6));
@@ -514,8 +523,7 @@ export default class purchaseDispatch extends DocBase
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
         if(e.column.dataField == "ORIGIN")
@@ -529,7 +537,7 @@ export default class purchaseDispatch extends DocBase
                     e.data.ORIGIN = r.component._changedValue
                     let tmpQuery = 
                     {
-                        query :"UPDATE ITEMS_GRP SET LDATE = dbo.GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
+                        query : `UPDATE ITEMS_GRP SET LDATE = dbo.GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM `,
                         param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
                         value : [e.data.ITEM,this.user.CODE,r.component._changedValue]
                     }
@@ -552,24 +560,24 @@ export default class purchaseDispatch extends DocBase
                                   e.data.ORIGIN = this.cmbOrigin.value 
                                   let tmpQuery = 
                                   {
-                                      query :"UPDATE ITEMS_GRP SET LDATE = dbo.GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM ",
-                                      param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
-                                      value : [e.data.ITEM,this.user.CODE,e.data.ORIGIN]
+                                    query : `UPDATE ITEMS_GRP SET LDATE = dbo.GETDATE(),LUSER = @PCUSER,ORGINS = @ORGINS WHERE ITEM = @ITEM `,
+                                    param : ['ITEM:string|50','PCUSER:string|25','ORGINS:string|25'],
+                                    value : [e.data.ITEM,this.user.CODE,e.data.ORIGIN]
                                   }
+                    
                                   let tmpData = await this.core.sql.execute(tmpQuery) 
-                                  if(typeof tmpData.result.err == 'undefined')
+                    
+                                  if(typeof tmpData.result.err != 'undefined')
                                   {
-                                     
-                                  }
-                                  else
-                                  {
-                                      let tmpConfObj1 =
-                                      {
-                                          id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
-                                          button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                      }
-                                      tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                      await dialog(tmpConfObj1);
+                                    let tmpConfObj1 =
+                                    {
+                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
+                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                    }
+                                    
+                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                    
+                                    await dialog(tmpConfObj1);
                                   }
                                 });  
                                 
@@ -577,8 +585,7 @@ export default class purchaseDispatch extends DocBase
                         },
                     ]
                 }
-                >  
-                </NdTextBox>
+                />  
             )
         }
     }
@@ -600,10 +607,12 @@ export default class purchaseDispatch extends DocBase
             if(pData.ITEM_TYPE == 0 || typeof pData.ITEM_TYPE == 'undefined')
             {
                 let tmpMergDt = await this.mergeItem(pData.CODE)
+                
                 if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
                 {
                     tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
                     tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY / tmpMergDt[0].SUB_FACTOR
+                
                     if(this.docObj.dt()[0].VAT_ZERO != 1)
                     {
                         tmpMergDt[0].VAT = Number((tmpMergDt[0].VAT + (tmpMergDt[0].PRICE * (tmpMergDt[0].VAT_RATE / 100) * pQuantity))).round(6)
@@ -617,13 +626,13 @@ export default class purchaseDispatch extends DocBase
                     tmpMergDt[0].AMOUNT = Number((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE)).round(4)
                     tmpMergDt[0].TOTAL = Number((((tmpMergDt[0].QUANTITY * tmpMergDt[0].PRICE) - tmpMergDt[0].DISCOUNT) + tmpMergDt[0].VAT)).round(2)
                     tmpMergDt[0].TOTALHT =  Number((tmpMergDt[0].AMOUNT - tmpMergDt[0].DISCOUNT)).round(2)
+                
                     this.calculateTotal()
                     //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
                     await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
                     //*****************************************/
                     App.instance.setState({isExecute:false})
                     resolve()
-                    console.log(4)
 
                     return
 
@@ -633,23 +642,27 @@ export default class purchaseDispatch extends DocBase
            
             let tmpCheckQuery = 
             {
-                query : "SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0",
+                query : `SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0`,
                 param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
                 value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
             }
+
             let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
+
             if(this.customerControl == true)
             {
 
                 if(tmpCheckData.result.recordset.length == 0)
                 {   
                     let tmpCustomerBtn = ''
+
                     if(this.customerClear == true)
                     {
                         await this.grid.devGrid.deleteRow(pIndex)
                         resolve()
                         return 
                     }
+
                     App.instance.setState({isExecute:false})
                     this.msgCustomerNotFound.setTitle(pData.NAME)
                     await this.msgCustomerNotFound.show().then(async (e) =>
@@ -660,6 +673,7 @@ export default class purchaseDispatch extends DocBase
                             resolve()
                             return
                         }
+
                         if(e == 'btn02')
                         {
                             tmpCustomerBtn = e
@@ -672,6 +686,7 @@ export default class purchaseDispatch extends DocBase
                             return 
                         }
                     })
+
                     if(tmpCustomerBtn == 'btn02')
                     {
                         resolve()
@@ -701,10 +716,11 @@ export default class purchaseDispatch extends DocBase
             {
                 pIndex = this.docObj.docItems.dt().length - pIndex -1
             }
+
             let tmpGrpQuery = 
             {
-                query :"SELECT ORGINS,UNIT_SHORT,PARTILOT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, " +
-                    "ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_GRP_VW_01 WHERE GUID = @GUID ",
+                query : `SELECT ORGINS,UNIT_SHORT,PARTILOT,ISNULL((SELECT top 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),1) AS SUB_FACTOR, 
+                        ISNULL((SELECT top 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = ITEMS_GRP_VW_01.GUID AND ITEM_UNIT_VW_01.TYPE = 1),'') AS SUB_SYMBOL FROM ITEMS_GRP_VW_01 WHERE GUID = @GUID `,
                 param : ['GUID:string|50'],
                 value : [pData.GUID]
             }
@@ -718,7 +734,6 @@ export default class purchaseDispatch extends DocBase
                 this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = tmpGrpData.result.recordset[0].SUB_SYMBOL
                 this.docObj.docItems.dt()[pIndex].UNIT_SHORT = tmpGrpData.result.recordset[0].UNIT_SHORT
             }
-
 
             this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
             this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
@@ -734,8 +749,6 @@ export default class purchaseDispatch extends DocBase
             //MÜŞTERİ İNDİRİMİ UYGULAMA...
             let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,pData.GUID)
             
-
-          
             if(typeof pPrice == 'undefined')
             {
                 if(tmpCheckData.result.recordset.length > 0)
@@ -762,6 +775,7 @@ export default class purchaseDispatch extends DocBase
             else
             {
                 this.docObj.docItems.dt()[pIndex].PRICE = parseFloat((pPrice).toFixed(4))
+
                 if(typeof pDiscountPer != 'undefined')
                 {
                     this.docObj.docItems.dt()[pIndex].DISCOUNT = typeof pDiscountPer == 'undefined' ? 0 : ((this.docObj.docItems.dt()[pIndex].PRICE * pDiscountPer / 100) * pQuantity).toFixed(4)
@@ -792,11 +806,13 @@ export default class purchaseDispatch extends DocBase
                 this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE = tmpCheckData.result.recordset[0].PRICE
                 this.docObj.docItems.dt()[pIndex].DIFF_PRICE = this.docObj.docItems.dt()[pIndex].PRICE - this.docObj.docItems.dt()[pIndex].CUSTOMER_PRICE
             }
+
             if(this.docObj.dt()[0].VAT_ZERO == 1)
             {
                 this.docObj.docItems.dt()[pIndex].VAT = 0
                 this.docObj.docItems.dt()[pIndex].VAT_RATE = 0
             }
+
             if(typeof pData.PARTILOT_GUID != 'undefined')
             {
                 this.docObj.docItems.dt()[pIndex].PARTILOT_GUID = pData.PARTILOT_GUID
@@ -811,12 +827,13 @@ export default class purchaseDispatch extends DocBase
                     {
                         select:
                         {
-                            query : "SELECT GUID,LOT_CODE,SKT FROM ITEM_PARTI_LOT_VW_01 WHERE UPPER(LOT_CODE) LIKE UPPER(@VAL) AND ITEM = '" + pData.GUID + "'",
+                            query : `SELECT GUID,LOT_CODE,SKT FROM ITEM_PARTI_LOT_VW_01 WHERE UPPER(LOT_CODE) LIKE UPPER(@VAL) AND ITEM = '${pData.GUID}'`,
                             param : ['VAL:string|50']
                         },
                         sql:this.core.sql
                     }
                 }
+
                 this.pg_partiLot.setSource(tmpSource)
                 this.pg_partiLot.onClick = async(data) =>
                 {
@@ -824,7 +841,7 @@ export default class purchaseDispatch extends DocBase
                     this.docObj.docItems.dt()[pIndex].LOT_CODE = data[0].LOT_CODE
                 }
                 this.pg_partiLot.show()
-                }
+            }
     
             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
             await this.itemRelated(pData.GUID,pQuantity)
@@ -838,7 +855,7 @@ export default class purchaseDispatch extends DocBase
     {
         let tmpMissCodes = []
         let tmpCounter = 0
-        console.log('this.multiItemData',this.multiItemData)
+
         if(this.multiItemData.length > 0)
         {
             let tmpConfObj =
@@ -849,6 +866,7 @@ export default class purchaseDispatch extends DocBase
             }
 
             let pResult = await dialog(tmpConfObj);
+
             if(pResult == 'btn01')
             {
                 this.multiItemData.clear()
@@ -860,16 +878,16 @@ export default class purchaseDispatch extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query : "SELECT ITEMS.GUID,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,1 AS QUANTITY, " +
-                            "CASE WHEN UNIT.GUID IS NULL THEN ITEMS.UNIT ELSE UNIT.GUID END AS UNIT, " +
-                            "CASE WHEN UNIT.NAME IS NULL THEN ITEMS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, " +
-                            "CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, " +
-                            "CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, " + 
-                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE " +
-                            "FROM ITEMS_VW_01 AS ITEMS " + 
-                            "LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON " +
-                            "ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '" + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + "' " +
-                            "WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') = @VALUE AND ITEMS.STATUS = 1" ,
+                    query : `SELECT ITEMS.GUID,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,1 AS QUANTITY, 
+                            CASE WHEN UNIT.GUID IS NULL THEN ITEMS.UNIT ELSE UNIT.GUID END AS UNIT, 
+                            CASE WHEN UNIT.NAME IS NULL THEN ITEMS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, 
+                            CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, 
+                            CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, 
+                            ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].OUTPUT}'),'') AS MULTICODE 
+                            FROM ITEMS_VW_01 AS ITEMS 
+                            LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON 
+                            ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '${this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value}' 
+                            WHERE ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].OUTPUT}'),'') = @VALUE AND ITEMS.STATUS = 1` ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
@@ -891,20 +909,22 @@ export default class purchaseDispatch extends DocBase
             {
                 let tmpQuery = 
                 {
-                    query : "SELECT ITEMS.GUID,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,1 AS QUANTITY, " +
-                            "CASE WHEN UNIT.GUID IS NULL THEN ITEMS.UNIT ELSE UNIT.GUID END AS UNIT, " +
-                            "CASE WHEN UNIT.NAME IS NULL THEN ITEMS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, " +
-                            "CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, " +
-                            "CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, " + 
-                            "ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '" + this.docObj.dt()[0].OUTPUT + "'),'') AS MULTICODE " +
-                            "FROM ITEMS_VW_01 AS ITEMS " +
-                            "LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON " +
-                            "ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '" + this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value + "' " +
-                            "WHERE ITEMS.CODE = @VALUE AND ITEMS.STATUS = 1" ,
+                    query : `SELECT ITEMS.GUID,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,1 AS QUANTITY, 
+                            CASE WHEN UNIT.GUID IS NULL THEN ITEMS.UNIT ELSE UNIT.GUID END AS UNIT, 
+                            CASE WHEN UNIT.NAME IS NULL THEN ITEMS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, 
+                            CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, 
+                            CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, 
+                            ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].OUTPUT}'),'') AS MULTICODE 
+                            FROM ITEMS_VW_01 AS ITEMS 
+                            LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON 
+                            ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '${this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value}' 
+                            WHERE ITEMS.CODE = @VALUE AND ITEMS.STATUS = 1` ,
                     param : ['VALUE:string|50'],
                     value : [this.tagItemCode.value[i]]
                 }
+               
                 let tmpData = await this.core.sql.execute(tmpQuery) 
+               
                 if(tmpData.result.recordset.length > 0)
                 {
                     if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
@@ -944,6 +964,7 @@ export default class purchaseDispatch extends DocBase
     async multiItemSave()
     {
         this.checkboxReset()
+        
         for (let i = 0; i < this.multiItemData.length; i++) 
         {
             await this.addItem(this.multiItemData[i],null,Number(this.multiItemData[i].QUANTITY * this.multiItemData[i].UNIT_FACTOR).round(3))
@@ -960,9 +981,11 @@ export default class purchaseDispatch extends DocBase
         }
         
         let pResult = await dialog(tmpConfObj);
+        
         if(pResult == 'btn01')
         {
             let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
+        
             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
             {
                 App.instance.setState({isExecute:true})
@@ -980,7 +1003,9 @@ export default class purchaseDispatch extends DocBase
                                 param : ['ITEM:string|50','CUSTOMER:string|50'],
                                 value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT]
                             }
+        
                             let tmpData = await this.core.sql.execute(tmpQuery)
+        
                             if(tmpData.result.recordset.length > 0)
                             {
                                 let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
@@ -988,10 +1013,12 @@ export default class purchaseDispatch extends DocBase
                                 tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
                                 tmpItemData[0].ITEM_VAT = tmpData.result.recordset[0].VAT
                                 tmpItemData[0].CUSER = this.user.CODE
+        
                                 let tmpExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
                                 let tmpMargin = tmpExVat - tmpItemData[0].PRICE;
                                 let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
                                 tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+        
                                 let tmpNetExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
                                 let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.15;
                                 let tmpNetMarginRate = (((tmpNetMargin / tmpItemData[0].PRICE))) * 100
@@ -1011,29 +1038,30 @@ export default class purchaseDispatch extends DocBase
                         {
                             
                         }
+        
                         if(e == 'btn02')
                         {
                             this.updatePriceData.insertCmd = 
                             {
-                                query : "EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] " + 
-                                "@PRICE_GUID = @PPRICE_GUID, " +
-                                "@NEW_CUSER = @PNEW_CUSER, " + 
-                                "@NEW_PRICE = @PNEW_PRICE, " +
-                                "@UPDATE_ITEM = @PUPDATE_ITEM, " +
-                                "@CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, " +
-                                "@COST_PRICE = @PCOST_PRICE ", 
+                                query : `EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] 
+                                @PRICE_GUID = @PPRICE_GUID, 
+                                @NEW_CUSER = @PNEW_CUSER, 
+                                @NEW_PRICE = @PNEW_PRICE, 
+                                @UPDATE_ITEM = @PUPDATE_ITEM, 
+                                @CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, 
+                                @COST_PRICE = @PCOST_PRICE `, 
                                 param : ['PPRICE_GUID:string|50','PNEW_CUSER:string|25','PNEW_PRICE:float','PUPDATE_ITEM:string|50','PCUSTOMER_PRICE_GUID:string|50','PCOST_PRICE:float'],
                                 dataprm : ['SALE_PRICE_GUID','CUSER','SALE_PRICE','ITEM','CUSTOMER_PRICE_GUID','PRICE']
                             } 
                             this.updatePriceData.updateCmd = 
                             {
-                                query : "EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] " + 
-                                "@PRICE_GUID = @PPRICE_GUID, " +
-                                "@NEW_CUSER = @PNEW_CUSER, " + 
-                                "@NEW_PRICE = @PNEW_PRICE, " +
-                                "@UPDATE_ITEM = @PUPDATE_ITEM, " +
-                                "@CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, " +
-                                "@COST_PRICE = @PCOST_PRICE ", 
+                                query : `EXEC [dbo].[PRD_INVOICE_PRICE_UPDATE] 
+                                @PRICE_GUID = @PPRICE_GUID, 
+                                @NEW_CUSER = @PNEW_CUSER, 
+                                @NEW_PRICE = @PNEW_PRICE, 
+                                @UPDATE_ITEM = @PUPDATE_ITEM, 
+                                @CUSTOMER_PRICE_GUID = @PCUSTOMER_PRICE_GUID, 
+                                @COST_PRICE = @PCOST_PRICE `, 
                                 param : ['PPRICE_GUID:string|50','PNEW_CUSER:string|25','PNEW_PRICE:float','PUPDATE_ITEM:string|50','PCUSTOMER_PRICE_GUID:string|50','PCOST_PRICE:float'],
                                 dataprm : ['SALE_PRICE_GUID','CUSER','SALE_PRICE','ITEM','CUSTOMER_PRICE_GUID','PRICE']
                             } 
@@ -1041,20 +1069,6 @@ export default class purchaseDispatch extends DocBase
                             for (let i = 0; i < this.grdNewPrice.getSelectedData().length; i++) 
                             {
                                 this.updatePriceData.push(this.grdNewPrice.getSelectedData()[i])
-                                // let tmpMulticodeObj = new itemMultiCodeCls()
-                                // await tmpMulticodeObj.load({ITEM_CODE:this.grdNewPrice.getSelectedData()[i].ITEM_CODE,CUSTOMER_CODE:this.grdNewPrice.getSelectedData()[i].CUSTOMER_CODE});
-                                // tmpMulticodeObj.dt()[0].CUSTOMER_PRICE = this.grdNewPrice.getSelectedData()[i].PRICE
-                                // tmpMulticodeObj.save()
-                                // let tmpQuery = 
-                                // {
-                                //     query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " +
-                                //             "@GUID = @PGUID, " +
-                                //             "@CUSER = @PCUSER, " +
-                                //             "@PRICE = @PPRICE" ,
-                                //     param : ['PGUID:string|50','PCUSER:string|25','PPRICE:float'],
-                                //     value : [this.grdNewPrice.getSelectedData()[i].SALE_PRICE_GUID,this.user.CODE,this.grdNewPrice.getSelectedData()[i].SALE_PRICE]
-                                // }
-                                // await this.core.sql.execute(tmpQuery)
                             }
                             await this.updatePriceData.update()
                             App.instance.setState({isExecute:false})
@@ -1073,13 +1087,16 @@ export default class purchaseDispatch extends DocBase
             }
             
             let pResult = await dialog(tmpConfObj);
+
             if(pResult == 'btn01')
             {
                 let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                 {
                     App.instance.setState({isExecute:true})
+
                     this.newPriceDate.clear()
+
                     for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                     {
                         if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
@@ -1088,29 +1105,34 @@ export default class purchaseDispatch extends DocBase
                             {
                                 let tmpQuery = 
                                 {
-                                    query : "SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER",
+                                    query : `SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER`,
                                     param : ['ITEM:string|50','CUSTOMER:string|50'],
                                     value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT]
                                 }
+
                                 let tmpData = await this.core.sql.execute(tmpQuery)
+
                                 if(tmpData.result.recordset.length > 0)
                                 {
-                                    console.log(tmpData.result.recordset)
                                     let tmpItemData = [{...this.docObj.docItems.dt()[i]}]
+
                                     tmpItemData[0].SALE_PRICE_GUID = tmpData.result.recordset[0].PRICE_GUID
                                     tmpItemData[0].SALE_PRICE = tmpData.result.recordset[0].SALE_PRICE
                                     tmpItemData[0].ITEM_VAT = tmpData.result.recordset[0].VAT
                                     tmpItemData[0].CUSER = this.user.CODE
+
                                     let tmpExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
                                     let tmpMargin = tmpExVat - tmpItemData[0].PRICE;
                                     let tmpMarginRate = ((tmpMargin / tmpItemData[0].PRICE)) * 100
+
                                     tmpItemData[0].PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+
                                     let tmpNetExVat = tmpData.result.recordset[0].SALE_PRICE / ((tmpItemData[0].ITEM_VAT / 100) + 1)
                                     let tmpNetMargin = (tmpNetExVat - tmpItemData[0].PRICE) / 1.15;
                                     let tmpNetMarginRate = (((tmpNetMargin / tmpItemData[0].PRICE))) * 100
+
                                     tmpItemData[0].NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2); 
                                     tmpItemData[0].CUSTOMER_PRICE_GUID = tmpData.result.recordset[0].CUSTOMER_PRICE_GUID
-                                    console.log(tmpItemData[0])
                                     this.newPriceDate.push(tmpItemData[0])
                                 } 
                             }
@@ -1129,25 +1151,27 @@ export default class purchaseDispatch extends DocBase
                             {
                                 this.updatePriceData.insertCmd = 
                                 {
-                                    query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " + 
-                                    "@GUID =  @PCUSTOMER_PRICE_GUID," +
-                                    "@CUSER = @PNEW_CUSER ", 
+                                    query : `EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] 
+                                    @GUID =  @PCUSTOMER_PRICE_GUID,
+                                    @CUSER = @PNEW_CUSER `, 
                                     param : ['PNEW_CUSER:string|25','PCUSTOMER_PRICE_GUID:string|50'],
                                     dataprm : ['CUSER','CUSTOMER_PRICE_GUID']
                                 } 
                                 this.updatePriceData.updateCmd = 
                                 {
-                                    query : "EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] " + 
-                                    "@GUID =  @PCUSTOMER_PRICE_GUID," +
-                                    "@CUSER = @PNEW_CUSER ", 
+                                    query : `EXEC [dbo].[PRD_ITEM_PRICE_UPDATE] 
+                                    @GUID =  @PCUSTOMER_PRICE_GUID,
+                                    @CUSER = @PNEW_CUSER `, 
                                     param : ['PNEW_CUSER:string|25','PCUSTOMER_PRICE_GUID:string|50'],
                                     dataprm : ['CUSER','CUSTOMER_PRICE_GUID']
                                 } 
                                 App.instance.setState({isExecute:true})
+                                
                                 for (let i = 0; i < this.grdNewPriceDate.getSelectedData().length; i++) 
                                 {
                                     this.updatePriceData.push(this.grdNewPriceDate.getSelectedData()[i])
                                 }
+                                
                                 await this.updatePriceData.update()
                                 App.instance.setState({isExecute:false})
                                 this.updatePriceData.clear()
@@ -1186,7 +1210,7 @@ export default class purchaseDispatch extends DocBase
     {
         let tmpQuery = 
         {
-            query : "SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE OUTPUT = @OUTPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(60)",
+            query : `SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE OUTPUT = @OUTPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0 AND DOC_TYPE IN(60)`,
             param : ['OUTPUT:string|50'],
             value : [this.docObj.dt()[0].OUTPUT]
         }
@@ -1196,7 +1220,7 @@ export default class purchaseDispatch extends DocBase
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.props.data.tabkey}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -1211,7 +1235,6 @@ export default class purchaseDispatch extends DocBase
                                         {
                                             if(typeof e != 'undefined')
                                             {
-                                                console.log(e)
                                                 if(e.CustomerCode != '')
                                                 {
                                                     this.docObj.dt()[0].OUTPUT = e.CustomerGuid                                                  
@@ -1225,6 +1248,7 @@ export default class purchaseDispatch extends DocBase
                                                     {
                                                         this.txtRef.value = e.CustomerCode
                                                     }
+
                                                     if(this.cmbDepot.value != '' && this.docLocked == false)
                                                     {
                                                         this.frmDocItems.option('disabled',false)
@@ -1236,7 +1260,9 @@ export default class purchaseDispatch extends DocBase
                                                         param : ['CUSTOMER:string|50'],
                                                         value : [e.CustomerGuid]
                                                     }
+
                                                     let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+
                                                     if(tmpAdressData.result.recordset.length > 1)
                                                     {
                                                         this.pg_adress.onClick = async(pdata) =>
@@ -1250,15 +1276,14 @@ export default class purchaseDispatch extends DocBase
                                                         await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                     }
                                                 }
+
                                                 this.dtDocDate.value = moment(e.InvoiceDate)
                                                 this.dtShipDate.value = moment(e.DueDate)
 
                                                 this.grid.devGrid.beginUpdate()
                                                 let tmpMissCodes = []
-                                                console.log(e)
                                                 for (let i = 0; i < e.Item.length; i++) 
                                                 {
-                                                    console.log(e.Item[i].ItemCode)
                                                     if(e.Item[i].ItemCode != '')
                                                     {
                                                         let tmpItem =
@@ -1318,6 +1343,7 @@ export default class purchaseDispatch extends DocBase
                                             this.toast.show({message:this.t("msgDocLocked.msg"),type:"warning"})
                                             return
                                         }
+                                        
                                         if(typeof this.docObj.docItems.dt()[0] == 'undefined')
                                         {
                                             let tmpConfObj =
@@ -1331,10 +1357,12 @@ export default class purchaseDispatch extends DocBase
                                             this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
                                             return
                                         }
+                                        
                                         if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                         {
                                             await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                         }
+                                        
                                         if(e.validationGroup.validate().status == "valid")
                                         {
                                             this.saveDoc()
@@ -1355,6 +1383,7 @@ export default class purchaseDispatch extends DocBase
                                             this.toast.show({message:this.t("msgGetLocked.msg"),type:"warning"})
                                             return
                                         }
+                                        
                                         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                                         {
                                             if(this.docObj.docItems.dt()[i].INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')   
@@ -1370,6 +1399,7 @@ export default class purchaseDispatch extends DocBase
                                                 return
                                             }
                                         }
+                                        
                                         let tmpConfObj =
                                         {
                                             id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -1378,6 +1408,7 @@ export default class purchaseDispatch extends DocBase
                                         }
                                         
                                         let pResult = await dialog(tmpConfObj);
+                                        
                                         if(pResult == 'btn01')
                                         {
                                             if(this.sysParam.filter({ID:'docDeleteDesc',USERS:this.user.CODE}).getValue().value == true)
@@ -1401,10 +1432,12 @@ export default class purchaseDispatch extends DocBase
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
                                             this.docObj.dt()[0].LOCKED = 1
+                                        
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
                                             }
+                                        
                                             if((await this.docObj.save()) == 0)
                                             {         
                                                 if(typeof this.piqX != 'undefined')
@@ -1474,6 +1507,7 @@ export default class purchaseDispatch extends DocBase
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+                                        
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -1492,17 +1526,16 @@ export default class purchaseDispatch extends DocBase
                                 <NdItem>
                                     <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
-                                        <div className="col-4 pe-0">
+                                        <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}
                                             maxLength={32}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
-                                            >
-                                            </NdTextBox>
+                                            />
                                         </div>
-                                        <div className="col-5 ps-0">
+                                        <div className="col-6 ps-0">
                                             <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             readOnly={true}
                                             button=
@@ -1531,11 +1564,13 @@ export default class purchaseDispatch extends DocBase
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query : "SELECT DELETED FROM DOC WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE = 0 AND DOC_TYPE = 40",
+                                                    query : `SELECT DELETED FROM DOC WHERE REF = @REF AND REF_NO = @REF_NO AND TYPE = 0 AND DOC_TYPE = 40`,
                                                     param : ['REF:string|50','REF_NO:int'],
                                                     value : [this.txtRef.value,this.txtRefno.value]
                                                 }
+                                            
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            
                                                 if(tmpData.result.recordset.length > 0)
                                                 {   
                                                     if(tmpData.result.recordset[0].DELETED == 1)
@@ -1546,12 +1581,15 @@ export default class purchaseDispatch extends DocBase
                                                             button:[{id:"btn01",caption:this.lang.t("msgDocDeleted.btn01"),location:'after'}],
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDocDeleted.msg")}</div>)
                                                         }
+                                            
                                                         this.txtRefno.value = 0
                                                         await dialog(tmpConfObj);
                                                         return
                                                     }
                                                 }
+                                            
                                                 let tmpResult = await this.checkDoc('00000000-0000-0000-0000-000000000000',this.txtRef.value,this.txtRefno.value)
+                                            
                                                 if(tmpResult == 3)
                                                 {
                                                     this.txtRefno.value = "";
@@ -1580,12 +1618,13 @@ export default class purchaseDispatch extends DocBase
                                     onValueChanged={(async()=>
                                         {
                                             this.checkRow()
+                                            
                                             if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                             {
                                                 this.frmDocItems.option('disabled',false)
                                             }
                                         }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
@@ -1621,7 +1660,9 @@ export default class purchaseDispatch extends DocBase
                                             this.toast.show({message:this.t("msgCustomerLock.msg"),type:"warning"})
                                             return;
                                         }
+                                       
                                         await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                       
                                         this.pg_txtCustomerCode.show()
                                         this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
@@ -1631,26 +1672,32 @@ export default class purchaseDispatch extends DocBase
                                                 {
                                                     this.frmDocItems.option('disabled',false)
                                                 }
+                                       
                                                 this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                 this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                 this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                 this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
+                                       
                                                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
                                                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                 {
                                                     this.txtRef.value = data[0].CODE;
                                                 }
+                                       
                                                 if(this.cmbDepot.value != '' && this.docLocked == false)
                                                 {
                                                     this.frmDocItems.option('disabled',false)
                                                 }
+                                       
                                                 let tmpQuery = 
                                                 {
                                                     query : "SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER",
                                                     param : ['CUSTOMER:string|50'],
                                                     value : [ data[0].GUID]
                                                 }
+                                       
                                                 let tmpAdressData = await this.core.sql.execute(tmpQuery) 
+                                       
                                                 if(tmpAdressData.result.recordset.length > 1)
                                                 {   
                                                     this.pg_adress.onClick = async(pdata) =>
@@ -1660,6 +1707,7 @@ export default class purchaseDispatch extends DocBase
                                                             this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
                                                         }
                                                     }
+                                       
                                                     await this.pg_adress.show()
                                                     await this.pg_adress.setData(tmpAdressData.result.recordset)
                                                 }
@@ -1679,6 +1727,7 @@ export default class purchaseDispatch extends DocBase
                                                         this.toast.show({message:this.t("msgCustomerLock.msg"),type:"warning"})
                                                         return;
                                                     }
+                                       
                                                     this.pg_txtCustomerCode.show()
                                                     this.pg_txtCustomerCode.onClick = (data) =>
                                                     {
@@ -1688,16 +1737,20 @@ export default class purchaseDispatch extends DocBase
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
                                                             }
+                                       
                                                             this.docObj.dt()[0].OUTPUT = data[0].GUID
                                                             this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
                                                             this.docObj.dt()[0].OUTPUT_CODE = data[0].CODE
                                                             this.docObj.dt()[0].OUTPUT_NAME = data[0].TITLE
+                                       
                                                             let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
+                                       
                                                             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                                                             {
                                                                 this.txtRef.value = data[0].CODE;
                                                                 this.txtRef.props.onChange()
                                                             }
+                                       
                                                             if(this.cmbDepot.value != '' && this.docLocked == false)
                                                             {
                                                                 this.frmDocItems.option('disabled',false)
@@ -1716,9 +1769,9 @@ export default class purchaseDispatch extends DocBase
                                         </Validator>
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#" + this.props.data.id + this.props.data.tabkey}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.props.data.tabkey}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -1731,7 +1784,7 @@ export default class purchaseDispatch extends DocBase
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,VAT_ZERO,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,VAT_ZERO,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -1765,8 +1818,7 @@ export default class purchaseDispatch extends DocBase
                                     readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </NdItem> 
                                 {/* Boş */}
                                 <NdEmptyItem />
@@ -1848,19 +1900,23 @@ export default class purchaseDispatch extends DocBase
                                         {
                                             return
                                         }
+                                    
                                         if(this.cmbDepot.value == '' || this.txtCustomerCode.value == '')
                                         {
                                             this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
                                             this.txtBarcode.value = ''
                                             return
                                         }
+                                    
                                         let tmpQuery = 
                                         {  
-                                            query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE,PARTILOT_GUID,LOT_CODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER))",
+                                            query : `SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE,PARTILOT_GUID,LOT_CODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER))`,
                                             param : ['CODE:string|50','CUSTOMER:string|50'],
                                             value : [this.txtBarcode.value,this.docObj.dt()[0].OUTPUT]
                                         }
+                                    
                                         let tmpData = await this.core.sql.execute(tmpQuery) 
+                                    
                                         if(tmpData.result.recordset.length > 0)
                                         {
                                             this.msgQuantity.tmpData = tmpData.result.recordset[0]
@@ -1952,6 +2008,7 @@ export default class purchaseDispatch extends DocBase
                                         {
                                             await this.popMultiItem.show()
                                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                                     
                                             if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
                                                 await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
@@ -2017,6 +2074,7 @@ export default class purchaseDispatch extends DocBase
                                                 dialog(tmpConfObj);
                                                 e.component.cancelEditData()
                                             }
+                                     
                                             if(typeof e.newData.QUANTITY != 'undefined')
                                             {
                                                 //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
@@ -2046,22 +2104,27 @@ export default class purchaseDispatch extends DocBase
                                             {
                                                 e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
                                             }
+                                     
                                             if(typeof e.data.SUB_QUANTITY != 'undefined')
                                             {
                                                 e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
                                             }
+                                     
                                             if(typeof e.data.SUB_FACTOR != 'undefined')
                                             {
                                                 e.key.QUANTITY = e.key.SUB_QUANTITY * e.data.SUB_FACTOR
                                             }
+                                     
                                             if(typeof e.data.PRICE != 'undefined')
                                             {
                                                 e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
                                             }
+                                     
                                             if(typeof e.data.SUB_PRICE != 'undefined')
                                             {
                                                 e.key.PRICE = e.data.SUB_PRICE * e.key.SUB_FACTOR
                                             }
+                                     
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
                                             {
                                                 e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
@@ -2069,6 +2132,7 @@ export default class purchaseDispatch extends DocBase
                                                 e.key.DISCOUNT_2 = 0
                                                 e.key.DISCOUNT_3 = 0
                                             }
+                                     
                                             if(typeof e.data.DISCOUNT != 'undefined')
                                             {
                                                 e.key.DISCOUNT_1 = e.data.DISCOUNT
@@ -2076,6 +2140,7 @@ export default class purchaseDispatch extends DocBase
                                                 e.key.DISCOUNT_3 = 0
                                                 e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
                                             }
+                                     
                                             if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
                                             {
                                                 let tmpConfObj =
@@ -2119,6 +2184,7 @@ export default class purchaseDispatch extends DocBase
                                             }
 
                                             e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
+                                     
                                             if(this.docObj.dt()[0].VAT_ZERO != 1)
                                             {
                                                 e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
@@ -2217,6 +2283,7 @@ export default class purchaseDispatch extends DocBase
                                                 onClick:async()  =>
                                                 {
                                                     await this.popDiscount.show()
+                                     
                                                     if(this.docObj.dt()[0].DISCOUNT > 0 )
                                                     {
                                                         this.txtDiscountPercent1.value  = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_1",3),3)
@@ -2341,10 +2408,10 @@ export default class purchaseDispatch extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDesign.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.props.data.tabkey} 
                         width={'500'}
                         height={'auto'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.props.data.tabkey}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -2385,7 +2452,7 @@ export default class purchaseDispatch extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY LINE_NO ` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
@@ -2402,8 +2469,6 @@ export default class purchaseDispatch extends DocBase
                                                             {
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                             } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         }
                                                     });
                                                     this.popDesign.hide();  
@@ -2427,7 +2492,7 @@ export default class purchaseDispatch extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO ` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
@@ -2439,13 +2504,10 @@ export default class purchaseDispatch extends DocBase
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                                                            console.log(mywindow)
                                                             mywindow.onload = function() 
                                                             {
                                                                 mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                             } 
-                                                            // let mywindow = window.open('','_blank',"width=900,height=1000,left=500");
-                                                            // mywindow.document.write("<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' default-src='self' width='100%' height='100%'></iframe>");
                                                         }
                                                     });
                                                 }
@@ -2459,11 +2521,13 @@ export default class purchaseDispatch extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query :"SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0",
+                                                        query : `SELECT EMAIL FROM CUSTOMER_OFFICAL WHERE CUSTOMER = @GUID AND DELETED = 0`,
                                                         param:  ['GUID:string|50'],
                                                         value:  [this.docObj.dt()[0].INPUT]
                                                     }
+                                                    
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    
                                                     if(tmpData.result.recordset.length > 0)
                                                     {
                                                         await this.popMailSend.show()
@@ -2488,10 +2552,10 @@ export default class purchaseDispatch extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popMailSend.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.props.data.tabkey} 
                         width={'600'}
                         height={'auto'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.props.data.tabkey}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -2502,7 +2566,7 @@ export default class purchaseDispatch extends DocBase
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
-                                    data={{source:{select:{query : "SELECT GUID,MAIL_ADDRESS FROM [dbo].[MAIL_SETTINGS]"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT GUID,MAIL_ADDRESS FROM [dbo].[MAIL_SETTINGS]`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbMailAddress',USERS:this.user.CODE})}
                                     >
@@ -2541,7 +2605,7 @@ export default class purchaseDispatch extends DocBase
                                                 {
                                                     let tmpQuery = 
                                                     {
-                                                        query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO ` ,
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
@@ -2553,10 +2617,12 @@ export default class purchaseDispatch extends DocBase
                                                         App.instance.setState({isExecute:true})
                                                         let tmpAttach = pResult.split('|')[1]
                                                         let tmpHtml = this.htmlEditor.value
+                                                        
                                                         if(this.htmlEditor.value.length == 0)
                                                         {
                                                             tmpHtml = ''
                                                         }
+                                                        
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                         }

@@ -63,12 +63,17 @@ export const langFr =
     sale:  // "Vente"
     
     {
-        popCustomerExtreReport : "Extrait client",
         btnGet : "Rechercher",
         loadMore : "Afficher plus",
         mostSalesFilter: "Produits les plus vendus",
         popFactNonSolde : "Facture non solde",
         btnMailSend : "Envoyer Mail",
+        popCustomerExtreReport :
+        {
+            title : "Extrait client",
+            clmFirstDate : "Date de début",
+            clmLastDate : "Date de fin",
+        },
         msgPriceZeroUnit : 
         {
             title : "Attention",

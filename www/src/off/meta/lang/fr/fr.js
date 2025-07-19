@@ -221,7 +221,7 @@ export const langFr =
     lineChart: "Graphique linéaire",
     selectProductGroup: "Sélectionner le groupe de produits",
     bestDays: "Meilleurs jours",
-    worstDays: "Pires jours",
+    worstDays: "Défavorable jours",
     comparison: "Comparaison",
     distribution: "Distribution",
     trend: "Tendance",
@@ -761,7 +761,7 @@ export const langFr =
     },
     // Catégories d'analyse principales
     bestDays : "Meilleurs Jours",
-    worstDays : "Pires Jours",
+    worstDays : "Défavorable Jours",
     comparison : "Comparaisons",
     distribution : "Distributions",
     trend : "Tendances",
@@ -771,13 +771,13 @@ export const langFr =
     topDay : "Jour avec le plus de ventes",
     worstDay : "Jour avec le moins de ventes",
     top5Days : "5 meilleurs jours",
-    worst5Days : "5 pires jours",
+    worst5Days : "5 Défavorable jours",
     top10Days : "10 meilleurs jours",
-    worst10Days : "10 pires jours",
+    worst10Days : "10 Défavorable jours",
     top15Days : "15 meilleurs jours",
-    worst15Days : "15 pires jours",
+    worst15Days : "15 Défavorable jours",
     top20Days : "20 meilleurs jours",
-    worst20Days : "20 pires jours",
+    worst20Days : "20 Défavorable jours",
     
     // Analyses par jour de la semaine
     bestMonday : "Meilleurs Lundis",
@@ -788,13 +788,13 @@ export const langFr =
     bestSaturday : "Meilleurs Samedis",
     bestSunday : "Meilleurs Dimanches",
     
-    worstMonday : "Pires Lundis",
-    worstTuesday : "Pires Mardis",
-    worstWednesday : "Pires Mercredis",
-    worstThursday : "Pires Jeudis",
-    worstFriday : "Pires Vendredis",
-    worstSaturday : "Pires Samedis",
-    worstSunday : "Pires Dimanches",
+    worstMonday : "Défavorable Lundis",
+    worstTuesday : "Défavorable Mardis",
+    worstWednesday : "Défavorable Mercredis",
+    worstThursday : "Défavorable Jeudis",
+    worstFriday : "Défavorable Vendredis",
+    worstSaturday : "Défavorable Samedis",
+    worstSunday : "Défavorable Dimanches",
     
     // Analyses de comparaison
     aboveAverage : "Jours au-dessus de la moyenne",
@@ -816,7 +816,7 @@ export const langFr =
     
     // Analyses de produits
     topProducts : "Meilleurs Produits",
-    worstProducts : "Pires Produits",
+    worstProducts : "Défavorable Produits",
     topProductGroups : "Groupes de Produits",
     selectProductGroup : "Sélectionner un Groupe de Produits",
     topSellingProductsInGroup : "Top 20 Produits du Groupe",
@@ -826,7 +826,7 @@ export const langFr =
     lineChart : "Graphique en Ligne",
     productAnalysis : {
         topSellingProducts : "Meilleurs Produits",
-        worstSellingProducts : "Pires Produits",
+        worstSellingProducts : "Défavorable Produits",
         topSellingProductGroups : "Groupes de Produits",
         topSellingProductsInGroup : "Top 20 Produits du Groupe",
     },
