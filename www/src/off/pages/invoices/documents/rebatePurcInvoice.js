@@ -1118,7 +1118,6 @@ export default class rebatePurcInvoice extends DocBase
                                     onValueChanged={(async()=>
                                         {
                                             this.checkRow()
-                                            this.docObj.docCustomer.dt()[0].INPUT = this.cmbDepot.value
                                             if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                             {
                                                 this.frmDocItems.option('disabled',false)
@@ -1309,7 +1308,6 @@ export default class rebatePurcInvoice extends DocBase
                                     onValueChanged={(async()=>
                                     {
                                         this.checkRow()
-                                        this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtDocDate.value 
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmDocItems"  + this.tabIndex}>

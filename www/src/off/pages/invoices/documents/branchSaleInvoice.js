@@ -1105,7 +1105,6 @@ export default class branchSaleInvoice extends DocBase
                                     onValueChanged={(async()=>
                                     {
                                         this.checkRow()
-                                        this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
                                         
                                         if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                         {

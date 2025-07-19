@@ -92,7 +92,7 @@ export default class salesInvoice extends DocBase
 
             this.docObj.dt()[0].TYPE_NAME = 'FAC'
             this.grid = this["grdSlsInv"+this.tabIndex]
-            this.grid.devGrid.clearFilter("row")            
+            // this.grid.devGrid.clearFilter("row")            
             
             this.quantityControl = this.prmObj.filter({ID:'negativeQuantity',USERS:this.user.CODE}).getValue().value
 
@@ -1096,8 +1096,11 @@ export default class salesInvoice extends DocBase
                                     onClick={async()=>
                                     {
                                         await this.popDetail.show()
-                                        this.loading.current.instance.show()
                                         
+                                        console.log(this)
+                                        console.log(this.docObj.dt()[0])
+                                        console.log(this.docObj.docItems.dt())
+                                        console.log(this["grdSlsInv"+this.tabIndex])
                                         this.txtDetailMargin.value = this.docObj.dt()[0].MARGIN;
                                         this.numDetailCount.value = this.docObj.docItems.dt().length
                                         this.numDetailQuantity.value =  Number(this.docObj.docItems.dt().sum("QUANTITY",2))
@@ -1121,7 +1124,7 @@ export default class salesInvoice extends DocBase
                                             }
                                         }
                                         this.numDetailQuantity2.value = tmpQuantity2.toFixed(3)
-                                        this.loading.current.instance.hide()
+                                        
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -1180,7 +1183,7 @@ export default class salesInvoice extends DocBase
                                             maxLength={32}
                                             onValueChanged={(async(e)=>
                                             {
-                                                this.docObj.docCustomer.dt()[0].REF = e.value;
+                                               this.checkRow()
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
@@ -1262,7 +1265,6 @@ export default class salesInvoice extends DocBase
                                     onValueChanged={(async()=>
                                     {
                                         await this.checkRow()
-                                        this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
 
                                         if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                         {
@@ -1482,7 +1484,6 @@ export default class salesInvoice extends DocBase
                                     onValueChanged={(async()=>
                                     {
                                         this.checkRow()
-                                        this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtDocDate.value 
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmDoc"  + this.tabIndex}>

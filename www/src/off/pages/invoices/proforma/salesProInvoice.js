@@ -1079,7 +1079,6 @@ export default class salesInvoice extends DocBase
                                     onValueChanged={(async()=>
                                     {
                                         this.checkRow()
-                                        this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtDocDate.value 
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmSalesInv"  + this.tabIndex}>

@@ -1203,7 +1203,6 @@ export default class priceDifferenceInvoice extends DocBase
                                     searchEnabled={true}
                                     onValueChanged={(async()=>
                                     {
-                                        this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
                                         this.checkRow()
         
                                         if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
@@ -1408,7 +1407,6 @@ export default class priceDifferenceInvoice extends DocBase
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                     onValueChanged={(async()=>
                                     {
-                                        this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtDocDate.value 
                                         this.checkRow()
                                     }).bind(this)}
                                     >

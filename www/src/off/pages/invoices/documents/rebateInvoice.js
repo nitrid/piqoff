@@ -942,7 +942,7 @@ export default class rebateInvoice extends DocBase
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
@@ -1372,7 +1372,6 @@ export default class rebateInvoice extends DocBase
                                     onValueChanged={(async()=>
                                         {
                                             this.checkRow()
-                                            this.docObj.docCustomer.dt()[0].OUTPUT = this.cmbDepot.value
                                             
                                             if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
                                             {
@@ -1578,7 +1577,6 @@ export default class rebateInvoice extends DocBase
                                     onValueChanged={(async()=>
                                     {
                                         this.checkRow()
-                                        this.docObj.docCustomer.dt()[0].DOC_DATE = this.dtDocDate.value 
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmDocItems"  + this.tabIndex}>
@@ -2175,10 +2173,10 @@ export default class rebateInvoice extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDesign.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'280'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -2330,10 +2328,10 @@ export default class rebateInvoice extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDetail.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'auto'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -2396,10 +2394,10 @@ export default class rebateInvoice extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popMailSend.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.tabIndex} 
                         width={'600'}
                         height={'auto'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>

@@ -694,7 +694,7 @@ export default class purchaseOffer extends DocBase
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
                     <div className="row px-2 pt-2">
