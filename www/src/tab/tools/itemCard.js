@@ -112,7 +112,7 @@ export default class NbItemCard extends NbBase
                             valueExpr="GUID"
                             value= {this.props.data.UNIT}
                             readOnly={this.props.unitLock}
-                            data={{source:{select:{query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID ='"+ this.props.data.GUID +"'"},sql:this.core.sql}}}
+                            data={{source:{select:{query : `SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = '${this.props.data.GUID}'`},sql:this.core.sql}}}
                             onValueChanged={(async(e)=>
                             {
                                 await this.core.util.waitUntil(300)

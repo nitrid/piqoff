@@ -9,6 +9,7 @@ import { LoadPanel } from 'devextreme-react/load-panel';
 import NdGrid,{Column, Paging,Pager,Scrolling,Export, Summary, TotalItem}from '../../core/react/devex/grid.js';
 import NbDateRange from '../../core/react/bootstrap/daterange.js';
 import NdPopUp from '../../core/react/devex/popup.js';
+import { Label } from 'devextreme-react/form';
 
 
 export default class openInvoiceList extends React.PureComponent
@@ -127,6 +128,7 @@ export default class openInvoiceList extends React.PureComponent
                     <div className="row" style={{margin:'0'}}>
                         <div className="col-12 col-md-6" style={{padding:'0 10px'}}>
                             <div style={{marginBottom:'10px'}}>
+                                <Label>{this.lang.t("txtCustomerCode")}</Label>
                                 <NdTextBox id={"txtCustomerCode"} parent={this} simple={true} placeholder={this.t("txtCustomerCode")} readOnly={true}
                                 button={
                                 [
@@ -152,6 +154,7 @@ export default class openInvoiceList extends React.PureComponent
                         </div>
                         <div className="col-12 col-md-6" style={{padding:'0 10px'}}>
                             <div style={{marginBottom:'10px'}}>
+                                <Label>{this.lang.t("txtDate")}</Label>
                                 <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('year')} endDate={moment().endOf('year')}/>
                             </div>
                         </div>
