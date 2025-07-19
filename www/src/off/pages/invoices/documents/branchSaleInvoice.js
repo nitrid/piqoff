@@ -1683,6 +1683,7 @@ export default class branchSaleInvoice extends DocBase
                                         onRowRemoved={async (e)=>{this.calculateTotal()}}
                                         onReady={async()=>
                                         {
+                                            this.grid = this["grdSlsInv" + this.tabIndex]
                                             this["grdSlsInv"+this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')})
                                         }}
                                         >

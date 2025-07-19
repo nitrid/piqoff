@@ -1748,6 +1748,7 @@ export default class priceDifferenceInvoice extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
+                                            this.grid = this["grdDiffInv" + this.tabIndex]
                                             await this["grdDiffInv"+this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >

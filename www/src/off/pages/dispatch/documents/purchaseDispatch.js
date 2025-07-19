@@ -2206,6 +2206,7 @@ export default class purchaseDispatch extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
+                                            this.grid = this["grdPurcDispatch" + this.tabIndex]
                                             await this["grdPurcDispatch" + this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >

@@ -1901,6 +1901,7 @@ export default class branchPurcDispatch extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
+                                            this.grid = this["grdSlsDispatch" + this.tabIndex]
                                             await this["grdSlsDispatch"+this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >

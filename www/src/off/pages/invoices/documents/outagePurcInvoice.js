@@ -1566,6 +1566,7 @@ export default class outagePurcInvoice extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
+                                            this.grid = this["grdRebtInv" + this.tabIndex]
                                             await this["grdRebtInv"+this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >

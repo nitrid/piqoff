@@ -1618,6 +1618,7 @@ export default class salesOffer extends DocBase
                                     }}
                                     onReady={async()=>
                                     {
+                                        this.grid = this["grdSlsOffer"+this.tabIndex]
                                         await this["grdSlsOffer"+this.tabIndex].dataRefresh({source:this.docObj.docOffers.dt('DOC_OFFERS')});
                                     }}
                                     >

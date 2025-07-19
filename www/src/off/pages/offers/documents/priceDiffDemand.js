@@ -1648,6 +1648,7 @@ export default class priceDiffDemand extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
+                                            this.grid = this["grdDiffOff"+this.tabIndex]
                                             await this["grdDiffOff"+this.tabIndex].dataRefresh({source:this.docObj.docDemand.dt('DOC_DEMAND')});
                                         }}
                                         >
