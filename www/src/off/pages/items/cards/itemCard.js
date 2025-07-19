@@ -1251,7 +1251,7 @@ export default class itemCard extends React.PureComponent
                                     </div>
                                 </NdLayoutItem>
                                 {/* cmbItemGrpLy */}
-                                <NdLayoutItem key={"cmbItemGrpLy"} id={"cmbItemGrpLy"} parent={this} data-grid={{x:0,y:1,h:1,w:1}} access={this.access.filter({ELEMENT:'cmbItemGrpLy',USERS:this.user.CODE})}>
+                                <NdLayoutItem key={"cmbItemGrpLy"} id={"cmbItemGrpLy"} parent={this} data-grid={{x:1,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'cmbItemGrpLy',USERS:this.user.CODE})}>
                                     <div className="row pe-3">
                                         <div className='col-4 p-0 pe-1'>
                                             <label className="col-form-label d-flex justify-content-end">{this.t("cmbItemGrp") + " :"}</label>
