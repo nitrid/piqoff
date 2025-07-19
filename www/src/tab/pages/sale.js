@@ -106,7 +106,7 @@ export default class Sale extends React.PureComponent
                     GROUP BY DOC_TYPE, TYPE, DOC_DATE, INPUT_NAME, DOC_REF_NO, DOC_REF, INPUT_CODE , DOC_GUID 
                     ) AS TMP 
                     WHERE ROUND((DOC_TOTAL - PAYING_AMOUNT), 2) > 0`,  
-                param : ['INPUT_CODE:string|50'],
+            param : ['INPUT_CODE:string|50'],
         }
 
         this.docType = 0
@@ -183,6 +183,7 @@ export default class Sale extends React.PureComponent
         {
             this.popCustomer.show()
             this.txtCustomerSearch.focus()
+            this.setState({isExecute:false})
         }
     }
     async getItems()
@@ -213,11 +214,13 @@ export default class Sale extends React.PureComponent
                 for (let i = 0; i < tmpBuf.result.recordset.length; i++) 
                 {
                     let tmpItemObj = tmpBuf.result.recordset[i]
+                    
                     tmpItemObj.PRICE = (await this.getPrice(tmpItemObj.GUID,1,moment(new Date()).format('YYYY-MM-DD'),this.docObj.dt()[0].INPUT,this.docObj.dt()[0].OUTPUT,this.docObj.dt()[0].PRICE_LIST_NO,0,false))
                     this.itemView.items.push(tmpItemObj)
                 }
 
                 this.itemView.items = this.itemView.items
+
                 this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
             }
             
@@ -284,6 +287,7 @@ export default class Sale extends React.PureComponent
                     this.itemView.items.push(tmpItemObj)
                 }
                 this.itemView.items = this.itemView.items
+
                 this.tmpStartPage = this.tmpStartPage + this.tmpPageLimit
             }
             
@@ -311,6 +315,7 @@ export default class Sale extends React.PureComponent
     {
         let tmpPrice = 0
         let tmpData
+
         if(this.core.local.platform != '')
         {
             let tmpQuery = 
@@ -516,6 +521,7 @@ export default class Sale extends React.PureComponent
             {
                 this.docLines.removeAt(this.docLines.where({'ITEM':e.GUID})[0])
             }
+
             this.calculateTotal()
         }
         else
@@ -692,6 +698,7 @@ export default class Sale extends React.PureComponent
             for (let i = 0; i < this.docLines.length; i++) 
             {
                 let tmpDocItems = {...this.docObj.docItems.empty}
+
                 tmpDocItems.DOC_GUID = this.docLines[i].DOC_GUID
                 tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
                 tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
@@ -777,6 +784,7 @@ export default class Sale extends React.PureComponent
                 id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
             }
+
             tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
             await dialog(tmpConfObj1);
         }
@@ -785,6 +793,7 @@ export default class Sale extends React.PureComponent
     {
         this.docObj.clearAll()
         this.setState({isExecute:true})
+
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:pDocType});
 
         if(pDocType == 60)
@@ -1102,8 +1111,9 @@ export default class Sale extends React.PureComponent
                                                             {
                                                                 this.factureSave()
                                                             }
-
-                                                        } else {
+                                                        }
+                                                        else 
+                                                        {
                                                             let tmpConfObj =
                                                             {
                                                                 id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -1112,13 +1122,12 @@ export default class Sale extends React.PureComponent
                                                             }
                                                             
                                                             let pResult = await dialog(tmpConfObj);
+
                                                             if(pResult == 'btn01')
                                                             {
                                                                 this.orderSave()
                                                             }
                                                         }    
-
-
                                                     }}>
                                                         <i className="fa-solid fa-floppy-disk fa-1x"></i>
                                                     </NbButton>                                                    
@@ -1141,7 +1150,9 @@ export default class Sale extends React.PureComponent
                                                         }
                                                         
                                                         let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                        
                                                         await this.cmbDesignList.dataRefresh({source:tmpData.result.recordset});
+                                                        
                                                         this.popDesign.show()
                                                     }}>
                                                         <i className="fa-solid fa-print fa-1x"></i>
@@ -1159,7 +1170,7 @@ export default class Sale extends React.PureComponent
                                                     {
                                                         let tmpConfObj =
                                                         {
-                                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'auto',height:'200px',
+                                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'auto',height:'auto',
                                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                                         }
@@ -1178,8 +1189,7 @@ export default class Sale extends React.PureComponent
                                                             {
                                                                 this.popCart.hide();
                                                                 this.init()
-                                                            }
-                                                            
+                                                            }    
                                                         }
                                                     }}>
                                                         <i className="fa-solid fa-trash fa-1x"></i>
@@ -1216,8 +1226,7 @@ export default class Sale extends React.PureComponent
                                                         ]
                                                     }
                                                     selectAll={true}                           
-                                                    >     
-                                                    </NdTextBox>
+                                                    />
                                                 </NdItem>
                                                 {/* cmbDepot */}
                                                 <NdItem>
@@ -1232,7 +1241,7 @@ export default class Sale extends React.PureComponent
                                                     onValueChanged={(async()=> { this.checkRow() }).bind(this)}
                                                     data={{source:{select:{query : `SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)`},sql:this.core.sql}}}
                                                     >
-                                                         <Validator validationGroup={"sale"}>
+                                                        <Validator validationGroup={"sale"}>
                                                             <RequiredRule message={this.t("validDepot")} />
                                                         </Validator> 
                                                     </NdSelectBox>
@@ -1351,7 +1360,8 @@ export default class Sale extends React.PureComponent
                                                                 </div>
                                                             )
                                                         }}
-                                                        validationRules={[
+                                                        validationRules=
+                                                        {[
                                                             {
                                                                 type: 'required',
                                                                 message: this.t("msgRequired")
@@ -1520,6 +1530,7 @@ export default class Sale extends React.PureComponent
                                                                                         let tmpTotalHt  =  parseFloat(this.docLines.where({'VAT_RATE':this.docLines.groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2))
                                                                                         let tmpVat = parseFloat(this.docLines.where({'VAT_RATE':this.docLines.groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
                                                                                         let tmpData = {"RATE":this.docLines.groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat,"TOTALHT":tmpTotalHt}
+                                                                                        
                                                                                         this.vatRate.push(tmpData)
                                                                                     }
 
@@ -1592,7 +1603,7 @@ export default class Sale extends React.PureComponent
                                                 
                                                 let tmpQuery = 
                                                 {
-                                                    query : `SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER`,
+                                                    query : `SELECT GUID, ADRESS, CITY, ZIPCODE  FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER`,
                                                     param : ['CUSTOMER:string|50'],
                                                     value : [this.grdCustomer.getSelectedData()[0].GUID]
                                                 }
@@ -1818,6 +1829,7 @@ export default class Sale extends React.PureComponent
                                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgVatDelete.msg")}</div>)
                                                     }
                                                     let pResult = await dialog(tmpConfObj);
+                                                    
                                                     if(pResult == 'btn01')
                                                     {
                                                         for (let i = 0; i < this.docLines.length; i++) 
@@ -2472,7 +2484,7 @@ export default class Sale extends React.PureComponent
                                                                     this.setState({isExecute:false})      
                                                                     let tmpConfObj1 =
                                                                     {
-                                                                        id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                        id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'auto',
                                                                         button:[{id:"btn01",caption:this.t("msgMailSendResult.btn01"),location:'after'}],
                                                                     }
                                                                     
@@ -2561,29 +2573,28 @@ export default class Sale extends React.PureComponent
                             >
                                 <Form colCount={1} height={'fit-content'}>                                
                                     <Item>
-                                        <NdButton text={this.t("btnMailSend")} type="danger" width="100%" stylingMode="contained"
-                                        onClick={async (pDesignValue = null)=>
+                                        <NbButton className="form-group btn btn-primary btn-block" style={{backgroundColor:'#154c79',width:'100%'}}
+                                        onClick={async ()=>
                                         {
                                             let tmpQuery = 
                                             {   
-                                                query : pDesignValue ? `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '115'` : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN]`
+                                                query :  `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '115'` 
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
 
                                             await this.cmbDesignList.dataRefresh({source:tmpData.result.recordset});
                                             this.popFactNonSolde.hide()
                                             
-                                            let tagValue = null;
-                                            
-                                            if(pDesignValue && tmpData.result.recordset.length > 0) 
+                                            if(tmpData.result.recordset.length > 0) 
                                             {
-                                                tagValue = tmpData.result.recordset[0].TAG;
-                                                this.cmbDesignList.value = tagValue;
+                                                this.cmbDesignList.value  = tmpData.result.recordset[0].TAG;
                                             }
                                             
-                                            this.popMailSend.show({designValue: tagValue || pDesignValue});
+                                            this.popMailSend.show({designValue: this.cmbDesignList.value});
                                         }}  
-                                        ></NdButton>
+                                        >
+                                            <i className="">{this.t("btnMailSend")}</i> 
+                                        </NbButton>
                                     </Item>
                                     <Item >
                                         <NdGrid parent={this} id={"grdFactNonSolde"}    
@@ -2597,14 +2608,13 @@ export default class Sale extends React.PureComponent
                                             dbApply={false}
                                             onRowDblClick={async(e)=>
                                             {
-                                                this.setState({isExecute:true})
-                                                
                                                 let tmpQuery = 
                                                 {
                                                     query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO ` ,
                                                     param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                     value:  [e.data.DOC_GUID,this.cmbDesignList.value,localStorage.getItem('lang').toUpperCase()]
                                                 }
+                                                
                                                 this.setState({isExecute:true})                                                        
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
 
@@ -2688,7 +2698,6 @@ export default class Sale extends React.PureComponent
                                         clearOnRefresh={true}
                                         onRowDblClick={async(e)=>
                                         {
-                                            this.setState({isExecute:true})
                                             
                                             let tmpQuery = 
                                             {

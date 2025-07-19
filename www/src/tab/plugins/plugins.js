@@ -13,6 +13,7 @@ App.prototype.init = async function()
   {
     const response = await fetch('/config.js');
     const configText = await response.text();
+
     pluginsConf = eval('(' + configText.replace('export default','').replace(/;$/, '') + ')');
   } 
   catch (error) 
@@ -21,6 +22,7 @@ App.prototype.init = async function()
   }
 
   const pluginsContext = require.context('./', false, /\.js$/);
+
   pluginsContext.keys().forEach((key) => 
   {
     const fileName = key.replace('./', '').replace('.js', '');
@@ -34,6 +36,7 @@ App.prototype.init = async function()
   try 
   {
     const privatePluginsContext = require.context('./private', false, /\.js$/);
+    
     privatePluginsContext.keys().forEach((key) => 
     {
       plugins.push(() => privatePluginsContext(key));
