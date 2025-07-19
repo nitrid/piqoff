@@ -1090,6 +1090,7 @@ export default class DocBase extends React.PureComponent
     }
     async convertDocOffers(data)
     {
+        this.grid.devGrid.beginUpdate()
         for (let i = 0; i < data.length; i++) 
             {
                 if(this.docType == 60)
@@ -1187,6 +1188,7 @@ export default class DocBase extends React.PureComponent
                     await this.core.util.waitUntil(100)
                 }
             }
+            this.grid.devGrid.endUpdate()
             this.calculateTotal()
     }
     async convertDocOrders(data)
@@ -1448,7 +1450,7 @@ export default class DocBase extends React.PureComponent
                     height={'90%'}
                     title={this.t("pg_txtCustomerCode.title")} //
                     search={true}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
@@ -1480,7 +1482,7 @@ export default class DocBase extends React.PureComponent
                             }
                         ]
                     }
-                    deferRendering={true}>
+                    deferRendering={false}>
                     {(()=>
                     {
                         if(this.type == 0)
@@ -1526,7 +1528,7 @@ export default class DocBase extends React.PureComponent
                     width={'500'}
                     height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -1705,7 +1707,7 @@ export default class DocBase extends React.PureComponent
                     width={'500'}
                     height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -1874,7 +1876,7 @@ export default class DocBase extends React.PureComponent
                     width={'500'}
                     height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <NdForm colCount={1} height={'fit-content'}>
                             <NdItem>
@@ -1951,7 +1953,7 @@ export default class DocBase extends React.PureComponent
                     height={'90%'}
                     selection={{mode:"multiple"}}
                     title={this.t("pg_dispatchGrid.title")} //
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <GroupPanel visible={true} allowColumnDragging={false}/>       
                         <Column dataField="REFERANS" caption={this.t("pg_dispatchGrid.clmReferans")} width={200} defaultSortOrder="asc" groupIndex={0}/>
@@ -1992,7 +1994,7 @@ export default class DocBase extends React.PureComponent
                             e.rowElement.style.color ="Black"
                         }
                     }}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                     {(()=>
                     {
@@ -2027,7 +2029,7 @@ export default class DocBase extends React.PureComponent
                     height={'90%'}
                     title={this.t("pg_service.title")} //
                     data={{source:{select:{query : "SELECT *,1 AS ITEM_TYPE,'00000000-0000-0000-0000-000000000000' AS UNIT FROM SERVICE_ITEMS_VW_01 WHERE STATUS = 1"},sql:this.core.sql}}}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Column dataField="CODE" caption={this.t("pg_service.clmCode")} width={200}/>
                         <Column dataField="NAME" caption={this.t("pg_service.clmName")} width={300} defaultSortOrder="asc"/>
@@ -2044,7 +2046,7 @@ export default class DocBase extends React.PureComponent
                     width={'1100'}
                     height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
-                    deferRendering={true}
+                    deferRendering={false}
                     onHiding={()=>
                     {
                         this.popMultiItem.tmpTagItemCode = this.tagItemCode.value
@@ -2141,7 +2143,7 @@ export default class DocBase extends React.PureComponent
                     width={'500'}
                     height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -2175,7 +2177,7 @@ export default class DocBase extends React.PureComponent
                     width={'500'}
                     height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item >
@@ -2289,7 +2291,7 @@ export default class DocBase extends React.PureComponent
                     width={"500px"}
                     height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCustomerNotFound.btn02"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
@@ -2317,7 +2319,7 @@ export default class DocBase extends React.PureComponent
                     width={"500px"}
                     height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
@@ -2345,7 +2347,7 @@ export default class DocBase extends React.PureComponent
                     width={"1000px"}
                     height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgNewPrice.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewPrice.btn02"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
@@ -2409,7 +2411,7 @@ export default class DocBase extends React.PureComponent
                     width={"1000px"}
                     height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgNewPriceDate.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewPriceDate.btn02"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
@@ -2471,7 +2473,7 @@ export default class DocBase extends React.PureComponent
                     width={"800px"}
                     height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgNewVat.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewVat.btn02"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
@@ -2517,7 +2519,7 @@ export default class DocBase extends React.PureComponent
                     width={"400px"}
                     height={"auto"}
                     button={[{id:"btn01",caption:this.lang.t("msgQuantity.btn01"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <div className="row">
                             <div className="col-12 py-2">
@@ -2604,7 +2606,7 @@ export default class DocBase extends React.PureComponent
                     height={'90%'}
                     title={this.t("pg_txtBarcode.title")} //
                     search={true}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
                         <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
@@ -2623,7 +2625,7 @@ export default class DocBase extends React.PureComponent
                     height={'90%'}
                     selection={{mode:"multiple"}}
                     title={this.lang.t("pg_ordersGrid.title")} //
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Paging defaultPageSize={22} />
                         <Column dataField="REFERANS" caption={this.lang.t("pg_ordersGrid.clmReferans")} width={100} defaultSortOrder="asc"/>
@@ -2647,7 +2649,7 @@ export default class DocBase extends React.PureComponent
                     height={'90%'}
                     selection={{mode:"multiple"}}
                     title={this.t("pg_offersGrid.title")} //
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Paging defaultPageSize={22} />
                         <Column dataField="REFERANS" caption={this.t("pg_offersGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
@@ -2669,7 +2671,7 @@ export default class DocBase extends React.PureComponent
                     height={'90%'}
                     selection={{mode:"multiple"}}
                     title={this.t("pg_getRebate.title")} //
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Paging defaultPageSize={22} />
                         <Column dataField="REFERANS" caption={this.t("pg_getRebate.clmReferans")} width={200} defaultSortOrder="asc"/>
@@ -2691,7 +2693,7 @@ export default class DocBase extends React.PureComponent
                     width={'600'}
                     height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <NdForm colCount={1} height={'fit-content'}>
                             <NdItem>
@@ -2788,7 +2790,7 @@ export default class DocBase extends React.PureComponent
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_adress.title")} //
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Column dataField="ADRESS" caption={this.t("pg_adress.clmAdress")} width={250} />
                         <Column dataField="CITY" caption={this.t("pg_adress.clmCiyt")} width={150} />
@@ -2808,7 +2810,7 @@ export default class DocBase extends React.PureComponent
                     height={'auto'}
                     position={{of:'#root'}}
                     button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -2888,7 +2890,7 @@ export default class DocBase extends React.PureComponent
                     height={'auto'}
                     position={{of:'#root'}}
                     button={[{id:"btn01",caption:this.t("msgDiscountEntry.btn01"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -2937,7 +2939,7 @@ export default class DocBase extends React.PureComponent
                     height={'auto'}
                     position={{of:'#root'}}
                     button={[{id:"btn01",caption:this.t("msgDiscountPerEntry.btn01"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -2966,7 +2968,7 @@ export default class DocBase extends React.PureComponent
                     height={'90%'}
                     selection={{mode:"multiple"}}
                     title={this.t("pg_proformaGrid.title")}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Column dataField="REFERANS" caption={this.t("pg_proformaGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
                         <Column dataField="ITEM_CODE" caption={this.t("pg_proformaGrid.clmCode")} width={200}/>
@@ -2988,7 +2990,7 @@ export default class DocBase extends React.PureComponent
                     height={'auto'}
                     position={{of:'#root'}}
                     button={[{id:"btn01",caption:this.t("msgGrdOrigins.btn01"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -3034,7 +3036,7 @@ export default class DocBase extends React.PureComponent
                     width={'800'}
                     height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Form colCount={2} height={'fit-content'}>
                             <Item>
@@ -3259,7 +3261,6 @@ export default class DocBase extends React.PureComponent
                     height={'90%'}
                     title={this.t("pg_partiLot.title")} 
                     search={true}
-                    deferRendering={true}
                     showCloseButton={this.sysParam.filter({ID:'sansPartiLot',USERS:this.user.CODE}).getValue()}
                     >
                         <Column dataField="LOT_CODE" caption={this.lang.t("pg_partiLot.clmLotCode")} width={150} />

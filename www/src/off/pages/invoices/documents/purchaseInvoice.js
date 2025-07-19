@@ -2238,7 +2238,7 @@ export default class purchaseInvoice extends DocBase
                             {
                                 this.frmDocItems = e.component
                             }}>                                
-                                <NdItem colSpan={3}>
+                                <NdItem location="after">
                                     <Button icon="add"
                                     validationGroup={"frmDoc"  + this.tabIndex}
                                     onClick={async (e)=>
