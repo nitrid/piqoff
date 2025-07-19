@@ -23,7 +23,7 @@ import NdPopGrid from '../../core/react/devex/popgrid.js';
 import { docCls,docExtraCls }from '../../core/cls/doc.js';
 import { datatable } from '../../core/core.js';
 import { NdToast} from '../../core/react/devex/toast.js';
-import { NdForm, NdLabel, NdItem, NdEmptyItem } from '../../core/react/devex/form.js';
+import { NdForm, NdLabel, NdItem } from '../../core/react/devex/form.js';
 
 export default class Sale extends React.PureComponent
 {
@@ -150,8 +150,8 @@ export default class Sale extends React.PureComponent
         this.docType = 0
         this.docLocked = false;
         this.orderGroup.value = this.sysParam.filter({ID:'salesItemsType',USERS:this.user.CODE}).getValue().value        
-        this.dtFirstDate.value = moment(new Date());
-        this.dtLastDate.value = moment(new Date());
+        this.dtFirstDate.value = new Date();
+        this.dtLastDate.value = new Date();
         this.cmbDesignList.value = ''
 
         this.grdCustomerExtreReport.dataRefresh({source:this.customerExtreReportDt})
@@ -974,7 +974,7 @@ export default class Sale extends React.PureComponent
                                 <i className="fa-solid fa-cart-shopping"></i>
                             </NbButton>
                         </div>
-                        <div className={window.innerWidth <= 768 ? "col-12" : "col-md-2"} align="left" style={{paddingTop:'5px',margin: window.innerWidth <= 768 ? '5px 0' : '0 5px'}}>
+                        <div className={window.innerWidth < 768 ? "col-12" : "col-md-2"} align="left" style={{paddingTop:'5px',margin: window.innerWidth < 768 ? '5px 0' : '0 5px'}}>
                             <NdSelectBox simple={true} parent={this} id="orderGroup" height='fit-content' 
                             displayExpr="VALUE"                       
                             valueExpr="ID"
@@ -982,7 +982,7 @@ export default class Sale extends React.PureComponent
                             data={{source:[{ID:"NAME",VALUE:this.t("orderGroup.Name")},{ID:"CODE",VALUE:this.t("orderGroup.Code")},{ID:"FAVORI DESC, NAME ASC",VALUE:this.t("orderGroup.Favori")},{ID:"SUB_FACTOR ASC",VALUE:this.t("orderGroup.Kilogram")}]}}
                             />
                         </div>
-                        <div className={window.innerWidth <= 768 ? "col-12" : "col-md-3"} align="center" style={{paddingTop:'5px',margin: window.innerWidth <= 768 ? '5px 0' : '0 5px'}}>
+                        <div className={window.innerWidth < 768 ? "col-12" : "col-md-3"} align="center" style={{paddingTop:'5px',margin: window.innerWidth < 768 ? '5px 0' : '0 5px'}}>
                             <NdTextBox id={"txtSearch"} parent={this} simple={true} placeholder={"Search"}  onChange={this.getItems}
                              button={
                             [
@@ -995,7 +995,7 @@ export default class Sale extends React.PureComponent
                             ]}
                             />
                         </div>
-                        <div className={window.innerWidth <= 768 ? "col-12" : "col-md-3"} align="right" style={{paddingTop:'5px',margin: window.innerWidth <= 768 ? '5px 0' : '0 5px'}}>
+                        <div className={window.innerWidth < 768 ? "col-12" : "col-md-3"} align="right" style={{paddingTop:'5px',margin: window.innerWidth < 768 ? '5px 0' : '0 5px'}}>
                             <NdSelectBox simple={true} parent={this} id="cmbGroup" height='fit-content' 
                             displayExpr="NAME"                       
                             valueExpr="CODE"
@@ -2629,6 +2629,7 @@ export default class Sale extends React.PureComponent
                                                         {
                                                             let raw = atob(base64);
                                                             let uint8Array = new Uint8Array(raw.length);
+
                                                             for (let i = 0; i < raw.length; i++) 
                                                             {
                                                                 uint8Array[i] = raw.charCodeAt(i);
@@ -2670,7 +2671,7 @@ export default class Sale extends React.PureComponent
                             visible={false}
                             showCloseButton={true}
                             showTitle={true}
-                            title={this.t("popCustomerExtreReport")}
+                            title={this.t("popCustomerExtreReport.title")}
                             container={"#root"} 
                             width={'600'}
                             height={'650'}
@@ -2678,9 +2679,11 @@ export default class Sale extends React.PureComponent
                             >
                                 <Form colCount={1} height={'fit-content'}>
                                     <Item>
+                                        <Label text={this.t("popCustomerExtreReport.clmFirstDate")} />
                                         <NdDatePicker simple={true}  parent={this} id={"dtFirstDate"} pickerType={"rollers"} />
                                     </Item>
                                     <Item>
+                                        <Label text={this.t("popCustomerExtreReport.clmLastDate")} />
                                         <NdDatePicker simple={true}  parent={this} id={"dtLastDate"} pickerType={"rollers"} />
                                     </Item>
                                     <Item>
@@ -2729,6 +2732,7 @@ export default class Sale extends React.PureComponent
                                                     this.popPrintView.show()
 
                                                     document.getElementById('printView').innerHTML = '<iframe id="pdfFrame" style="width:100%;height:100%;"></iframe>'
+                                                   
                                                     let pdfViewerFrame = document.getElementById("pdfFrame");
                                                     let tmpBase64 = base64ToUint8Array(pResult.split('|')[1])
 

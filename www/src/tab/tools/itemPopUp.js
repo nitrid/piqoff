@@ -1,8 +1,8 @@
 import React from "react";
 import App from "../lib/app.js";
 
-import Form, { Label} from 'devextreme-react/form';
-import Toolbar,{Item} from 'devextreme-react/toolbar';
+import Form, {Item, Label} from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
 import Carousel from 'react-bootstrap/Carousel';
 
 import NbBase from "../../core/react/bootstrap/base.js";
@@ -289,10 +289,10 @@ export default class NbItemPopUp extends NbBase
                                             {
                                                 if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
                                                 {                                                
-                                                    this.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+                                                    this.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value}).FACTOR
                                                     this.data.UNIT = e.value
                                                     this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
-                                                    this.txtFactor.value = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+                                                    this.txtFactor.value = this.cmbUnit.data.datatable.where({'GUID':e.value}).FACTOR
 
                                                     this.onValueChange(this.data)
                                                 }

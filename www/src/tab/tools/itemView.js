@@ -59,7 +59,7 @@ export default class NbItemView extends NbBase
                     {
                         return (
                             <div className='col-lg-3 col-md-4 col-sm-4 col-6 pb-2' key={'div' + i}>
-                                <div className="item-card-wrapper" style={{borderRadius: '12px', overflow: 'hidden', background: 'linear-gradient(to bottom right, #ffffff, #f8f9fa)', border: '1px solid rgba(127,143,166,0.3)'}} 
+                                <div className="item-card-wrapper" style={{borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(127,143,166,0.3)'}} 
                                >
                                     <NbItemCard id={'itemCard' + i} parent={this} key={'itemCard' + i} price={object.PRICE} name={object.NAME} prm={object.PRM}
                                     image={object.IMAGE == '' ? './css/img/noimage.jpg' : object.IMAGE} data={object} dt={this.props.dt} onValueChange={this.onValueChange} onClick={this.onClicked}
