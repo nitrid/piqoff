@@ -2041,6 +2041,7 @@ export default class salesInvoice extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
+                                            this.grid = this["grdSlsInv" + this.tabIndex]
                                             await this["grdSlsInv"+this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >

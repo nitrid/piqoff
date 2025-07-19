@@ -2567,6 +2567,7 @@ export default class purchaseInvoice extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
+                                            this.grid = this["grdPurcInv" + this.tabIndex]
                                             await this["grdPurcInv" + this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >

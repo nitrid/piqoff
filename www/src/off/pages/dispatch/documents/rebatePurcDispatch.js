@@ -1447,6 +1447,7 @@ export default class rebatePurcDispatch extends DocBase
                                         }}
                                         onReady={async()=>
                                         {
+                                            this.grid = this["grdRebtDispatch"+this.tabIndex]
                                             await this["grdRebtDispatch"+this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
                                         >
