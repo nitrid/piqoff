@@ -9,7 +9,8 @@ export class NdForm extends React.PureComponent
         this.lastLabelCount = 0;
         this.lastLabelTexts = [];
         this.isCalculating = false;
-        this.state = {
+        this.state = 
+        {
             disabled: props.disabled || false
         };
     }
@@ -70,7 +71,8 @@ export class NdForm extends React.PureComponent
     componentDidUpdate(prevProps)
     {
         // Props'tan gelen disabled değeri değiştiyse state'i güncelle
-        if (prevProps.disabled !== this.props.disabled) {
+        if (prevProps.disabled !== this.props.disabled) 
+        {
             this.setState({ disabled: this.props.disabled || false });
         }
     }
@@ -78,10 +80,7 @@ export class NdForm extends React.PureComponent
     componentDidMount()
     {
         // Label genişliklerini hesapla
-        setTimeout(() => 
-        {
-            this.calculateOptimalLabelWidth();
-        }, 100); // Biraz daha gecikme ekledim DOM'un tam yüklenmesi için
+        setTimeout(() => {this.calculateOptimalLabelWidth()}, 100); // Biraz daha gecikme ekledim DOM'un tam yüklenmesi için
         
         if (typeof this.props.onInitialized === 'function')
         {
@@ -95,7 +94,8 @@ export class NdForm extends React.PureComponent
                     if (arguments.length === 1) 
                     {
                         // Getter
-                        if (name === 'disabled') {
+                        if (name === 'disabled') 
+                        {
                             return this.state.disabled;
                         }
                         return this.formRef.current?.style[name];
@@ -103,9 +103,11 @@ export class NdForm extends React.PureComponent
                     else 
                     {
                         // Setter
-                        if (name === 'disabled') {
+                        if (name === 'disabled') 
+                        {
                             this.setState({ disabled: value });
-                        } else if (this.formRef.current) {
+                        } else if (this.formRef.current) 
+                        {
                             this.formRef.current.style[name] = value;
                         }
                     }
@@ -150,15 +152,20 @@ export class NdForm extends React.PureComponent
         };
         
         // Disabled durumunda child component'leri disable et
-        const processChildren = (children, disabled) => {
-            return React.Children.map(children, child => {
-                if (React.isValidElement(child)) {
+        const processChildren = (children, disabled) => 
+        {
+            return React.Children.map(children, child => 
+            {
+                if (React.isValidElement(child)) 
+                {
                     const newProps = disabled ? { disabled: true } : {};
                     
                     // Eğer child'ın kendi children'ı varsa onları da işle
-                    if (child.props.children) {
+                    if (child.props.children) 
+                    {
                         const processedGrandChildren = processChildren(child.props.children, disabled);
-                        return React.cloneElement(child, {
+                        return React.cloneElement(child, 
+                        {
                             ...newProps,
                             children: processedGrandChildren
                         });
@@ -227,20 +234,21 @@ export class NdItem extends React.PureComponent
                 </div>
             );
         }
-        
         // Normal item için - eğer sadece bir child varsa (grid gibi) full width yap
         const hasOnlyOneChild = React.Children.count(children) === 1;
         const firstChild = React.Children.toArray(children)[0];
-        
         // Grid detection - direkt grid veya React.Fragment içindeki grid
         let isGridChild = false;
-        if (firstChild) {
+        if (firstChild) 
+        {
             // Direkt grid check
-            if (firstChild.type && (firstChild.type.displayName === 'NdGrid' || firstChild.props.id?.includes('grd') || firstChild.type.name === 'NdGrid')) {
+            if (firstChild.type && (firstChild.type.displayName === 'NdGrid' || firstChild.props.id?.includes('grd') || firstChild.type.name === 'NdGrid')) 
+            {
                 isGridChild = true;
             }
             // React.Fragment içindeki grid check
-            else if (firstChild.type === React.Fragment && firstChild.props.children) {
+            else if (firstChild.type === React.Fragment && firstChild.props.children) 
+            {
                 const fragmentChildren = React.Children.toArray(firstChild.props.children);
                 isGridChild = fragmentChildren.some(child => 
                     child && child.type && (
@@ -269,7 +277,8 @@ export class NdItem extends React.PureComponent
             };
             
             // Grid'i wrap edecek div için stil
-            const gridWrapperStyle = {
+            const gridWrapperStyle = 
+            {
                 width: '100%',
                 overflowX: 'auto',
                 overflowY: 'hidden',

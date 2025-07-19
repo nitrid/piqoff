@@ -962,6 +962,8 @@ export default class DocBase extends React.PureComponent
             let tmpMergeDt = this.docDetailObj.dt().where({ITEM_CODE:pCode})
             if(tmpMergeDt.length > 0)
             {
+                App.instance.setState({isExecute:false})
+                
                 if(this.combineControl == true)
                 {
                     this.msgCombineItem.setTitle(tmpMergeDt[0].ITEM_NAME)

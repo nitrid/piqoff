@@ -57,7 +57,6 @@ export default class salesOffer extends DocBase
         this.grid = this["grdSlsOffer"+this.tabIndex]
         this.grid.devGrid.clearFilter("row")
 
-
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
         this.docLocked = false
@@ -141,6 +140,7 @@ export default class salesOffer extends DocBase
     }
     _cellRoleRender(e)
     {
+        console.log(this.grid)
         if(e.column.dataField == "ITEM_CODE")
         {
             return (
@@ -148,53 +148,53 @@ export default class salesOffer extends DocBase
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
                 onKeyDown={async(k)=>
+                {
+                    if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
                     {
-                        if(k.event.key == 'F10' || k.event.key == 'ArrowRight')
+                        this.pg_txtItemsCode.onClick = async(data) =>
                         {
-                            this.pg_txtItemsCode.onClick = async(data) =>
-                            {
-                                this.checkboxReset()
+                            this.checkboxReset()
 
-                                this.grid.devGrid.beginUpdate()
-                                
-                                for (let i = 0; i < data.length; i++) 
-                                {
-                                    await this.addItem(data[i],e.rowIndex)
-                                }
-                                
-                                this.grid.devGrid.endUpdate()
+                            this.grid.devGrid.beginUpdate()
+                            
+                            for (let i = 0; i < data.length; i++) 
+                            {
+                                await this.addItem(data[i],e.rowIndex)
                             }
-                            await this.pg_txtItemsCode.setVal(e.value)
+                            
+                            this.grid.devGrid.endUpdate()
                         }
-                    }}
-                    onValueChanged={(v)=>
-                    {
-                        e.value = v.value
-                    }}
+                        await this.pg_txtItemsCode.setVal(e.value)
+                    }
+                }}
+                onValueChanged={(v)=>
+                {
+                    e.value = v.value
+                }}
                 onChange={(async(r)=>
+                {
+                    if(typeof r.event.isTrusted == 'undefined')
                     {
-                        if(typeof r.event.isTrusted == 'undefined')
+                        let tmpQuery = 
                         {
-                            let tmpQuery = 
-                            {
-                                query : `SELECT ITEMS_VW_04.GUID,CODE,NAME,ITEMS_VW_04.VAT,COST_PRICE,ITEMS_VW_04.UNIT, FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE`,
-                                param : ['CODE:string|50'],
-                                value : [r.component._changedValue]
-                            }
-                            
-                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                            
-                            if(tmpData.result.recordset.length > 0)
-                            {
-                                this.checkboxReset()
-                                await this.addItem(tmpData.result.recordset[0],e.rowIndex)
-                            }
-                            else
-                            {
-                                this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning',displayTime:2000})
-                            }
+                            query : `SELECT ITEMS_VW_04.GUID,CODE,NAME,ITEMS_VW_04.VAT,COST_PRICE,ITEMS_VW_04.UNIT, FROM ITEMS_VW_04 INNER JOIN ITEM_BARCODE_VW_01 ON ITEMS_VW_04.GUID = ITEM_BARCODE_VW_01.ITEM_GUID WHERE CODE = @CODE OR ITEM_BARCODE_VW_01.BARCODE = @CODE`,
+                            param : ['CODE:string|50'],
+                            value : [r.component._changedValue]
                         }
-                    }).bind(this)}
+                        
+                        let tmpData = await this.core.sql.execute(tmpQuery) 
+                        
+                        if(tmpData.result.recordset.length > 0)
+                        {
+                            this.checkboxReset()
+                            await this.addItem(tmpData.result.recordset[0],e.rowIndex)
+                        }
+                        else
+                        {
+                            this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning',displayTime:2000})
+                        }
+                    }
+                }).bind(this)}
                 button=
                 {
                     [
@@ -226,11 +226,13 @@ export default class salesOffer extends DocBase
         if(e.column.dataField == "QUANTITY")
         {
             return (
-                <NdTextBox id={"txtGrdQuantity"+e.rowIndex} parent={this} simple={true} 
+                <NdTextBox id={"txtGrdQuantity" + e.rowIndex} parent={this} simple={true} 
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                 value={e.value}
                 onChange={(r)=>
                 {
+                    console.log(r.component._changedValue,this.grid,e.rowIndex)
+
                     this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
@@ -1326,10 +1328,7 @@ export default class salesOffer extends DocBase
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <NdForm colCount={1} onInitialized={(e)=>
-                            {
-                                this.frmDocItems = e.component
-                            }}>
+                            <NdForm colCount={1} onInitialized={(e)=>{this.frmDocItems = e.component}}>
                                 <NdItem location="after">
                                     <Button icon="add"
                                     validationGroup={"frmslsDoc" + this.tabIndex}
@@ -1618,6 +1617,7 @@ export default class salesOffer extends DocBase
                                     }}
                                     onReady={async()=>
                                     {
+                                        this.grid = this["grdSlsOffer"+this.tabIndex]
                                         await this["grdSlsOffer"+this.tabIndex].dataRefresh({source:this.docObj.docOffers.dt('DOC_OFFERS')});
                                     }}
                                     >
