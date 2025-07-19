@@ -1,8 +1,8 @@
 import React from "react";
 import App from "../lib/app.js";
 
-import Form, { Label} from 'devextreme-react/form';
-import Toolbar,{Item} from 'devextreme-react/toolbar';
+import Form, {Item, Label} from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
 import Carousel from 'react-bootstrap/Carousel';
 
 import NbBase from "../../core/react/bootstrap/base.js";
@@ -100,7 +100,7 @@ export default class NbItemPopUp extends NbBase
         }
         await this.grdQuantity.dataRefresh(tmpItemsSource)
     }
-    onValueChange(e)
+    _onValueChange(e)
     {
         if(typeof this.props.onValueChange != 'undefined')
         {
@@ -149,7 +149,7 @@ export default class NbItemPopUp extends NbBase
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgItemPrice',showTitle:true,title:this.t("msgItemPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgItemPrice',showTitle:true,title:this.t("msgItemPrice.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgItemPrice.btn01"),location:'after'},
                                                         {id:"btn02",caption:this.t("msgItemPrice.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemPrice.msg")}</div>)
@@ -261,8 +261,9 @@ export default class NbItemPopUp extends NbBase
                                                     if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
                                                     {
                                                         this.txtPrice.value = tmpData.result.recordset[0].PRICE
+                                                        console.log('this.txtPrice.value',this.txtPrice.value)
                                                         this.data.PRICE = this.txtPrice.value
-                                                        this.onValueChange(this.data)
+                                                        this._onValueChange(this.data)
                                                     }
                                                 }
                                             }}
@@ -274,30 +275,32 @@ export default class NbItemPopUp extends NbBase
                                         onValueChanged={(async(e)=>
                                         {
                                             this.data.PRICE = this.txtPrice.value
-                                            this.onValueChange(this.data)
+                                            this._onValueChange(this.data)
                                         }).bind(this)}/>
                                     </Item>
                                     <Item>
                                         <Label text={this.t("itemPopup.cmbUnit")} alignment="right" />
                                         <div className="row">
                                             <div className="col-8">
-                                            <NdSelectBox simple={true} parent={this} id="cmbUnit" height='fit-content' 
-                                            displayExpr="NAME"                       
-                                            valueExpr="GUID"
-                                            searchEnabled={true}
-                                            onValueChanged={(async(e)=>
-                                            {
-                                                if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
-                                                {                                                
-                                                    this.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
-                                                    this.data.UNIT = e.value
-                                                    this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
-                                                    this.txtFactor.value = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
-
-                                                    this.onValueChange(this.data)
-                                                }
-                                            }).bind(this)}
-                                            />
+                                                <NdSelectBox simple={true} parent={this} id="cmbUnit" height='fit-content' 
+                                                displayExpr="NAME"                       
+                                                valueExpr="GUID"
+                                                searchEnabled={true}
+                                                onValueChanged={(async(e)=>
+                                                {
+                                                    await this.core.util.waitUntil(500)
+                                                    if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
+                                                    {                
+                
+                                                        this.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+                                                        this.data.UNIT = e.value
+                                                        this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
+                                                        this.txtFactor.value = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+    
+                                                        this._onValueChange(this.data)
+                                                    }
+                                                }).bind(this)}
+                                                />
                                             </div>
                                             <div className="col-4">
                                                 <NdTextBox id={"txtFactor"} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }} value={this.data.UNIT_FACTOR} readOnly={true}/>
@@ -310,7 +313,7 @@ export default class NbItemPopUp extends NbBase
                                         onChange={(async(e)=>
                                         {
                                             this.data.DISCOUNT = this.txtDiscount.value
-                                            this.onValueChange(this.data)
+                                            this._onValueChange(this.data)
                                         }).bind(this)}
                                         button={
                                         [
@@ -337,7 +340,7 @@ export default class NbItemPopUp extends NbBase
                                         onChange={(async(e)=>
                                         {
                                             this.data.QUANTITY = this.txtQuantity.value
-                                            this.onValueChange(this.data)
+                                            this._onValueChange(this.data)
                                         }).bind(this)}
                                         button={
                                         [
@@ -349,7 +352,7 @@ export default class NbItemPopUp extends NbBase
                                                 {
                                                     this.txtQuantity.value = Number(this.txtQuantity.value) - 1 
                                                     this.data.QUANTITY = this.txtQuantity.value
-                                                    this.onValueChange(this.data)
+                                                    this._onValueChange(this.data)
                                                 }
                                             },
                                             {
@@ -360,7 +363,7 @@ export default class NbItemPopUp extends NbBase
                                                 {
                                                     this.txtQuantity.value = Number(this.txtQuantity.value) + 1 
                                                     this.data.QUANTITY = this.txtQuantity.value
-                                                    this.onValueChange(this.data)
+                                                    this._onValueChange(this.data)
                                                 }
                                             }                                                    
                                         ]}>
@@ -418,7 +421,7 @@ export default class NbItemPopUp extends NbBase
                                                         {
                                                             this.txtDiscount.value = this.txtDiscountPrice1.value
                                                             this.data.DISCOUNT = this.txtDiscountPrice1.value
-                                                            this.onValueChange(this.data)
+                                                            this._onValueChange(this.data)
                                                             this.popDiscount.hide();
                                                         }}/>
                                                     </div>

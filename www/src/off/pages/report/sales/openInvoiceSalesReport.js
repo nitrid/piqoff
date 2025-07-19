@@ -16,7 +16,7 @@ import NdOpenInvoiceReport from '../../../../core/react/devex/openinvoicereport.
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import { NdForm, NdItem, NdLabel} from '../../../../core/react/devex/form.js';
+import { NdForm, NdItem, NdLabel, NdEmptyItem} from '../../../../core/react/devex/form.js';
 import { NdToast} from '../../../../core/react/devex/toast.js';
 
 export default class openInvoiceSalesReport extends React.PureComponent
