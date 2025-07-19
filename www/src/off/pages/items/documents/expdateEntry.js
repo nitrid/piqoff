@@ -733,7 +733,7 @@ export default class expdateEntry extends React.Component
                         <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
                     {/* Miktar Dialog  */}
-                    <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
+                    <NdDialog id={"msgQuantity"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.t("msgQuantity.title")} 
                     showCloseButton={false}

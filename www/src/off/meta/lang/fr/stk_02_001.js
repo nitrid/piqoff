@@ -38,7 +38,7 @@ const stk_02_001 =
         clmCustomerName :"Compte Fournisseur",
         clmMulticode : "FRN.Code",
         clmBarcode : "Code barre",
-        clmUser : "Utilisateur",
+        clmCuser : "Utilisateur",
     },
     popPassword : 
     {

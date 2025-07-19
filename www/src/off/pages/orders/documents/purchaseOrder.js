@@ -1962,7 +1962,6 @@ export default class purchaseOrder extends DocBase
                         container={"#" + this.props.data.id + this.props.data.tabkey} 
                         width={'1200'}
                         height={'auto'}
-                        position={{of:'#' + this.props.data.id + this.props.data.tabkey}}
                         button={[{id:"btn01",caption:this.lang.t("btnOk"),location:'after'}]}
                         deferRendering={true}
                         onShowed={async ()=>

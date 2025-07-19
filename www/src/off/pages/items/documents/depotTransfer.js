@@ -1148,7 +1148,7 @@ export default class depotTransfer extends React.PureComponent
                         <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
                     {/* combineItem Dialog  */}
-                    <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
+                    <NdDialog id={"msgCombineItem"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.t("msgCombineItem.title")} 
                     showCloseButton={false}
@@ -1333,7 +1333,7 @@ export default class depotTransfer extends React.PureComponent
                         <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
                     {/* Miktar Dialog  */}
-                    <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
+                    <NdDialog id={"msgQuantity"} container={"#"+this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.t("msgQuantity.title")} 
                     showCloseButton={false}
