@@ -1,9 +1,8 @@
 import React from 'react';
 import App from '../../lib/app';
-import {datatable} from '../../../core/core.js'
-import {docCls,docExtraCls} from '../../../core/cls/doc.js'
+import { datatable } from '../../../core/core.js'
+import { docCls, docExtraCls } from '../../../core/cls/doc.js'
 
-import ScrollView from 'devextreme-react/scroll-view';
 import NbButton from '../../../core/react/bootstrap/button';
 import NdTextBox from '../../../core/react/devex/textbox';
 import NdSelectBox from '../../../core/react/devex/selectbox';
@@ -11,20 +10,21 @@ import NdDatePicker from '../../../core/react/devex/datepicker';
 import NdPopGrid from '../../../core/react/devex/popgrid';
 import NdNumberBox from '../../../core/react/devex/numberbox';
 import NdPopUp from '../../../core/react/devex/popup';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../core/react/devex/grid';
-import NdDialog, { dialog } from '../../../core/react/devex/dialog.js';
+import NdGrid,{ Column,Editing,Paging,Scrolling,KeyboardNavigation } from '../../../core/react/devex/grid';
+import { dialog } from '../../../core/react/devex/dialog.js';
 import NbLabel from '../../../core/react/bootstrap/label';
 
 import { PageBar } from '../../tools/pageBar';
 import { PageView,PageContent } from '../../tools/pageView';
 import moment from 'moment';
-
 export default class purchaseOrder extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
+        
         this.docObj = new docCls();
         this.extraObj = new docExtraCls();
         this.itemDt = new datatable();
@@ -34,23 +34,23 @@ export default class purchaseOrder extends React.PureComponent
 
         this.itemDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE OR MULTICODE = @CODE) OR (@CODE = '')",
+            query : `SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE OR MULTICODE = @CODE) OR (@CODE = '')`,
             param : ['CODE:string|25'],
         }
         this.unitDt.selectCmd = 
         {
-            query : "SELECT GUID,ID,NAME,SYMBOL,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE <> 1 ORDER BY TYPE ASC",
+            query : `SELECT GUID,ID,NAME,SYMBOL,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = @ITEM_GUID AND TYPE <> 1 ORDER BY TYPE ASC`,
             param : ['ITEM_GUID:string|50'],
         }
         this.priceDt.selectCmd = 
         {
-            query : "SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE",
+            query : `SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,'00000000-0000-0000-0000-000000000000',1,0,0) AS PRICE`,
             param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50'],
         }
 
         this.alertContent = 
         {
-            id:'msgAlert',showTitle:true,title:this.t("msgAlert.title"),showCloseButton:true,width:'90%',height:'200px',
+            id:'msgAlert',showTitle:true,title:this.t("msgAlert.title"),showCloseButton:true,width:'90%',height:'auto',
             button:[{id:"btn01",caption:this.t("msgAlert.btn01"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}></div>)
         }
@@ -62,7 +62,7 @@ export default class purchaseOrder extends React.PureComponent
 
         this.dtDocDate.value = moment(new Date())
 
-        await this.cmbDepot.dataRefresh({source:{select:{query : "SELECT * FROM DEPOT_VW_01"},sql:this.core.sql}});
+        await this.cmbDepot.dataRefresh({source:{select:{query:`SELECT * FROM DEPOT_VW_01`},sql:this.core.sql}});
 
         let tmpDoc = {...this.docObj.empty}
 
@@ -83,7 +83,7 @@ export default class purchaseOrder extends React.PureComponent
         this.txtRef.props.onChange(tmpDoc.REF)
 
         await this.grdList.dataRefresh({source:this.docObj.docOrders.dt('DOC_ORDERS')});
-        await this.cmbUnit.dataRefresh({source : this.unitDt})
+        await this.cmbUnit.dataRefresh({source:this.unitDt})
     }
     async componentDidMount()
     {
@@ -108,6 +108,7 @@ export default class purchaseOrder extends React.PureComponent
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
+
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:60});
         
         this.txtRef.readOnly = true
@@ -142,13 +143,16 @@ export default class purchaseOrder extends React.PureComponent
                 this.txtBarcode.value = ""
                 this.txtQuantity.focus();
                 this.txtQuantity.value = 1
+                
                 this.calcEntry()
             }
             else
             {                               
                 document.getElementById("Sound").play(); 
+                
                 this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgBarcodeNotFound")}</div>)
                 await dialog(this.alertContent);
+                
                 this.txtBarcode.value = ""
                 this.txtBarcode.focus();
             }
@@ -161,50 +165,45 @@ export default class purchaseOrder extends React.PureComponent
         {
             this.priceDt.selectCmd.value = [pGuid,pQuantity,(pCustomer == '' ? '00000000-0000-0000-0000-000000000000' : pCustomer)]
             await this.priceDt.refresh()
+
             if(this.priceDt.length > 0)
             {
                 resolve(this.priceDt[0].PRICE)
             }
+
             resolve(0)
         });
     }
-    async calcEntry() {
-        // Vérifie si l'une des propriétés a une valeur différente de zéro
-        if (this.txtFactor.value !== 0 || this.txtQuantity.value !== 0 || this.txtPrice.value !== 0) {
-            
-            // Calcule la quantité temporaire en multipliant txtFactor par txtQuantity
+    async calcEntry() 
+    {
+        if (this.txtFactor.value !== 0 || this.txtQuantity.value !== 0 || this.txtPrice.value !== 0) 
+        {
             let tmpQuantity = this.txtFactor.value * this.txtQuantity.value;
-     
-            // Récupère la limite de quantité depuis les paramètres système
             let prmLimitQuantity = this.sysParam.filter({ USERS: this.user.CODE, ID: 'limitQuantity' }).getValue()?.value;
-    
-            // Vérifie si la quantité temporaire dépasse la limite définie
-            if (tmpQuantity > prmLimitQuantity) {
-                // Affiche un message d'alerte et limite la valeur de txtQuantity à la limite définie
+            
+            if (tmpQuantity > prmLimitQuantity) 
+            {
                 this.alertContent.content = (
                     <div style={{ textAlign: "center", fontSize: "20px" }}>
                         {this.t("msgAlert.msgLimitQuantityCheck")}
                     </div>
                 );
                 await dialog(this.alertContent);
+
                 this.txtQuantity.value = prmLimitQuantity;
-                return; // Sort de la fonction si la quantité est limitée
+                return;
             }
     
-            // Si des arguments sont passés ou si aucun argument n'est passé, met à jour la valeur de txtPrice en appelant une fonction asynchrone getPrice
-            if ((arguments.length > 0 && arguments[0]) || arguments.length === 0) {
-                this.txtPrice.value = Number(
-                    (await this.getPrice(this.itemDt[0].GUID, tmpQuantity, this.docObj.dt()[0].OUTPUT))
-                ).round(2);
+            if ((arguments.length > 0 && arguments[0]) || arguments.length === 0) 
+            {
+                this.txtPrice.value = Number((await this.getPrice(this.itemDt[0].GUID, tmpQuantity, this.docObj.dt()[0].OUTPUT))).round(2);
             }
     
-            // Calcule les autres valeurs en fonction de txtPrice et de la quantité temporaire
             this.txtEntryAmount.value = Number(this.txtPrice.value * tmpQuantity).round(2);
             this.txtEntryVat.value = Number(this.txtEntryAmount.value - this.txtEntryDiscount.value).rateInc(this.itemDt[0].VAT, 2);
             this.txtEntrySumAmount.value = Number(this.txtEntryAmount.value - this.txtEntryDiscount.value).rateExc(this.itemDt[0].VAT, 2);
         }
     }
-    
     async addItem()
     {
         if(this.itemDt.length == 0)
@@ -213,6 +212,7 @@ export default class purchaseOrder extends React.PureComponent
             await dialog(this.alertContent);
             return
         }
+
         if(this.txtQuantity.value == "" || this.txtQuantity.value == 0 || this.txtQuantity.value > 15000000 || this.txtPrice.value > 15000000)
         {
             this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgQuantityCheck")}</div>)
@@ -231,9 +231,11 @@ export default class purchaseOrder extends React.PureComponent
                 this.docObj.docOrders.dt()[i].VAT = parseFloat((this.docObj.docOrders.dt()[i].VAT + (this.docObj.docOrders.dt()[i].PRICE * (this.docObj.docOrders.dt()[i].VAT_RATE / 100)) * tmpQuantity).toFixed(3))
                 this.docObj.docOrders.dt()[i].AMOUNT = parseFloat((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE).toFixed(3))
                 this.docObj.docOrders.dt()[i].TOTAL = parseFloat((((this.docObj.docOrders.dt()[i].QUANTITY * this.docObj.docOrders.dt()[i].PRICE) - this.docObj.docOrders.dt()[i].DISCOUNT) + this.docObj.docOrders.dt()[i].VAT).toFixed(3))
+                
                 this.clearEntry()
                 await this.save()
             }
+
             for (let i = 0; i < this.docObj.docOrders.dt().length; i++) 
             {
                 if(this.docObj.docOrders.dt()[i].ITEM_CODE == this.itemDt[0].CODE)
@@ -241,13 +243,16 @@ export default class purchaseOrder extends React.PureComponent
                     if(prmRowMerge == 2)
                     {
                         document.getElementById("Sound2").play(); 
+
                         let tmpConfObj = 
                         {
-                            id:'msgCombineItem',showTitle:true,title:this.lang.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'200px',
+                            id:'msgCombineItem',showTitle:true,title:this.lang.t("msgCombineItem.title"),showCloseButton:true,width:'350px',height:'auto',
                             button:[{id:"btn01",caption:this.lang.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCombineItem.btn02"),location:'after'}],
                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCombineItem.msg")}</div>)
                         }
+
                         let pResult = await dialog(tmpConfObj);
+                        
                         if(pResult == 'btn01')
                         {                   
                             tmpFnMergeRow(i)
@@ -305,10 +310,12 @@ export default class purchaseOrder extends React.PureComponent
             if(this.docObj.dt().length > 0)
             {
                 let tmpVat = 0
+
                 for (let i = 0; i < this.docObj.docOrders.dt().groupBy('VAT_RATE').length; i++) 
                 {
                     tmpVat = tmpVat + parseFloat(this.docObj.docOrders.dt().where({'VAT_RATE':this.docObj.docOrders.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
                 }
+
                 this.docObj.dt()[0].AMOUNT = this.docObj.docOrders.dt().sum("AMOUNT",2)
                 this.docObj.dt()[0].DISCOUNT = Number(parseFloat(this.docObj.docOrders.dt().sum("AMOUNT",2)) - parseFloat(this.docObj.docOrders.dt().sum("TOTALHT",2))).round(2)
                 this.docObj.dt()[0].DOC_DISCOUNT_1 = this.docObj.docOrders.dt().sum("DOC_DISCOUNT_1",4)
@@ -320,19 +327,15 @@ export default class purchaseOrder extends React.PureComponent
                 this.docObj.dt()[0].TOTALHT = parseFloat(parseFloat(this.docObj.docOrders.dt().sum("TOTALHT",2)) - parseFloat(this.docObj.docOrders.dt().sum("DOC_DISCOUNT",2))).round(2)
                 this.docObj.dt()[0].TOTAL = Number((parseFloat(this.docObj.dt()[0].TOTALHT)) + parseFloat(this.docObj.dt()[0].VAT)).round(2)
             }
-            let tmpConfObj1 =
-            {
-                id:'msgSaveResult',showTitle:true,title:this.lang.t("msgSave.title"),showCloseButton:true,width:'350px',height:'200px',
-                button:[{id:"btn01",caption:this.lang.t("msgSave.btn01"),location:'after'}],
-            }
             
-            if((await this.docObj.save()) == 0)
-            {                                                    
-               
-            }
-            else
+            if((await this.docObj.save()) != 0)
             {
-                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.lang.t("msgSaveResult.msgFailed")}</div>)
+                let tmpConfObj1 =
+                {
+                    id:'msgSaveResult',showTitle:true,title:this.lang.t("msgSave.title"),showCloseButton:true,width:'350px',height:'auto',
+                    button:[{id:"btn01",caption:this.lang.t("msgSave.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.lang.t("msgSaveResult.msgFailed")}</div>)
+                }
                 await dialog(tmpConfObj1);
             }
             resolve()
@@ -353,6 +356,7 @@ export default class purchaseOrder extends React.PureComponent
             await dialog(this.alertContent);
             return
         }
+
         if(this.docObj.dt()[0].INPUT == '')
         {
             this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgCustomer")}</div>)
@@ -378,252 +382,181 @@ export default class purchaseOrder extends React.PureComponent
         return(
             <div>
                 <div>
-                <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.sip_01")} content=
-                {[
-                    {
-                        name : 'Main',isBack : false,isTitle : true,
-                        menu :
-                        [
-                            {
-                                icon : "fa-file",
-                                text : this.lang.t("btnNewDoc"),
-                                onClick : ()=>
+                    <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.sip_01")} content=
+                    {[
+                        {
+                            name : 'Main',isBack : false,isTitle : true,
+                            menu :
+                            [
                                 {
-                                    this.init()
-                                }
-                            },
-                            {
-                                icon : "fa-trash",
-                                text : this.lang.t("btnDocDelete"),
-                                onClick : ()=>
-                                {
-                                    if(this.docObj.dt().length > 0)
+                                    icon : "fa-file",
+                                    text : this.lang.t("btnNewDoc"),
+                                    onClick : ()=>
                                     {
-                                        this.deleteAll();
+                                        this.init()
+                                    }
+                                },
+                                {
+                                    icon : "fa-trash",
+                                    text : this.lang.t("btnDocDelete"),
+                                    onClick : ()=>
+                                    {
+                                        if(this.docObj.dt().length > 0)
+                                        {
+                                            this.deleteAll();
+                                        }
                                     }
                                 }
-                            }
-                        ]
-                    },
-                    {
-                        name : 'Entry',isBack : true,isTitle : false,
-                        menu :
-                        [
-                            {
-                                icon : "fa-percent",
-                                text : this.lang.t("btnLineDisc"),
-                                onClick : ()=>
+                            ]
+                        },
+                        {
+                            name : 'Entry',isBack : true,isTitle : false,
+                            menu :
+                            [
                                 {
-                                    this.popDiscount.show()
+                                    icon : "fa-percent",
+                                    text : this.lang.t("btnLineDisc"),
+                                    onClick : ()=>
+                                    {
+                                        this.popDiscount.show()
+                                    }
                                 }
-                            }
-                        ],
-                        shortcuts :
-                        [
-                            {icon : "fa-file-lines",onClick : this.onClickProcessShortcut.bind(this)}
-                        ]
-                    },
-                    {
-                        name : 'Process',isBack : true,isTitle : false,
-                        shortcuts :
-                        [
-                            {icon : "fa-barcode",onClick : this.onClickBarcodeShortcut.bind(this)}
-                        ]
-                    }
-                ]}
-                onBackClick={()=>{this.pageView.activePage('Main')}}/>
+                            ],
+                            shortcuts :
+                            [
+                                {icon : "fa-file-lines",onClick : this.onClickProcessShortcut.bind(this)}
+                            ]
+                        },
+                        {
+                            name : 'Process',isBack : true,isTitle : false,
+                            shortcuts :
+                            [
+                                {icon : "fa-barcode",onClick : this.onClickBarcodeShortcut.bind(this)}
+                            ]
+                        }
+                    ]}
+                    onBackClick={()=>{this.pageView.activePage('Main')}}/>
                 </div>
                 <div style={{position:'relative',top:'1px',height:'calc(100vh - 1px)',overflow:'hidden'}}>
-                    <PageView id={"pageView"} parent={this} 
-                    onActivePage={(e)=>
-                    {
-                        this.pageBar.activePage(e)
-                    }}>
+                    <PageView id={"pageView"} parent={this} onActivePage={(e)=>{this.pageBar.activePage(e)}}>
                         <PageContent id={"Main"}>
                             <div className='row px-2'>
                                 <div className='col-12'>
-                                    <div className='card modern-card mb-2' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '6px'
-                                    }}>
-                                        
+                                    <div className='card modern-card mb-2' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '6px'}}>
                                         <div className='card-body' style={{padding: '0'}}>
-                                            <div className='form-group mb-2' style={{
-                                                background: '#f8f9fa',
-                                                padding: '6px',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label className='form-label' style={{
-                                                    fontSize: '12px',
-                                                    fontWeight: '500',
-                                                    color: '#6c757d',
-                                                    marginBottom: '2px',
-                                                    display: 'block'
-                                                }}>
+                                            <div className='form-group mb-2' style={{background: '#f8f9fa',padding: '6px',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label className='form-label' style={{fontSize: '12px',fontWeight: '500',color: '#6c757d',marginBottom: '2px',display: 'block'}}>
                                                     🔖 {this.t("lblRef")}
                                                 </label>
-                                            <div className='row'>
-                                                <div className='col-4'>
-                                                    <div style={{position: 'relative'}}>
-                                                    <NdTextBox id="txtRef" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
-                                                        style={{
-                                                            borderRadius: '4px',
-                                                            border: '1px solid #ced4da',
-                                                            fontSize: '12px',
-                                                            padding: '4px'
-                                                        }}
-                                                    onChange={(async(e)=>
-                                                    {
-                                                        try 
-                                                        {
-                                                            let tmpQuery = 
+                                                <div className='row'>
+                                                    <div className='col-4'>
+                                                        <div style={{position: 'relative'}}>
+                                                            <NdTextBox id="txtRef" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
+                                                            style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '4px'}}
+                                                            onChange={(async(e)=>
                                                             {
-                                                                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 60 AND REF = @REF ",
-                                                                param : ['REF:string|25'],
-                                                                value : [typeof e.component == 'undefined' ? e : this.txtRef.value]
-                                                            }
-
-                                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-
-                                                            if(tmpData.result.recordset.length > 0)
-                                                            {
-                                                                this.txtRefNo.value = tmpData.result.recordset[0].REF_NO
-                                                            }
-                                                        }
-                                                        catch (error) 
-                                                        {
-                                                            console.log("Hata oluştu: ", error);
-                                                        }
-                                                        
-                                                    }).bind(this)}
-                                                    />
-                                                        </div>
-                                                </div>
-                                                <div className='col-8'>
-                                                    <div style={{position: 'relative'}}>
-                                                    <NdTextBox id="txtRefNo" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
-                                                        style={{
-                                                            borderRadius: '4px',
-                                                            border: '1px solid #ced4da',
-                                                            fontSize: '12px',
-                                                            padding: '2px'
-                                                        }}
-                                                    button=
-                                                    {
-                                                        [
-                                                            {
-                                                                id:'01',
-                                                                icon:'more',
-                                                                onClick:async()=>
+                                                                try 
                                                                 {
-                                                                    this.popDoc.show()
-                                                                    this.popDoc.onClick = (data) =>
+                                                                    let tmpQuery = 
                                                                     {
-                                                                        if(data.length > 0)
-                                                                        {
-                                                                            this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
-                                                                        }
+                                                                        query : `SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 60 AND REF = @REF `,
+                                                                        param : ['REF:string|25'],
+                                                                        value : [typeof e.component == 'undefined' ? e : this.txtRef.value]
+                                                                    }
+
+                                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+
+                                                                    if(tmpData.result.recordset.length > 0)
+                                                                    {
+                                                                        this.txtRefNo.value = tmpData.result.recordset[0].REF_NO
                                                                     }
                                                                 }
-                                                            },
-                                                            {
-                                                                id:'02',
-                                                                icon:'arrowdown',
-                                                                onClick:()=>
+                                                                catch (error) 
                                                                 {
-                                                                    this.txtRefNo.value = Math.floor(Date.now() / 1000)
+                                                                    console.log("Hata oluştu: ", error);
                                                                 }
-                                                            }
-                                                        ]
-                                                    }/>
-                                                    {/*EVRAK SEÇİM */}
-                                                    <NdPopGrid id={"popDoc"} parent={this} container={"#root"}
-                                                    selection={{mode:"single"}}
-                                                    visible={false}
-                                                    position={{of:'#root'}} 
-                                                    showTitle={true} 
-                                                    showBorders={true}
-                                                    width={'100%'}
-                                                    height={'100%'}
-                                                    title={this.t("popDoc.title")} 
-                                                    data = 
-                                                    {{
-                                                        source:
-                                                        {
-                                                            select:
-                                                            {
-                                                                query : "SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0 ORDER BY DOC_DATE DESC"
-                                                            },
-                                                            sql:this.core.sql
-                                                        }
-                                                    }}
-                                                    >
-                                                        <Column dataField="REF" caption={this.t("popDoc.clmRef")} width={120} />
-                                                        <Column dataField="REF_NO" caption={this.t("popDoc.clmRefNo")} width={100}  />
-                                                        <Column dataField="DOC_DATE_CONVERT" caption={this.t("popDoc.clmDate")} width={100}  />
-                                                        <Column dataField="INPUT_NAME" caption={this.t("popDoc.clmInputName")} width={200}  />
-                                                        <Column dataField="INPUT_CODE" caption={this.t("popDoc.clmInputCode")} width={150}  />
-                                                    </NdPopGrid>
+                                                                
+                                                            }).bind(this)}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className='col-8'>
+                                                        <div style={{position: 'relative'}}>
+                                                            <NdTextBox id="txtRefNo" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
+                                                            style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '2px'}}
+                                                            button={[
+                                                                {
+                                                                    id:'01',
+                                                                    icon:'more',
+                                                                    onClick:async()=>
+                                                                    {
+                                                                        this.popDoc.show()
+                                                                        this.popDoc.onClick = (data) =>
+                                                                        {
+                                                                            if(data.length > 0)
+                                                                            {
+                                                                                this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    id:'02',
+                                                                    icon:'arrowdown',
+                                                                    onClick:()=>
+                                                                    {
+                                                                        this.txtRefNo.value = Math.floor(Date.now() / 1000)
+                                                                    }
+                                                                }
+                                                            ]}/>
+                                                            {/*EVRAK SEÇİM */}
+                                                            <NdPopGrid id={"popDoc"} parent={this} container={"#root"}
+                                                            selection={{mode:"single"}}
+                                                            visible={false}
+                                                            position={{of:'#root'}} 
+                                                            showTitle={true} 
+                                                            showBorders={true}
+                                                            width={'100%'}
+                                                            height={'100%'}
+                                                            title={this.t("popDoc.title")} 
+                                                            data = 
+                                                            {{
+                                                                source:
+                                                                {
+                                                                    select:
+                                                                    {
+                                                                        query : `SELECT GUID,REF,REF_NO,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 60 AND REBATE = 0 ORDER BY DOC_DATE DESC`,
+                                                                    },
+                                                                    sql:this.core.sql
+                                                                }
+                                                            }}
+                                                            >
+                                                                <Column dataField="REF" caption={this.t("popDoc.clmRef")} width={120} />
+                                                                <Column dataField="REF_NO" caption={this.t("popDoc.clmRefNo")} width={100}  />
+                                                                <Column dataField="DOC_DATE_CONVERT" caption={this.t("popDoc.clmDate")} width={100}  />
+                                                                <Column dataField="INPUT_NAME" caption={this.t("popDoc.clmInputName")} width={200}  />
+                                                                <Column dataField="INPUT_CODE" caption={this.t("popDoc.clmInputCode")} width={150}  />
+                                                            </NdPopGrid>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                            
-                                            <div className='form-group mb-2' style={{
-                                                background: '#f8f9fa',
-                                                padding: '6px',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label className='form-label' style={{
-                                                    fontSize: '12px',
-                                                    fontWeight: '500',
-                                                    color: '#6c757d',
-                                                    marginBottom: '2px',
-                                                    display: 'block'
-                                                }}>
+                                            <div className='form-group mb-2' style={{background: '#f8f9fa',padding: '6px',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label className='form-label' style={{fontSize: '12px',fontWeight: '500',color: '#6c757d',marginBottom: '2px',display: 'block'}}>
                                                     🏭 {this.t("lblDepot")}
                                                 </label>
-                                            <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
-                                                style={{
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #ced4da',
-                                                    fontSize: '12px',
-                                                    padding: '2px'
-                                                }}
-                                            dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}/>
-                                        </div>
-                                            
-                                            <div className='form-group mb-2' style={{
-                                                background: '#f8f9fa',
-                                                padding: '6px',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label className='form-label' style={{
-                                                    fontSize: '12px',
-                                                    fontWeight: '500',
-                                                    color: '#6c757d',
-                                                    marginBottom: '2px',
-                                                    display: 'block'
-                                                }}>
+                                                <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
+                                                style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '2px'}}
+                                                dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}/>
+                                            </div>
+                                            <div className='form-group mb-2' style={{background: '#f8f9fa',padding: '6px',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label className='form-label' style={{fontSize: '12px',fontWeight: '500',color: '#6c757d',marginBottom: '2px',display: 'block'}}>
                                                     👤 {this.t("lblCustomerCode")}
                                                 </label>
-                                            <NdTextBox id="txtCustomerCode" parent={this} simple={true} readOnly={true} maxLength={32}
-                                                style={{
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #ced4da',
-                                                    fontSize: '12px',
-                                                    padding: '2px'
-                                                }}
-                                            dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
-                                            button=
-                                            {
-                                                [
+                                                <NdTextBox id="txtCustomerCode" parent={this} simple={true} readOnly={true} maxLength={32}
+                                                style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '2px'}}
+                                                dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
+                                                button={[
                                                     {
                                                         id:'01',
                                                         icon:'more',
@@ -643,6 +576,7 @@ export default class purchaseOrder extends React.PureComponent
                                                                         this.txtRef.value = data[0].CODE;
                                                                         this.txtRef.props.onChange(data[0].CODE)
                                                                     }
+
                                                                     if(this.cmbDepot.value != '' && this.docLocked == false)
                                                                     {
                                                                         this.frmdocOrders.option('disabled',false)
@@ -651,353 +585,248 @@ export default class purchaseOrder extends React.PureComponent
                                                             }
                                                         }
                                                     }
-                                                ]
-                                            }/>
-                                            {/*CARI SECIMI POPUP */}
-                                            <NdPopGrid id={"popCustomer"} parent={this} container={"#root"}
-                                            selection={{mode:"single"}}
-                                            visible={false}
-                                            position={{of:'#root'}} 
-                                            showTitle={true} 
-                                            showBorders={true}
-                                            width={'100%'}
-                                            height={'100%'}
-                                            title={this.lang.t("popCustomer.title")} 
-                                            search={true}
-                                            data = 
-                                            {{
-                                                source:
-                                                {
-                                                    select:
+                                                ]}/>
+                                                {/*CARI SECIMI POPUP */}
+                                                <NdPopGrid id={"popCustomer"} parent={this} container={"#root"}
+                                                selection={{mode:"single"}}
+                                                visible={false}
+                                                position={{of:'#root'}} 
+                                                showTitle={true} 
+                                                showBorders={true}
+                                                width={'100%'}
+                                                height={'100%'}
+                                                title={this.lang.t("popCustomer.title")} 
+                                                search={true}
+                                                data = 
+                                                {{
+                                                    source:
                                                     {
-                                                        query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
-                                                        param : ['VAL:string|50']
-                                                    },
-                                                    sql:this.core.sql
-                                                }
-                                            }}
-                                            >
-                                                <Column dataField="CODE" caption={this.lang.t("popCustomer.clmCode")} width={150} />
-                                                <Column dataField="TITLE" caption={this.lang.t("popCustomer.clmTitle")} width={500} defaultSortOrder="asc" />
-                                                <Column dataField="TYPE_NAME" caption={this.lang.t("popCustomer.clmTypeName")} width={100} />
-                                                <Column dataField="GENUS_NAME" caption={this.lang.t("popCustomer.clmGenusName")} width={100} />
-                                            </NdPopGrid>
-                                        </div>
-                                            
-                                            <div className='form-group mb-2' style={{
-                                                background: '#f8f9fa',
-                                                padding: '6px',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label className='form-label' style={{
-                                                    fontSize: '12px',
-                                                    fontWeight: '500',
-                                                    color: '#6c757d',
-                                                    marginBottom: '2px',
-                                                    display: 'block'
-                                                }}>
+                                                        select:
+                                                        {
+                                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
+                                                            param : ['VAL:string|50']
+                                                        },
+                                                        sql:this.core.sql
+                                                    }
+                                                }}
+                                                >
+                                                    <Column dataField="CODE" caption={this.lang.t("popCustomer.clmCode")} width={150} />
+                                                    <Column dataField="TITLE" caption={this.lang.t("popCustomer.clmTitle")} width={500} defaultSortOrder="asc" />
+                                                    <Column dataField="TYPE_NAME" caption={this.lang.t("popCustomer.clmTypeName")} width={100} />
+                                                    <Column dataField="GENUS_NAME" caption={this.lang.t("popCustomer.clmGenusName")} width={100} />
+                                                </NdPopGrid>
+                                            </div>
+                                            <div className='form-group mb-2' style={{background: '#f8f9fa',padding: '6px',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label className='form-label' style={{fontSize: '12px',fontWeight: '500',color: '#6c757d',marginBottom: '2px',display: 'block'}}>
                                                     👥 {this.t("lblCustomerName")}
                                                 </label>
                                                 <NdTextBox id="txtCustomerName" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}}
-                                                style={{
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #ced4da',
-                                                    fontSize: '12px',
-                                                    padding: '2px'
-                                                }}/>
-                                    </div>
-                                            
-                                            <div className='form-group mb-0' style={{
-                                                background: '#f8f9fa',
-                                                padding: '6px',
-                                                borderRadius: '6px',
-                                                border: '1px solid #dee2e6'
-                                            }}>
-                                                <label className='form-label' style={{
-                                                    fontSize: '12px',
-                                                    fontWeight: '500',
-                                                    color: '#6c757d',
-                                                    marginBottom: '2px',
-                                                    display: 'block'
-                                                }}>
+                                                style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '2px'}}/>
+                                            </div>
+                                            <div className='form-group mb-0' style={{background: '#f8f9fa',padding: '6px',borderRadius: '6px',border: '1px solid #dee2e6'}}>
+                                                <label className='form-label' style={{fontSize: '12px',fontWeight: '500',color: '#6c757d',marginBottom: '2px',display: 'block'}}>
                                                     📅 {this.t("lblDate")}
                                                 </label>
                                                 <NdDatePicker simple={true} parent={this} id={"dtDocDate"} pickerType={"rollers"} dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
-                                                style={{
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #ced4da',
-                                                    fontSize: '12px'
-                                                }}/>
+                                                style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px'}}/>
+                                            </div>
                                         </div>
                                     </div>
-                                        </div>
-                                    
                                     <div className='row pb-1'>
                                         <div className='col-6 pe-1'>
-                                            <div className='card action-card' style={{
-                                                background: '#007bff',
-                                                borderRadius: '8px',
-                                                boxShadow: '0 2px 8px rgba(0,123,255,0.2)',
-                                                border: 'none',
-                                                height: '50px',
-                                                transition: 'all 0.3s ease'
-                                            }}>
+                                            <div className='card action-card' style={{background: '#007bff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,123,255,0.2)',border: 'none',height: '50px',transition: 'all 0.3s ease'}}>
                                                 <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%",background:"transparent",border:"none"}} 
                                                 onClick={this.onClickBarcodeShortcut.bind(this)}>
                                                     <div className='d-flex align-items-center justify-content-center h-100'>
                                                         <div className='text-center'>
                                                             <i className={"fa-solid fa-barcode"} style={{color:'#ffffff',fontSize:'18px',marginBottom:'4px'}}></i>
                                                             <div style={{color:'#ffffff',fontSize:'12px',fontWeight:'600'}}>{this.lang.t("btnBarcodeEntry")}</div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </NbButton>
-                                        </div>
+                                                </NbButton>
+                                            </div>
                                         </div>
                                         <div className='col-6 ps-1'>
-                                            <div className='card action-card' style={{
-                                                background: '#28a745',
-                                                borderRadius: '8px',
-                                                boxShadow: '0 2px 8px rgba(40,167,69,0.2)',
-                                                border: 'none',
-                                                height: '50px',
-                                                transition: 'all 0.3s ease'
-                                            }}>
+                                            <div className='card action-card' style={{background: '#28a745',borderRadius: '8px',boxShadow: '0 2px 8px rgba(40,167,69,0.2)',border: 'none',height: '50px',transition: 'all 0.3s ease'}}>
                                                 <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%",background:"transparent",border:"none"}} 
-                                            onClick={this.onClickProcessShortcut.bind(this)}>
+                                                onClick={this.onClickProcessShortcut.bind(this)}>
                                                     <div className='d-flex align-items-center justify-content-center h-100'>
                                                         <div className='text-center'>
                                                             <i className={"fa-solid fa-file-lines"} style={{color:'#ffffff',fontSize:'18px',marginBottom:'4px'}}></i>
                                                             <div style={{color:'#ffffff',fontSize:'12px',fontWeight:'600'}}>{this.lang.t("btnProcessLines")}</div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </NbButton>
+                                                </NbButton>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            </div>
-
                         </PageContent>
-                        <PageContent id={"Entry"} onActive={()=>
-                        {
-                            this.txtBarcode.focus();
-                        }}>
+                        <PageContent id={"Entry"} onActive={()=>{this.txtBarcode.focus()}}>
                             <div className='row px-2'>
                                 <div className='col-12'>
                                     {/* Barkod Giriş Kartı */}
-                                    <div className='card entry-card mb-2' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '6px'
-                                    }}>
-                                            <NdTextBox id="txtBarcode" parent={this} simple={true} maxLength={32}
-                                        style={{
-                                            borderRadius: '6px',
-                                            border: '1px solid #ced4da',
-                                            fontSize: '14px',
-                                            padding: '6px',
-                                            backgroundColor: '#ffffff'
-                                        }}
+                                    <div className='card entry-card mb-2' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '6px'}}>
+                                        <NdTextBox id="txtBarcode" parent={this} simple={true} maxLength={32}
+                                        style={{borderRadius: '6px',border: '1px solid #ced4da',fontSize: '14px',padding: '6px',backgroundColor: '#ffffff'}}
                                         placeholder={this.t("lblBarcode")}
-                                            onKeyUp={(async(e)=>
+                                        onKeyUp={(async(e)=>
+                                        {
+                                            if(e.event.key == 'Enter')
                                             {
-                                                if(e.event.key == 'Enter')
+                                                await this.getItem(this.txtBarcode.value)
+                                            }
+                                        }).bind(this)}
+                                        button={[
+                                            {
+                                                id:'01',
+                                                icon:'more',
+                                                onClick:async()=>
                                                 {
-                                                    await this.getItem(this.txtBarcode.value)
-                                                }
-                                            }).bind(this)}
-                                            button=
-                                            {
-                                                [
+                                                    this.popItem.show()
+                                                    this.popItem.onClick = (data) =>
                                                     {
-                                                        id:'01',
-                                                        icon:'more',
-                                                        onClick:async()=>
+                                                        if(data.length > 0)
                                                         {
-                                                            this.popItem.show()
-                                                            this.popItem.onClick = (data) =>
-                                                            {
-                                                                if(data.length > 0)
-                                                                {
-                                                                    this.getItem(data[0].CODE)
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                    {
-                                                        id:'02',
-                                                        icon:'photo',
-                                                        onClick:()=>
-                                                        {
-                                                            if(typeof cordova == "undefined")
-                                                            {
-                                                                return;
-                                                            }
-                                                            cordova.plugins.barcodeScanner.scan(
-                                                                async function (result) 
-                                                                {
-                                                                    if(result.cancelled == false)
-                                                                    {
-                                                                        this.txtBarcode.value = result.text;
-                                                                        this.getItem(result.text)
-                                                                    }
-                                                                }.bind(this),
-                                                                function (error) 
-                                                                {
-                                                                    
-                                                                },
-                                                                {
-                                                                  prompt : "Scan",
-                                                                  orientation : "portrait"
-                                                                }
-                                                            );
+                                                            this.getItem(data[0].CODE)
                                                         }
                                                     }
-                                                ]
-                                            }>
-                                            </NdTextBox>
-                                            {/*STOK SEÇİM */}
-                                            <NdPopGrid id={"popItem"} parent={this} container={"#root"}
-                                            selection={{mode:"single"}}
-                                            visible={false}
-                                            position={{of:'#root'}} 
-                                            showTitle={true} 
-                                            showBorders={true}
-                                            width={'100%'}
-                                            height={'100%'}
-                                            search={true}
-                                            title={this.lang.t("popItem.title")} 
-                                            data = 
-                                            {{
-                                                source:
-                                                {
-                                                    select:
-                                                    {
-                                                        query : "SELECT CODE,NAME FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
-                                                        param : ['VAL:string|50']
-                                                    },
-                                                    sql:this.core.sql
                                                 }
-                                            }}
-                                            >
-                                                <Column dataField="CODE" caption={this.lang.t("popItem.clmCode")} width={120} />
-                                                <Column dataField="NAME" caption={this.lang.t("popItem.clmName")} width={100} />
-                                            </NdPopGrid>
-                                        </div>
+                                            },
+                                            {
+                                                id:'02',
+                                                icon:'photo',
+                                                onClick:()=>
+                                                {
+                                                    if(typeof cordova == "undefined")
+                                                    {
+                                                        return;
+                                                    }
 
+                                                    cordova.plugins.barcodeScanner.scan(
+                                                        async function (result) 
+                                                        {
+                                                            if(result.cancelled == false)
+                                                            {
+                                                                this.txtBarcode.value = result.text;
+                                                                this.getItem(result.text)
+                                                            }
+                                                        }.bind(this),
+                                                        function (error) 
+                                                        {
+                                                            
+                                                        },
+                                                        {
+                                                            prompt : "Scan",
+                                                            orientation : "portrait"
+                                                        }
+                                                    );
+                                                }
+                                            }
+                                        ]}/>
+                                        {/*STOK SEÇİM */}
+                                        <NdPopGrid id={"popItem"} parent={this} container={"#root"}
+                                        selection={{mode:"single"}}
+                                        visible={false}
+                                        position={{of:'#root'}} 
+                                        showTitle={true} 
+                                        showBorders={true}
+                                        width={'100%'}
+                                        height={'100%'}
+                                        search={true}
+                                        title={this.lang.t("popItem.title")} 
+                                        data = 
+                                        {{
+                                            source:
+                                            {
+                                                select:
+                                                {
+                                                    query : `SELECT CODE,NAME FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)) AND STATUS = 1`,
+                                                    param : ['VAL:string|50']
+                                                },
+                                                sql:this.core.sql
+                                            }
+                                        }}
+                                        >
+                                            <Column dataField="CODE" caption={this.lang.t("popItem.clmCode")} width={120} />
+                                            <Column dataField="NAME" caption={this.lang.t("popItem.clmName")} width={100} />
+                                        </NdPopGrid>
+                                    </div>
                                     {/* Ürün Bilgileri */}
-                                    <div className='card mb-2' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '6px'
-                                    }}>
-                                        <div style={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center',
-                                            marginBottom: '8px'
-                                        }}>
+                                    <div className='card mb-2' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '6px'}}>
+                                        <div style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center',marginBottom: '8px'}}>
                                             <span style={{fontSize: '14px', fontWeight: '600', color: '#495057'}}>
                                                 📦 {this.t("lblItemName")}
                                             </span>
                                             <span style={{fontSize: '13px', color: '#6c757d'}}>
                                                 {this.t("lblDepotQuantity")}: <strong><NbLabel id="lblDepotQuantity" parent={this} value={0}/></strong>
                                             </span>
-                                    </div>
-                                        <div style={{
-                                            background: '#f8f9fa',
-                                            padding: '6px',
-                                            borderRadius: '6px',
-                                            border: '1px solid #dee2e6',
-                                            textAlign: 'center',
-                                            minHeight: '30px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center'
-                                        }}>
-                                            <NbLabel id="lblItemName" parent={this} value={""} 
-                                            style={{fontSize: '14px', fontWeight: '500', color: '#495057'}}/>
+                                        </div>
+                                        <div style={{background: '#f8f9fa',padding: '6px',borderRadius: '6px',border: '1px solid #dee2e6',textAlign: 'center',minHeight: '30px',display: 'flex',alignItems: 'center',justifyContent: 'center'}}>
+                                            <NbLabel id="lblItemName" parent={this} value={""} style={{fontSize: '14px', fontWeight: '500', color: '#495057'}}/>
                                         </div>
                                     </div>
-
                                     {/* Miktar ve Fiyat */}
-                                    <div className='card mb-2' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '6px'
-                                    }}>
+                                    <div className='card mb-2' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '6px'}}>
                                         {/* Birim */}
                                         <div className='row mb-2'>
-                                        <div className='col-4'>
+                                            <div className='col-4'>
                                                 <label style={{fontSize: '12px', color: '#6c757d', fontWeight: '500'}}>{this.t("lblUnit")}</label>
                                             </div>
                                             <div className='col-8'>
-                                            <NdSelectBox simple={true} parent={this} id="cmbUnit" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
+                                                <NdSelectBox simple={true} parent={this} id="cmbUnit" notRefresh = {true} displayExpr="NAME" valueExpr="GUID" value="" searchEnabled={true}
                                                 style={{borderRadius: '6px', border: '1px solid #ced4da', fontSize: '13px'}}
-                                             dt={{data:this.orderDt,field:"UNIT"}}
-                                            onValueChanged={(e)=>
-                                            {
-                                                if(e.value != null && e.value != "")
+                                                dt={{data:this.orderDt,field:"UNIT"}}
+                                                onValueChanged={(e)=>
                                                 {
-                                                    let tmpFactor = this.unitDt.where({GUID:e.value});
-                                                    if(tmpFactor.length > 0)
+                                                    if(e.value != null && e.value != "")
                                                     {
-                                                        this.txtFactor.value = tmpFactor[0].FACTOR
-                                                        this.txtFactor.props.onValueChanged()
+                                                        let tmpFactor = this.unitDt.where({GUID:e.value});
+
+                                                        if(tmpFactor.length > 0)
+                                                        {
+                                                            this.txtFactor.value = tmpFactor[0].FACTOR
+                                                            this.txtFactor.props.onValueChanged()
+                                                        }
                                                     }
-                                                }
-                                            }}/>
+                                                }}/>
+                                            </div>
                                         </div>
-                                    </div>
-                                        
                                         {/* Miktar */}
                                         <div className='row mb-2'>
-                                        <div className='col-4'>
+                                            <div className='col-4'>
                                                 <label style={{fontSize: '12px', color: '#6c757d', fontWeight: '500'}}>{this.t("lblQuantity")}</label>
                                             </div>
                                             <div className='col-3'>
-                                            <NdTextBox id="txtFactor" parent={this} simple={true} maxLength={32} readOnly={true} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"FACTOR"}}
+                                                <NdTextBox id="txtFactor" parent={this} simple={true} maxLength={32} readOnly={true} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"FACTOR"}}
                                                 style={{borderRadius: '6px', border: '1px solid #ced4da', textAlign: 'center', fontSize: '13px'}}
-                                            onEnterKey={this.addItem.bind(this)}/>
-                                        </div>
+                                                onEnterKey={this.addItem.bind(this)}/>
+                                            </div>
                                             <div className='col-2 d-flex align-items-center justify-content-center'>
                                                 <span style={{fontSize: '14px', fontWeight: 'bold', color: '#6c757d'}}>×</span>
-                                        </div>
+                                            </div>
                                             <div className='col-3'>
                                                 <NdNumberBox id="txtQuantity" parent={this} simple={true} maxLength={32}
                                                 style={{borderRadius: '6px', border: '2px solid #007bff', textAlign: 'center', fontSize: '13px'}}
                                                 onValueChanged={this.calcEntry.bind(this)} 
                                                 dt={{data:this.orderDt,field:"QUANTITY"}}
-                                            onEnterKey={this.addItem.bind(this)}/>
+                                                onEnterKey={this.addItem.bind(this)}/>
+                                            </div>
                                         </div>
-                                    </div>
-                                        
                                         {/* Fiyat */}
                                         <div className='row mb-2'>
-                                        <div className='col-4'>
+                                            <div className='col-4'>
                                                 <label style={{fontSize: '12px', color: '#6c757d', fontWeight: '500'}}>{this.t("lblPrice")}</label>
                                             </div>
                                             <div className='col-8'>
-                                            <NdNumberBox id="txtPrice" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this,false)} dt={{data:this.orderDt,field:"PRICE"}} 
+                                                <NdNumberBox id="txtPrice" parent={this} simple={true} maxLength={32} onValueChanged={this.calcEntry.bind(this,false)} dt={{data:this.orderDt,field:"PRICE"}} 
                                                 style={{borderRadius: '6px', border: '1px solid #ced4da', fontSize: '13px'}}
-                                            onEnterKey={this.addItem.bind(this)}/>
+                                                onEnterKey={this.addItem.bind(this)}/>
+                                            </div>
                                         </div>
-                                    </div>
-                                        
                                         {/* Hesaplanan Değerler */}
-                                        <div style={{
-                                            background: '#f8f9fa',
-                                            padding: '4px',
-                                            borderRadius: '6px',
-                                            border: '1px solid #dee2e6'
-                                        }}>
+                                        <div style={{background: '#f8f9fa',padding: '4px',borderRadius: '6px',border: '1px solid #dee2e6'}}>
                                             <div className='row mb-1'>
                                                 <div className='col-6'>
                                                     <span style={{fontSize: '12px', color: '#6c757d'}}>{this.t("lblAmount")}:</span>
@@ -1036,24 +865,10 @@ export default class purchaseOrder extends React.PureComponent
                                             </div>
                                         </div>
                                     </div>
-
                                     {/* Ekle Butonu */}
-                                    <div className='card action-button' style={{
-                                        background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 4px 12px rgba(40,167,69,0.3)',
-                                        border: 'none',
-                                        overflow: 'hidden'
-                                    }}>
-                                        <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{
-                                            height:"40px",
-                                            width:"100%",
-                                            background:"transparent",
-                                            border:"none",
-                                            color:"#ffffff",
-                                            fontSize:"16px",
-                                            fontWeight:"600"
-                                        }} 
+                                    <div className='card action-button' style={{background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',borderRadius: '8px',boxShadow: '0 4px 12px rgba(40,167,69,0.3)',border: 'none',overflow: 'hidden'}}>
+                                        <NbButton className="form-group btn btn-primary btn-purple btn-block" 
+                                        style={{height:"40px",width:"100%",background:"transparent",border:"none",color:"#ffffff",fontSize:"16px",fontWeight:"600"}} 
                                         onClick={this.addItem.bind(this)}>
                                             <div className='d-flex align-items-center justify-content-center'>
                                                 <i className="fa-solid fa-plus" style={{marginRight: '8px', fontSize: '16px'}}></i>
@@ -1107,12 +922,11 @@ export default class purchaseOrder extends React.PureComponent
                                         <NbButton className="form-group btn btn-primary btn-purple btn-block" style={{height:"100%",width:"100%"}} 
                                             onClick={(() =>
                                             {
-                                                
                                                 this.calcEntry(false)
-                                                console.log(this.popDiscount)
                                                 this.popDiscount.hide()
                                             }).bind(this)
-                                        }>{this.t("lblAdd")}
+                                        }>
+                                            {this.t("lblAdd")}
                                         </NbButton>
                                     </div>
                                 </div>
@@ -1121,212 +935,147 @@ export default class purchaseOrder extends React.PureComponent
                         <PageContent id={"Process"}>
                             <div className='row px-2'>
                                 <div className='col-12'>
-                                    <div className='card grid-card mb-2' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '4px'
-                                    }}>
-                                            <NdGrid parent={this} id={"grdList"} 
-                                            showBorders={true} 
-                                            columnsAutoWidth={true} 
-                                            allowColumnReordering={true} 
-                                            allowColumnResizing={true} 
-                                            headerFilter = {{visible:false}}
-                                            height={'250px'} 
-                                            width={'100%'}
-                                            dbApply={false}
-                                            onRowRemoving={async (e)=>
+                                    <div className='card grid-card mb-2' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '4px'}}>
+                                        <NdGrid parent={this} id={"grdList"} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        headerFilter = {{visible:false}}
+                                        height={'250px'} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        onRowRemoving={async (e)=>
+                                        {
+                                            if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
                                             {
-                                                if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
-                                                {
-                                                    e.cancel = true
-                                                    this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgRowNotDelete")}</div>)
-                                                    await dialog(this.alertContent);
-                                                    e.component.cancelEditData()
-                                                }
-                                            }}
-                                            onRowRemoved={async (e)=>
-                                            {
-                                                if(this.docObj.docOrders.dt().length == 0)
-                                                {
-                                                    this.deleteAll()
-                                                }
-                                                else
-                                                {
-                                                    await this.save()
-                                                }
+                                                e.cancel = true
+
+                                                this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgRowNotDelete")}</div>)
+                                                await dialog(this.alertContent);
                                                 
-                                            }}
-                                            onRowUpdating={async (e)=>
+                                                e.component.cancelEditData()
+                                            }
+                                        }}
+                                        onRowRemoved={async (e)=>
+                                        {
+                                            if(this.docObj.docOrders.dt().length == 0)
                                             {
-                                                if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
-                                                {
-                                                    e.cancel = true
-                                                    this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgRowNotUpdate")}</div>)
-                                                    await dialog(this.alertContent);
-                                                    e.component.cancelEditData()
-                                                }
-                                            }}
-                                            onRowUpdated={async(e)=>
+                                                this.deleteAll()
+                                            }
+                                            else
                                             {
-                                                if(typeof e.data.QUANTITY != 'undefined')
-                                                {
-                                                    e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
-                                                    e.key.PRICE = Number((await this.getPrice(e.key.ITEM,e.data.QUANTITY,this.docObj.dt()[0].INPUT))).round(2)
-                                                    await this.save()
-                                                }
-                                                if(typeof e.data.PRICE != 'undefined')
-                                                {
-                                                    e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
-                                                }
-                                                if(typeof e.data.DISCOUNT_RATE != 'undefined')
-                                                {
-                                                    e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
-                                                    e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
-                                                    e.key.DISCOUNT_2 = 0
-                                                    e.key.DISCOUNT_3 = 0
-                                                }
-                                                if(typeof e.data.DISCOUNT != 'undefined')
-                                                {
-                                                    e.key.DISCOUNT_1 = e.data.DISCOUNT
-                                                    e.key.DISCOUNT_2 = 0
-                                                    e.key.DISCOUNT_3 = 0
-                                                    e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
-                                                }
-                                                
-                                                if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
-                                                {
-                                                    this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgDiscount")}</div>)
-                                                    await dialog(this.alertContent);
-                                                    
-                                                    e.key.DISCOUNT = 0 
-                                                    e.key.DISCOUNT_1 = 0
-                                                    e.key.DISCOUNT_2 = 0
-                                                    e.key.DISCOUNT_3 = 0
-                                                    e.key.DISCOUNT_RATE = 0
-                                                    return
-                                                }
-        
-                                                e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - (parseFloat(e.key.DISCOUNT) + parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
-                                                e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
-                                                e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY)) - (parseFloat(e.key.DISCOUNT)))).round(2)
-                                                e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
-        
-                                                if(e.key.DISCOUNT > 0)
-                                                {
-                                                    e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(4))
-                                                }
                                                 await this.save()
-                                            }}
-                                            >
-                                                <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
-                                                <Scrolling mode="standart" />
-                                                <Paging defaultPageSize={10} />
-                                                {/* <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} /> */}
-                                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                                <Column dataField="ITEM_NAME" caption={this.t("grdList.clmItemName")} width={150} />
-                                                <Column dataField="QUANTITY" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={40}/>
-                                                <Column dataField="PRICE" caption={this.t("grdList.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={60}/>
-                                                <Column dataField="AMOUNT" caption={this.t("grdList.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
-                                                <Column dataField="DISCOUNT" caption={this.t("grdList.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
-                                                <Column dataField="DISCOUNT_RATE" caption={this.t("grdList.clmDiscountRate")} dataType={'number'} width={80}/>
-                                                <Column dataField="VAT" caption={this.t("grdList.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={80}/>
-                                                <Column dataField="TOTAL" caption={this.t("grdList.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={100}/>
-                                            </NdGrid>
-                                        </div>
-                                    
-                                    <div className='card summary-card' style={{
-                                        background: '#ffffff',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                                        border: '1px solid #e9ecef',
-                                        padding: '6px'
-                                    }}>
-                                        <div className='summary-item' style={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center',
-                                            padding: '2px 0',
-                                            borderBottom: '1px solid #f0f0f0'
-                                        }}>
-                                            <label style={{
-                                                fontSize: '13px',
-                                                fontWeight: '500',
-                                                color: '#6c757d',
-                                                margin: '0'
-                                            }}>{this.t("lblAmount")}</label>
+                                            }
+                                        }}
+                                        onRowUpdating={async (e)=>
+                                        {
+                                            if(e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000')
+                                            {
+                                                e.cancel = true
+
+                                                this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgRowNotUpdate")}</div>)
+                                                await dialog(this.alertContent);
+                                                
+                                                e.component.cancelEditData()
+                                            }
+                                        }}
+                                        onRowUpdated={async(e)=>
+                                        {
+                                            if(typeof e.data.QUANTITY != 'undefined')
+                                            {
+                                                e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
+                                                e.key.PRICE = Number((await this.getPrice(e.key.ITEM,e.data.QUANTITY,this.docObj.dt()[0].INPUT))).round(2)
+                                                await this.save()
+                                            }
+
+                                            if(typeof e.data.PRICE != 'undefined')
+                                            {
+                                                e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
+                                            }
+
+                                            if(typeof e.data.DISCOUNT_RATE != 'undefined')
+                                            {
+                                                e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
+                                                e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                            }
+
+                                            if(typeof e.data.DISCOUNT != 'undefined')
+                                            {
+                                                e.key.DISCOUNT_1 = e.data.DISCOUNT
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                                e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
+                                            }
+                                            
+                                            if(e.key.DISCOUNT > (e.key.PRICE * e.key.QUANTITY))
+                                            {
+                                                this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgDiscount")}</div>)
+                                                await dialog(this.alertContent);
+                                                
+                                                e.key.DISCOUNT = 0 
+                                                e.key.DISCOUNT_1 = 0
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                                e.key.DISCOUNT_RATE = 0
+                                                return
+                                            }
+    
+                                            e.key.VAT = parseFloat(((((e.key.PRICE * e.key.QUANTITY) - (parseFloat(e.key.DISCOUNT) + parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                            e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
+                                            e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY)) - (parseFloat(e.key.DISCOUNT)))).round(2)
+                                            e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
+    
+                                            if(e.key.DISCOUNT > 0)
+                                            {
+                                                e.key.DISCOUNT_RATE = parseFloat((100 - ((((e.key.PRICE * e.key.QUANTITY) - e.key.DISCOUNT) / (e.key.PRICE * e.key.QUANTITY)) * 100)).toFixed(4))
+                                            }
+
+                                            await this.save()
+                                        }}
+                                        >
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'row'} />
+                                            <Scrolling mode="standart" />
+                                            <Paging defaultPageSize={10} />
+                                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                            <Column dataField="ITEM_NAME" caption={this.t("grdList.clmItemName")} width={150} />
+                                            <Column dataField="QUANTITY" caption={this.t("grdList.clmQuantity")} dataType={'number'} width={40}/>
+                                            <Column dataField="PRICE" caption={this.t("grdList.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={60}/>
+                                            <Column dataField="AMOUNT" caption={this.t("grdList.clmAmount")} allowEditing={false} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
+                                            <Column dataField="DISCOUNT" caption={this.t("grdList.clmDiscount")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={80}/>
+                                            <Column dataField="DISCOUNT_RATE" caption={this.t("grdList.clmDiscountRate")} dataType={'number'} width={80}/>
+                                            <Column dataField="VAT" caption={this.t("grdList.clmVat")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={80}/>
+                                            <Column dataField="TOTAL" caption={this.t("grdList.clmTotal")} format={{ style: "currency", currency: "EUR",precision: 3}} allowEditing={false} width={100}/>
+                                        </NdGrid>
+                                    </div>
+                                    <div className='card summary-card' style={{background: '#ffffff',borderRadius: '8px',boxShadow: '0 2px 8px rgba(0,0,0,0.06)',border: '1px solid #e9ecef',padding: '6px'}}>
+                                        <div className='summary-item' style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center',padding: '2px 0',borderBottom: '1px solid #f0f0f0'}}>
+                                            <label style={{fontSize: '13px',fontWeight: '500',color: '#6c757d',margin: '0'}}>{this.t("lblAmount")}</label>
                                             <div style={{width: '120px'}}>
                                                 <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
-                                                style={{
-                                                    borderRadius: '4px',
-                                                    border: '1px solid #ced4da',
-                                                    fontSize: '12px',
-                                                    padding: '2px',
-                                                    textAlign: 'right'
-                                                }}/>
-                                    </div>
+                                                style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '2px',textAlign: 'right'}}/>
+                                            </div>
                                         </div>
-                                         
-                                         <div className='summary-item' style={{
-                                             display: 'flex',
-                                             justifyContent: 'space-between',
-                                             alignItems: 'center',
-                                             padding: '2px 0',
-                                             borderBottom: '1px solid #f0f0f0'
-                                         }}>
-                                             <label style={{
-                                                 fontSize: '13px',
-                                                 fontWeight: '500',
-                                                 color: '#6c757d',
-                                                 margin: '0'
-                                             }}>{this.t("lblDiscount")}</label>
-                                             <div style={{width: '120px'}}>
+                                        <div className='summary-item' style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center',padding: '2px 0',borderBottom: '1px solid #f0f0f0'}}>
+                                            <label style={{fontSize: '13px',fontWeight: '500',color: '#6c757d',margin: '0'}}>{this.t("lblDiscount")}</label>
+                                            <div style={{width: '120px'}}>
                                                  <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
-                                                 style={{
-                                                     borderRadius: '4px',
-                                                     border: '1px solid #ced4da',
-                                                     fontSize: '12px',
-                                                     padding: '2px',
-                                                     textAlign: 'right'
-                                                 }}/>
+                                                 style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '2px',textAlign: 'right'}}/>
+                                            </div>
                                         </div>
-                                    </div>
-                                         
-                                         <div className='summary-item' style={{
-                                             display: 'flex',
-                                             justifyContent: 'space-between',
-                                             alignItems: 'center',
-                                             padding: '2px 0',
-                                             borderBottom: '1px solid #f0f0f0'
-                                         }}>
-                                             <label style={{
-                                                 fontSize: '13px',
-                                                 fontWeight: '500',
-                                                 color: '#6c757d',
-                                                 margin: '0'
-                                             }}>{this.t("lblDocDiscount")}</label>
-                                             <div style={{width: '120px'}}>
-                                            <NdTextBox id="txtDocDiscount" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"DOC_DISCOUNT"}}
-                                                 style={{
-                                                     borderRadius: '4px',
-                                                     border: '1px solid #ced4da',
-                                                     fontSize: '12px',
-                                                     padding: '2px',
-                                                     textAlign: 'right'
-                                                 }}
-                                            button=
-                                            {
-                                                [
+                                        <div className='summary-item' style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center',padding: '2px 0',borderBottom: '1px solid #f0f0f0'}}>
+                                            <label style={{fontSize: '13px',fontWeight: '500',color: '#6c757d',margin: '0'}}>{this.t("lblDocDiscount")}</label>
+                                            <div style={{width: '120px'}}>
+                                                <NdTextBox id="txtDocDiscount" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"DOC_DISCOUNT"}}
+                                                style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '2px',textAlign: 'right'}}
+                                                button={[
                                                     {
                                                         id:'01',
                                                         icon:'more',
                                                         onClick:()  =>
                                                         {
-                                                            console.log(this.docObj.dt()[0].SUBTOTAL)
-                                                            console.log(this.docObj.dt()[0].DOC_DISCOUNT_1)
-                                                            console.log( Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5))
                                                             if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
                                                             {
                                                                 this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)
@@ -1345,92 +1094,34 @@ export default class purchaseOrder extends React.PureComponent
                                                                 this.txtDocDiscountPercent3.value  = 0
                                                                 this.txtDocDiscountPrice3.value = 0
                                                             }
+
                                                             this.popDocDiscount.show()
                                                         }
                                                     }
-                                                ]
-                                            }/>
+                                                ]}/>
+                                            </div>
                                         </div>
-                                    </div>
-                                         
-                                         <div className='summary-item' style={{
-                                             display: 'flex',
-                                             justifyContent: 'space-between',
-                                             alignItems: 'center',
-                                             padding: '2px 0',
-                                             borderBottom: '1px solid #f0f0f0'
-                                         }}>
-                                             <label style={{
-                                                 fontSize: '13px',
-                                                 fontWeight: '500',
-                                                 color: '#6c757d',
-                                                 margin: '0'
-                                             }}>{this.t("lblTotalHt")}</label>
+                                        <div className='summary-item' style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center',padding: '2px 0',borderBottom: '1px solid #f0f0f0'}}>
+                                             <label style={{fontSize: '13px',fontWeight: '500',color: '#6c757d',margin: '0'}}>{this.t("lblTotalHt")}</label>
                                              <div style={{width: '120px'}}>
-                                                 <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}
-                                                 style={{
-                                                     borderRadius: '4px',
-                                                     border: '1px solid #ced4da',
-                                                     fontSize: '12px',
-                                                     padding: '2px',
-                                                     textAlign: 'right'
-                                                 }}/>
+                                                <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}
+                                                style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '2px',textAlign: 'right'}}/>
+                                            </div>
                                         </div>
+                                        <div className='summary-item' style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center',padding: '2px 0',borderBottom: '1px solid #f0f0f0'}}>
+                                            <label style={{fontSize: '13px',fontWeight: '500',color: '#6c757d',margin: '0'}}>{this.t("lblVat")}</label>
+                                            <div style={{width: '120px'}}>
+                                                <NdTextBox id="txtDocVat" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"VAT"}}
+                                                style={{borderRadius: '4px',border: '1px solid #ced4da',fontSize: '12px',padding: '2px',textAlign: 'right'}}/>
+                                            </div>
                                         </div>
-                                         
-                                         <div className='summary-item' style={{
-                                             display: 'flex',
-                                             justifyContent: 'space-between',
-                                             alignItems: 'center',
-                                             padding: '2px 0',
-                                             borderBottom: '1px solid #f0f0f0'
-                                         }}>
-                                             <label style={{
-                                                 fontSize: '13px',
-                                                 fontWeight: '500',
-                                                 color: '#6c757d',
-                                                 margin: '0'
-                                             }}>{this.t("lblVat")}</label>
-                                             <div style={{width: '120px'}}>
-                                                 <NdTextBox id="txtDocVat" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"VAT"}}
-                                                 style={{
-                                                     borderRadius: '4px',
-                                                     border: '1px solid #ced4da',
-                                                     fontSize: '12px',
-                                                     padding: '2px',
-                                                     textAlign: 'right'
-                                                 }}/>
-                                    </div>
+                                        <div className='summary-item total-item' style={{display: 'flex',justifyContent: 'space-between',alignItems: 'center',padding: '4px 0',borderTop: '2px solid #28a745',marginTop: '2px',background: 'linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%)'}}>
+                                            <label style={{fontSize: '14px',fontWeight: 'bold',color: '#28a745',margin: '0'}}>{this.t("lblGenAmount")}</label>
+                                            <div style={{width: '120px'}}>
+                                                <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
+                                                style={{borderRadius: '4px',border: '2px solid #28a745',fontSize: '14px',padding: '2px',textAlign: 'right',fontWeight: 'bold',color: '#28a745'}}/>
+                                            </div>
                                         </div>
-                                         
-                                         <div className='summary-item total-item' style={{
-                                             display: 'flex',
-                                             justifyContent: 'space-between',
-                                             alignItems: 'center',
-                                             padding: '4px 0',
-                                             borderTop: '2px solid #28a745',
-                                             marginTop: '2px',
-                                             background: 'linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%)'
-                                         }}>
-                                             <label style={{
-                                                 fontSize: '14px',
-                                                 fontWeight: 'bold',
-                                                 color: '#28a745',
-                                                 margin: '0'
-                                             }}>{this.t("lblGenAmount")}</label>
-                                             <div style={{width: '120px'}}>
-                                                 <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} maxLength={32} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
-                                                 style={{
-                                                     borderRadius: '4px',
-                                                     border: '2px solid #28a745',
-                                                     fontSize: '14px',
-                                                     padding: '2px',
-                                                     textAlign: 'right',
-                                                     fontWeight: 'bold',
-                                                     color: '#28a745'
-                                                 }}/>
-                                        </div>
-                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -1457,12 +1148,13 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
                                                 }
                                     
                                                 await dialog(tmpConfObj);
+
                                                 this.txtDocDiscountPercent1.value = 0;
                                                 this.txtDocDiscountPrice1.value = 0;
                                                 return
@@ -1485,12 +1177,13 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
                                                 }
                                     
                                                 await dialog(tmpConfObj);
+
                                                 this.txtDocDiscountPercent1.value = 0;
                                                 this.txtDocDiscountPrice1.value = 0;
                                                 return
@@ -1513,12 +1206,13 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
                                                 }
                                     
                                                 await dialog(tmpConfObj);
+
                                                 this.txtDocDiscountPercent2.value = 0;
                                                 this.txtDocDiscountPrice2.value = 0;
                                                 return
@@ -1541,12 +1235,13 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
                                                 }
                                     
                                                 await dialog(tmpConfObj);
+
                                                 this.txtDocDiscountPercent2.value = 0;
                                                 this.txtDocDiscountPrice2.value = 0;
                                                 return
@@ -1569,12 +1264,13 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
                                                 }
                                     
                                                 await dialog(tmpConfObj);
+
                                                 this.txtDocDiscountPercent3.value = 0;
                                                 this.txtDocDiscountPrice3.value = 0;
                                                 return
@@ -1597,12 +1293,13 @@ export default class purchaseOrder extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
                                                 }
                                     
                                                 await dialog(tmpConfObj);
+
                                                 this.txtDocDiscountPercent3.value = 0;
                                                 this.txtDocDiscountPrice3.value = 0;
                                                 return
@@ -1634,13 +1331,16 @@ export default class purchaseOrder extends React.PureComponent
                                                     {
                                                         tmpDocData.VAT = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) * (tmpDocData.VAT_RATE / 100)).toFixed(6))
                                                     }
+
                                                     tmpDocData.TOTAL = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) + tmpDocData.VAT)).round(2)
                                                     tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
                                                 }
+
                                                 await this.save()
                                                 this.popDocDiscount.hide()
                                             }).bind(this)
-                                        }>{this.t("lblAdd")}
+                                        }>
+                                            {this.t("lblAdd")}
                                         </NbButton>
                                     </div>
                                 </div>
