@@ -1182,8 +1182,7 @@ export default class itemEntryOutDoc extends React.PureComponent
                         </NdPopUp>
                     </div> 
                     {/* combineItem Dialog  */}
-                    <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
+                    <NdDialog id={"msgCombineItem"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.t("msgCombineItem.title")} 
                     showCloseButton={false}
@@ -1241,8 +1240,7 @@ export default class itemEntryOutDoc extends React.PureComponent
                         <Column dataField="NAME" caption={this.t("pg_txtBarcode.clmName")} width={300} defaultSortOrder="asc" />
                     </NdPopGrid>
                     {/* Miktar Dialog  */}
-                    <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
+                    <NdDialog id={"msgQuantity"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.t("msgQuantity.title")} 
                     showCloseButton={false}

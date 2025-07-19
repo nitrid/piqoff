@@ -137,7 +137,6 @@ export default class NdDialog extends Base
                 deferRendering={typeof this.props.deferRendering == 'undefined' ? false : this.props.deferRendering}
                 onShowed={this._onShowed.bind(this)}
                 >
-                    <Position at="bottom" my="center" of={''}/>
                     {this._buttonView(this.props.button)}
                     {this.props.children}
                 </NdPopUp>

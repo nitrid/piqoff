@@ -261,7 +261,7 @@ export default class salesOfrList extends React.PureComponent
                                 App.instance.menuClick(
                                 {
                                     id: 'tkf_02_002',
-                                    text: this.t('menuOff.tkf_02_002'),
+                                    text: this.lang.t('menuOff.tkf_02_002'),
                                     path: 'offers/documents/salesOffer.js',
                                     pagePrm:{GUID:e.data.GUID}
                                 })
@@ -272,7 +272,7 @@ export default class salesOfrList extends React.PureComponent
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
-                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                <Editing mode="cell" />
                                 <Export fileName={this.lang.t("menuOff.sip_01_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="REF" caption={this.t("grdSlsOfrList.clmRef")} visible={true} width={200}/> 
                                 <Column dataField="REF_NO" caption={this.t("grdSlsOfrList.clmRefNo")} visible={true} width={100}/> 

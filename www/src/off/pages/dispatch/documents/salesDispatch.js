@@ -46,7 +46,6 @@ export default class salesDispatch extends DocBase
     }
     async componentDidMount()
     {
-        await this.core.util.waitUntil(0)
         await this.init()
         if(typeof this.pagePrm != 'undefined')
         {
@@ -173,7 +172,10 @@ export default class salesDispatch extends DocBase
         {
             tmpTotalCost += this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY
         }
-        
+
+        console.log('tmpTotalCost',tmpTotalCost)
+        console.log('this.docObj.dt()[0].TOTAL',this.docObj.dt()[0])
+        console.log('this.docObj.dt()[0].VAT',this.docObj.dt()[0].VAT)
         let tmpMargin = ((this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost)
         let tmpMarginRate = ((( this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost) - (this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT)) * 100
         

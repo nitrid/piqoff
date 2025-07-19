@@ -2258,7 +2258,7 @@ export default class salesOffer extends DocBase
                                             let pResult = await dialog(tmpConfObj);
  
                                             if(pResult == 'btn01')
-                                            {
+                                            {   
                                                 App.instance.menuClick(
                                                 {
                                                     id: 'ftr_02_002',

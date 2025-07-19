@@ -831,9 +831,6 @@ export default class itemCard extends React.PureComponent
                             icon:'more',
                             onClick:async ()  =>
                             {
-                                this.txtUnitQuantity.value = 1
-                                this.txtUnitQuantity2.value = 1
-                                this.txtUnitFactor.value = 1
                                 await this.msgUnit.show().then(async () =>
                                 {
                                     this.grdUnit.devGrid.cellValue(e.rowIndex,"FACTOR",this.txtUnitFactor.value)
@@ -3411,16 +3408,15 @@ export default class itemCard extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("msgUnit.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'230'}
-                        position={{of:'#root'}}
+                        height={'auto'}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
                         >
                             <div className='row py-2'>
                                 <div className='col-5'>
-                                    <NdNumberBox id="txtUnitQuantity" parent={this} simple={true}
-                                    maxLength={32}
+                                    <NdNumberBox id="txtUnitQuantity" parent={this} simple={true} maxLength={32}
                                     onValueChanged={(async(e)=>
                                     {
                                         this.txtUnitFactor.value = parseFloat((this.txtUnitQuantity.value / this.txtUnitQuantity2.value).toFixed(6))
@@ -3454,7 +3450,7 @@ export default class itemCard extends React.PureComponent
                         title={this.t("popDescription.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'800'}
-                        height={'470'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
