@@ -41,8 +41,9 @@ App.prototype.init = async function()
   } 
   catch (e) 
   {
-    
+    console.log('error', e)
   }
 
   const loadedPlugins = await Promise.all(plugins.map(plugin => plugin()));
+  console.log('loadedPlugins', loadedPlugins)
 }
