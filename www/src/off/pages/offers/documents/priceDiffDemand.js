@@ -1013,7 +1013,7 @@ export default class priceDiffDemand extends DocBase
                                 <Item>
                                     <Label text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
-                                        <div className="col-4 pe-0">
+                                        <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             readOnly={true}

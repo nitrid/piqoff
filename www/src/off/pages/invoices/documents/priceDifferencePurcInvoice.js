@@ -877,7 +877,7 @@ export default class priceDifferenceInvoice extends DocBase
                                 <NdItem>
                                     <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
-                                        <div className="col-4 pe-0">
+                                        <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                             maxLength={32}
@@ -898,7 +898,7 @@ export default class priceDifferenceInvoice extends DocBase
                                             >
                                             </NdTextBox>
                                         </div>
-                                        <div className="col-5 ps-0">
+                                        <div className="col-6 ps-0">
                                             <NdTextBox id="txtRefno" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF_NO"}}
                                             button=
                                             {
