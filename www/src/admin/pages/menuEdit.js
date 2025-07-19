@@ -241,7 +241,7 @@ export default class menuEdit extends React.Component
                                         showClearButton={true}
                                         pageSize ={50}
                                         notRefresh={true}
-                                        data={{source:{select:{query : "SELECT CODE FROM USERS ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                        data={{source:{select:{query : `SELECT CODE FROM USERS ORDER BY CODE ASC`},sql:this.core.sql}}}
                                         onValueChanged={async (e)=>
                                         {
                                             if(this.cmbApp.value == 'OFF')
@@ -321,7 +321,7 @@ export default class menuEdit extends React.Component
                         {
                             select:
                             {
-                                query : "SELECT CODE,NAME FROM USERS ORDER BY CODE ASC"
+                                query : `SELECT CODE,NAME FROM USERS ORDER BY CODE ASC`
                             },
                             sql:this.core.sql
                         }

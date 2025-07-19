@@ -2,20 +2,17 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
+import Form, { Label,Item } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
 import NdGrid,{Column, Paging,Pager,Export,Scrolling,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
 
 export default class purchaseOrdList extends React.PureComponent
 {
@@ -23,11 +20,10 @@ export default class purchaseOrdList extends React.PureComponent
     {
         super(props)
 
-        
         this.core = App.instance.core;
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
-        this._btnGetClick = this._btnGetClick.bind(this)
+        this.btnGrdPrint = this.btnGrdPrint.bind(this)
     }
     componentDidMount()
     {
@@ -53,69 +49,7 @@ export default class purchaseOrdList extends React.PureComponent
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
     }
-    _columnListBox(e)
-    {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }                
-                if(typeof e.value.find(x => x == 'OUTPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('OUTPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
-                {
-                    this.groupList.push('TOTAL')
-                }
-                
-                for (let i = 0; i < this.grdPurcOrdList.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdPurcOrdList.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdPurcOrdList.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdPurcOrdList.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                {
-                    columnListValue : e.value
-                }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
-    }
-    async _btnGetClick()
+    async btnGrdPrint()
     {
         if(this.chkInvOrDisp.value == false)
         {
@@ -126,10 +60,10 @@ export default class purchaseOrdList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT * FROM DOC_VW_01 " +
-                                "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND "+ 
-                                "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  " +
-                                " AND TYPE = 0 AND DOC_TYPE = 60 AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                        query : `SELECT * FROM DOC_VW_01 
+                                WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND 
+                                ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101'))  
+                                AND TYPE = 0 AND DOC_TYPE = 60 AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC`,
                         param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                         value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                     },
@@ -149,23 +83,23 @@ export default class purchaseOrdList extends React.PureComponent
                     groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT DOC_GUID AS GUID, " +
-                                    "REF, " +
-                                    "REF_NO, " +
-                                    "DOC_DATE, " +
-                                    "OUTPUT_NAME, " +
-                                    "OUTPUT_CODE, " +
-                                    "INPUT_CODE, " +
-                                    "INPUT_NAME, " +
-                                    "SUM(TOTAL) as TOTAL, " +
-                                    "SUM(VAT) as VAT, " +
-                                    "SUM(AMOUNT) as AMOUNT " +
-                                "FROM DOC_ORDERS_VW_01 " +
-                                "WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND  " +
-                                    "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) " +
-                                    "AND TYPE = 0 AND PEND_QUANTITY > 0 AND CLOSED = 0 " +
-                                "GROUP BY DOC_GUID,REF,REF_NO,DOC_DATE,OUTPUT_NAME,OUTPUT_CODE,INPUT_NAME,INPUT_CODE " +
-                                "ORDER BY DOC_DATE DESC,REF_NO DESC " ,
+                        query : `SELECT DOC_GUID AS GUID, 
+                                REF, 
+                                REF_NO, 
+                                DOC_DATE, 
+                                OUTPUT_NAME, 
+                                OUTPUT_CODE, 
+                                INPUT_CODE, 
+                                INPUT_NAME, 
+                                SUM(TOTAL) as TOTAL, 
+                                SUM(VAT) as VAT, 
+                                SUM(AMOUNT) as AMOUNT 
+                                FROM DOC_ORDERS_VW_01 
+                                WHERE ((OUTPUT_CODE = @OUTPUT_CODE) OR (@OUTPUT_CODE = '')) AND 
+                                ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) 
+                                AND TYPE = 0 AND PEND_QUANTITY > 0 AND CLOSED = 0 
+                                GROUP BY DOC_GUID,REF,REF_NO,DOC_DATE,OUTPUT_NAME,OUTPUT_CODE,INPUT_NAME,INPUT_CODE 
+                                ORDER BY DOC_DATE DESC,REF_NO DESC ` ,
                         param : ['OUTPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
                         value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value]
                     },
@@ -239,15 +173,13 @@ export default class purchaseOrdList extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("dtFirst")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtFirst"} showClearButton={true}
-                                    >
-                                    </NdDatePicker>
+                                    />
                                 </Item>
                                 {/* dtLast */}
                                 <Item>
                                     <Label text={this.t("dtLast")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtLast"}
-                                    >
-                                    </NdDatePicker>
+                                    />
                                 </Item>
                                 <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -293,9 +225,9 @@ export default class purchaseOrdList extends React.PureComponent
                                 >
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#" + this.props.data.id + this.props.data.tabkey}
                                 visible={false}
-                                position={{of:'#root'}} 
+                                position={{of:'#' + this.props.data.id + this.props.data.tabkey}} 
                                 showTitle={true} 
                                 showBorders={true}
                                 width={'90%'}
@@ -308,7 +240,7 @@ export default class purchaseOrdList extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql
@@ -330,7 +262,6 @@ export default class purchaseOrdList extends React.PureComponent
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                     <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                     <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                
                                 </NdPopGrid>
                                 </Item> 
                             </Form>
@@ -348,10 +279,9 @@ export default class purchaseOrdList extends React.PureComponent
                             </Form>
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGrdPrint}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

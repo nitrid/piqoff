@@ -73,7 +73,7 @@ export default class elementParamOff extends React.PureComponent
                                     valueExpr="CODE"
                                     value={""}
                                     showClearButton={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM USERS ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM USERS ORDER BY NAME ASC`},sql:this.core.sql}}}
                                     onValueChanged={async(e)=>
                                     {
                                         if(e.value == null)
@@ -244,7 +244,7 @@ export default class elementParamOff extends React.PureComponent
                             {
                                 select:
                                 {
-                                    query : "SELECT CODE,NAME FROM USERS ORDER BY CODE ASC"
+                                    query : `SELECT CODE,NAME FROM USERS ORDER BY CODE ASC`
                                 },
                                 sql:this.core.sql
                             }

@@ -18,10 +18,12 @@ export default class systemParamTab extends React.PureComponent
     {
         super()
         this.core = App.instance.core;
+ 
         this.state = 
         {
             metaPrm : []
         }
+ 
         this.ItemBuild = ItemBuild.bind(this)
         this.ItemSet = ItemSet.bind(this)
         this.ItemGet = ItemGet.bind(this)
@@ -67,7 +69,7 @@ export default class systemParamTab extends React.PureComponent
                                     valueExpr="CODE"
                                     value={""}
                                     showClearButton={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM USERS ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM USERS ORDER BY NAME ASC`},sql:this.core.sql}}}
                                     onValueChanged={async(e)=>
                                     {
                                         if(e.value == null)
@@ -168,6 +170,7 @@ export default class systemParamTab extends React.PureComponent
                                                     )
                                                 }
                                             }
+ 
                                             let tmpResult = await this.prmData.save()
                                             await this.prmData.load({APP:'TAB'})
                                             App.instance.setState({isExecute:false})
@@ -209,7 +212,7 @@ export default class systemParamTab extends React.PureComponent
                             {
                                 select:
                                 {
-                                    query : "SELECT CODE,NAME FROM USERS ORDER BY CODE ASC"
+                                    query : `SELECT CODE,NAME FROM USERS ORDER BY CODE ASC`
                                 },
                                 sql:this.core.sql
                             }
