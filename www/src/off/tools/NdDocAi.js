@@ -23,7 +23,10 @@ export default class NdDocAi extends Base
         this.files = []
         this.importData = undefined
         this.customer = '00000000-0000-0000-0000-000000000000'
-        this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
+        this.state.container = typeof props.container == 'undefined' ? '#root' : props.container
+        this.state.position = typeof props.position == 'undefined' ? {of:'#root'} : props.position
+
     }
     async show(pCustomer)
     {
@@ -74,7 +77,7 @@ export default class NdDocAi extends Base
         }
         return tmpValue
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         console.log(this)
         if(e.column.dataField == "ItemCode")
@@ -397,10 +400,10 @@ export default class NdDocAi extends Base
             showCloseButton={true}
             showTitle={true}
             title={this.lang.t("popDocAi.title")}
-            container={"#root"} 
+            container={this.state.container} 
             width={'100%'}
             height={'100%'}
-            position={{of:'#root'}}
+            position={this.state.position}
             deferRendering={true}
             onHiding={()=>
             {
@@ -530,7 +533,7 @@ export default class NdDocAi extends Base
                                     <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                     <Scrolling mode="standart" />
                                     <Editing mode="cell" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
-                                    <Column dataField="ItemCode" caption={this.lang.t("popDocAi.clmItemCode")} allowEditing={true} width={120} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
+                                    <Column dataField="ItemCode" caption={this.lang.t("popDocAi.clmItemCode")} allowEditing={true} width={120} editCellRender={this.cellRoleRender} allowHeaderFiltering={false}/>
                                     <Column dataField="ProductCode" caption={this.lang.t("popDocAi.clmMulticode")} allowEditing={false} width={120} allowHeaderFiltering={false}/>
                                     <Column dataField="ItemName" caption={this.lang.t("popDocAi.clmItemName")} allowEditing={false} width={350} allowHeaderFiltering={false}/>
                                     <Column dataField="Quantity" caption={this.lang.t("popDocAi.clmQuantity")}  width={70} dataType={'number'}/>
@@ -571,9 +574,9 @@ export default class NdDocAi extends Base
                     </Item>
                 </Form>
             </NdPopUp>
-            <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"} 
+            <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={this.state.container} 
             visible={false}
-            position={{of:'#root'}} 
+            position={this.state.position} 
             showTitle={true} 
             showBorders={true}
             width={'90%'}

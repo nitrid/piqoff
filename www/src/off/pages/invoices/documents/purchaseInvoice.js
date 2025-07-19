@@ -2857,9 +2857,9 @@ export default class purchaseInvoice extends DocBase
                                                 >     
                                                 </NdTextBox>      
                                                 {/*GÜMRÜK KODU POPUP */}
-                                                <NdPopGrid id={"pg_transportType"} parent={this} container={"#root"} 
+                                                <NdPopGrid id={"pg_transportType"} parent={this} container={"#" + this.props.data.id + this.tabIndex} 
                                                 visible={false}
-                                                position={{of:'#root'}} 
+                                                position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                                 showTitle={true} 
                                                 showBorders={true}
                                                 width={'90%'}
@@ -2887,10 +2887,10 @@ export default class purchaseInvoice extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDesign.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'auto'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -3037,10 +3037,10 @@ export default class purchaseInvoice extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDetail.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'auto'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
@@ -3106,10 +3106,10 @@ export default class purchaseInvoice extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popMailSend.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.tabIndex} 
                         width={'600'}
                         height={'auto'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -3228,7 +3228,7 @@ export default class purchaseInvoice extends DocBase
                     </div>
                     {/* Document AI PopUp */}
                     <div>
-                        <NdDocAi id={"popDocAi"} parent={this}/>
+                        <NdDocAi id={"popDocAi"} parent={this} container={"#" + this.props.data.id + this.tabIndex} position={{of:'#' + this.props.data.id + this.tabIndex}}/>
                     </div>
                     <div>{super.render()}</div>
                     <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>

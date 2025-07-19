@@ -2283,8 +2283,7 @@ export default class DocBase extends React.PureComponent
                 </div>  
                 {/* notCustomer Dialog  */}
                 <div>
-                    <NdDialog id={"msgCustomerNotFound"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
+                    <NdDialog id={"msgCustomerNotFound"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.t("msgCustomerNotFound.title")} 
                     showCloseButton={false}
@@ -2311,8 +2310,7 @@ export default class DocBase extends React.PureComponent
                 </div>  
                 {/* combineItem Dialog  */}
                 <div>
-                    <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
+                    <NdDialog id={"msgCombineItem"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.t("msgCombineItem.title")} 
                     showCloseButton={false}
@@ -2339,8 +2337,7 @@ export default class DocBase extends React.PureComponent
                 </div>
                 {/* Yeni Fiyat Dialog  */}
                 <div>
-                    <NdDialog id={"msgNewPrice"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
+                    <NdDialog id={"msgNewPrice"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.t("msgNewPrice.title")} 
                     showCloseButton={false}
@@ -2403,8 +2400,7 @@ export default class DocBase extends React.PureComponent
                 </div>
                 {/* Yeni Fiyat Dialog  */}
                 <div>
-                    <NdDialog id={"msgNewPriceDate"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
+                    <NdDialog id={"msgNewPriceDate"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.t("msgNewPriceDate.title")} 
                     showCloseButton={false}
@@ -2465,8 +2461,7 @@ export default class DocBase extends React.PureComponent
                 </div>
                 {/* Yeni KDV Dialog  */}
                 <div>
-                    <NdDialog id={"msgNewVat"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
+                    <NdDialog id={"msgNewVat"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.t("msgNewVat.title")} 
                     showCloseButton={false}
@@ -2511,8 +2506,7 @@ export default class DocBase extends React.PureComponent
                 </div>
                 {/* Miktar Dialog  */}
                 <div>
-                    <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
+                    <NdDialog id={"msgQuantity"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.lang.t("msgQuantity.title")} 
                     showCloseButton={false}
@@ -2805,10 +2799,9 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("msgUnit.title")}
-                    container={"#root"} 
+                    container={"#" + this.props.data.id + this.tabIndex} 
                     width={'500'}
                     height={'auto'}
-                    position={{of:'#root'}}
                     button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
                     deferRendering={false}
                     >
@@ -2885,10 +2878,9 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("msgDiscountEntry.title")}
-                    container={"#root"} 
+                    container={"#" + this.props.data.id + this.tabIndex} 
                     width={'500'}
                     height={'auto'}
-                    position={{of:'#root'}}
                     button={[{id:"btn01",caption:this.t("msgDiscountEntry.btn01"),location:'after'}]}
                     deferRendering={false}
                     >
@@ -2934,10 +2926,9 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("msgDiscountPerEntry.title")}
-                    container={"#root"} 
+                    container={"#" + this.props.data.id + this.tabIndex} 
                     width={'500'}
                     height={'auto'}
-                    position={{of:'#root'}}
                     button={[{id:"btn01",caption:this.t("msgDiscountPerEntry.btn01"),location:'after'}]}
                     deferRendering={false}
                     >
@@ -2985,10 +2976,9 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("msgGrdOrigins.title")}
-                    container={"#root"} 
+                    container={"#" + this.props.data.id + this.tabIndex} 
                     width={'500'}
                     height={'auto'}
-                    position={{of:'#root'}}
                     button={[{id:"btn01",caption:this.t("msgGrdOrigins.btn01"),location:'after'}]}
                     deferRendering={false}
                     >
