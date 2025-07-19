@@ -1653,11 +1653,11 @@ export default class salesDispatch extends DocBase
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>
+                            <NdForm colCount={1} onInitialized={(e)=>
                             {
                                 this.frmDocItems = e.component
                             }}>
-                                <Item location="after" colSpan={3}>
+                                <NdItem location="after" colSpan={3}>
                                     <Button icon="add"
                                     validationGroup={"frmSalesDis"  + this.tabIndex}
                                     onClick={async (e)=>
@@ -1725,8 +1725,8 @@ export default class salesDispatch extends DocBase
                                             this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
                                         }
                                     }}/>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                 <React.Fragment>
                                     <NdGrid parent={this} id={"grdSlsDispatch"+this.tabIndex} 
                                     showBorders={true} 
@@ -2026,8 +2026,8 @@ export default class salesDispatch extends DocBase
                                         }
                                     }).bind(this)} />
                                  </React.Fragment>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

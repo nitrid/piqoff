@@ -1228,11 +1228,11 @@ export default class purchaseOffer extends DocBase
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>
+                            <NdForm colCount={1} onInitialized={(e)=>
                             {
                                 this.frmDocItems = e.component
                             }}>
-                                <Item location="after">
+                                <NdItem location="after">
                                     <Button icon="add"
                                     validationGroup={"frmPurcoffer"  + this.tabIndex}
                                     onClick={async (e)=>
@@ -1294,8 +1294,8 @@ export default class purchaseOffer extends DocBase
                                             this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
                                         }
                                     }}/>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <NdGrid parent={this} id={"grdPurcoffers"+this.tabIndex} 
                                     showBoffers={true} 
                                     columnsAutoWidth={true} 
@@ -1488,8 +1488,8 @@ export default class purchaseOffer extends DocBase
                                         <Column dataField="TOTAL" caption={this.t("grdPurcoffers.clmTotal")} width={110} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false}/>
                                         <Column dataField="DESCRIPTION" caption={this.t("grdPurcoffers.clmDescription")} width={120}  headerFilter={{visible:true}}/>
                                     </NdGrid>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

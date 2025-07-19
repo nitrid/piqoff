@@ -2234,11 +2234,11 @@ export default class purchaseInvoice extends DocBase
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>
+                            <NdForm colCount={1} onInitialized={(e)=>
                             {
                                 this.frmDocItems = e.component
                             }}>                                
-                                <Item colSpan={3}>
+                                <NdItem colSpan={3}>
                                     <Button icon="add"
                                     validationGroup={"frmDoc"  + this.tabIndex}
                                     onClick={async (e)=>
@@ -2365,8 +2365,8 @@ export default class purchaseInvoice extends DocBase
                                         this.txtPopExcelDisc.value = tmpShema.DISC
                                         this.txtPopExcelDiscRate.value = tmpShema.DISC_PER
                                     }}/>  
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <React.Fragment>
                                         <NdGrid parent={this} id={"grdPurcInv"+this.tabIndex} 
                                         showBorders={true} 
@@ -2626,8 +2626,8 @@ export default class purchaseInvoice extends DocBase
                                             }
                                         }).bind(this)} />
                                     </React.Fragment>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className='row px-2 pt-2'>

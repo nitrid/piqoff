@@ -1358,11 +1358,11 @@ export default class posSalesOrder extends DocBase
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>
+                            <NdForm colCount={1} onInitialized={(e)=>
                             {
                                 this.frmDocItems = e.component
                             }}>
-                                <Item location="after">
+                                <NdItem location="after">
                                     <Button icon="add"
                                     validationGroup={"frmslsDoc" + this.tabIndex}
                                     onClick={async (e)=>
@@ -1426,8 +1426,8 @@ export default class posSalesOrder extends DocBase
                                             this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
                                         }
                                     }}/>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                     <React.Fragment>
                                         <NdGrid parent={this} id={"grdSlsOrder"} 
                                         showBorders={true} 
@@ -1658,8 +1658,8 @@ export default class posSalesOrder extends DocBase
                                             <Column dataField="DESCRIPTION" caption={this.t("grdSlsOrder.clmDescription")} width={100}  headerFilter={{visible:true}}/>
                                         </NdGrid>
                                     </React.Fragment>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">

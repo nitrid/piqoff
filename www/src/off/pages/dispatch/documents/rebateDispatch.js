@@ -1569,11 +1569,11 @@ export default class rebateDispatch extends DocBase
                     {/* Grid */}
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>
+                            <NdForm colCount={1} onInitialized={(e)=>
                             {
                                 this.frmDocItems = e.component
                             }}>
-                                <Item location="after">
+                                <NdItem location="after">
                                     <Button icon="add"
                                     validationGroup={"frmRebateDis"  + this.tabIndex}
                                     onClick={async (e)=>
@@ -1616,8 +1616,8 @@ export default class rebateDispatch extends DocBase
                                             this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
                                         }
                                     }}/>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
                                  <React.Fragment>
                                     <NdGrid parent={this} id={"grdRebtDispatch"+this.tabIndex} 
                                     showBorders={true} 
@@ -1810,8 +1810,8 @@ export default class rebateDispatch extends DocBase
                                         this._getRebate()
                                     }).bind(this)} />
                                 </React.Fragment> 
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
