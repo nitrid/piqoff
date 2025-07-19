@@ -144,36 +144,36 @@ export default class transferCls
                 {
                     name : "POS_VW_01",
                     type : "select",
-                    query : "SELECT * FROM POS_VW_01"
+                    query : `SELECT * FROM POS_VW_01`
                 },
                 to : 
                 {
                     insert : 
                     {
-                        query : "EXEC [dbo].[PRD_POS_INSERT] " + 
-                                "@GUID = @PGUID, " +
-                                "@CUSER = @PCUSER, " + 
-                                "@FIRM = @PFIRM, " +
-                                "@DEVICE = @PDEVICE, " +
-                                "@DEPOT = @PDEPOT, " +
-                                "@TYPE = @PTYPE, " +  
-                                "@DOC_TYPE = @PDOC_TYPE, " +                       
-                                "@DOC_DATE = @PDOC_DATE, " + 
-                                "@REF = @PREF, " +
-                                "@CUSTOMER = @PCUSTOMER, " + 
-                                "@FAMOUNT = @PFAMOUNT, " + 
-                                "@AMOUNT = @PAMOUNT, " + 
-                                "@DISCOUNT = @PDISCOUNT, " + 
-                                "@LOYALTY = @PLOYALTY, " + 
-                                "@VAT = @PVAT, " + 
-                                "@TOTAL = @PTOTAL, " + 
-                                "@TICKET = @PTICKET, " + 
-                                "@STATUS = @PSTATUS, " +
-                                "@CERTIFICATE = @PCERTIFICATE, " +
-                                "@ORDER_GUID = @PORDER_GUID, " +
-                                "@SIGNATURE = @PSIGNATURE, " +
-                                "@SIGNATURE_SUM = @PSIGNATURE_SUM, " +
-                                "@DELETED = @PDELETED ",
+                        query : `EXEC [dbo].[PRD_POS_INSERT] 
+                                @GUID = @PGUID, 
+                                @CUSER = @PCUSER, 
+                                @FIRM = @PFIRM, 
+                                @DEVICE = @PDEVICE, 
+                                @DEPOT = @PDEPOT, 
+                                @TYPE = @PTYPE, 
+                                @DOC_TYPE = @PDOC_TYPE, 
+                                @DOC_DATE = @PDOC_DATE, 
+                                @REF = @PREF, 
+                                @CUSTOMER = @PCUSTOMER, 
+                                @FAMOUNT = @PFAMOUNT, 
+                                @AMOUNT = @PAMOUNT, 
+                                @DISCOUNT = @PDISCOUNT, 
+                                @LOYALTY = @PLOYALTY, 
+                                @VAT = @PVAT, 
+                                @TOTAL = @PTOTAL, 
+                                @TICKET = @PTICKET, 
+                                @STATUS = @PSTATUS, 
+                                @CERTIFICATE = @PCERTIFICATE, 
+                                @ORDER_GUID = @PORDER_GUID, 
+                                @SIGNATURE = @PSIGNATURE, 
+                                @SIGNATURE_SUM = @PSIGNATURE_SUM, 
+                                @DELETED = @PDELETED`,
                         param : ['PGUID:string|50','PCUSER:string|25','PFIRM:string|50','PDEVICE:string|25','PDEPOT:string|50','PTYPE:int','PDOC_TYPE:int','PDOC_DATE:date','PREF:int',
                                 'PCUSTOMER:string|50','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PTICKET:string|50','PSTATUS:int',
                                 'PCERTIFICATE:string|250','PORDER_GUID:string|50','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max','PDELETED:bit'],
@@ -213,7 +213,7 @@ export default class transferCls
                     },
                     control :
                     {
-                        query : "SELECT * FROM [dbo].[POS] WHERE GUID = @GUID",
+                        query : `SELECT * FROM [dbo].[POS_VW_01] WHERE GUID = @GUID`,
                         param : ['GUID:string|50'],
                         dataprm : ['GUID'],
                     }
@@ -225,35 +225,35 @@ export default class transferCls
                 {
                     name : "POS_SALE_VW_01",
                     type : "select",
-                    query : "SELECT * FROM POS_SALE_VW_01"
+                    query : `SELECT * FROM POS_SALE_VW_01`
                 },
                 to : 
                 {
                     insert : 
                     {
-                        query : "EXEC [dbo].[PRD_POS_SALE_INSERT] " + 
-                                "@GUID = @PGUID, " +
-                                "@CUSER = @PCUSER, " +
-                                "@CDATE = @PCDATE, " + 
-                                "@LDATE = @PLDATE, " + 
-                                "@POS = @PPOS, " +
-                                "@LINE_NO = @PLINE_NO, " +
-                                "@ITEM = @PITEM, " +  
-                                "@INPUT = @PINPUT, " +                      
-                                "@BARCODE = @PBARCODE, " + 
-                                "@UNIT = @PUNIT, " + 
-                                "@QUANTITY = @PQUANTITY, " + 
-                                "@PRICE = @PPRICE, " + 
-                                "@FAMOUNT = @PFAMOUNT, " + 
-                                "@AMOUNT = @PAMOUNT, " + 
-                                "@DISCOUNT = @PDISCOUNT, " + 
-                                "@LOYALTY = @PLOYALTY, " + 
-                                "@VAT = @PVAT, " + 
-                                "@TOTAL = @PTOTAL, " + 
-                                "@SUBTOTAL = @PSUBTOTAL, " + 
-                                "@PROMO_TYPE = @PPROMO_TYPE, " +
-                                "@ORDER_GUID = @PORDER_GUID, " +
-                                "@DELETED = @PDELETED ",  
+                        query : `EXEC [dbo].[PRD_POS_SALE_INSERT] 
+                                @GUID = @PGUID, 
+                                @CUSER = @PCUSER, 
+                                @CDATE = @PCDATE, 
+                                @LDATE = @PLDATE, 
+                                @POS = @PPOS, 
+                                @LINE_NO = @PLINE_NO, 
+                                @ITEM = @PITEM,  
+                                @INPUT = @PINPUT,                      
+                                @BARCODE = @PBARCODE, 
+                                @UNIT = @PUNIT, 
+                                @QUANTITY = @PQUANTITY, 
+                                @PRICE = @PPRICE, 
+                                @FAMOUNT = @PFAMOUNT, 
+                                @AMOUNT = @PAMOUNT, 
+                                @DISCOUNT = @PDISCOUNT, 
+                                @LOYALTY = @PLOYALTY, 
+                                @VAT = @PVAT, 
+                                @TOTAL = @PTOTAL, 
+                                @SUBTOTAL = @PSUBTOTAL, 
+                                @PROMO_TYPE = @PPROMO_TYPE, 
+                                @ORDER_GUID = @PORDER_GUID, 
+                                @DELETED = @PDELETED `,  
                         param : ['PGUID:string|50','PCUSER:string|25','PCDATE:datetime','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
                                 'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50',
                                 'PDELETED:bit'],
@@ -262,28 +262,28 @@ export default class transferCls
                     },
                     update : 
                     {
-                        query : "EXEC [dbo].[PRD_POS_SALE_UPDATE] " + 
-                                "@GUID = @PGUID, " +
-                                "@CUSER = @PCUSER, " + 
-                                "@LDATE = @PLDATE, " + 
-                                "@POS = @PPOS, " +
-                                "@LINE_NO = @PLINE_NO, " +
-                                "@ITEM = @PITEM, " + 
-                                "@INPUT = @PINPUT, " +                   
-                                "@BARCODE = @PBARCODE, " + 
-                                "@UNIT = @PUNIT, " + 
-                                "@QUANTITY = @PQUANTITY, " + 
-                                "@PRICE = @PPRICE, " + 
-                                "@FAMOUNT = @PFAMOUNT, " +
-                                "@AMOUNT = @PAMOUNT, " + 
-                                "@DISCOUNT = @PDISCOUNT, " + 
-                                "@LOYALTY = @PLOYALTY, " + 
-                                "@VAT = @PVAT, " + 
-                                "@TOTAL = @PTOTAL, " + 
-                                "@SUBTOTAL = @PSUBTOTAL, " + 
-                                "@PROMO_TYPE = @PPROMO_TYPE, " +
-                                "@ORDER_GUID = @PORDER_GUID, " +
-                                "@DELETED = @PDELETED ",  
+                        query : `EXEC [dbo].[PRD_POS_SALE_UPDATE] 
+                                @GUID = @PGUID, 
+                                @CUSER = @PCUSER, 
+                                @LDATE = @PLDATE, 
+                                @POS = @PPOS, 
+                                @LINE_NO = @PLINE_NO, 
+                                @ITEM = @PITEM, 
+                                @INPUT = @PINPUT, 
+                                @BARCODE = @PBARCODE, 
+                                @UNIT = @PUNIT, 
+                                @QUANTITY = @PQUANTITY, 
+                                @PRICE = @PPRICE, 
+                                @FAMOUNT = @PFAMOUNT, 
+                                @AMOUNT = @PAMOUNT, 
+                                @DISCOUNT = @PDISCOUNT, 
+                                @LOYALTY = @PLOYALTY, 
+                                @VAT = @PVAT, 
+                                @TOTAL = @PTOTAL, 
+                                @SUBTOTAL = @PSUBTOTAL, 
+                                @PROMO_TYPE = @PPROMO_TYPE, 
+                                @ORDER_GUID = @PORDER_GUID, 
+                                @DELETED = @PDELETED `,  
                         param : ['PGUID:string|50','PCUSER:string|25','PLDATE:datetime','PPOS:string|50','PLINE_NO:int','PITEM:string|50','PINPUT:string|25','PBARCODE:string|50','PUNIT:string|50',
                                 'PQUANTITY:float','PPRICE:float','PFAMOUNT:float','PAMOUNT:float','PDISCOUNT:float','PLOYALTY:float','PVAT:float','PTOTAL:float','PSUBTOTAL:int','PPROMO_TYPE:int','PORDER_GUID:string|50',
                                 'PDELETED:bit'],
@@ -292,7 +292,7 @@ export default class transferCls
                     },
                     control :
                     {
-                        query : "SELECT * FROM [dbo].[POS_SALE] WHERE GUID = @GUID",
+                        query : `SELECT * FROM [dbo].[POS_SALE_VW_01] WHERE GUID = @GUID`,
                         param : ['GUID:string|50'],
                         dataprm : ['GUID'],
                     }
@@ -304,41 +304,41 @@ export default class transferCls
                 {
                     name : "POS_PAYMENT_VW_01",
                     type : "select",
-                    query : "SELECT * FROM POS_PAYMENT_VW_01"
+                    query : `SELECT * FROM POS_PAYMENT_VW_01`
                 },
                 to : 
                 {
                     insert : 
                     {
-                        query : "EXEC [dbo].[PRD_POS_PAYMENT_INSERT] " + 
-                                "@GUID = @PGUID, " +
-                                "@CUSER = @PCUSER, " + 
-                                "@POS = @PPOS, " +
-                                "@TYPE = @PTYPE, " +
-                                "@LINE_NO = @PLINE_NO, " +
-                                "@AMOUNT = @PAMOUNT, " + 
-                                "@CHANGE = @PCHANGE, " +
-                                "@DELETED = @PDELETED ",  
+                        query : `EXEC [dbo].[PRD_POS_PAYMENT_INSERT] 
+                                @GUID = @PGUID, 
+                                @CUSER = @PCUSER, 
+                                @POS = @PPOS, 
+                                @TYPE = @PTYPE, 
+                                @LINE_NO = @PLINE_NO, 
+                                @AMOUNT = @PAMOUNT, 
+                                @CHANGE = @PCHANGE, 
+                                @DELETED = @PDELETED `,  
                         param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float','PDELETED:bit'],
                         dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE','DELETED'],
                     },
                     update : 
                     {
-                        query : "EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] " + 
-                                "@GUID = @PGUID, " +
-                                "@CUSER = @PCUSER, " + 
-                                "@POS = @PPOS, " +
-                                "@TYPE = @PTYPE, " +
-                                "@LINE_NO = @PLINE_NO, " +
-                                "@AMOUNT = @PAMOUNT, " + 
-                                "@CHANGE = @PCHANGE, " +
-                                "@DELETED = @PDELETED ", 
+                        query : `EXEC [dbo].[PRD_POS_PAYMENT_UPDATE] 
+                                @GUID = @PGUID, 
+                                @CUSER = @PCUSER, 
+                                @POS = @PPOS, 
+                                @TYPE = @PTYPE, 
+                                @LINE_NO = @PLINE_NO, 
+                                @AMOUNT = @PAMOUNT, 
+                                @CHANGE = @PCHANGE, 
+                                @DELETED = @PDELETED `, 
                         param : ['PGUID:string|50','PCUSER:string|25','PPOS:string|50','PTYPE:int','PLINE_NO:int','PAMOUNT:float','PCHANGE:float','PDELETED:bit'],
                         dataprm : ['GUID','CUSER','POS_GUID','PAY_TYPE','LINE_NO','AMOUNT','CHANGE','DELETED'],
                     },
                     control :
                     {
-                        query : "SELECT * FROM [dbo].[POS_PAYMENT] WHERE GUID = @GUID",
+                        query : `SELECT * FROM [dbo].[POS_PAYMENT_VW_01] WHERE GUID = @GUID`,
                         param : ['GUID:string|50'],
                         dataprm : ['GUID'],
                     }
@@ -350,41 +350,41 @@ export default class transferCls
                 {
                     name : "POS_EXTRA_VW_01",
                     type : "select",
-                    query : "SELECT * FROM POS_EXTRA_VW_01"
+                    query : `SELECT * FROM POS_EXTRA_VW_01`
                 },
                 to : 
                 {
                     insert : 
                     {
-                        query : "EXEC [dbo].[PRD_POS_EXTRA_INSERT] " + 
-                                "@GUID = @PGUID, " +
-                                "@CUSER = @PCUSER, " + 
-                                "@TAG = @PTAG, " +
-                                "@POS_GUID = @PPOS_GUID, " +
-                                "@LINE_GUID = @PLINE_GUID, " +
-                                "@DATA =@PDATA, " +
-                                "@APP_VERSION =@PAPP_VERSION, " +
-                                "@DESCRIPTION = @PDESCRIPTION ", 
+                        query : `EXEC [dbo].[PRD_POS_EXTRA_INSERT] 
+                                @GUID = @PGUID, 
+                                @CUSER = @PCUSER, 
+                                @TAG = @PTAG, 
+                                @POS_GUID = @PPOS_GUID, 
+                                @LINE_GUID = @PLINE_GUID, 
+                                @DATA =@PDATA, 
+                                @APP_VERSION =@PAPP_VERSION, 
+                                @DESCRIPTION = @PDESCRIPTION `, 
                         param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
                         dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_GUID','DATA','APP_VERSION','DESCRIPTION'],
                     },
                     update : 
                     {
-                        query : "EXEC [dbo].[PRD_POS_EXTRA_UPDATE] " + 
-                                "@GUID = @PGUID, " +
-                                "@CUSER = @PCUSER, " + 
-                                "@TAG = @PTAG, " +
-                                "@POS_GUID = @PPOS_GUID, " +
-                                "@LINE_GUID = @PLINE_GUID, " +
-                                "@DATA =@PDATA, " +
-                                "@APP_VERSION =@PAPP_VERSION, " +
-                                "@DESCRIPTION = @PDESCRIPTION ", 
+                        query : `EXEC [dbo].[PRD_POS_EXTRA_UPDATE] 
+                                @GUID = @PGUID, 
+                                @CUSER = @PCUSER, 
+                                @TAG = @PTAG, 
+                                @POS_GUID = @PPOS_GUID, 
+                                @LINE_GUID = @PLINE_GUID, 
+                                @DATA =@PDATA, 
+                                @APP_VERSION =@PAPP_VERSION, 
+                                @DESCRIPTION = @PDESCRIPTION `, 
                         param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PPOS_GUID:string|50','PLINE_GUID:string|50','PDATA:string|50','PAPP_VERSION:string|25','PDESCRIPTION:string|max'],
                         dataprm : ['GUID','CUSER','TAG','POS_GUID','LINE_GUID','DATA','APP_VERSION','DESCRIPTION'],
                     },
                     control :
                     {
-                        query : "SELECT * FROM [dbo].[POS_EXTRA] WHERE GUID = @GUID",
+                        query : `SELECT * FROM [dbo].[POS_EXTRA_VW_01] WHERE GUID = @GUID`,
                         param : ['GUID:string|50'],
                         dataprm : ['GUID'],
                     }
@@ -396,39 +396,39 @@ export default class transferCls
                 {
                     name : "CUSTOMER_POINT_VW_01",
                     type : "select",
-                    query : "SELECT * FROM CUSTOMER_POINT_VW_01"
+                    query : `SELECT * FROM CUSTOMER_POINT_VW_01`
                 },
                 to : 
                 {
                     insert : 
                     {
-                        query : "EXEC [dbo].[PRD_CUSTOMER_POINT_INSERT] " + 
-                                "@GUID = @PGUID, " + 
-                                "@CUSER = @PCUSER, " + 
-                                "@TYPE = @PTYPE, " +     
-                                "@CUSTOMER = @PCUSTOMER, " +                  
-                                "@DOC = @PDOC, " + 
-                                "@POINT = @PPOINT, " + 
-                                "@DESCRIPTION = @PDESCRIPTION ", 
+                        query : `EXEC [dbo].[PRD_CUSTOMER_POINT_INSERT] 
+                                @GUID = @PGUID, 
+                                @CUSER = @PCUSER, 
+                                @TYPE = @PTYPE,     
+                                @CUSTOMER = @PCUSTOMER,                  
+                                @DOC = @PDOC, 
+                                @POINT = @PPOINT, 
+                                @DESCRIPTION = @PDESCRIPTION `, 
                         param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
                         dataprm : ['GUID','CUSER','TYPE','CUSTOMER','DOC','POINT','DESCRIPTION'],
                     },
                     update : 
                     {
-                        query : "EXEC [dbo].[PRD_CUSTOMER_POINT_UPDATE] " + 
-                                "@GUID = @PGUID, " + 
-                                "@CUSER = @PCUSER, " + 
-                                "@TYPE = @PTYPE, " +     
-                                "@CUSTOMER = @PCUSTOMER, " +                  
-                                "@DOC = @PDOC, " + 
-                                "@POINT = @PPOINT, " + 
-                                "@DESCRIPTION = @PDESCRIPTION ", 
+                        query : `EXEC [dbo].[PRD_CUSTOMER_POINT_UPDATE] 
+                                @GUID = @PGUID, 
+                                @CUSER = @PCUSER, 
+                                @TYPE = @PTYPE,     
+                                @CUSTOMER = @PCUSTOMER,                  
+                                @DOC = @PDOC, 
+                                @POINT = @PPOINT, 
+                                @DESCRIPTION = @PDESCRIPTION `, 
                         param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PCUSTOMER:string|50','PDOC:string|50','PPOINT:float','PDESCRIPTION:string|250'],
                         dataprm : ['GUID','CUSER','TYPE','CUSTOMER','DOC','POINT','DESCRIPTION'],
                     },
                     control :
                     {
-                        query : "SELECT * FROM [dbo].[CUSTOMER_POINT_VW_01] WHERE GUID = @GUID",
+                        query : `SELECT * FROM [dbo].[CUSTOMER_POINT_VW_01] WHERE GUID = @GUID`,
                         param : ['GUID:string|50'],
                         dataprm : ['GUID'],
                     }
@@ -440,39 +440,39 @@ export default class transferCls
                 {
                     name : "CHEQPAY_VW_01",
                     type : "select",
-                    query : "SELECT * FROM CHEQPAY_VW_01 WHERE TRANSFER = 1;",
+                    query : `SELECT * FROM CHEQPAY_VW_01 WHERE TRANSFER = 1;`,
                 },
                 to : 
                 {
                     insert : 
                     {
-                        query : "EXEC [dbo].[PRD_CHEQPAY_INSERT] " + 
-                                "@GUID = @PGUID, " +
-                                "@CUSER = @PCUSER, " + 
-                                "@TYPE = @PTYPE, " +                      
-                                "@DOC = @PDOC, " + 
-                                "@CODE = @PCODE, " + 
-                                "@AMOUNT = @PAMOUNT, " + 
-                                "@STATUS = @PSTATUS ", 
+                        query : `EXEC [dbo].[PRD_CHEQPAY_INSERT] 
+                                @GUID = @PGUID, 
+                                @CUSER = @PCUSER, 
+                                @TYPE = @PTYPE,                      
+                                @DOC = @PDOC, 
+                                @CODE = @PCODE, 
+                                @AMOUNT = @PAMOUNT, 
+                                @STATUS = @PSTATUS `, 
                         param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC:string|50','PCODE:string|25','PAMOUNT:float','PSTATUS:int'],
                         dataprm : ['GUID','CUSER','TYPE','DOC','CODE','AMOUNT','STATUS'],
                     },
                     update : 
                     {
-                        query : "EXEC [dbo].[PRD_CHEQPAY_UPDATE] " + 
-                                "@GUID = @PGUID, " +
-                                "@CUSER = @PCUSER, " + 
-                                "@TYPE = @PTYPE, " +                      
-                                "@DOC = @PDOC, " + 
-                                "@CODE = @PCODE, " + 
-                                "@AMOUNT = @PAMOUNT, " + 
-                                "@STATUS = @PSTATUS ", 
+                        query : `EXEC [dbo].[PRD_CHEQPAY_UPDATE] 
+                                @GUID = @PGUID, 
+                                @CUSER = @PCUSER, 
+                                @TYPE = @PTYPE,                      
+                                @DOC = @PDOC, 
+                                @CODE = @PCODE, 
+                                @AMOUNT = @PAMOUNT, 
+                                @STATUS = @PSTATUS `, 
                         param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC:string|50','PCODE:string|25','PAMOUNT:float','PSTATUS:int'],
                         dataprm : ['GUID','CUSER','TYPE','DOC','CODE','AMOUNT','STATUS'],
                     },
                     control :
                     {
-                        query : "SELECT * FROM [dbo].[CHEQPAY_VW_01] WHERE GUID = @GUID",
+                        query : `SELECT * FROM [dbo].[CHEQPAY_VW_01] WHERE GUID = @GUID`,
                         param : ['GUID:string|50'],
                         dataprm : ['GUID'],
                     }
@@ -498,6 +498,7 @@ export default class transferCls
             let tmpEndPage = 0
 
             let tmpDataQuery = {...pTemp.from}
+
             tmpDataQuery.query = tmpDataQuery.query.toString().replace('{0}',pClear ? '' : typeof tmpDataQuery.where == 'undefined' ? '' : tmpDataQuery.where)
             tmpDataQuery.buffer = true;
             
@@ -512,6 +513,7 @@ export default class transferCls
                 {   
                     tmpStartPage = tmpPageLimit * m
                     tmpEndPage = tmpStartPage + tmpPageLimit
+
                     let tmpData = await this.core.sql.buffer({start : tmpStartPage,end : tmpEndPage,bufferId : tmpBuf.result.bufferId})                    
                     let tmpInserts = {querys:[],values:[]}
                     
@@ -523,6 +525,7 @@ export default class transferCls
                         {   
                             let tmpValues = []
                             let tmpLocQuery = JSON.parse(JSON.stringify(pTemp.to))
+
                             tmpInserts.querys.push(tmpLocQuery.query)
                             
                             Object.values(tmpLocQuery.values[0]).map(tmpMap => 
@@ -552,6 +555,7 @@ export default class transferCls
                             if(this.core.local.platform == 'cordova')
                             {
                                 let tmpArr = []
+
                                 for (let i = 0; i < tmpInserts.querys.length; i++) 
                                 {
                                     tmpArr.push([tmpInserts.querys[i],tmpInserts.values[i]])
@@ -572,6 +576,7 @@ export default class transferCls
                                 this.core.local.db.serialize(() => 
                                 {
                                     this.core.local.db.run('BEGIN TRANSACTION;');
+
                                     for (let i = 0; i < tmpInserts.querys.length; i++) 
                                     {
                                         this.core.local.db.run(tmpInserts.querys[i], typeof tmpInserts.values[i] == 'undefined' ? [] : tmpInserts.values[i],(err) => 
@@ -589,6 +594,7 @@ export default class transferCls
                     }
                     tmpInserts = null;
                     tmpData = null;
+
                     this.emit('onState',{tag:'progress',count:tmpCount,index:tmpEndPage})
                 }
                 //SQL DEKI BUFFER TEMIZLENIYOR.
@@ -611,6 +617,7 @@ export default class transferCls
                 for (let i = 0; i < tmpData.length; i++) 
                 {
                     let tmpCtrlQuery = JSON.parse(JSON.stringify(pTemp.to.control))
+
                     tmpCtrlQuery.value = this.setSqlValues(tmpCtrlQuery,tmpData[i])
                     
                     let tmpCtrlData = await this.core.sql.execute(tmpCtrlQuery)
@@ -620,9 +627,11 @@ export default class transferCls
                         if(tmpCtrlData.result.recordset.length > 0)
                         {               
                             let tmpQuery = JSON.parse(JSON.stringify(pTemp.to.update))
+
                             tmpQuery.value = this.setSqlValues(tmpQuery,tmpData[i])
                             
                             let tmpResult = await this.core.sql.execute(tmpQuery)
+
                             if(typeof tmpResult.result.err != 'undefined')
                             {
                                 console.log(tmpResult.result.err)
@@ -661,6 +670,7 @@ export default class transferCls
         return new Promise(async resolve => 
         {
             let tmpSchema = this.fetchSchema()
+
             for (let i = 0; i < tmpSchema.length; i++) 
             {                
                 this.emit('onState',{tag:'',text: tmpSchema[i].name})
@@ -675,10 +685,13 @@ export default class transferCls
         return new Promise(async resolve => 
         {
             let tmpSchema = this.sendSchema()
+
             for (let i = 0; i < tmpSchema.length; i++) 
             {
                 this.emit('onState',{tag:'',text: tmpSchema[i].from.name})
+
                 let tmpResult = await this.sendToSql(tmpSchema[i])
+
                 if(!tmpResult)
                 {
                     resolve(false)
@@ -686,6 +699,7 @@ export default class transferCls
                 }
             }
             let tmpData = await this.core.local.select({from : "NF525_JET"})
+            
             for (let i = 0; i < tmpData.result.length; i++) 
             {
                 let tmpJetData =

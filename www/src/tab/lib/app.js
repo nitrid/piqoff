@@ -23,7 +23,7 @@ import trMessages from '../meta/lang/devexpress/tr.js';
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 import i18n from './i18n.js'
 import Login from './login.js'
-import NdDialog,{dialog} from '../../core/react/devex/dialog';
+import {dialog} from '../../core/react/devex/dialog';
 import NbButton from '../../core/react/bootstrap/button';
 import NbPopUp from '../../core/react/bootstrap/popup';
 import * as appInfo from '../../../package.json'
@@ -42,6 +42,7 @@ export default class App extends React.PureComponent
         loadMessages(enMessages);
         loadMessages(frMessages);
         loadMessages(trMessages);
+        
         locale(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'));
         i18n.changeLanguage(localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'))
         this.lang = i18n;  
@@ -96,7 +97,6 @@ export default class App extends React.PureComponent
             this.device = true
             document.addEventListener('deviceready', ()=>
             {
-                console.log(navigator.camera)
                 this.init();
             }, false);
         }
@@ -105,7 +105,9 @@ export default class App extends React.PureComponent
     {
         this.core = new core(io(this.device ? 'http://' + localStorage.host : window.origin,{timeout:100000,transports : ['websocket']}));
         this.core.appInfo = appInfo
+
         this.transfer = new transferCls()
+
         await this.transfer.init('TAB')
         
         if(!App.instance)
@@ -147,6 +149,7 @@ export default class App extends React.PureComponent
                 await dialog(tmpConfObj);
 
                 this.core.auth.logout()
+
                 window.location.reload()
             }
             //LİSANS KONTROLÜ YAPILDIKTAN SONRA KULLANICI DISCONNECT EDİLİYOR.
@@ -164,6 +167,7 @@ export default class App extends React.PureComponent
         return new Promise(async (resolve) =>
         {
             this.prmObj = new param(prm)
+
             await this.prmObj.load({APP:'TAB',USERS:this.core.auth.data.CODE})
             resolve()
         })
@@ -234,6 +238,7 @@ export default class App extends React.PureComponent
         ];
 
         let tmpMenu = []
+        
         for (let i = 0; i < menuButtons.length; i++) 
         {
             if(this.prmObj.filter({ID:menuButtons[i].id}).getValue() != false || typeof this.prmObj.filter({ID:menuButtons[i].id}).getValue() == 'undefined' )
