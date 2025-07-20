@@ -121,6 +121,7 @@ export default class PrinterCard extends React.PureComponent
                     }
     
                     let pResult = await dialog(tmpConfObj);
+
                     if(pResult == 'btn01')
                     {
                         this.getPrinter(pCode)
@@ -145,42 +146,41 @@ export default class PrinterCard extends React.PureComponent
     async searchSameItems(data) 
     {
         let duplicateItems = [];
+        let addedItems = [];
         
-        if(this.printerObj.dt('REST_PRINT_ITEM').length > 0)
+        if(data.length > 0)
         {
-            for(let i = 0; i < this.printerObj.dt('REST_PRINT_ITEM').length; i++)
+            for(let i = 0; i < data.length; i++)
             {
-                if(this.printerObj.dt('REST_PRINT_ITEM')[i].ITEM == data[0].GUID)
-                {
-                    duplicateItems.push(data[0].NAME);
-                }
+                let existingItem = this.printerObj.dt('REST_PRINT_ITEM').find(item => item.ITEM === data[i].GUID);
                 
-            }
-            
-            if(duplicateItems.length > 0)
-            {
-                this.toast.show({message:this.t("msgDuplicateItems.msg") + " " + duplicateItems.join(", "),type:"warning"})
-                return
-            }
-            else
-            {
-            if(data.length > 0)
+                if(existingItem)
+                {
+                    duplicateItems.push(data[i].NAME);
+                }
+                else
                 {
                     let tmpEmpty = 
                     {
                         CUSER : this.user.CODE,
                         LUSER : this.user.CODE,
-                        ITEM : data[0].GUID,
+                        ITEM : data[i].GUID,
                         PRINTER : this.printerObj.dt()[0].GUID,
-                        ITEM_NAME : data[0].NAME
+                        ITEM_NAME : data[i].NAME
                     }
                     this.printerObj.dt('REST_PRINT_ITEM').push(tmpEmpty)
+                    addedItems.push(data[i].NAME)
                 }
             }
-        }
+            
+            if(duplicateItems.length > 0)
+            {
+                this.toast.show({message:this.t("msgDuplicateItems.msg") + " " + duplicateItems.join(", "),type:"warning"})
+            }
         
-        return [];
+        }
     }
+
     render()
     {
         return(
@@ -222,6 +222,7 @@ export default class PrinterCard extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 let tmpConfObj1 =
@@ -268,6 +269,7 @@ export default class PrinterCard extends React.PureComponent
                                         }
                                         
                                         let pResult = await dialog(tmpConfObj);
+
                                         if(pResult == 'btn01')
                                         {
                                             this.printerObj.dt("REST_PRINT_ITEM").removeAll()
@@ -298,6 +300,7 @@ export default class PrinterCard extends React.PureComponent
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -370,7 +373,7 @@ export default class PrinterCard extends React.PureComponent
                                     height={'90%'}
                                     title={this.t("pg_txtCode.title")}
                                     deferRendering={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM REST_PRINTER WHERE DELETED = 0"},sql:this.core.sql}}}                                   
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM REST_PRINTER WHERE DELETED = 0`},sql:this.core.sql}}}                                   
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
@@ -484,7 +487,6 @@ export default class PrinterCard extends React.PureComponent
                         width={'90%'}
                         height={'90%'}
                         title={this.t("pgProduct.title")} 
-                        deferRendering={true}
                         data={{source:{select:{query : `SELECT GUID,CODE,NAME FROM ITEMS WHERE DELETED = 0`},sql:this.core.sql}}}                                   
                         >
                             <Column dataField="CODE" caption={this.t("pgProduct.clmCode")} width={150} />
