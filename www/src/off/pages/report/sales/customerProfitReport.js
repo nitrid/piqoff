@@ -140,7 +140,7 @@ export default class customerProfitReport extends React.PureComponent
                                     <ColumnChooser enabled={true} />
                                     {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={true} />}
                                     {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} /> : <Paging enabled={true} />}
-                                    {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                    {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
                                     <Export fileName={this.lang.t("menuOff.slsRpt_01_013")} enabled={true} allowExportSelectedData={true} />
                                     <Column dataField="ROW_NO" caption={this.t("grdListe.clmRowNo")}  width={70} visible={true}/>
                                     <Column dataField="INPUT_CODE" caption={this.t("grdListe.clmInputCode")} width={130} visible={true}/>

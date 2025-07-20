@@ -131,7 +131,7 @@ export default class piqXPurcFactList extends React.PureComponent
                             >   
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}              
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}              
                                 <Column dataField="DOC_DATE" caption={this.t("grdList.clmDate")} visible={true} width={'10%'} dataType={'date'}/> 
                                 <Column dataField="DOC_FROM_NO" caption={this.t("grdList.clmFromNo")} visible={true} width={'35%'}/> 
                                 <Column dataField="DOC_FROM_TITLE" caption={this.t("grdList.clmFromTitle")} visible={true} width={'40%'}/> 

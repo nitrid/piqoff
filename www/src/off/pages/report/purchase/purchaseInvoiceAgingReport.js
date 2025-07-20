@@ -253,6 +253,7 @@ export default class purchaseInvoiceAgingReport extends React.PureComponent
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
                             columnAutoWidth={true}
+                            height={'600'}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             sorting={{mode:'none'}}
@@ -270,7 +271,7 @@ export default class purchaseInvoiceAgingReport extends React.PureComponent
                             >
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={30} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
                                 <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdListe"}/>
                                 <ColumnChooser enabled={true} />
                                 <Export fileName={this.lang.t("menuOff.fns_01_002")} enabled={true} allowExportSelectedData={true} />

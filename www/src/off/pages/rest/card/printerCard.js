@@ -177,7 +177,6 @@ export default class PrinterCard extends React.PureComponent
             {
                 this.toast.show({message:this.t("msgDuplicateItems.msg") + " " + duplicateItems.join(", "),type:"warning"})
             }
-        
         }
     }
 

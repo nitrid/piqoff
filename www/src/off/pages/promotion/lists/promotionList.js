@@ -225,7 +225,7 @@ export default class promotionList extends React.PureComponent
                                 <GroupPanel visible={true} allowColumnDragging={false}/>
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
                                 <Export fileName={"promo"} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="ACTIVE" caption={this.t("grdListe.clmCode")} visible={false} defaultSortOrder="desc"/> 
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 

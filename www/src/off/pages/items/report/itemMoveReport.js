@@ -209,7 +209,7 @@ export default class itemMoveReport extends React.PureComponent
                             >                            
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
                                 <Export fileName={this.lang.t("menuOff.stk_05_005")} enabled={true} allowExportSelectedData={true} />                                
                                 <Column dataField="LUSER" caption={this.t("grdItemMoveReport.clmLuser")} visible={true} width={80}/> 
                                 <Column dataField="LDATE" caption={this.t("grdItemMoveReport.clmLdate")} visible={true} width={150}  dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>

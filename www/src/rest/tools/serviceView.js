@@ -205,7 +205,7 @@ export default class NbServiceView extends NbBase
                                         {
                                             if(this.state.data[i].DELIVERED > 0)
                                             {
-                                                return <i className="fa-solid fa-bell-concierge fa-1x" style={{color:'#FF6B6B', textShadow:'0px 0px 5px rgba(255,107,107,0.5)', animation:'pulse 1.5s infinite'}}></i>
+                                                return <i className="fa-solid fa-bell-concierge fa-1x" style={{color:'#FF6B6B', textShadow:'0px 0px 5px rgba(255,107,107,0.5)', animation:'pulse 1.5s virtual'}}></i>
                                             }
                                             else
                                             {
