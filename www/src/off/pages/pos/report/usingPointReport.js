@@ -27,10 +27,11 @@ export default class useingPointReport extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => { this.init() }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
     async Init()
     {
+        await this.core.util.waitUntil(100)
     }
 
     loadState()

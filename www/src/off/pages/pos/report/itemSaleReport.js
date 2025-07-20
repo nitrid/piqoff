@@ -13,7 +13,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import NdToast from '../../../../core/react/devex/toast.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 
 
@@ -35,7 +35,7 @@ export default class itemSaleReport extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => { }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
     async Init()
     {
@@ -65,7 +65,6 @@ export default class itemSaleReport extends React.PureComponent
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
                     query : `SELECT MIN(DOC_DATE) AS FIRST_DATE, MAX(DOC_DATE) AS LAST_DATE, 

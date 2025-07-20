@@ -18,7 +18,7 @@ export default class posSalesDetailReport extends React.PureComponent
     }
     async componentDidMount()
     {
-        await this.core.util.waitUntil(0)
+        await this.core.util.waitUntil(100)
     }
     render()
     {

@@ -11,7 +11,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { NdForm,NdItem, NdLabel } from '../../../../core/react/devex/form.js';
 
-export default class itemSalesReport extends React.PureComponent
+export default class balanceTicket extends React.PureComponent
 {
     constructor(props)
     {

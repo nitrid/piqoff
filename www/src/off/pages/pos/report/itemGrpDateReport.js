@@ -25,9 +25,9 @@ export default class itemGrpDateReport extends React.PureComponent
     }
     async componentDidMount()
     {
-        await this.core.util.waitUntil(0)
-        this.init()
+        await this.core.util.waitUntil(100)
     }
+
     render()
     {
         return(

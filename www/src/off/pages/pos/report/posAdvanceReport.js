@@ -26,9 +26,12 @@ export default class enddayReport extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => { }, 1000);
+        setTimeout(async () => { this.init() }, 1000);
     }
-
+    async init()
+    {
+        await this.core.util.waitUntil(100)
+    }
     loadState()
     {
         let tmpLoad = this.access.filter({ELEMENT:'grdAdvanceDataState',USERS:this.user.CODE})
