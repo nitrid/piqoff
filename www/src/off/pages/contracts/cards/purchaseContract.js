@@ -462,24 +462,6 @@ export default class purchaseContract extends React.PureComponent
                                             <RequiredRule message={this.t("validCode")} />
                                         </Validator> 
                                     </NdTextBox>                                    
-                                    {/*EVRAK SEÇİM */}
-                                    <NdPopGrid id={"pg_Docs"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
-                                    visible={false}
-                                    position={{of:'#' + this.props.data.id + this.tabIndex}}
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_Docs.title")} 
-                                    data={{source:{select:{query : `SELECT CODE,NAME,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME 
-                                                                    FROM CONTRACT_VW_01 WHERE TYPE = 1 GROUP BY CODE,NAME,CUSTOMER
-                                                                    CUSTOMER_CODE,CUSTOMER_NAME`},sql:this.core.sql}}}
-                                    >
-                                        <Column dataField="CODE" caption={this.t("pg_Docs.clmCode")} width={150} defaultSortOrder="asc"/>
-                                        <Column dataField="NAME" caption={this.t("pg_Docs.clmName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="CUSTOMER_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
-                                        <Column dataField="CUSTOMER_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} defaultSortOrder="asc" />
-                                    </NdPopGrid>
                                 </NdItem>
                                 {/* txtName */}
                                 <NdItem>
@@ -553,37 +535,7 @@ export default class purchaseContract extends React.PureComponent
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
-                                    {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
-                                    visible={false}
-                                    position={{of:'#' + this.props.data.id + this.tabIndex}}
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_txtCustomerCode.title")} //
-                                    search={true}
-                                    data = 
-                                    {{
-                                        source:
-                                        {
-                                            select:
-                                            {
-                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] 
-                                                         FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) 
-                                                         LIKE UPPER(@VAL)) AND STATUS = 1`,
-                                                param : ['VAL:string|50']
-                                            },
-                                            sql:this.core.sql
-                                        }
-                                    }}
-                                    >
-                                        <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
-                                        <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
-                                        <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                                        
-                                    </NdPopGrid>
+
                                 </NdItem> 
                                 {/* txtCustomerName */}
                                 <NdItem>
@@ -1027,6 +979,55 @@ export default class purchaseContract extends React.PureComponent
                         </NdItem>
                         </NdForm>
                     </NdPopUp>
+                    {/*EVRAK SEÇİM */}
+                    <NdPopGrid id={"pg_Docs"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
+                    visible={false}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_Docs.title")} 
+                    data={{source:{select:{query : `SELECT CODE,NAME,CUSTOMER,CUSTOMER_CODE,CUSTOMER_NAME 
+                                                    FROM CONTRACT_VW_01 WHERE TYPE = 1 GROUP BY CODE,NAME,CUSTOMER
+                                                    CUSTOMER_CODE,CUSTOMER_NAME`},sql:this.core.sql}}}
+                    >
+                        <Column dataField="CODE" caption={this.t("pg_Docs.clmCode")} width={150} defaultSortOrder="asc"/>
+                        <Column dataField="NAME" caption={this.t("pg_Docs.clmName")} width={300} defaultSortOrder="asc" />
+                        <Column dataField="CUSTOMER_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} defaultSortOrder="asc" />
+                        <Column dataField="CUSTOMER_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} defaultSortOrder="asc" />
+                    </NdPopGrid>
+                    {/*CARI SECIMI POPUP */}
+                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
+                    visible={false}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_txtCustomerCode.title")} //
+                    search={true}
+                    data = 
+                    {{
+                        source:
+                        {
+                            select:
+                            {
+                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] 
+                                            FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) 
+                                            LIKE UPPER(@VAL)) AND STATUS = 1`,
+                                param : ['VAL:string|50']
+                            },
+                            sql:this.core.sql
+                        }
+                    }}
+                    >
+                        <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
+                        <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
+                        <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
+                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
+                        
+                    </NdPopGrid>
                     <NdToast id={"toast"} parent={this} displayTime={3000} position={{at:"top center",offset:'0px 110px'}}/>
                 </div> 
             </div>

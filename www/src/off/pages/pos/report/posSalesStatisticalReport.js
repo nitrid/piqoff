@@ -41,7 +41,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
             productDetailAnalysisType: 'daily',
             productDetailChartType: 'line',
             selectBoxResetKey: Date.now(),
-            popAnalysisResetKey: Date.now()
+            popAnalysisResetKey: Date.now(),
+            // Saatlik satış verisi için
+            hourlySalesData: []
         },
         this.tabIndex = props.data.tabkey
 
@@ -1055,41 +1057,41 @@ export default class posSalesStatisticalReport extends React.PureComponent
                             {
                                 let tmpQuery = 
                                 {
-                                    query : "SELECT " +
-                                            "POS.DOC_DATE AS DOC_DATE, " +
-                                            "POS.DEVICE AS DEVICE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
-                                            "'SALES' AS TITLE, " +
-                                            "'HT' AS TYPE, " +
-                                            "POS.VAT_RATE AS VAT_RATE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN SUM(POS.FAMOUNT) ELSE SUM(POS.FAMOUNT) * -1 END AS AMOUNT " +
-                                            "FROM POS_SALE_VW_01 AS POS " +
-                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 " +
-                                            "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE " +
-                                            "UNION ALL " +
-                                            "SELECT " +
-                                            "POS.DOC_DATE AS DOC_DATE, " +
-                                            "POS.DEVICE AS DEVICE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
-                                            "'SALES' AS TITLE, " +
-                                            "'TVA' AS TYPE, " +
-                                            "POS.VAT_RATE AS VAT_RATE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN SUM(POS.VAT) ELSE SUM(POS.VAT) * -1 END AS AMOUNT " +
-                                            "FROM POS_SALE_VW_01 AS POS " +
-                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 " +
-                                            "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE " +
-                                            "UNION ALL " +
-                                            "SELECT " +
-                                            "POS.DOC_DATE AS DOC_DATE, " +
-                                            "POS.DEVICE AS DEVICE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
-                                            "'PAYMENT' AS TITLE, " +
-                                            "PAY_TYPE_NAME AS TYPE, " +
-                                            "0 AS VAT_RATE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT - CHANGE) * -1 END AS AMOUNT  " +
-                                            "FROM POS_PAYMENT_VW_01 AS POS " +
-                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' " +
-                                            "GROUP BY POS.GUID,POS.DOC_DATE,POS.TYPE,POS.PAY_TYPE_NAME,POS.PAY_TYPE,POS.DEVICE " , 
+                                    query : `SELECT 
+                                            POS.DOC_DATE AS DOC_DATE, 
+                                            POS.DEVICE AS DEVICE, 
+                                            CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, 
+                                            'SALES' AS TITLE, 
+                                            'HT' AS TYPE, 
+                                            POS.VAT_RATE AS VAT_RATE, 
+                                            CASE WHEN POS.TYPE = 0 THEN SUM(POS.FAMOUNT) ELSE SUM(POS.FAMOUNT) * -1 END AS AMOUNT 
+                                            FROM POS_SALE_VW_01 AS POS 
+                                            WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 
+                                            GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE 
+                                            UNION ALL 
+                                            SELECT 
+                                            POS.DOC_DATE AS DOC_DATE, 
+                                            POS.DEVICE AS DEVICE, 
+                                            CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, 
+                                            'SALES' AS TITLE, 
+                                            'TVA' AS TYPE, 
+                                            POS.VAT_RATE AS VAT_RATE, 
+                                            CASE WHEN POS.TYPE = 0 THEN SUM(POS.VAT) ELSE SUM(POS.VAT) * -1 END AS AMOUNT 
+                                            FROM POS_SALE_VW_01 AS POS 
+                                            WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 
+                                            GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE 
+                                            UNION ALL 
+                                            SELECT 
+                                            POS.DOC_DATE AS DOC_DATE, 
+                                            POS.DEVICE AS DEVICE, 
+                                            CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, 
+                                            'PAYMENT' AS TITLE, 
+                                            PAY_TYPE_NAME AS TYPE, 
+                                            0 AS VAT_RATE, 
+                                            CASE WHEN POS.TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT - CHANGE) * -1 END AS AMOUNT  
+                                            FROM POS_PAYMENT_VW_01 AS POS 
+                                            WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' 
+                                            GROUP BY POS.GUID,POS.DOC_DATE,POS.TYPE,POS.PAY_TYPE_NAME,POS.PAY_TYPE,POS.DEVICE` , 
                                     param : ['START:date','END:date'],
                                     value : [this.dtDate.startDate,this.dtDate.endDate]
                                 }
@@ -1195,10 +1197,14 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                     
                                     this.calculateAnalysisData(dailySalesData)
                                     
+                                    // Saatlik veriyi de yükle
+                                    let hourlySalesData = await this.getHourlySalesData()
+                                    
                                     this.setState
                                     ({ 
                                         chartData: chartData,
-                                        dailySalesData: dailySalesData
+                                        dailySalesData: dailySalesData,
+                                        hourlySalesData: hourlySalesData
                                     })
                                 }
                                 else
@@ -1206,7 +1212,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                     this.setState
                                     ({ 
                                         chartData: [],
-                                        dailySalesData: []  
+                                        dailySalesData: [],
+                                        hourlySalesData: []
                                     })
                                 }
                             }}/>
@@ -1408,12 +1415,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         'CB': { name: this.lang.t("barChart.creditCard"), color: "#4caf50" },
                                                         'CB TICKET': { name: this.lang.t("barChart.creditCardTicket"), color: "#8bc34a" },
                                                         'CHECK': { name: this.lang.t("barChart.check"), color: "#ff9800" },
-                                                        'BON DE VALAUER': { name: this.lang.t("barChart.giftVoucher"), color: "#e91e63" },
                                                         'BON D\'AVOIR': { name: this.lang.t("barChart.giftCard"), color: "#f44336" },
                                                         'AVOIR': { name: this.lang.t("barChart.credit"), color: "#9c27b0" },
                                                         'VIRM': { name: this.lang.t("barChart.transfer"), color: "#2196f3" },
                                                         'PRLV': { name: this.lang.t("barChart.directDebit"), color: "#607d8b" },
-                                                        'FRANC': { name: this.lang.t("barChart.franc"), color: "#795548" },
                                                         'T.R': { name: this.lang.t("barChart.ticketRest"), color: "#2196f3" }
                                                     };
                                                     
@@ -1460,7 +1465,149 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                 }
                             </div>
                         </div>
-                    </React.Suspense>
+                        <div className="row px-2 pt-4">
+                            <div className="col-6">
+                                {
+                                    this.state.chartData && this.state.chartData.length > 0 ?
+                                    <div style={{minHeight: '400px', height: '500px', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)'}}>
+                                        <Chart
+                                            id="currencyDistributionChart"
+                                            style={{minHeight: '400px'}}
+                                            title={this.lang.t("currencyDistributionChart.title")}
+                                            dataSource={this.getCurrencyDistributionData()}
+                                            palette="Bright"
+                                        >
+                                            <CommonSeriesSettings 
+                                                argumentField="currency" 
+                                                type="bar"
+                                            />
+                                            <Series
+                                                valueField="amount"
+                                                name={this.lang.t("currencyDistributionChart.totalAmount")}
+                                                color="#4caf50"
+                                                barPadding={0.1}
+                                                minBarSize={3}
+                                            >
+                                                <Label visible={true} position="inside" backgroundColor="transparent" customizeText={(point) => `${parseFloat(point.value).toFixed(1)}€`} />
+                                            </Series>
+                                            <ArgumentAxis
+                                                allowDecimals={false}
+                                                axisDivisionFactor={1}
+                                                discreteAxisDivisionMode="crossLabels"
+                                            >
+                                                <ChartLabel rotationAngle={45} />
+                                                <Grid visible={true} opacity={0.2} />
+                                            </ArgumentAxis>
+                                            <ValueAxis>
+                                                <Title text={this.lang.t("currencyDistributionChart.amount") + '€'} />
+                                                <Grid visible={true} opacity={0.2} />
+                                            </ValueAxis>
+                                            <Legend 
+                                                position="outside"
+                                                horizontalAlignment="center"
+                                                verticalAlignment="bottom"
+                                                orientation="horizontal"
+                                                columnCount={2}
+                                                markerSize={12}
+                                            >
+                                                <Border visible={true} cornerRadius={4} />
+                                            </Legend>
+                                            <Tooltip 
+                                                enabled={true}
+                                                cornerRadius={6}
+                                                shadow={{opacity: 0.2, blur: 5, color: "#000", offsetX: 2, offsetY: 2}}
+                                                customizeTooltip={(arg) => 
+                                                {
+                                                    return {
+                                                        text: `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`,
+                                                        color: '#ffffff',
+                                                        fontWeight: 'bold',
+                                                        backgroundColor: '#1e88e5'
+                                                    };
+                                                }}
+                                            />
+                                        </Chart>
+                                    </div>
+                                    :
+                                    <div style={{minHeight: '400px', height: '500px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)'}}>
+                                        <span>{this.lang.t("noData")}</span>
+                                    </div>
+                                }
+                            </div>
+                            {/* Saatlik Satış Dağılımı Grafiği - Sağ */}
+                            <div className="col-6">
+                                {
+                                    this.state.chartData && this.state.chartData.length > 0 ?
+                                    <div style={{minHeight: '400px', height: '500px', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px'}}>
+                                        <Chart
+                                            id="hourlySalesChart"
+                                            style={{minHeight: '400px'}}
+                                            title={this.lang.t("hourlySalesChart.title")}
+                                            dataSource={this.state.hourlySalesData}
+                                        >
+                                            <CommonSeriesSettings 
+                                                argumentField="hour" 
+                                                type="bar"
+                                            />
+                                            <Series
+                                                valueField="totalSales"
+                                                name={this.lang.t("hourlySalesChart.totalSales")}
+                                                color="#4caf50"
+                                                barPadding={0.1}
+                                                minBarSize={3}
+                                            />
+                                            <Series
+                                                valueField="saleCount"
+                                                name={this.lang.t("hourlySalesChart.saleCount")}
+                                                color="#ff9800"
+                                                barPadding={0.1}
+                                                minBarSize={3}
+                                            />
+                                            <ArgumentAxis
+                                                allowDecimals={false}
+                                                axisDivisionFactor={1}
+                                                discreteAxisDivisionMode="crossLabels"
+                                            >
+                                                <ChartLabel rotationAngle={0} />
+                                                <Grid visible={true} />
+                                            </ArgumentAxis>
+                                            <ValueAxis>
+                                                <Title text={this.lang.t("hourlySalesChart.amount") + '€'} />
+                                                <Grid visible={true} />
+                                            </ValueAxis>
+                                            <Legend 
+                                                position="outside"
+                                                horizontalAlignment="center"
+                                                verticalAlignment="bottom"
+                                                orientation="horizontal"
+                                            >
+                                                <Border visible={true} />
+                                            </Legend>
+                                            <Tooltip 
+                                                enabled={true}
+                                                customizeTooltip={(arg) => 
+                                                {
+                                                    if (arg.seriesName.includes(this.lang.t("hourlySalesChart.saleCount"))) {
+                                                        return {
+                                                            text: `${arg.seriesName}: ${arg.valueText} adet`
+                                                        };
+                                                    } else {
+                                                        return {
+                                                            text: `${arg.seriesName}: ${parseFloat(arg.valueText).toFixed(2)} €`
+                                                        };
+                                                    }
+                                                }}
+                                            />
+                                        </Chart>
+                                    </div>
+                                    :
+                                    <div style={{minHeight: '400px', height: '500px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px'}}>
+                                        <span>{this.lang.t("noData")}</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        </React.Suspense>
                     
                     {/* Analiz PopUp */}
                     <NdPopUp parent={this} id={"popAnalysis"} 
@@ -2836,5 +2983,106 @@ export default class posSalesStatisticalReport extends React.PureComponent
                 </ScrollView>
             </div>
         )
+    }
+
+    // Para birimi dağılımı verisi
+    getCurrencyDistributionData() 
+    {
+        if (!this.state.chartData || this.state.chartData.length === 0) 
+        {
+            return [];
+        }
+
+        let currencyData = {};
+        
+        this.state.chartData.forEach(item => {
+            // Para birimi kategorileri
+            let cashAmount = (item['ESC'] || 0) + (item['FRANC'] || 0);
+            let cardAmount = (item['CB'] || 0) + (item['CB TICKET'] || 0);
+            let checkAmount = item['CHECK'] || 0;
+            let voucherAmount = (item['BON DE VALAUER'] || 0) + (item['BON D\'AVOIR'] || 0);
+            let creditAmount = item['AVOIR'] || 0;
+            let transferAmount = (item['VIRM'] || 0) + (item['PRLV'] || 0);
+            let ticketAmount = item['T.R'] || 0;
+
+            // Kategorilere göre grupla
+            if (cashAmount > 0) currencyData[this.lang.t("currencyDistributionChart.cash")] = (currencyData[this.lang.t("currencyDistributionChart.cash")] || 0) + cashAmount;
+            if (cardAmount > 0) currencyData[this.lang.t("currencyDistributionChart.card")] = (currencyData[this.lang.t("currencyDistributionChart.card")] || 0) + cardAmount;
+            if (checkAmount > 0) currencyData[this.lang.t("currencyDistributionChart.check")] = (currencyData[this.lang.t("currencyDistributionChart.check")] || 0) + checkAmount;
+            if (voucherAmount > 0) currencyData[this.lang.t("currencyDistributionChart.voucher")] = (currencyData[this.lang.t("currencyDistributionChart.voucher")] || 0) + voucherAmount;
+            if (creditAmount > 0) currencyData[this.lang.t("currencyDistributionChart.credit")] = (currencyData[this.lang.t("currencyDistributionChart.credit")] || 0) + creditAmount;
+            if (transferAmount > 0) currencyData[this.lang.t("currencyDistributionChart.transfer")] = (currencyData[this.lang.t("currencyDistributionChart.transfer")] || 0) + transferAmount;
+            if (ticketAmount > 0) currencyData[this.lang.t("currencyDistributionChart.ticket")] = (currencyData[this.lang.t("currencyDistributionChart.ticket")] || 0) + ticketAmount;
+        });
+
+        // Array formatına çevir
+        return Object.keys(currencyData).map(currency => (
+        {
+            currency: currency,
+            amount: parseFloat(currencyData[currency].toFixed(2))
+        })).sort((a, b) => b.amount - a.amount);
+    }
+
+    // Saatlik satış dağılımı verisi (Gerçek verilerden)
+    async getHourlySalesData() 
+    {
+        try 
+        {
+            // Gerçek saatlik veri çek
+            let tmpQuery = 
+            {
+                query: `SELECT 
+                        DATEPART(HOUR, POS.CDATE) AS HOUR,
+                        SUM(CASE WHEN POS.TYPE = 0 THEN POS.TOTAL ELSE POS.TOTAL * -1 END) AS TOTAL_SALES,
+                        COUNT(*) AS SALE_COUNT
+                        FROM POS_SALE_VW_01 AS POS 
+                        WHERE POS.STATUS = 1 
+                        AND POS.DOC_DATE >= @START 
+                        AND POS.DOC_DATE <= @END 
+                        AND POS.DEVICE <> '9999' 
+                        AND POS.TOTAL <> 0
+                        GROUP BY DATEPART(HOUR, POS.CDATE)
+                        ORDER BY DATEPART(HOUR, POS.CDATE)`,
+                param: ['START:date', 'END:date'],
+                value: [this.dtDate.startDate, this.dtDate.endDate]
+            };
+
+            App.instance.setState({ isExecute: true });
+            let tmpData = await this.core.sql.execute(tmpQuery);
+            App.instance.setState({ isExecute: false });
+
+            let hourlyData = [];
+            
+            for (let hour = 7; hour <= 22; hour++) 
+            {
+                let hourLabel = hour < 10 ? `0${hour}:00` : `${hour}:00`;
+
+            let realData = tmpData && tmpData.result && tmpData.result.recordset ? 
+                tmpData.result.recordset.find(row => row.HOUR === hour) : null;
+                
+                let totalSales = 0;
+                let saleCount = 0;
+                
+                if (realData) 
+                {
+                    totalSales = parseFloat(realData.TOTAL_SALES || 0);
+                    saleCount = parseInt(realData.SALE_COUNT || 0);
+                }
+                
+                hourlyData.push(
+                {
+                    hour: hourLabel,
+                    totalSales: parseFloat(totalSales.toFixed(2)),
+                    saleCount: saleCount
+                });
+            }
+
+            return hourlyData;
+        } 
+        catch (error) 
+        {
+            console.error(this.lang.t("hourlySalesChart.error"), error);
+            return [];
+        }
     }
 }
