@@ -120,7 +120,7 @@ export const langTr =
             txtTotal : "Genel Toplam",
             cmbDepot : "Depo",
             dtDocDate : "Tarih",
-            dtDShıpmentDate : "Teslimat Tarihi",
+            dtDShipmentDate : "Teslimat Tarihi",
             txtDescription : "Açıklama",
             cmbPricingList : "Fiyat Liste No",
             txtFactNonSolde : "Ödenmemiş Fatura"

@@ -40,19 +40,6 @@ export default class itemCard extends React.PureComponent
             isItemGrpForMinMaxAccess : false,
             isTaxSugar : false,
             isPromotion : false,
-            // SuperSonic Analytics States
-            chartMode: 'quantity',
-            quantityChartData: null,
-            priceChartData: null,
-            stockChartData: null,
-            linearRegressionData: null,
-            monteCarloPredictionData: null,
-            stockPredictionData: null,
-            totalSalesStats: null,
-            azurePricePrediction: null,
-            reorderRecommendation: null,
-            dataSource: null,
-
         }
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
@@ -1043,20 +1030,6 @@ export default class itemCard extends React.PureComponent
                                             this.itemsObj.dt('ITEMS').removeAt(0)
                                             await this.itemsObj.dt('ITEMS').delete();
                                             this.init(); 
-                                        }
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSuperSonic" parent={this} icon="chart" type="info" text="🚀 Analytics"
-                                    onClick={async()=>
-                                    {
-                                        if(this.txtRef.value && this.txtRef.value.trim() !== '')
-                                        {
-                                            await this.popSuperSonicAnalytics.show();
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:"Lütfen önce bir ürün seçin!",type:'warning'})
                                         }
                                     }}/>
                                 </Item>
@@ -3557,6 +3530,7 @@ export default class itemCard extends React.PureComponent
                             </NdForm>
                         </NdPopUp>
                     </div>
+<<<<<<< HEAD
                     {/* SuperSonic Analytics Popup */}
                     <div>
                         <NdPopUp parent={this} id={"popSuperSonicAnalytics"} 
@@ -3622,7 +3596,8 @@ export default class itemCard extends React.PureComponent
                                             {
                                                 App.instance.setState({isExecute:true})
 
-                                                try {
+                                                try 
+                                                {
                                                     await this.loadSuperSonicAnalytics()
                                                 } 
                                                 catch (err) 
@@ -3989,6 +3964,8 @@ export default class itemCard extends React.PureComponent
                     </NdPopUp>
                     
                     </div>
+=======
+>>>>>>> d0670a5158442d91130dee2429930e894e052e01
                     <div>
                         <NdAccessEdit id={"accesComp"} parent={this}/>
                     </div>                            
@@ -3997,6 +3974,7 @@ export default class itemCard extends React.PureComponent
             </div>
         )
     }
+<<<<<<< HEAD
 
     // SuperSonic Analytics Matematik Fonksiyonları
     async mathematicalPriceAnalysis() 
@@ -4209,22 +4187,27 @@ export default class itemCard extends React.PureComponent
             let depotStocks = [];
             
             try {
-                console.log(this.txtRef?.value);
                 let stockQuery = 
                 {
                     
-                    query: `SELECT REF,REF_NO,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE,DEPOT_NAME,SUM(QUANTITY) AS QUANTITY,COUNT(REF) AS TOTAL_LINE 
-                           FROM ITEM_COUNT_VW_01 
-                           WHERE ITEM_CODE = @CODE
-                           GROUP BY REF,REF_NO,DOC_DATE,DEPOT_NAME 
-                           ORDER BY DOC_DATE DESC`,
-                    param: ['CODE:string|50'],
-                    value: [this.txtRef?.value]
+                    source : 
+                    {
+                        select : 
+                        {
+                            query : `SELECT NAME,CODE,UNIT_NAME,
+                                    ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS BARCODE,
+                                    [dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,dbo.GETDATE()) AS QUANTITY FROM ITEMS_VW_01 
+                                    WHERE ((NAME like @NAME + '%') OR (@NAME = ''))`,
+                            param : ['CODE:string|50','DEPOT:string|50'],
+                            value : [this.txtRef?.value,this.cmbPopPriDepot.value]
+                        },
+                        sql : this.core.sql
+                    }
                 };
                 
                 let stockData = await this.core.sql.execute(stockQuery);
-
-                console.log(stockData);
+                console.log('this.cmbPopPriDepot.value',this.cmbPopPriDepot.value);
+                console.log('stockData',stockData);
                 
                 if (stockData.result.recordset.length > 0) 
                 {
@@ -4252,8 +4235,8 @@ export default class itemCard extends React.PureComponent
             }
             
             // Sabit parametreler
-            let leadTime = 7; // Tedarik süresi (gün)
-            let safetyStock = avgDailySales * 2; // Güvenlik stoku
+            let leadTime = 7; // Tedarik süresi (gün) BAAAAK
+            let safetyStock = avgDailySales * 2; // Güvenlik stoku BAAAK
             
             let reorderPoint = (avgDailySales * leadTime) + safetyStock;
             let suggestedOrder = reorderPoint - currentStock;
@@ -5093,8 +5076,6 @@ export default class itemCard extends React.PureComponent
 
     prepareQuantityChartData(dailyData) 
     {
-        console.log('📊 prepareQuantityChartData - dailyData:', dailyData);
-        
         let result = dailyData.map(day => (
         {
             DOC_DATE_STR: day.DOC_DATE_STR,
@@ -5354,15 +5335,6 @@ export default class itemCard extends React.PureComponent
             return defaultPrediction;
         }
     }
+=======
+>>>>>>> d0670a5158442d91130dee2429930e894e052e01
 }
-
-
-
-
-
-
-
-
-
-
-

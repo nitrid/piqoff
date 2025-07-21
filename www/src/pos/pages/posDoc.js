@@ -4164,7 +4164,7 @@ export default class posDoc extends React.PureComponent
                                             else
                                             {
                                                 let tmpAcsVal = this.acsObj.filter({ID:'btnPluEdit',USERS:this.user.CODE})
-                                                
+
                                                 if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
                                                 {   
                                                     let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})

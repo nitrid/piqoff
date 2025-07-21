@@ -283,7 +283,8 @@ export const langFr =
         directDebit: "Prélèvement automatique",
         franc: "Franc",
         ticketRest: "Ticket rest",
-        voucher: "Bon d'achat"
+        voucher: "Bon d'achat",
+        ticket: "Ticket"
     },
     hourlySalesChart: {
         title: "Répartition des ventes par intervalle horaire",

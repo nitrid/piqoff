@@ -283,7 +283,8 @@ export const langTr =
         directDebit: "Otomatik Ödeme",
         franc: "Frank",
         ticketRest: "T.R Tike",
-        voucher: "Hediye Çeki"
+        voucher: "Hediye Çeki",
+        ticket: "Tike"
     },
     hourlySalesChart: {
         title: "Saatlik Satış Dağılımı",

@@ -273,7 +273,8 @@ export const langDe =
         directDebit: "Direkte Lastschrift",
         franc: "Frank",
         ticketRest: "Ticket-Rest",  
-        voucher: "Geschenkkarte"
+        voucher: "Geschenkkarte",
+        ticket: "Ticket"
     },
     hourlySalesChart: {
         title: "Stündliche Verkaufsverteilung",
