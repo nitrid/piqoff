@@ -436,7 +436,7 @@ export default class outageDoc extends React.PureComponent
             pQuantity = 1
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         
         if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
         {
@@ -453,7 +453,7 @@ export default class outageDoc extends React.PureComponent
             {
                 if(tmpQuantity.result.recordset[0].QUANTITY < 1)
                 {
-                    App.instance.setState({isExecute:false})
+                    App.instance.loading.hide()
                     this.toast.show({message:this.t("msgNotQuantity.msg"),type:"warning"})
                     await this.grdOutwasItems.devGrid.deleteRow(0)
                     return
@@ -471,7 +471,7 @@ export default class outageDoc extends React.PureComponent
                 if(this.combineControl == true)
                 {
                     let tmpCombineBtn = ''
-                    App.instance.setState({isExecute:false})
+                    App.instance.loading.hide()
                     await this.msgCombineItem.show().then(async (e) =>
                     {
                         if(e == 'btn01')
@@ -522,7 +522,7 @@ export default class outageDoc extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
 
         this.calculateTotal()
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async checkRow()
     {

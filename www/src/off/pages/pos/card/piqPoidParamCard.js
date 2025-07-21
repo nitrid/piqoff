@@ -293,7 +293,7 @@ export default class piqPoidDeviceCard extends React.PureComponent
                                             button:[{id:"btn02",caption:this.t("msgSaveResult.btn01"),location:'after'}],
                                         }
 
-                                        App.instance.setState({isExecute:true})
+                                        App.instance.loading.show()
                                         for (let x = 0; x < this.state.metaPrm.length; x++) 
                                         {
                                             this.prmData.add
@@ -312,7 +312,7 @@ export default class piqPoidDeviceCard extends React.PureComponent
                                         }
                                         let tmpResult = await this.prmData.save()                                            
                                         await this.prmData.load({APP:'POID'})
-                                        App.instance.setState({isExecute:false})
+                                        App.instance.loading.hide()
 
                                         if(tmpResult == 0)
                                         {

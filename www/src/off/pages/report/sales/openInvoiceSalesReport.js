@@ -52,7 +52,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
     async InvPrint()
     {
         let tmpLines = []
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         for (let i = 0; i < this.grdListe.getSelectedData().length; i++) 
         {
             let tmpQuery = 
@@ -81,7 +81,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                 } 
             }
         });
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
 
     async btnGetirClick()
@@ -550,7 +550,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                                 {
                                                     
                                                     let tmpLines = []
-                                                    App.instance.setState({isExecute:true})
+                                                    App.instance.loading.show()
                                                     for (let i = 0; i < this.grdListe.getSelectedData().length; i++) 
                                                     {
                                                         let tmpQuery = 
@@ -581,7 +581,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                                             let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"Rapport Facture"+".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
                                                             this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                             {
-                                                                App.instance.setState({isExecute:false})
+                                                                App.instance.loading.hide()
                                                                 let tmpConfObj1 =
                                                                 {
                                                                     id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -605,8 +605,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                                                                 }
                                                             });
                                                     });
-                                                    App.instance.setState({isExecute:false})
-                                                  
+                                                    App.instance.loading.hide()
                                                 }
                                                     
                                             }}/>

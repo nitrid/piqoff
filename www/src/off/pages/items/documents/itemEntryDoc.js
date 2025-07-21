@@ -407,7 +407,7 @@ export default class itemEntryDoc extends React.PureComponent
             pQuantity = 1
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         
         for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
         {
@@ -416,7 +416,7 @@ export default class itemEntryDoc extends React.PureComponent
                 if(this.combineControl == true)
                 {
                     let tmpCombineBtn = ''
-                    App.instance.setState({isExecute:false})
+                    App.instance.loading.hide()
                     await this.msgCombineItem.show().then(async (e) =>
                     {
     
@@ -468,7 +468,7 @@ export default class itemEntryDoc extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
 
         this.calculateTotal()
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async checkRow()
     {

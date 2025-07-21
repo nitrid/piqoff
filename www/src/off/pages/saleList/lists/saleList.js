@@ -80,9 +80,9 @@ export default class saleList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdOfferList.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async btnOrdersGetClick()
     {
@@ -106,9 +106,9 @@ export default class saleList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdOrderList.dataRefresh(tmpSource1)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async btnDispatchGetClick()
     {
@@ -132,9 +132,9 @@ export default class saleList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdDispatchList.dataRefresh(tmpSource2)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async btnInvoiceGetClick()
     {
@@ -158,9 +158,9 @@ export default class saleList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdInvoiceList.dataRefresh(tmpSource3)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async convertInvoice()
     {
@@ -179,7 +179,7 @@ export default class saleList extends React.PureComponent
         }
         let tmpDocGuids = []
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
 
         for (let i = 0; i < this.grdSlsDisList.getSelectedData().length; i++) 
         {
@@ -347,7 +347,7 @@ export default class saleList extends React.PureComponent
             }
         }
 
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
         
         let tmpConfObj2 =
         {
@@ -362,7 +362,7 @@ export default class saleList extends React.PureComponent
         {
             let tmpLines = []
 
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
 
             for (let i = 0; i < tmpDocGuids.length; i++) 
             {
@@ -389,9 +389,9 @@ export default class saleList extends React.PureComponent
                     value:  [tmpDocGuids[i].GUID,'333',localStorage.getItem('lang').toUpperCase()]
                 }
 
-                App.instance.setState({isExecute:true})
+                App.instance.loading.show()
                 let tmpData = await this.core.sql.execute(tmpQuery) 
-                App.instance.setState({isExecute:false})
+                App.instance.loading.hide()
 
                 for (let x = 0; x < tmpData.result.recordset.length; x++) 
                 {
@@ -426,7 +426,7 @@ export default class saleList extends React.PureComponent
                         } 
                     }
                 });
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
             this.toast.show({message:this.t("msgConvertSucces.msg"),type:"success"})
         }
     }
@@ -444,7 +444,7 @@ export default class saleList extends React.PureComponent
             return
         }
         let tmpLines = []
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         for (let i = 0; i < this.grdSlsDisList.getSelectedData().length; i++) 
         {
             let tmpQuery = 
@@ -473,7 +473,7 @@ export default class saleList extends React.PureComponent
                 } 
             }
         });
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
 
     async mailSend(pGuid,pCustomer,pRefno)
@@ -498,13 +498,13 @@ export default class saleList extends React.PureComponent
             value:  [pGuid,this.sysParam.filter({ID:'autoFactureMailSend',USERS:this.user.CODE}).getValue().design,this.lang.languages[0].toString().toUpperCase()]
             }
 
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             let tmpData = await this.core.sql.execute(tmpQuery)
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
 
             this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
             {
-                App.instance.setState({isExecute:true})
+                App.instance.loading.show()
 
                 let  tmpHtml = this.sysParam.filter({ID:'MailExplanation',USERS:this.user.CODE}).getValue()
 
@@ -525,7 +525,7 @@ export default class saleList extends React.PureComponent
                         }
                         await this.core.sql.execute(tmpQuery) 
                     }
-                    App.instance.setState({isExecute:false})
+                    App.instance.loading.hide()
                 });
             }); 
         } 
@@ -537,7 +537,7 @@ export default class saleList extends React.PureComponent
            
             this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
             {
-                App.instance.setState({isExecute:false})
+                App.instance.loading.hide()
             });
         }    
     }

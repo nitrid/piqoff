@@ -72,9 +72,9 @@ export default class salesInvList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdSlsIvcList.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async txtDownload()
     {
@@ -188,7 +188,7 @@ export default class salesInvList extends React.PureComponent
     async InvPrint()
     {
         let tmpLines = []
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         for (let i = 0; i < this.grdSlsIvcList.getSelectedData().length; i++) 
         {
             let tmpQuery = 
@@ -215,7 +215,7 @@ export default class salesInvList extends React.PureComponent
                 } 
             }
         });
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     render()
     {
@@ -273,10 +273,10 @@ export default class salesInvList extends React.PureComponent
                                             value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,'115']
                                         }
                                         let tmpData = await this.core.sql.execute(tmpQuery)
-                                        App.instance.setState({isExecute:true})
+                                        App.instance.loading.show()
                                         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
                                         {
-                                            App.instance.setState({isExecute:false})
+                                            App.instance.loading.hide()
                                             if(pResult.split('|')[0] != 'ERR')
                                             {
                                                 var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      

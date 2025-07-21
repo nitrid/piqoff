@@ -505,15 +505,17 @@ export default class posSalesStatisticalReport extends React.PureComponent
         this.setState({ analysisData })
     }
     
-    async getProductGroups() {
-        // Loading başlat
-        App.instance.setState({isExecute:true})
+    async getProductGroups() 
+    {
+        App.instance.loading.show()
         
-        try {
-            let query = {
+        try 
+        {
+            let query = 
+            {
                 query: `SELECT DISTINCT 
-                            POS.ITEM_GRP_CODE,
-                            POS.ITEM_GRP_NAME
+                        POS.ITEM_GRP_CODE,
+                        POS.ITEM_GRP_NAME
                         FROM POS_SALE_VW_01 POS WITH (NOLOCK)
                         WHERE POS.STATUS = 1 
                         AND POS.DOC_DATE >= @FIRST_DATE 
@@ -549,16 +551,14 @@ export default class posSalesStatisticalReport extends React.PureComponent
         }
         finally 
         {
-            // Loading bitir
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
     }
 
     // Ürün detay analizi için yeni fonksiyon
     async calculateProductDetailData(productCode, productName, analysisType = 'daily') 
     {
-        // Loading başlat
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         
         try {
             let productDetailData = {}
@@ -746,12 +746,13 @@ export default class posSalesStatisticalReport extends React.PureComponent
             
             if (analysisType === 'yearly') 
             {
-                let tmpQuery = {
+                let tmpQuery = 
+                {
                     query: `SELECT 
-                                DATEPART(YEAR, POS.DOC_DATE) AS YEAR_NUMBER,
-                                SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
-                                SUM(POS.TOTAL) AS TOTAL_AMOUNT,
-                                COUNT(DISTINCT POS.GUID) AS SALE_COUNT
+                            DATEPART(YEAR, POS.DOC_DATE) AS YEAR_NUMBER,
+                            SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
+                            SUM(POS.TOTAL) AS TOTAL_AMOUNT,
+                            COUNT(DISTINCT POS.GUID) AS SALE_COUNT
                             FROM POS_SALE_VW_01 POS WITH (NOLOCK)
                             WHERE POS.STATUS = 1 
                             AND POS.DOC_DATE >= @FIRST_DATE 
@@ -765,7 +766,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     param: ['FIRST_DATE:date', 'LAST_DATE:date', 'ITEM_CODE:string|25'],
                     value: [this.dtDate.startDate, this.dtDate.endDate, productCode]
                 }
+
                 let tmpData = await this.core.sql.execute(tmpQuery)
+                
                 if (tmpData?.result?.recordset?.length > 0) 
                 {
                     productDetailData.yearly = tmpData.result.recordset.map((item) => 
@@ -793,15 +796,12 @@ export default class posSalesStatisticalReport extends React.PureComponent
         }
         finally 
         {
-            // Loading bitir
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
     }
-
     async calculateProductAnalysisData(analysisType) 
     {
-        // Loading başlat
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         
         try {
             let productAnalysisData = {}
@@ -992,12 +992,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
         }
         finally 
         {
-            // Loading bitir
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
     }
-
-
     render()
     {
         return(
@@ -1095,10 +1092,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                     param : ['START:date','END:date'],
                                     value : [this.dtDate.startDate,this.dtDate.endDate]
                                 }
-                                App.instance.setState({isExecute:true})
+                                App.instance.loading.show()
                                 let tmpData = await this.core.sql.execute(tmpQuery)
 
-                                App.instance.setState({isExecute:false})
+                                App.instance.loading.hide()
                                 let tmpPayType = 
                                 {
                                     query : "SELECT NAME FROM POS_PAY_TYPE",
@@ -1616,32 +1613,36 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     showTitle={true}
                     title={this.lang.t("popAnalysis.title")}
                     container={'#' + this.props.data.id + this.tabIndex} 
-                        width={'1200'}
-                        height={'800'}
+                    width={'1200'}
+                    height={'800'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
-                        ref={(el) => { this.popAnalysis = el }}
-                        onHiding={async () => {
-                            await new Promise(resolve => this.setState({
-                                selectedProduct: null,
-                                productDetailData: {},
-                                productDetailAnalysisType: 'daily',
-                                productDetailChartType: 'line'
-                            }, resolve));
-                            App.instance.setState({isExecute:false});
-                        }}
-                        onShowing={async () => {
-                            const newKey = Date.now();
-                            await new Promise(resolve => this.setState({
-                                selectedAnalysisType: 'best',
-                                selectedSubOption: 'topDay',
-                                selectedAnalysis: 'topDay',
-                                chartType: 'bar',
-                                selectedProductGroup: null,
-                                productAnalysisData: {},
-                                popAnalysisResetKey: newKey
-                            }, resolve));
-                        }}
-                        >
+                    ref={(el) => { this.popAnalysis = el }}
+                    onHiding={async () => 
+                    {
+                        await new Promise(resolve => this.setState(
+                        {
+                            selectedProduct: null,
+                            productDetailData: {},
+                            productDetailAnalysisType: 'daily',
+                            productDetailChartType: 'line'
+                        }, resolve));
+                        App.instance.loading.hide()
+                    }}
+                    onShowing={async () => 
+                    {
+                        const newKey = Date.now();
+                        await new Promise(resolve => this.setState(
+                        {
+                            selectedAnalysisType: 'best',
+                            selectedSubOption: 'topDay',
+                            selectedAnalysis: 'topDay',
+                            chartType: 'bar',
+                            selectedProductGroup: null,
+                            productAnalysisData: {},
+                            popAnalysisResetKey: newKey
+                        }, resolve));
+                    }}
+                    >
                         <div className="row p-4">
                             {/* Başlık ve Açıklama */}
                             <div className="col-12 mb-4 text-center">
@@ -1652,11 +1653,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                     {this.lang.t("popAnalysis.description")}
                                 </p>
                             </div>
-                            
                             {/* Analiz Seçim Paneli */}
                             <div className="col-12 mb-4">
                                 <div style={{
-                                    
                                     borderRadius: '12px',
                                     padding: '25px',
                                     boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
@@ -1698,7 +1697,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     if(e.value === 'products')
                                                     {
                                                         // Sadece ürün gruplarını yükle, analiz yapma
-                                                        App.instance.setState({isExecute:true})
+                                                        App.instance.loading.show()
                                                         
                                                         try {
                                                             let productGroups = await this.getProductGroups()
@@ -1740,8 +1739,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     })
                                                     
                                                     // Ürün analizleri seçildiğinde ilgili veriyi yükle
-                                                    if (this.state.selectedAnalysisType === 'products') {
-                                                        App.instance.setState({isExecute:true})
+                                                    if (this.state.selectedAnalysisType === 'products') 
+                                                    {
+                                                        App.instance.loading.show()
                                                         
                                                         try 
                                                         {
@@ -1749,7 +1749,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                             {
                                                                 // Sadece ürün gruplarını yükle, analiz yapma
                                                                 let productGroups = await this.getProductGroups()
-                                                                this.setState({ 
+                                                                this.setState(
+                                                                { 
                                                                     selectedAnalysis: e.value,
                                                                     productGroups: productGroups,
                                                                     productAnalysisData: {} // Boş bırak, ürün grubu seçilince doldurulacak
@@ -1764,7 +1765,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                             {
                                                                 // Diğer ürün analizleri için veriyi yükle
                                                                 let productData = await this.calculateProductAnalysisData(e.value)
-                                                                this.setState({ 
+                                                                this.setState(
+                                                                { 
                                                                     selectedAnalysis: e.value,
                                                                     productAnalysisData: productData
                                                                 }, async () => 
@@ -1836,7 +1838,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     {
                                                         if (e.value) 
                                                         {
-                                                            App.instance.setState({isExecute:true})
+                                                            App.instance.loading.show()
                                                             
                                                             try 
                                                             {
@@ -1940,7 +1942,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         async () => 
                                                         {
                                                             // Ürün detay verilerini yükle
-                                                            App.instance.setState({isExecute:true})
+                                                            App.instance.loading.show()
                                                             
                                                             try 
                                                             {
@@ -2060,7 +2062,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         async () => 
                                                         {
                                                             // Ürün detay verilerini yükle
-                                                            App.instance.setState({isExecute:true})
+                                                            App.instance.loading.show()
                                                             
                                                             try 
                                                             {
@@ -2191,7 +2193,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         () => 
                                                         {
                                                             // Ürün detay verilerini yükle
-                                                            App.instance.setState({isExecute:true})
+                                                            App.instance.loading.show()
                                                             
                                                             try 
                                                             {
@@ -2545,7 +2547,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                             productDetailAnalysisType: 'daily',
                             productDetailChartType: 'line'
                         }, resolve));
-                        App.instance.setState({isExecute:false});
+                        App.instance.loading.hide()
                     }}
                     onShowing={async () => 
                     {
@@ -2558,7 +2560,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         }, resolve));
                         if (this.state.selectedProduct) 
                         {
-                            App.instance.setState({isExecute:true})
+                            App.instance.loading.show()
                             try {
                                 let productDetailData = await this.calculateProductDetailData(
                                     this.state.selectedProduct.code,
@@ -2573,7 +2575,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                             } 
                             finally 
                             {
-                                App.instance.setState({isExecute:false})
+                                App.instance.loading.hide()
                             }
                             } 
                         else 
@@ -2628,7 +2630,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     if (this.state.selectedProduct) 
                                                     {
                                                         this.setState({ productDetailAnalysisType: e.value })
-                                                        App.instance.setState({isExecute:true})
+                                                        App.instance.loading.show()
                                                         try 
                                                         {
                                                             let productDetailData = await this.calculateProductDetailData(
@@ -2644,7 +2646,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         }
                                                         finally
                                                         {
-                                                            App.instance.setState({isExecute:false})
+                                                            App.instance.loading.hide()
                                                         }
                                                     }
                                                 }}
@@ -3047,9 +3049,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                 value: [this.dtDate.startDate, this.dtDate.endDate]
             };
 
-            App.instance.setState({ isExecute: true });
+            App.instance.loading.show()
             let tmpData = await this.core.sql.execute(tmpQuery);
-            App.instance.setState({ isExecute: false });
+            App.instance.loading.hide()
 
             let hourlyData = [];
             

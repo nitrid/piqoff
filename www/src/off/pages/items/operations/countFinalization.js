@@ -167,9 +167,9 @@ export default class countFinalization extends React.PureComponent
                     sql : this.core.sql
                 }
             }
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             await this.grdCountItems.dataRefresh(tmpSource)
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
         else if(this.chkNotCountItems.value == true)
         {
@@ -193,9 +193,9 @@ export default class countFinalization extends React.PureComponent
                 }
             }
 
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             await this.grdCountItems.dataRefresh(tmpSource)
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
         this.popCount.show()
     }

@@ -324,7 +324,7 @@ export default class rebateDoc extends React.PureComponent
             pQuantity = 1
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         
         if(typeof this.quantityControl != 'undefined' && this.quantityControl ==  true)
         {
@@ -341,7 +341,7 @@ export default class rebateDoc extends React.PureComponent
             {
                 if(tmpQuantity.result.recordset[0].QUANTITY < 1)
                 {
-                    App.instance.setState({isExecute:false})
+                    App.instance.loading.hide()
                     this.toast.show({message:this.t("msgNotQuantity.msg") + tmpQuantity.result.recordset[0].QUANTITY,type:"warning"})
                     await this.grdRebItems.devGrid.deleteRow(0)
                     return
@@ -360,7 +360,7 @@ export default class rebateDoc extends React.PureComponent
                 if(this.combineControl == true)
                 {
                     let tmpCombineBtn = ''
-                    App.instance.setState({isExecute:false})
+                    App.instance.loading.hide()
                     await this.msgCombineItem.show().then(async (e) =>
                     {
                         if(e == 'btn01')
@@ -409,7 +409,7 @@ export default class rebateDoc extends React.PureComponent
         this.docObj.docItems.dt()[pIndex].DISCOUNT_RATE = 0
         this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
 
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async checkRow()
     {

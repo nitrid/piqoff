@@ -79,9 +79,9 @@ export default class itemGrpSalesReport extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdGroupSalesReport.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async getDetail(pGrp)
     {
@@ -110,9 +110,9 @@ export default class itemGrpSalesReport extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grpGrpDetail.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
         this.popGrpDetail.show()
     }

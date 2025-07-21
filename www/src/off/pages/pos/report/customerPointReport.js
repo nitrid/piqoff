@@ -71,7 +71,7 @@ export default class customerPointReport extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdCustomerPointReport.dataRefresh(tmpSource)
         let tmpTotal = 0
         for (let i = 0; i < this.grdCustomerPointReport.data.datatable.length; i++) 
@@ -79,7 +79,7 @@ export default class customerPointReport extends React.PureComponent
             tmpTotal = tmpTotal + this.grdCustomerPointReport.data.datatable[i].EURO
         }
         this.txtAmount.value = tmpTotal
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
 
     async getPointDetail(pCustomer)

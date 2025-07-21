@@ -121,7 +121,7 @@ export default class excelItemImport extends React.PureComponent
                         'TICKET_REST','SUGAR_RATE','DESCRIPTION','CUSTOMER','SALE_PRICE','UNIT_CODE','UNIT_CODE_2','BARCODE','MULTICODE','FACTOR_2']
         } 
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         
         for (let i = 0; i < pData.length; i++) 
         {
@@ -157,7 +157,7 @@ export default class excelItemImport extends React.PureComponent
         }
 
         await this.excelData.update()
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
         this.excelData.clear()
 
         this.toast.show({message:this.t("msgSucces.msg"),type:"success"})

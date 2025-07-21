@@ -94,9 +94,9 @@ export default class privatePrinting extends React.PureComponent
             value:  [e.row.data.GUID,'02']
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         let tmpData = await this.core.sql.execute(tmpQuery) 
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
         
         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' +  JSON.stringify(tmpData.result.recordset)+ '}',(pResult) => 
         {
@@ -285,9 +285,9 @@ export default class privatePrinting extends React.PureComponent
                                             }
                                         }
 
-                                        App.instance.setState({isExecute:true})
+                                        App.instance.loading.show()
                                         await this.grdUniqList.dataRefresh(tmpSource)
-                                        App.instance.setState({isExecute:false})
+                                        App.instance.loading.hide()
                                         
                                         this.popUniqCodeList.show()
                                     }}/>
@@ -565,9 +565,9 @@ export default class privatePrinting extends React.PureComponent
                                                     value:  [this.labelMainObj.dt()[0].GUID,this.cmbDesignList.value]
                                                 }
 
-                                                App.instance.setState({isExecute:true})
+                                                App.instance.loading.show()
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                App.instance.setState({isExecute:false})
+                                                App.instance.loading.hide()
                                                 
                                                 this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' +  JSON.stringify(tmpData.result.recordset)+ '}',(pResult) => 
                                                 {

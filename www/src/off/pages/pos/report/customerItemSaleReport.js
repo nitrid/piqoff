@@ -82,9 +82,9 @@ export default class customerItemSaleReport extends React.PureComponent
             }
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdList.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
         let tmpTotal = this.grdList.data.datatable.sum("TOTAL",2)
         this.txtTotal.value = parseFloat(tmpTotal)

@@ -80,10 +80,10 @@ export default class salesOrdList extends React.PureComponent
             param : ['FIRST_DATE:date','LAST_DATE:date','DEPOT:string|50'],
             value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbDepot.value]
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.orderList.refresh()
         await this.grdSlsOrdList.dataRefresh({source:this.orderList})
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async btnApprove()
     {
@@ -101,7 +101,7 @@ export default class salesOrdList extends React.PureComponent
             return
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
 
         for (let i = 0; i < this.grdSlsOrdList.getSelectedData().length; i++) 
         {
@@ -155,7 +155,7 @@ export default class salesOrdList extends React.PureComponent
                 await this.core.sql.execute(tmpQuery) 
             }
         }
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
         let tmpConfObj =
         {
@@ -243,10 +243,10 @@ export default class salesOrdList extends React.PureComponent
             value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbDepot.value,pData.ITEM]
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.orderDetail.refresh()
         await this.grdOrderDetail.dataRefresh({source:this.orderDetail})
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
         this.itemTotalQyt = pData.TOTAL_QUANTITY
         if(pData.TOTAL_QUANTITY <  pData.APPROVED_QYT)
         {

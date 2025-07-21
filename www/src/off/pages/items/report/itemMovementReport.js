@@ -46,11 +46,11 @@ export default class itemMovementReport extends React.PureComponent
     }
     async getItem(pCode)
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.itemsObj.load({CODE:pCode});
         this.txtRef.value = this.itemsObj.dt()[0].CODE
         this.txtRef.GUID = this.itemsObj.dt()[0].GUID
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     loadState() 
     {
@@ -65,7 +65,7 @@ export default class itemMovementReport extends React.PureComponent
     }
     async findPartiLot(pGuid)
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
 
         let tmpSource =
         {
@@ -86,7 +86,7 @@ export default class itemMovementReport extends React.PureComponent
             this.txtPartiLot.value = data[0].LOT_CODE
         }
 
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
    
     async btnGetClick()
@@ -113,9 +113,9 @@ export default class itemMovementReport extends React.PureComponent
             }
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdItemMovementReport.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     render()
     {

@@ -79,7 +79,7 @@ export default class multipleSaleContract extends React.PureComponent
     }
     async btnGetContracts()
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         let tmpContDt = new datatable()
 
         for (let i = 0; i < this.txtCode.value.split(',').length; i++)
@@ -140,11 +140,11 @@ export default class multipleSaleContract extends React.PureComponent
         }
         
         await this.grdContracts.dataRefresh({source:this.grdData});
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async addItem(pData)
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         let tmpCheckQuery = 
         {
             query : `SELECT CODE,NAME,VAT,PRICE_SALE AS PRICE,UNIT_GUID,UNIT_NAME,UNIT_FACTOR,MAIN_GRP_NAME,ORGINS_NAME, 
@@ -192,11 +192,11 @@ export default class multipleSaleContract extends React.PureComponent
             this.grdData.push(tmpEmpty)
         }
         await this.grdContracts.dataRefresh({source:this.grdData});
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async save()
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         this.grdContracts.devGrid.saveEditData()
         for (let i = 0; i < this.txtCode.value.split(',').length; i++)
         {
@@ -237,7 +237,7 @@ export default class multipleSaleContract extends React.PureComponent
                 await this.core.sql.execute(tmpInsUpQuery) 
             }            
         }
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
   
         this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
     }

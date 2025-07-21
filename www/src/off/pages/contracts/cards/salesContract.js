@@ -128,7 +128,7 @@ export default class salesContract extends React.PureComponent
     }
     async addItem(pData)
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         let tmpEmpty = {...this.contractObj.itemPrice.empty};
                                                     
         tmpEmpty.TYPE = 0,
@@ -172,7 +172,7 @@ export default class salesContract extends React.PureComponent
         
         this.contractObj.itemPrice.addEmpty(tmpEmpty);
         this.calculateMargin()
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
         this.btnSave.setState({disabled:false});
     }
     async multiItemAdd()
@@ -1084,12 +1084,12 @@ export default class salesContract extends React.PureComponent
                                                     value:  [this.contractObj.dt()[0].CODE,this.cmbDesignList.value]
                                                 }
                                                 
-                                                App.instance.setState({isExecute:true})
+                                                App.instance.loading.show()
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                App.instance.setState({isExecute:false})
+                                                App.instance.loading.hide()
                                                 this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                 {
-                                                    App.instance.setState({isExecute:true})
+                                                    App.instance.loading.show()
                                                     let tmpAttach = pResult.split('|')[1]
                                                     let tmpHtml = this.htmlEditor.value
                                                     if(this.htmlEditor.value.length == 0)
@@ -1102,7 +1102,7 @@ export default class salesContract extends React.PureComponent
                                                     let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName: this.cmbDesignList.displayValue + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
                                                     this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                     {
-                                                        App.instance.setState({isExecute:false})
+                                                        App.instance.loading.hide()
                                                         let tmpConfObj1 =
                                                         {
                                                             id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'auto',

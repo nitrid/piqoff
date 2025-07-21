@@ -50,11 +50,11 @@ export default class partiLotQuantityReport extends React.PureComponent
     }
     async getItem(pCode)
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.itemsObj.load({CODE:pCode});
         this.txtRef.value = this.itemsObj.dt()[0].CODE
         this.txtRef.GUID = this.itemsObj.dt()[0].GUID
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async btnGetClick()
     {
@@ -82,9 +82,9 @@ export default class partiLotQuantityReport extends React.PureComponent
             tmpSource.source.select.query = tmpSource.source.select.query.replace("{0}", "")
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdListe.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     render()
     {

@@ -155,9 +155,9 @@ export default class itemList extends React.PureComponent
                 }
             }
 
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             await this.grdListe.dataRefresh(tmpSource)
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
             
             let tmpDatas = this.prmObj.filter({ID:'emptyCode',USERS:this.user.CODE}).getValue()
             
@@ -277,9 +277,9 @@ export default class itemList extends React.PureComponent
                 }
             }
 
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             await this.grdListe.dataRefresh(tmpSource)
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
             
             let tmpDatas = this.prmObj.filter({ID:'emptyCode',USERS:this.user.CODE}).getValue()
             

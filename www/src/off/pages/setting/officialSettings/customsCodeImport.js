@@ -56,7 +56,7 @@ export default class customsCodeImport extends React.PureComponent
             param : ['PMULTICODE:string|50','PNAME:string|max','PCUSTOMS:string|50','PORIGIN:string|50','PCUSTOMER:string|50'],
             dataprm : ['MULTICODE','NAME','CUSTOMS','ORIGIN','CUSTOMER','CUSTOMER']
         } 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
 
         for (let i = 0; i < pData.length; i++) 
         {
@@ -66,7 +66,7 @@ export default class customsCodeImport extends React.PureComponent
 
         await this.customsData.update()
 
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
         this.customsData.clear()
 

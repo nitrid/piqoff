@@ -62,9 +62,9 @@ export default class collectiveItemEdit extends React.PureComponent
             tmpSrc = "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND"
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.editObj.load({NAME:this.txtName.value.replaceAll("*", "%"),MAIN_GRP:this.cmbItemGroup.value,CUSTOMER_CODE:this.cmbTedarikci.value,QUERY:tmpSrc})
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
         this.netMargin()
         this.grossMargin()
@@ -302,21 +302,21 @@ export default class collectiveItemEdit extends React.PureComponent
                             }}
                             onSaving={async(e)=>
                             {
-                                App.instance.setState({isExecute:true})
+                                App.instance.loading.show()
                             }}
                             onSaved={async(e)=>
                             {
-                                App.instance.setState({isExecute:true})
+                                App.instance.loading.show()
                                 
                                 
                                 if(await this.editObj.save() == 0)
                                 {                                                    
-                                    App.instance.setState({isExecute:false})
+                                    App.instance.loading.hide()
                                     this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
                                 }
                                 else
                                 {
-                                    App.instance.setState({isExecute:false})
+                                    App.instance.loading.hide()
                                     let tmpConfObj1 =
                                     {
                                         id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',

@@ -349,7 +349,7 @@ export default class collectiveCustomer extends React.PureComponent
                                             <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {     
-                                                App.instance.setState({isExecute:true})
+                                                App.instance.loading.show()
 
                                                 let tmpCounter
                                                 if(this.txtTotal.value == '')
@@ -420,7 +420,7 @@ export default class collectiveCustomer extends React.PureComponent
                                                     this.customerObj.customerAdress.dt('CUSTOMER_ADRESS')[0].COUNTRY =  this.cmbPopCountry.value
                                                     await this.customerObj.save()
                                                 }
-                                                App.instance.setState({isExecute:false})
+                                                App.instance.loading.hide()
 
                                                 this.toast.show({type:"success",message:this.t("msgSaveResult.msgSuccess")})
                                                 this.popSettingCustomer.hide();  

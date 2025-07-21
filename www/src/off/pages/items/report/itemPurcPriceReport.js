@@ -63,9 +63,9 @@ export default class itemPurcPriceReport extends React.PureComponent
             }
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdItemPurcPriceReport.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async getDetail(pGuid,pCustomer)
     {
