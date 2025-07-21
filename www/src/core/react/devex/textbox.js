@@ -44,13 +44,16 @@ export default class NdTextBox extends Base
     }
     _onValueChanged(e) 
     {       
-        if(this.props.upper)
+        if(this.value != e.value)
         {
-            this.value = e.value.toString().toUpperCase();
-        }    
-        else
-        {
-            this.value = e.value;
+            if(this.props.upper)
+            {
+                this.value = e.value.toString().toUpperCase();
+            }    
+            else
+            {
+                this.value = e.value;
+            }
         }
         
         if(typeof this.props.onValueChanged != 'undefined')
@@ -92,7 +95,11 @@ export default class NdTextBox extends Base
     }
     _onChange(e)
     {
-        this.value = e.value;
+        if(this.value != e.value)
+        {
+            this.value = e.value;
+        }
+
         if(typeof this.props.onChange != 'undefined')
         {
             this.props.onChange(e);
