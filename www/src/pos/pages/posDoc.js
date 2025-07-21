@@ -30,6 +30,7 @@ import NdAccessEdit from '../../core/react/devex/accesEdit.js';
 import { NdLayout,NdLayoutItem } from '../../core/react/devex/layout';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
 import { NdForm, NdItem, NdLabel, NdEmptyItem } from '../../core/react/devex/form';
+import { NdLoadPanel } from '../../core/react/devex/loadpanel.js';
 
 import { posCls, posDeviceCls, posPromoCls, posUsbTSECls} from "../../core/cls/pos.js";
 import { posScaleCls, posLcdCls } from "../../core/cls/scale.js";
@@ -89,8 +90,6 @@ export default class posDoc extends React.PureComponent
             isConnected:this.core.offline ? false : true,
             isFormation:false,
             keyboardVisibility: false,
-            loading:false,
-            loadingPay:false
         }   
         
         document.onkeydown = (e) =>
@@ -342,7 +341,7 @@ export default class posDoc extends React.PureComponent
     }
     async init()
     {
-        this.loadingPay(true)
+        this.loadingPay.show()
 
         setInterval(()=>
         {
@@ -461,7 +460,6 @@ export default class posDoc extends React.PureComponent
             }
             await this.firm.refresh();
             //******************************************************** */
-           
 
             this.pricingListNo = this.prmObj.filter({ID:'PricingListNo',TYPE:0,USERS:this.user.CODE}).getValue()
             //ALMANYA TSE USB CİHAZLAR İÇİN YAPILDI
@@ -556,9 +554,9 @@ export default class posDoc extends React.PureComponent
                     }
                     await dialog(tmpConfObj);
 
-                    this.loading(true)
+                    this.loading.show()
                     let tmpTransferResult = await this.transferLocal();
-                    this.loading(false)
+                    this.loading.hide()
                     
                     if(tmpTransferResult)
                     {
@@ -649,7 +647,7 @@ export default class posDoc extends React.PureComponent
         //PROMOSYON GETİR.
         await this.getPromoDb()
         //************************************************** */        
-        this.loadingPay(false)
+        this.loadingPay.hide()
         let tmpLastSaleQuery = 
         {
             query : `SELECT TOP 1 * FROM POS_${this.state.isFormation ? 'FRM_' : ''}VW_01 WHERE STATUS = 0 AND LUSER = @LUSER ORDER BY LDATE DESC`,
@@ -1009,7 +1007,7 @@ export default class posDoc extends React.PureComponent
         tmpPrice = typeof tmpBarPattern.price == 'undefined' || tmpBarPattern.price == 0 ? tmpPrice : tmpBarPattern.price
         tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' || tmpBarPattern.quantity == 0 ? tmpQuantity : tmpBarPattern.quantity
         pCode = tmpBarPattern.barcode
-        this.loading(true)
+        this.loading.show()
         //ÜRÜN GETİRME    
         let tmpItemsDt = await this.getItemDb(pCode)
         if(tmpItemsDt.length > 0)
@@ -1030,7 +1028,7 @@ export default class posDoc extends React.PureComponent
                 let tmpPriceChoice = await this.priceListChoice(tmpItemsDt[0].GUID)
                 if(tmpPriceChoice == -1)
                 {
-                    this.loading(false)
+                    this.loading.hide()
                     return;
                 }
                 else
@@ -1097,7 +1095,7 @@ export default class posDoc extends React.PureComponent
                     await dialog(tmpConfObj);
 
                     this.btnInfo.setUnLock({backgroundColor:"#0dcaf0",borderColor:"#0dcaf0",height:"100%",width:"100%",fontSize:"0.6rem",padding:"1px"})
-                    this.loading(false)
+                    this.loading.hide()
                     return;
                 }
                 //**************************************************** */
@@ -1106,7 +1104,7 @@ export default class posDoc extends React.PureComponent
             //EĞER ÜRÜN TERAZİLİ İSE
             if(tmpItemsDt[0].WEIGHING)
             {
-                this.loading(false)
+                this.loading.hide()
 
                 if(tmpPrice > 0)
                 {
@@ -1273,7 +1271,7 @@ export default class posDoc extends React.PureComponent
             //*****************************************************/
             if(tmpPrice == 0)
             {
-                this.loading(false)
+                this.loading.hide()
 
                 let tmpMsgResult = "btn01"
 
@@ -1326,12 +1324,12 @@ export default class posDoc extends React.PureComponent
             tmpItemsDt[0].LIST_NO = tmpPriceListNo
             tmpItemsDt[0].LIST_NAME = tmpPriceListName
             tmpItemsDt[0].LIST_TAG = tmpPriceListTag
-            this.loading(false)
+            this.loading.hide()
             this.saleAdd(tmpItemsDt[0])
         }
         else
         {
-            this.loading(false)
+            this.loading.hide()
             document.getElementById("Sound").play(); 
 
             let tmpConfObj =
@@ -2360,7 +2358,7 @@ export default class posDoc extends React.PureComponent
                 }
             }
 
-            this.loading(true)
+            this.loading.show()
             let tmpRowData = this.isRowMerge('PAY',{TYPE:pType})
             //NAKİT ALDIĞINDA KASA AÇMA İŞLEMİ 
             if(pType == 0 || pType == 8)
@@ -2376,7 +2374,7 @@ export default class posDoc extends React.PureComponent
             {
                 await this.payRowAdd({PAY_TYPE:pType,AMOUNT:pAmount,CHANGE:0})
             }            
-            this.loading(false)
+            this.loading.hide()
         }        
     }
     payRowAdd(pPayData)
@@ -2913,7 +2911,7 @@ export default class posDoc extends React.PureComponent
     }
     async ticketCheckRetour(pGuid)
     {
-        this.loadingPay(true)
+        this.loadingPay.show()
         if(pGuid != "")
         {
             let tmpDt = new datatable();
@@ -2989,7 +2987,7 @@ export default class posDoc extends React.PureComponent
                 }
             }
         }        
-        this.loadingPay(false)
+        this.loadingPay.hide()
     }
     async ticketCheck(pTicket)
     {
@@ -3945,14 +3943,6 @@ export default class posDoc extends React.PureComponent
             }
         })
     }
-    loading(pState)
-    {
-        this.setState({loading:pState})
-    }
-    loadingPay(pState)
-    {
-        this.setState({loadingPay:pState})  
-    }
     render()
     {
         return(
@@ -3969,25 +3959,19 @@ export default class posDoc extends React.PureComponent
 
                     this.core.auth.logout()
                     window.location.reload()
-                }}/>           
-                <LoadPanel
-                shadingColor="rgba(0,0,0,0.0)"
-                position={{ of: '#root' }}
-                showIndicator={false}
-                shading={true}
+                }}/>
+                <NdLoadPanel parent={this} id={"loading"} 
+                shadingColor={"rgba(0,0,0,0.0)"} 
+                showIndicator={true} 
                 showPane={false}
-                message={""}
-                visible={this.state.loading}
-                />
-                <LoadPanel
-                shadingColor="rgba(255,255,255,1.0)"
-                position={{ of: '#root' }}
-                showIndicator={true}
-                shading={true}
+                showMessage={false} 
+                message={""} />   
+                <NdLoadPanel parent={this} id={"loadingPay"} 
+                shadingColor={"rgba(255,255,255,1.0)"} 
                 showPane={true}
-                message={this.lang.t("pleaseWait")}
-                visible={this.state.loadingPay}
-                />
+                showIndicator={true} 
+                showMessage={true} 
+                message={this.lang.t("pleaseWait")} />         
                 <div className="top-bar row">
                     <div className="col-12">                    
                         <div className="row m-2">
@@ -8391,9 +8375,9 @@ export default class posDoc extends React.PureComponent
                             await this.descSave("FULL DELETE",e,'00000000-0000-0000-0000-000000000000')
                         }
 
-                        this.loading(true)
+                        this.loading.show()
                         await this.delete()
-                        this.loading(false)
+                        this.loading.hide()
                     }}/>
                 </div>
                 {/* Row Delete Description Popup */} 
@@ -8409,9 +8393,9 @@ export default class posDoc extends React.PureComponent
                             await this.descSave("ROW DELETE",e,this.grdList.devGrid.getSelectedRowKeys()[0].GUID)
                         }
 
-                        this.loading(true)
+                        this.loading.show()
                         await this.rowDelete()
-                        this.loading(false)
+                        this.loading.hide()
                     }}/>
                 </div>
                 {/* Item Return Description Popup */} 
