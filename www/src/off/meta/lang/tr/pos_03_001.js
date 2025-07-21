@@ -22,6 +22,7 @@ const pos_03_001 =
     txtReal : "Doğru",
     payTransfer : "Tutarları Aktar",
     validPriceFloat : "Avans 0'dan büyük olmalıdır",
+    msgSafeNotFound : "Kasa bulunamadı, lütfen kasayı kontrol ediniz.",
     popFinish : 
     {
         title :"Sonuç"
