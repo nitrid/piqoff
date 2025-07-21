@@ -1589,7 +1589,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 {
                                                     if (arg.seriesName.includes(this.lang.t("hourlySalesChart.saleCount"))) {
                                                         return {
-                                                            text: `${arg.seriesName}: ${arg.valueText} adet`
+                                                            text: `${arg.seriesName}: ${arg.valueText} ${this.lang.t("hourlySalesChart.saleCount")}`
                                                         };
                                                     } else {
                                                         return {

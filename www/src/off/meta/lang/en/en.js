@@ -267,7 +267,8 @@ export const langEn =
         directDebit: "Direct Debit",
         franc: "Franc",
         ticketRest: "Ticket Rest",      
-        voucher: "Gift Voucher"
+        voucher: "Gift Voucher",
+        ticket: "Ticket"
     },
     low: "Low",
     stable: "Stable",

@@ -3622,7 +3622,8 @@ export default class itemCard extends React.PureComponent
                                             {
                                                 App.instance.setState({isExecute:true})
 
-                                                try {
+                                                try 
+                                                {
                                                     await this.loadSuperSonicAnalytics()
                                                 } 
                                                 catch (err) 
@@ -4209,22 +4210,27 @@ export default class itemCard extends React.PureComponent
             let depotStocks = [];
             
             try {
-                console.log(this.txtRef?.value);
                 let stockQuery = 
                 {
                     
-                    query: `SELECT REF,REF_NO,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE,DEPOT_NAME,SUM(QUANTITY) AS QUANTITY,COUNT(REF) AS TOTAL_LINE 
-                           FROM ITEM_COUNT_VW_01 
-                           WHERE ITEM_CODE = @CODE
-                           GROUP BY REF,REF_NO,DOC_DATE,DEPOT_NAME 
-                           ORDER BY DOC_DATE DESC`,
-                    param: ['CODE:string|50'],
-                    value: [this.txtRef?.value]
+                    source : 
+                    {
+                        select : 
+                        {
+                            query : `SELECT NAME,CODE,UNIT_NAME,
+                                    ISNULL((SELECT TOP 1 BARCODE FROM ITEM_BARCODE WHERE ITEM_BARCODE.ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC),'') AS BARCODE,
+                                    [dbo].[FN_DEPOT_QUANTITY](GUID,@DEPOT,dbo.GETDATE()) AS QUANTITY FROM ITEMS_VW_01 
+                                    WHERE ((NAME like @NAME + '%') OR (@NAME = ''))`,
+                            param : ['CODE:string|50','DEPOT:string|50'],
+                            value : [this.txtRef?.value,this.cmbPopPriDepot.value]
+                        },
+                        sql : this.core.sql
+                    }
                 };
                 
                 let stockData = await this.core.sql.execute(stockQuery);
-
-                console.log(stockData);
+                console.log('this.cmbPopPriDepot.value',this.cmbPopPriDepot.value);
+                console.log('stockData',stockData);
                 
                 if (stockData.result.recordset.length > 0) 
                 {
@@ -4252,8 +4258,8 @@ export default class itemCard extends React.PureComponent
             }
             
             // Sabit parametreler
-            let leadTime = 7; // Tedarik süresi (gün)
-            let safetyStock = avgDailySales * 2; // Güvenlik stoku
+            let leadTime = 7; // Tedarik süresi (gün) BAAAAK
+            let safetyStock = avgDailySales * 2; // Güvenlik stoku BAAAK
             
             let reorderPoint = (avgDailySales * leadTime) + safetyStock;
             let suggestedOrder = reorderPoint - currentStock;
@@ -5093,8 +5099,6 @@ export default class itemCard extends React.PureComponent
 
     prepareQuantityChartData(dailyData) 
     {
-        console.log('📊 prepareQuantityChartData - dailyData:', dailyData);
-        
         let result = dailyData.map(day => (
         {
             DOC_DATE_STR: day.DOC_DATE_STR,
@@ -5355,14 +5359,3 @@ export default class itemCard extends React.PureComponent
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
