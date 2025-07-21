@@ -186,9 +186,9 @@ export default class salesOrdList extends React.PureComponent
                 }
             }
 
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             await this.grdSaleTicketReport.dataRefresh(tmpSource)
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
         else
         {
@@ -239,9 +239,9 @@ export default class salesOrdList extends React.PureComponent
                 }
             }
 
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             await this.grdSaleTicketReport.dataRefresh(tmpSource)
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
     }
     async btnGetDetail(pGuid)
@@ -323,7 +323,7 @@ export default class salesOrdList extends React.PureComponent
     {
         for (let i = 0; i < this.grdSaleTicketReport.getSelectedData().length; i++) 
         {
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
 
             let tmpLastPos = new datatable(); 
 
@@ -419,7 +419,7 @@ export default class salesOrdList extends React.PureComponent
                 }
             }
             await this.print(tmpData)
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
      
         this.mailPopup.hide()
@@ -440,7 +440,7 @@ export default class salesOrdList extends React.PureComponent
         }
         for (let i = 0; i < this.grdSaleTicketReport.getSelectedData().length; i++) 
         {
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
 
             let tmpLastPos = new datatable(); 
 
@@ -455,7 +455,7 @@ export default class salesOrdList extends React.PureComponent
 
             if(tmpLastPos[0].CUSTOMER_GUID == '00000000-0000-0000-0000-000000000000')
             {
-                App.instance.setState({isExecute:false})
+                App.instance.loading.hide()
                 this.toast.show({message:this.t("msgFactureCustomer.msg"),type:"warning"})
                 if(pResult == 'btn01')
                 {
@@ -492,7 +492,7 @@ export default class salesOrdList extends React.PureComponent
         
                 await this.core.sql.execute(tmpInsertQuery)                                
             }
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
     }
     print(pData)
@@ -1319,17 +1319,19 @@ export default class salesOrdList extends React.PureComponent
                                             {       
                                                 if(this.grdSaleTicketReport.devGrid.getSelectedRowsData().length > 0)
                                                 {
-                                                    App.instance.setState({isExecute:true})
+                                                    App.instance.loading.show()
                                                     let tmpQuery = 
                                                     {
                                                         query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM POS_SALE_VW_01 WHERE POS_GUID = @POS_GUID ORDER BY LINE_NO ` ,
                                                         param:  ['POS_GUID:string|50','DESIGN:string|25'],
                                                         value:  [this.grdSaleTicketReport.devGrid.getSelectedRowsData()[0].POS_GUID,this.cmbDesignList.value]
                                                     }
+
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
-                                                        App.instance.setState({isExecute:false})
+                                                        App.instance.loading.hide()
                                                         if(pResult.split('|')[0] != 'ERR')
                                                         {
                                                             var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");                                                         

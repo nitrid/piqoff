@@ -43,9 +43,9 @@ export default class promoPricerSend extends React.PureComponent
             }
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdPromotion.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async btnPromoSend()
     {

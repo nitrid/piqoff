@@ -244,10 +244,10 @@ export default class collectionReport extends React.PureComponent
                                             param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','LANG:string|50'],
                                             value : [this.txtCustomerCode.CODE,this.dtFirst.value,this.dtLast.value,localStorage.getItem('lang')]
                                 }
-                                App.instance.setState({isExecute:true})
+                                App.instance.loading.show()
                                 let tmpData = await this.core.sql.execute(tmpQuery)
 
-                                App.instance.setState({isExecute:false})
+                                App.instance.loading.hide()
                                 if(tmpData.result.recordset.length > 0)
                                 {
                                     this.pvtData.setDataSource(tmpData.result.recordset)

@@ -134,9 +134,9 @@ export default class branchSaleDispatch extends DocBase
     }
     async getDoc(pGuid,pRef,pRefno)
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await super.getDoc(pGuid,pRef,pRefno);
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
@@ -509,7 +509,7 @@ export default class branchSaleDispatch extends DocBase
     {
         return new Promise(async resolve =>
         {
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
     
             this.txtRef.readOnly = true
             this.txtRefno.readOnly = true
@@ -534,7 +534,7 @@ export default class branchSaleDispatch extends DocBase
                 {
                    if(tmpQuantity.result.recordset[0].QUANTITY < pQuantity)
                    {
-                        App.instance.setState({isExecute:false})
+                        App.instance.loading.hide()
                         let tmpConfObj =
                         {
                             id:'msgNotQuantity',showTitle:true,title:this.t("msgNotQuantity.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -576,7 +576,7 @@ export default class branchSaleDispatch extends DocBase
                     //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
                     await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
                     //*****************************************/
-                    App.instance.setState({isExecute:false})
+                    App.instance.loading.hide()
                     resolve()
                     return
                 }
@@ -705,7 +705,7 @@ export default class branchSaleDispatch extends DocBase
             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
             await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
             resolve()
         })
     }
@@ -742,13 +742,13 @@ export default class branchSaleDispatch extends DocBase
                     param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                     value:  [this.docObj.dt()[0].GUID,'27',this.lang.languages[0].toString().toUpperCase()]
                 }
-                App.instance.setState({isExecute:true})
+                App.instance.loading.show()
                 let tmpData = await this.core.sql.execute(tmpQuery) 
-                App.instance.setState({isExecute:false})
+                App.instance.loading.hide()
 
                 this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                 {
-                    App.instance.setState({isExecute:true})
+                    App.instance.loading.show()
                     let tmpAttach = pResult.split('|')[1]
                     let  tmpHtml = ''
               
@@ -760,7 +760,7 @@ export default class branchSaleDispatch extends DocBase
               
                     this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                     {
-                        App.instance.setState({isExecute:false})
+                        App.instance.loading.hide()
                     });
                 });
             }
@@ -1930,9 +1930,9 @@ export default class branchSaleDispatch extends DocBase
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
 
-                                                    App.instance.setState({isExecute:true})
+                                                    App.instance.loading.show()
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    App.instance.setState({isExecute:false})
+                                                    App.instance.loading.hide()
 
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
@@ -2047,13 +2047,13 @@ export default class branchSaleDispatch extends DocBase
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                                     
-                                                    App.instance.setState({isExecute:true})
+                                                    App.instance.loading.show()
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    App.instance.setState({isExecute:false})
+                                                    App.instance.loading.hide()
 
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
-                                                        App.instance.setState({isExecute:true})
+                                                        App.instance.loading.show()
                                                         let tmpAttach = pResult.split('|')[1]
                                                         let tmpHtml = this.htmlEditor.value
 
@@ -2069,7 +2069,7 @@ export default class branchSaleDispatch extends DocBase
 
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
-                                                            App.instance.setState({isExecute:false})
+                                                            App.instance.loading.hide()
 
                                                             let tmpConfObj1 =
                                                             {

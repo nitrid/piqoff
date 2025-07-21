@@ -37,9 +37,9 @@ export default class barcodeList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdListe.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     render()
     {

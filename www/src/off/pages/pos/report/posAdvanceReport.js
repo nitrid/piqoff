@@ -66,9 +66,9 @@ export default class enddayReport extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdAdvanceData.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
     }
     render()

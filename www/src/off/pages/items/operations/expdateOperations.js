@@ -67,9 +67,9 @@ export default class expdateOperations extends React.PureComponent
             }
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdExpdateList.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async btnPrint()
     {
@@ -166,9 +166,9 @@ export default class expdateOperations extends React.PureComponent
             value:  [this.labelMainObj.dt()[0].GUID,'02']
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         let tmpPrintData = await this.core.sql.execute(tmpPrintQuery) 
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
         
         this.popQuantity.hide()
         let tmpUpdateQuery = 
@@ -178,9 +178,9 @@ export default class expdateOperations extends React.PureComponent
             value:  [this.grdExpdateList.getSelectedData()[0].GUID,this.user.CODE,this.txtQuantity.value]
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.core.sql.execute(tmpUpdateQuery) 
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
         
         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpPrintData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' +  JSON.stringify(tmpPrintData.result.recordset)+ '}',(pResult) => 
         {

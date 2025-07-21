@@ -52,9 +52,9 @@ export default class piqXBranchPurcFactList extends React.PureComponent
             this.core.socket.emit('piqXInvoiceList',{taxId:this.taxId,first:moment(this.dtFirst.value).utcOffset(0, true),last:moment(this.dtLast.value).utcOffset(0, true),docType:22,rebate:0},async(pData)=>
             {
                 await this.grdList.dataRefresh({source:[]})
-                App.instance.setState({isExecute:true})
+                App.instance.loading.show()
                 await this.grdList.dataRefresh({source:pData})
-                App.instance.setState({isExecute:false})
+                App.instance.loading.hide()
             })
         }
     }

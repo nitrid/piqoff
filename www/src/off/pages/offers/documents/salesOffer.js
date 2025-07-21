@@ -121,9 +121,9 @@ export default class salesOffer extends DocBase
     }
     async getDoc(pGuid,pRef,pRefno)
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await super.getDoc(pGuid,pRef,pRefno);
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
         this.calculateMargin()
         this.calculateTotalMargin()
@@ -417,8 +417,9 @@ export default class salesOffer extends DocBase
     }
     addItem(pData,pIndex,pQuantity,pPrice)
     {
-        return new Promise(async resolve =>{
-            App.instance.setState({isExecute:true})
+        return new Promise(async resolve =>
+        {
+            App.instance.loading.show()
             
             this.txtRef.readOnly = true
             this.txtRefno.readOnly = true
@@ -458,7 +459,7 @@ export default class salesOffer extends DocBase
                 //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
                 await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
                 //*****************************************/
-                App.instance.setState({isExecute:false})
+                App.instance.loading.hide()
                 resolve()
                 return
             }            
@@ -587,7 +588,7 @@ export default class salesOffer extends DocBase
                 this.docObj.docOffers.dt()[pIndex].VAT_RATE = 0
             }
             
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
             await this.itemRelated(pData.GUID,this.docObj.docOffers.dt()[pIndex].QUANTITY)
             //*****************************************/
@@ -1955,9 +1956,9 @@ export default class salesOffer extends DocBase
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
 
-                                                    App.instance.setState({isExecute:true})
+                                                    App.instance.loading.show()
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    App.instance.setState({isExecute:false})
+                                                    App.instance.loading.hide()
 
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
@@ -2084,13 +2085,13 @@ export default class salesOffer extends DocBase
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
 
-                                                    App.instance.setState({isExecute:true})
+                                                    App.instance.loading.show()
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    App.instance.setState({isExecute:false})
+                                                    App.instance.loading.hide()
 
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
-                                                        App.instance.setState({isExecute:true})
+                                                        App.instance.loading.show()
 
                                                         let tmpAttach = pResult.split('|')[1]
                                                         let tmpHtml = this.htmlEditor.value
@@ -2108,7 +2109,7 @@ export default class salesOffer extends DocBase
 
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
-                                                            App.instance.setState({isExecute:false})
+                                                            App.instance.loading.hide()
 
                                                             let tmpConfObj1 =
                                                             {

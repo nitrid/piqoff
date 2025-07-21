@@ -126,14 +126,14 @@ export default class rebateInvList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdSlsIvcList.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async InvPrint()
     {
         let tmpLines = []
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         for (let i = 0; i < this.grdSlsIvcList.getSelectedData().length; i++) 
         {
             let tmpQuery = 
@@ -165,7 +165,7 @@ export default class rebateInvList extends React.PureComponent
                 console.log("Error Response:", pResult);
             }
         });
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     render()
     {

@@ -36,6 +36,7 @@ import NdPopUp from '../../core/react/devex/popup.js';
 import Form, { Label,Item } from 'devextreme-react/form';
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../core/react/devex/textbox.js'
 import NdButton from '../../core/react/devex/button.js';
+import { NdLoadPanel } from '../../core/react/devex/loadpanel.js';
 
 import HTMLReactParser from 'html-react-parser';
 
@@ -583,6 +584,12 @@ export default class App extends React.PureComponent
                 shading={true}
                 showPane={true}
                 />
+                <NdLoadPanel parent={this} id={"loading"} 
+                shadingColor={"rgba(0,0,0,0.0)"} 
+                showIndicator={true} 
+                showPane={true}
+                showMessage={true} 
+                message={this.lang.t("loading")} />
                 <div className="top-bar">
                     <Toolbar className="main-toolbar" items={this.state.toolbarItems}/>
                 </div>

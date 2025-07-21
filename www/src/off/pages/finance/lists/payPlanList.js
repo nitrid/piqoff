@@ -70,9 +70,9 @@ export default class payPlanList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdColList.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
         let tmpTotal =  this.grdColList.data.datatable.sum("TOTAL",2)
         this.txtTotal.setState({value:tmpTotal + ' ' + Number.money.sign});
@@ -358,13 +358,13 @@ export default class payPlanList extends React.PureComponent
                                                         }
 
                                                         let tmpData = await this.core.sql.execute(tmpQuery)
-                                                        App.instance.setState({isExecute:true})
+                                                        App.instance.loading.show()
                                                         
                                                         if(tmpData.result.recordset.length > 0)
                                                         {
                                                             this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
                                                             {
-                                                                App.instance.setState({isExecute:false})
+                                                                App.instance.loading.hide()
                                                                 if(pResult.split('|')[0] != 'ERR')
                                                                 {
                                                                     var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
@@ -403,9 +403,9 @@ export default class payPlanList extends React.PureComponent
                                                             param : ['DESIGN:string|25','LANG:string|10','DOC_GUID:string|50'],
                                                             value : [this.cmbDesignList.value,this.cmbDesignLang.value,this.selectedRowKeys[i].DOC_GUID]
                                                         }
-                                                        App.instance.setState({isExecute:true})
+                                                        App.instance.loading.show()
                                                         let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                        App.instance.setState({isExecute:false})
+                                                        App.instance.loading.hide()
 
                                                         let tmpObj = {DATA:tmpData.result.recordset}
                                                         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',(pResult) => 

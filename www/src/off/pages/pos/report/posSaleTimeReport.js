@@ -230,9 +230,9 @@ export default class posSalesReport extends React.PureComponent
                                     value : [this.dtFirst.value,this.dtLast.value]
                                 }
 
-                                App.instance.setState({isExecute:true})
+                                App.instance.loading.show()
                                 let tmpData = await this.core.sql.execute(tmpQuery)
-                                App.instance.setState({isExecute:false})
+                                App.instance.loading.hide()
 
                                 if(tmpData.result.recordset.length > 0)
                                 {

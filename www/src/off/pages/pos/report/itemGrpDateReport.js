@@ -111,9 +111,9 @@ export default class itemGrpDateReport extends React.PureComponent
                                     value : [lang,this.dtDate.startDate,this.dtDate.endDate]
                                 }
                                 
-                                App.instance.setState({isExecute:true})
+                                App.instance.loading.show()
                                 let tmpData = await this.core.sql.execute(tmpQuery)
-                                App.instance.setState({isExecute:false})
+                                App.instance.loading.hide()
 
                                 if(tmpData.result.recordset.length > 0)
                                 {

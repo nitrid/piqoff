@@ -75,7 +75,7 @@ export default class itemRelated extends React.PureComponent
     }
     async addItem(pData)
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         let tmpEmpty = {...this.itemRelatedObj.empty};
                                                     
         tmpEmpty.CUSER = this.core.auth.data.CODE,  
@@ -88,7 +88,7 @@ export default class itemRelated extends React.PureComponent
         tmpEmpty.RELATED_NAME = pData.NAME
         
         this.itemRelatedObj.addEmpty(tmpEmpty);
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     render()
     {

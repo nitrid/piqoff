@@ -70,9 +70,9 @@ export default class promotionList extends React.PureComponent
             }
         }
         
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdListe.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     render()
     {
@@ -114,7 +114,7 @@ export default class promotionList extends React.PureComponent
 
                                         if(pResult == 'btn01')
                                         {
-                                            App.instance.setState({isExecute:true})
+                                            App.instance.loading.show()
                                             for (let i = 0; i < this.grdListe.getSelectedData().length; i++) 
                                             {
                                                 let tmpQuery = 
@@ -125,7 +125,7 @@ export default class promotionList extends React.PureComponent
                                                 }
                                                 await this.core.sql.execute(tmpQuery) 
                                             }
-                                            App.instance.setState({isExecute:false})
+                                            App.instance.loading.hide()
                                             this.btnGetClick()
                                         }
                                     }}/>

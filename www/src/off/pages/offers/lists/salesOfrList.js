@@ -73,9 +73,9 @@ export default class salesOfrList extends React.PureComponent
             }
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdSlsOfrList.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     render()
     {

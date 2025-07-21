@@ -131,7 +131,7 @@ export default class collection extends React.PureComponent
     {
         this.docObj.clearAll()
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:0,DOC_TYPE:200});
         await this.deptCreditMatchingObj.load({PAID_DOC:this.docObj.dt()[0].GUID,PAYING_DOC:this.docObj.dt()[0].GUID})
@@ -167,7 +167,7 @@ export default class collection extends React.PureComponent
             }
         }
         
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true

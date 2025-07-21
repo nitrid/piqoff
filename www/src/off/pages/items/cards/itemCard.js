@@ -245,7 +245,7 @@ export default class itemCard extends React.PureComponent
     }
     async getItem(pCode)
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         this.itemsObj.clearAll();
         this.txtRef.value = Math.floor(Date.now() / 1000)
         this.txtCustomer.value = "";
@@ -300,7 +300,7 @@ export default class itemCard extends React.PureComponent
             this.setState({isPromotion:false})
         }
         //*************************************** */
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
         if(typeof this.txtSalePrice != 'undefined')
         {
             let tmpQuery = 
@@ -336,9 +336,9 @@ export default class itemCard extends React.PureComponent
         {
             if(pCode !== '')
             {
-                App.instance.setState({isExecute:true})
+                App.instance.loading.show()
                 let tmpData = await new itemsCls().load({CODE:pCode});
-                App.instance.setState({isExecute:false})
+                App.instance.loading.hide()
                 if(tmpData.length > 0)
                 {
                     let tmpConfObj =
@@ -3209,7 +3209,7 @@ export default class itemCard extends React.PureComponent
                                     <NdButton id="btnGet" parent={this} text={this.t("btnGet")} type="default" width='100%'
                                     onClick={async()=>
                                     {
-                                        App.instance.setState({isExecute:true})
+                                        App.instance.loading.show()
                                         if(this.cmbAnlysType.value == 0)
                                         {
                                             if(this.chkDayAnalysis.value == true)
@@ -3296,7 +3296,7 @@ export default class itemCard extends React.PureComponent
                                                 }
                                             }
                                         } 
-                                        App.instance.setState({isExecute:false})
+                                        App.instance.loading.hide()
                                     }}/>
                                 </NdItem>
                                 {/* cmbAnlysType */}

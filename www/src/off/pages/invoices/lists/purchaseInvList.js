@@ -72,14 +72,14 @@ export default class purchaseInvList extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdPurcIvcList.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async InvPrint()
     {
         let tmpLines = []
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         for (let i = 0; i < this.grdPurcIvcList.getSelectedData().length; i++) 
         {
             let tmpQuery = 
@@ -111,7 +111,7 @@ export default class purchaseInvList extends React.PureComponent
                 console.log("Error Response:", pResult);
             }
         });
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     render()
     {

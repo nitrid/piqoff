@@ -106,10 +106,10 @@ export default class labelPrinting extends React.PureComponent
         this.lblObj.clearAll()
         this.mainLblObj.clearAll()
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.lblObj.load({GUID:pGuid});
         this.mainLblObj.load({GUID:pGuid});
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
@@ -222,9 +222,9 @@ export default class labelPrinting extends React.PureComponent
                         WHERE (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < (SELECT TOP 1 LDATE FROM ITEM_PRICE WHERE TYPE = 0  AND ITEM = ITEMS_VW_01.GUID ORDER BY LDATE DESC) OR (SELECT TOP 1 LDATE FROM LABEL_QUEUE ORDER BY LDATE DESC) < ITEMS_VW_01.LDATE AND STATUS = 1) AS TMP`,
             }
 
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
             
             if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
             {
@@ -267,9 +267,9 @@ export default class labelPrinting extends React.PureComponent
                 value : [this.dtSelectChange.value]
             }
 
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
             
             if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset && tmpData.result.recordset.length > 0)
             {
@@ -314,9 +314,9 @@ export default class labelPrinting extends React.PureComponent
                 value : [this.dtSelectPriceChange.value]
             }
 
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
             
             if(tmpData.result.recordset.length > 0)
             {
@@ -360,9 +360,9 @@ export default class labelPrinting extends React.PureComponent
                 value : [this.cmbGroup.value]
             }
 
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
             
             if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
             {
@@ -405,9 +405,9 @@ export default class labelPrinting extends React.PureComponent
                 value : [this.cmbCustomer.value]
             }
 
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
             
             if(tmpData.result.recordset.length > 0)
             {
@@ -450,9 +450,9 @@ export default class labelPrinting extends React.PureComponent
                 value : [this.dtDate.startDate,this.dtDate.endDate]
             }
 
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
             
             if(tmpData.result.recordset.length > 0)
             {
@@ -492,9 +492,9 @@ export default class labelPrinting extends React.PureComponent
                         FROM ITEMS_VW_01  WHERE STATUS = 1) AS TMP`, 
             }
 
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             let tmpData = await this.core.sql.execute(tmpQuery) 
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
             
             if(tmpData.result.recordset.length > 0)
             {
@@ -636,13 +636,13 @@ export default class labelPrinting extends React.PureComponent
     }
     async addItem(pData,pIndex)
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
 
         for (let i = 0; i < this.lblObj.dt().length; i++) 
         {
             if(this.lblObj.dt()[i].CODE == pData.CODE)
             {
-                App.instance.setState({isExecute:false})
+                App.instance.loading.hide()
                 let tmpConfObj = 
                 {
                     id:'msgCombineItem',showTitle:true,title:this.t("msgCombineItem.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -676,11 +676,11 @@ export default class labelPrinting extends React.PureComponent
         this.lblObj.dt()[pIndex].PRICE = pData.PRICE
         this.lblObj.dt()[pIndex].ORGINS =pData.ORGINS
         this.calculateCount()
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async addAutoItem(pData)
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         let tmpDocItems = {...this.lblObj.empty}
         tmpDocItems.REF = this.mainLblObj.dt()[0].REF
         tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
@@ -699,7 +699,7 @@ export default class labelPrinting extends React.PureComponent
         tmpDocItems.LINE_NO = this.lblObj.dt().length
         this.lblObj.addEmpty(tmpDocItems)
         this.calculateCount()
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     calculateCount()
     {
@@ -794,14 +794,14 @@ export default class labelPrinting extends React.PureComponent
                                                 value:  [this.mainLblObj.dt()[0].GUID,this.cmbDesignList.value]
                                             }
 
-                                            App.instance.setState({isExecute:true})
+                                            App.instance.loading.show()
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            App.instance.setState({isExecute:false})
+                                            App.instance.loading.hide()
                                             console.log(JSON.stringify(tmpData.result.recordset))
                                             
                                             this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' +  JSON.stringify(tmpData.result.recordset)+ '}',(pResult) => 
                                             {                
-                                                App.instance.setState({isExecute:true})                                
+                                                App.instance.loading.show()                                
                                                 if(pResult.split('|')[0] != 'ERR')
                                                 {
                                                     var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
@@ -810,7 +810,7 @@ export default class labelPrinting extends React.PureComponent
                                                         mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
                                                     } 
                                                 }
-                                                App.instance.setState({isExecute:false})
+                                                App.instance.loading.hide()
                                             });
 
                                             let updateQuery = 

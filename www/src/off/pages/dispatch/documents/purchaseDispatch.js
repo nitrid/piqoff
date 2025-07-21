@@ -276,9 +276,9 @@ export default class purchaseDispatch extends DocBase
     }
     async getDoc(pGuid,pRef,pRefno)
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await super.getDoc(pGuid,pRef,pRefno);
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
@@ -593,7 +593,7 @@ export default class purchaseDispatch extends DocBase
     {
         return new Promise(async resolve => 
         {
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
     
             this.txtRef.readOnly = true
             this.txtRefno.readOnly = true
@@ -631,7 +631,7 @@ export default class purchaseDispatch extends DocBase
                     //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
                     await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
                     //*****************************************/
-                    App.instance.setState({isExecute:false})
+                    App.instance.loading.hide()
                     resolve()
 
                     return
@@ -663,7 +663,7 @@ export default class purchaseDispatch extends DocBase
                         return 
                     }
 
-                    App.instance.setState({isExecute:false})
+                    App.instance.loading.hide()
                     this.msgCustomerNotFound.setTitle(pData.NAME)
                     await this.msgCustomerNotFound.show().then(async (e) =>
                     {
@@ -847,7 +847,7 @@ export default class purchaseDispatch extends DocBase
             await this.itemRelated(pData.GUID,pQuantity)
 
             //*****************************************/
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
             resolve()
         })
     } 
@@ -988,7 +988,7 @@ export default class purchaseDispatch extends DocBase
         
             if(typeof tmpData != 'undefined' && tmpData.value ==  true)
             {
-                App.instance.setState({isExecute:true})
+                App.instance.loading.show()
                 this.newPrice.clear()
                 for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                 {
@@ -1065,18 +1065,18 @@ export default class purchaseDispatch extends DocBase
                                 param : ['PPRICE_GUID:string|50','PNEW_CUSER:string|25','PNEW_PRICE:float','PUPDATE_ITEM:string|50','PCUSTOMER_PRICE_GUID:string|50','PCOST_PRICE:float'],
                                 dataprm : ['SALE_PRICE_GUID','CUSER','SALE_PRICE','ITEM','CUSTOMER_PRICE_GUID','PRICE']
                             } 
-                            App.instance.setState({isExecute:true})
+                            App.instance.loading.show()
                             for (let i = 0; i < this.grdNewPrice.getSelectedData().length; i++) 
                             {
                                 this.updatePriceData.push(this.grdNewPrice.getSelectedData()[i])
                             }
                             await this.updatePriceData.update()
-                            App.instance.setState({isExecute:false})
+                            App.instance.loading.hide()
                             this.updatePriceData.clear()
                         }
                     })
                 }    
-                App.instance.setState({isExecute:false})
+                App.instance.loading.hide()
             }
             
             let tmpConfObj =
@@ -1093,7 +1093,7 @@ export default class purchaseDispatch extends DocBase
                 let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                 {
-                    App.instance.setState({isExecute:true})
+                    App.instance.loading.show()
 
                     this.newPriceDate.clear()
 
@@ -1165,7 +1165,7 @@ export default class purchaseDispatch extends DocBase
                                     param : ['PNEW_CUSER:string|25','PCUSTOMER_PRICE_GUID:string|50'],
                                     dataprm : ['CUSER','CUSTOMER_PRICE_GUID']
                                 } 
-                                App.instance.setState({isExecute:true})
+                                App.instance.loading.show()
                                 
                                 for (let i = 0; i < this.grdNewPriceDate.getSelectedData().length; i++) 
                                 {
@@ -1173,12 +1173,12 @@ export default class purchaseDispatch extends DocBase
                                 }
                                 
                                 await this.updatePriceData.update()
-                                App.instance.setState({isExecute:false})
+                                App.instance.loading.hide()
                                 this.updatePriceData.clear()
                             }
                         })
                     }    
-                    App.instance.setState({isExecute:false})
+                    App.instance.loading.hide()
                 }
             }
 
@@ -2497,9 +2497,9 @@ export default class purchaseDispatch extends DocBase
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
-                                                    App.instance.setState({isExecute:true})
+                                                    App.instance.loading.show()
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    App.instance.setState({isExecute:false})
+                                                    App.instance.loading.hide()
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')
@@ -2610,12 +2610,12 @@ export default class purchaseDispatch extends DocBase
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
-                                                    App.instance.setState({isExecute:true})
+                                                    App.instance.loading.show()
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    App.instance.setState({isExecute:false})
+                                                    App.instance.loading.hide()
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
-                                                        App.instance.setState({isExecute:true})
+                                                        App.instance.loading.show()
                                                         let tmpAttach = pResult.split('|')[1]
                                                         let tmpHtml = this.htmlEditor.value
                                                         
@@ -2630,7 +2630,7 @@ export default class purchaseDispatch extends DocBase
                                                         let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailSelect.value}
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
-                                                            App.instance.setState({isExecute:false})
+                                                            App.instance.loading.hide()
                                                             let tmpConfObj1 =
                                                             {
                                                                 id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'auto',

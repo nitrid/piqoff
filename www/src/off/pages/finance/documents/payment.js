@@ -128,11 +128,11 @@ export default class payment extends React.PureComponent
     async getDoc(pGuid,pRef,pRefno)
     {
         this.docObj.clearAll()
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:1,DOC_TYPE:200});
         await this.deptCreditMatchingObj.load({PAID_DOC:this.docObj.docCustomer.dt()[0].GUID,PAYING_DOC:this.docObj.docCustomer.dt()[0].GUID});
 
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true

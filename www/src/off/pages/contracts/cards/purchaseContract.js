@@ -129,7 +129,7 @@ export default class purchaseContract extends React.PureComponent
     }
     async addItem(pData)
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         
         let tmpEmpty = {...this.contractObj.itemPrice.empty};
         
@@ -185,7 +185,7 @@ export default class purchaseContract extends React.PureComponent
         {
             this.contractObj.itemPrice.addEmpty(tmpEmpty);
         }
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
     }
     async checkboxReset()

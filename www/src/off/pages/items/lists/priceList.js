@@ -86,9 +86,9 @@ export default class priceList extends React.PureComponent
             }
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdPriceListe.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
         this.txtTotalCount.value = this.grdPriceListe.data.datatable.length
     }
     render()
@@ -291,9 +291,9 @@ export default class priceList extends React.PureComponent
                                                         value:  [this.cmbPricingList.value,this.chkCatalog.value,this.cmbDesignList.value]
                                                     }
 
-                                                    App.instance.setState({isExecute:true})
+                                                    App.instance.loading.show()
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    App.instance.setState({isExecute:false})
+                                                    App.instance.loading.hide()
                                                     
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
@@ -400,7 +400,7 @@ export default class priceList extends React.PureComponent
                                             if(e.validationGroup.validate().status == "valid")
                                             {
                                                 let tmpLines = []
-                                                App.instance.setState({isExecute:true})
+                                                App.instance.loading.show()
 
                                                 let tmpQuery = 
                                                 {
@@ -433,7 +433,7 @@ export default class priceList extends React.PureComponent
                                                     
                                                     this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                     {
-                                                        App.instance.setState({isExecute:false})
+                                                        App.instance.loading.hide()
                                                         
                                                         if((pResult1) == 0)
                                                         {
@@ -456,7 +456,7 @@ export default class priceList extends React.PureComponent
                                                         }
                                                     });
                                                 });
-                                                App.instance.setState({isExecute:false})
+                                                App.instance.loading.hide()
                                             }
                                         }}/>
                                     </div>

@@ -86,9 +86,9 @@ export default class itemSaleReport extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdItemSaleReport.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
         let tmpTotal = this.grdItemSaleReport.data.datatable.sum("TOTAL",2)
 

@@ -70,9 +70,9 @@ export default class purchaseOrdList extends React.PureComponent
                     sql : this.core.sql
                 }
             }
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             await this.grdPurcOrdList.dataRefresh(tmpSource)
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
         else
         {
@@ -106,9 +106,9 @@ export default class purchaseOrdList extends React.PureComponent
                     sql : this.core.sql
                 }
             }
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             await this.grdPurcOrdList.dataRefresh(tmpSource2)
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
     }
     render()

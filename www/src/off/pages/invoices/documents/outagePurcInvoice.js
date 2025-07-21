@@ -152,9 +152,9 @@ export default class outagePurcInvoice extends DocBase
     }
     async getDoc(pGuid,pRef,pRefno)
     {
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await super.getDoc(pGuid,pRef,pRefno);
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
     }
     calculateTotal()
@@ -420,7 +420,7 @@ export default class outagePurcInvoice extends DocBase
     {
         return new Promise(async resolve => 
         {
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             if(typeof pQuantity == 'undefined')
             {
                 pQuantity = 1
@@ -450,7 +450,7 @@ export default class outagePurcInvoice extends DocBase
                 //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
                 await this.itemRelated(pData.GUID,tmpMergDt[0].QUANTITY)
                 //*****************************************/
-                App.instance.setState({isExecute:false})
+                App.instance.loading.hide()
                 resolve()
                 return
             }
@@ -558,7 +558,7 @@ export default class outagePurcInvoice extends DocBase
             //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
             await this.itemRelated(pData.GUID,pQuantity)
             //*****************************************/
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
             resolve()
         })
     }
@@ -1861,9 +1861,9 @@ export default class outagePurcInvoice extends DocBase
                                                             value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                         }
                                     
-                                                        App.instance.setState({isExecute:true})
+                                                        App.instance.loading.show()
                                                         let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                        App.instance.setState({isExecute:false})
+                                                        App.instance.loading.hide()
                                     
                                                         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                         {
@@ -2051,13 +2051,13 @@ export default class outagePurcInvoice extends DocBase
                                                         value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
                                  
-                                                    App.instance.setState({isExecute:true})
+                                                    App.instance.loading.show()
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    App.instance.setState({isExecute:false})
+                                                    App.instance.loading.hide()
 
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
                                                     {
-                                                        App.instance.setState({isExecute:true})
+                                                        App.instance.loading.show()
                                                         let tmpAttach = pResult.split('|')[1]
                                                         let tmpHtml = this.htmlEditor.value
 
@@ -2072,7 +2072,7 @@ export default class outagePurcInvoice extends DocBase
                                                         let tmpMailData = {html:tmpHtml,subject:this.txtMailSubject.value,sendMail:this.txtSendMail.value,attachName:"facture " + this.docObj.dt()[0].REF + "-" + this.docObj.dt()[0].REF_NO + ".pdf",attachData:tmpAttach,text:"",mailGuid:this.cmbMailAddress.value}
                                                         this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                                                         {
-                                                            App.instance.setState({isExecute:false})
+                                                            App.instance.loading.hide()
                                                             let tmpConfObj1 =
                                                             {
                                                                 id:'msgMailSendResult',showTitle:true,title:this.t("msgMailSendResult.title"),showCloseButton:true,width:'500px',height:'auto',

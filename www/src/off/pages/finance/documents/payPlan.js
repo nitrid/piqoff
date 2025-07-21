@@ -187,10 +187,10 @@ export default class payPlan extends React.PureComponent
     async getDoc(pDocGuid)
     {
         this.payPlanObj.clearAll()
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.payPlanObj.load({DOC_GUID:pDocGuid});
 
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
         this.tmpFacGuid = this.payPlanObj.dt()[0].FAC_GUID
         this.tmpFacRef = this.payPlanObj.dt()[0].REF
@@ -225,9 +225,9 @@ export default class payPlan extends React.PureComponent
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdPopInstallment.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     render()
     {
@@ -853,9 +853,9 @@ export default class payPlan extends React.PureComponent
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.payPlanObj.dt()[0].DOC_GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
-                                                    App.instance.setState({isExecute:true})
+                                                    App.instance.loading.show()
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    App.instance.setState({isExecute:false})
+                                                    App.instance.loading.hide()
 
                                                     let tmpObj = {DATA:tmpData.result.recordset}
                                                     this.core.socket.emit('devprint','{"TYPE":"PRINT","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',(pResult) => 
@@ -891,9 +891,9 @@ export default class payPlan extends React.PureComponent
                                                         param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                                                         value:  [this.payPlanObj.dt()[0].DOC_GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                     }
-                                                    App.instance.setState({isExecute:true})
+                                                    App.instance.loading.show()
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    App.instance.setState({isExecute:false})
+                                                    App.instance.loading.hide()
 
                                                     let tmpObj = {DATA:tmpData.result.recordset}
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',(pResult) => 

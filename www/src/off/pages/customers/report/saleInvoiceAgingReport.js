@@ -96,9 +96,9 @@ export default class invoiceAgingReport extends React.PureComponent
                 )
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdList.dataRefresh({source : tmpDt})
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     render()
     {
