@@ -2,7 +2,6 @@ import React from "react";
 import App from "../lib/app.js";
 import moment from 'moment';
 
-import { LoadPanel } from 'devextreme-react/load-panel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import NdTextBox, { Validator, RequiredRule } from "../../core/react/devex/textbox.js";
