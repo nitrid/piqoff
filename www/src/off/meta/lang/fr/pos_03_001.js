@@ -22,6 +22,7 @@ const pos_03_001 =
     txtReal : "Ok",
     payTransfer : "Transfert des Sommes", 
     validPriceFloat : "Fond de Caisse doit être Supérieur à 0", 
+    msgSafeNotFound : "Caisse non trouvée, veuillez vérifier la caisse.",
     popFinish : 
     {
         title :"Résultat"

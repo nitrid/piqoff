@@ -5,6 +5,7 @@ import ReactWizard from 'react-bootstrap-wizard';
 import moment from 'moment';
 import { posEnddayCls } from '../../../../core/cls/pos.js';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import ScrollView from 'devextreme-react/scroll-view';
 
 import { NdForm,NdItem, NdLabel} from '../../../../core/react/devex/form.js';
 import { Validator, RangeRule } from '../../../../core/react/devex/textbox.js'
@@ -228,8 +229,11 @@ export default class endOfDay extends React.PureComponent
         else
         {
             let tmpCash
+
             tmpCash = (parseFloat((parseFloat(this.txtCash.value) - parseFloat(this.txtAdvance.value).toFixed(2))) - parseFloat((this.paymentData.where({'PAY_TYPE':0}).sum('AMOUNT').toFixed(2))))
+            
             let tmpCashValue
+            
             if(tmpCash > 0)
             {
                 this.color.cash = "blue"
@@ -240,6 +244,7 @@ export default class endOfDay extends React.PureComponent
                 this.color.cash = "red"
                 tmpCashValue = tmpCash.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
             }
+            
             this.Cash = tmpCashValue
             this.setState({Cash:tmpCashValue})
         }
@@ -253,7 +258,9 @@ export default class endOfDay extends React.PureComponent
         else 
         {
             let tmpDebit = Number(this.txtCreditCard.value - (Number(this.paymentData.where({'PAY_TYPE':1}).sum('AMOUNT')).round(2) + Number(this.paymentData.where({'PAY_TYPE':9}).sum('AMOUNT')).round(2))).round(2)
+            
             let tmpDebitValue
+            
             if(tmpDebit > 0)
             {
                 this.color.card = "blue"
@@ -277,7 +284,9 @@ export default class endOfDay extends React.PureComponent
         else 
         {
             let tmpCheck = parseFloat((this.txtCheck.value - parseFloat(this.paymentData.where({'PAY_TYPE':2}).sum('AMOUNT'))).toFixed(2))
+            
             let tmpCheckValue
+            
             if(tmpCheck > 0)
             {
                 this.color.check = "blue"
@@ -480,6 +489,7 @@ export default class endOfDay extends React.PureComponent
     async safeTransfer()
     {
         this.enddayObj.clearAll()
+
         let tmpSafeQuery = 
         {
             query : "SELECT GUID FROM SAFE_VW_01 WHERE CODE = @INPUT_CODE",
@@ -487,8 +497,11 @@ export default class endOfDay extends React.PureComponent
             value : [this.cmbSafe.value]
         }
         let tmpSafeData = await this.core.sql.execute(tmpSafeQuery) 
+        
         let tmpCodeSafe = tmpSafeData.result.recordset[0].GUID
+        
         let tmpEndday = {...this.enddayObj.empty}
+        
         tmpEndday.CASH = this.txtCash.value
         tmpEndday.CDATE = moment(this.dtDocDate.value).format("YYYY-MM-DD")
         tmpEndday.CREDIT = this.txtCreditCard.value
@@ -499,6 +512,7 @@ export default class endOfDay extends React.PureComponent
         
         this.enddayObj.addEmpty(tmpEndday)
         this.enddayObj.save()
+        
         let tmpQuery = 
         {
             query : "SELECT GUID FROM SAFE_VW_01 WHERE CODE = @INPUT_CODE",
@@ -506,7 +520,9 @@ export default class endOfDay extends React.PureComponent
             value : [this.cmbSafe.value]
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
+        
         let tmpSafe = tmpData.result.recordset[0].GUID
+        
         if(this.docObj.dt().length == 0)
         {
             this.docObj.addEmpty()
@@ -605,7 +621,7 @@ export default class endOfDay extends React.PureComponent
         console.log(this.docObj.docCustomer.dt())
 
         let tmpSave = await this.docObj.save()
-        console.log(tmpSave)
+
         if(tmpSave == 0)
         {
             this.toast.show({message:this.t("msgSucces.msg"),type:"success"})
@@ -630,6 +646,7 @@ export default class endOfDay extends React.PureComponent
             finishButton: false,
             width: "16.666666666666668%",
         })
+
         this.txtCash.value = 0
         this.txtCreditCard.value = 0
         this.txtRestorant.value = 0
@@ -684,533 +701,545 @@ export default class endOfDay extends React.PureComponent
     {
         return(
             <div id={this.props.data.id + this.tabIndex}>
-                <div className='panel'>
-                    <div className={"panel-body container-fluid"}>
-                        <div className={'row'}>
-                            <div className={'col-12'}>
-                            <ReactWizard ref={this.reactWizardRef} color={"green"} steps={this.steps} progressbar={true} title={this.t("title")} finishButtonClick={this.finishButtonClick}>
-                            </ReactWizard>
+                <ScrollView>
+                    <div className='panel'>
+                        <div className={"panel-body container-fluid"}>
+                            <div className={'row'}>
+                                <div className={'col-12'}>
+                                <ReactWizard ref={this.reactWizardRef} color={"green"} steps={this.steps} progressbar={true} title={this.t("title")} finishButtonClick={this.finishButtonClick}>
+                                </ReactWizard>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div>
-                    <NdPopUp parent={this} id={"popTotalCash"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popTotalCash.title")}
-                        container={"#root"} 
-                        width={'500'}
-                        height={'420'}
-                        position={{of:'#root'}}
-                        deferRendering={false}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("txtAmountCash1")} alignment="right" />
-                                    <NdNumberBox id="txtAmountCash1" parent={this} simple={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.saveTotalCash()
-                                        
-                                    }}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtAmountCash2")} alignment="right" />
-                                    <NdNumberBox id="txtAmountCash2" parent={this} simple={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.saveTotalCash()
-                                    }}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtAmountCash3")} alignment="right" />
-                                    <NdNumberBox id="txtAmountCash3" parent={this} simple={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.saveTotalCash()
-                                    }}/>
-                                </Item>
-                                <Item>
-                                    <Label  text={this.t("txtAmountCash4")} alignment="right" />
-                                    <NdNumberBox id="txtAmountCash4" parent={this} simple={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.saveTotalCash()
-                                    }}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtAmountCash5")} alignment="right" />
-                                    <NdNumberBox id="txtAmountCash5" parent={this} simple={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.saveTotalCash()
-                                    }}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtAmountCashTotal")} alignment="right" />
-                                    <NdNumberBox id="txtAmountCashTotal" parent={this} simple={true}
-                                    readOnly={true}
-                                    />
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("btnSaveTotalCash")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={async (e)=>
-                                            {       
-                                                this.popTotalCash.hide();
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("btnCancelTotalCash")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.txtAmountCash1.value = 0;
-                                                this.txtAmountCash2.value = 0;
-                                                this.txtAmountCash3.value = 0;
-                                                this.txtAmountCash4.value = 0;
-                                                this.txtAmountCash5.value = 0;
-                                                this.txtCash.value = 0;
-                                                this.Cash = 0;
-                                                this.txtAmountCashTotal.value = 0;
-                                                this.popTotalCash.hide();
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
                     </div>
                     <div>
-                    <NdPopUp parent={this} id={"popTotalCreditCard"} 
+                        <NdPopUp parent={this} id={"popTotalCash"} 
+                            visible={false}
+                            showCloseButton={true}
+                            showTitle={true}
+                            title={this.t("popTotalCash.title")}
+                            container={"#root"} 
+                            width={'500'}
+                            height={'420'}
+                            position={{of:'#root'}}
+                            deferRendering={false}
+                            >
+                                <Form colCount={1} height={'fit-content'}>
+                                    <Item>
+                                        <Label text={this.t("txtAmountCash1")} alignment="right" />
+                                        <NdNumberBox id="txtAmountCash1" parent={this} simple={true}
+                                        onValueChanged={(e)=>
+                                        {
+                                            this.saveTotalCash()
+                                            
+                                        }}/>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("txtAmountCash2")} alignment="right" />
+                                        <NdNumberBox id="txtAmountCash2" parent={this} simple={true}
+                                        onValueChanged={(e)=>
+                                        {
+                                            this.saveTotalCash()
+                                        }}/>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("txtAmountCash3")} alignment="right" />
+                                        <NdNumberBox id="txtAmountCash3" parent={this} simple={true}
+                                        onValueChanged={(e)=>
+                                        {
+                                            this.saveTotalCash()
+                                        }}/>
+                                    </Item>
+                                    <Item>
+                                        <Label  text={this.t("txtAmountCash4")} alignment="right" />
+                                        <NdNumberBox id="txtAmountCash4" parent={this} simple={true}
+                                        onValueChanged={(e)=>
+                                        {
+                                            this.saveTotalCash()
+                                        }}/>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("txtAmountCash5")} alignment="right" />
+                                        <NdNumberBox id="txtAmountCash5" parent={this} simple={true}
+                                        onValueChanged={(e)=>
+                                        {
+                                            this.saveTotalCash()
+                                        }}/>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("txtAmountCashTotal")} alignment="right" />
+                                        <NdNumberBox id="txtAmountCashTotal" parent={this} simple={true}
+                                        readOnly={true}
+                                        />
+                                    </Item>
+                                    <Item>
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("btnSaveTotalCash")} type="normal" stylingMode="contained" width={'100%'}
+                                                onClick={async (e)=>
+                                                {       
+                                                    this.popTotalCash.hide();
+                                                }}/>
+                                            </div>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("btnCancelTotalCash")} type="normal" stylingMode="contained" width={'100%'}
+                                                onClick={()=>
+                                                {
+                                                    this.txtAmountCash1.value = 0;
+                                                    this.txtAmountCash2.value = 0;
+                                                    this.txtAmountCash3.value = 0;
+                                                    this.txtAmountCash4.value = 0;
+                                                    this.txtAmountCash5.value = 0;
+                                                    this.txtCash.value = 0;
+                                                    this.Cash = 0;
+                                                    this.txtAmountCashTotal.value = 0;
+                                                    this.popTotalCash.hide();
+                                                }}/>
+                                            </div>
+                                        </div>
+                                    </Item>
+                                </Form>
+                            </NdPopUp>
+                    </div>
+                        <div>
+                        <NdPopUp parent={this} id={"popTotalCreditCard"} 
+                            visible={false}
+                            showCloseButton={true}
+                            showTitle={true}
+                            title={this.t("popTotalCreditCard.title")}
+                            container={'#' + this.props.data.id + this.tabIndex}     
+                            width={'500'}
+                            height={'620'}
+                            position={{of:'#' + this.props.data.id + this.tabIndex}}
+                            deferRendering={false}
+                            >
+                                <Form colCount={1} height={'fit-content'}>
+                                    <Item>
+                                        <Label text={this.t("txtAmountCreditCard1")} alignment="right" />
+                                        <NdNumberBox id="txtAmountCreditCard1" parent={this} simple={true}
+                                        onValueChanged={(e)=>
+                                        {
+                                            this.saveTotalCreditCard()
+                                        }}/>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("txtAmountCreditCard2")} alignment="right" />
+                                        <NdNumberBox id="txtAmountCreditCard2" parent={this} simple={true}
+                                        onValueChanged={(e)=>
+                                        {
+                                            this.saveTotalCreditCard()
+                                        }}/>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("txtAmountCreditCard3")} alignment="right" />
+                                        <NdNumberBox id="txtAmountCreditCard3" parent={this} simple={true}
+                                        onValueChanged={(e)=>
+                                        {
+                                            this.saveTotalCreditCard()
+                                        }}/>
+                                    </Item>
+                                    <Item>
+                                        <Label  text={this.t("txtAmountCreditCard4")} alignment="right" />
+                                        <NdNumberBox id="txtAmountCreditCard4" parent={this} simple={true}
+                                        onValueChanged={(e)=>
+                                        {
+                                            this.saveTotalCreditCard()
+                                        }}/>
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("txtAmountCreditCard5")} alignment="right" />
+                                        <NdNumberBox id="txtAmountCreditCard5" parent={this} simple={true}
+                                        onValueChanged={(e)=>
+                                        {
+                                            this.saveTotalCreditCard()
+                                        }}/>    
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("txtAmountTicketCard1")} alignment="right" />
+                                        <NdNumberBox id="txtAmountTicketCard1" parent={this} simple={true}
+                                        onValueChanged={(e)=>
+                                        {
+                                            this.saveTotalCreditCard()
+                                        }}/>    
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("txtAmountTicketCard2")} alignment="right" />
+                                        <NdNumberBox id="txtAmountTicketCard2" parent={this} simple={true}
+                                        onValueChanged={(e)=>
+                                        {
+                                            this.saveTotalCreditCard()
+                                        }}/>    
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("txtAmountTicketCard3")} alignment="right" />
+                                        <NdNumberBox id="txtAmountTicketCard3" parent={this} simple={true}
+                                        onValueChanged={(e)=>
+                                        {
+                                            this.saveTotalCreditCard()
+                                        }}/>    
+                                    </Item>
+                                    <Item>
+                                        <Label text={this.t("txtAmountCreditCardTotal")} alignment="right" />
+                                        <NdNumberBox id="txtAmountCreditCardTotal" parent={this} simple={true}
+                                        readOnly={true}
+                                        />    
+                                    </Item>
+                                    <Item>
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("btnSaveTotalCreditCard")} type="normal" stylingMode="contained" width={'100%'}
+                                                onClick={async (e)=>
+                                                {       
+                                                    this.popTotalCreditCard.hide(); 
+                                                }}/>
+                                            </div>
+                                            <div className='col-6'>
+                                                <NdButton text={this.t("btnCancelTotalCreditCard")} type="normal" stylingMode="contained" width={'100%'}
+                                                onClick={()=>
+                                                {
+                                                    this.txtAmountCreditCard1.value = 0;
+                                                    this.txtAmountCreditCard2.value = 0;
+                                                    this.txtAmountCreditCard3.value = 0;
+                                                    this.txtAmountCreditCard4.value = 0;
+                                                    this.txtAmountCreditCard5.value = 0;
+                                                    this.txtAmountTicketCard1.value = 0;
+                                                    this.txtAmountTicketCard2.value = 0;
+                                                    this.txtAmountTicketCard3.value = 0;
+                                                    this.txtCreditCard.value = 0;
+                                                    this.DebitCard = 0;
+                                                    this.txtAmountCreditCardTotal.value = 0;
+                                                    this.popTotalCreditCard.hide();
+                                                }}/>
+                                            </div>
+                                        </div>
+                                    </Item>
+                                </Form>
+                            </NdPopUp>
+                        </div>
+                    {/* Finish PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popFinish"} 
+                        visible={false}
+                        showTitle={true}
+                        title={this.t("popFinish.title")}
+                        container={'#' + this.props.data.id + this.tabIndex}         
+                        width={'500'}
+                        height={'600'}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
+                        >
+                            <div className='col-12'>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <h2>{this.t("cash")}</h2>
+                                    </div>
+                                    <div className='col-6' style={{color:this.color.cash}}>
+                                        <h2> : {this.Cash}</h2>
+                                    </div>
+                                </div>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <h2>{this.t("debitCard")}</h2>
+                                    </div>
+                                    <div className='col-6' style={{color:this.color.card}}>
+                                        <h2> : {this.DebitCard}</h2>
+                                    </div>
+                                </div>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <h2>{this.t("check")}</h2>
+                                    </div>
+                                    <div className='col-6' style={{color:this.color.check}}>
+                                        <h2> : {this.Check}</h2>
+                                    </div>
+                                </div>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <h2>{this.t("ticketRest")}</h2>
+                                    </div>
+                                    <div className='col-6' style={{color:this.color.rest}}>
+                                        <h2> : {this.TicketRest}</h2>
+                                    </div>
+                                </div>
+                                <div className='row px-4'>
+                                    <div className='col-12'>
+                                        <h2>{this.t("advanceMsg1")}</h2>
+                                    </div>
+                                </div>
+                                <div className='row px-4'>
+                                    <div className='col-4 offset-4'>
+                                        <h2>{this.message}</h2>
+                                    </div>
+                                </div>
+                                <div className='row px-4'>
+                                    <div className='col-12'>
+                                        <h2>{this.t("advanceMsg2")}</h2>
+                                    </div>
+                                </div>
+                                <div>
+                                    <Form colCount={2}>
+                                        <Item>
+                                            <NdButton text={this.t("btnNotTrue")}
+                                            onClick={async ()=>
+                                            {       
+                                                this.popFinish.hide()
+                                            }}/>
+                                        </Item>
+                                        <Item>
+                                            <NdButton text={this.t("addAdvance")}
+                                            onClick={async ()=>
+                                            {       
+                                                this.popAdvance.show()
+                                            }}/>
+                                        </Item>
+                                    </Form>
+                                </div>
+                            </div>
+                        </NdPopUp>
+                    </div> 
+                    {/* Avans PopUp */}
+                    <div>
+                        <NdPopUp parent={this} id={"popAdvance"} 
+                        visible={false}
+                        showTitle={true}
+                        showCloseButton={true}
+                        title={this.t("popAdvance.title")}
+                        container={'#' + this.props.data.id + this.tabIndex} 
+                        width={'450'}
+
+                        height={'250'}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
+                        >
+                            <NdForm colCount={1} height={'fit-content'} id={"frmAdvances"}>
+                                <NdItem>
+                                    <div className='row px-4'>
+                                        <div className='col-12'>
+                                            <h4>{this.t("popAdvance.msg")}</h4>
+                                        </div>
+                                    </div>
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("txtPopAdvance")} alignment="right" />
+                                    <NdNumberBox id="txtPopAdvance" parent={this} simple={true}>
+                                        <Validator validationGroup={"frmAdvance" + this.tabIndex}>
+                                            <RangeRule min={0.9} message={this.t("validPriceFloat")}/>
+                                        </Validator>
+                                    </NdNumberBox>
+                                </NdItem>
+                                <NdItem>
+                                    <div className='row'>
+                                        <div className='col-6'>
+                                        </div>
+                                        <div className='col-6'>
+                                            <NdButton text={this.t("btnPopAdd")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmAdvance" + this.tabIndex}
+                                            onClick={async (e)=>
+                                            {
+                                                if(e.validationGroup.validate().status == "valid")
+                                                {  
+                                                    if(this.txtPopAdvance.value == 0)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgZeroQuantity',showTitle:true,title:this.t("msgZeroQuantity.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                            button:[{id:"btn01",caption:this.t("msgZeroQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgZeroQuantity.btn02"),location:'after'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgZeroQuantity.msg")}</div>)
+                                                        }
+                                                        
+                                                        let pResult = await dialog(tmpConfObj);
+                                                        if(pResult == 'btn01')
+                                                        {
+                                                            return
+                                                        }
+                                                    }
+                                                    else if(this.txtPopAdvance.value > 1000)
+                                                    {
+                                                        let tmpConfObj =
+                                                        {
+                                                            id:'msgBigAmount',showTitle:true,title:this.t("msgBigAmount.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                            button:[{id:"btn01",caption:this.t("msgBigAmount.btn01"),location:'before'}],
+                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBigAmount.msg")}</div>)
+                                                        }
+                                                        
+                                                        let pResult = await dialog(tmpConfObj);
+                                                        if(pResult == 'btn01')
+                                                        {
+                                                            return
+                                                        }
+                                                    }
+                                                    let tmpQuery = 
+                                                    {
+                                                        query : "SELECT GUID FROM SAFE_VW_01 WHERE CODE = @INPUT_CODE",
+                                                        param : ['INPUT_CODE:string|50'],
+                                                        value : [this.cmbSafe.value]
+                                                    }
+
+                                                    let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                    
+                                                    if(tmpData.result.recordset.length == 0)
+                                                    {
+                                                        this.toast.show({message:this.t("msgSafeNotFound"), type:"error"})
+                                                        return
+                                                    }
+                                                    
+                                                    
+                                                    let tmpSafe = tmpData.result.recordset[0].GUID
+
+                                                    if(this.docObj.dt().length == 0)
+                                                    {
+                                                        this.docObj.addEmpty()
+                                                        this.docObj.dt()[0].TYPE = 2
+                                                        this.docObj.dt()[0].DOC_TYPE = 201
+                                                        this.docObj.dt()[0].REF = 'POS'
+                                                        this.docObj.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
+                                                        this.docObj.dt()[0].DOC_DATE = this.dtDocDate.value
+                                                        this.docObj.dt()[0].INPUT = tmpSafe
+                                                        this.docObj.dt()[0].OUTPUT = '00000000-0000-0000-0000-000000000000'
+                                                        this.docObj.dt()[0].AMOUNT =  Number(this.txtAdvance.value + this.txtCash.value).round(2)
+                                                        this.docObj.dt()[0].TOTAL = Number(this.txtAdvance.value + this.txtCash.value).round(2)
+                                                    }
+                                                    
+                                                    this.docObj.docCustomer.addEmpty()
+                                                    this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
+                                                    this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
+                                                    this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
+                                                    this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
+                                                    this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
+                                                    this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
+                                                    this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = tmpSafe
+                                                    this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
+                                                    this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = '00000000-0000-0000-0000-000000000000'
+                                                    this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
+                                                    this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = Number(this.txtCash.value).round(2)
+                                                    this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
+                                                    
+                                                    this.safeTransfer()
+                                                    this.popAdvance.hide()
+                                                    this.popFinish.hide()
+                                                }
+                                            }}/>
+                                        </div>
+                                    </div>
+                                </NdItem>
+                            </NdForm>
+                        </NdPopUp>
+                    </div>  
+                    {/* Detay Popup */}
+                    <div>
+                        <NdPopUp parent={this} id={"popDetail"} 
+                        visible={false}                        
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popDetail.title")}
+                        container={'#' + this.props.data.id + this.tabIndex} 
+                        width={'100%'}
+                        height={'100%'}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
+                        >
+                            <div className="row">
+                                <div className="col-1 pe-0"></div>
+                                <div className="col-7 pe-0">
+                                    {this.t("TicketId")} : {this.state.ticketId}
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-1 pe-0"></div>
+                                <div className="col-7 pe-0">
+                                    <NdGrid id="grdSaleTicketItems" parent={this} 
+                                    selection={{mode:"multiple"}} 
+                                    showBorders={true}
+                                    filterRow={{visible:true}} 
+                                    headerFilter={{visible:true}}
+                                    columnAutoWidth={true}
+                                    allowColumnReordering={true}
+                                    allowColumnResizing={true}
+                                    >                            
+                                        <Paging defaultPageSize={20} />
+                                        <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                        <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="BARCODE" caption={this.t("grdSaleTicketItems.clmBarcode")} visible={true} width={150}/> 
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdSaleTicketItems.clmName")} visible={true} width={250}/> 
+                                        <Column dataField="QUANTITY" caption={this.t("grdSaleTicketItems.clmQuantity")} visible={true} width={100}/> 
+                                        <Column dataField="PRICE" caption={this.t("grdSaleTicketItems.clmPrice")} visible={true} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                        <Column dataField="TOTAL" caption={this.t("grdSaleTicketItems.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                    </NdGrid>
+                                </div>
+                                <div className="col-3 ps-0">
+                                    <NdGrid id="grdSaleTicketPays" parent={this} 
+                                    selection={{mode:"multiple"}} 
+                                    showBorders={true}
+                                    filterRow={{visible:true}} 
+                                    headerFilter={{visible:true}}
+                                    columnAutoWidth={true}
+                                    allowColumnReordering={true}
+                                    allowColumnResizing={true}
+                                    onRowClick={async(e)=>
+                                    {
+                                        if(this.lastPosPayDt.length > 0)
+                                        {
+                                            this.rbtnTotalPayType.value = 0
+                                            this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT'))
+                                            this.txtPopLastTotal.value = this.lastPosSaleDt[0].GRAND_TOTAL;
+                                            this.popLastTotal.show()
+
+                                            //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
+                                            setTimeout(() => 
+                                            {
+                                                this.grdLastTotalPay.devGrid.selectRowsByIndexes(0)
+                                            }, 100);
+                                        }
+                                    }}
+                                    >
+                                        <Paging defaultPageSize={20} />
+                                        <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                        <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="PAY_TYPE_NAME" caption={this.t("grdSaleTicketPays.clmPayName")} visible={true} width={155}/> 
+                                        <Column dataField="LINE_TOTAL" caption={this.t("grdSaleTicketPays.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150}/> 
+                                    </NdGrid>
+                                </div>
+                            </div>
+                        </NdPopUp>
+                        <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
+                    </div>
+                    {/* Açık Fişler PopUp */}
+                    <NdPopUp parent={this} id={"popOpenTike"} 
                         visible={false}
                         showCloseButton={true}
                         showTitle={true}
-                        title={this.t("popTotalCreditCard.title")}
-                        container={'#' + this.props.data.id + this.tabIndex}     
-                        width={'500'}
-                        height={'620'}
+                        title={this.t("popOpenTike.title")}
+                        container={'#' + this.props.data.id + this.tabIndex} 
+                        width={'900'}
+                        height={'500'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
-                        deferRendering={false}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
-                                    <Label text={this.t("txtAmountCreditCard1")} alignment="right" />
-                                    <NdNumberBox id="txtAmountCreditCard1" parent={this} simple={true}
-                                    onValueChanged={(e)=>
+                                    <NdGrid parent={this} id={"grdOpenTike"} 
+                                    showBorders={true} 
+                                    columnsAutoWidth={true} 
+                                    allowColumnReordering={true} 
+                                    allowColumnResizing={true} 
+                                    filterRow={{visible:true}}
+                                    height={350} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    onRowDblClick={async(e)=>
                                     {
-                                        this.saveTotalCreditCard()
-                                    }}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtAmountCreditCard2")} alignment="right" />
-                                    <NdNumberBox id="txtAmountCreditCard2" parent={this} simple={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.saveTotalCreditCard()
-                                    }}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtAmountCreditCard3")} alignment="right" />
-                                    <NdNumberBox id="txtAmountCreditCard3" parent={this} simple={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.saveTotalCreditCard()
-                                    }}/>
-                                </Item>
-                                <Item>
-                                    <Label  text={this.t("txtAmountCreditCard4")} alignment="right" />
-                                    <NdNumberBox id="txtAmountCreditCard4" parent={this} simple={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.saveTotalCreditCard()
-                                    }}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtAmountCreditCard5")} alignment="right" />
-                                    <NdNumberBox id="txtAmountCreditCard5" parent={this} simple={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.saveTotalCreditCard()
-                                    }}/>    
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtAmountTicketCard1")} alignment="right" />
-                                    <NdNumberBox id="txtAmountTicketCard1" parent={this} simple={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.saveTotalCreditCard()
-                                    }}/>    
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtAmountTicketCard2")} alignment="right" />
-                                    <NdNumberBox id="txtAmountTicketCard2" parent={this} simple={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.saveTotalCreditCard()
-                                    }}/>    
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtAmountTicketCard3")} alignment="right" />
-                                    <NdNumberBox id="txtAmountTicketCard3" parent={this} simple={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.saveTotalCreditCard()
-                                    }}/>    
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtAmountCreditCardTotal")} alignment="right" />
-                                    <NdNumberBox id="txtAmountCreditCardTotal" parent={this} simple={true}
-                                    readOnly={true}
-                                    />    
-                                </Item>
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("btnSaveTotalCreditCard")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={async (e)=>
-                                            {       
-                                                this.popTotalCreditCard.hide(); 
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.t("btnCancelTotalCreditCard")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.txtAmountCreditCard1.value = 0;
-                                                this.txtAmountCreditCard2.value = 0;
-                                                this.txtAmountCreditCard3.value = 0;
-                                                this.txtAmountCreditCard4.value = 0;
-                                                this.txtAmountCreditCard5.value = 0;
-                                                this.txtAmountTicketCard1.value = 0;
-                                                this.txtAmountTicketCard2.value = 0;
-                                                this.txtAmountTicketCard3.value = 0;
-                                                this.txtCreditCard.value = 0;
-                                                this.DebitCard = 0;
-                                                this.txtAmountCreditCardTotal.value = 0;
-                                                this.popTotalCreditCard.hide();
-                                            }}/>
-                                        </div>
-                                    </div>
+                                        this.btnGetDetail(e.data.GUID)
+                                        this.setState({ticketId:e.data.TICKET_ID})
+                                    }}
+                                    >
+                                        <Scrolling mode="standart" />
+                                        <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
+                                        <Column dataField="CUSER_NAME" caption={this.lang.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
+                                        <Column dataField="DEVICE" caption={this.lang.t("grdOpenTike.clmDevice")} width={60}  headerFilter={{visible:true}}/>
+                                        <Column dataField="DATE" caption={this.lang.t("grdOpenTike.clmDate")} width={90} allowEditing={false} />
+                                        <Column dataField="TICKET_ID" caption={this.lang.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
+                                        <Column dataField="TOTAL" caption={this.lang.t("grdOpenTike.clmTotal")} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}} headerFilter={{visible:true}}/>
+                                        <Column dataField="DESCRIPTION" caption={this.lang.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
+                                    </NdGrid>
                                 </Item>
                             </Form>
-                        </NdPopUp>
-                    </div>                {/* Finish PopUp */}
-                <div>
-                    <NdPopUp parent={this} id={"popFinish"} 
-                    visible={false}
-                    showTitle={true}
-                    title={this.t("popFinish.title")}
-                    container={'#' + this.props.data.id + this.tabIndex}         
-                    width={'500'}
-                    height={'600'}
-                    position={{of:'#' + this.props.data.id + this.tabIndex}}
-                    >
-                        <div className='col-12'>
-                            <div className='row'>
-                                <div className='col-6'>
-                                    <h2>{this.t("cash")}</h2>
-                                </div>
-                                <div className='col-6' style={{color:this.color.cash}}>
-                                    <h2> : {this.Cash}</h2>
-                                </div>
-                            </div>
-                            <div className='row'>
-                                <div className='col-6'>
-                                    <h2>{this.t("debitCard")}</h2>
-                                </div>
-                                <div className='col-6' style={{color:this.color.card}}>
-                                    <h2> : {this.DebitCard}</h2>
-                                </div>
-                            </div>
-                            <div className='row'>
-                                <div className='col-6'>
-                                    <h2>{this.t("check")}</h2>
-                                </div>
-                                <div className='col-6' style={{color:this.color.check}}>
-                                    <h2> : {this.Check}</h2>
-                                </div>
-                            </div>
-                            <div className='row'>
-                                <div className='col-6'>
-                                    <h2>{this.t("ticketRest")}</h2>
-                                </div>
-                                <div className='col-6' style={{color:this.color.rest}}>
-                                    <h2> : {this.TicketRest}</h2>
-                                </div>
-                            </div>
-                            <div className='row px-4'>
-                                <div className='col-12'>
-                                    <h2>{this.t("advanceMsg1")}</h2>
-                                </div>
-                            </div>
-                            <div className='row px-4'>
-                                <div className='col-4 offset-4'>
-                                    <h2>{this.message}</h2>
-                                </div>
-                            </div>
-                            <div className='row px-4'>
-                                <div className='col-12'>
-                                    <h2>{this.t("advanceMsg2")}</h2>
-                                </div>
-                            </div>
-                            <div>
-                                <Form colCount={2}>
-                                    <Item>
-                                        <NdButton text={this.t("btnNotTrue")}
-                                        onClick={async ()=>
-                                        {       
-                                            this.popFinish.hide()
-                                        }}/>
-                                    </Item>
-                                    <Item>
-                                        <NdButton text={this.t("addAdvance")}
-                                        onClick={async ()=>
-                                        {       
-                                            this.popAdvance.show()
-                                        }}/>
-                                    </Item>
-                                </Form>
-                            </div>
-                        </div>
                     </NdPopUp>
-                </div> 
-                {/* Açık Fişler PopUp */}
-                <div>
-                    <NdPopUp parent={this} id={"popOpenTike"} 
-                    visible={false}
-                    showCloseButton={true}
-                    showTitle={true}
-                    title={this.t("popOpenTike.title")}
-                    container={'#' + this.props.data.id + this.tabIndex} 
-                    width={'900'}
-                    height={'500'}
-                    position={{of:'#' + this.props.data.id + this.tabIndex}}
-                    >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <NdGrid parent={this} id={"grdOpenTike"} 
-                                showBorders={true} 
-                                columnsAutoWidth={true} 
-                                allowColumnReordering={true} 
-                                allowColumnResizing={true} 
-                                filterRow={{visible:true}}
-                                height={350} 
-                                width={'100%'}
-                                dbApply={false}
-                                onRowDblClick={async(e)=>
-                                {
-                                    this.btnGetDetail(e.data.GUID)
-                                    this.setState({ticketId:e.data.TICKET_ID})
-                                }}
-                                >
-                                    <Scrolling mode="standart" />
-                                    <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                    <Column dataField="CUSER_NAME" caption={this.lang.t("grdOpenTike.clmUser")} width={110}  headerFilter={{visible:true}}/>
-                                    <Column dataField="DEVICE" caption={this.lang.t("grdOpenTike.clmDevice")} width={60}  headerFilter={{visible:true}}/>
-                                    <Column dataField="DATE" caption={this.lang.t("grdOpenTike.clmDate")} width={90} allowEditing={false} />
-                                    <Column dataField="TICKET_ID" caption={this.lang.t("grdOpenTike.clmTicketId")} width={150}  headerFilter={{visible:true}}/>
-                                    <Column dataField="TOTAL" caption={this.lang.t("grdOpenTike.clmTotal")} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}} headerFilter={{visible:true}}/>
-                                    <Column dataField="DESCRIPTION" caption={this.lang.t("grdOpenTike.clmDescription")} width={250}  headerFilter={{visible:true}}/>
-                                </NdGrid>
-                            </Item>
-                        </Form>
-                    </NdPopUp>
-                </div>  
-                {/* Avans PopUp */}
-                <div>
-                    <NdPopUp parent={this} id={"popAdvance"} 
-                    visible={false}
-                    showTitle={true}
-                    title={this.t("popAdvance.title")}
-                    container={'#' + this.props.data.id + this.tabIndex} 
-                    width={'450'}
-                    height={'250'}
-                    position={{of:'#' + this.props.data.id + this.tabIndex}}
-                    >
-                        <NdForm colCount={1} height={'fit-content'} id={"frmAdvances"}>
-                            <NdItem>
-                                <div className='row px-4'>
-                                    <div className='col-12'>
-                                        <h4>{this.t("popAdvance.msg")}</h4>
-                                    </div>
-                                </div>
-                            </NdItem>
-                            <NdItem>
-                                <NdLabel text={this.t("txtPopAdvance")} alignment="right" />
-                                <NdNumberBox id="txtPopAdvance" parent={this} simple={true}>
-                                    <Validator validationGroup={"frmAdvance" + this.tabIndex}>
-                                        <RangeRule min={0.9} message={this.t("validPriceFloat")}/>
-                                    </Validator>
-                                </NdNumberBox>
-                            </NdItem>
-                            <NdItem>
-                                <div className='row'>
-                                    <div className='col-6'>
-                                    </div>
-                                    <div className='col-6'>
-                                        <NdButton text={this.t("btnPopAdd")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmAdvance" + this.tabIndex}
-                                        onClick={async (e)=>
-                                        {
-                                            if(e.validationGroup.validate().status == "valid")
-                                            {  
-                                                if(this.txtPopAdvance.value == 0)
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgZeroQuantity',showTitle:true,title:this.t("msgZeroQuantity.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                        button:[{id:"btn01",caption:this.t("msgZeroQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgZeroQuantity.btn02"),location:'after'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgZeroQuantity.msg")}</div>)
-                                                    }
-                                                    
-                                                    let pResult = await dialog(tmpConfObj);
-                                                    if(pResult == 'btn01')
-                                                    {
-                                                        return
-                                                    }
-                                                }
-                                                else if(this.txtPopAdvance.value > 1000)
-                                                {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgBigAmount',showTitle:true,title:this.t("msgBigAmount.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                        button:[{id:"btn01",caption:this.t("msgBigAmount.btn01"),location:'before'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgBigAmount.msg")}</div>)
-                                                    }
-                                                    
-                                                    let pResult = await dialog(tmpConfObj);
-                                                    if(pResult == 'btn01')
-                                                    {
-                                                        return
-                                                    }
-                                                }
-                                                let tmpQuery = 
-                                                {
-                                                    query : "SELECT GUID FROM SAFE_VW_01 WHERE CODE = @INPUT_CODE",
-                                                    param : ['INPUT_CODE:string|50'],
-                                                    value : [this.cmbSafe.value]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                let tmpSafe = tmpData.result.recordset[0].GUID
-                                            
-                                                if(this.docObj.dt().length == 0)
-                                                {
-                                                    this.docObj.addEmpty()
-                                                    this.docObj.dt()[0].TYPE = 2
-                                                    this.docObj.dt()[0].DOC_TYPE = 201
-                                                    this.docObj.dt()[0].REF = 'POS'
-                                                    this.docObj.dt()[0].REF_NO = Math.floor(Date.now() / 1000)
-                                                    this.docObj.dt()[0].DOC_DATE = this.dtDocDate.value
-                                                    this.docObj.dt()[0].INPUT = tmpSafe
-                                                    this.docObj.dt()[0].OUTPUT = '00000000-0000-0000-0000-000000000000'
-                                                    this.docObj.dt()[0].AMOUNT =  Number(this.txtAdvance.value + this.txtCash.value).round(2)
-                                                    this.docObj.dt()[0].TOTAL = Number(this.txtAdvance.value + this.txtCash.value).round(2)
-                                                }
-                                                
-                                                this.docObj.docCustomer.addEmpty()
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].TYPE = 2
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_GUID = this.docObj.dt()[0].GUID
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_TYPE = 201
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DOC_DATE = this.dtDocDate.value
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF = 'POS'
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].REF_NO = this.docObj.dt()[0].REF_NO
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT = tmpSafe
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].INPUT_NAME =  this.cmbSafe.displayValue
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].OUTPUT = '00000000-0000-0000-0000-000000000000'
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].PAY_TYPE = 20
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].AMOUNT = Number(this.txtCash.value).round(2)
-                                                this.docObj.docCustomer.dt()[this.docObj.docCustomer.dt().length-1].DESCRIPTION = ''
-                                                
-                                                this.safeTransfer()
-                                                this.popAdvance.hide()
-                                                this.popFinish.hide()
-                                            }
-                                        }}/>
-                                    </div>
-                                </div>
-                            </NdItem>
-                        </NdForm>
-                    </NdPopUp>
-                </div>  
-                {/* Detay Popup */}
-                <div>
-                    <NdPopUp parent={this} id={"popDetail"} 
-                    visible={false}                        
-                    showCloseButton={true}
-                    showTitle={true}
-                    title={this.t("popDetail.title")}
-                    container={'#' + this.props.data.id + this.tabIndex} 
-                    width={'100%'}
-                    height={'100%'}
-                    position={{of:'#' + this.props.data.id + this.tabIndex}}
-                    >
-                        <div className="row">
-                            <div className="col-1 pe-0"></div>
-                            <div className="col-7 pe-0">
-                                {this.t("TicketId")} : {this.state.ticketId}
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-1 pe-0"></div>
-                            <div className="col-7 pe-0">
-                                <NdGrid id="grdSaleTicketItems" parent={this} 
-                                selection={{mode:"multiple"}} 
-                                showBorders={true}
-                                filterRow={{visible:true}} 
-                                headerFilter={{visible:true}}
-                                columnAutoWidth={true}
-                                allowColumnReordering={true}
-                                allowColumnResizing={true}
-                                >                            
-                                    <Paging defaultPageSize={20} />
-                                    <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                    <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
-                                    <Column dataField="BARCODE" caption={this.t("grdSaleTicketItems.clmBarcode")} visible={true} width={150}/> 
-                                    <Column dataField="ITEM_NAME" caption={this.t("grdSaleTicketItems.clmName")} visible={true} width={250}/> 
-                                    <Column dataField="QUANTITY" caption={this.t("grdSaleTicketItems.clmQuantity")} visible={true} width={100}/> 
-                                    <Column dataField="PRICE" caption={this.t("grdSaleTicketItems.clmPrice")} visible={true} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
-                                    <Column dataField="TOTAL" caption={this.t("grdSaleTicketItems.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
-                                </NdGrid>
-                            </div>
-                            <div className="col-3 ps-0">
-                                <NdGrid id="grdSaleTicketPays" parent={this} 
-                                selection={{mode:"multiple"}} 
-                                showBorders={true}
-                                filterRow={{visible:true}} 
-                                headerFilter={{visible:true}}
-                                columnAutoWidth={true}
-                                allowColumnReordering={true}
-                                allowColumnResizing={true}
-                                onRowClick={async(e)=>
-                                {
-                                    if(this.lastPosPayDt.length > 0)
-                                    {
-                                        this.rbtnTotalPayType.value = 0
-                                        this.lastPayRest.value = this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT') < 0 ? 0 : Number(this.lastPosSaleDt[0].GRAND_TOTAL - this.lastPosPayDt.sum('AMOUNT'))
-                                        this.txtPopLastTotal.value = this.lastPosSaleDt[0].GRAND_TOTAL;
-                                        this.popLastTotal.show()
-
-                                        //HER EKLEME İŞLEMİNDEN SONRA İLK SATIR SEÇİLİYOR.
-                                        setTimeout(() => 
-                                        {
-                                            this.grdLastTotalPay.devGrid.selectRowsByIndexes(0)
-                                        }, 100);
-                                    }
-                                }}
-                                >
-                                    <Paging defaultPageSize={20} />
-                                    <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                    <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
-                                    <Column dataField="PAY_TYPE_NAME" caption={this.t("grdSaleTicketPays.clmPayName")} visible={true} width={155}/> 
-                                    <Column dataField="LINE_TOTAL" caption={this.t("grdSaleTicketPays.clmTotal")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}}  width={150}/> 
-                                </NdGrid>
-                            </div>
-                        </div>
-                    </NdPopUp>
-                    <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
-                </div>
+                </ScrollView>
             </div>
         )
     }

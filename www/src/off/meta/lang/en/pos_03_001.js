@@ -22,6 +22,7 @@ const pos_03_001 =
     txtReal : "Correct",
     payTransfer : "Transfer Amounts",
     validPriceFloat : "Advance must be greater than 0",
+    msgSafeNotFound : "Safe not found, please check the safe.",
     popFinish : 
     {
         title :"Result"
