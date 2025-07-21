@@ -984,10 +984,10 @@ export default class endOfDay extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popOpenTike.title")}
-                    container={'#' + this.props.data.id + this.tabIndex} 
+                    container={'#root'} 
                     width={'900'}
-                    height={'500'}
-                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    height={'auto'}
+                    position={{of:'#root'}}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -1025,10 +1025,10 @@ export default class endOfDay extends React.PureComponent
                     visible={false}
                     showTitle={true}
                     title={this.t("popAdvance.title")}
-                    container={'#' + this.props.data.id + this.tabIndex} 
+                    container={'#root'} 
                     width={'450'}
                     height={'250'}
-                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    position={{of:'#root'}}
                     >
                         <NdForm colCount={1} height={'fit-content'} id={"frmAdvances"}>
                             <NdItem>
@@ -1141,10 +1141,10 @@ export default class endOfDay extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popDetail.title")}
-                    container={'#' + this.props.data.id + this.tabIndex} 
+                    container={'#root'} 
                     width={'100%'}
                     height={'100%'}
-                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    position={{of:'#root'}}
                     >
                         <div className="row">
                             <div className="col-1 pe-0"></div>
