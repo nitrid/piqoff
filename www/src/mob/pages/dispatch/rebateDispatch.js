@@ -1383,7 +1383,7 @@ export default class rebateDispatch extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
                                                     content: this.createStyledDialog('error', this.t("msgDiscountPercent.title"), this.t("msgDiscountPercent.msg"), 'fa-solid fa-percent')
                                                 }

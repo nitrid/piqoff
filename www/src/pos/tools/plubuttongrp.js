@@ -425,7 +425,7 @@ export default class NbPluButtonGrp extends NbBase
                         title:this.lang.t("nbPluButtonGrp.msgRef.title"),
                         showCloseButton:true,
                         width:'500px',
-                        height:'200px',
+                        height:'auto',
                         button:[{id:"btn01",caption:this.lang.t("nbPluButtonGrp.msgRef.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("nbPluButtonGrp.msgRef.btn02"),location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("nbPluButtonGrp.msgRef.msg")}</div>)
                     }
@@ -463,7 +463,7 @@ export default class NbPluButtonGrp extends NbBase
                         title:this.lang.t("nbPluButtonGrp.msgRef.title"),
                         showCloseButton:true,
                         width:'500px',
-                        height:'200px',
+                        height:'auto',
                         button:[{id:"btn01",caption:this.lang.t("nbPluButtonGrp.msgRef.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("nbPluButtonGrp.msgRef.btn02"),location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("nbPluButtonGrp.msgRef.msg")}</div>)
                     }
@@ -516,7 +516,7 @@ export default class NbPluButtonGrp extends NbBase
                         title:this.lang.t("nbPluButtonGrp.msgRef.title"),
                         showCloseButton:true,
                         width:'500px',
-                        height:'200px',
+                        height:'auto',
                         button:[{id:"btn01",caption:this.lang.t("nbPluButtonGrp.msgRef.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("nbPluButtonGrp.msgRef.btn02"),location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("nbPluButtonGrp.msgRef.msg")}</div>)
                     }

@@ -256,7 +256,7 @@ export default class NdDocAi extends Base
         {
             let tmpConfObj =
             {
-                id:'msgCustomerNotFound',showTitle:true,title:this.lang.t("popDocAi.msgCustomerNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgCustomerNotFound',showTitle:true,title:this.lang.t("popDocAi.msgCustomerNotFound.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.lang.t("popDocAi.msgCustomerNotFound.btn01"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popDocAi.msgCustomerNotFound.msg")}</div>)
             }
