@@ -189,7 +189,7 @@ export default class Navigation extends React.PureComponent
         {
             let tmpConfObj =
             {
-                id:'msgPageSelect',showTitle:true,title:this.lang.t("msgPageSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgPageSelect',showTitle:true,title:this.lang.t("msgPageSelect.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.lang.t("msgPageSelect.btn01"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPageSelect.msg")}</div>)
             }

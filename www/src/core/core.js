@@ -2071,8 +2071,10 @@ export class access extends datatable
             }
             
             // EMPTY parametresi metası olmayan kayıtların meta datalarını oluşturmak istenildiğinde kullanılır.
+            // Ama sadece gerçekten gerekli olduğunda (yeni bir component ilk defa yüklendiğinde)
             if(tmpMeta.length == 0 && tmpData.length == 0 && typeof arguments[0].ELEMENT != 'undefined' && typeof arguments[0].PAGE != 'undefined' && typeof arguments[0].APP != 'undefined')
             {
+               // Sadece meta oluştur, data ekleme 
                tmpMeta = [
                {
                 TYPE : 2,
@@ -2092,10 +2094,9 @@ export class access extends datatable
         }
         return this;
     }
-    async getValue()
+    getValue()
     {
-        return new Promise(async resolve => 
-        {
+       
             // DB İÇERİSİNDEKİ PARAMETRE DEĞERİ GERİ DÖNDÜRÜLÜYOR.
             if(this.length > 0)
             {
@@ -2105,11 +2106,11 @@ export class access extends datatable
                     // return JSON.parse(JSON.stringify(this[0].VALUE))
                     try
                     {
-                        resolve(JSON.parse(this[0].VALUE))
+                        return JSON.parse(this[0].VALUE)
                     }
                     catch(ex)
                     {
-                        resolve(this[0].VALUE)
+                        return this[0].VALUE
                     }
                 }
                 // EĞER PARAMETRE GELMİŞ İSE VE GELEN VERİ NUMBER İSE VERİLEN SATIR I DÖNDÜR.
@@ -2118,7 +2119,7 @@ export class access extends datatable
                     try 
                     {
                         //  return JSON.parse(JSON.stringify(this[arguments[0]].VALUE))
-                        resolve(JSON.parse(this[arguments[0]].VALUE))
+                        return JSON.parse(this[arguments[0]].VALUE)
 
                     } catch (error) 
                     {
@@ -2129,10 +2130,9 @@ export class access extends datatable
             // DB İÇERİSİNDE KAYIT YOKSA META İÇERİSİNDEKİ DEĞER DÖNDÜRÜLÜYOR.
             else if(this.length == 0 && this.meta != null && this.meta.length > 0 && typeof this.meta[0].VALUE != 'undefined')
             {               
-                resolve(JSON.parse(JSON.stringify(this.meta[0].VALUE)))
-            }
-                resolve(undefined);
-            });
+            return JSON.parse(JSON.stringify(this.meta[0].VALUE))
+        }
+        return undefined;
     }
     async setValue()
     {
@@ -2158,11 +2158,24 @@ export class access extends datatable
         {
             if(this.meta && this.meta.length > 0)
             {
-                let tmpData = {...this.meta[0]}
-                tmpData.VALUE = typeof arguments[0] == 'object' ? JSON.stringify(arguments[0]) : arguments[0];
-                tmpData.GUID = datatable.uuidv4();
-                this.push(tmpData);
-                this.save()
+                // Database'den güncel veriyi çek - belki başka yerden eklenmiştir
+                await this.load(this.meta[0]);
+                
+                // Yeniden kontrol et, database'de kayıt var mı?
+                if(this.length == 0)
+                {
+                    let tmpData = {...this.meta[0]}
+                    tmpData.VALUE = typeof arguments[0] == 'object' ? JSON.stringify(arguments[0]) : arguments[0];
+                    tmpData.GUID = datatable.uuidv4();
+                    this.push(tmpData);
+                    // Sadece gerçekten yeni kayıt eklendiğinde save et
+                    await this.save();
+                }
+                else
+                {
+                    // Kayıt varsa sadece değerini güncelle (save etme!)
+                    this[0].VALUE = typeof arguments[0] == 'object' ? JSON.stringify(arguments[0]) : arguments[0];
+                }
             }
         }
         

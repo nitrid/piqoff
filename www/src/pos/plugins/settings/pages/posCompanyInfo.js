@@ -72,7 +72,7 @@ export default class posCompanyInfo extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgSave',showTitle:true,title:this.lang.t("posCompanyInfo.msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgSave',showTitle:true,title:this.lang.t("posCompanyInfo.msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("posCompanyInfo.msgSave.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("posCompanyInfo.msgSave.btn02"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posCompanyInfo.msgSave.msg")}</div>)
                                                 }
@@ -82,7 +82,7 @@ export default class posCompanyInfo extends React.PureComponent
                                                 {
                                                     let tmpConfObj1 =
                                                     {
-                                                        id:'msgSaveResult',showTitle:true,title:this.lang.t("posCompanyInfo.msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        id:'msgSaveResult',showTitle:true,title:this.lang.t("posCompanyInfo.msgSaveResult.title"),showCloseButton:true,width:'500px',height:'auto',
                                                         button:[{id:"btn01",caption:this.lang.t("posCompanyInfo.msgSaveResult.btn01"),location:'after'}],
                                                     }
                                                     if((await this.companyObj.save()) == 0)
@@ -112,7 +112,7 @@ export default class posCompanyInfo extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgSaveValid',showTitle:true,title:this.lang.t("posCompanyInfo.msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgSaveValid',showTitle:true,title:this.lang.t("posCompanyInfo.msgSaveValid.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("posCompanyInfo.msgSaveValid.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posCompanyInfo.msgSaveValid.msg")}</div>)
                                                 }
@@ -132,7 +132,7 @@ export default class posCompanyInfo extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }

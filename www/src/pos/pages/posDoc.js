@@ -401,7 +401,7 @@ export default class posDoc extends React.PureComponent
             {
                 let tmpConfObj =
                 {
-                    id:'msgDeviceLoadFailed',showTitle:true,title:this.lang.t("msgDeviceLoadFailed.title"),showCloseButton:true,width:'400px',height:'200px',
+                    id:'msgDeviceLoadFailed',showTitle:true,title:this.lang.t("msgDeviceLoadFailed.title"),showCloseButton:true,width:'400px',height:'auto',
                     button:[{id:"btn01",caption:this.lang.t("msgDeviceLoadFailed.btn01"),location:'before'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeviceLoadFailed.msg")}</div>)
                 }
@@ -4180,7 +4180,7 @@ export default class posDoc extends React.PureComponent
                                             else
                                             {
                                                 let tmpAcsVal = this.acsObj.filter({ID:'btnPluEdit',USERS:this.user.CODE})
-                                                
+
                                                 if(typeof tmpAcsVal.getValue().dialog != 'undefined' && tmpAcsVal.getValue().dialog.type != -1)
                                                 {   
                                                     let tmpResult = await acsDialog({id:"AcsDialog",parent:this,type:tmpAcsVal.getValue().dialog.type})
@@ -5139,7 +5139,7 @@ export default class posDoc extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgDeleteLineSelect',showTitle:true,title:this.lang.t("msgDeleteLineSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgDeleteLineSelect',showTitle:true,title:this.lang.t("msgDeleteLineSelect.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("msgDeleteLineSelect.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgDeleteLineSelect.msg")}</div>)
                                             }

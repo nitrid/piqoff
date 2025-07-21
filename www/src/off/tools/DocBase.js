@@ -353,7 +353,7 @@ export default class DocBase extends React.PureComponent
             {
                 let tmpConfObj =
                 {
-                    id:'msgDuplicateItems',showTitle:true,title:this.t("msgDuplicateItems.title"),showCloseButton:true,width:'500px',height:'200px',
+                    id:'msgDuplicateItems',showTitle:true,title:this.t("msgDuplicateItems.title"),showCloseButton:true,width:'500px',height:'auto',
                     button:[{id:"btn01",caption:this.t("msgDuplicateItems.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDuplicateItems.msg") + " " + duplicateItems.join(", ")}</div>)
                 }
@@ -518,7 +518,7 @@ export default class DocBase extends React.PureComponent
                         title:this.t("msgCode.title"),
                         showCloseButton:true,
                         width:'500px',
-                        height:'200px',
+                        height:'auto',
                         button:[{id:"btn01",caption:this.t("msgCode.btn01"),location:'before'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCode.msg")}</div>)
                     }
@@ -1011,7 +1011,7 @@ export default class DocBase extends React.PureComponent
                 {
                     let tmpConfObj =
                     {
-                        id:'msgCheckDocNo',showTitle:true,title:this.lang.t("msgCheckDocNo.title"),showCloseButton:true,width:'500px',height:'200px',
+                        id:'msgCheckDocNo',showTitle:true,title:this.lang.t("msgCheckDocNo.title"),showCloseButton:true,width:'500px',height:'auto',
                         button:[{id:"btn01",caption:this.lang.t("msgCheckDocNo.btn01"),location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCheckDocNo.msg")}</div>)
                     }
@@ -1029,7 +1029,7 @@ export default class DocBase extends React.PureComponent
         }
         let tmpConfObj1 =
         {
-            id:'msgPriceListChange',showTitle:true,title:this.lang.t("msgPriceListChange.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgPriceListChange',showTitle:true,title:this.lang.t("msgPriceListChange.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.lang.t("msgPriceListChange.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPriceListChange.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.lang.t("msgPriceListChange.msg")}</div>)
         }
@@ -1918,7 +1918,7 @@ export default class DocBase extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgPasswordWrong',showTitle:true,title:this.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgPasswordWrong',showTitle:true,title:this.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgPasswordWrong.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPasswordWrong.msg")}</div>)
                                                 }
@@ -2208,7 +2208,7 @@ export default class DocBase extends React.PureComponent
                                         {       
                                             let tmpConfObj =
                                             {
-                                                id:'msgVatDelete',showTitle:true,title:this.t("msgVatDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgVatDelete',showTitle:true,title:this.t("msgVatDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgVatDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgVatDelete.msg")}</div>)
                                             }
@@ -2245,7 +2245,7 @@ export default class DocBase extends React.PureComponent
                                         {       
                                             let tmpConfObj =
                                             {
-                                                id:'msgVatCalculate',showTitle:true,title:this.lang.t("msgVatCalculate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgVatCalculate',showTitle:true,title:this.lang.t("msgVatCalculate.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("msgVatCalculate.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgVatCalculate.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgVatCalculate.msg")}</div>)
                                             }

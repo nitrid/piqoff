@@ -165,7 +165,7 @@ export default class posItemsList extends React.PureComponent
         {
             let tmpConfObj =
             {
-                id:"msgItemValidation",showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgItemValidation.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:"msgItemValidation",showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgItemValidation.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgItemValidation.btn01"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.msgItemValidation." + tmpMsgType)}</div>)
             }
@@ -181,7 +181,7 @@ export default class posItemsList extends React.PureComponent
             {
                 let tmpConfObj =
                 {
-                    id:'msgPriceSave',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgPriceSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                    id:'msgPriceSave',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgPriceSave.title"),showCloseButton:true,width:'500px',height:'auto',
                     button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgPriceSave.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.msgPriceSave.msg")}</div>)
                 }
@@ -192,7 +192,7 @@ export default class posItemsList extends React.PureComponent
         //************************************ */
         let tmpConfObj =
         {
-            id:'msgSave',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgSave',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgSave.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("posItemsList.popItemEdit.msgSave.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.msgSave.msg")}</div>)
         }
@@ -203,7 +203,7 @@ export default class posItemsList extends React.PureComponent
         {
             let tmpConfObj1 =
             {
-                id:'msgSaveResult',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgSaveResult',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgSaveResult.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgSaveResult.btn01"),location:'after'}],
             }
 
@@ -237,7 +237,7 @@ export default class posItemsList extends React.PureComponent
         {
             let tmpConfObj =
             {
-                id:'msgNotDelete',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgNotDelete',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgNotDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgNotDelete.btn01"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.msgNotDelete.msg")}</div>)
             }
@@ -247,7 +247,7 @@ export default class posItemsList extends React.PureComponent
 
         let tmpConfObj =
         {
-            id:'msgDelete',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgDelete',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("posItemsList.popItemEdit.msgDelete.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.msgDelete.msg")}</div>)
         }
@@ -309,7 +309,7 @@ export default class posItemsList extends React.PureComponent
                                 {
                                     let tmpConfObj =
                                     {
-                                        id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                        id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                         button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                     }
@@ -438,7 +438,7 @@ export default class posItemsList extends React.PureComponent
                                 {
                                     let tmpConfObj =
                                     {
-                                        id:'msgNewItem',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgNewItem.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        id:'msgNewItem',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgNewItem.title"),showCloseButton:true,width:'500px',height:'auto',
                                         button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgNewItem.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("posItemsList.popItemEdit.msgNewItem.btn02"),location:'after'}],
                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.msgNewItem.msg")}</div>)
                                     }
@@ -523,7 +523,7 @@ export default class posItemsList extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgItemExist',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgItemExist.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgItemExist',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.msgItemExist.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.msgItemExist.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("posItemsList.popItemEdit.msgItemExist.btn02"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.msgItemExist.msg")}</div>)
                                                 }
@@ -858,7 +858,7 @@ export default class posItemsList extends React.PureComponent
                                                                     {
                                                                         let tmpConfObj =
                                                                         {
-                                                                            id:'msgUnitRowNotDelete',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitRowNotDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                                            id:'msgUnitRowNotDelete',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitRowNotDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                                                             button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitRowNotDelete.btn01"),location:'after'}],
                                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitRowNotDelete.msg")}</div>)
                                                                         }                                                                    
@@ -899,7 +899,7 @@ export default class posItemsList extends React.PureComponent
                                                     {
                                                         let tmpConfObj =
                                                         {
-                                                            id:'msgUnitRowNotEdit',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitRowNotEdit.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            id:'msgUnitRowNotEdit',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitRowNotEdit.title"),showCloseButton:true,width:'500px',height:'auto',
                                                             button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitRowNotEdit.btn01"),location:'after'}],
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitRowNotEdit.msg")}</div>)
                                                         }                                                                    
@@ -1105,7 +1105,7 @@ export default class posItemsList extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgPriceQuantityEmpty',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceQuantityEmpty.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgPriceQuantityEmpty',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceQuantityEmpty.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceQuantityEmpty.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceQuantityEmpty.msg")}</div>)
                                                 }
@@ -1116,7 +1116,7 @@ export default class posItemsList extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgPriceQuantityNotNumber',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceQuantityNotNumber.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgPriceQuantityNotNumber',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceQuantityNotNumber.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceQuantityNotNumber.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceQuantityNotNumber.msg")}</div>)
                                                 }
@@ -1127,7 +1127,7 @@ export default class posItemsList extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgPriceEmpty',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceEmpty.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgPriceEmpty',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceEmpty.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceEmpty.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceEmpty.msg")}</div>)
                                                 }
@@ -1138,7 +1138,7 @@ export default class posItemsList extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgPriceNotNumber',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceNotNumber.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgPriceNotNumber',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceNotNumber.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceNotNumber.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popPrice.msgPriceNotNumber.msg")}</div>)
                                                 }
@@ -1151,7 +1151,7 @@ export default class posItemsList extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgCostPriceValid',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgCostPriceValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgCostPriceValid',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgCostPriceValid.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popPrice.msgCostPriceValid.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popPrice.msgCostPriceValid.msg")}</div>)
                                                 }
@@ -1176,7 +1176,7 @@ export default class posItemsList extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgCheckPrice',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgCheckPrice.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgCheckPrice',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popPrice.msgCheckPrice.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popPrice.msgCheckPrice.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popPrice.msgCheckPrice.msg")}</div>)
                                                 }
@@ -1294,7 +1294,7 @@ export default class posItemsList extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgUnitFactorEmpty',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitFactorEmpty.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgUnitFactorEmpty',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitFactorEmpty.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitFactorEmpty.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitFactorEmpty.msg")}</div>)
                                                 }
@@ -1306,7 +1306,7 @@ export default class posItemsList extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgUnitFactorNotNumber',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitFactorNotNumber.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgUnitFactorNotNumber',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitFactorNotNumber.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitFactorNotNumber.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popUnit.msgUnitFactorNotNumber.msg")}</div>)
                                                 }
@@ -1450,7 +1450,7 @@ export default class posItemsList extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgBarcodeEmpty',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popBarcode.msgBarcodeEmpty.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgBarcodeEmpty',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popBarcode.msgBarcodeEmpty.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popBarcode.msgBarcodeEmpty.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popBarcode.msgBarcodeEmpty.msg")}</div>)
                                                 }
@@ -1471,7 +1471,7 @@ export default class posItemsList extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgBarcodeExist',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popBarcode.msgBarcodeExist.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgBarcodeExist',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popBarcode.msgBarcodeExist.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popBarcode.msgBarcodeExist.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popBarcode.msgBarcodeExist.msg")}</div>)
                                                 }
@@ -1613,7 +1613,7 @@ export default class posItemsList extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgAddItemGrpEmpty',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.msgAddItemGrpEmpty.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgAddItemGrpEmpty',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.msgAddItemGrpEmpty.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.msgAddItemGrpEmpty.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popAddItemGrp.msgAddItemGrpEmpty.msg")}</div>)
                                                 }
@@ -1628,7 +1628,7 @@ export default class posItemsList extends React.PureComponent
                                             {
                                                 let tmpConfObj = 
                                                 {
-                                                    id:'msgAddItemGrpExist',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.msgAddItemGrpExist.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgAddItemGrpExist',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.msgAddItemGrpExist.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.msgAddItemGrpExist.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popAddItemGrp.msgAddItemGrpExist.msg")}</div>)
                                                 }
@@ -1708,7 +1708,7 @@ export default class posItemsList extends React.PureComponent
                                                     {
                                                         let tmpConfObj =
                                                         {
-                                                            id:'msgGrpDelete',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.grpListPopup.msgGrpDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                            id:'msgGrpDelete',showTitle:true,title:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.grpListPopup.msgGrpDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                                             button:[{id:"btn01",caption:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.grpListPopup.msgGrpDelete.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("posItemsList.popItemEdit.popAddItemGrp.grpListPopup.msgGrpDelete.btn02"),location:'after'}],
                                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posItemsList.popItemEdit.popAddItemGrp.grpListPopup.msgGrpDelete.msg")}</div>)
                                                         }

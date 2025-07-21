@@ -58,7 +58,7 @@ export default class posTicketEndDescription extends React.PureComponent
         
         let tmpConfObj =
         {
-            id:'msgSaveResult',showTitle:true,title:this.lang.t("posTicketEndDescription.msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgSaveResult',showTitle:true,title:this.lang.t("posTicketEndDescription.msgSaveResult.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.lang.t("posTicketEndDescription.msgSaveResult.btn01"),location:'before'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("posTicketEndDescription.msgSaveResult.msgSuccess")}</div>)
         }
@@ -118,7 +118,7 @@ export default class posTicketEndDescription extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }

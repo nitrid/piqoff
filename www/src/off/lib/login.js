@@ -267,7 +267,7 @@ export default class Login extends React.PureComponent
         {
             let tmpConfObj =
             {
-                id:'msgInvalidUser',showTitle:true,title:this.lang.t("msgInvalidUser"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgInvalidUser',showTitle:true,title:this.lang.t("msgInvalidUser"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.lang.t("btnOk"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgInvalidUser")}</div>)
             }

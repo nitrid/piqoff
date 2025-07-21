@@ -339,7 +339,7 @@ function renderDiscount()
                     {
                         let tmpConfObj =
                         {
-                            id:'msgRestDiscount',showTitle:true,title:this.lang.t("msgRestDiscount.title"),showCloseButton:true,width:'500px',height:'200px',
+                            id:'msgRestDiscount',showTitle:true,title:this.lang.t("msgRestDiscount.title"),showCloseButton:true,width:'500px',height:'auto',
                             button:[{id:"btn01",caption:this.lang.t("msgRestDiscount.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgRestDiscount.btn02"),location:'after'}],
                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgRestDiscount.msg")}</div>)
                         }
@@ -614,7 +614,7 @@ function renderTables()
                                 {
                                     let tmpConfObj =
                                     {
-                                        id:'msgTableEmptyAlert',showTitle:true,title:this.lang.t("msgTableEmptyAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        id:'msgTableEmptyAlert',showTitle:true,title:this.lang.t("msgTableEmptyAlert.title"),showCloseButton:true,width:'500px',height:'auto',
                                         button:[{id:"btn01",caption:this.lang.t("msgTableEmptyAlert.btn01"),location:'after'}],
                                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgTableEmptyAlert.msg")}</div>)
                                     }

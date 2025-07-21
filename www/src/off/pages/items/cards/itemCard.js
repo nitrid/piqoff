@@ -40,19 +40,6 @@ export default class itemCard extends React.PureComponent
             isItemGrpForMinMaxAccess : false,
             isTaxSugar : false,
             isPromotion : false,
-            // SuperSonic Analytics States
-            chartMode: 'quantity',
-            quantityChartData: null,
-            priceChartData: null,
-            stockChartData: null,
-            linearRegressionData: null,
-            monteCarloPredictionData: null,
-            stockPredictionData: null,
-            totalSalesStats: null,
-            azurePricePrediction: null,
-            reorderRecommendation: null,
-            dataSource: null,
-
         }
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
@@ -1043,20 +1030,6 @@ export default class itemCard extends React.PureComponent
                                             this.itemsObj.dt('ITEMS').removeAt(0)
                                             await this.itemsObj.dt('ITEMS').delete();
                                             this.init(); 
-                                        }
-                                    }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSuperSonic" parent={this} icon="chart" type="info" text="🚀 Analytics"
-                                    onClick={async()=>
-                                    {
-                                        if(this.txtRef.value && this.txtRef.value.trim() !== '')
-                                        {
-                                            await this.popSuperSonicAnalytics.show();
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:"Lütfen önce bir ürün seçin!",type:'warning'})
                                         }
                                     }}/>
                                 </Item>
@@ -3557,6 +3530,7 @@ export default class itemCard extends React.PureComponent
                             </NdForm>
                         </NdPopUp>
                     </div>
+<<<<<<< HEAD
                     {/* SuperSonic Analytics Popup */}
                     <div>
                         <NdPopUp parent={this} id={"popSuperSonicAnalytics"} 
@@ -3990,6 +3964,8 @@ export default class itemCard extends React.PureComponent
                     </NdPopUp>
                     
                     </div>
+=======
+>>>>>>> d0670a5158442d91130dee2429930e894e052e01
                     <div>
                         <NdAccessEdit id={"accesComp"} parent={this}/>
                     </div>                            
@@ -3998,6 +3974,7 @@ export default class itemCard extends React.PureComponent
             </div>
         )
     }
+<<<<<<< HEAD
 
     // SuperSonic Analytics Matematik Fonksiyonları
     async mathematicalPriceAnalysis() 
@@ -5358,4 +5335,6 @@ export default class itemCard extends React.PureComponent
             return defaultPrediction;
         }
     }
+=======
+>>>>>>> d0670a5158442d91130dee2429930e894e052e01
 }

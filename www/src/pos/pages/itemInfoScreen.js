@@ -131,7 +131,7 @@ export default class itemInfoScreen extends React.PureComponent
                     title:this.lang.t("msgBarcodeNotFound.title"),
                     showCloseButton:true,
                     width:'500px',
-                    height:'200px',
+                    height:'auto',
                     button:[{id:"btn01",caption:this.lang.t("msgBarcodeNotFound.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeNotFound.msg")}</div>)
                 }

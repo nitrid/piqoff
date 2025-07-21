@@ -273,7 +273,7 @@ export default class App extends React.PureComponent
             {
                 let tmpConfObj =
                 {
-                    id:'msgAnotherUserAlert',showTitle:true,title:this.lang.t("msgAnotherUserAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                    id:'msgAnotherUserAlert',showTitle:true,title:this.lang.t("msgAnotherUserAlert.title"),showCloseButton:true,width:'500px',height:'auto',
                     button:[{id:"btn01",caption:this.lang.t("msgAnotherUserAlert.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgAnotherUserAlert.msg")}</div>)
                 }
@@ -438,7 +438,7 @@ export default class App extends React.PureComponent
         this.setState({isExecute:false})
         let tmpConfObj =
         {
-            id:'msgisExecuteClose',showTitle:true,title:this.lang.t("msgisExecuteClose.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgisExecuteClose',showTitle:true,title:this.lang.t("msgisExecuteClose.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.lang.t("msgisExecuteClose.btn01"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgisExecuteClose.msg")}</div>)
         }
@@ -644,7 +644,7 @@ export default class App extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgPasswordWrong',showTitle:true,title:this.lang.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgPasswordWrong',showTitle:true,title:this.lang.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("msgPasswordWrong.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPasswordWrong.msg")}</div>)
                                                 }
@@ -706,7 +706,7 @@ export default class App extends React.PureComponent
                                                 await this.core.sql.execute(tmpQuery) 
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgPassChange',showTitle:true,title:this.lang.t("msgPassChange.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgPassChange',showTitle:true,title:this.lang.t("msgPassChange.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("msgPassChange.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPassChange.msg")}</div>)
                                                 }
@@ -718,7 +718,7 @@ export default class App extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgPasswordWrong',showTitle:true,title:this.lang.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgPasswordWrong',showTitle:true,title:this.lang.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("msgPasswordWrong.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPasswordWrong.msg")}</div>)
                                                 }

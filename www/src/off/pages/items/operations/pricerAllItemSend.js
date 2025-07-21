@@ -34,7 +34,7 @@ export default class priceAllItemSend extends React.PureComponent
         this.core.socket.emit('priceAllItemSend')
         let tmpConfObj1 =
         {
-            id:'msgItemSend',showTitle:true,title:this.t("msgItemSend.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgItemSend',showTitle:true,title:this.t("msgItemSend.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgItemSend.btn01"),location:'after'}],
         }
              
@@ -46,7 +46,7 @@ export default class priceAllItemSend extends React.PureComponent
         this.core.socket.emit('priceDateItemSend',[this.dtDate.startDate,this.dtDate.endDate])
         let tmpConfObj1 =
         {
-            id:'msgItemSend',showTitle:true,title:this.t("msgItemSend.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgItemSend',showTitle:true,title:this.t("msgItemSend.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgItemSend.btn01"),location:'after'}],
         }
              

@@ -187,7 +187,7 @@ export default class NbItemCard extends NbBase
                                             {
                                                 let confObj = 
                                                 {
-                                                    id:'msgWrongUnit',showTitle:true,title:this.t("msgWrongUnit.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgWrongUnit',showTitle:true,title:this.t("msgWrongUnit.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgWrongUnit.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgWrongUnit.msg")}</div>)
                                                 }
@@ -199,7 +199,7 @@ export default class NbItemCard extends NbBase
                                             {
                                                 let confObj = 
                                                 {
-                                                    id:'msgPriceZeroUnit',showTitle:true,title:this.t("msgPriceZeroUnit.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgPriceZeroUnit',showTitle:true,title:this.t("msgPriceZeroUnit.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgPriceZeroUnit.btn01"),location:'after'},
                                                             {id:"btn02",caption:this.t("msgPriceZeroUnit.btn02"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgPriceZeroUnit.msg")}</div>)
