@@ -54,7 +54,7 @@ const saleList_01 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Iptal",
-        msg: "Seçilen irsaliyeleri faturaya cevirmek istediğinizden eminmisiniz ? Fatura oluştukdan sonra değiştirilemez !!"         
+        msg: "Seçilen irsaliyeleri faturaya cevirmek istediğinizden emin misiniz ? Fatura oluştukdan sonra değiştirilemez !!"         
     },
     msgConvertSucces :
     {  

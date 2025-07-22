@@ -11,7 +11,7 @@ export const langTr =
     info : "Bilgi",
     btnYes : "Evet",
     btnNo : "Hayır",
-    msgClose : "Sayfayı Kapatmak İstediğinize Eminmisiniz ?",
+    msgClose : "Sayfayı Kapatmak İstediğinize Emin misiniz ?",
     txtLangSelect : "Dil Seçimi",
     userListTitle : "Kullanıcı Listesi",
     txtUser : "Kullanıcı",
@@ -108,7 +108,7 @@ export const langTr =
     msgPayCheck :
     {
         title : "Uyarı",
-        msg : "Ödemeyi aldığınızdan eminmisiniz ?",
+        msg : "Ödemeyi aldığınızdan emin misiniz ?",
         btn01 : "Tamam",
         btn02 : "İptal"
     },
@@ -244,14 +244,14 @@ export const langTr =
     msgLineDeleteConfirm: 
     {
         title : "Uyarı",
-        msg :"Satırı iptal etmek istediğinize eminmisiniz ?",
+        msg :"Satırı iptal etmek istediğinize emin misiniz ?",
         btn01 : "Tamam",
         btn02 : "İptal",
     },
     msgDocDeleteConfirm: 
     {
         title : "Uyarı",
-        msg : "Evrakı iptal etmek istediğinize eminmisiniz ?",
+        msg : "Evrakı iptal etmek istediğinize emin misiniz ?",
         btn01 : "Tamam",
         btn02 : "İptal",
     },
@@ -299,7 +299,7 @@ export const langTr =
     msgCancelCustomerConfirm: 
     {
         title : "Uyarı",
-        msg : "Seçili müşteriden çıkmak istediğinize eminmisiniz ?",
+        msg : "Seçili müşteriden çıkmak istediğinize emin misiniz ?",
         btn01 : "Tamam",
         btn02 : "İptal",
     },
@@ -353,7 +353,7 @@ export const langTr =
     msgLastSaleRetour:
     {
         title : "Dikkat",
-        msg : "İade almak istediğinizden eminmisiniz ?",
+        msg : "İade almak istediğinizden emin misiniz ?",
         btn01 : "Evet",
         btn02 : "Hayır",
     },
@@ -891,7 +891,7 @@ export const langTr =
     msgGetOrder : 
     {
         title : "Uyarı",
-        msg : "Bu sipariş daha önce pos ekranına çağırılmış devam etmek istediğinize eminmisiniz?",
+        msg : "Bu sipariş daha önce pos ekranına çağırılmış devam etmek istediğinize emin misiniz?",
         btn01 : "Evet",
         btn02 : "Hayır"
     },

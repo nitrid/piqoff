@@ -63,7 +63,7 @@ const stk_02_002 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kayıt etmek istediğinize eminmisiniz !"
+        msg: "Kayıt etmek istediğinize emin misiniz !"
     },
     msgSaveResult:
     {
@@ -83,7 +83,7 @@ const stk_02_002 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        msg: "Kaydı silmek istediğinize emin misiniz ?"
     },
     msgLocked:
     {

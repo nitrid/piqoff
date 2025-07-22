@@ -51,7 +51,7 @@ const stk_04_004 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Seçmiş olduğunuz ürün için daha önce özel etiket oluşturulmuş! Tekrar oluşturmak istediğinizden eminmisiniz?"
+        msg: "Seçmiş olduğunuz ürün için daha önce özel etiket oluşturulmuş! Tekrar oluşturmak istediğinizden emin misiniz?"
     },
     msgLabelCount:
     {

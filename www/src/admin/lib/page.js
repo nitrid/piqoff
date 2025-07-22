@@ -66,7 +66,7 @@ export default class Page extends React.PureComponent
           {
               id:'msgClose',showTitle:true,title:("Dikkat"),showCloseButton:true,width:'500px',height:'auto',
               button:[{id:"btn01",caption:("Evet"),location:'before'},{id:"btn02",caption:("Hayır"),location:'after'}],
-              content:(<div style={{textAlign:"center",fontSize:"20px"}}>{("Sayfayı Kapatmak İstediğinize Eminmisiniz?")}</div>)
+              content:(<div style={{textAlign:"center",fontSize:"20px"}}>{("Sayfayı Kapatmak İstediğinize Emin misiniz?")}</div>)
           }
           
           let pResult = await dialog(tmpConfObj);

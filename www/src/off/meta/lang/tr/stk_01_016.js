@@ -17,7 +17,7 @@ const stk_01_016 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kayıt etmek istediğinize eminmisiniz !"
+        msg: "Kayıt etmek istediğinize emin misiniz !"
     },
     msgSaveResult:
     {
@@ -37,7 +37,7 @@ const stk_01_016 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        msg: "Kaydı silmek istediğinize emin misiniz ?"
     },
     msgAddItemWarning:
     {
@@ -50,7 +50,7 @@ const stk_01_016 =
         title: "Dikkat",
         btn01: "Evet",
         btn02: "Vazgeç",
-        msg: "Yeni ürüne geçmek istediğinize eminmisiniz !"
+        msg: "Yeni ürüne geçmek istediğinize emin misiniz !"
     },
     msgItemNotFound:
     {
@@ -63,7 +63,7 @@ const stk_01_016 =
         title: "Dikkat",
         btn01: "Evet",
         btn02: "Vazgeç",
-        msg: "Ürünü tekrar getirmek istediğinize eminmisiniz !"
+        msg: "Ürünü tekrar getirmek istediğinize emin misiniz !"
     },
     validDate : "Tarih Seçmelisiniz",
     grdList : 
