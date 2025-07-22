@@ -276,6 +276,7 @@ export const langTr =
         amount: "Tutar",
         cash: "Nakit",
         card: "Kart",
+        check: "Çek",
         giftVoucher: "Hediye Çeki",
         giftCard: "Hediye Kartı",
         credit: "Kredi",

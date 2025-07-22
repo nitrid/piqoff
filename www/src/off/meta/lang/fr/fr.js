@@ -284,6 +284,7 @@ export const langFr =
         franc: "Franc",
         ticketRest: "Ticket rest",
         voucher: "Bon d'achat",
+        check: "Chèque",
         ticket: "Ticket"
     },
     hourlySalesChart: {

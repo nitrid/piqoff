@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import ReactWizard from 'react-bootstrap-wizard';
+import {Stepper , Item as StepperItem} from 'devextreme-react/stepper';
 
 import moment from 'moment';
 import { posEnddayCls } from '../../../../core/cls/pos.js';
@@ -38,53 +38,20 @@ export default class endOfDay extends React.PureComponent
         this.Advance = 0
         this.lastPosSaleDt = new datatable();
         this.lastPosPayDt = new datatable();
-        this.state={ticketId :""}
+        this.state={ticketId :"", currentStep: 0}
         this.tabIndex = props.data.tabkey
 
-        this.reactWizardRef = React.createRef();
-
         this.finishButtonClick = this.finishButtonClick.bind(this)
-        ReactWizard.defaultProps = 
-        {
-            validate: true,
-            previousButtonText: this.t("previous"),
-            finishButtonText: this.t("finish"),
-            nextButtonText: this.t("next"),
-            color: "primary",
-            progressbar: false
-        };
+
 
         this.steps = [
-        {
-            stepName: this.t("start"),
-            stepIcon: "tim-icons icon-single-02",
-            component: this.stepStart(),
-        },
-        {
-            stepName: this.t("advance"),
-            stepIcon: "tim-icons icon-settings-gear-63",
-            component: this.stepAdvance(),
-        },
-        {
-            stepName: this.t("cash"),
-            stepIcon: "tim-icons icon-delivery-fast",
-            component: this.stepCash()
-        }, 
-        {
-            stepName: this.t("debitCard"),
-            stepIcon: "tim-icons icon-settings-gear-63",
-            component: this.stepCreditCard()
-        },
-        {
-            stepName: this.t("check"),
-            stepIcon: "tim-icons icon-settings-gear-63",
-            component: this.stepCheck()
-        },
-        {
-            stepName: this.t("ticketRest"),
-            stepIcon: "tim-icons icon-settings-gear-63",
-            component: this.stepRestorant()
-        }];
+            { label: this.t("start"), component: this.stepStart() },
+            { label: this.t("advance"), component: this.stepAdvance() },
+            { label: this.t("cash"), component: this.stepCash() },
+            { label: this.t("debitCard"), component: this.stepCreditCard() },
+            { label: this.t("check"), component: this.stepCheck() },
+            { label: this.t("ticketRest"), component: this.stepRestorant() }
+        ];
 
 
         this.Cash = '';
@@ -101,8 +68,10 @@ export default class endOfDay extends React.PureComponent
         }
         this.paymentData = new datatable
 
-        this.state = {
+        this.state = 
+        {
             ticketId: "",
+            currentStep: 0
         }
     }
     async componentDidMount()
@@ -110,6 +79,7 @@ export default class endOfDay extends React.PureComponent
         await this.core.util.waitUntil(0)
         this.init();
     }
+
     async init()
     {
         this.dtDocDate.value = moment(new Date()).format("YYYY-MM-DD")
@@ -132,6 +102,7 @@ export default class endOfDay extends React.PureComponent
             this.popOpenTike.show()
         }
     }
+
     async btnGetDetail(pGuid)
     {
         this.lastPosSaleDt.selectCmd = 
@@ -150,6 +121,7 @@ export default class endOfDay extends React.PureComponent
             param : ['POS_GUID:string|50'],
             value : [pGuid]
         }
+
         this.lastPosPayDt.insertCmd = 
         {
             query : `EXEC [dbo].[PRD_POS_PAYMENT_INSERT] 
@@ -194,9 +166,11 @@ export default class endOfDay extends React.PureComponent
 
         this.popDetail.show()
     }
+
     async finishButtonClick()
     {
         this.message = this.txtAdvance.value.toLocaleString('en-IN', {style: 'currency',currency: 'eur', minimumFractionDigits: 2})
+        
         this.Advance = this.txtAdvance.value
         let tmpQuery = 
         {
@@ -335,25 +309,25 @@ export default class endOfDay extends React.PureComponent
                 <Item>
                     <Label text={this.t("dtDocDate")} alignment="right" />
                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
-                    onValueChanged={(async(e)=>
-                    {
-                        if(this.cmbSafe.value != '')
-                        {
-                            let tmpQuery = 
-                            {
-                                query : `SELECT ROUND((SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)),2) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN 
-                                        WHERE INPUT_CODE = @INPUT_CODE AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT`, 
-                                param : ['INPUT_CODE:string|50'],
-                                value : [this.cmbSafe.value]
-                            }
-                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                    // onValueChanged={(async(e)=>
+                    // {
+                    //     if(this.cmbSafe.value != '')
+                    //     {
+                    //         let tmpQuery = 
+                    //         {
+                    //             query : `SELECT ROUND((SUM(AMOUNT) - ISNULL((SELECT SUM(AMOUNT) FROM DOC_CUSTOMER_VW_01 AS DOCOUT WHERE DOCOUT.OUTPUT = DOCIN.INPUT AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20),0)),2) AS AMOUNT FROM DOC_CUSTOMER_VW_01 AS DOCIN 
+                    //                     WHERE INPUT_CODE = @INPUT_CODE AND TYPE = 2 AND DOC_TYPE = 201 AND PAY_TYPE = 20 GROUP BY INPUT`, 
+                    //             param : ['INPUT_CODE:string|50'],
+                    //             value : [this.cmbSafe.value]
+                    //         }
+                    //         let tmpData = await this.core.sql.execute(tmpQuery) 
                             
-                            if(tmpData.result.recordset.length > 0)
-                            {
-                                this.txtAdvance.value = tmpData.result.recordset[0].AMOUNT 
-                            }
-                        }
-                    }).bind(this)}
+                    //         if(tmpData.result.recordset.length > 0)
+                    //         {
+                    //             this.txtAdvance.value = tmpData.result.recordset[0].AMOUNT 
+                    //         }
+                    //     }
+                    // }).bind(this)}
                     />
                 </Item>
                 <Item>
@@ -380,7 +354,7 @@ export default class endOfDay extends React.PureComponent
 
                         if(tmpData.result.recordset.length > 0)
                         {
-                            this.txtAdvance.value = tmpData.result.recordset[0].AMOUNT 
+                            this.txtAdvance.value = tmpData.result.recordset[0].AMOUNT
                         }
                     }).bind(this)}
                     />
@@ -395,9 +369,13 @@ export default class endOfDay extends React.PureComponent
                 <EmptyItem/>
                 <Item>
                         <Label text={this.t("txtAdvance")} alignment="right" />
-                        <NdNumberBox id="txtAdvance" parent={this} simple={true} readOnly={true} 
-                        param={this.param.filter({ELEMENT:'txtAdvance',USERS:this.user.CODE})}
-                        access={this.access.filter({ELEMENT:'txtAdvance',USERS:this.user.CODE})}
+                        <NdNumberBox
+                        id={'txtAdvance'}
+                        parent={this}
+                        simple={true}
+                        readOnly={true}
+                        param={this.param ? this.param.filter({ELEMENT:'txtAdvance',USERS:this.user.CODE}) : undefined}
+                        access={this.access ? this.access.filter({ELEMENT:'txtAdvance',USERS:this.user.CODE}) : undefined}
                         />
                 </Item>
             </Form>
@@ -617,14 +595,14 @@ export default class endOfDay extends React.PureComponent
 
         this.docObj.dt()[0].AMOUNT = Number(this.txtAdvance.value + this.txtCash.value).round(2)
         this.docObj.dt()[0].TOTAL = Number(this.txtAdvance.value + this.txtCash.value).round(2)
-        console.log(this.docObj.dt()[0])
-        console.log(this.docObj.docCustomer.dt())
 
         let tmpSave = await this.docObj.save()
 
         if(tmpSave == 0)
         {
             this.toast.show({message:this.t("msgSucces.msg"),type:"success"})
+            // Kayıt başarılıysa stepper'ı ve formu en başa döndür
+            this.setState({ currentStep: 0 });
         }
         else
         {
@@ -636,16 +614,6 @@ export default class endOfDay extends React.PureComponent
             }
             await dialog(tmpConfObj);
         }
-        
-       
-        this.reactWizardRef.current.setState(
-        {
-            currentStep: 0,
-            nextButton: true,
-            previousButton: false,
-            finishButton: false,
-            width: "16.666666666666668%",
-        })
 
         this.txtCash.value = 0
         this.txtCreditCard.value = 0
@@ -677,6 +645,7 @@ export default class endOfDay extends React.PureComponent
                    this.txtAmountCash3.value + 
                    this.txtAmountCash4.value + 
                    this.txtAmountCash5.value;
+
         this.Cash = total;
         this.txtCash.value = total;
         this.txtAmountCashTotal.value = total;
@@ -689,9 +658,11 @@ export default class endOfDay extends React.PureComponent
                    this.txtAmountCreditCard3.value +
                    this.txtAmountCreditCard4.value +
                    this.txtAmountCreditCard5.value;
+
         let totalTicketCard = this.txtAmountTicketCard1.value +
                    this.txtAmountTicketCard2.value +
                    this.txtAmountTicketCard3.value;
+
         this.DebitCard = total;
         this.txtCreditCard.value = total + totalTicketCard;
         this.txtAmountCreditCardTotal.value = total + totalTicketCard;
@@ -706,8 +677,79 @@ export default class endOfDay extends React.PureComponent
                         <div className={"panel-body container-fluid"}>
                             <div className={'row'}>
                                 <div className={'col-12'}>
-                                <ReactWizard ref={this.reactWizardRef} color={"green"} steps={this.steps} progressbar={true} title={this.t("title")} finishButtonClick={this.finishButtonClick}>
-                                </ReactWizard>
+                                    {/* ReactWizard kaldırıldı, yerine Stepper eklendi */}
+                                    <Stepper
+                                    selectedIndex={this.state.currentStep}
+                                    onSelectionChanged={(e) => 
+                                    {
+                                        if (e.itemIndex === this.state.currentStep + 1 || e.itemIndex === this.state.currentStep - 1) 
+                                        {
+                                            this.setState({ currentStep: e.itemIndex });
+                                        } 
+                                        else if (e.itemIndex === 0 && this.state.currentStep !== 0) 
+                                        {
+                                            this.setState({ currentStep: 0 });
+                                        }
+                                    }}
+                                    linear={true}
+                                    orientation="horizontal"
+                                    >
+                                    {this.steps.map((step, idx) => (
+                                        <StepperItem key={idx} label={step.label} />
+                                    ))}
+                                    </Stepper>
+                                    <div style={{ marginTop: 24 }}>
+                                        {this.steps.map((step, idx) => 
+                                        (
+                                            <div
+                                            key={idx}
+                                            style={{display: this.state.currentStep === idx ? 'block' : 'none',idth: '100%'}}
+                                            >
+                                                {step.component}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="row mt-3">
+                                        <div className="col-4">
+                                            <button
+                                            className="btn btn-secondary btn-lg"
+                                            disabled={this.state.currentStep === 0}
+                                            onClick={() => this.setState({ currentStep: this.state.currentStep - 1 })}
+                                            >
+                                                {this.t("previous")}
+                                            </button>
+                                        </div>
+                                        <div className="col-4"></div>
+                                        <div className="col-4 text-end">
+                                            {this.state.currentStep < this.steps.length - 1 ? (
+                                                <button
+                                                    className="btn btn-primary btn-lg"
+                                                    onClick={() => 
+                                                    {
+                                                        if (this.state.currentStep === 0 && (!this.cmbSafe || !this.cmbSafe.value)) 
+                                                        {
+                                                            if (this.toast)
+                                                            {
+                                                                this.toast.show({message: this.t("msgSafeNotFound"), type: "error"});
+                                                            }
+                                                            
+                                                            return;
+                                                        }
+                                                        this.setState({ currentStep: this.state.currentStep + 1 });
+                                                    }}
+                                                >
+                                                    {this.t("next")}
+                                                </button>
+                                            ) : (
+                                                <button
+                                                className="btn btn-success btn-lg"
+                                                onClick={this.finishButtonClick}
+                                                >
+                                                    {this.t("finish")}
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -718,10 +760,10 @@ export default class endOfDay extends React.PureComponent
                             showCloseButton={true}
                             showTitle={true}
                             title={this.t("popTotalCash.title")}
-                            container={"#root"} 
+                            container={'#' + this.props.data.id + this.tabIndex} 
                             width={'500'}
                             height={'420'}
-                            position={{of:'#root'}}
+                            position={{of:'#' + this.props.data.id + this.tabIndex}}
                             deferRendering={false}
                             >
                                 <Form colCount={1} height={'fit-content'}>
@@ -731,7 +773,6 @@ export default class endOfDay extends React.PureComponent
                                         onValueChanged={(e)=>
                                         {
                                             this.saveTotalCash()
-                                            
                                         }}/>
                                     </Item>
                                     <Item>
@@ -982,6 +1023,7 @@ export default class endOfDay extends React.PureComponent
                                             onClick={async ()=>
                                             {       
                                                 this.popFinish.hide()
+                                                this.setState({ currentStep: 0 });
                                             }}/>
                                         </Item>
                                         <Item>
@@ -1073,14 +1115,7 @@ export default class endOfDay extends React.PureComponent
                                                     }
 
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                    
-                                                    if(tmpData.result.recordset.length == 0)
-                                                    {
-                                                        this.toast.show({message:this.t("msgSafeNotFound"), type:"error"})
-                                                        return
-                                                    }
-                                                    
-                                                    
+                     
                                                     let tmpSafe = tmpData.result.recordset[0].GUID
 
                                                     if(this.docObj.dt().length == 0)

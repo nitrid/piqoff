@@ -274,7 +274,8 @@ export const langDe =
         franc: "Frank",
         ticketRest: "Ticket-Rest",  
         voucher: "Geschenkkarte",
-        ticket: "Ticket"
+        ticket: "Ticket",
+        check: "Scheck"
     },
     hourlySalesChart: {
         title: "Stündliche Verkaufsverteilung",
