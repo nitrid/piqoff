@@ -1,20 +1,47 @@
 import React from 'react';
 import Base from './base.js';
-
+import {dialog} from './dialog.js';
 export class NdLoadPanel extends Base
 {
     constructor(props)
     {
         super(props)
+
         this.state.visible = false;
+        this.isTimeOut = null;
+
+        this.timeout = this.timeout.bind(this)
+    }
+    get showed()
+    {
+        return this.state.visible
+    }
+    async timeout()
+    {
+        this.hide()
+        let tmpConfObj =
+        {
+            id:'msgisExecuteClose',showTitle:true,title:this.props.timeoutPopup.title,showCloseButton:true,width:'500px',height:'auto',
+            button:[{id:"btn01",caption:this.props.timeoutPopup.button,location:'after'}],
+            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.props.timeoutPopup.msg}</div>)
+        }
+        await dialog(tmpConfObj);
     }
     show()
     {
         this.setState({visible:true})
+        if(this.props.timeout)
+        {
+            this.isTimeOut = setTimeout(this.timeout, this.props.timeout);
+        }
     }
     hide()
     {
         this.setState({visible:false})
+        if(this.props.timeout)
+        {
+            clearTimeout(this.isTimeOut)
+        }
     }
     render()
     {

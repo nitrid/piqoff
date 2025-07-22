@@ -17,28 +17,23 @@ import "@fortawesome/fontawesome-free/js/all.js";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import {core} from '../../core/core.js'
+import { core } from '../../core/core.js'
 import enMessages from '../meta/lang/devexpress/en.js';
 import frMessages from '../meta/lang/devexpress/fr.js';
 import trMessages from '../meta/lang/devexpress/tr.js';
-import { locale, loadMessages, formatMessage } from 'devextreme/localization';
-import { i18n, loadLocaleResources } from './i18n';
+import { locale, loadMessages } from 'devextreme/localization';
+import { i18n } from './i18n';
 import Drawer from 'devextreme-react/drawer';
 import Toolbar from 'devextreme-react/toolbar';
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button';
-import SelectBox from 'devextreme-react/select-box';
-import { LoadPanel } from 'devextreme-react/load-panel';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../core/react/devex/grid.js';
+import { Column } from '../../core/react/devex/grid.js';
 import NdPopUp from '../../core/react/devex/popup.js';
-import Form, { Label,Item } from 'devextreme-react/form';
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../core/react/devex/textbox.js'
+import Form, { Label, Item } from 'devextreme-react/form';
+import NdTextBox from '../../core/react/devex/textbox.js'
 import NdButton from '../../core/react/devex/button.js';
 import { NdLoadPanel } from '../../core/react/devex/loadpanel.js';
-
-import HTMLReactParser from 'html-react-parser';
 
 import Navigation from './navigation.js'
 import Panel from './panel.js'
@@ -65,7 +60,6 @@ export default class App extends React.PureComponent
         
         this.UserChange = this.UserChange.bind(this)
         this.passChange = this.passChange.bind(this)
-        this.timeoutControl = this.timeoutControl.bind(this)
 
         this.style =
         {
@@ -172,13 +166,11 @@ export default class App extends React.PureComponent
                 title :  this.lang.t('serverConnection'),
             },
             vtadi : '',
-            isExecute:false,
             user : "",
             toolbarItems : this.toolbarItems,
             changeUser : "",
             changePass : ""
         }
-        this.isExecuteTimeOut
                 
         this.core = new core(io(window.location.origin,{timeout:100000,transports : ['websocket']}));
         this.textValueChanged = this.textValueChanged.bind(this)
@@ -294,7 +286,7 @@ export default class App extends React.PureComponent
     }
     init()
     {
-
+        
     }
     menuClick(data)
     {
@@ -433,18 +425,6 @@ export default class App extends React.PureComponent
             }
         ]})
     }
-    async timeoutControl()
-    {
-       
-        this.setState({isExecute:false})
-        let tmpConfObj =
-        {
-            id:'msgisExecuteClose',showTitle:true,title:this.lang.t("msgisExecuteClose.title"),showCloseButton:true,width:'500px',height:'auto',
-            button:[{id:"btn01",caption:this.lang.t("msgisExecuteClose.btn01"),location:'after'}],
-            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgisExecuteClose.msg")}</div>)
-        }
-        await dialog(tmpConfObj);
-    }
     getLicence(pApp,pField)
     {
         return new Promise((resolve) =>
@@ -477,15 +457,6 @@ export default class App extends React.PureComponent
     render() 
     {
         const { opened,logined,connected,splash } = this.state;
-
-        if(this.state.isExecute == true)
-        {
-            this.isExecuteTimeOut = setTimeout(this.timeoutControl, 60000);
-        }
-        else
-        {
-            clearTimeout(this.isExecuteTimeOut)
-        }
 
         if(this.state.licenced)
         {
@@ -575,21 +546,20 @@ export default class App extends React.PureComponent
                 {
                     this.core.auth.logout()
                     window.location.reload()
-                }}/>   
-                <LoadPanel
-                shadingColor="rgba(0,0,0,0)"
-                position={{ of: '#root' }}
-                visible={this.state.isExecute}
-                showIndicator={true}
-                shading={true}
-                showPane={true}
-                />
+                }}/>
                 <NdLoadPanel parent={this} id={"loading"} 
                 shadingColor={"rgba(0,0,0,0.0)"} 
                 showIndicator={true} 
                 showPane={true}
                 showMessage={true} 
-                message={this.lang.t("loading")} />
+                message={this.lang.t("loading")} 
+                timeout={60000} 
+                timeoutPopup={
+                {
+                    title:this.lang.t("msgisExecuteClose.title"),
+                    button:this.lang.t("msgisExecuteClose.btn01"),
+                    msg:this.lang.t("msgisExecuteClose.msg")
+                }}/>
                 <div className="top-bar">
                     <Toolbar className="main-toolbar" items={this.state.toolbarItems}/>
                 </div>

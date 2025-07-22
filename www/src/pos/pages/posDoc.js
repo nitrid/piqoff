@@ -3961,7 +3961,7 @@ export default class posDoc extends React.PureComponent
                 }}/>
                 <NdLoadPanel parent={this} id={"loading"} 
                 shadingColor={"rgba(0,0,0,0.0)"} 
-                showIndicator={true} 
+                showIndicator={false} 
                 showPane={false}
                 showMessage={false} 
                 message={""} />   
