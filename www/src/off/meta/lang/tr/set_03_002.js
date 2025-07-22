@@ -9,7 +9,7 @@ const set_03_002 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Seçili evrakı tekrar oluşturmak istediğinize eminmisiniz ?"
+        msg: "Seçili evrakı tekrar oluşturmak istediğinize emin misiniz ?"
     },
     grdDeleteList : 
     {

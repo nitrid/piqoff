@@ -18,7 +18,7 @@ export const langTr =
     msgSqlService3: "Vt kurulumu başarılı.Lütfen config dosyasını kontrol edip sunucuyu restart ediniz.", //BAK
     btnYes : "Evet",
     btnNo : "Hayır",
-    msgClose : "Sayfayı Kapatmak İstediğinize Eminmisiniz ?",
+    msgClose : "Sayfayı Kapatmak İstediğinize Emin misiniz ?",
     msgNoData : "Seçilen kriterlere uygun veri bulunamadı.",
     txtLangSelect : "Dil Seçimi",
     txtDbSelect : "Database Seçimi",
@@ -177,7 +177,7 @@ export const langTr =
     msgVatCalculate :
     {
         title : "Dikkat",
-        msg : "Vergiyi yeniden hesaplamak istediğinize eminmisiniz ",
+        msg : "Vergiyi yeniden hesaplamak istediğinize emin misiniz ",
         btn01 : "Tamam",
         btn02 : "İptal",
     },

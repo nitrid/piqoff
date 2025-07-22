@@ -29,7 +29,7 @@ const stk_04_002 =
         title: "Dikkat",
         btn01: "Onayla",
         btn02: "Vazgeç",
-        msg: "Seçili Satırları İade Etmek İstediğinize Eminmisiniz !"
+        msg: "Seçili Satırları İade Etmek İstediğinize Emin misiniz !"
     },
     msgSaveResult:
     {

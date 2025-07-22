@@ -182,7 +182,7 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             btn02: "Vazgeç",
-            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+            msg: "Kaydı silmek istediğinize emin misiniz ?"
         },
         msgCustomerSelect:
         {
@@ -267,7 +267,7 @@ export const langTr =
             title: "Dikkat",
             btn01: "Evet",
             btn02: "Hayır",
-            msg: "Yeni evrak oluşturmak istediğinize eminmisiniz ?"
+            msg: "Yeni evrak oluşturmak istediğinize emin misiniz ?"
         },
         popDesign : 
         {
@@ -478,7 +478,7 @@ export const langTr =
             title: "Dikkat",
             btn01: "Evet",
             btn02: "Hayır",
-            msg: "Yeni evrak oluşturmak istediğinize eminmisiniz ?"
+            msg: "Yeni evrak oluşturmak istediğinize emin misiniz ?"
         },
         msgSave:
         {
@@ -499,7 +499,7 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             btn02: "Vazgeç",
-            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+            msg: "Kaydı silmek istediğinize emin misiniz ?"
         },
         popDesign : 
         {
@@ -661,7 +661,7 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             btn02: "Vazgeç",
-            msg: "Kayıt etmek istediğinize eminmisiniz !"
+            msg: "Kayıt etmek istediğinize emin misiniz !"
         },
         msgSaveResult:
         {
@@ -699,7 +699,7 @@ export const langTr =
             title: "Dikkat",
             btn01: "Tamam",
             btn02: "Vazgeç",
-            msg: "Kaydı silmek istediğinize eminmisiniz ?"
+            msg: "Kaydı silmek istediğinize emin misiniz ?"
         },
         cmbTypeData : 
         {

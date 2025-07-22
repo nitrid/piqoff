@@ -129,7 +129,7 @@ export const langTr =
         title: "Dikkat",
         btn01: "Evet",
         btn02: "Iptal",
-        msg: "Siparişi Tamamladıgınıza eminmisiniz ?"
+        msg: "Siparişi Tamamladıgınıza Emin misiniz ?"
     },
     menu:
     {

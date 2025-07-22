@@ -43,7 +43,7 @@ const stk_04_001 =
         title: "Dikkat",
         btn01: "Onayla",
         btn02: "Vazgeç",
-        msg: "Kayıt Etmek İstediğinize Eminmisiniz !"
+        msg: "Kayıt Etmek İstediğinize Emin misiniz !"
     },
     msgSaveResult:
     {
