@@ -105,7 +105,7 @@ posDoc.prototype.getItem = async function(pCode)
         if(!this.state.loading)
         {
             this.txtBarcode.value = "";
-            this.loading(true)
+            this.loading.show()
             let tmpBalanceDt = await getBalanceCounter(tmpTicketNo,pCode)
 
             if(tmpBalanceDt.length > 0)
@@ -146,7 +146,7 @@ posDoc.prototype.getItem = async function(pCode)
         
                         if(tmpQuantity == 0)
                         {
-                            this.loading(false)
+                            this.loading.hide()
                             return
                         }
                         let resultQuantity = Number((tmpDQuantity) - (tmpQuantity)).round(3)
@@ -204,7 +204,7 @@ posDoc.prototype.getItem = async function(pCode)
                             
                             if(tmpConfResult == 'btn01')
                             {
-                                this.loading(false)
+                                this.loading.hide()
                                 return
                             }
                             else
@@ -217,7 +217,7 @@ posDoc.prototype.getItem = async function(pCode)
                                 }
                                 else
                                 {
-                                    this.loading(false)
+                                    this.loading.hide()
                                     return
                                 }
                             }
@@ -254,7 +254,7 @@ posDoc.prototype.getItem = async function(pCode)
                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeNotFound.msg")}</div>)
                         }
                         await dialog(tmpConfObj);
-                        this.loading(false)
+                        this.loading.hide()
                         return
                     }
                 }
@@ -360,7 +360,7 @@ posDoc.prototype.getItem = async function(pCode)
                 }
                 await dialog(tmpConfObj);
             }
-            this.loading(false)
+            this.loading.hide()
         }
     }
     else

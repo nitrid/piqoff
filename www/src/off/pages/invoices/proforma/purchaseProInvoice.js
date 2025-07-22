@@ -850,6 +850,7 @@ export default class purchaseProInvoice extends DocBase
                 }
                 if(this.newPrice.length > 0)
                 {
+                    App.instance.loading.hide()
                     await this.msgNewPrice.show().then(async (e) =>
                     {
             
