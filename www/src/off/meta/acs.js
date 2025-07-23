@@ -191,11 +191,31 @@ export const acs =
         ELEMENT : "chkTicketRestLy",
         APP : "OFF",
     },
+    //chkTaxSugarControlLy
+    {
+        TYPE : 2,
+        ID :"chkTaxSugarControlLy",
+        VALUE : {visible:true,editable:true,position:{x:4,y:0}},
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "chkTaxSugarControlLy",
+        APP : "OFF",
+    },
+    //chkPiqPoidLy
+    {
+        TYPE : 2,
+        ID :"chkPiqPoidLy",
+        VALUE : {visible:true,editable:true,position:{x:5,y:0}},
+        SPECIAL : "",
+        PAGE : "stk_01_001",
+        ELEMENT : "chkPiqPoidLy",
+        APP : "OFF",
+    },
     //chkInterfelLy
     {
         TYPE : 2,
         ID :"chkInterfelLy",
-        VALUE : {visible:true,editable:true,position:{x:4,y:0}},
+        VALUE : {visible:true,editable:true,position:{x:7,y:0}},
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "chkInterfelLy",
@@ -205,7 +225,7 @@ export const acs =
     {
         TYPE : 2,
         ID :"chkPiqPoidLy",
-        VALUE : {visible:true,editable:true,position:{x:5,y:0}},
+        VALUE : {visible:true,editable:true,position:{x:6,y:0}},
         SPECIAL : "",
         PAGE : "stk_01_001",
         ELEMENT : "chkPiqPoidLy",
