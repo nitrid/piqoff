@@ -145,7 +145,7 @@ export default class itemPricingListCard extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -251,7 +251,7 @@ export default class itemPricingListCard extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={2} id={"frmMain" + this.tabIndex}>
                                 {/* txtNo */}

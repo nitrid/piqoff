@@ -34,6 +34,7 @@ export default class labelPrinting extends React.PureComponent
         this.tabIndex = props.data.tabkey
 
         this.cellRoleRender = this.cellRoleRender.bind(this)
+        this.onLabelQueueGridToolbarPreparing = this.onLabelQueueGridToolbarPreparing.bind(this)
 
         this.frmOutwas = undefined;
     }
@@ -719,13 +720,126 @@ export default class labelPrinting extends React.PureComponent
         }
         this.txtLineCount.value = this.lblObj.dt().length
     }
+    onLabelQueueGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push(
+        {
+            location: 'before',
+            widget: 'dxButton',     
+            options: 
+            {
+                icon: 'add',
+                validationGroup: 'frmLabelQeueu' + this.tabIndex,
+                onClick: (async(c) => 
+                {   
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        if(typeof this.lblObj.dt()[0] != 'undefined')
+                        {
+                            if(this.lblObj.dt()[this.lblObj.dt().length - 1].CODE == '')
+                            {
+                                this.pg_txtItemsCode.show()
+                                this.pg_txtItemsCode.onClick = async(data) =>
+                                {
+                                    if(data.length == 1)
+                                    {
+                                        this.addItem(data[0],this.lblObj.dt().length - 1)
+                                    }
+                                    else if(data.length > 1)
+                                    {
+                                        for (let i = 0; i < data.length; i++) 
+                                        {
+                                            if(i == 0)
+                                            {
+                                                this.addItem(data[i],this.lblObj.dt().length - 1)
+                                            }
+                                            else
+                                            {
+                                                let tmpDocItems = {...this.lblObj.empty}
+                                                tmpDocItems.REF = this.mainLblObj.dt()[0].REF
+                                                tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
+                                                tmpDocItems.LINE_NO = this.lblObj.dt().length
+                                                this.lblObj.addEmpty(tmpDocItems)
+                                                this.addItem(data[i],this.lblObj.dt().length -1)
+                                            }
+                                        }
+                                    }
+                                }
+                                return
+                            }
+                        }
+
+                        let tmpDocItems = {...this.lblObj.empty}
+                        tmpDocItems.REF = this.mainLblObj.dt()[0].REF
+                        tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
+                        tmpDocItems.LINE_NO = this.lblObj.dt().length
+                        this.txtRef.readOnly = true
+                        this.txtRefno.readOnly = true
+                        this.lblObj.addEmpty(tmpDocItems)
+                        
+                        this.pg_txtItemsCode.show()
+                        this.pg_txtItemsCode.onClick = async(data) =>
+                        {
+                            if(data.length == 1)
+                            {
+                                this.addItem(data[0],this.lblObj.dt().length - 1)
+                            }
+                            else if(data.length > 1)
+                            {
+                                for (let i = 0; i < data.length; i++) 
+                                {
+                                    if(i == 0)
+                                    {
+                                        this.addItem(data[i],this.lblObj.dt().length - 1)
+                                    }
+                                    else
+                                    {
+                                        let tmpDocItems = {...this.lblObj.empty}
+                                        tmpDocItems.REF = this.mainLblObj.dt()[0].REF
+                                        tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
+                                        tmpDocItems.LINE_NO = this.lblObj.dt().length
+                                        this.lblObj.addEmpty(tmpDocItems)
+                                        this.addItem(data[i],this.lblObj.dt().length -1)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:'warning'})
+                    }   
+                }).bind(this)
+            }
+        });
+        e.toolbarOptions.items.push(
+        {
+            location: 'before',
+            widget: 'dxButton',     
+            options: 
+            {
+                text: this.t("btnLabelCombine"),  
+                onClick: (async(c) => 
+                {   
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        this.getDocsCombine(0)
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:'warning'})
+                    } 
+                }).bind(this)
+            }
+        });
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -856,7 +970,7 @@ export default class labelPrinting extends React.PureComponent
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={3} id="frmLabelQeueu">
                                 {/* txtRef-Refno */}
@@ -1143,106 +1257,9 @@ export default class labelPrinting extends React.PureComponent
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={1} onInitialized={(e)=>{this.frmOutwas = e.component}}>
-                                <NdItem location="after">
-                                    <Button icon="add"
-                                    validationGroup={"frmLabelQeueu" + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.lblObj.dt()[0] != 'undefined')
-                                            {
-                                                if(this.lblObj.dt()[this.lblObj.dt().length - 1].CODE == '')
-                                                {
-                                                    this.pg_txtItemsCode.show()
-                                                    this.pg_txtItemsCode.onClick = async(data) =>
-                                                    {
-                                                        if(data.length == 1)
-                                                        {
-                                                            this.addItem(data[0],this.lblObj.dt().length - 1)
-                                                        }
-                                                        else if(data.length > 1)
-                                                        {
-                                                            for (let i = 0; i < data.length; i++) 
-                                                            {
-                                                                if(i == 0)
-                                                                {
-                                                                    this.addItem(data[i],this.lblObj.dt().length - 1)
-                                                                }
-                                                                else
-                                                                {
-                                                                    let tmpDocItems = {...this.lblObj.empty}
-                                                                    tmpDocItems.REF = this.mainLblObj.dt()[0].REF
-                                                                    tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
-                                                                    tmpDocItems.LINE_NO = this.lblObj.dt().length
-                                                                    this.lblObj.addEmpty(tmpDocItems)
-                                                                    this.addItem(data[i],this.lblObj.dt().length -1)
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    return
-                                                }
-                                            }
-
-                                            let tmpDocItems = {...this.lblObj.empty}
-                                            tmpDocItems.REF = this.mainLblObj.dt()[0].REF
-                                            tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
-                                            tmpDocItems.LINE_NO = this.lblObj.dt().length
-                                            this.txtRef.readOnly = true
-                                            this.txtRefno.readOnly = true
-                                            this.lblObj.addEmpty(tmpDocItems)
-                                            
-                                            this.pg_txtItemsCode.show()
-                                            this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                if(data.length == 1)
-                                                {
-                                                    this.addItem(data[0],this.lblObj.dt().length - 1)
-                                                }
-                                                else if(data.length > 1)
-                                                {
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        if(i == 0)
-                                                        {
-                                                            this.addItem(data[i],this.lblObj.dt().length - 1)
-                                                        }
-                                                        else
-                                                        {
-                                                            let tmpDocItems = {...this.lblObj.empty}
-                                                            tmpDocItems.REF = this.mainLblObj.dt()[0].REF
-                                                            tmpDocItems.REF_NO = this.mainLblObj.dt()[0].REF_NO
-                                                            tmpDocItems.LINE_NO = this.lblObj.dt().length
-                                                            this.lblObj.addEmpty(tmpDocItems)
-                                                            this.addItem(data[i],this.lblObj.dt().length -1)
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning'})
-                                        }
-                                    }}/>
-                                    <Button text={this.t("btnLabelCombine")}
-                                    validationGroup={"frmLabelQeueu" + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            this.getDocsCombine(0)
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning'})
-                                        }
-                                    }}/>
-                                </NdItem>
                                 <NdItem>
                                     <NdGrid parent={this} id={"grdLabelQueue"} 
                                     showBorders={true} 
@@ -1273,6 +1290,7 @@ export default class labelPrinting extends React.PureComponent
                                         }, 500);
                                     }}
                                     onRowRemoved={(e)=>{this.calculateCount()}}
+                                    onToolbarPreparing={this.onLabelQueueGridToolbarPreparing}
                                     >
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                         <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />

@@ -2295,7 +2295,7 @@ export default class DocBase extends React.PureComponent
                     button={[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCustomerNotFound.btn02"),location:'after'}]}
                     deferRendering={false}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>
                             </div>
@@ -2322,7 +2322,7 @@ export default class DocBase extends React.PureComponent
                     button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
                     deferRendering={false}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
                             </div>
@@ -2349,7 +2349,7 @@ export default class DocBase extends React.PureComponent
                     button={[{id:"btn01",caption:this.t("msgNewPrice.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewPrice.btn02"),location:'after'}]}
                     deferRendering={false}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewPrice.msg")}</div>
                             </div>
@@ -2412,7 +2412,7 @@ export default class DocBase extends React.PureComponent
                     button={[{id:"btn01",caption:this.t("msgNewPriceDate.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewPriceDate.btn02"),location:'after'}]}
                     deferRendering={false}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewPriceDate.msg")}</div>
                             </div>
@@ -2456,7 +2456,7 @@ export default class DocBase extends React.PureComponent
                                             <Column dataField="NET_MARGIN" caption={this.t("grdNewPriceDate.clmNetMargin")}width={100} allowEditing={false}/>
                                             <Column dataField="MARGIN" caption={this.t("grdNewPrice.clmMarge")} width={80} format={"##0.00"} allowEditing={false}/>
                                         </NdGrid>
-                                        </Item>
+                                    </Item>
                                 </Form>
                             </div>
                         </div>
@@ -2473,7 +2473,7 @@ export default class DocBase extends React.PureComponent
                     button={[{id:"btn01",caption:this.t("msgNewVat.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewVat.btn02"),location:'after'}]}
                     deferRendering={false}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewVat.msg")}</div>
                             </div>
@@ -2518,7 +2518,7 @@ export default class DocBase extends React.PureComponent
                     button={[{id:"btn01",caption:this.lang.t("msgQuantity.btn01"),location:'after'}]}
                     deferRendering={false}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgQuantity.msg")}</div>
                             </div>
