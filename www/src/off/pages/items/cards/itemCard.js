@@ -86,6 +86,10 @@ export default class itemCard extends React.PureComponent
         this.onItemRendered = this.onItemRendered.bind(this)
         this.taxSugarCalculate = this.taxSugarCalculate.bind(this)
         this.cellRoleRender = this.cellRoleRender.bind(this)
+        this.onPriceGridToolbarPreparing = this.onPriceGridToolbarPreparing.bind(this)
+        this.onUnitGridToolbarPreparing = this.onUnitGridToolbarPreparing.bind(this)
+        this.onBarcodeGridToolbarPreparing = this.onBarcodeGridToolbarPreparing.bind(this)
+        this.onCustomerGridToolbarPreparing = this.onCustomerGridToolbarPreparing.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
 
@@ -868,12 +872,108 @@ export default class itemCard extends React.PureComponent
         tmpSave.setValue(e)
         tmpSave.save()
     }
+    onPriceGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push(
+        {
+            location: 'before',
+            widget: 'dxButton',
+            options: 
+            {
+                icon: 'add',
+                text: this.t("sellPriceAdd"),
+                onClick: (async() => 
+                {
+                    await this.popPrice.show();
+
+                    this.cmbPopPriListNo.value = 1
+                    this.dtPopPriStartDate.value = "1970-01-01"
+                    this.dtPopPriEndDate.value = "1970-01-01"
+                    this.txtPopPriQuantity.value = 1
+                    this.txtPopPriPrice.value = 0
+                    this.txtPopPriHT.value = 0
+                    this.txtPopPriTTC.value = 0
+                    this.txtPopPriceMargin.value = 0
+                    this.cmbPopPriDepot.value = "00000000-0000-0000-0000-000000000000"
+
+                    setTimeout(async () => {this.txtPopPriPrice.focus()}, 600)
+                }).bind(this)
+            }
+        }); 
+    }
+    onUnitGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push(
+        {
+            location: 'before',
+            widget: 'dxButton', 
+            options: 
+            {
+                icon: 'add',
+                onClick: (async() => 
+                {   
+                    await this.popUnit.show();
+
+                    this.cmbPopUnitType.value = "2"
+                    this.cmbPopUnitName.value = "001"
+                    this.txtPopUnitFactor.value = "0"
+                    this.txtPopUnitWeight.value = "0"
+                    this.txtPopUnitVolume.value = "0";
+                    this.txtPopUnitWidth.value = "0";
+                    this.txtPopUnitHeight.value = "0"
+                    this.txtPopUnitSize.value = "0"
+                }).bind(this)
+            }
+        });
+    }
+    onBarcodeGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push(
+        {
+            location: 'before',
+            widget: 'dxButton', 
+            options:
+            {
+                icon: 'add',
+                onClick: (async() => 
+                {   
+                    await this.popBarcode.show();
+                    await this.cmbPopBarUnit.dataRefresh({source : this.itemsObj.dt('ITEM_UNIT').where({TYPE:{'in':[0,2]}})})
+                    this.txtPopBarcode.value = "";
+                    this.cmbPopBarType.value = "0";
+                    this.cmbPopBarUnit.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
+
+                    setTimeout(async () => {this.txtPopBarcode.focus()}, 600); 
+                }).bind(this)
+            }
+        });
+    }
+    onCustomerGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push(
+        {
+            location: 'before',
+            widget: 'dxButton', 
+            options: 
+            {
+                icon: 'add',
+                onClick: (async() => 
+                {   
+                    await this.popCustomer.show();
+                    this.txtPopCustomerItemCode.value = "";
+                    this.txtPopCustomerPrice.value = 0;
+
+                    setTimeout(async () => {this.txtPopCustomerCode.focus()}, 600);
+                }).bind(this)
+            }
+        });
+    }
     render()
     {           
         return (
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>                    
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -1126,9 +1226,9 @@ export default class itemCard extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-10 pe-0">                        
-                            <NdLayout parent={this} id={"frmItems" + this.tabIndex} rowHeight={42} margin={[2,2]} cols={2}>
+                            <NdLayout parent={this} id={"frmItems" + this.tabIndex} rowHeight={28} margin={[2,2]} cols={2}>
                                 {/* txtRefLy */}
                                 <NdLayoutItem key={"txtRefLy"} id={"txtRefLy"} parent={this} data-grid={{x:0,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtRefLy',USERS:this.user.CODE})}>
                                     <div className="row pe-3">
@@ -1409,7 +1509,7 @@ export default class itemCard extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtUnderUnit',USERS:this.user.CODE})}/>
                                         </div>
                                         <div className="col-3 pe-0">
-                                            <div className="dx-field-label" style={{width:"100%"}}>{this.state.underPrice}</div>
+                                            <div className="dx-field-label" style={{width:"100%",padding:'3px',fontSize:'12px'}}>{this.state.underPrice}</div>
                                         </div>
                                     </div>
                                 </NdLayoutItem>
@@ -1505,7 +1605,7 @@ export default class itemCard extends React.PureComponent
                                     }}/>
                                 </div>
                             </div>
-                            <div className='row pt-2'>
+                            <div className='row pt-1'>
                                 <div className='col-6'>
                                     <NdButton id="btnNewImg" parent={this} icon="add" type="default" width='100%'/>
                                 </div>
@@ -1522,54 +1622,62 @@ export default class itemCard extends React.PureComponent
                             </div>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdLayout parent={this} id={"frmChkBox" + this.tabIndex} cols={9}>
                                 {/* chkActive */}
                                 <NdLayoutItem key={"chkActiveLy"} id={"chkActiveLy"} parent={this} data-grid={{x:0,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkActiveLy',USERS:this.user.CODE})}>
-                                    <div className="row pe-3">
-                                        <div className='col-10 p-0 pe-1'>
-                                            <label className="col-form-label d-flex justify-content-end">{this.t("chkActive") + " :"}</label>
-                                        </div>
-                                        <div className="col-2 p-0 d-flex align-items-center">
+                                    <div className="row">
+                                        <div className="col-12 d-flex align-items-center justify-content-center">
                                             <NdCheckBox id="chkActive" parent={this} defaultValue={true} dt={{data:this.itemsObj.dt('ITEMS'),field:"STATUS"}}
                                             param={this.param.filter({ELEMENT:'chkActive',USERS:this.user.CODE})}/>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-12 d-flex align-items-center justify-content-center text-center">
+                                            <label className="col-form-label d-flex justify-content-center">{this.t("chkActive")}</label>
                                         </div>
                                     </div>
                                 </NdLayoutItem>
                                 {/* chkCaseWeighedLy */}
                                 <NdLayoutItem key={"chkCaseWeighedLy"} id={"chkCaseWeighedLy"} parent={this} data-grid={{x:1,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkCaseWeighedLy',USERS:this.user.CODE})}>
-                                    <div className="row pe-3">
-                                        <div className='col-10 p-0 pe-1'>
-                                            <label className="col-form-label d-flex justify-content-end">{this.t("chkCaseWeighed") + " :"}</label>
-                                        </div>
-                                        <div className="col-2 p-0 d-flex align-items-center">
+                                    <div className="row">
+                                        <div className="col-12 d-flex align-items-center justify-content-center">
                                             <NdCheckBox id="chkCaseWeighed" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"WEIGHING"}}
                                             param={this.param.filter({ELEMENT:'chkCaseWeighed',USERS:this.user.CODE})}/>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className='col-12 d-flex align-items-center justify-content-center'>
+                                            <label className="col-form-label d-flex justify-content-center text-center">{this.t("chkCaseWeighed")}</label>
                                         </div>
                                     </div>
                                 </NdLayoutItem>
                                 {/* chkLineMerged */}
                                 <NdLayoutItem key={"chkLineMergedLy"} id={"chkLineMergedLy"} parent={this} data-grid={{x:2,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkLineMergedLy',USERS:this.user.CODE})}>
-                                    <div className="row pe-3">
-                                        <div className='col-10 p-0 pe-1'>
-                                            <label className="col-form-label d-flex justify-content-end">{this.t("chkLineMerged") + " :"}</label>
-                                        </div>
-                                        <div className="col-2 p-0 d-flex align-items-center">
+                                    <div className="row">
+                                        <div className="col-12 d-flex align-items-center justify-content-center">
                                             <NdCheckBox id="chkLineMerged" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"SALE_JOIN_LINE"}}
                                             param={this.param.filter({ELEMENT:'chkLineMerged',USERS:this.user.CODE})}/>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className='col-12 d-flex align-items-center justify-content-center'>
+                                            <label className="col-form-label d-flex justify-content-center text-center">{this.t("chkLineMerged")}</label>
                                         </div>
                                     </div>
                                 </NdLayoutItem>
                                 {/* chkTicketRestLy */}
                                 <NdLayoutItem key={"chkTicketRestLy"} id={"chkTicketRestLy"} parent={this} data-grid={{x:3,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkTicketRestLy',USERS:this.user.CODE})}>
-                                    <div className="row pe-3">
-                                        <div className='col-10 p-0 pe-1'>
-                                            <label className="col-form-label d-flex justify-content-end">{this.t("chkTicketRest") + " :"}</label>
-                                        </div>
-                                        <div className="col-1 p-0 d-flex align-items-center">
+                                    <div className="row">
+                                        <div className="col-12 d-flex align-items-center justify-content-center">
                                             <NdCheckBox id="chkTicketRest" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"TICKET_REST"}}
                                             param={this.param.filter({ELEMENT:'chkTicketRest',USERS:this.user.CODE})}/>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className='col-12 d-flex align-items-center justify-content-center'>
+                                            <label className="col-form-label d-flex justify-content-center text-center">{this.t("chkTicketRest")}</label>
                                         </div>
                                     </div>
                                 </NdLayoutItem>
@@ -1582,54 +1690,62 @@ export default class itemCard extends React.PureComponent
                                         <div className="col-2 p-0 d-flex align-items-center">
                                             <NdCheckBox id="chkTaxSugarControl" parent={this}  
                                             dt={{data:this.itemsObj.dt('ITEMS'),field:"TAX_SUGAR"}}
-                                            onValueChanged={(e) => 
-                                            {
-                                                this.taxSugarValidCheck();
-                                            }}
+                                            onValueChanged={(e) => {this.taxSugarValidCheck();}}
                                             param={this.param.filter({ELEMENT:'chkTaxSugarControl',USERS:this.user.CODE})}/>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className='col-12 d-flex align-items-center justify-content-center'>
+                                            <label className="col-form-label d-flex justify-content-center text-center">{this.t("chkTaxSugarControl")}</label>
                                         </div>
                                     </div>
                                 </NdLayoutItem>
                                  {/* chkPiqPoidLy */}
                                  <NdLayoutItem key={"chkPiqPoidLy"} id={"chkPiqPoidLy"} parent={this} data-grid={{x:5,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkPiqPoidLy',USERS:this.user.CODE})}>
-                                    <div className="row pe-3">
-                                        <div className='col-10 p-0 pe-1'>
-                                            <label className="col-form-label d-flex justify-content-end">{"Piq Poid" + " :"}</label>
-                                        </div>
-                                        <div className="col-2 p-0 d-flex align-items-center">
+                                    <div className="row">
+                                        <div className="col-12 d-flex align-items-center justify-content-center">
                                             <NdCheckBox id="chkPiqPoid" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"PIQPOID"}}
                                             param={this.param.filter({ELEMENT:'chkPiqPoid',USERS:this.user.CODE})}/>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className='col-12 d-flex align-items-center justify-content-center'>
+                                            <label className="col-form-label d-flex justify-content-center text-center">{"Piq Poid"}</label>
                                         </div>
                                     </div>
                                 </NdLayoutItem>
                                 {/* chkFavori */}
                                 <NdLayoutItem key={"chkFavoriLy"} id={"chkFavoriLy"} parent={this} data-grid={{x:6,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkFavoriLy',USERS:this.user.CODE})}>
-                                    <div className="row pe-3">
-                                        <div className='col-10 p-0 pe-1'>
-                                            <label className="col-form-label d-flex justify-content-end">{"Favori" + " :"}</label>
-                                        </div>
-                                        <div className="col-2 p-0 d-flex align-items-center">
+                                    <div className="row">
+                                        <div className="col-12 d-flex align-items-center justify-content-center">
                                             <NdCheckBox id="chkFavori" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"FAVORI"}}
                                             param={this.param.filter({ELEMENT:'chkFavori',USERS:this.user.CODE})}/>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className='col-12 d-flex align-items-center justify-content-center'>
+                                            <label className="col-form-label d-flex justify-content-center text-center">{"Favori"}</label>
                                         </div>
                                     </div>
                                 </NdLayoutItem>
                                 {/* chkCatalog */}
                                 <NdLayoutItem key={"chkCatalogLy"} id={"chkCatalogLy"} parent={this} data-grid={{x:7,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkCatalogLy',USERS:this.user.CODE})}>
-                                    <div className="row pe-3">
-                                        <div className='col-10 p-0 pe-1'>
-                                            <label className="col-form-label d-flex justify-content-end">{"Catalog" + " :"}</label>
-                                        </div>
-                                        <div className="col-2 p-0 d-flex align-items-center">
+                                    <div className="row">
+                                        <div className="col-12 d-flex align-items-center justify-content-center">
                                             <NdCheckBox id="chkCatalog" parent={this} defaultValue={false} dt={{data:this.itemsObj.dt('ITEMS'),field:"CATALOG"}}
                                             param={this.param.filter({ELEMENT:'chkCatalog',USERS:this.user.CODE})}/>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className='col-12 d-flex align-items-center justify-content-center'>
+                                            <label className="col-form-label d-flex justify-content-center text-center">{"Catalog"}</label>
                                         </div>
                                     </div>
                                 </NdLayoutItem>
                             </NdLayout>
                         </div>
                     </div>
-                    <div className='row px-2 pt-2'>
+                    <div className='row px-2 pt-1'>
                         <div className='col-12'>
                             <NdTabPanel id={"tabPanel"} parent={this} height="100%" onItemRendered={this.onItemRendered}
                             access={this.access.filter({ELEMENT:'tabPanel',USERS:this.user.CODE})} editMode={false}>
@@ -1637,84 +1753,100 @@ export default class itemCard extends React.PureComponent
                                     {/* FİYAT PANELI */}
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
-                                            <NdLayout parent={this} id={"frmTabPrice" + this.tabIndex} rowHeight={30} cols={10}>
+                                            <NdLayout parent={this} id={"frmTabPrice" + this.tabIndex} rowHeight={30} cols={10} style={{height:'50px'}}>
                                                 {/* txtCostPriceLy */}
                                                 <NdLayoutItem key={"txtCostPriceLy"} id={"txtCostPriceLy"} parent={this} data-grid={{x:0,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtCostPriceLy',USERS:this.user.CODE})}>
-                                                    <div>
-                                                        <NdNumberBox id="txtCostPrice" parent={this} title={this.t("txtCostPrice")}  titleAlign={"top"} tabIndex={this.tabIndex}
-                                                        dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}} readOnly={true}
-                                                        format={"#,##0.000"} step={0.1}
-                                                        param={this.param.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}/>
+                                                    <div className="row">
+                                                        <div className="col-12 d-flex align-items-center justify-content-center">
+                                                            <NdNumberBox id="txtCostPrice" parent={this} simple={true} tabIndex={this.tabIndex}
+                                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"COST_PRICE"}} readOnly={true}
+                                                            format={"#,##0.000"} step={0.1}
+                                                            param={this.param.filter({ELEMENT:'txtCostPrice',USERS:this.user.CODE})}/>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-12 d-flex align-items-center justify-content-center">
+                                                            <label className="col-form-label d-flex justify-content-center text-center">{this.t("txtCostPrice")}</label>
+                                                        </div>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* txtTotalExtraCostLy */}
                                                 <NdLayoutItem key={"txtTotalExtraCostLy"} id={"txtTotalExtraCostLy"} parent={this} data-grid={{x:1,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtTotalExtraCostLy',USERS:this.user.CODE})}>
-                                                    <div>
-                                                        <NdNumberBox id="txtTotalExtraCost" parent={this} title={this.t("txtTotalExtraCost")}  titleAlign={"top"} tabIndex={this.tabIndex}
-                                                        format={"#,##0.000"} readOnly={true}
-                                                        param={this.param.filter({ELEMENT:'txtTotalExtraCost',USERS:this.user.CODE})}/>
+                                                    <div className="row">
+                                                        <div className="col-12 d-flex align-items-center justify-content-center">
+                                                            <NdNumberBox id="txtTotalExtraCost" parent={this} simple={true} tabIndex={this.tabIndex}
+                                                            format={"#,##0.000"} readOnly={true}
+                                                            param={this.param.filter({ELEMENT:'txtTotalExtraCost',USERS:this.user.CODE})}/>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-12 d-flex align-items-center justify-content-center">
+                                                            <label className="col-form-label d-flex justify-content-center text-center">{this.t("txtTotalExtraCost")}</label>
+                                                        </div>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* txtMinSalePriceLy */}
                                                 <NdLayoutItem key={"txtMinSalePriceLy"} id={"txtMinSalePriceLy"} parent={this} data-grid={{x:2,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtMinSalePriceLy',USERS:this.user.CODE})}>
-                                                    <div>
-                                                        <NdNumberBox id="txtMinSalePrice" parent={this} title={this.t("txtMinSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
-                                                        dt={{data:this.itemsObj.dt('ITEMS'),field:"MIN_PRICE"}}
-                                                        format={"#,##0.000"} step={0.1}
-                                                        editable={this.state.isItemGrpForMinMaxAccess}
-                                                        param={this.param.filter({ELEMENT:'txtMinSalePrice',USERS:this.user.CODE})}/>
+                                                    <div className="row">
+                                                        <div className="col-12 d-flex align-items-center justify-content-center">
+                                                            <NdNumberBox id="txtMinSalePrice" parent={this} simple={true} tabIndex={this.tabIndex}
+                                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"MIN_PRICE"}}
+                                                            format={"#,##0.000"} step={0.1}
+                                                            editable={this.state.isItemGrpForMinMaxAccess}
+                                                            param={this.param.filter({ELEMENT:'txtMinSalePrice',USERS:this.user.CODE})}/>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-12 d-flex align-items-center justify-content-center">
+                                                            <label className="col-form-label d-flex justify-content-center text-center">{this.t("txtMinSalePrice")}</label>
+                                                        </div>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* txtMaxSalePriceLy */}
                                                 <NdLayoutItem key={"txtMaxSalePriceLy"} id={"txtMaxSalePriceLy"} parent={this} data-grid={{x:3,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtMaxSalePriceLy',USERS:this.user.CODE})}>
-                                                    <div>
-                                                        <NdNumberBox id="txtMaxSalePrice" parent={this} title={this.t("txtMaxSalePrice")} titleAlign={"top"} tabIndex={this.tabIndex}
-                                                        dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
-                                                        format={"#,##0.000"} step={0.1}
-                                                        editable={this.state.isItemGrpForMinMaxAccess}
-                                                        param={this.param.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}/>
+                                                    <div className="row">
+                                                        <div className="col-12 d-flex align-items-center justify-content-center">
+                                                            <NdNumberBox id="txtMaxSalePrice" parent={this} simple={true} tabIndex={this.tabIndex}
+                                                            dt={{data:this.itemsObj.dt('ITEMS'),field:"MAX_PRICE"}}
+                                                            format={"#,##0.000"} step={0.1}
+                                                            editable={this.state.isItemGrpForMinMaxAccess}
+                                                            param={this.param.filter({ELEMENT:'txtMaxSalePrice',USERS:this.user.CODE})}/>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-12 d-flex align-items-center justify-content-center">
+                                                            <label className="col-form-label d-flex justify-content-center text-center">{this.t("txtMaxSalePrice")}</label>
+                                                        </div>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* txtLastBuyPriceLy */}
                                                 <NdLayoutItem key={"txtLastBuyPriceLy"} id={"txtLastBuyPriceLy"} parent={this} data-grid={{x:4,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtLastBuyPriceLy',USERS:this.user.CODE})}>
-                                                    <div>
-                                                        <NdNumberBox id="txtLastBuyPrice" parent={this} title={this.t("txtLastBuyPrice")} titleAlign={"top"} readOnly={true}
-                                                        format={"#,##0.000"} step={0.1}
-                                                        param={this.param.filter({ELEMENT:'txtLastBuyPrice',USERS:this.user.CODE})}/>
+                                                    <div className="row">
+                                                        <div className="col-12 d-flex align-items-center justify-content-center">
+                                                            <NdNumberBox id="txtLastBuyPrice" parent={this} simple={true} readOnly={true}
+                                                            format={"#,##0.000"} step={0.1}
+                                                            param={this.param.filter({ELEMENT:'txtLastBuyPrice',USERS:this.user.CODE})}/>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-12 d-flex align-items-center justify-content-center">
+                                                            <label className="col-form-label d-flex justify-content-center text-center">{this.t("txtLastBuyPrice")}</label>
+                                                        </div>
                                                     </div>
                                                 </NdLayoutItem>
                                                 {/* txtLastSalePriceLy */}
                                                 <NdLayoutItem key={"txtLastSalePriceLy"} id={"txtLastSalePriceLy"} parent={this} data-grid={{x:5,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'txtLastSalePriceLy',USERS:this.user.CODE})}>
-                                                    <div>
-                                                        <NdNumberBox id="txtLastSalePrice" parent={this} title={this.t("txtLastSalePrice")} titleAlign={"top"}
-                                                        format={"#,##0.000"} step={0.1} readOnly={true}
-                                                        param={this.param.filter({ELEMENT:'txtLastSalePrice',USERS:this.user.CODE})}/>
+                                                    <div className="row">
+                                                        <div className="col-12 d-flex align-items-center justify-content-center">
+                                                            <NdNumberBox id="txtLastSalePrice" parent={this} simple={true} readOnly={true}
+                                                            format={"#,##0.000"} step={0.1}
+                                                            param={this.param.filter({ELEMENT:'txtLastSalePrice',USERS:this.user.CODE})}/>
+                                                        </div>
                                                     </div>
-                                                </NdLayoutItem>
-                                                {/* sellPriceAddLy */}
-                                                <NdLayoutItem key={"sellPriceAddLy"} id={"sellPriceAddLy"} parent={this} data-grid={{x:10,y:0,h:1,w:2}} access={this.access.filter({ELEMENT:'sellPriceAddLy',USERS:this.user.CODE})}>
-                                                    <div>
-                                                        <Button icon="add"
-                                                        text={this.t("sellPriceAdd")}
-                                                        onClick={async()=>
-                                                        {   
-                                                            await this.popPrice.show();
-
-                                                            this.cmbPopPriListNo.value = 1
-                                                            this.dtPopPriStartDate.value = "1970-01-01"
-                                                            this.dtPopPriEndDate.value = "1970-01-01"
-                                                            this.txtPopPriQuantity.value = 1
-                                                            this.txtPopPriPrice.value = 0
-                                                            this.txtPopPriHT.value = 0
-                                                            this.txtPopPriTTC.value = 0
-                                                            this.txtPopPriceMargin.value = 0
-                                                            this.cmbPopPriDepot.value = "00000000-0000-0000-0000-000000000000"
-
-                                                            setTimeout(async () => 
-                                                            {
-                                                                this.txtPopPriPrice.focus()
-                                                            }, 600)
-                                                        }}/>
+                                                    <div className="row">
+                                                        <div className="col-12 d-flex align-items-center justify-content-center">
+                                                            <label className="col-form-label d-flex justify-content-center text-center">{this.t("txtLastSalePrice")}</label>
+                                                        </div>
                                                     </div>
                                                 </NdLayoutItem>
                                             </NdLayout>
@@ -1814,6 +1946,7 @@ export default class itemCard extends React.PureComponent
                                                     }
                                                 }
                                             }}
+                                            onToolbarPreparing={this.onPriceGridToolbarPreparing}
                                             >
                                                 <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPrice"}/>                                
                                                 <ColumnChooser enabled={true} />  
@@ -1859,26 +1992,6 @@ export default class itemCard extends React.PureComponent
                                         <div className='col-2'>
                                             <NdTextBox id="txtUnderUnitFiyat" parent={this} title={this.t("underUnitPrice")} titleAlign={"top"}/>
                                         </div>
-                                        <div className='col-10'>
-                                            <Toolbar>
-                                                <Item location="after">
-                                                    <Button icon="add"
-                                                    onClick={async()=>
-                                                    {                                                        
-                                                        await this.popUnit.show();
-
-                                                        this.cmbPopUnitType.value = "2"
-                                                        this.cmbPopUnitName.value = "001"
-                                                        this.txtPopUnitFactor.value = "0"
-                                                        this.txtPopUnitWeight.value = "0"
-                                                        this.txtPopUnitVolume.value = "0";
-                                                        this.txtPopUnitWidth.value = "0";
-                                                        this.txtPopUnitHeight.value = "0"
-                                                        this.txtPopUnitSize.value = "0"
-                                                    }}/>
-                                                </Item>
-                                            </Toolbar>
-                                        </div>
                                     </div>
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
@@ -1899,6 +2012,7 @@ export default class itemCard extends React.PureComponent
                                                     e.component.cancelEditData()
                                                 }
                                             }}
+                                            onToolbarPreparing={this.onUnitGridToolbarPreparing}
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
@@ -1917,28 +2031,6 @@ export default class itemCard extends React.PureComponent
                                 <Item title={this.t("tabTitleBarcode")} text={"tbBarcode"}>
                                     <div className='row px-2 py-2'>
                                         <div className='col-12'>
-                                            <Toolbar>
-                                                <Item location="after">
-                                                    <Button icon="add"
-                                                    onClick={async ()=>
-                                                    {                                                        
-                                                        await this.popBarcode.show();
-                                                        await this.cmbPopBarUnit.dataRefresh({source : this.itemsObj.dt('ITEM_UNIT').where({TYPE:{'in':[0,2]}})})
-                                                        this.txtPopBarcode.value = "";
-                                                        this.cmbPopBarType.value = "0";
-                                                        this.cmbPopBarUnit.value = this.itemsObj.dt('ITEM_UNIT').where({TYPE:0}).length > 0 ? this.itemsObj.dt('ITEM_UNIT').where({TYPE:0})[0].GUID : ''
-
-                                                        setTimeout(async () => 
-                                                        {
-                                                           this.txtPopBarcode.focus()
-                                                        }, 600);
-                                                    }}/>
-                                                </Item>
-                                            </Toolbar>
-                                        </div>
-                                    </div>
-                                    <div className='row px-2 py-2'>
-                                        <div className='col-12'>
                                             <NdGrid parent={this} id={"grdBarcode"} 
                                             showBorders={true} 
                                             columnsAutoWidth={true} 
@@ -1947,6 +2039,7 @@ export default class itemCard extends React.PureComponent
                                             height={'100%'} 
                                             width={'100%'}
                                             dbApply={false}
+                                            onToolbarPreparing={this.onBarcodeGridToolbarPreparing}
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
@@ -1964,24 +2057,6 @@ export default class itemCard extends React.PureComponent
                                         </div>
                                         <div className='col-2'>
                                             <NdTextBox id="txtMaxAlisFiyat" parent={this} title={this.t("maxBuyPrice")} titleAlign={"top"}/>
-                                        </div>
-                                        <div className='col-8'>
-                                            <Toolbar>
-                                                <Item location="after">
-                                                    <Button icon="add"
-                                                    onClick={async()=>
-                                                    {
-                                                        await this.popCustomer.show();
-                                                        this.txtPopCustomerItemCode.value = "";
-                                                        this.txtPopCustomerPrice.value = 0;
-
-                                                        setTimeout(async () => 
-                                                        {
-                                                           this.txtPopCustomerCode.focus()
-                                                        }, 600);
-                                                    }}/>                                                                                                            
-                                                </Item>
-                                            </Toolbar>
                                         </div>
                                     </div>
                                     <div className='row px-2 py-2'>
@@ -2022,6 +2097,7 @@ export default class itemCard extends React.PureComponent
                                                     }
                                                 }
                                             }}
+                                            onToolbarPreparing={this.onCustomerGridToolbarPreparing}
                                             >
                                                 <Paging defaultPageSize={5} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
@@ -2566,7 +2642,7 @@ export default class itemCard extends React.PureComponent
                         title={this.t("popPrice.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'600'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={2} height={'fit-content'} id={"frmPrice" + this.tabIndex}>
@@ -2714,12 +2790,12 @@ export default class itemCard extends React.PureComponent
                                     <NdLabel text={this.t("popPrice.txtPopPriHT")} alignment="right" />
                                     <NdNumberBox id={"txtPopPriHT"} parent={this} simple={true} readOnly={true} format={"##0.000"}/>
                                 </NdItem>
-                                 {/* txtPopPriTTC */}
-                                 <NdItem colSpan={2}>
+                                {/* txtPopPriTTC */}
+                                <NdItem colSpan={2}>
                                     <NdLabel text={this.t("popPrice.txtPopPriTTC")} alignment="right" />
                                     <NdNumberBox id={"txtPopPriTTC"} parent={this} simple={true} readOnly={true} format={"##0.000"}/>
                                 </NdItem>
-                                <NdItem>
+                                <NdItem colSpan={2}>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmPrice" + this.tabIndex}
@@ -2794,8 +2870,8 @@ export default class itemCard extends React.PureComponent
                         showTitle={true}
                         title={this.t("popUnit.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
-                        width={'500'}
-                        height={'510'}
+                        width={'350'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -2883,8 +2959,8 @@ export default class itemCard extends React.PureComponent
                         showTitle={true}
                         title={this.t("popBarcode.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
-                        width={'500'}
-                        height={'275'}
+                        width={'350'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -3021,8 +3097,8 @@ export default class itemCard extends React.PureComponent
                         showTitle={true}
                         title={this.t("popCustomer.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
-                        width={'500'}
-                        height={'320'}
+                        width={'400'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'} id={"frmItemCustomer" + + this.tabIndex}>
@@ -3483,7 +3559,7 @@ export default class itemCard extends React.PureComponent
                         title={this.t("popItemLang.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'250'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>

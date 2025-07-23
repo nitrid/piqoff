@@ -125,8 +125,8 @@ export default class NdPopGrid extends Base
                 )
             }   
             return (
-            <div className="row">
-                <div className="col-12 py-1">
+            <div className="row px-2">
+                <div className="col-12">
                     <Toolbar>
                         {tmp}
                     </Toolbar>

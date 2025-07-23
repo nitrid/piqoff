@@ -855,8 +855,8 @@ export default class promotionCard extends React.PureComponent
                             showCloseButton={true}
                             showTitle={true}
                             title={this.t("popDiscount.title")}
-                            width={'500'}
-                            height={'260'}
+                            width={'350'}
+                            height={'auto'}
                             >
                                 <div className='row'>
                                     <div className='col-12'>
@@ -870,6 +870,11 @@ export default class promotionCard extends React.PureComponent
                                             <NdTextBox id={"txtDiscRate" + pItem.WITHAL} parent={this} simple={true} 
                                             onValueChanged={async(e)=>
                                             {
+                                                if(this["txtDiscAmount" + pItem.WITHAL].isFocused)
+                                                {
+                                                    return
+                                                }
+
                                                 if(e.value >= 0 && e.value <= 100)
                                                 {
                                                     this["txtDiscAmount" + pItem.WITHAL].value = Number(this.state.discPrice - Number(this.state.discPrice).rateInc(e.value,2)).toFixed(2)
@@ -887,6 +892,11 @@ export default class promotionCard extends React.PureComponent
                                             <NdTextBox id={"txtDiscAmount" + pItem.WITHAL} parent={this} simple={true}
                                             onValueChanged={async(e)=>
                                             { 
+                                                if(this["txtDiscRate" + pItem.WITHAL].isFocused)
+                                                {
+                                                    return
+                                                }
+
                                                 if(Number(100 - Number(this.state.discPrice).rate2Num(Number(e.value.replace(",",".")),2)) >= 0 && Number(100 - Number(this.state.discPrice).rate2Num(Number(e.value.replace(",",".")),2)) <= 100)
                                                 {
                                                     this["txtDiscRate" + pItem.WITHAL].value = Number(100 - Number(this.state.discPrice).rate2Num(e.value.replace(",","."),2)).toFixed(2)

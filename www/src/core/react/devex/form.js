@@ -366,7 +366,6 @@ export class NdGroupItem extends React.PureComponent
         const groupWrapperStyle = 
         {
             gridColumn: `span ${colSpan}`,
-            marginBottom: '18px', // Burada mesafeyi biraz açtık (varsayılan 10px idi)
             ...style
         };
         
@@ -395,7 +394,7 @@ export class NdGroupItem extends React.PureComponent
                         {caption}
                     </div>
                 )}
-                <div style={contentStyle}>
+                <div className="nd-group-item-content" style={contentStyle}>
                     {children}
                 </div>
             </div>

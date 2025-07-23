@@ -790,10 +790,10 @@ export const langFr =
     worst5Days : "5 Défavorable jours",
     top10Days : "10 meilleurs jours",
     worst10Days : "10 Défavorable jours",
-    top15Days : "15 meilleurs jours",
-    worst15Days : "15 Défavorable jours",
     top20Days : "20 meilleurs jours",
     worst20Days : "20 Défavorable jours",
+    top50Days : "50 meilleurs jours",
+    worst50Days : "50 Défavorable jours",
     
     // Analyses par jour de la semaine
     bestMonday : "Meilleurs Lundis",
@@ -819,7 +819,8 @@ export const langFr =
     weekend : "Week-end",
     weekdayVsWeekend : "Semaine vs Week-end",
     firstWeekVsLastWeek : "Première semaine vs Dernière semaine",
-    
+    weeklyComparison : "Comparaison hebdomadaire",
+    monthlyComparison : "Comparaison mensuelle",
     // Analyses de distribution
     monthlyDistribution : "Répartition des ventes par mois",
     weeklyDistribution : "Répartition des ventes par semaine",
