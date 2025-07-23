@@ -83,8 +83,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                 { id: 'topDay', name: this.lang.t("topDay") },
                 { id: 'top5Days', name: this.lang.t("top5Days") },
                 { id: 'top10Days', name: this.lang.t("top10Days") },
-                { id: 'top15Days', name: this.lang.t("top15Days") },
                 { id: 'top20Days', name: this.lang.t("top20Days") },
+                { id: 'top50Days', name: this.lang.t("top50Days") },
                 { id: 'bestMonday', name: this.lang.t("bestMonday") },
                 { id: 'bestTuesday', name: this.lang.t("bestTuesday") },
                 { id: 'bestWednesday', name: this.lang.t("bestWednesday") },
@@ -102,8 +102,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     { id: 'topDay', name: this.lang.t("topDay") },
                     { id: 'top5Days', name: this.lang.t("top5Days") },
                     { id: 'top10Days', name: this.lang.t("top10Days") },
-                    { id: 'top15Days', name: this.lang.t("top15Days") },
                     { id: 'top20Days', name: this.lang.t("top20Days") },
+                    { id: 'top50Days', name: this.lang.t("top50Days") },
                     { id: 'bestMonday', name: this.lang.t("bestMonday") },
                     { id: 'bestTuesday', name: this.lang.t("bestTuesday") },
                     { id: 'bestWednesday', name: this.lang.t("bestWednesday") },
@@ -117,8 +117,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     { id: 'worstDay', name: this.lang.t("worstDay") },
                     { id: 'worst5Days', name: this.lang.t("worst5Days") },
                     { id: 'worst10Days', name: this.lang.t("worst10Days") },
-                    { id: 'worst15Days', name: this.lang.t("worst15Days") },
                     { id: 'worst20Days', name: this.lang.t("worst20Days") },
+                    { id: 'worst50Days', name: this.lang.t("worst50Days") },
                     { id: 'worstMonday', name: this.lang.t("worstMonday") },
                     { id: 'worstTuesday', name: this.lang.t("worstTuesday") },
                     { id: 'worstWednesday', name: this.lang.t("worstWednesday") },
@@ -132,7 +132,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     { id: 'weekendVsWeekday', name: this.lang.t("weekdayVsWeekend") },
                     { id: 'aboveAverage', name: this.lang.t("aboveAverage") },
                     { id: 'belowAverage', name: this.lang.t("belowAverage") },
-                    { id: 'firstWeekVsLastWeek', name: this.lang.t("firstWeekVsLastWeek") }
+                    { id: 'firstWeekVsLastWeek', name: this.lang.t("firstWeekVsLastWeek") },
+                    { id: 'weeklyComparison', name: this.lang.t("weeklyComparison") },
+                    { id: 'monthlyComparison', name: this.lang.t("monthlyComparison") }
                 ];
             case 'distribution':
                 return [
@@ -158,8 +160,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     { id: 'topDay', name: this.lang.t("topDay") },
                     { id: 'top5Days', name: this.lang.t("top5Days") },
                     { id: 'top10Days', name: this.lang.t("top10Days") },
-                    { id: 'top15Days', name: this.lang.t("top15Days") },
                     { id: 'top20Days', name: this.lang.t("top20Days") },
+                    { id: 'top50Days', name: this.lang.t("top50Days") },
                     { id: 'bestMonday', name: this.lang.t("bestMonday") },
                     { id: 'bestTuesday', name: this.lang.t("bestTuesday") },
                     { id: 'bestWednesday', name: this.lang.t("bestWednesday") },
@@ -238,26 +240,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                 }))
             analysisData.aboveAverage = aboveAverageDays
             
-            // Hafta sonu vs hafta içi
-            let weekendDays = dailySalesData.filter(day => 
-            {
-                let date = moment(day.date, 'DD/MM/YYYY')
-                return date.day() === 0 || date.day() === 6
-            })
-            let weekdays = dailySalesData.filter(day => 
-            {
-                let date = moment(day.date, 'DD/MM/YYYY')
-                return date.day() !== 0 && date.day() !== 6
-            })
-            
-            let weekendTotal = weekendDays.reduce((sum, day) => sum + day.totalSales, 0)
-            let weekdayTotal = weekdays.reduce((sum, day) => sum + day.totalSales, 0)
-            
-            analysisData.weekendVsWeekday = 
-            [
-                { category: this.lang.t("weekday"), value: weekdayTotal, title: this.lang.t("weekdayVsWeekend") },
-                { category: this.lang.t("weekend"), value: weekendTotal, title: this.lang.t("weekdayVsWeekend") }
-            ]
+             
             
             // Aylık dağılım
             let monthlyData = {}
@@ -299,9 +282,11 @@ export default class posSalesStatisticalReport extends React.PureComponent
             
             // Gün bazlı analizler
             let dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
             let dayNumbers = [0, 1, 2, 3, 4, 5, 6];
             
-            dayNumbers.forEach((dayNum, index) => {
+            dayNumbers.forEach((dayNum, index) => 
+            {
                 let dayName = dayNames[index];
                 let dayData = dailySalesData.filter(day => 
                 {
@@ -351,25 +336,25 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     rank: index + 1
                 }));
                 
-            analysisData.top15Days = dailySalesData
+            analysisData.top20Days = dailySalesData
                 .sort((a, b) => b.totalSales - a.totalSales)
-                .slice(0, 15)
+                .slice(0, 20)
                 .map((day, index) =>
                 ({
                     category: day.date,
                     value: day.totalSales,
-                    title: this.lang.t("top15Days"),
+                    title: this.lang.t("top20Days"),
                     rank: index + 1
                 }));
                 
-            analysisData.top20Days = dailySalesData
+            analysisData.top50Days = dailySalesData
                 .sort((a, b) => b.totalSales - a.totalSales)
-                .slice(0, 20)
+                .slice(0, 50)
                 .map((day, index) => 
                 ({
                     category: day.date,
                     value: day.totalSales,
-                    title: this.lang.t("top20Days"),
+                    title: this.lang.t("top50Days"),
                     rank: index + 1
                 }));
                 
@@ -384,17 +369,6 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     rank: index + 1
                 }));
                 
-            analysisData.worst15Days = dailySalesData
-                .sort((a, b) => a.totalSales - b.totalSales)
-                .slice(0, 15)
-                .map((day, index) => 
-                ({
-                    category: day.date,
-                    value: day.totalSales,
-                    title: this.lang.t("worst15Days"),
-                    rank: index + 1
-                }));
-                
             analysisData.worst20Days = dailySalesData
                 .sort((a, b) => a.totalSales - b.totalSales)
                 .slice(0, 20)
@@ -403,6 +377,17 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     category: day.date,
                     value: day.totalSales,
                     title: this.lang.t("worst20Days"),
+                    rank: index + 1
+                }));
+                
+            analysisData.worst50Days = dailySalesData
+                .sort((a, b) => a.totalSales - b.totalSales)
+                .slice(0, 50)
+                .map((day, index) => 
+                ({
+                    category: day.date,
+                    value: day.totalSales,
+                    title: this.lang.t("worst50Days"),
                     rank: index + 1
                 }));
                 
@@ -436,6 +421,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
             dailySalesData.forEach(day => 
             {
                 let week = moment(day.date, 'DD/MM/YYYY').format('YYYY-[W]WW')
+
                 if (!weeklyData[week]) 
                 {
                     weeklyData[week] = 0
@@ -898,7 +884,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                 // Seçili gruptaki en çok satan ürünler
                 let tmpQuery = 
                 {
-                    query: `SELECT TOP 20 
+                    query: `SELECT TOP 50 
                                 POS.ITEM_CODE,
                                 POS.ITEM_NAME,
                                 POS.ITEM_GRP_CODE,
@@ -945,7 +931,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                 // En çok satan ürün grupları
                 let tmpQuery = 
                 {
-                    query: `SELECT TOP 15 
+                    query: `SELECT TOP 50 
                                 POS.ITEM_GRP_CODE,
                                 POS.ITEM_GRP_NAME AS GROUP_NAME,
                                 SUM(POS.TOTAL) AS TOTAL_AMOUNT,

@@ -5,7 +5,7 @@ const pos_02_021 =
         topSellingProducts : "Beste Produkte",
         worstSellingProducts : "Schlechteste Produkte",
         topSellingProductGroups : "Beste Produktgruppen",
-        topSellingProductsInGroup : "Top 20 Produkte in Gruppe",
+        topSellingProductsInGroup : "Top 50 Produkte in Gruppe",
     }
 }
 

@@ -797,10 +797,10 @@ export const langEn =
     worst5Days : "Worst 5 Days",
     top10Days : "Top 10 Days",
     worst10Days : "Worst 10 Days",
-    top15Days : "Top 15 Days",
-    worst15Days : "Worst 15 Days",
     top20Days : "Top 20 Days",
     worst20Days : "Worst 20 Days",
+    top50Days : "Top 50 Days",
+    worst50Days : "Worst 50 Days",
     
     // Day-based Analysis
     bestMonday : "Best Mondays",
@@ -826,7 +826,8 @@ export const langEn =
     weekend : "Weekend",
     weekdayVsWeekend : "Weekday vs Weekend",
     firstWeekVsLastWeek : "First Week vs Last Week",
-    
+    weeklyComparison : "Weekly Comparison",
+    monthlyComparison : "Monthly Comparison",
     // Distribution Analysis
     monthlyDistribution : "Monthly Distribution",
     weeklyDistribution : "Weekly Distribution",

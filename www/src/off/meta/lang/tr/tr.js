@@ -786,10 +786,10 @@ export const langTr =
     worst5Days : "En Kötü 5 Gün",
     top10Days : "En İyi 10 Gün",
     worst10Days : "En Kötü 10 Gün",
-    top15Days : "En İyi 15 Gün",
-    worst15Days : "En Kötü 15 Gün",
     top20Days : "En İyi 20 Gün",
     worst20Days : "En Kötü 20 Gün",
+    top50Days : "En İyi 50 Gün",
+    worst50Days : "En Kötü 50 Gün",
     
     // Gün Bazlı Analizler
     bestMonday : "En İyi Pazartesi Günleri",
@@ -815,7 +815,7 @@ export const langTr =
     weekend : "Hafta Sonu",
     weekdayVsWeekend : "Hafta İçi vs Hafta Sonu",
     firstWeekVsLastWeek : "İlk Hafta vs Son Hafta",
-    
+    weeklyComparison : "Haftalık Karşılaştırma",
     // Dağılım Analizleri
     monthlyDistribution : "Aylık Satış Dağılımı",
     weeklyDistribution : "Haftalık Satış Dağılımı",

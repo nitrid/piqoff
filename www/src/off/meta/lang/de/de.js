@@ -742,10 +742,10 @@ export const langDe =
     worst5Days : "Schlechteste 5 Tage",
     top10Days : "Beste 10 Tage",
     worst10Days : "Schlechteste 10 Tage",
-    top15Days : "Beste 15 Tage",
-    worst15Days : "Schlechteste 15 Tage",
     top20Days : "Beste 20 Tage",
     worst20Days : "Schlechteste 20 Tage",
+    top50Days : "Beste 50 Tage",
+    worst50Days : "Schlechteste 50 Tage",
     
     // Gün Bazlı Analizler
     bestMonday : "Beste Montage",
@@ -771,6 +771,8 @@ export const langDe =
     weekend : "Wochenende",
     weekdayVsWeekend : "Wochenende vs Wochentag",
     firstWeekVsLastWeek : "Erste Woche vs Letzte Woche",
+    weeklyComparison : "Wöchentliche Vergleich",
+    monthlyComparison : "Monatliche Vergleich",
     
     // Dağılım Analizleri
     monthlyDistribution : "Monatliche Verteilung",
