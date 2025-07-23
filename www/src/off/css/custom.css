@@ -398,6 +398,10 @@
     gap: 5px !important;
     padding: 0px !important;
 }
+.nd-group-item-content
+{
+    gap: 5px !important;
+}
 .dx-placeholder
 {
     top: -5px !important;
