@@ -835,7 +835,7 @@ export const langFr =
     worstProducts : "Défavorable Produits",
     topProductGroups : "Groupes de Produits",
     selectProductGroup : "Sélectionner un Groupe de Produits",
-    topSellingProductsInGroup : "Top 20 Produits du Groupe",
+    topSellingProductsInGroup : "Top 50 Produits du Groupe",
     chartType : "Type de Graphique",
     barChartPop : "Graphique en Barres",
     pieChartPop :  "Graphique Circulaire",
@@ -844,7 +844,7 @@ export const langFr =
         topSellingProducts : "Meilleurs Produits",
         worstSellingProducts : "Défavorable Produits",
         topSellingProductGroups : "Groupes de Produits",
-        topSellingProductsInGroup : "Top 20 Produits du Groupe",
+        topSellingProductsInGroup : "Top 50 Produits du Groupe",
     },
     paretoChart : {
         title : "Graphique de Pareto",
