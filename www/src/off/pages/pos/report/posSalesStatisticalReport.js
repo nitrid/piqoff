@@ -1702,7 +1702,6 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 if(e.value === 'products')
                                                 {
                                                     // Sadece ürün gruplarını yükle, analiz yapma
-                                                    App.instance.loading.show()
                                                     
                                                     try {
                                                         let productGroups = await this.getProductGroups()
@@ -1746,8 +1745,6 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 // Ürün analizleri seçildiğinde ilgili veriyi yükle
                                                 if (this.state.selectedAnalysisType === 'products') 
                                                 {
-                                                    App.instance.loading.show()
-                                                    
                                                     try 
                                                     {
                                                         if (e.value === 'topSellingProductsInGroup') 
@@ -1847,8 +1844,6 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 {
                                                     if (e.value) 
                                                     {
-                                                        App.instance.loading.show()
-                                                        
                                                         try 
                                                         {
                                                             // selectedProductGroup'u güncelle
@@ -1952,8 +1947,6 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     async () => 
                                                     {
                                                         // Ürün detay verilerini yükle
-                                                        App.instance.loading.show()
-                                                        
                                                         try 
                                                         {
                                                             let productDetailData = this.calculateProductDetailData(
@@ -2075,7 +2068,6 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     async () => 
                                                     {
                                                         // Ürün detay verilerini yükle
-                                                        App.instance.loading.show()
                                                         
                                                         try 
                                                         {
@@ -2095,6 +2087,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         {
                                                             console.error('Error loading product detail:', error)
                                                         }
+                                                        
                                                     });
                                                 }
                                             }}
@@ -2206,7 +2199,6 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         () => 
                                                         {
                                                             // Ürün detay verilerini yükle
-                                                            App.instance.loading.show()
                                                             
                                                             try 
                                                             {
@@ -2577,7 +2569,6 @@ export default class posSalesStatisticalReport extends React.PureComponent
 
                         if (this.state.selectedProduct) 
                         {
-                            App.instance.loading.show()
                             try {
                                 let productDetailData = await this.calculateProductDetailData(
                                     this.state.selectedProduct.code,
@@ -2646,7 +2637,6 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 {
                                                     this.setState({ productDetailAnalysisType: e.value })
 
-                                                    App.instance.loading.show()
 
                                                     try 
                                                     {
