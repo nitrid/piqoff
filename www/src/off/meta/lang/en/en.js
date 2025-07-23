@@ -268,7 +268,8 @@ export const langEn =
         franc: "Franc",
         ticketRest: "Ticket Rest",      
         voucher: "Gift Voucher",
-        ticket: "Ticket"
+        ticket: "Ticket",
+        check: "Check"
     },
     low: "Low",
     stable: "Stable",
