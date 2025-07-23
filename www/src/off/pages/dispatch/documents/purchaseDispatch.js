@@ -1141,6 +1141,7 @@ export default class purchaseDispatch extends DocBase
                     }
                     if(this.newPriceDate.length > 0)
                     {
+                        App.instance.loading.show()
                         await this.msgNewPriceDate.show().then(async (e) =>
                         {
                 

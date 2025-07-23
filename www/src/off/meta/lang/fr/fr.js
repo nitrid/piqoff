@@ -790,10 +790,10 @@ export const langFr =
     worst5Days : "5 Défavorable jours",
     top10Days : "10 meilleurs jours",
     worst10Days : "10 Défavorable jours",
-    top15Days : "15 meilleurs jours",
-    worst15Days : "15 Défavorable jours",
     top20Days : "20 meilleurs jours",
     worst20Days : "20 Défavorable jours",
+    top50Days : "50 meilleurs jours",
+    worst50Days : "50 Défavorable jours",
     
     // Analyses par jour de la semaine
     bestMonday : "Meilleurs Lundis",
@@ -819,7 +819,8 @@ export const langFr =
     weekend : "Week-end",
     weekdayVsWeekend : "Semaine vs Week-end",
     firstWeekVsLastWeek : "Première semaine vs Dernière semaine",
-    
+    weeklyComparison : "Comparaison hebdomadaire",
+    monthlyComparison : "Comparaison mensuelle",
     // Analyses de distribution
     monthlyDistribution : "Répartition des ventes par mois",
     weeklyDistribution : "Répartition des ventes par semaine",
@@ -835,7 +836,7 @@ export const langFr =
     worstProducts : "Défavorable Produits",
     topProductGroups : "Groupes de Produits",
     selectProductGroup : "Sélectionner un Groupe de Produits",
-    topSellingProductsInGroup : "Top 20 Produits du Groupe",
+    topSellingProductsInGroup : "Top 50 Produits du Groupe",
     chartType : "Type de Graphique",
     barChartPop : "Graphique en Barres",
     pieChartPop :  "Graphique Circulaire",
@@ -844,7 +845,7 @@ export const langFr =
         topSellingProducts : "Meilleurs Produits",
         worstSellingProducts : "Défavorable Produits",
         topSellingProductGroups : "Groupes de Produits",
-        topSellingProductsInGroup : "Top 20 Produits du Groupe",
+        topSellingProductsInGroup : "Top 50 Produits du Groupe",
     },
     paretoChart : {
         title : "Graphique de Pareto",

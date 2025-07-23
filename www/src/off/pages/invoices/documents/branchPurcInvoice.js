@@ -1088,6 +1088,7 @@ export default class branchSaleInvoice extends DocBase
                     }
                     if(this.newPriceDate.length > 0)
                     {
+                        App.instance.loading.show()
                         await this.msgNewPriceDate.show().then(async (e) =>
                         {
                             if(e == 'btn02')
