@@ -105,6 +105,7 @@ export default class App extends React.PureComponent
                 options : 
                 {
                     width: 80,
+                    elementAttr: {class: 'top-bar-dropdown-lang'},
                     items: [{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
                     valueExpr: 'id',
                     displayExpr: 'text',
@@ -387,6 +388,7 @@ export default class App extends React.PureComponent
                 options : 
                 {
                     width: 80,
+                    elementAttr: {class: 'top-bar-dropdown-lang'},
                     items: [{id:"de",text:"DE"},{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
                     valueExpr: 'id',
                     displayExpr: 'text',

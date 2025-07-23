@@ -8,7 +8,7 @@ import { acs } from '../../../meta/acs.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import Form, { Label, Item, EmptyItem } from 'devextreme-react/form';
 import ContextMenu from 'devextreme-react/context-menu';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
@@ -23,8 +23,8 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
 import { LoadPanel } from 'devextreme-react/load-panel';
-import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
-import {NdToast} from '../../../../core/react/devex/toast';
+import { NdForm, NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast';
 
 export default class salesInvoice extends DocBase
 {
@@ -41,6 +41,7 @@ export default class salesInvoice extends DocBase
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
         this._calculateInterfel = this._calculateInterfel.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
 
@@ -949,6 +950,147 @@ export default class salesInvoice extends DocBase
             resolve()
         })
     }    
+    onGridToolbarPreparing(e) 
+    {
+        e.toolbarOptions.items.push(
+        {
+            location: 'before',
+            widget: 'dxButton',
+            options: 
+            {
+                icon: 'add',
+                validationGroup: 'frmDoc' + this.tabIndex,
+                onClick: ((c) => 
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        if(typeof this.docObj.docItems.dt()[0] != 'undefined')
+                        {
+                            if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                            {
+                                this.pg_txtItemsCode.onClick = async(data) =>
+                                {
+                                    this.checkboxReset()
+                                    
+                                    this.grid.devGrid.beginUpdate()
+                                    for (let i = 0; i < data.length; i++) 
+                                    {
+                                        await this.addItem(data[i],null)
+                                    }
+                                    this.grid.devGrid.endUpdate()
+                                }
+                                this.pg_txtItemsCode.show()
+                                return
+                            }
+                        }
+                    
+                        this.pg_txtItemsCode.onClick = async(data) =>
+                        {
+                            await this.core.util.waitUntil(100)
+                            this.checkboxReset()
+                            
+                            this.grid.devGrid.beginUpdate()
+                            for (let i = 0; i < data.length; i++) 
+                            {
+                                await this.addItem(data[i],null)
+                            }
+                            this.grid.devGrid.endUpdate()
+                        }
+                        this.pg_txtItemsCode.show()
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
+                    }
+                }).bind(this)
+            }
+        })
+        e.toolbarOptions.items.push(
+        {
+            location: 'before',
+            widget: 'dxButton',
+            options: 
+            {
+                icon: 'add',
+                text: this.t("serviceAdd"),
+                validationGroup: 'frmDoc' + this.tabIndex,
+                onClick: (async(c) => 
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        if(typeof this.docObj.docItems.dt()[0] != 'undefined')
+                        {
+                            if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                            {
+                                await this.pg_service.show()
+                                this.pg_service.onClick = async(data) =>
+                                {
+                                    this.checkboxReset()
+                                    
+                                    this.grid.devGrid.beginUpdate()
+                                    for (let i = 0; i < data.length; i++) 
+                                    {
+                                        await this.addItem(data[i],null)
+                                    }
+                                    this.grid.devGrid.endUpdate()
+                                }
+                                return
+                            }
+                        }
+                        
+                        await this.core.util.waitUntil(100)
+                        await this.pg_service.show()
+                        
+                        this.pg_service.onClick = async(data) =>
+                        {
+                            this.checkboxReset()
+                            
+                            this.grid.devGrid.beginUpdate()
+                            for (let i = 0; i < data.length; i++) 
+                            {
+                                await this.addItem(data[i],null)
+                            }
+                            this.grid.devGrid.endUpdate()
+                        }
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
+                    }
+                }).bind(this)
+            }
+        })
+        e.toolbarOptions.items.push(
+        {
+            location: 'before',
+            widget: 'dxButton',
+            options: 
+            {
+                icon: 'increaseindent',
+                text: this.lang.t("collectiveItemAdd"),
+                validationGroup: 'frmDoc' + this.tabIndex,
+                onClick: (async(c) => 
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        await this.popMultiItem.show()
+                        await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                        
+                        this.cmbMultiItemType.value = 1
+                        
+                        if(typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                        {
+                            await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                        }
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
+                    }
+                }).bind(this)
+            }
+        })
+    }
     render()
     {
         return(
@@ -964,7 +1106,7 @@ export default class salesInvoice extends DocBase
                     ref={this.loading}
                     />
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -1169,7 +1311,7 @@ export default class salesInvoice extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '15%'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmDoc">
                                 {/* txtRef-Refno */}
@@ -1245,7 +1387,7 @@ export default class salesInvoice extends DocBase
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmDoc"  + this.tabIndex}>
+                                                <Validator validationGroup={"frmDoc"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                     <RangeRule min={1} message={this.t("validRefNo")}/>
                                                 </Validator> 
@@ -1637,127 +1779,10 @@ export default class salesInvoice extends DocBase
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '60%'}}>
                         <div className="col-12">
-                            <NdForm colCount={1} onInitialized={(e)=>
-                            {
-                                this.frmDocItems = e.component
-                            }}>
-                                <NdItem location="after">
-                                    <Button icon="add"
-                                    validationGroup={"frmDoc"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    this.pg_txtItemsCode.onClick = async(data) =>
-                                                    {
-                                                        this.checkboxReset()
-                                                        
-                                                        this.grid.devGrid.beginUpdate()
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            await this.addItem(data[i],null)
-                                                        }
-                                                        this.grid.devGrid.endUpdate()
-                                                    }
-                                                    this.pg_txtItemsCode.show()
-                                                    return
-                                                }
-                                            }
-                                           
-                                            this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                await this.core.util.waitUntil(100)
-                                                this.checkboxReset()
-                                                
-                                                this.grid.devGrid.beginUpdate()
-                                                for (let i = 0; i < data.length; i++) 
-                                                {
-                                                    await this.addItem(data[i],null)
-                                                }
-                                                this.grid.devGrid.endUpdate()
-                                            }
-                                            this.pg_txtItemsCode.show()
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
-                                        }
-                                    }}/>
-                                    <Button icon="add" text={this.t("serviceAdd")}
-                                    validationGroup={"frmPurcInv"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    await this.pg_service.show()
-                                                    this.pg_service.onClick = async(data) =>
-                                                    {
-                                                        this.checkboxReset()
-                                                        
-                                                        this.grid.devGrid.beginUpdate()
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            await this.addItem(data[i],null)
-                                                        }
-                                                        this.grid.devGrid.endUpdate()
-                                                    }
-                                                    return
-                                                }
-                                            }
-                                           
-                                            await this.core.util.waitUntil(100)
-                                            await this.pg_service.show()
-                                            this.pg_service.onClick = async(data) =>
-                                            {
-                                                this.checkboxReset()
-                                                
-                                                this.grid.devGrid.beginUpdate()
-                                                for (let i = 0; i < data.length; i++) 
-                                                {
-                                                    await this.addItem(data[i],null)
-                                                }
-                                                this.grid.devGrid.endUpdate()
-                                            }
-                                              
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
-                                        }
-                                    }}/>
-                                    <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
-                                    validationGroup={"frmDoc"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            await this.popMultiItem.show()
-                                            await this.grdMultiItem.dataRefresh({source:this.multiItemData});
-                                            
-                                            this.cmbMultiItemType.value = 1
-                                            
-                                            if(typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                            {
-                                                await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
-                                            }
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
-                                        }
-                                    }}/>
-                                </NdItem>
-                                <NdItem>
+                            <NdForm colCount={1} onInitialized={(e)=>{this.frmDocItems = e.component}} style={{height: '100%'}}> 
+                                <NdItem style={{height: '100%'}}>
                                     <React.Fragment>
                                         <NdGrid parent={this} id={"grdSlsInv"+this.tabIndex} 
                                         showBorders={true} 
@@ -1766,7 +1791,7 @@ export default class salesInvoice extends DocBase
                                         onColumnReorder={this.handleColumnReorder}
                                         allowColumnResizing={true} 
                                         filterRow={{visible:true}}
-                                        height={'400'} 
+                                        height={'100%'} 
                                         width={'100%'}
                                         dbApply={false}
                                         sorting={{mode:'none'}}
@@ -2044,12 +2069,13 @@ export default class salesInvoice extends DocBase
                                             this.grid = this["grdSlsInv" + this.tabIndex]
                                             await this["grdSlsInv"+this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
                                         }}
+                                        onToolbarPreparing={this.onGridToolbarPreparing}
                                         >
                                             <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsInv"}/>
                                             <ColumnChooser enabled={true} />
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="virtual" /> : <Scrolling mode="virtual" />}
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                             <Export fileName={this.lang.t("menuOff.ftr_02_002")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
@@ -2103,150 +2129,155 @@ export default class salesInvoice extends DocBase
                             </NdForm>
                         </div>
                     </div>
-                    <div className='row px-2 pt-2'>
+                    <div className='row px-2 pt-1' style={{height: '18%'}}>
                         <div className='col-12'>
                             <TabPanel height="100%">
                                 <Item title={this.t("tabTitleSubtotal")}>
-                                    <div className="row px-2 pt-2">
-                                    <div className="col-12">
-                                        <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
-                                            {/* Ara Toplam */}
-                                            <EmptyItem colSpan={2}/>
-                                            <Item>
-                                                <Label text={this.t("txtAmount")} alignment="right" />
-                                                <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
-                                                maxLength={32}
-                                                />
-                                            </Item>
-                                            <Item>
-                                                <Label text={this.t("txtDiscount")} alignment="right" />
-                                                <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
-                                                maxLength={32}
-                                                button=
-                                                {
-                                                    [
+                                    <ScrollView>
+                                        <div className="row px-2 pt-1">
+                                            <div className="col-12">
+                                                <NdForm colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
+                                                    {/* Ara Toplam */}
+                                                    <NdEmptyItem colSpan={2}/>
+                                                    <NdItem>
+                                                        <NdLabel text={this.t("txtAmount")} alignment="right" />
+                                                        <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"AMOUNT"}}
+                                                        maxLength={32}
+                                                        />
+                                                    </NdItem>
+                                                    <NdItem>
+                                                        <NdLabel text={this.t("txtDiscount")} alignment="right" />
+                                                        <NdTextBox id="txtDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DISCOUNT"}}
+                                                        maxLength={32}
+                                                        button=
                                                         {
-                                                            id:'01',
-                                                            icon:'more',
-                                                            onClick:async()  =>
-                                                            {
-                                                                await this.popDiscount.show()
-                                                                if(this.docObj.dt()[0].DISCOUNT > 0 )
+                                                            [
                                                                 {
-                                                                    this.txtDiscountPercent1.value  = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_1",3),3)
-                                                                    this.txtDiscountPrice1.value = this.docObj.docItems.dt().sum("DISCOUNT_1",2)
-                                                                    this.txtDiscountPercent2.value  = Number(this.docObj.dt()[0].AMOUNT-parseFloat(this.docObj.docItems.dt().sum("DISCOUNT_1",3))).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_2",3),3)
-                                                                    this.txtDiscountPrice2.value = this.docObj.docItems.dt().sum("DISCOUNT_2",2)
-                                                                    this.txtDiscountPercent3.value  = Number(this.docObj.dt()[0].AMOUNT-(parseFloat(this.docObj.docItems.dt().sum("DISCOUNT_1",3))+parseFloat(this.docObj.docItems.dt().sum("DISCOUNT_2",3)))).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_3",3),3)
-                                                                    this.txtDiscountPrice3.value = this.docObj.docItems.dt().sum("DISCOUNT_3",2)
-                                                                }
-                                                                else
-                                                                {
-                                                                    this.txtDiscountPercent1.value  = 0
-                                                                    this.txtDiscountPrice1.value = 0
-                                                                    this.txtDiscountPercent2.value  = 0
-                                                                    this.txtDiscountPrice2.value = 0
-                                                                    this.txtDiscountPercent3.value  = 0
-                                                                    this.txtDiscountPrice3.value = 0
-                                                                }
-                                                            }
-                                                        },
-                                                    ]
-                                                }
-                                                />
-                                            </Item>
-                                            {/* İndirim */}
-                                            <EmptyItem colSpan={2}/>
-                                            <Item>
-                                                <Label text={this.t("txtSubTotal")} alignment="right" />
-                                                <NdTextBox id="txtSubTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"SUBTOTAL"}}
-                                                maxLength={32}
-                                                />
-                                            </Item>
-                                            <Item>
-                                                <Label text={this.t("txtDocDiscount")} alignment="right" />
-                                                <NdTextBox id="txtDocDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DOC_DISCOUNT"}}
-                                                maxLength={32}
-                                                button=
-                                                {
-                                                    [
+                                                                    id:'01',
+                                                                    icon:'more',
+                                                                    onClick:async()  =>
+                                                                    {
+                                                                        await this.popDiscount.show()
+                                                                        if(this.docObj.dt()[0].DISCOUNT > 0 )
+                                                                        {
+                                                                            this.txtDiscountPercent1.value  = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_1",3),3)
+                                                                            this.txtDiscountPrice1.value = this.docObj.docItems.dt().sum("DISCOUNT_1",2)
+                                                                            this.txtDiscountPercent2.value  = Number(this.docObj.dt()[0].AMOUNT-parseFloat(this.docObj.docItems.dt().sum("DISCOUNT_1",3))).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_2",3),3)
+                                                                            this.txtDiscountPrice2.value = this.docObj.docItems.dt().sum("DISCOUNT_2",2)
+                                                                            this.txtDiscountPercent3.value  = Number(this.docObj.dt()[0].AMOUNT-(parseFloat(this.docObj.docItems.dt().sum("DISCOUNT_1",3))+parseFloat(this.docObj.docItems.dt().sum("DISCOUNT_2",3)))).rate2Num(this.docObj.docItems.dt().sum("DISCOUNT_3",3),3)
+                                                                            this.txtDiscountPrice3.value = this.docObj.docItems.dt().sum("DISCOUNT_3",2)
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            this.txtDiscountPercent1.value  = 0
+                                                                            this.txtDiscountPrice1.value = 0
+                                                                            this.txtDiscountPercent2.value  = 0
+                                                                            this.txtDiscountPrice2.value = 0
+                                                                            this.txtDiscountPercent3.value  = 0
+                                                                            this.txtDiscountPrice3.value = 0
+                                                                        }
+                                                                    }
+                                                                },
+                                                            ]
+                                                        }
+                                                        />
+                                                    </NdItem>
+                                                    {/* İndirim */}
+                                                    <NdEmptyItem colSpan={2}/>
+                                                    <NdItem>
+                                                        <NdLabel text={this.t("txtSubTotal")} alignment="right" />
+                                                        <NdTextBox id="txtSubTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"SUBTOTAL"}}
+                                                        maxLength={32}
+                                                        />
+                                                    </NdItem>
+                                                    <NdItem>
+                                                        <NdLabel text={this.t("txtDocDiscount")} alignment="right" />
+                                                        <NdTextBox id="txtDocDiscount" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"DOC_DISCOUNT"}}
+                                                        maxLength={32}
+                                                        button=
                                                         {
-                                                            id:'01',
-                                                            icon:'more',
-                                                            onClick:async()  =>
-                                                            {
-                                                                await this.popDocDiscount.show()
-                                                                if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
+                                                            [
                                                                 {
-                                                                    this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)
-                                                                    this.txtDocDiscountPrice1.value = this.docObj.dt()[0].DOC_DISCOUNT_1
-                                                                    this.txtDocDiscountPercent2.value  = Number(this.docObj.dt()[0].SUBTOTAL-parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_1)).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_2,5)
-                                                                    this.txtDocDiscountPrice2.value = this.docObj.dt()[0].DOC_DISCOUNT_2
-                                                                    this.txtDocDiscountPercent3.value  = Number(this.docObj.dt()[0].SUBTOTAL-(parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_1)+parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_2))).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_3,5)
-                                                                    this.txtDocDiscountPrice3.value = this.docObj.dt()[0].DOC_DISCOUNT_3
-                                                                }
-                                                                else
-                                                                {
-                                                                    this.txtDocDiscountPercent1.value  = 0
-                                                                    this.txtDocDiscountPrice1.value = 0
-                                                                    this.txtDocDiscountPercent2.value  = 0
-                                                                    this.txtDocDiscountPrice2.value = 0
-                                                                    this.txtDocDiscountPercent3.value  = 0
-                                                                    this.txtDocDiscountPrice3.value = 0
-                                                                }
-                                                            }
-                                                        },
-                                                    ]
-                                                }
-                                                />
-                                            </Item>
-                                            {/* KDV */}
-                                            <EmptyItem colSpan={2}/>
-                                            <Item>
-                                                <Label text={this.t("txtTotalHt")} alignment="right" />
-                                                <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}
-                                                maxLength={32}
-                                                />
-                                            </Item>
-                                            <Item>
-                                                <Label text={this.t("txtVat")} alignment="right" />
-                                                <NdTextBox id="txtVat" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"VAT"}}
-                                                maxLength={32}
-                                                button=
-                                                {
-                                                    [
+                                                                    id:'01',
+                                                                    icon:'more',
+                                                                    onClick:async()  =>
+                                                                    {
+                                                                        await this.popDocDiscount.show()
+                                                                        if(this.docObj.dt()[0].DOC_DISCOUNT > 0 )
+                                                                        {
+                                                                            this.txtDocDiscountPercent1.value  = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_1,5)
+                                                                            this.txtDocDiscountPrice1.value = this.docObj.dt()[0].DOC_DISCOUNT_1
+                                                                            this.txtDocDiscountPercent2.value  = Number(this.docObj.dt()[0].SUBTOTAL-parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_1)).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_2,5)
+                                                                            this.txtDocDiscountPrice2.value = this.docObj.dt()[0].DOC_DISCOUNT_2
+                                                                            this.txtDocDiscountPercent3.value  = Number(this.docObj.dt()[0].SUBTOTAL-(parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_1)+parseFloat(this.docObj.dt()[0].DOC_DISCOUNT_2))).rate2Num(this.docObj.dt()[0].DOC_DISCOUNT_3,5)
+                                                                            this.txtDocDiscountPrice3.value = this.docObj.dt()[0].DOC_DISCOUNT_3
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            this.txtDocDiscountPercent1.value  = 0
+                                                                            this.txtDocDiscountPrice1.value = 0
+                                                                            this.txtDocDiscountPercent2.value  = 0
+                                                                            this.txtDocDiscountPrice2.value = 0
+                                                                            this.txtDocDiscountPercent3.value  = 0
+                                                                            this.txtDocDiscountPrice3.value = 0
+                                                                        }
+                                                                    }
+                                                                },
+                                                            ]
+                                                        }
+                                                        />
+                                                    </NdItem>
+                                                    {/* KDV */}
+                                                    <NdEmptyItem colSpan={2}/>
+                                                    <NdItem>
+                                                        <NdLabel text={this.t("txtTotalHt")} alignment="right" />
+                                                        <NdTextBox id="txtTotalHt" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTALHT"}}
+                                                        maxLength={32}
+                                                        />
+                                                    </NdItem>
+                                                    <NdItem>
+                                                        <NdLabel text={this.t("txtVat")} alignment="right" />
+                                                        <NdTextBox id="txtVat" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"VAT"}}
+                                                        maxLength={32}
+                                                        button=
                                                         {
-                                                            id:'01',
-                                                            icon:'more',
-                                                            onClick:async ()  =>
-                                                            {
-                                                                await this.popVatRate.show()
-                                                                this.vatRate.clear()
-                                                                for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
+                                                            [
                                                                 {
-                                                                    let tmpTotalHt  =  parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2) -this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("DOC_DISCOUNT",2))
-                                                                    let tmpVat = parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
-                                                                    let tmpData = {"RATE":this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat,"TOTALHT":tmpTotalHt}
-                                                                    this.vatRate.push(tmpData)
-                                                                }
-                                                                await this.grdVatRate.dataRefresh({source:this.vatRate})
-                                                            }
-                                                        },
-                                                    ]
-                                                }
-                                                />
-                                            </Item>
-                                            {/* KDV */}
-                                            <EmptyItem colSpan={3}/>
-                                            <Item>
-                                                <Label text={this.t("txtTotal")} alignment="right" />
-                                                <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
-                                                maxLength={32}
-                                                />
-                                            </Item>
-                                        </Form>
-                                    </div>
-                                    </div>
+                                                                    id:'01',
+                                                                    icon:'more',
+                                                                    onClick:async ()  =>
+                                                                    {
+                                                                        await this.popVatRate.show()
+                                                                        this.vatRate.clear()
+                                                                        for (let i = 0; i < this.docObj.docItems.dt().groupBy('VAT_RATE').length; i++) 
+                                                                        {
+                                                                            let tmpTotalHt  =  parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("TOTALHT",2) -this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("DOC_DISCOUNT",2))
+                                                                            let tmpVat = parseFloat(this.docObj.docItems.dt().where({'VAT_RATE':this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
+                                                                            let tmpData = {"RATE":this.docObj.docItems.dt().groupBy('VAT_RATE')[i].VAT_RATE,"VAT":tmpVat,"TOTALHT":tmpTotalHt}
+                                                                            this.vatRate.push(tmpData)
+                                                                        }
+                                                                        await this.grdVatRate.dataRefresh({source:this.vatRate})
+                                                                    }
+                                                                },
+                                                            ]
+                                                        }
+                                                        />
+                                                    </NdItem>
+                                                    {/* KDV */}
+                                                    <NdEmptyItem colSpan={3}/>
+                                                    <NdItem>
+                                                        <NdLabel text={this.t("txtTotal")} alignment="right" />
+                                                        <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}
+                                                        maxLength={32}
+                                                        />
+                                                    </NdItem>
+                                                </NdForm>
+                                            </div>
+                                        </div>
+                                    </ScrollView>
+                                </Item>
+                                <Item title={this.t("tabTitlePayments")}>
+
                                 </Item>
                             </TabPanel>
                         </div>
@@ -2259,7 +2290,7 @@ export default class salesInvoice extends DocBase
                         showTitle={true}
                         title={this.t("popDesign.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
-                        width={'500'}
+                        width={'350'}
                         height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={false}
@@ -2465,7 +2496,7 @@ export default class salesInvoice extends DocBase
                         showTitle={true}
                         title={this.t("popDetail.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
-                        width={'500'}
+                        width={'350'}
                         height={'auto'}
                         loadPanel={{enabled:false}}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
