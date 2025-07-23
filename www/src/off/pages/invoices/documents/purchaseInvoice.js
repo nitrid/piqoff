@@ -1052,7 +1052,7 @@ export default class purchaseInvoice extends DocBase
                             CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, 
                             CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, 
                             ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID AND CUSTOMER = '${this.docObj.dt()[0].OUTPUT}' AND DELETED =0),'') AS MULTICODE 
-                            FROM ITEMS_VW_04 AS ITEMS 
+                            FROM ITEMS_VW_01 AS ITEMS 
                             LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON 
                             ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '${this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value}' 
                             WHERE ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS.GUID AND CUSTOMER = '${this.docObj.dt()[0].OUTPUT}' AND DELETED =0),'') = @VALUE AND ITEMS.STATUS = 1 `,
@@ -1083,7 +1083,7 @@ export default class purchaseInvoice extends DocBase
                             CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, 
                             CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, 
                             ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE WHERE DELETED = 0 AND ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].OUTPUT}'),'') AS MULTICODE 
-                            FROM ITEMS_VW_04 AS ITEMS 
+                            FROM ITEMS_VW_01 AS ITEMS 
                             LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON 
                             ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '${this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value}' 
                             WHERE ITEMS.CODE = @VALUE AND ITEMS.STATUS = 1 `,
@@ -1402,6 +1402,7 @@ export default class purchaseInvoice extends DocBase
                     }
                     if(this.newPriceDate.length > 0)
                     {
+                        App.instance.loading.show()
                         await this.msgNewPriceDate.show().then(async (e) =>
                         {
                 

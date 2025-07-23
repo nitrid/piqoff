@@ -193,7 +193,6 @@ export default class DocBase extends React.PureComponent
             this.msgQuantity.onShowed = async ()=>
             {
                 this.txtPopQteUnitQuantity.value = 1
-                this.txtPopQuantity.focus()
                 this.msgQuantity.setTitle(this.msgQuantity.tmpData.NAME)
                 
                 let tmpUnitDt = new datatable()
@@ -269,6 +268,8 @@ export default class DocBase extends React.PureComponent
                         this.txtPopQteInputQty.value = tmpDepotQty.RESERV_INPUT_QTY
                     }
                     this.txtPopQuantity.value = 1
+                    this.txtPopQuantity.focus()
+
                 }
             }
             this.msgUnit.onShowed = async ()=>
