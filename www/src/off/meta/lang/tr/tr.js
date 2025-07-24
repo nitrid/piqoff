@@ -979,6 +979,17 @@ export const langTr =
     data: "Veri",
     item: "Ürün",
     product: "Ürün",
+    periodComparison: "Dönem Karşılaştırması",
+    granularity: "Dönem",
+    year: "Yıl",
+    month: "Ay",
+    week: "Hafta",
+    day: "Gün",
+    comparedWith: "Karşılaştırılan",
+    period1: "Dönem 1",
+    period2: "Dönem 2",
+    updateChart: "Grafiği Güncelle",
+    
     analyticsChart: {
         stockStatus: "Stok Yeterli",
         stockStatus1: "Kritik Stok",

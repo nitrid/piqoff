@@ -970,7 +970,7 @@ export default class labelPrinting extends React.PureComponent
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-1">
+                    <div className="row px-2 pt-1" style={{height: '12%'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmLabelQeueu">
                                 {/* txtRef-Refno */}
@@ -1257,10 +1257,10 @@ export default class labelPrinting extends React.PureComponent
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-1">
+                    <div className="row px-2 pt-1" style={{height: '81%'}}>
                         <div className="col-12">
-                            <NdForm colCount={1} onInitialized={(e)=>{this.frmOutwas = e.component}}>
-                                <NdItem>
+                            <NdForm colCount={1} onInitialized={(e)=>{this.frmOutwas = e.component}} style={{height: '100%'}}>
+                                <NdItem style={{height: '100%'}}>
                                     <NdGrid parent={this} id={"grdLabelQueue"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
@@ -1268,7 +1268,7 @@ export default class labelPrinting extends React.PureComponent
                                     allowColumnResizing={true} 
                                     filterRow={{visible:true}}
                                     paging={{enabled:false}}
-                                    height={'600'} 
+                                    height={'100%'} 
                                     width={'100%'}
                                     dbApply={false}
                                     loadPanel={{enabled:true}}

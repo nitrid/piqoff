@@ -794,7 +794,16 @@ export const langFr =
     worst20Days : "20 Défavorable jours",
     top50Days : "50 meilleurs jours",
     worst50Days : "50 Défavorable jours",
-    
+    periodComparison: "Comparaison de période",
+    granularity: "Période",
+    year: "Année",
+    month: "Mois",
+    week: "Semaine",
+    day: "Jour",
+    comparedWith: "Comparé avec",
+    period1: "Période 1",
+    period2: "Période 2",
+    updateChart: "Mettre à jour le graphique",
     // Analyses par jour de la semaine
     bestMonday : "Meilleurs Lundis",
     bestTuesday : "Meilleurs Mardis",

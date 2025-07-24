@@ -746,7 +746,16 @@ export const langDe =
     worst20Days : "Schlechteste 20 Tage",
     top50Days : "Beste 50 Tage",
     worst50Days : "Schlechteste 50 Tage",
-    
+    periodComparison: "Zeitraumvergleich",
+    granularity: "Zeitraum",
+    year: "Jahr",
+    month: "Monat",
+    week: "Woche",
+    day: "Tag",
+    comparedWith: "Verglichen mit",
+    period1: "Zeitraum 1",
+    period2: "Zeitraum 2",
+    updateChart: "Diagramm aktualisieren",
     // Gün Bazlı Analizler
     bestMonday : "Beste Montage",
     bestTuesday : "Beste Dienstag",
