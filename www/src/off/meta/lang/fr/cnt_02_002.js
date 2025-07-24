@@ -62,11 +62,17 @@ const cnt_02_002 =
         msgSuccess: "Enregistré avec succès !",
         msgFailed: "Enregistrement échoué !"
     },
+    msgDeleteResult:
+    {
+        msg: "Enregistrement supprimé avec succès !"
+    },
     msgSaveValid:
     {
         title: "Attention",
         btn01: "OK",
-        msg: "Veuillez saisir les zones nécessaires !"
+        msg: "Veuillez saisir les zones nécessaires !",
+        msgSuccess: "Enregistrement réussi !",
+        msgFailed: "Enregistrement échoué !"
     },
     msgDelete:
     {

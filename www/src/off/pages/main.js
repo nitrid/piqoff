@@ -61,11 +61,11 @@ export default class mainPage extends React.PureComponent
             { id: 'piqx_01_001', icon: 'fa-solid fa-truck-fast', color: '#e83e8c', path:'piqx/dispatch/piqXPurcDispatchList' },
             { id: 'fns_02_002', icon: 'fa-solid fa-file-invoice-dollar', color: '#e83e8c', path:'finance/documents/collection' },
             { id: 'fns_02_001', icon: 'fa-solid fa-money-bill-wave', color: '#28a745', path:'finance/documents/payment' },
-            { id: 'slsRpt_01_003', icon: 'fa-solid fa-chart-pie', color: '#17a2b8', path:'sales/report/salesInvoiceReport' },
-            { id: 'slsRpt_01_006', icon: 'fa-solid fa-chart-column', color: '#ffc107', path:'sales/report/customerBasedSaleAndReturnReport' },
-            { id: 'slsRpt_01_007', icon: 'fa-solid fa-percent', color: '#fd7e14', path:'sales/report/rebateInvoiceReport' },
-            { id: 'slsRpt_02_006', icon: 'fa-solid fa-folder-open', color: '#6f42c1', path:'purchase/report/openPurchaseInvoiceReport' },
-            { id: 'slsRpt_01_013', icon: 'fa-solid fa-sack-dollar', color: '#28a745', path:'purchase/report/customerProfitReport' },
+            { id: 'slsRpt_01_003', icon: 'fa-solid fa-chart-pie', color: '#17a2b8', path:'report/sales/salesInvoiceReport' },
+            { id: 'slsRpt_01_006', icon: 'fa-solid fa-chart-column', color: '#ffc107', path:'report/sales/customerSaleRebateReport' },
+            { id: 'slsRpt_01_007', icon: 'fa-solid fa-percent', color: '#fd7e14', path:'report/sales/rebateInvoiceReport' },
+            { id: 'slsRpt_02_006', icon: 'fa-solid fa-folder-open', color: '#6f42c1', path:'report/purchase/openInvoicePurchaseReport' },
+            { id: 'slsRpt_01_013', icon: 'fa-solid fa-sack-dollar', color: '#28a745', path:'report/sales/customerProfitReport' },
             { id: 'fns_04_005', icon: 'fa-solid fa-magnifying-glass-dollar', color: '#e83e8c', path:'finance/report/collectionReport' },
             { id: 'pos_02_021', icon: 'fa-solid fa-chart-line', color: '#17a2b8', path:'pos/report/posSalesStatisticalReport' },
             { id: 'pos_02_003', icon: 'fa-solid fa-clipboard-list', color: '#e83e8c', path:'pos/report/posSalesReport' },
@@ -108,7 +108,7 @@ export default class mainPage extends React.PureComponent
         // {
         //     let tmpConfObj =
         //     {
-        //         id:'msgExpUpcoming',showTitle:true,title:this.lang.t("msgExpUpcoming.title"),showCloseButton:true,width:'500px',height:'200px',
+        //         id:'msgExpUpcoming',showTitle:true,title:this.lang.t("msgExpUpcoming.title"),showCloseButton:true,width:'500px',height:'auto',
         //         button:[{id:"btn01",caption:this.lang.t("msgExpUpcoming.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgExpUpcoming.btn02"),location:'after'}],
         //         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgExpUpcoming.msg")}</div>)
         //     }
@@ -164,7 +164,36 @@ export default class mainPage extends React.PureComponent
     {
         return(
             <ScrollView>
-                <div>
+                <div style={{
+                    backgroundImage: 'url(../css/img/logo.png)',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center center',
+                    backgroundSize: '800px auto',
+                    backgroundAttachment: 'fixed',
+                    opacity: '0.2',
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    zIndex: -1,
+                    pointerEvents: 'none'
+                }}></div>
+                <div style={{
+                    backgroundImage: 'url(../css/img/logoClient.jpg)',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'bottom right',
+                    backgroundSize: '300px auto',
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '20px',
+                    width: '300px',
+                    height: '300px',
+                    zIndex: 0,
+                    pointerEvents: 'none',
+                    opacity: '0.10'
+                }}></div>
+                <div style={{position: 'relative', zIndex: 1}}>
                     <div className='row pt-3' style={{paddingBottom:"20px"}}>
                         {this.state.tmpLastMenu.map((function(object, i)
                         {
@@ -176,7 +205,8 @@ export default class mainPage extends React.PureComponent
                                             height:'180px', 
                                             borderRadius:'10px', 
                                             background:'#f8f9fa', 
-                                            border:'1px solid #dee2e6'
+                                            border:'1px solid #dee2e6',
+                                            margin:'0 10px'
                                         }} 
                                         onClick={() => {
                                             App.instance.menuClick({

@@ -9,9 +9,12 @@ const slsRpt_01_013 =
     txtProductTypeName : "Ürün tipi",
     btnGet :"Getir", 
     msgNoData : "Seçilen kriterlere göre veri bulunamadı.",
+
     grdListe : 
     {
         clmDate : "Tarih",   
+        clmCustomerMainGrp : "Müşteri grubu",
+        clmDocDate : "Evrak tarihi",
         clmCode: "Kod",   
         clmName : "Adı",            
         clmAmount : "Tutar",   

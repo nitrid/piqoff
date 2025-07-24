@@ -4,6 +4,7 @@ const slsRpt_01_014 =
     chkZeroBalance : "Show Zero Balances",   
     txtCustomerCode : "Customer",   
     btnCheck : "Active",   
+    dtDate : "Date",
     btnGet :"Get",   
     grdListe :    
     {   

@@ -2,11 +2,8 @@ import React from 'react';
 import App from '../../../lib/app.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
 
-import NdButton from '../../../../core/react/devex/button.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
-
+import NdGrid,{Column,Editing} from '../../../../core/react/devex/grid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
@@ -15,6 +12,7 @@ export default class piqPoidDeviceCard extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.prevCode = "";
@@ -22,25 +20,29 @@ export default class piqPoidDeviceCard extends React.PureComponent
         this.dialogOpene = false
 
         this.deviceDt = new datatable()
+
         this.deviceDt.selectCmd = 
         {
-            query : "SELECT * FROM BALANCE_DEVICES WHERE DELETED = 0"
+            query : `SELECT * FROM BALANCE_DEVICES WHERE DELETED = 0`
         }
+
         this.deviceDt.insertCmd = 
         {
-            query : "INSERT INTO BALANCE_DEVICES (GUID,CDATE,CUSER,LDATE,LUSER,CODE,NAME,MACID,LANG,USER_CODE,USER_PWD,DELETED) VALUES (@GUID,dbo.GETDATE(),@CUSER,dbo.GETDATE(),@LUSER,@CODE,@NAME,@MACID,@LANG,@USER_CODE,@USER_PWD,0)",
+            query : `INSERT INTO BALANCE_DEVICES (GUID,CDATE,CUSER,LDATE,LUSER,CODE,NAME,MACID,LANG,USER_CODE,USER_PWD,DELETED) VALUES (@GUID,dbo.GETDATE(),@CUSER,dbo.GETDATE(),@LUSER,@CODE,@NAME,@MACID,@LANG,@USER_CODE,@USER_PWD,0)`,
             param : ['GUID:string|50','CUSER:string|25','LUSER:string|25','CODE:string|10','NAME:string|50','MACID:string|50','LANG:string|5','USER_CODE:string|25','USER_PWD:string|50'],
             dataprm : ['GUID','CUSER','LUSER','CODE','NAME','MACID','LANG','USER_CODE','USER_PWD']
         }
+
         this.deviceDt.updateCmd = 
         {
-            query : "UPDATE BALANCE_DEVICES SET LDATE = dbo.GETDATE(),LUSER = @LUSER, CODE = @CODE, NAME = @NAME, MACID = @MACID, LANG = @LANG, USER_CODE = @USER_CODE, USER_PWD = @USER_PWD WHERE GUID = @GUID",
+            query : `UPDATE BALANCE_DEVICES SET LDATE = dbo.GETDATE(),LUSER = @LUSER, CODE = @CODE, NAME = @NAME, MACID = @MACID, LANG = @LANG, USER_CODE = @USER_CODE, USER_PWD = @USER_PWD WHERE GUID = @GUID`,
             param : ['LUSER:string|25','CODE:string|10','NAME:string|50','MACID:string|50','LANG:string|5','USER_CODE:string|25','USER_PWD:string|50','GUID:string|50'],
             dataprm : ['LUSER','CODE','NAME','MACID','LANG','USER_CODE','USER_PWD','GUID']
         }
+
         this.deviceDt.deleteCmd = 
         {
-            query : "UPDATE BALANCE_DEVICES SET DELETED = 1 WHERE GUID = @GUID",
+            query : `UPDATE BALANCE_DEVICES SET DELETED = 1 WHERE GUID = @GUID`,
             param : ['GUID:string|50'],
             dataprm : ['GUID']
         }
@@ -58,7 +60,7 @@ export default class piqPoidDeviceCard extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -77,9 +79,10 @@ export default class piqPoidDeviceCard extends React.PureComponent
                                 {
                                     let tmpConfObj =
                                     {
-                                        id:'msgAlertCodeName',showTitle:true,title:this.t("msgAlertCodeName.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        id:'msgAlertCodeName',showTitle:true,title:this.t("msgAlertCodeName.title"),showCloseButton:true,width:'500px',height:'auto',
                                         button:[{id:"btn01",caption:this.t("msgAlertCodeName.btn01"),location:'before'}],
                                     }
+
                                     if(typeof e.data.CODE == 'undefined' || e.data.CODE == null)
                                     {
                                         e.cancel = true;
@@ -90,6 +93,7 @@ export default class piqPoidDeviceCard extends React.PureComponent
                                         console.log(1)
                                         return
                                     }
+
                                     if(typeof e.data.NAME == 'undefined' || e.data.NAME == null)
                                     {
                                         e.cancel = true;
@@ -109,26 +113,32 @@ export default class piqPoidDeviceCard extends React.PureComponent
                                 {
                                     e.data.GUID = datatable.uuidv4()
                                 }
+
                                 if(typeof e.data.CUSER == 'undefined')
                                 {
                                     e.data.CUSER = this.core.auth.data.CODE
                                 }
+
                                 if(typeof e.data.LUSER == 'undefined')
                                 {
                                     e.data.LUSER = this.core.auth.data.CODE
                                 }
+
                                 if(typeof e.data.MACID == 'undefined')
                                 {
                                     e.data.MACID = ""
                                 }
+
                                 if(typeof e.data.LANG == 'undefined')
                                 {
                                     e.data.LANG = ""
                                 }
+
                                 if(typeof e.data.USER_CODE == 'undefined')
                                 {
                                     e.data.USER_CODE = ""
                                 }
+
                                 if(typeof e.data.USER_PWD == 'undefined')
                                 {
                                     e.data.USER_PWD = ""
@@ -140,7 +150,7 @@ export default class piqPoidDeviceCard extends React.PureComponent
                                 {
                                     let tmpConfObj =
                                     {
-                                        id:'msgAlertCodeName',showTitle:true,title:this.t("msgAlertCodeName.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        id:'msgAlertCodeName',showTitle:true,title:this.t("msgAlertCodeName.title"),showCloseButton:true,width:'500px',height:'auto',
                                         button:[{id:"btn01",caption:this.t("msgAlertCodeName.btn01"),location:'before'}],
                                     }
                                     if(typeof e.newData.CODE != 'undefined' && e.newData.CODE == '')
@@ -152,6 +162,7 @@ export default class piqPoidDeviceCard extends React.PureComponent
                                         this.dialogOpened = false;
                                         return
                                     }
+                                    
                                     if(typeof e.newData.NAME != 'undefined' && e.newData.NAME == '')
                                     {
                                         e.cancel = true;

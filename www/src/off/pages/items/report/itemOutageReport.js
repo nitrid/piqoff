@@ -2,20 +2,14 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label,EmptyItem } from 'devextreme-react/form';
+import Toolbar,{ Item } from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
-import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
+import NdGrid,{Column,Paging,Pager,Scrolling,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import { NdForm, NdItem } from '../../../../core/react/devex/form.js';
 
 export default class itemOutageReport extends React.PureComponent
 {
@@ -23,126 +17,11 @@ export default class itemOutageReport extends React.PureComponent
     {
         super(props)
 
-        this.state = 
-        {
-            columnListValue : ['OUTPUT_NAME','OUTPUT_NAME','REF','REF_NO','DOC_DATE','ITEM_CODE','ITEM_NAME','QUANTITY','TOTAL_COST','COST_PRICE','DESCRIPTION']
-        }
-        
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "OUTPUT_CODE",NAME : this.t("grdListe.clmOutputCode")},                                   
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdListe.clmOutputName")},                                   
-            {CODE : "REF",NAME : this.t("grdListe.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdListe.clmRefNo")},
-            {CODE : "DOC_DATE",NAME : this.t("grdListe.clmDocDate")},
-            {CODE : "ITEM_CODE",NAME : this.t("grdListe.clmCode")},
-            {CODE : "ITEM_NAME",NAME : this.t("grdListe.clmName")},
-            {CODE : "QUANTITY",NAME : this.t("grdListe.clmQuantity")},
-            {CODE : "COST_PRICE",NAME : this.t("grdListe.clmCostPrice")},
-            {CODE : "TOTAL_COST",NAME : this.t("grdListe.clmTotalCost")},
-            {CODE : "DESCRIPTION",NAME : this.t("grdListe.clmDescription")},
-        ]
-      
-        this.groupList = [];
-        this._btnGetirClick = this._btnGetirClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
+        this.btnGetClick = this.btnGetClick.bind(this)
     }
-    componentDidMount()
+    async btnGetClick()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
-    }
-    _columnListBox(e)
-    {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'OUTPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('OUTPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'OUTPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('OUTPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }                
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'ITEM_CODE') != 'undefined')
-                {
-                    this.groupList.push('ITEM_CODE')
-                }
-                if(typeof e.value.find(x => x == 'ITEM_NAME') != 'undefined')
-                {
-                    this.groupList.push('ITEM_NAME')
-                }
-                if(typeof e.value.find(x => x == 'QUANTITY') != 'undefined')
-                {
-                    this.groupList.push('QUANTITY')
-                }
-                if(typeof e.value.find(x => x == 'TOTAL_COST') != 'undefined')
-                {
-                    this.groupList.push('TOTAL_COST')
-                }
-                if(typeof e.value.find(x => x == 'COST_PRICE') != 'undefined')
-                {
-                    this.groupList.push('COST_PRICE')
-                }
-                if(typeof e.value.find(x => x == 'DESCRIPTION') != 'undefined')
-                {
-                    this.groupList.push('DESCRIPTION')
-                }
-                
-                for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdListe.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
-    }
-    async _btnGetirClick()
-    {
-       
         let tmpSource =
         {
             source : 
@@ -150,16 +29,14 @@ export default class itemOutageReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM DOC_ITEMS_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 1 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE" ,
+                    query : `SELECT * FROM DOC_ITEMS_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 1 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE` ,
                     param : ['FIRST_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
                 sql : this.core.sql
             }
         }
-
         await this.grdListe.dataRefresh(tmpSource)
-      
     }
     render()
     {
@@ -169,7 +46,7 @@ export default class itemOutageReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                 <Item location="after"
+                                <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
                                 options=
@@ -181,12 +58,13 @@ export default class itemOutageReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -199,31 +77,16 @@ export default class itemOutageReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmKriter">
-                            <Item>
-                                <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('month')} endDate={moment().endOf('month')}/>
-                            </Item>
-                            </Form>
+                            <NdForm colCount={2} id="frmKriter">
+                                <NdItem>
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('month')} endDate={moment().endOf('month')}/>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
-                        <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
-                        </div>
-                        <div className="col-3">
-                      
-                        </div>
-                        <div className="col-3">
-                            
-                        </div>
-                        <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                        <div className="col-3 offset-9">
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -252,7 +115,6 @@ export default class itemOutageReport extends React.PureComponent
                                     {
                                         return e.text
                                     }
-                                    
                                     return
                                 }}/>
                                 <Column dataField="OUTPUT_CODE" caption={this.t("grdListe.clmOutputCode")} width={60} visible={true} /> 
@@ -266,13 +128,8 @@ export default class itemOutageReport extends React.PureComponent
                                 <Column dataField="TOTAL_COST" caption={this.t("grdListe.clmTotalCost")} width={90} format={{ style: "currency", currency: Number.money.code,precision: 2}} visible={true}/> 
                                 <Column dataField="DESCRIPTION" caption={this.t("grdListe.clmDescription")} width={120}  visible={true}/> 
                                 <Summary>
-                                    <TotalItem
-                                    column="QUANTITY"
-                                    summaryType="sum"/>
-                                    <TotalItem
-                                    column="TOTAL_COST"
-                                    summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                                    <TotalItem column="QUANTITY" summaryType="sum"/>
+                                    <TotalItem column="TOTAL_COST" summaryType="sum" valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}}/>
                                 </Summary> 
                             </NdGrid>
                         </div>

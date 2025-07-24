@@ -4,6 +4,7 @@ const fns_04_003 =
     cmbSafe : "Safe Selection",
     btnCheck : "Active",
     btnGet :"Get",
+    dtDate : "Date",
     grdListe : 
     {
         clmOutputName : "Output Account",

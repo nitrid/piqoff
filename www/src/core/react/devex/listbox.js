@@ -18,7 +18,7 @@ export default class NdListBox extends Base
     //#region Private
     _onOptionChanged(e) 
     {
-        if (e.name == 'selectedItemKeys') 
+        if (e.name == 'selectedItemKeys' && JSON.stringify(this.state.value) !== JSON.stringify(e.value)) 
         {
             this.value = e.value;
         }
@@ -62,6 +62,7 @@ export default class NdListBox extends Base
     {
         return(
             <List
+            id={this.props.id}
             dataSource={typeof this.state.data == 'undefined' ? undefined : this.state.data.store} 
             allowItemDeleting={this.props.allowItemDeleting}
             itemDeleteMode={this.props.itemDeleteMode}

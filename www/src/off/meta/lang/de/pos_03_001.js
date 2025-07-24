@@ -22,6 +22,7 @@ const pos_03_001 =
     txtReal: "Richtig",
     payTransfer: "Betrag übertragen",
     validPriceFloat: "Der Vorschussbetrag muss größer als 0 sein",
+    msgSafeNotFound: "Kasse nicht gefunden, bitte überprüfen Sie die Kasse.",
     popFinish:
     {
         title: "Ergebnis"

@@ -13,5 +13,9 @@ const set_02_006 =
         msgSuccess: "Envoi effectué !",    
         msgFailed: "Envoi non effectué !"    
     },
+    msgDeleteResult:
+    {
+        msgSuccess: "Enregistrement réussi !"
+    },
 }
 export default set_02_006

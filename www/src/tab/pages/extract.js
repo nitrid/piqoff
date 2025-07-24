@@ -1,18 +1,16 @@
 import React from 'react';
 import App from '../lib/app.js';
 import moment from 'moment';
-import ScrollView from 'devextreme-react/scroll-view';
 import NbButton from '../../core/react/bootstrap/button';
-import NdTextBox,{ Button,Validator, NumericRule, RequiredRule, CompareRule } from '../../core/react/devex/textbox'
-import NdSelectBox from '../../core/react/devex/selectbox'
+import NdTextBox,{ } from '../../core/react/devex/textbox'
 import NdButton from '../../core/react/devex/button'
 import NbPopUp from '../../core/react/bootstrap/popup';
 import Form, { Label,Item, EmptyItem } from 'devextreme-react/form';
-import Toolbar from 'devextreme-react/toolbar';
 import { LoadPanel } from 'devextreme-react/load-panel';
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem}from '../../core/react/devex/grid.js';
+import NdGrid,{Column, Paging,Pager,Scrolling,Export, Summary, TotalItem}from '../../core/react/devex/grid.js';
 import NbDateRange from '../../core/react/bootstrap/daterange.js';
 import NdPopUp from '../../core/react/devex/popup.js';
+import { NdToast} from '../../core/react/devex/toast.js';
 
 
 export default class extract extends React.PureComponent
@@ -20,31 +18,32 @@ export default class extract extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.t = App.instance.lang.getFixedT(null,null,"extract")
         this.lang = App.instance.lang;
+
         this.state = 
         {
             isExecute : false
         }
 
-        this._customerSearch = this._customerSearch.bind(this)
-        this._btnGetirClick = this._btnGetirClick.bind(this)
+        this.customerSearch = this.customerSearch.bind(this)
+        this.btnGetirClick = this.btnGetirClick.bind(this)
     }
     async componentDidMount()
     {
         await this.core.util.waitUntil(0)
-        setTimeout(async () => 
-        {
-            this.txtCustomerCode.GUID = ''
-        }, 500);
+
+        setTimeout(async () => { this.txtCustomerCode.GUID = '' }, 500);
+
         this.init()
     }
     async init()
     {
         
     }
-    async _btnGetirClick()
+    async btnGetirClick()
     {
         if(this.txtCustomerCode.GUID != '')
         {
@@ -52,73 +51,69 @@ export default class extract extends React.PureComponent
             {
                 source : 
                 {
-                    groupBy : this.groupList,
                     select : 
                     {
-                        query : "SELECT 0 AS DOC_TYPE,'00000000-0000-0000-0000-000000000000' AS DOC_GUID," +
-                        "CONVERT(DATETIME,@FIRST_DATE) - 1 AS DOC_DATE,  " +
-                        "'' AS REF,  " +
-                        "0 AS REF_NO,  " +
-                        "'' AS TYPE_NAME,  " +
-                        "CASE WHEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) < 0 THEN  (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) ELSE 0 END AS DEBIT,  " +
-                        "CASE WHEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) > 0 THEN  (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) ELSE 0  END AS RECEIVE,  " +
-                        "(SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) AS BALANCE  " +
-                        "UNION ALL " +
-                        "SELECT DOC_TYPE,  " +
-                        "DOC_GUID, " +
-                        "DOC_DATE, " +
-                        "REF, " +
-                        "REF_NO, " +
-                        "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME,  " +
-                        "CASE TYPE WHEN 0 THEN (AMOUNT * -1) ELSE 0 END AS DEBIT,  " +
-                        "CASE TYPE WHEN 1 THEN AMOUNT ELSE 0 END AS RECEIVE,  " +
-                        "CASE TYPE WHEN 0 THEN (AMOUNT * -1) WHEN 1 THEN AMOUNT END AS BALANCE  " +
-                        "FROM DOC_CUSTOMER_VW_01  " +
-                        "WHERE (INPUT = @CUSTOMER OR OUTPUT = @CUSTOMER)  " +
-                        "AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE  " ,
+                        query : 
+                            `SELECT 0 AS DOC_TYPE,'00000000-0000-0000-0000-000000000000' AS DOC_GUID,
+                            CONVERT(DATETIME,@FIRST_DATE) - 1 AS DOC_DATE,  
+                            '' AS REF,  
+                            0 AS REF_NO,  
+                            '' AS TYPE_NAME,  
+                            CASE WHEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) < 0 THEN  (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) ELSE 0 END AS DEBIT,  
+                            CASE WHEN (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) > 0 THEN  (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) ELSE 0  END AS RECEIVE,  
+                            (SELECT [dbo].[FN_CUSTOMER_BALANCE](@CUSTOMER,@FIRST_DATE)) AS BALANCE  
+                            UNION ALL 
+                            SELECT DOC_TYPE,  
+                            DOC_GUID, 
+                            DOC_DATE, 
+                            REF, 
+                            REF_NO, 
+                            (SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_CUSTOMER_TYPE_NAME](TYPE,DOC_TYPE,REBATE,PAY_TYPE)) AND LANG = @LANG) AS TYPE_NAME,  
+                            CASE TYPE WHEN 0 THEN (AMOUNT * -1) ELSE 0 END AS DEBIT,  
+                            CASE TYPE WHEN 1 THEN AMOUNT ELSE 0 END AS RECEIVE,  
+                            CASE TYPE WHEN 0 THEN (AMOUNT * -1) WHEN 1 THEN AMOUNT END AS BALANCE  
+                            FROM DOC_CUSTOMER_VW_01  
+                            WHERE (INPUT = @CUSTOMER OR OUTPUT = @CUSTOMER)  
+                            AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE`,
                         param : ['CUSTOMER:string|50','LANG:string|10','FIRST_DATE:date','LAST_DATE:date'],
                         value : [this.txtCustomerCode.GUID,localStorage.getItem('lang'),this.dtDate.startDate,this.dtDate.endDate]
                     },
                     sql : this.core.sql
                 }
             }
+
             this.setState({isExecute:true})
             await this.grdListe.dataRefresh(tmpSource)
             this.setState({isExecute:false})
-            let tmpBalance = this.grdListe.data.datatable.sum("BALANCE",2)
+
+            let tmpBalance = this.grdListe.data.datatable.sum("BALANCE",2)  
             this.txtTotalBalance.setState({value:tmpBalance})
+
             let tmpLineBalance = 0;
+
             for (let i = 0; i < this.grdListe.data.datatable.length; i++) 
             {
                 tmpLineBalance += this.grdListe.data.datatable[i].BALANCE;
                 this.grdListe.data.datatable[i].BALANCE = tmpLineBalance.toFixed(2);
-                console.log(this.grdListe.data.datatable[i].BALANCE)
-                console.log(tmpLineBalance)
             }
+
             await this.grdListe.dataRefresh(this.grdListe.data.datatable)
         }
         else
         {
-            let tmpConfObj =
-            {
-                id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgNotCustomer.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotCustomer.msg")}</div>)
-            }
-            await dialog(tmpConfObj);
+            this.toast.show({message:this.t("msgNotCustomer.msg"),type:"warning"})
         }
            
     }
-    async _customerSearch()
+    async customerSearch()
     {
         let tmpSource =
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1",
+                    query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_02 WHERE (UPPER(CODE) LIKE UPPER('%' + @VAL + '%') OR UPPER(TITLE) LIKE UPPER('%' + @VAL + '%')) AND STATUS = 1`,
                     param : ['VAL:string|50'],
                     value : [this.txtCustomerSearch.value]
                 },
@@ -135,10 +130,9 @@ export default class extract extends React.PureComponent
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT ITEM_CODE,ITEM_NAME,QUANTITY,PRICE,TOTAL FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID" ,
+                    query : `SELECT ITEM_CODE,ITEM_NAME,QUANTITY,PRICE,TOTAL FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID OR INVOICE_DOC_GUID = @DOC_GUID` ,
                     param : ['DOC_GUID:string|50'],
                     value : [pGuid]
                 },
@@ -179,10 +173,7 @@ export default class extract extends React.PureComponent
                                         id:'01',
                                         icon:'more',
                                         location:'after',
-                                        onClick:async()=>
-                                        {
-                                            this.popCustomer.show()
-                                        }
+                                        onClick:async()=> { this.popCustomer.show() }
                                     }                                                    
                                 ]}
                                 />
@@ -198,18 +189,11 @@ export default class extract extends React.PureComponent
                         <div className="col-12 col-md-6" style={{padding:'0 10px'}}>
                             <div style={{marginBottom:'10px'}}>
                                 <NdButton 
-                                    text={this.t("btnGet")} 
-                                    type="success" 
-                                    width="100%" 
-                                    onClick={this._btnGetirClick}
-                                    style={{
-                                        maxWidth: '200px',
-                                        height: '40px',
-                                        borderRadius: '8px',
-                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                                        marginLeft: 'auto',
-                                        marginRight: '0'
-                                    }}
+                                text={this.t("btnGet")} 
+                                type="success" 
+                                width="100%" 
+                                onClick={this.btnGetirClick}
+                                style={{ maxWidth: '200px', height: '40px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', marginLeft: 'auto', marginRight: '0' }}
                                 />
                             </div>
                         </div>
@@ -270,7 +254,8 @@ export default class extract extends React.PureComponent
                         </div>
                         <div style={{paddingTop:"15px"}}>
                             <Form colCount={2}>
-                                <EmptyItem colSpan={1}></EmptyItem>
+                                <EmptyItem colSpan={1}>
+                                </EmptyItem>
                                 <Item>
                                     <Label text={this.t("txtTotalBalance")} alignment="right" />
                                         <NdTextBox id="txtTotalBalance" parent={this} simple={true} readOnly={true}/>
@@ -288,10 +273,7 @@ export default class extract extends React.PureComponent
                                     </div>
                                     <div className='col-2' align={"right"}>
                                         <NbButton className="form-group btn btn-block btn-outline-dark" style={{height:"40px",width:"40px",backgroundColor:"#154c79", color: 'white'}}
-                                        onClick={()=>
-                                        {
-                                            this.popCustomer.hide();
-                                        }}>
+                                        onClick={()=> { this.popCustomer.hide() }}>
                                             <i className="fa-solid fa-xmark fa-1x"></i>
                                         </NbButton>
                                     </div>
@@ -299,19 +281,13 @@ export default class extract extends React.PureComponent
                                 <div className='row' style={{paddingTop:"10px"}}>
                                     <div className='col-12'>
                                         <NdTextBox id="txtCustomerSearch" parent={this} simple={true} selectAll={true}
-                                        onEnterKey={(async()=>
-                                            {
-                                                this._customerSearch()
-                                            }).bind(this)}/>
+                                        onEnterKey={()=> { this.customerSearch() }}/>
                                     </div>
                                 </div>
                                 <div className='row' style={{paddingTop:"10px"}}>
                                     <div className='col-6'>
                                         <NbButton className="btn btn-block btn-primary" style={{width:"100%", backgroundColor:"#154c79"}}
-                                        onClick={()=>
-                                        {
-                                            this._customerSearch()
-                                        }}>
+                                        onClick={()=> { this.customerSearch() }}>
                                             {this.t('popCustomer.btn01')}
                                         </NbButton>
                                     </div>
@@ -360,30 +336,32 @@ export default class extract extends React.PureComponent
                         height={'100%'}
                         position={{of:'#root'}}
                         >
-                          <div className="row">
-                          <div className="col-1 pe-0"></div>
-                            <div className="col-12 pe-0">
-                            <NdGrid id="grdDetail" parent={this} 
-                                selection={{mode:"single"}} 
-                                showBorders={true}
-                                filterRow={{visible:true}} 
-                                headerFilter={{visible:true}}
-                                columnAutoWidth={true}
-                                allowColumnReordering={true}
-                                allowColumnResizing={true}
-                                >                            
-                                    <Paging defaultPageSize={20} />
-                                    <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                    <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
-                                    <Column dataField="ITEM_CODE" caption={this.t("grdDetail.clmCode")} visible={true} width={120}/> 
-                                    <Column dataField="ITEM_NAME" caption={this.t("grdDetail.clmName")} visible={true} width={250}/> 
-                                    <Column dataField="QUANTITY" caption={this.t("grdDetail.clmQuantity")} visible={true} width={100}/> 
-                                    <Column dataField="PRICE" caption={this.t("grdDetail.clmPrice")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                                    <Column dataField="TOTAL" caption={this.t("grdDetail.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
-                            </NdGrid>
-                            </div>
+                            <div className="row">
+                                <div className="col-1 pe-0">
+                                </div>
+                                <div className="col-12 pe-0">
+                                    <NdGrid id="grdDetail" parent={this} 
+                                        selection={{mode:"single"}} 
+                                        showBorders={true}
+                                        filterRow={{visible:true}} 
+                                        headerFilter={{visible:true}}
+                                        columnAutoWidth={true}
+                                        allowColumnReordering={true}
+                                        allowColumnResizing={true}
+                                        >                            
+                                            <Paging defaultPageSize={20} />
+                                            <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                            <Export fileName={this.lang.t("menu.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdDetail.clmCode")} visible={true} width={120}/> 
+                                            <Column dataField="ITEM_NAME" caption={this.t("grdDetail.clmName")} visible={true} width={250}/> 
+                                            <Column dataField="QUANTITY" caption={this.t("grdDetail.clmQuantity")} visible={true} width={100}/> 
+                                            <Column dataField="PRICE" caption={this.t("grdDetail.clmPrice")} visible={true} width={100} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                            <Column dataField="TOTAL" caption={this.t("grdDetail.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: "EUR",precision: 2}}/> 
+                                    </NdGrid>
+                                </div>
                             </div>
                         </NdPopUp>
+                        <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>    
                     </div>                           
                 </div>
             </div>

@@ -1,15 +1,9 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import { subGroupCls} from '../../../../core/cls/items.js';
-
-
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
 
-import NdButton from '../../../../core/react/devex/button.js';
 import NdTreeList,{Column,RowDragging,Editing,Button,ValidationRule,Popup,Form,Item} from '../../../../core/react/devex/treelist.js';
-
-import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
 
 export default class itemSubGroupCard extends React.PureComponent

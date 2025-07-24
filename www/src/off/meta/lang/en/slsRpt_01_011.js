@@ -30,6 +30,25 @@ const slsRpt_01_011 =
         clmItemName :"Product Name",
         clmLivre : "Sent"
     },
+    msgConvertDispatch : 
+    {
+        title : "Delivery Conversion",
+        msg : "The delivery conversion was successful.",
+        btn01 : "OK",
+        btn02 : "Cancel"
+    },
+    msgConvertSucces : 
+    {
+        title : "Delivery Conversion",
+        msg : "The delivery conversion was successful.",
+        btn01 : "OK",
+        btn02 : "Cancel"
+    },
+    popDesign : {
+        title : "Print Design",
+        clmDesign : "Print Design",
+        clmPath : "Path"
+    }
 }
 
 export default slsRpt_01_011

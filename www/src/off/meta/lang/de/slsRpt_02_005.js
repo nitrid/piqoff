@@ -5,6 +5,7 @@ const slsRpt_02_005 =
     txtCustomerCode : "Kunde",     
     btnCheck : "Aktiv",    
     btnGet :"Suchen",     
+    dtDate : "Datum",
     cmbMainGrp : "Artikelgruppe",
     grdListe :    
     {   

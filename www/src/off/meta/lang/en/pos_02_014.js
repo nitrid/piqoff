@@ -2,6 +2,7 @@
 const pos_02_014 = 
 {
     btnGet :"Get",
+    dtDate : "Date",
     grdListe : 
     {
         clmCode: "Code",

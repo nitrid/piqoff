@@ -137,7 +137,6 @@ export default class NdDialog extends Base
                 deferRendering={typeof this.props.deferRendering == 'undefined' ? false : this.props.deferRendering}
                 onShowed={this._onShowed.bind(this)}
                 >
-                    <Position at="bottom" my="center" of={''}/>
                     {this._buttonView(this.props.button)}
                     {this.props.children}
                 </NdPopUp>
@@ -179,7 +178,6 @@ export const dialog = function()
         let tmpJsx = 
         (
             <NdDialog ref={tmpObj} id={arguments[0].id} container={"#root"}
-            position={{of:typeof arguments[0].position == 'undefined' ? '#root' : arguments[0].position}} 
             showTitle={arguments[0].showTitle} 
             title={arguments[0].title} 
             showCloseButton={arguments[0].showCloseButton}
@@ -196,15 +194,20 @@ export const dialog = function()
                 }
             }}
             >
-                <div className="row">
-                    <div className="col-12 py-2">
-                        {arguments[0].content}
-                    </div>
+                <div style={{padding: '8px'}}>
+                    {arguments[0].content}
                 </div>
             </NdDialog>
         )
-        
         ReactDOM.render(tmpJsx,document.body.appendChild(document.createElement('div',{id:'dialog'})));
-        resolve(await tmpObj.current.show())
+ 
+        if(tmpObj.current != null && tmpObj.current != undefined)
+        {
+            resolve(await tmpObj.current.show())
+        }
+        else
+        {
+            resolve()
+        }
     });
 }

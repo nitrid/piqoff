@@ -1,38 +1,30 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { posDeviceCls} from '../../../../core/cls/pos';
-import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
+import Form, { Label,Item } from 'devextreme-react/form';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
+
 
 export default class pluCopy extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
+
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
 
-        this._btnSave = this._btnSave.bind(this)
+        this.btnSave = this.btnSave.bind(this)
     }
     async componentDidMount()
     {
@@ -49,10 +41,9 @@ export default class pluCopy extends React.PureComponent
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query :"SELECT * FROM USERS WHERE STATUS = 1",
+                    query : `SELECT CODE, NAME FROM USERS WHERE STATUS = 1 ORDER BY CODE ASC`,
                 },
                 sql : this.core.sql
             }
@@ -60,24 +51,17 @@ export default class pluCopy extends React.PureComponent
         
         await this.grdUserList.dataRefresh(tmpSource)
     }
-    async _btnSave()
+    async btnSave()
     {
         if(this.cmbUser.value == '')
         {
-            let tmpConfObj =
-            {
-                id:'msgUserNotFound',showTitle:true,title:this.t("msgUserNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                button:[{id:"btn01",caption:this.t("msgUserNotFound.btn01"),location:'after'}],
-                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgUserNotFound.msg")}</div>)
-            }
-    
-            await dialog(tmpConfObj);
+            this.toast.show({message:this.t("msgUserNotFound.msg"),type:"warning"})
             return
         }
 
         let tmpConfObj1 =
         {
-            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
         }
@@ -94,9 +78,7 @@ export default class pluCopy extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query : "EXEC [dbo].[PRD_PLU_COPY] " +
-                    "@NEW_USER =@PNEW_USER, " +
-                    "@COPY_USER = @PCOPY_USER " ,
+                    query : `EXEC [dbo].[PRD_PLU_COPY] @NEW_USER =@PNEW_USER, @COPY_USER = @PCOPY_USER`,
                     param : ['PNEW_USER:string|50','PCOPY_USER:string|50'],
                     value : [this.grdUserList.getSelectedData()[i].CODE,this.cmbUser.value]
                 }
@@ -104,14 +86,7 @@ export default class pluCopy extends React.PureComponent
             }
         }
         
-        let tmpConfObj =
-        {
-            id:'msgSaveResult',showTitle:true,title:this.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
-            button:[{id:"btn01",caption:this.t("msgSaveResult.btn01"),location:'before'}],
-            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-        }
-        
-        await dialog(tmpConfObj);
+        this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
     }
     render()
     {
@@ -133,7 +108,7 @@ export default class pluCopy extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -162,14 +137,11 @@ export default class pluCopy extends React.PureComponent
                                         showClearButton={true}
                                         pageSize ={50}
                                         notRefresh={true}
-                                        data={{source:{select:{query : "SELECT CODE,NAME FROM USERS WHERE STATUS = 1 ORDER BY CODE ASC"},sql:this.core.sql}}}
-                                        onValueChanged={async (e)=>
-                                        {
-                                           
-                                        }}/>
+                                        data={{source:{select:{query : `SELECT CODE,NAME FROM USERS WHERE STATUS = 1 ORDER BY CODE ASC`},sql:this.core.sql}}}
+                                    />
                                 </Item>
                                 <Item>
-                                    <NdButton text={this.t("btnSave")} type="success" width="100%" onClick={this._btnSave} ></NdButton>
+                                    <NdButton text={this.t("btnSave")} type="success" width="100%" onClick={this.btnSave} />
                                 </Item>
                                 <Item colSpan={2}>
                                     <NdGrid id="grdUserList" parent={this} onSelectionChanged={this.onSelectionChanged} 
@@ -189,6 +161,7 @@ export default class pluCopy extends React.PureComponent
                             </Form>
                         </div>
                     </div>
+                    <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )

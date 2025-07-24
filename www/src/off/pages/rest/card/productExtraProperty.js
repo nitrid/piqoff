@@ -1,22 +1,10 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { restTableCls } from '../../../../core/cls/rest.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
+import Form, { Item} from 'devextreme-react/form';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
-import NdButton from '../../../../core/react/devex/button.js';
-import { dialog } from '../../../../core/react/devex/dialog.js';
+import NdGrid,{Column,Editing,Scrolling} from '../../../../core/react/devex/grid.js';
 import { datatable } from '../../../../core/core.js';
 
 export default class ProductExtraProperty extends React.PureComponent
@@ -24,8 +12,10 @@ export default class ProductExtraProperty extends React.PureComponent
     constructor(props)
     {
         super(props)
+        
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+
         this.itemObj = new datatable()
         this.tabIndex = props.data.tabkey
     }
@@ -45,7 +35,8 @@ export default class ProductExtraProperty extends React.PureComponent
         }
         this.itemObj.updateCmd =
         {
-            query : `DECLARE @ISCHECK AS BIT
+            query : 
+                    `DECLARE @ISCHECK AS BIT
                     SET @ISCHECK = ISNULL((SELECT TOP 1 1 FROM ITEMS_REST WHERE ITEMS_REST.ITEM = @ITEM),0)
                     IF @ISCHECK = 0
                     BEGIN 

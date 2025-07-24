@@ -38,7 +38,7 @@ const stk_02_001 =
         clmCustomerName :"Compte Fournisseur",
         clmMulticode : "FRN.Code",
         clmBarcode : "Code barre",
-        clmUser : "Utilisateur",
+        clmCuser : "Utilisateur",
     },
     popPassword : 
     {
@@ -160,6 +160,7 @@ const stk_02_001 =
     {
         title: "Attention",
         btn01: "Aller au document",
+        btn02: "Annuler",
         msg: "Document trouvé !"
     },
 }

@@ -3,7 +3,6 @@ import { access, datatable } from '../../../core/core';
 import App from '../../lib/app';
 import { core,param } from '../../../core/core';
 import Form, { Label,Item } from 'devextreme-react/form';
-import NdTextBox from '../../../core/react/devex/textbox';
 import NdSelectBox from '../../../core/react/devex/selectbox';
 import { acs as acs } from '../../../mob/meta/acs';
 import NdButton from '../../../core/react/devex/button';
@@ -21,6 +20,7 @@ export default class accessMob extends React.PureComponent
         {
             metaAcs : []
         }
+
         this.ItemBuild = ItemBuild.bind(this)
         this.ItemSet = ItemSet.bind(this)
         this.ItemGet = ItemGet.bind(this)
@@ -35,14 +35,17 @@ export default class accessMob extends React.PureComponent
         await this.acsData.load({APP:'MOB'})        
 
         let tmpDt = new datatable()
+        
         tmpDt.import(this.acsData.filter({TYPE:2}).meta)
         tmpDt = tmpDt.groupBy('PAGE')
-        console.log(tmpDt)
+        
         let tmpMenu = []
+        
         for (let i = 0; i < tmpDt.length; i++) 
         {
             tmpMenu.push({CODE:tmpDt[i].PAGE,NAME:tmpDt[i].VIEW.PAGE_NAME})            
         }
+        
         await this.cmbDoc.dataRefresh({source:tmpMenu});
     }
     buildItem()
@@ -68,7 +71,7 @@ export default class accessMob extends React.PureComponent
                                 valueExpr="CODE"
                                 value={""}
                                 showClearButton={true}
-                                data={{source:{select:{query : "SELECT CODE,NAME FROM USERS ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                data={{source:{select:{query : `SELECT CODE,NAME FROM USERS ORDER BY NAME ASC`},sql:this.core.sql}}}
                                 onValueChanged={async(e)=>
                                 {
                                     await this.acsData.load({APP:'MOB'})                                    
@@ -88,7 +91,6 @@ export default class accessMob extends React.PureComponent
                                 displayExpr="NAME"                       
                                 valueExpr="CODE"
                                 showClearButton={true}
-                                // data={{source:{select:{query : "SELECT CODE,NAME FROM USERS ORDER BY NAME ASC"},sql:this.core.sql}}}
                                 onValueChanged={async(e)=>
                                 {
                                     await this.acsData.load({APP:'MOB'})
@@ -159,7 +161,7 @@ export default class accessMob extends React.PureComponent
                         {
                             select:
                             {
-                                query : "SELECT CODE,NAME FROM USERS ORDER BY CODE ASC"
+                                query : `SELECT CODE,NAME FROM USERS ORDER BY CODE ASC`
                             },
                             sql:this.core.sql
                         }

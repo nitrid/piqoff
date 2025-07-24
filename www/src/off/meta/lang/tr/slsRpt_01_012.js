@@ -6,6 +6,8 @@ const slsRpt_01_012 =
     txtItemCode : "Ürün kodu",
     txtProductCode : "Ürün kodu",
     txtProductName : "Ürün adı",
+    dtDate : "Tarih",
+    cmbMainGrp : "Ürün grubu",
     txtProductTypeName : "Ürün tipi",
     btnGet :"Getir", 
     msgNoData : "Seçilen kriterlere uygun veri bulunamadı.",

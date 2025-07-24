@@ -3,7 +3,6 @@ import NbBase from '../../core/react/bootstrap/base.js';
 import NbButton from '../../core/react/bootstrap/button.js';
 import NdPopUp from '../../core/react/devex/popup.js';
 import NdTextBox from '../../core/react/devex/textbox.js';
-
 export default class NbCalculator extends NbBase
 {
     constructor(props)
@@ -12,12 +11,8 @@ export default class NbCalculator extends NbBase
 
         this.state = 
         {
-            calcResult:""
+            calcResult : ""
         }
-    }
-    _btnEqual()
-    {
-
     }
     show()
     {
@@ -45,8 +40,7 @@ export default class NbCalculator extends NbBase
                     {/* txtCalc */}
                     <div className='row py-1'>
                         <div className="col-12">
-                            <NdTextBox id={"txtCalc" + this.props.id} parent={this} simple={true}>     
-                            </NdTextBox> 
+                            <NdTextBox id={"txtCalc" + this.props.id} parent={this} simple={true}/>     
                         </div>
                     </div>                    
                     {/* Line 1 */}
@@ -181,10 +175,7 @@ export default class NbCalculator extends NbBase
                     <div className='row py-1'>
                         <div className="col-6">
                             <NbButton id={"btnCe" + this.props.id} parent={this} className="form-group btn btn-danger btn-block" style={{height:'60px',width:'100%',fontSize:'20pt'}}
-                            onClick={()=>
-                            {
-                                this.setState({calcResult:""})
-                            }}>
+                            onClick={()=>{this.setState({calcResult:""})}}>
                             CE
                             </NbButton>
                         </div>

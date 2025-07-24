@@ -4,6 +4,8 @@ const slsRpt_01_009 =
     menu : "Satış Faturası",
     btnGet: "Getir",
     txtCustomerCode : "Müşteri", 
+    dtDate : "Tarih",
+    btnPrint : "Yazdır",
     btnMailSend : "Mail Gönder",
     placeMailHtmlEditor : "Mail İçeriği",
     btnMailSend : "Mail Gönder",

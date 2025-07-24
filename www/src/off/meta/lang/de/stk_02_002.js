@@ -2,6 +2,9 @@
 const stk_02_002 = 
 {
     txtRefRefno : "Seriennummer-Reihenfolge",
+    validRef : "Seriennummer darf nicht leer sein",
+    validDepot : "Sie müssen einen Lager auswählen",
+    validDesign : "Bitte Design auswählen",
     cmbOutDepot: "Ausgangsdepot",
     cmbInDepot: "Eingangsdepot",
     dtDocDate : "Datum",
@@ -147,5 +150,12 @@ const stk_02_002 =
         msg: "Menge eingeben!"
     },
     txtQuantity : "Menge",
+    msgCode :
+    {
+        title: "Achtung",
+        btn01: "Zum Dokument gehen",
+        btn02: "Abbrechen",
+        msg: "Dokument gefunden"
+    },
 }
 export default stk_02_002

@@ -2,31 +2,31 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import { transportTypeCls} from '../../../../core/cls/doc.js';
 
-
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import TabPanel from 'devextreme-react/tab-panel';
+import Form, { Label,Item } from 'devextreme-react/form';
 import { Button } from 'devextreme-react/button';
-import FileUploader from 'devextreme-react/file-uploader';
 import * as xlsx from 'xlsx'
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdTextBox, { Validator, RequiredRule} from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
-import NdButton from '../../../../core/react/devex/button.js';
+import {Column} from '../../../../core/react/devex/grid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
+import {NdForm,NdItem,NdLabel, NdEmptyItem} from '../../../../core/react/devex/form.js';
+import {NdToast} from '../../../../core/react/devex/toast.js';
 
 export default class customsCodeImport extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.transportObj = new transportTypeCls();
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
         this.customsData = new datatable
@@ -47,38 +47,37 @@ export default class customsCodeImport extends React.PureComponent
     {
         this.customsData.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_ITEMS_CUSTOMS_DATA_INSERT] " + 
-            "@MULTICODE = @PMULTICODE, " +
-            "@NAME = @PNAME, " + 
-            "@CUSTOMS = @PCUSTOMS, " +
-            "@ORIGIN = @PORIGIN, " +
-            "@CUSTOMER = @PCUSTOMER ", 
+            query : `EXEC [dbo].[PRD_ITEMS_CUSTOMS_DATA_INSERT] 
+                    @MULTICODE = @PMULTICODE, 
+                    @NAME = @PNAME, 
+                    @CUSTOMS = @PCUSTOMS, 
+                    @ORIGIN = @PORIGIN, 
+                    @CUSTOMER = @PCUSTOMER `, 
             param : ['PMULTICODE:string|50','PNAME:string|max','PCUSTOMS:string|50','PORIGIN:string|50','PCUSTOMER:string|50'],
             dataprm : ['MULTICODE','NAME','CUSTOMS','ORIGIN','CUSTOMER','CUSTOMER']
         } 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
+
         for (let i = 0; i < pData.length; i++) 
         {
             pData[i].CUSTOMER = this.customerGuid
             this.customsData.push(pData[i])
         }
-        await this.customsData.update()
-        App.instance.setState({isExecute:false})
-        this.customsData.clear()
-        let tmpConfObj =
-        {
-            id:'msgSucces',showTitle:true,title:this.t("msgSucces.title"),showCloseButton:true,width:'500px',height:'200px',
-            button:[{id:"btn01",caption:this.t("msgSucces.btn01"),location:'after'}],
-            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSucces.msg")}</div>)
-        }
 
-        await dialog(tmpConfObj);
+        await this.customsData.update()
+
+        App.instance.loading.hide()
+
+        this.customsData.clear()
+
+        this.toast.show({message:this.t("msgSucces.msg"),type:"success"});
 
     }
     render()
     {
         return(
-            <div>
+            <div id = {this.props.data.id + this.tabIndex}>
+                <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -95,7 +94,7 @@ export default class customsCodeImport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -113,10 +112,10 @@ export default class customsCodeImport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmCustoms">
+                            <NdForm colCount={3} id="frmCustoms">
                                    {/* txtCustomerCode */}
-                                   <Item>
-                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                   <NdItem>
+                                    <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onEnterKey={(async()=>
@@ -161,9 +160,10 @@ export default class customsCodeImport extends React.PureComponent
                                         </Validator>  
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} 
+                                    container={"#" + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -176,65 +176,41 @@ export default class customsCodeImport extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
-                                        
                                     </NdPopGrid>
-                                </Item> 
+                                </NdItem> 
                                 {/* txtCustomerName */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     readOnly={true}
-                                    >
-                                    </NdTextBox>
-                                </Item> 
-                                <EmptyItem />
-                                <Item>
+                                    />
+                                </NdItem> 
+                                <NdEmptyItem />
+                                <NdItem>
                                 <Button icon="xlsxfile" text={this .t("excelAdd")}
                                     validationGroup={"frmslsDoc"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.customerGuid == '')
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:false,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgNotCustomer.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotCustomer.msg")}</div>)
-                                            }
-                                            
-                                            let pResult = await dialog(tmpConfObj);
-                                            if(pResult == 'btn01')
-                                            {
-                                               return
-                                            }
+                                            this.toast.show({message:this.t("msgNotCustomer.msg"),type:"warning"});
                                         }
                                         this.popExcel.show()
                                     }}/>  
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                        {/* Excel PopUp */}
@@ -244,33 +220,29 @@ export default class customsCodeImport extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popExcel.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.tabIndex} 
                         width={'600'}
                         height={'450'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
                                     <Label text={this.t("popExcel.txtMulticode")} alignment="right" />
                                     <NdTextBox id="txtPopMulticode" parent={this} simple={true}  notRefresh = {true} readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popExcel.txtCustoms")} alignment="right" />
                                     <NdTextBox id="txtPopCustoms" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
+                                    />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popExcel.txtOrigin")} alignment="right" />
                                     <NdTextBox id="txtPopOrigin" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                       
-                                    </NdTextBox>
+                                    />
                                 </Item>
                             </Form>
                             <Form colCount={2}>

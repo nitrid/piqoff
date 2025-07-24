@@ -5,7 +5,7 @@ import moment from 'moment';
 import NbLabel from "../../core/react/bootstrap/label.js";
 import NdGrid,{Column,Editing,Paging,Scrolling} from "../../core/react/devex/grid.js";
 
-import { dataset,datatable,param,access } from "../../core/core.js";
+import { param } from "../../core/core.js";
 import {prm} from '../meta/prm.js'
 import LCD from 'dot-matrix-lcd'
 export default class customerInfoScreen extends React.PureComponent

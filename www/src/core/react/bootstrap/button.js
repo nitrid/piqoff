@@ -8,9 +8,11 @@ export default class NbButton extends NbBase
     constructor(props)
     {
         super(props)
+
         this.state.disabled = this.props.disabled
         this.state.style = this.props.style
-        this.state.lock = typeof this.props.lock == 'undefined' ? false : this.props.lock        
+        this.state.lock = typeof this.props.lock == 'undefined' ? false : this.props.lock    
+            
         this._onClick = this._onClick.bind(this);
     }
     get disabled()

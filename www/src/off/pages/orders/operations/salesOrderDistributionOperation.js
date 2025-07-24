@@ -9,15 +9,13 @@ import ScrollView from 'devextreme-react/scroll-view';
 import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
 import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core';
-import { docCls } from '../../../../core/cls/doc.js'
+import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class salesOrdList extends React.PureComponent
 {
@@ -29,10 +27,14 @@ export default class salesOrdList extends React.PureComponent
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.state = {columns:[],summary:[],selecedItem:'',textColor:'green'}
         this.core = App.instance.core;
+        
         this.orderList = new datatable()
         this.orderDetail = new datatable()
-        this._btnGetClick = this._btnGetClick.bind(this)
-        this._btnApprove = this._btnApprove.bind(this)
+        
+        this.btnGetClick = this.btnGetClick.bind(this)
+        this.btnApprove = this.btnApprove.bind(this)
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
@@ -45,7 +47,7 @@ export default class salesOrdList extends React.PureComponent
     {
         
     }
-    async _btnGetClick()
+    async btnGetClick()
     {
         this.orderList = new datatable()
         this.orderList.selectCmd = 
@@ -78,28 +80,29 @@ export default class salesOrdList extends React.PureComponent
             param : ['FIRST_DATE:date','LAST_DATE:date','DEPOT:string|50'],
             value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbDepot.value]
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.orderList.refresh()
         await this.grdSlsOrdList.dataRefresh({source:this.orderList})
-        App.instance.setState({isExecute:false})
-
-        
+        App.instance.loading.hide()
     }
-    async _btnApprove()
+    async btnApprove()
     {
         let tmpConfOb1 =
         {
-            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
         }
         
         let pResult = await dialog(tmpConfOb1);
+
         if(pResult == 'btn02')
         {
             return
         }
-        App.instance.setState({isExecute:true})
+
+        App.instance.loading.show()
+
         for (let i = 0; i < this.grdSlsOrdList.getSelectedData().length; i++) 
         {
             let tmpQuery = 
@@ -142,21 +145,21 @@ export default class salesOrdList extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query : "EXEC [dbo].[PRD_DOC_ORDERS_UPDATE] " + 
-                            "@CUSER = @PCUSER, " + 
-                            "@APPROVED_QUANTITY = @PAPPROVED_QUANTITY, " + 
-                            "@GUID = @PGUID ", 
+                    query : `EXEC [dbo].[PRD_DOC_ORDERS_UPDATE] 
+                            @CUSER = @PCUSER, 
+                            @APPROVED_QUANTITY = @PAPPROVED_QUANTITY, 
+                            @GUID = @PGUID `, 
                     param : ['PCUSER:string|50','PAPPROVED_QUANTITY:float','PGUID:string|50'],
                     value : [this.user.CODE,tmpOrderLines.result.recordset[x].APPROVED_QYT * tmpOrderLines.result.recordset[x].UNIT_FACTOR,tmpOrderLines.result.recordset[x].GUID]
                 }
                 await this.core.sql.execute(tmpQuery) 
             }
         }
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
 
         let tmpConfObj =
         {
-            id:'msgSaveSuccess',showTitle:true,title:this.t("msgSaveSuccess.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgSaveSuccess',showTitle:true,title:this.t("msgSaveSuccess.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgSaveSuccess.btn01"),location:'before'},{id:"btn01",caption:this.t("msgSaveSuccess.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveSuccess.msg")}</div>)
         }
@@ -240,21 +243,31 @@ export default class salesOrdList extends React.PureComponent
             value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbDepot.value,pData.ITEM]
         }
 
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.orderDetail.refresh()
         await this.grdOrderDetail.dataRefresh({source:this.orderDetail})
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
         this.itemTotalQyt = pData.TOTAL_QUANTITY
         if(pData.TOTAL_QUANTITY <  pData.APPROVED_QYT)
         {
             this.setState({textColor:'red'})
         }
-        else
-        if(pData.TOTAL_QUANTITY <  pData.APPROVED_QYT)
+        else if(pData.TOTAL_QUANTITY >  pData.APPROVED_QYT)
         {
             this.setState({textColor:'green'})
         }
         this.popOrderDetail.show()
+    }
+    async loadState()
+    {
+        let tmpLoad = await this.access.filter({ELEMENT:'grdOrderDetailState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    async saveState(e)
+    {
+        let tmpSave = await this.access.filter({ELEMENT:'grdOrderDetailState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        await tmpSave.setValue(e)
+        await tmpSave.save()
     }
     render()
     {
@@ -295,7 +308,7 @@ export default class salesOrdList extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -313,30 +326,31 @@ export default class salesOrdList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmCriter">
+                            <NdForm colCount={2} id="frmCriter">
                                 {/* dtFirst */}
-                                <Item>
-                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}onApply={(async()=>{this._btnGetClick()}).bind(this)}/>
-                                </Item>
+                                <NdItem>
+                                    <NdLabel text={this.lang.t("dtDate")} alignment="right" />
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}onApply={(async()=>{this.btnGetClick()}).bind(this)}/>
+                                </NdItem>
                                 {/* dtLast */}
-                                <Item>
-                                </Item>
+                                <NdItem>
+                                </NdItem>
                                 {/* cmbDepot */}
-                                <Item>
-                                    <Label text={this.t("cmbDepot")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot" 
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
                                     value = ""
-                                    data = {{source:{select:{query : "SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)"},sql:this.core.sql}}}
+                                    data = {{source:{select:{query : `SELECT * FROM DEPOT_VW_01 WHERE TYPE IN(0,2)`},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbDepot',USERS:this.user.CODE})}
                                     >
                                         <Validator validationGroup={"frmslsDoc" + this.tabIndex}>
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -347,7 +361,7 @@ export default class salesOrdList extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="Default" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="Default" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -419,9 +433,10 @@ export default class salesOrdList extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnSave")} type="success" width="100%" onClick={this._btnApprove}></NdButton>
+                            <NdButton text={this.t("btnSave")} type="success" width="100%" onClick={this.btnApprove}></NdButton>
                         </div>
                     </div>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 73px'}}/>
                 </ScrollView>
                 <div>
                     <NdPopUp id={"popOrderDetail"} container={"#root"} parent={this}
@@ -458,12 +473,13 @@ export default class salesOrdList extends React.PureComponent
                                            {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgApprovedBig',showTitle:true,title:this.t("msgApprovedBig.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgApprovedBig',showTitle:true,title:this.t("msgApprovedBig.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgApprovedBig.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgApprovedBig.msg")}</div>)
                                                 }
                                                 
                                                 await dialog(tmpConfObj);  
+            
                                                 e.key.APPROVED_QYT = e.key.QUANTITY
                                            }
                                         }}
@@ -472,7 +488,7 @@ export default class salesOrdList extends React.PureComponent
                                             App.instance.menuClick(
                                                 {
                                                     id: 'sip_02_002',
-                                                    text: this.t('menu'),
+                                                    text: this.t('menuOff.sip_02_002'),
                                                     path: 'orders/documents/salesOrder.js',
                                                     pagePrm:{GUID:e.data.DOC_GUID}
                                                 })
@@ -480,7 +496,11 @@ export default class salesOrdList extends React.PureComponent
                                         }}
                                         >
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                            <Scrolling mode="standart" />
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdOrderDetail"}/>
+                                            <ColumnChooser enabled={true}/>
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={false} />
                                             <Column dataField="DOC_DATE" caption={this.t("grdOrderDetail.clmDate")} width={100} allowEditing={false} dataType="datetime" format={"dd/MM/yyyy"}/>
                                             <Column dataField="INPUT_NAME" caption={this.t("grdOrderDetail.clmCustomer")} width={230} allowEditing={false}/>
@@ -515,17 +535,18 @@ export default class salesOrdList extends React.PureComponent
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query : "EXEC [dbo].[PRD_DOC_ORDERS_UPDATE] " + 
-                                                            "@CUSER = @PCUSER, " + 
-                                                            "@APPROVED_QUANTITY = @PAPPROVED_QUANTITY, " + 
-                                                            "@GUID = @PGUID ", 
+                                                    query : `EXEC [dbo].[PRD_DOC_ORDERS_UPDATE] 
+                                                            @CUSER = @PCUSER, 
+                                                            @APPROVED_QUANTITY = @PAPPROVED_QUANTITY, 
+                                                            @GUID = @PGUID `, 
                                                     param : ['PCUSER:string|50','PAPPROVED_QUANTITY:float','PGUID:string|50'],
                                                     value : [this.user.CODE,this.orderDetail[i].APPROVED_QYT * this.orderDetail[i].UNIT_FACTOR,this.orderDetail[i].GUID]
                                                 }
+                                                
                                                 await this.core.sql.execute(tmpQuery) 
                                             }
                                             this.popOrderDetail.hide()
-                                            this._btnGetClick()
+                                            this.btnGetClick()
                                         }}/>
                                     </div>
                                 </div>

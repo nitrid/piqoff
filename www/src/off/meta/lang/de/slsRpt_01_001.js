@@ -4,6 +4,7 @@ const slsRpt_01_001 =
     chkZeroBalance : "Nullsalden anzeigen!",
     txtCustomerCode : "Kunde",
     btnCheck : "Aktivieren",
+    dtDate : "Datum",
     btnGet :"Suchen",
     grdListe : 
     {

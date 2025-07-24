@@ -1,27 +1,27 @@
 // "Satış Faturası Yaşlandırma Raporu"
 const slsRpt_02_007 =
 {
-    txtCustomerCode : "Customer",
-    btnGet : "Get",
-    dtFirst : "First Date",
-    dtLast : "Last Date",
-    pg_txtCustomerCode : 
+    btnGet: "Search",
+    txtCustomerCode : "Customer", 
+    dtFirst : "Start Date",
+    dtLast : "End Date",
+    grdList : 
     {
-        title : "Customer Selection",
-        clmCode :  "Customer Code",
-        clmTitle : "Customer Name",
-        clmTypeName : "Type",
-        clmGenusName : "Genus"
-    },
-    grdList: 
-    {
-        clmDate: "Date",
-        clmType: "Document",
+        clmDate : "Date",
+        clmType : "Document",
         clmCustomerName : "Customer Name",
         clmDebit : "Debit",
         clmCredit :"Credit",
         clmBalance : "Balance"
+
+    },
+    pg_txtCustomerCode : 
+    {
+        title : "Customer Selection",
+        clmCode :  "CUSTOMER CODE",
+        clmTitle : "CUSTOMER NAME",
+        clmTypeName : "TYPE",
+        clmGenusName : "GENUS"
     },
 }
-
 export default slsRpt_02_007

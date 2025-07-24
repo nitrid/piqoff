@@ -67,7 +67,7 @@ const fns_02_001 =
         clmAmount : "Total",
         clmOutputName : "Coffre-fort/Banque",
         clmDescription : "Motif",
-        clmInvoice : "Facture payée",
+        clmInvoice : "Référence Facture",
         clmFacDate : "Date de facture ",
         clmDocDate : "Date"
     },
@@ -165,6 +165,7 @@ const fns_02_001 =
         title: "Attention",   
         btn01: "OK",    
         msg: "Vous ne pouvez pas effectuer le processus sans sélectionner une facture !"  
-    },
+    },  
+    msgNotBank : "Veuillez sélectionner un compte",
 }
 export default fns_02_001

@@ -1,6 +1,7 @@
 // "Ürün Grubu Raporu"
 const slsRpt_01_002 =
 {
+    dtDate : "Date",
     btnGet :"Rechercher",  
     txtAmount : "Total", 
     txtTotalTicket : "Nombre Total de Documents", 

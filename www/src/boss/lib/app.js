@@ -1,3 +1,8 @@
+import { devexLic } from '../../devex-lic.js'
+import config from 'devextreme/core/config'
+
+config({ licenseKey: devexLic });
+
 import React from 'react';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import enMessages from '../meta/lang/devexpress/en.js';
@@ -127,7 +132,7 @@ export default class App extends React.PureComponent
             {
                 let tmpConfObj =
                 {
-                    id:'msgAnotherUserAlert',showTitle:true,title:this.lang.t("msgAnotherUserAlert.title"),showCloseButton:true,width:'350px',height:'200px',
+                    id:'msgAnotherUserAlert',showTitle:true,title:this.lang.t("msgAnotherUserAlert.title"),showCloseButton:true,width:'350px',height:'auto',
                     button:[{id:"btn01",caption:this.lang.t("msgAnotherUserAlert.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgAnotherUserAlert.msg")}</div>)
                 }

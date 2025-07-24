@@ -27,7 +27,6 @@ export default class Navigation extends React.PureComponent
             value: 'contains',
             menu:[],
             favMenu:[],
-            firmName: ''
         }
 
         this.favArray = []
@@ -40,7 +39,7 @@ export default class Navigation extends React.PureComponent
         {
             div :
             {
-                height:'94%'
+                height:'98%'
             },
             treeview :
             {
@@ -98,8 +97,7 @@ export default class Navigation extends React.PureComponent
             query :"SELECT TOP 1 NAME  FROM COMPANY_VW_01 " ,
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
-        this.firmName.value = tmpData.result.recordset[0].NAME
-        this.setState({firmName:tmpData.result.recordset[0].NAME})
+        this.firmName.value = tmpData.result.recordset[0].NAME + " - V." + this.core.appInfo.version
     }
     async mergeMenu(tmpMenu,tmpMenuData)
     {
@@ -189,7 +187,7 @@ export default class Navigation extends React.PureComponent
         {
             let tmpConfObj =
             {
-                id:'msgPageSelect',showTitle:true,title:this.lang.t("msgPageSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgPageSelect',showTitle:true,title:this.lang.t("msgPageSelect.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.lang.t("msgPageSelect.btn01"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPageSelect.msg")}</div>)
             }
@@ -249,8 +247,7 @@ export default class Navigation extends React.PureComponent
     render()
     {
         return(
-            <div style={this.style.div}>
-           
+            <div className="navigation-container" style={{...this.style.div, position: 'relative'}}>
                 <LoadPanel
                 shadingColor="rgba(255,255,255,1)"
                 position={{ of: '#Menu' }}
@@ -260,75 +257,94 @@ export default class Navigation extends React.PureComponent
                 showPane={false}
                 />
                 <div>
-                <React.Fragment>
-                    <TabPanel id="tabPanel" width={300}>
-                        <Item title={this.lang.t("menu")} icon="menu">
-                            <TreeView id="Menu1" style={this.style.treeview}
-                            items = {this.state.menu}
-                            width = {300}
-                            height = {'100%'}
-                            onItemClick = {this.selectItem}
-                            searchMode={this.state.value}
-                            searchEnabled={true}
-                            onItemContextMenu= {this.onTreeViewItemContextMenu}
-                            onInitialized={(e)=>
-                            {
-                                this.menuRef = e.component
-                            }}
-                            >
-                                <SearchEditorOptions height={'fit-content'} />                        
-                            </TreeView> 
-                        </Item>
-                        <Item title={this.lang.t("favMenu")} icon="favorites">
-                            <TreeView id="Menu2" style={this.style.treeview}
-                            items = {this.state.favMenu}
-                            width = {300}
-                            height = {'100%'}
-                            onItemClick = {this.selectItem}
-                            searchMode={this.state.value}
-                            searchEnabled={true}
-                            onItemContextMenu= {this.onTreeViewItemContextMenu}
-                            onInitialized={(e)=>
-                            {
-                                this.menuRef2 = e.component
-                            }}
-                            >
-                                <SearchEditorOptions height={'fit-content'} />                        
-                            </TreeView> 
-                        </Item>
-                    </TabPanel>
-                    <ContextMenu
-                    dataSource={[{ text: this.lang.t("favAdd")}]}
-                    width={200}
-                    target="#Menu1"
-                    onItemClick={(async(e)=>
-                    {
-                        this.favItemAdd()
-                    }).bind(this)} />
-                    <ContextMenu
-                    dataSource={[{ text: this.lang.t("favDell")}]}
-                    width={200}
-                    target="#Menu2"
-                    onItemClick={(async(e)=>
-                    {
-                        this.favItemDell()
-                    }).bind(this)} />
-                </React.Fragment>
-
+                    <React.Fragment>
+                        <TabPanel id="tabPanel" width={300} height={'100%'}>
+                            <Item title={this.lang.t("menu")} icon="menu">
+                                <TreeView id="Menu1" 
+                                className="custom-menu-treeview"
+                                style={{
+                                    ...this.style.treeview,
+                                    backgroundColor: '#ffffff',
+                                    border: 'none',
+                                    borderRadius: '0',
+                                    padding: '5px',
+                                    boxShadow: 'none',
+                                    margin: '0'
+                                }}
+                                items = {this.state.menu}
+                                width = {300}
+                                height = {'100%'}
+                                onItemClick = {this.selectItem}
+                                searchMode={this.state.value}
+                                searchEnabled={true}
+                                onItemContextMenu= {this.onTreeViewItemContextMenu}
+                                onInitialized={(e)=>
+                                {
+                                    this.menuRef = e.component
+                                }}
+                                >
+                                    <SearchEditorOptions height={'fit-content'} />                        
+                                </TreeView> 
+                            </Item>
+                            <Item title={this.lang.t("favMenu")} icon="favorites">
+                                <TreeView id="Menu2" 
+                                className="custom-menu-treeview"
+                                style={{
+                                    ...this.style.treeview,
+                                    backgroundColor: '#ffffff',
+                                    border: 'none',
+                                    borderRadius: '0',
+                                    padding: '10px',
+                                    boxShadow: 'none',
+                                    margin: '0'
+                                }}
+                                items = {this.state.favMenu}
+                                width = {300}
+                                height = {'100%'}
+                                onItemClick = {this.selectItem}
+                                searchMode={this.state.value}
+                                searchEnabled={true}
+                                onItemContextMenu= {this.onTreeViewItemContextMenu}
+                                onInitialized={(e)=>
+                                {
+                                    this.menuRef2 = e.component
+                                }}
+                                >
+                                    <SearchEditorOptions height={'fit-content'} />                        
+                                </TreeView> 
+                            </Item>
+                        </TabPanel>
+                        <ContextMenu
+                        dataSource={[{ text: this.lang.t("favAdd")}]}
+                        width={200}
+                        target="#Menu1"
+                        onItemClick={(async(e)=>
+                        {
+                            this.favItemAdd()
+                        }).bind(this)} />
+                        <ContextMenu
+                        dataSource={[{ text: this.lang.t("favDell")}]}
+                        width={200}
+                        target="#Menu2"
+                        onItemClick={(async(e)=>
+                        {
+                            this.favItemDell()
+                        }).bind(this)} />
+                    </React.Fragment>
                 </div>
                 <div className="row">
-                    <div className="col-12 px-4">
-                        <NbLabel id="firmName" parent={this} value={this.state.firmName}/>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-12 px-4">
-                        <NbLabel id="info" parent={this} value={this.core.appInfo.name + " version : " + this.core.appInfo.version}/>
+                    <div className="col-12 py-0" 
+                    style=
+                    {{
+                        fontSize: '10px',
+                        fontWeight: '500',
+                        margin: '0px'
+                    }}>
+                        <NbLabel id="firmName" parent={this}/>
                     </div>
                 </div>
             </div>
         )
-        
     }
     selectItem(e) 
     {        

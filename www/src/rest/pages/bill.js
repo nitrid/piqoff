@@ -1016,7 +1016,7 @@ export default class bill extends React.PureComponent
                             {
                                 let tmpConfObj =
                                 {
-                                    id:'msgWaitStatus',showTitle:true,title:this.lang.t("msgWaitStatus.title"),showCloseButton:true,width:'90%',height:'200px',
+                                    id:'msgWaitStatus',showTitle:true,title:this.lang.t("msgWaitStatus.title"),showCloseButton:true,width:'90%',height:'auto',
                                     button:[{id:"btn01",caption:this.lang.t("msgWaitStatus.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgWaitStatus.btn02"),location:'after'}],
                                 }
 

@@ -12,6 +12,8 @@ const slsRpt_01_013 =
     grdListe : 
     {
         clmDate : "Date",   
+        clmCustomerMainGrp : "Customer Group",
+        clmDocDate : "Document Date",
         clmCode: "Code",   
         clmName : "Name",            
         clmAmount : "Amount",   

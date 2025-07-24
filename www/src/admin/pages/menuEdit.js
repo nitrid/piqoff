@@ -241,7 +241,7 @@ export default class menuEdit extends React.Component
                                         showClearButton={true}
                                         pageSize ={50}
                                         notRefresh={true}
-                                        data={{source:{select:{query : "SELECT CODE FROM USERS ORDER BY CODE ASC"},sql:this.core.sql}}}
+                                        data={{source:{select:{query : `SELECT CODE FROM USERS ORDER BY CODE ASC`},sql:this.core.sql}}}
                                         onValueChanged={async (e)=>
                                         {
                                             if(this.cmbApp.value == 'OFF')
@@ -277,7 +277,7 @@ export default class menuEdit extends React.Component
                                                     this.menuSave();
                                                     let tmpConfObj1 =
                                                     {
-                                                        id:'msgSaveResult',showTitle:true,title:this.lang.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                        id:'msgSaveResult',showTitle:true,title:this.lang.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                         button:[{id:"btn01",caption:this.lang.t("msgSave.btn01"),location:'after'}],
                                                     }
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.lang.t("msgSaveResult.msgSuccess")}</div>)
@@ -321,7 +321,7 @@ export default class menuEdit extends React.Component
                         {
                             select:
                             {
-                                query : "SELECT CODE,NAME FROM USERS ORDER BY CODE ASC"
+                                query : `SELECT CODE,NAME FROM USERS ORDER BY CODE ASC`
                             },
                             sql:this.core.sql
                         }

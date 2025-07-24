@@ -6,6 +6,7 @@ const cri_01_002 =
     txtTitle : "Title",
     txtCustomerName : "Name",
     tabTitleAdress : "Address",
+    codeFailedMsg : "A valid customer was not found. Please enter a valid customer code.",
     pg_txtCode : 
     {
         title : "Customer Selection",
@@ -54,7 +55,9 @@ const cri_01_002 =
         title: "Attention",
         btn01: "OK",
         btn02: "Cancel",
-        msg: "Are you sure you want to delete the record ?"
+        msg: "Are you sure you want to delete the record ?",
+        msgFailed: "Record deletion failed !",
+        msgSuccess: "Record deletion was successful !"
     },
     msgCode : 
     {

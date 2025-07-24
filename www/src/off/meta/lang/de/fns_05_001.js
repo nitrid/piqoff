@@ -4,6 +4,7 @@ const fns_05_001 =
     txtRefRefno : "Seriennummer",
     cmbCashSafe : "Tresor auswählen",
     cmbCheckSafe : "Scheck-Tresor",
+    checkReference : "Referenz",
     cmbBank : "Bank auswählen",
     txtCustomerCode : "Kundennummer",
     txtCustomerName : "Kundenname",
@@ -84,20 +85,37 @@ const fns_05_001 =
         btn01: "OK",
         msg: "Kunde nicht gefunden!"
     },
+    pg_txtCustomerCode : 
+    {
+        title : "Kunden auswählen",
+        clmCode : "KUNDENNUMMER",
+        clmTitle : "KUNDENNAME",
+        clmTypeName : "TYP",
+        clmGenusName : "ART"
+    },
     popCash : 
     {
-        title: "Barzahlung",
-        btnApprove : "Hinzufügen"
+        title: "Einzugseingabe",
+        btnApprove : "Hinzufügen",
+        btnCancel : "Abbrechen",
+        dtDocDate : "Datum",
+        cash : "Betrag",
+        txtCustomerCode : "Kundennummer",
+        txtCustomerName : "Kundenname",
+        description : "Beschreibung",
+        cmbCashSafe : "Tresor auswählen",
     },
     popCheck : 
     {
         title: "Scheckeinzug",
-        btnApprove : "Hinzufügen"
+        btnApprove : "Hinzufügen",
+        btnCancel : "Abbrechen",
     },
     popBank : 
     {
         title: "Banküberweisung",
-        btnApprove : "Hinzufügen"
+        btnApprove : "Hinzufügen",
+        btnCancel : "Abbrechen",
     },
     validRef :"Serie darf nicht leer sein",
     validCustomerCode : "Kundennummer darf nicht leer sein",

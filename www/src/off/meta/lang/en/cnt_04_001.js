@@ -28,6 +28,10 @@ const cnt_04_001 =
         clmUnitPrice : "Unit Price",   
         clmQuantity : "Quantity",
     },
+    msgDeleteResult:
+    {
+        msg: "Record deleted successfully !"
+    },
     msgUnit:
     {
         title: "Unit Selection",

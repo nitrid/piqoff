@@ -28,6 +28,10 @@ const set_02_001 =
         btn02: "Cancel",
         msg: "Are you sure you want to save?"
     },
+    msgDeleteResult:
+    {
+        msgSuccess: "Enregistrement réussi !"
+    },
     msgSaveResult:
     {
         title: "Attention",

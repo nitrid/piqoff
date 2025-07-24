@@ -69,7 +69,7 @@ export default class deviceChoose extends React.Component
                                 {
                                     select:
                                     {
-                                        query : "select CODE,NAME from POS_DEVICE ORDER BY CODE ASC"
+                                        query : `select CODE,NAME from POS_DEVICE ORDER BY CODE ASC`
                                     }
                                     ,sql:this.core.sql
                                 }

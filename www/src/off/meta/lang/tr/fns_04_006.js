@@ -2,6 +2,7 @@
  const fns_04_006 =
  {
      btnGet :"Getir",
+     dtDate : "Tarih",
      grdListe : 
      {
          clmCustomerCode : "Müşteri Kodu",

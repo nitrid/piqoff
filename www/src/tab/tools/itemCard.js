@@ -1,16 +1,18 @@
 import React from "react";
 import App from "../lib/app.js";
 import NbBase from "../../core/react/bootstrap/base.js";
-import NdTextBox,{ Button } from '../../core/react/devex/textbox'
+import NdTextBox from '../../core/react/devex/textbox'
 import NdSelectBox from '../../core/react/devex/selectbox'
-import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
+import  { dialog } from '../../core/react/devex/dialog.js';
 
 export default class NbItemCard extends NbBase
 {
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
+
         this.state = 
         {
             image : typeof this.props.image == 'undefined' ? '../css/img/noimage.jpg' : this.props.image,
@@ -22,6 +24,7 @@ export default class NbItemCard extends NbBase
         
         this.data = this.props.data
         this.value = 0
+
         this._onValueChange = this._onValueChange.bind(this);
         this._onClick = this._onClick.bind(this);        
     }
@@ -32,7 +35,9 @@ export default class NbItemCard extends NbBase
             if(typeof this.props.defaultUnit != 'undefined' && typeof pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID != 'undefined' && typeof this.data.QUANTITY == 'undefined')
             {
                 this.cmbUnit._onValueChanged({value:pData.data.find(option => option.NAME === this.props.defaultUnit)?.GUID})
+                
                 let tmpDt = typeof this.props.dt == 'undefined' ? [] : this.props.dt.where({'ITEM':this.props.data.GUID})
+                
                 if(tmpDt.length > 0)
                 {
 
@@ -42,6 +47,7 @@ export default class NbItemCard extends NbBase
             }
         }
     }
+
     _onValueChange(e)
     {
         if(typeof this.props.onValueChange != 'undefined')
@@ -49,6 +55,7 @@ export default class NbItemCard extends NbBase
             this.props.onValueChange(e);
         }
     }
+
     _onClick()
     {
         if(typeof this.props.onClick != 'undefined')
@@ -56,13 +63,16 @@ export default class NbItemCard extends NbBase
             this.props.onClick(this.props);
         }
     }
+
     setDocItem()
     {
         let tmpDt = typeof this.props.dt == 'undefined' ? [] : this.props.dt.where({'ITEM':this.props.data.GUID})
+        
         if(typeof this.cmbUnit.data.datatable.where({'TYPE':0})[0] != 'undefined')
         {
             this.setState({unitName : this.cmbUnit.data.datatable.where({'TYPE':0})[0].NAME})
         }
+
         if(tmpDt.length > 0)
         {
             this["txtQuantity" + this.props.id].value = tmpDt[0].QUANTITY / tmpDt[0].UNIT_FACTOR
@@ -81,6 +91,7 @@ export default class NbItemCard extends NbBase
             this["txtQuantity" + this.props.id].value = 0
         }
     }
+    
     render()
     {
         return(
@@ -101,15 +112,18 @@ export default class NbItemCard extends NbBase
                             valueExpr="GUID"
                             value= {this.props.data.UNIT}
                             readOnly={this.props.unitLock}
-                            data={{source:{select:{query : "SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID ='"+ this.props.data.GUID +"'"},sql:this.core.sql}}}
+                            data={{source:{select:{query : `SELECT GUID,NAME,FACTOR,TYPE FROM ITEM_UNIT_VW_01 WHERE ITEM_GUID = '${this.props.data.GUID}'`},sql:this.core.sql}}}
                             onValueChanged={(async(e)=>
                             {
                                 await this.core.util.waitUntil(300)
+                                
                                 if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
                                 {
                                     this.props.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value}).length > 0 ? this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR : 1
                                     this.props.data.UNIT = e.value
+                                    
                                     let tmpDt = typeof this.props.dt == 'undefined' ? [] : this.props.dt.where({'ITEM':this.props.data.GUID})
+                                    
                                     if(tmpDt.length > 0)
                                     {
                                         tmpDt[0].UNIT_FACTOR = this.data.UNIT_FACTOR
@@ -136,7 +150,7 @@ export default class NbItemCard extends NbBase
                     </div>
                     <div className='row'>
                         <div className='col-12'>
-                            <NdTextBox id={"txtQuantity" + this.props.id} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center' }}
+                            <NdTextBox id={"txtQuantity" + this.props.id} parent={this} simple={true} inputAttr={{ class: 'dx-texteditor-input txtbox-center item-quantity-box' }}
                             selectAll={false}
                             value={0}
                             onChange={(async(e)=>
@@ -173,7 +187,7 @@ export default class NbItemCard extends NbBase
                                             {
                                                 let confObj = 
                                                 {
-                                                    id:'msgWrongUnit',showTitle:true,title:this.t("msgWrongUnit.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgWrongUnit',showTitle:true,title:this.t("msgWrongUnit.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgWrongUnit.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgWrongUnit.msg")}</div>)
                                                 }
@@ -185,7 +199,7 @@ export default class NbItemCard extends NbBase
                                             {
                                                 let confObj = 
                                                 {
-                                                    id:'msgPriceZeroUnit',showTitle:true,title:this.t("msgPriceZeroUnit.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgPriceZeroUnit',showTitle:true,title:this.t("msgPriceZeroUnit.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgPriceZeroUnit.btn01"),location:'after'},
                                                             {id:"btn02",caption:this.t("msgPriceZeroUnit.btn02"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgPriceZeroUnit.msg")}</div>)

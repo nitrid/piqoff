@@ -14,6 +14,7 @@ export default class NdTextBox extends Base
         super(props)
         
         this.dev = null;
+        this.isFocused = false;
 
         this.state.value = typeof props.value == 'undefined' ? ''  : props.value
         this.state.title = typeof props.title == 'undefined' ? '' : props.title
@@ -44,13 +45,16 @@ export default class NdTextBox extends Base
     }
     _onValueChanged(e) 
     {       
-        if(this.props.upper)
+        if(this.value != e.value)
         {
-            this.value = e.value.toString().toUpperCase();
-        }    
-        else
-        {
-            this.value = e.value;
+            if(this.props.upper)
+            {
+                this.value = e.value.toString().toUpperCase();
+            }    
+            else
+            {
+                this.value = e.value;
+            }
         }
         
         if(typeof this.props.onValueChanged != 'undefined')
@@ -74,6 +78,8 @@ export default class NdTextBox extends Base
     }
     _onFocusIn(e)
     {
+        this.isFocused = true;
+
         if(typeof this.props.selectAll == 'undefined' || this.props.selectAll == true)
         {
             this.dev.element().getElementsByTagName('input')[0].select()
@@ -85,6 +91,8 @@ export default class NdTextBox extends Base
     }
     _onFocusOut()
     {
+        this.isFocused = false;
+        
         if(typeof this.props.onFocusOut != 'undefined')
         {
             this.props.onFocusOut();
@@ -92,7 +100,11 @@ export default class NdTextBox extends Base
     }
     _onChange(e)
     {
-        this.value = e.value;
+        if(this.value != e.value)
+        {
+            this.value = e.value;
+        }
+
         if(typeof this.props.onChange != 'undefined')
         {
             this.props.onChange(e);
@@ -170,7 +182,6 @@ export default class NdTextBox extends Base
     }
     _txtView()
     {           
-        console.log(this.props.id)             
         return (
             <TextBox id={this.props.id} mode={this.state.mode} showClearButton={this.state.showClearButton} height='fit-content'
                 mask={this.props.mask}

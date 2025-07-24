@@ -37,6 +37,10 @@ const  prsnl_02_001 =
         both : "Both",
         branch : "Branch"
     },
+    msgDeleteSuccess :
+    {
+        msg: "Delete operation successful !"
+    }
 }
 
 export default prsnl_02_001

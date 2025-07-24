@@ -11,7 +11,7 @@ const ftr_01_006 =
         clmTypeName : "Type",
         clmGenusName : "Genre"
     },
-    btnGet :"Apporter",
+    btnGet :"Rechercher",
     dtFirst : "Première date",
     dtLast : "Dernière date",
     grdSlsIvcList: 

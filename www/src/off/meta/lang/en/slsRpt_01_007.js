@@ -3,8 +3,9 @@ const slsRpt_01_007 =
 {
     chkZeroBalance : "Show Zero Balances",
     txtItemCode : "Product Selection",
+    dtDate : "Date",
     btnGet :"Get",
-    grdListe : 
+    grdListe :  
     {
         clmDate : "Date",
         clmCode: "Code",

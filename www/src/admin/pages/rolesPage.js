@@ -15,7 +15,6 @@ export default class userPage extends React.PureComponent
 
         this.core = App.instance.core;
         this.roleObj = new roleCls();
-        // this.RoleCmb = [{CODE: 'Administrator', NAME: 'Administrator'}, {CODE: 'User', NAME: 'User'}]
 
         this._cellRoleRender = this._cellRoleRender.bind(this)
     }
@@ -63,8 +62,6 @@ export default class userPage extends React.PureComponent
                 </Editing>
                 <Column dataField="CODE" caption={this.t("grdRoleList.clmCode")} />
                 <Column dataField="NAME" caption={this.t("grdRoleList.clmName")} />
-                {/* <Column dataField="ROLE" caption={this.t("grdRoleList.clmRole")} >
-                <Lookup dataSource={this.RoleCmb} valueExpr="CODE" displayExpr="CODE" /> </Column> */}
                 </NdGrid>
                 </div>
             </div>

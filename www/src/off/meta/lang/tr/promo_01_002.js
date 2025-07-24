@@ -53,7 +53,7 @@ const promo_01_002 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kayıt etmek istediğinize eminmisiniz !"
+        msg: "Kayıt etmek istediğinize emin misiniz !"
     },
     msgSaveResult:
     {
@@ -73,7 +73,7 @@ const promo_01_002 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        msg: "Kaydı silmek istediğinize emin misiniz ?"
     },
     popDiscount:
     {
@@ -111,7 +111,7 @@ const promo_01_002 =
         title: "Dikkat",
         btn01: "Evet",
         btn02: "Hayır",
-        msg: "Tümünü silmek istediğinize eminmisiniz ?",
+        msg: "Tümünü silmek istediğinize emin misiniz ?",
     },
     msgItemAlert:
     {

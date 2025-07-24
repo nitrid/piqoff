@@ -18,25 +18,37 @@ export class NdLayout extends Base
     componentWillUnmount() 
     {
         this.isUnmounted = true;
+        
+        // ResizeObserver'ı temizle
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect();
+            this.resizeObserver = null;
+        }
     }
     componentDidMount()
     {
-        const myDiv = document.getElementById(this.props.id);
-
-        const resizeObserver = new ResizeObserver(entries =>
-        {
-            for (const entry of entries)
-            {
-                const newWidth = entry.contentRect.width;
-                if (!this.isUnmounted) 
+        // Biraz daha uzun bekle, DevExtreme v24'te render timing değişmiş
+        setTimeout(() => {
+            const myDiv = document.getElementById(this.props.id);
+            
+            if (myDiv && !this.isUnmounted) {
+                this.resizeObserver = new ResizeObserver(entries =>
                 {
-                    this.setState({width : newWidth})
-                }
-            }
-        });
+                    for (const entry of entries)
+                    {
+                        const newWidth = entry.contentRect.width;
+                        if (!this.isUnmounted) 
+                        {
+                            this.setState({width : newWidth})
+                        }
+                    }
+                });
 
-        resizeObserver.observe(myDiv);
+                this.resizeObserver.observe(myDiv);
+            }
+        }, 200); // DevExtreme v24 için biraz daha uzun timeout
     }
+
     handleLayoutChange (newLayout) 
     {
         newLayout.forEach(itemL => 

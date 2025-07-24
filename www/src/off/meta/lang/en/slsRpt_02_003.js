@@ -4,7 +4,8 @@ const slsRpt_02_003 =
     chkZeroBalance : "Show Zero Balances",   
     txtCustomerCode : "Customer",   
     btnCheck : "Active",   
-    btnGet :"Get",   
+    btnGet :"Get",      
+    dtDate : "Date",
     grdListe :    
     {   
         clmRef: "Invoice Series",

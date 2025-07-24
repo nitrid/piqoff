@@ -248,6 +248,10 @@ const prsnl_01_001 =
         title : "Sub Group Selection",
         clmName : "Name",
     },
+    msgDeleteSuccess :
+    {
+        msg: "Delete operation successful !"
+    }
 }
 
 export default prsnl_01_001

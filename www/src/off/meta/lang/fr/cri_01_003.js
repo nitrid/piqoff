@@ -37,7 +37,9 @@ const cri_01_003 =
         title: "Attention",
         btn01: "D'accord",
         btn02: "Abandonner",
-        msg: "Êtes-vous sûr(e) de vouloir supprimer?"
+        msg: "Êtes-vous sûr(e) de vouloir supprimer?",
+        msgFailed: "Suppression de l'enregistrement échouée !",
+        msgSuccess: "Suppression de l'enregistrement réussie !"
     },
     msgCode : 
     {

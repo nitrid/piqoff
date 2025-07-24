@@ -2,7 +2,13 @@
 const cnt_01_002 =
 {
     txtCustomerCode : "Customer",
-    menu : "Sales Agreement",
+    menu : "Accord de vente",
+    cmbVatType :
+    {
+        title : "VAT Type",
+        vatInc : "Inclusive",
+        vatExt : "Exclusive"
+    },
     pg_txtCustomerCode : 
     {
         title : "Customer Selection",
@@ -12,7 +18,7 @@ const cnt_01_002 =
         clmGenusName : "GENUS"
     },
     btnGet : "Get",
-    grdPurcContList: 
+    grdSlsContList: 
     {
         clmCreateDate: "Record Date",
         clmCode: "Product Code",
@@ -24,6 +30,10 @@ const cnt_01_002 =
         clmFinishDate :"Finish",
         clmDepot : "Depot",
         clmUser : "User"
+    },
+    msgDeleteResult:
+    {
+        msg: "Record deleted successfully !"
     },
 }
 

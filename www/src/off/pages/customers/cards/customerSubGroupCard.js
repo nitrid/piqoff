@@ -2,14 +2,10 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import { subGroupCls} from '../../../../core/cls/customers.js';
 
-
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-
-import NdButton from '../../../../core/react/devex/button.js';
-import NdTreeList,{Column,RowDragging,Editing,Button,ValidationRule,Popup,Form,Item} from '../../../../core/react/devex/treelist.js';
-
-import { dialog } from '../../../../core/react/devex/dialog.js';
+import { NdForm, NdItem }from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
+import NdTreeList,{Column,RowDragging,Editing,Button,ValidationRule,Popup} from '../../../../core/react/devex/treelist.js';
 import { datatable } from '../../../../core/core.js';
 
 export default class customerSubGroupCard extends React.PureComponent
@@ -17,9 +13,12 @@ export default class customerSubGroupCard extends React.PureComponent
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+
         this.subGrpObj = new subGroupCls();
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
     }
@@ -35,7 +34,7 @@ export default class customerSubGroupCard extends React.PureComponent
     }
     calculateDepth(itemId, items, depth = 0) 
     {
-        const item = items.find(x => x.GUID === itemId);
+        let item = items.find(x => x.GUID === itemId);
         if (!item || item.PARENT === '00000000-0000-0000-0000-000000000000') 
         {
             return depth;
@@ -88,10 +87,10 @@ export default class customerSubGroupCard extends React.PureComponent
                             {
                                 let tmpFn = (itemId, items)=>
                                 {
-                                    const item = items.find(x => x.PARENT === itemId);
+                                    let item = items.find(x => x.PARENT === itemId);
                                     if (typeof item != 'undefined') 
                                     {
-                                        this.subGrpObj.dt().removeAt(item)
+                                        this.subGrpObj.dt().removeAt(items.indexOf(item))
                                         return tmpFn(item.GUID,items)
                                     }
                                     else
@@ -107,9 +106,9 @@ export default class customerSubGroupCard extends React.PureComponent
                                 <RowDragging allowDropInsideItem={true} allowReordering={true} showDragIcons={true}
                                 onReorder={async(e)=>
                                 {
-                                    const visibleRows = e.component.getVisibleRows();
+                                    let visibleRows = e.component.getVisibleRows();
                                     let sourceData = e.itemData;
-                                    const sourceIndex = this.subGrpObj.dt().indexOf(sourceData);
+                                    let sourceIndex = this.subGrpObj.dt().indexOf(sourceData);
                                     
                                     if (e.dropInsideItem) 
                                     {
@@ -120,8 +119,8 @@ export default class customerSubGroupCard extends React.PureComponent
                                     } 
                                     else 
                                     {
-                                        const targetData = visibleRows[e.toIndex].data;
-                                        const targetIndex = this.subGrpObj.dt().indexOf(targetData);
+                                        let targetData = visibleRows[e.toIndex].data;
+                                        let targetIndex = this.subGrpObj.dt().indexOf(targetData);
                                         sourceData.PARENT = targetData.PARENT;
                                         sourceData.PARENT_MASK = targetData.PARENT_MASK;
                                         this.subGrpObj.dt().splice(sourceIndex, 1);
@@ -144,10 +143,10 @@ export default class customerSubGroupCard extends React.PureComponent
                                 />
                                 <Editing allowUpdating={true} allowDeleting={true} allowAdding={true} mode="popup">
                                     <Popup title={""} showTitle={true} width={400} height={260} />
-                                    <Form colCount={1}>
-                                        <Item dataField="CODE" />
-                                        <Item dataField="NAME" />
-                                    </Form>
+                                    <NdForm colCount={1}>
+                                        <NdItem dataField="CODE" />
+                                        <NdItem dataField="NAME" />
+                                    </NdForm>
                                 </Editing>
 
                                 <Column dataField="NAME" caption={this.t("tglGrp.clmName")}>
@@ -165,6 +164,7 @@ export default class customerSubGroupCard extends React.PureComponent
                                 </Column>
                             </NdTreeList>
                         </div>
+                        <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                     </div>
                 </ScrollView>
             </div>

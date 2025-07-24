@@ -1,7 +1,6 @@
 import React from "react";
 import NbBase from "../../core/react/bootstrap/base.js";
 import NbButton from "../../core/react/bootstrap/button.js";
-import NdGrid,{Paging,Pager,Column} from "../../core/react/devex/grid.js";
 import NbKeyboard from "../../core/react/bootstrap/keyboard.js";
 import NdTextBox from "../../core/react/devex/textbox.js";
 import NdPopUp from "../../core/react/devex/popup.js";
@@ -117,7 +116,7 @@ export default class NbPopDescboard extends NbBase
         {
             let tmpConfObj =
             {
-                id:'popDescbordValidation2',showTitle:true,title:this.lang.t("popDescbordValidation2.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'popDescbordValidation2',showTitle:true,title:this.lang.t("popDescbordValidation2.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.lang.t("popDescbordValidation2.title"),location:'before'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popDescbordValidation2.msg1") + this.state.minCharSize + this.lang.t("popDescbordValidation2.msg2")}</div>)
             }

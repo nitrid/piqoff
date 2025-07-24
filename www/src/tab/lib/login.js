@@ -1,15 +1,12 @@
 import React from 'react';
 import App from './app.js'
-import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button';
-import Form, { Label,Item } from 'devextreme-react/form';
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../core/react/devex/textbox.js'
+import NdTextBox from '../../core/react/devex/textbox.js'
 import NdSelectBox from '../../core/react/devex/selectbox.js';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
-import NdPopUp from '../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Export} from '../../core/react/devex/grid.js';
+import {Column} from '../../core/react/devex/grid.js';
 import i18n from './i18n.js'
-import { locale, loadMessages, formatMessage } from 'devextreme/localization';
+import { locale } from 'devextreme/localization';
 import NdDialog from '../../core/react/devex/dialog.js';
 import NdButton from '../../core/react/devex/button.js';
 import NdCheckBox from 'devextreme-react/check-box';
@@ -135,6 +132,7 @@ export default class Login extends React.PureComponent
     {
         window.close()
     }
+    
     async completeLogin(withTransfer = false)
     {
         if(withTransfer)
@@ -176,7 +174,7 @@ export default class Login extends React.PureComponent
                                 displayExpr="text"                       
                                 valueExpr="id"
                                 value= {localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang')}
-                                data={{source:[{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}]}}
+                                data={{source:[{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"},{id:"de",text:"DE"}]}}
                                 onValueChanged={(async(args)=>
                                 {
                                     localStorage.setItem('lang',args.value)

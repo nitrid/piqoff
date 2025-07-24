@@ -22,6 +22,7 @@ const pos_03_001 =
     txtReal : "Doğru",
     payTransfer : "Tutarları Aktar",
     validPriceFloat : "Avans 0'dan büyük olmalıdır",
+    msgSafeNotFound : "Kasa bulunamadı, lütfen kasayı kontrol ediniz.",
     popFinish : 
     {
         title :"Sonuç"
@@ -100,7 +101,7 @@ const pos_03_001 =
         title: "Dikkat",
         btn01: "İptal",
         btn02: "Devam",
-        msg: "Girmiş olduğunuz tutar 0€ ! Devam etmek istediğinizden eminmisiniz.."
+        msg: "Girmiş olduğunuz tutar 0€ ! Devam etmek istediğinizden emin misiniz.."
     },
     msgBigAmount:
     {

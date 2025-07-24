@@ -2,6 +2,7 @@
 const pos_02_014 = 
 {
     btnGet :"Getir",
+    dtDate : "Tarih",
     grdListe : 
     {
         clmCode: "Kodu",

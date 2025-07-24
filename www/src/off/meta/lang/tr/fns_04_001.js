@@ -4,6 +4,7 @@ const fns_04_001 =
     cmbBank : "Banka Seçimi",
     btnCheck : "Aktif",
     btnGet :"Getir",
+    dtDate : "Tarih",
     grdListe : 
     {
         clmOutputName : "Çıkış Hesabı",

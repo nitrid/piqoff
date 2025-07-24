@@ -2,30 +2,17 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { EmptyItem, Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
+import Form, {Item,EmptyItem, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,ColumnChooser,StateStoring,Paging,Pager,Scrolling,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-import NbRadioButton from "../../../../core/react/bootstrap/radiogroup.js";
-import NbLabel from "../../../../core/react/bootstrap/label.js";
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NbButton from "../../../../core/react/bootstrap/button.js";
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { dataset,datatable,param,access } from "../../../../core/core.js";
-import { posExtraCls} from "../../../../core/cls/pos.js";
-
-
 
 export default class customerItemSaleReport extends React.PureComponent
 {
@@ -34,29 +21,44 @@ export default class customerItemSaleReport extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
-        this._btnGetClick = this._btnGetClick.bind(this)
+        
+        this.btnGetClick = this.btnGetClick.bind(this)
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
        
         Number.money = this.sysParam.filter({ID:'MoneySymbol',TYPE:0}).getValue()
         this.tabIndex = props.data.tabkey
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
+
+    loadState()
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE, PAGE:this.props.data.id, APP:"OFF"})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
+
     async Init()
     {
         this.txtCustomer.GUID = '00000000-0000-0000-0000-000000000000'
     }
-    async _btnGetClick()
+
+    async btnGetClick()
     {
         if(this.txtCustomer.GUID == '00000000-0000-0000-0000-000000000000')
         {
             let tmpConfObj =
             {
-                id:'msgCustomerSelect',showTitle:true,title:this.t("msgCustomerSelect.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgCustomerSelect',showTitle:true,title:this.t("msgCustomerSelect.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.t("msgCustomerSelect.btn01"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerSelect.msg")}</div>)
             }
@@ -70,25 +72,27 @@ export default class customerItemSaleReport extends React.PureComponent
             {
                 select : 
                 {
-                    query : "SELECT CUSER_NAME,LUSER_NAME,DEVICE,REF,DOC_DATE,ITEM_CODE,ITEM_NAME,ITEM_GRP_NAME,BARCODE,QUANTITY,UNIT_SHORT,PRICE,CASE WHEN TYPE = 1 THEN FAMOUNT * -1 ELSE FAMOUNT END AS FAMOUNT, " +
-                            " CASE WHEN TYPE = 1 THEN AMOUNT * -1 ELSE AMOUNT END AS AMOUNT,DISCOUNT, " +
-                            "LOYALTY,CASE WHEN TYPE = 1 THEN VAT * -1 ELSE VAT END AS VAT,VAT_RATE,CASE WHEN TYPE = 1 THEN TOTAL * -1 ELSE TOTAL END AS TOTAL FROM POS_SALE_VW_01 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE" ,
+                    query : `SELECT CUSER_NAME,LUSER_NAME,DEVICE,REF,DOC_DATE,ITEM_CODE,ITEM_NAME,ITEM_GRP_NAME,BARCODE,QUANTITY,UNIT_SHORT,PRICE,CASE WHEN TYPE = 1 THEN FAMOUNT * -1 ELSE FAMOUNT END AS FAMOUNT, 
+                            CASE WHEN TYPE = 1 THEN AMOUNT * -1 ELSE AMOUNT END AS AMOUNT,DISCOUNT, 
+                            LOYALTY,CASE WHEN TYPE = 1 THEN VAT * -1 ELSE VAT END AS VAT,VAT_RATE,CASE WHEN TYPE = 1 THEN TOTAL * -1 ELSE TOTAL END AS TOTAL FROM POS_SALE_VW_01 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE` ,
                     param : ['FIRST_DATE:date','LAST_DATE:date','CUSTOMER_GUID:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.txtCustomer.GUID]
                 },
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+
+        App.instance.loading.show()
         await this.grdList.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
+
         let tmpTotal = this.grdList.data.datatable.sum("TOTAL",2)
         this.txtTotal.value = parseFloat(tmpTotal)
     }
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -105,7 +109,7 @@ export default class customerItemSaleReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -173,9 +177,9 @@ export default class customerItemSaleReport extends React.PureComponent
                                     >     
                                     </NdTextBox>      
                                     {/* MÜŞTERİ SEÇİM POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomer"} parent={this} container={"#root"} 
+                                    <NdPopGrid id={"pg_txtCustomer"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -189,7 +193,7 @@ export default class customerItemSaleReport extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)",
+                                                query : `SELECT GUID,CODE,TITLE FROM CUSTOMER_VW_03 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
@@ -202,7 +206,7 @@ export default class customerItemSaleReport extends React.PureComponent
                                 </Item>
                                 <EmptyItem colSpan={1}/>
                                 <Item>
-                                <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                                    <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                                 </Item>
                             </Form>
                         </div>
@@ -221,7 +225,10 @@ export default class customerItemSaleReport extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             >                            
-                                <Scrolling mode="standart" />
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsContList"}/>
                                 <ColumnChooser enabled={true} />
                                 <Export fileName={this.lang.t("menuOff.pos_02_008")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CUSER_NAME" caption={this.t("grdList.cuserName")} visible={true} width={100}/> 
@@ -262,8 +269,7 @@ export default class customerItemSaleReport extends React.PureComponent
                                 <Item>
                                     <Label text={this.t("txtTotal")} alignment="right" />
                                     <NdNumberBox id="txtTotal" parent={this} simple={true} readOnly={true} 
-                                    maxLength={32} format={{ style: "currency", currency: Number.money.code,precision: 2}}
-                                    ></NdNumberBox>
+                                    maxLength={32} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                 </Item>
                             </Form>
                         </div>

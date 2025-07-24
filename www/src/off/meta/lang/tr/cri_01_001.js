@@ -106,7 +106,7 @@ const cri_01_001 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kayıt etmek istediğinize eminmisiniz !"
+        msg: "Kayıt etmek istediğinize emin misiniz !"
     },
     msgSaveResult:
     {
@@ -144,7 +144,7 @@ const cri_01_001 =
         title: "Dikkat",
         btn01: "Evet",
         btn02: "Hayır",
-        msg: "Kaydı silmek istediğinize eminmisiniz ?",
+        msg: "Kaydı silmek istediğinize emin misiniz ?",
         msgFailed: "Kayıt silme işleminiz başarısız  çünkü müşteriye ait bir evrak bulunuyor !",
         msgSuccess: "Kayıt silme işleminiz başarılı !"
     },

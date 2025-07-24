@@ -32,7 +32,7 @@ const promo_02_001 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Seçtiğiniz promosyonları silmek istediğinize eminmisiniz ?"
+        msg: "Seçtiğiniz promosyonları silmek istediğinize emin misiniz ?"
     },
 }
 

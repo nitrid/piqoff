@@ -311,7 +311,6 @@ export default class NdTreeList extends Base
             columnWidth={this.props.columnWidth}
             allowColumnReordering={this.props.allowColumnReordering} 
             allowColumnResizing={this.props.allowColumnResizing}
-            showRowLines={typeof this.props.showRowLines == 'undefined' ? true : this.props.showRowLines}
             showColumnLines={typeof this.props.showColumnLines == 'undefined' ? true : this.props.showColumnLines}
             showColumnHeaders={typeof this.props.showColumnHeaders == 'undefined' ? true : this.props.showColumnHeaders}
             loadPanel={this.props.loadPanel}

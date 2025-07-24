@@ -2,7 +2,8 @@
 const cri_04_001 =
 {
     txtCustomerCode : "Client/Fournisseur", 
-    btnGet :"Apporter", 
+    btnGet :"Rechercher", 
+    txtDate : "Date",
     grdListe : 
     {
         clmDocDate: "Date",  

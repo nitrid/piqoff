@@ -88,7 +88,7 @@ const fns_02_004 =
         btn01: "OK",
         msg: "Dokument ist gesperrt!\nBitte entsperren Sie es, um Änderungen zu speichern!"
     },
-    msgDoclocked:
+    msgDocLocked:
     {
         title: "Achtung",
         btn01: "OK",

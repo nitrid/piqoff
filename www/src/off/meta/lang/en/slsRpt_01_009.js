@@ -3,6 +3,8 @@ const slsRpt_01_009 =
 {
     menu : "Satış Faturası",
     btnGet: "Get",
+    dtDate : "Date",
+    btnPrint : "Print",
     txtCustomerCode : "Customer", 
     btnMailSend : "Mail Send",
     placeMailHtmlEditor : "Mail Content",

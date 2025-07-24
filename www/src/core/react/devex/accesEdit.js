@@ -46,7 +46,7 @@ export default class NdAccessEdit extends Base
             
             let tmpConfObj =
             {
-                id:'msgCloseAlert',showTitle:true,title:this.lang.t("acsEdit.msgCloseAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgCloseAlert',showTitle:true,title:this.lang.t("acsEdit.msgCloseAlert.title"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.lang.t("acsEdit.msgCloseAlert.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("acsEdit.msgCloseAlert.btn02"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("acsEdit.msgCloseAlert.msg")}</div>)
             }

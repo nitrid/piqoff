@@ -3,6 +3,12 @@ const cnt_01_001 =
 {
     txtCustomerCode : "Müşteri",
     menu : "Alış Anlaşması",
+    cmbVatType :
+    {
+        title : "Vergi Tipi",
+        vatInc : "İç",
+        vatExt : "Dış"
+    },
     pg_txtCustomerCode : 
     {
         title : "Müşteri Seçimi",
@@ -25,6 +31,10 @@ const cnt_01_001 =
         clmDepot : "Depo",
         clmUser : "Kullanıcı",
         clmDepotName : "Depo",
+    },
+    msgDeleteResult:
+    {
+        msg: "Kayıt silme işleminiz başarılı !"
     },
 }
 

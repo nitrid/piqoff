@@ -37,7 +37,9 @@ const cri_01_004 =
         title: "Attention",
         btn01: "OK",
         btn02: "Cancel",
-        msg: "Are you sure you want to delete the record ?"
+        msg: "Are you sure you want to delete the record ?",
+        msgFailed: "Record deletion failed !",
+        msgSuccess: "Record deletion was successful !"
     },
     msgCode : 
     {

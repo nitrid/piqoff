@@ -36,7 +36,7 @@ const prsnl_01_003 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kayıt etmek istediğinize eminmisiniz !"
+        msg: "Kayıt etmek istediğinize emin misiniz !"
     },
     msgSaveResult:
     {
@@ -56,7 +56,7 @@ const prsnl_01_003 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        msg: "Kaydı silmek istediğinize emin misiniz ?"
     },
     msgCode : 
     {
@@ -68,6 +68,10 @@ const prsnl_01_003 =
     validation : //BAK
     {
         frmCustomerAddress: "Kodu boş geçemezsiniz !",
+    },
+    msgDeleteSuccess :
+    {
+        msg: "Silme işleminiz başarılı !"
     }
 }
 

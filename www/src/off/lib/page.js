@@ -68,7 +68,7 @@ export default class Page extends React.PureComponent
         
           let tmpConfObj =
           {
-              id:'msgClose',showTitle:true,title:App.instance.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+              id:'msgClose',showTitle:true,title:App.instance.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'220px',
               button:[{id:"btn01",caption:App.instance.lang.t("btnYes"),location:'before'},{id:"btn02",caption:App.instance.lang.t("btnNo"),location:'after'}],
               content:(<div style={{textAlign:"center",fontSize:"20px"}}>{App.instance.lang.t("msgClose")}</div>)
           }

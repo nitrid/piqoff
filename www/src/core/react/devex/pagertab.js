@@ -56,7 +56,7 @@ export default class NdPagerTab extends Base
     render()
     {
         return (
-            <TabPanel height="100%" animationEnabled={false} deferRendering={false}
+            <TabPanel id={this.props.id} height="100%" animationEnabled={false} deferRendering={false}
             onItemRendered={this._onItemRendered} onInitialized={this._onInitialized}
             onSelectionChanged={this._onSelectionChanged}>
                 {this.props.children}

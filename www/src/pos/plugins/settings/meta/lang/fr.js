@@ -261,7 +261,7 @@ const lang =
     },
     posSaleReport :
     {
-        btnGet : "Obtenir",
+        btnGet : "Rechercher",
         txtTotalTicket : "Nombre Total de Tickets",
         txtTicketAvg : "Montant Moyen du Ticket",
     },
@@ -285,7 +285,7 @@ const lang =
         txtCustomerCode : "Code Client",
         txtCustomerName : "Nom Client",
         txtAmount : "Montant Total",
-        btnGet : "Obtenir",
+        btnGet : "Rechercher",
         popCustomers :
         {
             title : "Sélection du Client",
@@ -371,7 +371,7 @@ const lang =
         chkTicket : "Nombre de Tickets",
         txtTotalTicket : "Nombre Total de Tickets",
         txtTicketAvg : "Montant Moyen du Ticket",
-        btnGet : "Obtenir",
+        btnGet : "Rechercher",
         btnGetAnalysis : "Analyse",
         grdGroupSalesReport :
         {

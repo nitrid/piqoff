@@ -22,8 +22,10 @@ import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,C
 import NbPopDescboard from "./popdescboard.js";
 import NdDatePicker from '../../core/react/devex/datepicker.js';
 import NdTagBox from '../../core/react/devex/tagbox.js';
-import * as xlsx from 'xlsx'
+import {NdToast} from '../../core/react/devex/toast.js';
+import {NdForm,NdItem,NdLabel,NdEmptyItem} from '../../core/react/devex/form.js';
 
+import * as xlsx from 'xlsx'
 export default class DocBase extends React.PureComponent
 {
     constructor(props)
@@ -143,10 +145,12 @@ export default class DocBase extends React.PureComponent
                 this.btnNew.setState({disabled:false});
                 this.btnSave.setState({disabled:true});
                 this.btnPrint.setState({disabled:false});  
+                
                 if(typeof this.btnDelete != 'undefined')
                 {
                     this.btnDelete.setState({disabled:false});
                 }
+
                 this.calculateMargin()
                 this.calculateTotalMargin()        
             })
@@ -156,6 +160,7 @@ export default class DocBase extends React.PureComponent
                 this.btnNew.setState({disabled:false});
                 this.btnSave.setState({disabled:false});
                 this.btnPrint.setState({disabled:false});
+                
                 if(typeof this.btnDelete != 'undefined')
                 {
                     this.btnDelete.setState({disabled:false});
@@ -174,34 +179,38 @@ export default class DocBase extends React.PureComponent
             {
                 await this.grdNewPrice.dataRefresh({source:this.newPrice})
             }
+
             this.msgNewPriceDate.onShowed = async ()=>
             {
                 await this.grdNewPriceDate.dataRefresh({source:this.newPriceDate})
             }
+
             this.msgNewVat.onShowed = async ()=>
             {
                 await this.grdNewVat.dataRefresh({source:this.newVat})
             }
+
             this.msgQuantity.onShowed = async ()=>
             {
                 this.txtPopQteUnitQuantity.value = 1
-                this.txtPopQuantity.value = 1
-                this.txtPopQuantity.focus()
                 this.msgQuantity.setTitle(this.msgQuantity.tmpData.NAME)
                 
                 let tmpUnitDt = new datatable()
                 tmpUnitDt.selectCmd = 
                 {
-                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                    query: `SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE` ,
                     param: ['ITEM:string|50'],
                     value: [this.msgQuantity.tmpData.GUID]
                 }
+            
                 await tmpUnitDt.refresh()
                 
                 if(tmpUnitDt.length > 0)
                 {   
                     this.cmbPopQteUnit.setData(tmpUnitDt)
+            
                     let tmpDefaultUnit = tmpUnitDt.where({TYPE:{'<>' : 0}}).where({NAME:this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value})
+            
                     if(tmpDefaultUnit.length > 0)
                     {
                         this.cmbPopQteUnit.value = tmpDefaultUnit[0].GUID
@@ -226,7 +235,9 @@ export default class DocBase extends React.PureComponent
                     {
                         tmpCustomer = typeof this.docObj != 'undefined' && typeof this.docObj.dt() != 'undefined' && this.docObj.dt().length > 0 ? this.docObj.dt()[0].INPUT : '00000000-0000-0000-0000-000000000000'
                     }
+            
                     let priceType = 0
+            
                     if(this.docObj.dt()[0].REBATE == 0)
                     {
                         priceType = this.type == 0 ? 1 : 0
@@ -239,31 +250,38 @@ export default class DocBase extends React.PureComponent
                     }
 
                     let tmpPrice = await this.getPrice(this.msgQuantity.tmpData.GUID,this.txtPopQteUnitFactor.value,tmpCustomer,tmpDepot,tmpListNo,priceType,0)
+                 
                     if(this.docObj.dt()[0].DOC_TYPE == 42 || this.docObj.dt()[0].DOC_TYPE == 22)
                     {
                         tmpPrice = this.msgQuantity.tmpData.COST_PRICE
                     }
+                 
                     this.txtPopQteUnitPrice.value = Number(tmpPrice).round(3)
                     // *************************************************************************************************************/
                     // DEPO MIKTARLARI GETIRME *************************************************************************************/
                     let tmpDepotQty = await this.getDepotQty(this.msgQuantity.tmpData.GUID,tmpDepot)
+                 
                     if(typeof tmpDepotQty != 'undefined')
                     {
                         this.txtPopQteDepotQty.value = tmpDepotQty.DEPOT_QTY
                         this.txtPopQteReservQty.value = tmpDepotQty.RESERV_OUTPUT_QTY
                         this.txtPopQteInputQty.value = tmpDepotQty.RESERV_INPUT_QTY
                     }
+                    this.txtPopQuantity.value = 1
+                    this.txtPopQuantity.focus()
                 }
             }
             this.msgUnit.onShowed = async ()=>
             {
                 let tmpUnitDt = new datatable()
+
                 tmpUnitDt.selectCmd = 
                 {
-                    query: "SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE" ,
+                    query: `SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE` ,
                     param:  ['ITEM:string|50'],
                     value:  [this.msgUnit.tmpData.ITEM]
                 }
+
                 await tmpUnitDt.refresh()
 
                 if(tmpUnitDt.length > 0)
@@ -271,6 +289,7 @@ export default class DocBase extends React.PureComponent
                     this.cmbUnit.setData(tmpUnitDt)
                     
                     let tmpDefaultUnit = tmpUnitDt.where({TYPE:{'<>' : 0}}).where({NAME:this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value})
+
                     if(tmpDefaultUnit.length > 0)
                     {
                         this.cmbUnit.value = tmpDefaultUnit[0].GUID
@@ -281,7 +300,9 @@ export default class DocBase extends React.PureComponent
                         this.cmbUnit.value = this.msgUnit.tmpData.UNIT
                         this.txtUnitFactor.value = this.msgUnit.tmpData.UNIT_FACTOR
                     }
+
                     this.txtTotalQuantity.value =  this.msgUnit.tmpData.QUANTITY
+
                     if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
                     {
                         this.txtUnitQuantity.value = this.msgUnit.tmpData.QUANTITY * this.txtUnitFactor.value                        
@@ -296,14 +317,16 @@ export default class DocBase extends React.PureComponent
             }
             if(typeof this.txtRef != 'undefined' && typeof this.txtRef.props.onChange != 'undefined')
             {
-                setTimeout(() => {
+                setTimeout(() => 
+                {
                     this.txtRef.props.onChange()
                 }, 1000);
             }
             resolve()
         })
     }
-    async searchSameItems() {
+    async searchSameItems() 
+    {
         let itemCodes = [];
         let duplicateItems = [];
         
@@ -330,7 +353,7 @@ export default class DocBase extends React.PureComponent
             {
                 let tmpConfObj =
                 {
-                    id:'msgDuplicateItems',showTitle:true,title:this.t("msgDuplicateItems.title"),showCloseButton:true,width:'500px',height:'200px',
+                    id:'msgDuplicateItems',showTitle:true,title:this.t("msgDuplicateItems.title"),showCloseButton:true,width:'500px',height:'auto',
                     button:[{id:"btn01",caption:this.t("msgDuplicateItems.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDuplicateItems.msg") + " " + duplicateItems.join(", ")}</div>)
                 }
@@ -348,27 +371,24 @@ export default class DocBase extends React.PureComponent
             this.docObj.clearAll()
             await this.docObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno,TYPE:this.type,DOC_TYPE:this.docType,SUB_FACTOR:this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value});
             this.searchSameItems()
+
             if(this.docObj.dt().length == 0)
             {
                 resolve()
                 return
             }
+
             if(this.docObj.dt()[0].LOCKED != 0)
             {
                 this.docLocked = true
-                let tmpConfObj =
-                {
-                    id:'msgGetLocked',showTitle:true,title:this.t("msgGetLocked.title"),showCloseButton:true,width:'500px',height:'200px',
-                    button:[{id:"btn01",caption:this.t("msgGetLocked.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgGetLocked.msg")}</div>)
-                }
-                await dialog(tmpConfObj);
+                this.toast.show({message:this.t("msgGetLocked.msg"),type:'warning',displayTime:2000})
             }
             else
             {
                 this.docLocked = false
                 this.frmDocItems.option('disabled',false)
             }
+
             for(let i = 0; i < this.docDetailObj.dt().length; i++)
             {
                 this.docDetailObj.dt()[i].PURC_PRICE = this.docDetailObj.dt()[i].CUSTOMER_PRICE + this.docDetailObj.dt()[i].PRICE
@@ -380,20 +400,21 @@ export default class DocBase extends React.PureComponent
     async getDocs(pType)
     {
         let tmpQuery = {}
+     
         if(pType == 0)
         {
             if(this.type == 0)
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,CLOSED,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > dbo.GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC"
+                    query : `SELECT GUID,REF,REF_NO,CLOSED,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = ${this.type} AND DOC_TYPE = ${this.docType} AND REBATE = ${this.rebate} AND DOC_DATE > dbo.GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC`
                 }
             }
             else
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,CLOSED,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " AND DOC_DATE > dbo.GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC"
+                    query : `SELECT GUID,REF,REF_NO,CLOSED,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = ${this.type} AND DOC_TYPE = ${this.docType} AND REBATE = ${this.rebate} AND DOC_DATE > dbo.GETDATE() - 30 ORDER BY DOC_DATE DESC,REF_NO DESC`
                 }
             }
         }
@@ -403,20 +424,21 @@ export default class DocBase extends React.PureComponent
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,CLOSED,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC,REF_NO DESC"
+                    query : `SELECT GUID,REF,REF_NO,CLOSED,OUTPUT_CODE,OUTPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = ${this.type} AND DOC_TYPE = ${this.docType} AND REBATE = ${this.rebate} ORDER BY DOC_DATE DESC,REF_NO DESC`
                 }
             }
             else
             {
                 tmpQuery = 
                 {
-                    query : "SELECT GUID,REF,REF_NO,CLOSED,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = " + this.type + " AND DOC_TYPE = " + this.docType + " AND REBATE = " + this.rebate + " ORDER BY DOC_DATE DESC,REF_NO DESC"
+                    query : `SELECT GUID,REF,REF_NO,CLOSED,INPUT_CODE,INPUT_NAME,DOC_DATE_CONVERT,TOTAL FROM DOC_VW_01 WHERE TYPE = ${this.type} AND DOC_TYPE = ${this.docType} AND REBATE = ${this.rebate} ORDER BY DOC_DATE DESC,REF_NO DESC`
                 }
             }
         }
 
         let tmpData = await this.core.sql.execute(tmpQuery) 
         let tmpRows = []
+     
         if(tmpData.result.recordset.length > 0)
         {
             tmpRows = tmpData.result.recordset
@@ -429,6 +451,7 @@ export default class DocBase extends React.PureComponent
                 this.getDoc(data[0].GUID,data[0].REF,data[0].REF_NO)
             }
         }
+     
         await this.pg_Docs.show()
         await this.pg_Docs.setData(tmpRows)
     }
@@ -438,12 +461,13 @@ export default class DocBase extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :"SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,@DEPOT,@PRICE_LIST_NO,@TYPE,@ADD_VAT) AS PRICE",
+                query : `SELECT dbo.FN_PRICE(@GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER,@DEPOT,@PRICE_LIST_NO,@TYPE,@ADD_VAT) AS PRICE`,
                 param : ['GUID:string|50','QUANTITY:float','CUSTOMER:string|50','DEPOT:string|50','PRICE_LIST_NO:int','TYPE:int','ADD_VAT:bit'],
                 value : [pItem,pQty,pCustomer,pDepot,pListNo,pType,pAddVat]
             }
             
             let tmpData = await this.core.sql.execute(tmpQuery) 
+     
             if(tmpData.result.recordset.length > 0)
             {
                 resolve(tmpData.result.recordset[0].PRICE)
@@ -459,15 +483,15 @@ export default class DocBase extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT " +
-                        "dbo.FN_DEPOT_QUANTITY(@ITEM,@DEPOT,dbo.GETDATE()) AS DEPOT_QTY, " +
-                        "dbo.FN_ORDER_PEND_QTY(@ITEM,1,@DEPOT) AS RESERV_OUTPUT_QTY, " +
-                        "dbo.FN_ORDER_PEND_QTY(@ITEM,0,@DEPOT) AS RESERV_INPUT_QTY",
+                query : `SELECT dbo.FN_DEPOT_QUANTITY(@ITEM,@DEPOT,dbo.GETDATE()) AS DEPOT_QTY,
+                 dbo.FN_ORDER_PEND_QTY(@ITEM,1,@DEPOT) AS RESERV_OUTPUT_QTY,
+                  dbo.FN_ORDER_PEND_QTY(@ITEM,0,@DEPOT) AS RESERV_INPUT_QTY`,
                 param : ['ITEM:string|50','DEPOT:string|50'],
                 value : [pItem,pDepot]
             }
             
             let tmpData = await this.core.sql.execute(tmpQuery) 
+            
             if(tmpData.result.recordset.length > 0)
             {
                 resolve(tmpData.result.recordset[0])
@@ -494,12 +518,13 @@ export default class DocBase extends React.PureComponent
                         title:this.t("msgCode.title"),
                         showCloseButton:true,
                         width:'500px',
-                        height:'200px',
+                        height:'auto',
                         button:[{id:"btn01",caption:this.t("msgCode.btn01"),location:'before'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCode.msg")}</div>)
                     }
     
                     let pResult = await dialog(tmpConfObj);
+            
                     if(pResult == 'btn01')
                     {
                         this.getDoc(pGuid,pRef,pRefno)
@@ -533,7 +558,7 @@ export default class DocBase extends React.PureComponent
             this.docDetailObj.dt()[i].REF_NO = this.docObj.dt()[0].REF_NO
         }
 
-        if(this.docType >= 20 && this.docType <= 39)
+        if(this.docType >= 20 && this.docType <= 39 && this.docObj.docCustomer.dt().length > 0)
         {
             this.docObj.docCustomer.dt()[0].INPUT = this.docObj.dt()[0].INPUT
             this.docObj.docCustomer.dt()[0].OUTPUT = this.docObj.dt()[0].OUTPUT
@@ -544,6 +569,7 @@ export default class DocBase extends React.PureComponent
         }
         // MÜŞTERİ INDIRIM İ GETİRMEK İÇİN....
         let TmpDepot = this.type == 0 ? this.docObj.dt()[0].INPUT : this.docObj.dt()[0].OUTPUT
+       
         await this.discObj.loadDocDisc(
         {
             DEPOT : TmpDepot == '' ? '00000000-0000-0000-0000-000000000000' : TmpDepot, 
@@ -567,6 +593,7 @@ export default class DocBase extends React.PureComponent
     async calculateTotal()
     {
         let tmpVat = 0
+       
         for (let i = 0; i < this.docDetailObj.dt().groupBy('VAT_RATE').length; i++) 
         {
             if(this.docObj.dt()[0].VAT_ZERO != 1)
@@ -574,6 +601,7 @@ export default class DocBase extends React.PureComponent
                 tmpVat = tmpVat + parseFloat(this.docDetailObj.dt().where({'VAT_RATE':this.docDetailObj.dt().groupBy('VAT_RATE')[i].VAT_RATE}).sum("VAT",2))
             }
         }
+
         this.docObj.dt()[0].AMOUNT = this.docDetailObj.dt().sum("AMOUNT",2)
         this.docObj.dt()[0].DISCOUNT = Number(parseFloat(this.docDetailObj.dt().sum("AMOUNT",2)) - parseFloat(this.docDetailObj.dt().sum("TOTALHT",2))).round(2)
         this.docObj.dt()[0].DOC_DISCOUNT_1 = this.docDetailObj.dt().sum("DOC_DISCOUNT_1",4)
@@ -592,12 +620,12 @@ export default class DocBase extends React.PureComponent
         if(typeof this.docObj.dt()[0] != 'undefined')
         {
             for (let  i= 0; i < this.docDetailObj.dt().length; i++) 
-                {
-                    tmpTotalCost += this.docDetailObj.dt()[i].COST_PRICE * this.docDetailObj.dt()[i].QUANTITY
-                }
-                let tmpMargin = ((this.docObj.dt()[0].TOTALHT ) - tmpTotalCost)
-                let tmpMarginRate = Number(tmpTotalCost).rate2Num(tmpMargin,2)
-                this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+            {
+                tmpTotalCost += this.docDetailObj.dt()[i].COST_PRICE * this.docDetailObj.dt()[i].QUANTITY
+            }
+            let tmpMargin = ((this.docObj.dt()[0].TOTALHT ) - tmpTotalCost)
+            let tmpMarginRate = Number(tmpTotalCost).rate2Num(tmpMargin,2)
+            this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
         }
     }
     async calculateMargin()
@@ -615,7 +643,7 @@ export default class DocBase extends React.PureComponent
         {
             let tmpRelatedQuery = 
             {
-                query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,ITEM_QUANTITY,RELATED_GUID,RELATED_CODE,RELATED_NAME,RELATED_QUANTITY FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
+                query : `SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,ITEM_QUANTITY,RELATED_GUID,RELATED_CODE,RELATED_NAME,RELATED_QUANTITY FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID`,
                 param : ['ITEM_GUID:string|50'],
                 value : [pGuid]
             }
@@ -630,7 +658,7 @@ export default class DocBase extends React.PureComponent
                 {
                     let tmpRelatedItemQuery = 
                     {   
-                        query :"SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID",
+                        query : `SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE GUID = @GUID`,
                         param : ['GUID:string|50'],
                         value : [tmpRelatedData.result.recordset[i].RELATED_GUID]
                     }
@@ -652,6 +680,7 @@ export default class DocBase extends React.PureComponent
         return new Promise(async resolve =>
         {
             await this.core.util.waitUntil()
+     
             let tmpRelatedQuery = 
             {
                 query :"SELECT ITEM_GUID,ITEM_CODE,ITEM_NAME,ITEM_QUANTITY,RELATED_GUID,RELATED_CODE,RELATED_NAME,RELATED_QUANTITY FROM ITEM_RELATED_VW_01 WHERE ITEM_GUID = @ITEM_GUID",
@@ -664,6 +693,7 @@ export default class DocBase extends React.PureComponent
             for (let i = 0; i < tmpRelatedData.result.recordset.length; i++) 
             {
                 let tmpExist = false
+     
                 for (let x = 0; x < this.docDetailObj.dt().length; x++) 
                 {
                     if(this.docDetailObj.dt()[x].ITEM_CODE == tmpRelatedData.result.recordset[i].RELATED_CODE)
@@ -680,8 +710,8 @@ export default class DocBase extends React.PureComponent
                             {
                                 this.docDetailObj.dt()[x].VAT = 0
                             }
+
                             this.docDetailObj.dt()[x].QUANTITY = tmpRelatedQt
-                            
                             this.docDetailObj.dt()[x].AMOUNT = parseFloat((this.docDetailObj.dt()[x].QUANTITY * this.docDetailObj.dt()[x].PRICE)).round(2)
                             this.docDetailObj.dt()[x].TOTAL = parseFloat((((this.docDetailObj.dt()[x].QUANTITY * this.docDetailObj.dt()[x].PRICE) - this.docDetailObj.dt()[x].DISCOUNT) + this.docDetailObj.dt()[x].VAT)).round(2)
                             this.docDetailObj.dt()[x].TOTALHT =  parseFloat((this.docDetailObj.dt()[x].AMOUNT - this.docDetailObj.dt()[x].DISCOUNT)).round(2)
@@ -716,7 +746,6 @@ export default class DocBase extends React.PureComponent
         this.pg_dispatchGrid.onClick = async(data) =>
         {   
             await this.convertDocDispatch(data)
-          
         }
     }
     async getOrders() 
@@ -726,6 +755,7 @@ export default class DocBase extends React.PureComponent
         let tmpQuery = arguments[0]
 
         let tmpData = await this.core.sql.execute(tmpQuery) 
+
         if(tmpData.result.recordset.length > 0)
         {   
             await this.pg_ordersGrid.setData(tmpData.result.recordset)
@@ -737,9 +767,9 @@ export default class DocBase extends React.PureComponent
 
         this.pg_ordersGrid.onClick = async(data) =>
         {
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             await this.convertDocOrders(data)
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
     }
     async getOffers()
@@ -760,9 +790,9 @@ export default class DocBase extends React.PureComponent
 
         this.pg_offersGrid.onClick = async(data) =>
         {
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             await this.convertDocOffers(data)
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
     }
     async getProforma()
@@ -772,6 +802,7 @@ export default class DocBase extends React.PureComponent
         let tmpQuery = arguments[0]
 
         let tmpData = await this.core.sql.execute(tmpQuery) 
+
         if(tmpData.result.recordset.length > 0)
         {   
             await this.pg_proformaGrid.setData(tmpData.result.recordset)
@@ -783,7 +814,8 @@ export default class DocBase extends React.PureComponent
 
         this.pg_proformaGrid.onClick = async(data) =>
         {
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
+
             for (let i = 0; i < data.length; i++) 
             {
                 let tmpDocItems = {...this.docObj.docItems.empty}
@@ -835,7 +867,8 @@ export default class DocBase extends React.PureComponent
             }
             
             this.calculateTotal()
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
+
             setTimeout(() => 
             {
                 this.btnSave.setState({disabled:false});
@@ -849,6 +882,7 @@ export default class DocBase extends React.PureComponent
         let tmpQuery = arguments[0]
 
         let tmpData = await this.core.sql.execute(tmpQuery)
+
         if(tmpData.result.recordset.length > 0)
         {   
             await this.pg_getRebate.setData(tmpData.result.recordset)
@@ -860,7 +894,8 @@ export default class DocBase extends React.PureComponent
 
         this.pg_getRebate.onClick = async(data) =>
         {
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
+
             for (let i = 0; i < data.length; i++) 
             {
                 let tmpDocItems = {...this.docObj.docItems.empty}
@@ -912,12 +947,12 @@ export default class DocBase extends React.PureComponent
                 tmpDocItems.SUB_QUANTITY = data[i].SUB_QUANTITY
                 tmpDocItems.SUB_PRICE = data[i].SUB_PRICE
 
-            
                 await this.docObj.docItems.addEmpty(tmpDocItems)
                 await this.core.util.waitUntil(100)
             }
+
             this.calculateTotal()
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
     }
     async mergeItem(pCode)
@@ -927,6 +962,8 @@ export default class DocBase extends React.PureComponent
             let tmpMergeDt = this.docDetailObj.dt().where({ITEM_CODE:pCode})
             if(tmpMergeDt.length > 0)
             {
+                App.instance.loading.hide()
+                
                 if(this.combineControl == true)
                 {
                     this.msgCombineItem.setTitle(tmpMergeDt[0].ITEM_NAME)
@@ -948,6 +985,7 @@ export default class DocBase extends React.PureComponent
                         this.combineNew = true
                     }
                 }
+
                 resolve(tmpMergeDt)
             }
             else
@@ -964,7 +1002,7 @@ export default class DocBase extends React.PureComponent
             {
                 let tmpQuery = 
                 {
-                    query : "SELECT * FROM DOC_VW_01 WHERE DOC_NO = @DOC_NO AND TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE AND REBATE = @REBATE",
+                    query : `SELECT DOC_NO FROM DOC_VW_01 WHERE DOC_NO = @DOC_NO AND TYPE = @TYPE AND DOC_TYPE = @DOC_TYPE AND REBATE = @REBATE`,
                     param : ['DOC_NO:string|50','TYPE:int','DOC_TYPE:int','REBATE:bit'],
                     value : [pDocNo,this.type,this.docType,this.rebate]
                 }
@@ -973,7 +1011,7 @@ export default class DocBase extends React.PureComponent
                 {
                     let tmpConfObj =
                     {
-                        id:'msgCheckDocNo',showTitle:true,title:this.lang.t("msgCheckDocNo.title"),showCloseButton:true,width:'500px',height:'200px',
+                        id:'msgCheckDocNo',showTitle:true,title:this.lang.t("msgCheckDocNo.title"),showCloseButton:true,width:'500px',height:'auto',
                         button:[{id:"btn01",caption:this.lang.t("msgCheckDocNo.btn01"),location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCheckDocNo.msg")}</div>)
                     }
@@ -985,15 +1023,18 @@ export default class DocBase extends React.PureComponent
     }
     async priceListChange()
     {
+        if(this.docDetailObj.dt().length == 0)
+        {
+            return
+        }
         let tmpConfObj1 =
         {
-            id:'msgPriceListChange',showTitle:true,title:this.lang.t("msgPriceListChange.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgPriceListChange',showTitle:true,title:this.lang.t("msgPriceListChange.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.lang.t("msgPriceListChange.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgPriceListChange.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.lang.t("msgPriceListChange.msg")}</div>)
         }
 
         let pResult = await dialog(tmpConfObj1);
-        
         if(pResult == 'btn01')
         {
             for (let i = 0; i < this.docDetailObj.dt().length; i++) 
@@ -1001,6 +1042,7 @@ export default class DocBase extends React.PureComponent
                 let tmpDepot = typeof this.cmbDepot != 'undefined' ? this.cmbDepot.value : '00000000-0000-0000-0000-000000000000'
                 let tmpCustomer = '00000000-0000-0000-0000-000000000000'
                 let tmpListNo = typeof this.cmbPricingList != 'undefined' ? this.cmbPricingList.value : 1
+
                 if(this.type == 0)
                 {
                     tmpCustomer = typeof this.docObj != 'undefined' && typeof this.docObj.dt() != 'undefined' && this.docObj.dt().length > 0 ? this.docObj.dt()[0].OUTPUT : '00000000-0000-0000-0000-000000000000'
@@ -1009,7 +1051,9 @@ export default class DocBase extends React.PureComponent
                 {
                     tmpCustomer = typeof this.docObj != 'undefined' && typeof this.docObj.dt() != 'undefined' && this.docObj.dt().length > 0 ? this.docObj.dt()[0].INPUT : '00000000-0000-0000-0000-000000000000'
                 }
+
                 let priceType = 0
+
                 if(this.docObj.dt()[0].REBATE == 0)
                 {
                     priceType = this.type == 0 ? 1 : 0
@@ -1018,8 +1062,10 @@ export default class DocBase extends React.PureComponent
                 {
                     priceType = this.type == 0 ? 0 : 1
                 }
+
                 this.docDetailObj.dt()[i].PRICE = await this.getPrice(this.docDetailObj.dt()[i].ITEM,this.docDetailObj.dt()[i].QUANTITY,tmpCustomer,tmpDepot,tmpListNo,priceType,0)
                 this.docDetailObj.dt()[i].TOTALHT = Number(Number(parseFloat((this.docDetailObj.dt()[i].PRICE * this.docDetailObj.dt()[i].QUANTITY)) - (parseFloat(this.docDetailObj.dt()[i].DISCOUNT))).toFixed(3)).round(2)
+
                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                 {
                     this.docDetailObj.dt()[i].VAT = parseFloat(((((this.docDetailObj.dt()[i].TOTALHT) - (parseFloat(this.docDetailObj.dt()[i].DOC_DISCOUNT))) * (this.docDetailObj.dt()[i].VAT_RATE) / 100))).round(6);
@@ -1029,11 +1075,13 @@ export default class DocBase extends React.PureComponent
                     this.docDetailObj.dt()[i].VAT = 0
                     this.docDetailObj.dt()[i].VAT_RATE = 0
                 }
+
                 this.docDetailObj.dt()[i].AMOUNT = parseFloat((this.docDetailObj.dt()[i].PRICE * this.docDetailObj.dt()[i].QUANTITY).toFixed(3)).round(2)
                 this.docDetailObj.dt()[i].TOTAL = Number(((this.docDetailObj.dt()[i].TOTALHT - this.docDetailObj.dt()[i].DOC_DISCOUNT) + this.docDetailObj.dt()[i].VAT)).round(2)
 
                 let tmpMargin = (this.docDetailObj.dt()[i].TOTAL - this.docDetailObj.dt()[i].VAT) - (this.docDetailObj.dt()[i].COST_PRICE * this.docDetailObj.dt()[i].QUANTITY)
                 let tmpMarginRate = (tmpMargin /(this.docDetailObj.dt()[i].TOTAL - this.docDetailObj.dt()[i].VAT)) * 100
+
                 this.docDetailObj.dt()[i].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
                 this.docDetailObj.dt()[i].SUB_PRICE = Number(parseFloat((this.docDetailObj.dt()[i].PRICE).toFixed(4)) / this.docDetailObj.dt()[i].SUB_FACTOR).round(2)
                
@@ -1044,6 +1092,7 @@ export default class DocBase extends React.PureComponent
     }
     async convertDocOffers(data)
     {
+        this.grid.devGrid.beginUpdate()
         for (let i = 0; i < data.length; i++) 
             {
                 if(this.docType == 60)
@@ -1141,6 +1190,7 @@ export default class DocBase extends React.PureComponent
                     await this.core.util.waitUntil(100)
                 }
             }
+            this.grid.devGrid.endUpdate()
             this.calculateTotal()
     }
     async convertDocOrders(data)
@@ -1200,13 +1250,16 @@ export default class DocBase extends React.PureComponent
             await this.docObj.docItems.addEmpty(tmpDocItems)
             await this.core.util.waitUntil(100)
         }
+
         this.grid.devGrid.endUpdate()   
         this.calculateTotal()
     }
     async convertDocDispatch(data)
     {
         this.grid.devGrid.beginUpdate()
-        App.instance.setState({isExecute:true})
+        
+        App.instance.loading.show()
+        
         for (let i = 0; i < data.length; i++) 
         {
             let tmpDocItems = {...this.docDetailObj.empty}
@@ -1269,10 +1322,13 @@ export default class DocBase extends React.PureComponent
             await this.core.util.waitUntil(100)
             this.docDetailObj.dt()[this.docDetailObj.dt().length - 1].stat = 'edit'
         }
+        
         this.grid.devGrid.endUpdate()
         this.docDetailObj.dt().emit('onRefresh')
         this.calculateTotal()
-        App.instance.setState({isExecute:false})
+        
+        App.instance.loading.hide()
+        
         setTimeout(() => 
         {
             this.btnSave.setState({disabled:false});
@@ -1288,7 +1344,7 @@ export default class DocBase extends React.PureComponent
         }       
 
         let tmpControlData = await this.core.sql.execute(tmpControlQuery)
-        console.log('tmpControlData.result.recordset[0]',tmpControlData.result.recordset[0])
+
         if(tmpControlData.result.recordset.length > 0 )
         {
             //Bu devis daha once IRSALIYEYE cevrilmistir
@@ -1300,15 +1356,14 @@ export default class DocBase extends React.PureComponent
                     button:[{id:"btn01",caption:this.t("msgControlOfDispatch.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgControlOfDispatch.msg")}</div>)
                 }
+
                 let pResult = await dialog(tmpConfObj);
+
                 if(pResult == 'btn01')
                 {
                     App.instance.panel.closePage()
                 }
-
-
             }
-            //Bu devis daha once FATURAYA cevrilmistir
             else if (tmpControlData.result.recordset[0].TYPE_TO == 20 && pType == 40)
             {
                 let tmpConfObj =
@@ -1337,8 +1392,9 @@ export default class DocBase extends React.PureComponent
             param : ['GUID:string|50'],
             value : [pGuid]
         }
+
         let tmpData = await this.core.sql.execute(tmpQuery)
-        console.log('tmpData.result.recordset[0]',tmpData.result.recordset[0])
+
         if(tmpData.result.recordset.length > 0)
         {
             this.docObj.dt()[0].INPUT = tmpData.result.recordset[0].INPUT
@@ -1348,10 +1404,12 @@ export default class DocBase extends React.PureComponent
             this.docObj.dt()[0].OUTPUT_CODE = tmpData.result.recordset[0].OUTPUT_CODE
             this.docObj.dt()[0].OUTPUT_NAME = tmpData.result.recordset[0].OUTPUT_NAME
             this.docObj.dt()[0].PRICE_LIST_NO = tmpData.result.recordset[0].PRICE_LIST_NO
+            
             if(this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue() != 'undefined' && this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue().value ==  true)
             {
                 this.txtRef.value = tmpData.result.recordset[0].INPUT_CODE;
             }
+            
             if(this.docType != 20)
             {
                 this.txtRef.props.onChange()
@@ -1359,40 +1417,42 @@ export default class DocBase extends React.PureComponent
 
             let tmpOfferQuery = 
             {
-                query : "SELECT *, " +
-                    "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, " +
-                    "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, " +
-                    "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
-                    "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE, " + 
-                    "REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE DOC_GUID = @GUID",
+                query : `SELECT *,
+                        ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, 
+                        ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, 
+                        QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY,  
+                        PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE,  
+                        REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE DOC_GUID = @GUID`,
                 param : ['GUID:string|50','SUB_FACTOR:string|10'],
                 value : [pGuid,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
             }
+           
             let tmpOfferData = await this.core.sql.execute(tmpOfferQuery)
+           
             if(tmpOfferData.result.recordset.length > 0)
             {
                 await this.convertDocOffers(tmpOfferData.result.recordset)
             }
+           
             this.frmDocItems.option('disabled',false)
-            
        }
     }
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 {/* Cari Seçim PopUp */}
                 <div>
-                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_txtCustomerCode.title")} //
                     search={true}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
@@ -1402,9 +1462,9 @@ export default class DocBase extends React.PureComponent
                 </div>
                 {/* Evrak Seçim PopUp*/}
                 <div>
-                    <NdPopGrid id={"pg_Docs"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_Docs"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
@@ -1424,40 +1484,39 @@ export default class DocBase extends React.PureComponent
                             }
                         ]
                     }
-                    deferRendering={true}
-                    >
-                        {(()=>
+                    deferRendering={false}>
+                    {(()=>
+                    {
+                        if(this.type == 0)
                         {
-                            if(this.type == 0)
+                            let tmpArr = []
+                            tmpArr.push(<Column key={"REF"} dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150}/>)
+                            tmpArr.push(<Column key={"REF_NO"} dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={120} />)
+                            tmpArr.push(<Column key={"DOC_DATE_CONVERT"} dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} />)
+                            tmpArr.push(<Column key={"OUTPUT_NAME"} dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} />)
+                            tmpArr.push(<Column key={"OUTPUT_CODE"} dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} />)
+                            tmpArr.push(<Column key={"TOTAL"} dataField="TOTAL" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={200} />)
+                            return tmpArr
+                        }
+                        else if(this.type == 1)
+                        {
+                            let tmpArr = []
+                            tmpArr.push(<Column key={"REF"} dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150}/>)
+                            tmpArr.push(<Column key={"REF_NO"} dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={120} />)
+                            tmpArr.push(<Column key={"DOC_DATE_CONVERT"} dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} />)
+                            tmpArr.push(<Column key={"INPUT_NAME"} dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} />)
+                            tmpArr.push(<Column key={"INPUT_CODE"} dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} />)
+                            if(this.docType==62)
                             {
-                                let tmpArr = []
-                                tmpArr.push(<Column key={"REF"} dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150}/>)
-                                tmpArr.push(<Column key={"REF_NO"} dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={120} />)
-                                tmpArr.push(<Column key={"DOC_DATE_CONVERT"} dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} />)
-                                tmpArr.push(<Column key={"OUTPUT_NAME"} dataField="OUTPUT_NAME" caption={this.t("pg_Docs.clmOutputName")} width={300} />)
-                                tmpArr.push(<Column key={"OUTPUT_CODE"} dataField="OUTPUT_CODE" caption={this.t("pg_Docs.clmOutputCode")} width={300} />)
-                                tmpArr.push(<Column key={"TOTAL"} dataField="TOTAL" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={200} />)
-                                return tmpArr
+                                tmpArr.push(<Column key={"CLOSED"} dataField="CLOSED" caption={this.t("pg_Docs.clmClosed")} width={100} 
+                                cellRender={(data) => {
+                                    return data.value == 2 ? '✓' : 'X';
+                                }} />)
                             }
-                            else if(this.type == 1)
-                            {
-                                let tmpArr = []
-                                tmpArr.push(<Column key={"REF"} dataField="REF" caption={this.t("pg_Docs.clmRef")} width={150}/>)
-                                tmpArr.push(<Column key={"REF_NO"} dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={120} />)
-                                tmpArr.push(<Column key={"DOC_DATE_CONVERT"} dataField="DOC_DATE_CONVERT" caption={this.t("pg_Docs.clmDate")} width={300} />)
-                                tmpArr.push(<Column key={"INPUT_NAME"} dataField="INPUT_NAME" caption={this.t("pg_Docs.clmInputName")} width={300} />)
-                                tmpArr.push(<Column key={"INPUT_CODE"} dataField="INPUT_CODE" caption={this.t("pg_Docs.clmInputCode")} width={300} />)
-                                if(this.docType==62)
-                                {
-                                    tmpArr.push(<Column key={"CLOSED"} dataField="CLOSED" caption={this.t("pg_Docs.clmClosed")} width={100} 
-                                    cellRender={(data) => {
-                                        return data.value == 2 ? '✓' : 'X';
-                                    }} />)
-                                }
-                                tmpArr.push(<Column key={"TOTAL"} dataField="TOTAL" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={200} />)
-                                return tmpArr
-                            }
-                        })()}
+                            tmpArr.push(<Column key={"TOTAL"} dataField="TOTAL" format={{ style: "currency", currency: Number.money.code,precision: 2}} caption={this.t("pg_Docs.clmTotal")} width={200} />)
+                            return tmpArr
+                        }
+                    })()}
                     </NdPopGrid>
                 </div>
                 {/* İndirim PopUp */}
@@ -1467,11 +1526,11 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popDiscount.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'500'}
-                    height={'500'}
-                    position={{of:'#root'}}
-                    deferRendering={true}
+                    height={'auto'}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -1482,13 +1541,7 @@ export default class DocBase extends React.PureComponent
                                 {
                                     if( this.txtDiscountPercent1.value > 100)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                        }
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPercent.msg"),type:'warning',displayTime:2000})
                                         this.txtDiscountPercent1.value = 0;
                                         this.txtDiscountPrice1.value = 0;
                                         return
@@ -1496,7 +1549,7 @@ export default class DocBase extends React.PureComponent
 
                                     this.txtDiscountPrice1.value =  Number(this.docObj.dt()[0].AMOUNT).rateInc(this.txtDiscountPercent1.value,2)
                                 }).bind(this)}
-                                ></NdNumberBox>
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.t("popDiscount.Price1")} alignment="right" />
@@ -1506,14 +1559,7 @@ export default class DocBase extends React.PureComponent
                                     {
                                         if( this.txtDiscountPrice1.value > this.docObj.dt()[0].AMOUNT)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDiscountPrice.msg"),type:'warning',displayTime:2000})
                                             this.txtDiscountPercent1.value = 0;
                                             this.txtDiscountPrice1.value = 0;
                                             return
@@ -1521,7 +1567,7 @@ export default class DocBase extends React.PureComponent
                                         
                                         this.txtDiscountPercent1.value = Number(this.docObj.dt()[0].AMOUNT).rate2Num(this.txtDiscountPrice1.value)
                                     }).bind(this)}
-                                ></NdNumberBox>
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.t("popDiscount.Percent2")} alignment="right" />
@@ -1531,21 +1577,15 @@ export default class DocBase extends React.PureComponent
                                 {
                                     if( this.txtDiscountPercent1.value > 100)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPercent.msg"),type:'warning',displayTime:2000})
                                         this.txtDiscountPercent2.value = 0;
                                         this.txtDiscountPrice2.value = 0;
                                         return
                                     }
+                                
                                     this.txtDiscountPrice2.value =  Number(this.docObj.dt()[0].AMOUNT - Number(this.txtDiscountPrice1.value)).rateInc(this.txtDiscountPercent2.value,2)
                                 }).bind(this)}
-                                ></NdNumberBox>
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.t("popDiscount.Price2")} alignment="right" />
@@ -1555,21 +1595,15 @@ export default class DocBase extends React.PureComponent
                                     {
                                         if( this.txtDiscountPrice2.value > this.docObj.dt()[0].AMOUNT)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDiscountPrice.msg"),type:'warning',displayTime:2000})
                                             this.txtDiscountPercent2.value = 0;
                                             this.txtDiscountPrice2.value = 0;
                                             return
                                         }
+                                
                                         this.txtDiscountPercent2.value = Number(this.docObj.dt()[0].AMOUNT - Number(this.txtDiscountPrice1.value)).rate2Num(this.txtDiscountPrice2.value)
                                     }).bind(this)}
-                                ></NdNumberBox>
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.t("popDiscount.Percent3")} alignment="right" />
@@ -1579,21 +1613,15 @@ export default class DocBase extends React.PureComponent
                                 {
                                     if( this.txtDiscountPercent1.value > 100)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPercent.msg"),type:'warning',displayTime:2000})
                                         this.txtDiscountPercent3.value = 0;
                                         this.txtDiscountPrice3.value = 0;
                                         return
                                     }
+
                                     this.txtDiscountPrice3.value = Number(this.docObj.dt()[0].AMOUNT - (Number(this.txtDiscountPrice1.value) + Number(this.txtDiscountPrice2.value))).rateInc(this.txtDiscountPercent3.value,2)
                                 }).bind(this)}
-                                ></NdNumberBox>
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.t("popDiscount.Price3")} alignment="right" />
@@ -1603,21 +1631,15 @@ export default class DocBase extends React.PureComponent
                                     {
                                         if( this.txtDiscountPrice3.value > this.docObj.dt()[0].AMOUNT)
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                            }
-                                
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgDiscountPrice.msg"),type:'warning',displayTime:2000})
                                             this.txtDiscountPercent3.value = 0;
                                             this.txtDiscountPrice3.value = 0;
                                             return
                                         }
+
                                         this.txtDiscountPercent3.value = Number(this.docObj.dt()[0].AMOUNT - (Number(this.txtDiscountPrice1.value) + Number(this.txtDiscountPrice2.value))).rate2Num(this.txtDiscountPrice3.value)
                                     }).bind(this)}
-                                ></NdNumberBox>
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.t("popDiscount.chkFirstDiscount")} alignment="right" />
@@ -1638,6 +1660,7 @@ export default class DocBase extends React.PureComponent
                                                 {
                                                     tmpDocData.DISCOUNT_1 = Number(tmpDocData.PRICE * tmpDocData.QUANTITY).rateInc(this.txtDiscountPercent1.value,4)
                                                 }
+
                                                 tmpDocData.DISCOUNT_2 = Number(((tmpDocData.PRICE * tmpDocData.QUANTITY) - tmpDocData.DISCOUNT_1)).rateInc(this.txtDiscountPercent2.value,4)
                                                 tmpDocData.DISCOUNT_3 =  Number(((tmpDocData.PRICE * tmpDocData.QUANTITY) - (tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2))).rateInc(this.txtDiscountPercent3.value,4)
                                                 tmpDocData.DISCOUNT = parseFloat((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3)).round(2)
@@ -1655,6 +1678,7 @@ export default class DocBase extends React.PureComponent
                                                         tmpDocData.VAT = 0
                                                     }
                                                 }
+
                                                 tmpDocData.TOTAL = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) + tmpDocData.VAT)).round(2)
                                                 tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
                                             }
@@ -1681,11 +1705,11 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popDocDiscount.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'500'}
-                    height={'500'}
-                    position={{of:'#root'}}
-                    deferRendering={true}
+                    height={'auto'}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -1696,14 +1720,7 @@ export default class DocBase extends React.PureComponent
                                 {
                                     if( this.txtDocDiscountPercent1.value > 100)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPercent.msg"),type:'warning',displayTime:2000})
                                         this.txtDocDiscountPercent1.value = 0;
                                         this.txtDocDiscountPrice1.value = 0;
                                         return
@@ -1711,7 +1728,7 @@ export default class DocBase extends React.PureComponent
 
                                     this.txtDocDiscountPrice1.value =  Number(this.docObj.dt()[0].SUBTOTAL).rateInc(this.txtDocDiscountPercent1.value,2)
                                 }).bind(this)}
-                                ></NdNumberBox>
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.t("popDocDiscount.Price1")} alignment="right" />
@@ -1721,14 +1738,7 @@ export default class DocBase extends React.PureComponent
                                 {
                                     if( this.txtDocDiscountPrice1.value > this.docObj.dt()[0].SUBTOTAL)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPrice.msg"),type:'warning',displayTime:2000})
                                         this.txtDocDiscountPercent1.value = 0;
                                         this.txtDocDiscountPrice1.value = 0;
                                         return
@@ -1736,7 +1746,7 @@ export default class DocBase extends React.PureComponent
                                     
                                     this.txtDocDiscountPercent1.value = Number(this.docObj.dt()[0].SUBTOTAL).rate2Num(this.txtDocDiscountPrice1.value)
                                 }).bind(this)}
-                                ></NdNumberBox>
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.t("popDocDiscount.Percent2")} alignment="right" />
@@ -1746,21 +1756,15 @@ export default class DocBase extends React.PureComponent
                                 {
                                     if( this.txtDocDiscountPercent1.value > 100)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPercent.msg"),type:'warning',displayTime:2000})
                                         this.txtDocDiscountPercent2.value = 0;
                                         this.txtDocDiscountPrice2.value = 0;
                                         return
                                     }
+
                                     this.txtDocDiscountPrice2.value =  Number(this.docObj.dt()[0].SUBTOTAL - Number(this.txtDocDiscountPrice1.value)).rateInc(this.txtDocDiscountPercent2.value,2)
                                 }).bind(this)}
-                                ></NdNumberBox>
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.t("popDocDiscount.Price2")} alignment="right" />
@@ -1770,21 +1774,15 @@ export default class DocBase extends React.PureComponent
                                 {
                                     if( this.txtDocDiscountPrice2.value > this.docObj.dt()[0].SUBTOTAL)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPrice.msg"),type:'warning',displayTime:2000})
                                         this.txtDocDiscountPercent2.value = 0;
                                         this.txtDocDiscountPrice2.value = 0;
                                         return
                                     }
+
                                     this.txtDocDiscountPercent2.value = Number(this.docObj.dt()[0].SUBTOTAL - Number(this.txtDocDiscountPrice1.value)).rate2Num(this.txtDocDiscountPrice2.value)
                                 }).bind(this)}
-                                ></NdNumberBox>
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.t("popDocDiscount.Percent3")} alignment="right" />
@@ -1794,21 +1792,15 @@ export default class DocBase extends React.PureComponent
                                 {
                                     if( this.txtDocDiscountPercent1.value > 100)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPercent',showTitle:true,title:this.t("msgDiscountPercent.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPercent.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPercent.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPercent.msg"),type:'warning',displayTime:2000})
                                         this.txtDocDiscountPercent3.value = 0;
                                         this.txtDocDiscountPrice3.value = 0;
                                         return
                                     }
+
                                     this.txtDocDiscountPrice3.value = Number(this.docObj.dt()[0].SUBTOTAL - (Number(this.txtDocDiscountPrice1.value) + Number(this.txtDocDiscountPrice2.value))).rateInc(this.txtDocDiscountPercent3.value,2)
                                 }).bind(this)}
-                                ></NdNumberBox>
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.t("popDocDiscount.Price3")} alignment="right" />
@@ -1818,21 +1810,14 @@ export default class DocBase extends React.PureComponent
                                 {
                                     if( this.txtDocDiscountPrice3.value > this.docObj.dt()[0].SUBTOTAL)
                                     {
-                                        let tmpConfObj =
-                                        {
-                                            id:'msgDiscountPrice',showTitle:true,title:this.t("msgDiscountPrice.title"),showCloseButton:true,width:'500px',height:'200px',
-                                            button:[{id:"btn01",caption:this.t("msgDiscountPrice.btn01"),location:'after'}],
-                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDiscountPrice.msg")}</div>)
-                                        }
-                            
-                                        await dialog(tmpConfObj);
+                                        this.toast.show({message:this.t("msgDiscountPrice.msg"),type:'warning',displayTime:2000})
                                         this.txtDocDiscountPercent3.value = 0;
                                         this.txtDocDiscountPrice3.value = 0;
                                         return
                                     }
                                     this.txtDocDiscountPercent3.value = Number(this.docObj.dt()[0].SUBTOTAL - (Number(this.txtDocDiscountPrice1.value) + Number(this.txtDocDiscountPrice2.value))).rate2Num(this.txtDocDiscountPrice3.value)
                                 }).bind(this)}
-                                ></NdNumberBox>
+                                />
                             </Item>
                             <Item>
                                 <div className='row'>
@@ -1862,6 +1847,7 @@ export default class DocBase extends React.PureComponent
                                                         tmpDocData.VAT = 0
                                                     }
                                                 }
+
                                                 tmpDocData.TOTAL = parseFloat(((tmpDocData.TOTALHT - tmpDocData.DOC_DISCOUNT) + tmpDocData.VAT)).round(2)
                                                 tmpDocData.DISCOUNT_RATE = Number((tmpDocData.PRICE * tmpDocData.QUANTITY)).rate2Num((tmpDocData.DISCOUNT_1 + tmpDocData.DISCOUNT_2 + tmpDocData.DISCOUNT_3),2)
                                             }
@@ -1888,43 +1874,39 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popPassword.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'500'}
-                    height={'200'}
-                    position={{of:'#root'}}
-                    deferRendering={true}
+                    height={'auto'}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    deferRendering={false}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("popPassword.Password")} alignment="right" />
-                                <NdTextBox id="txtPassword" mode="password" parent={this} simple={true} maxLength={32}></NdTextBox>
-                            </Item>
-                            <Item>
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("popPassword.Password")} alignment="right" />
+                                <NdTextBox id="txtPassword" mode="password" parent={this} simple={true} maxLength={32}/>
+                            </NdItem>
+                            <NdItem>
                                 <div className='row'>
                                     <div className='col-6'>
                                         <NdButton text={this.t("popPassword.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
                                         onClick={async ()=>
                                         {       
                                             let tmpPass = btoa(this.txtPassword.value);
+
                                             let tmpQuery = 
                                             {
                                                 query : "SELECT TOP 1 * FROM USERS WHERE PWD = @PWD AND ROLE = 'Administrator' AND STATUS = 1", 
                                                 param : ['PWD:string|50'],
                                                 value : [tmpPass],
                                             }
+
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
+
                                             if(tmpData.result.recordset.length > 0)
                                             {
                                                 this.docObj.dt()[0].LOCKED = 0
                                                 this.docLocked = false
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgPasswordSucces',showTitle:true,title:this.t("msgPasswordSucces.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgPasswordSucces.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPasswordSucces.msg")}</div>)
-                                                }
-
-                                                await dialog(tmpConfObj);
+                                                this.toast.show({message:this.t("msgPasswordSucces.msg"),type:'success',displayTime:2000})
                                                 this.popPassword.hide();  
 
                                                 if(typeof this.popPassword.onStatus != 'undefined')
@@ -1936,7 +1918,7 @@ export default class DocBase extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgPasswordWrong',showTitle:true,title:this.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgPasswordWrong',showTitle:true,title:this.t("msgPasswordWrong.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgPasswordWrong.btn01"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPasswordWrong.msg")}</div>)
                                                 }
@@ -1958,22 +1940,22 @@ export default class DocBase extends React.PureComponent
                                         }}/>
                                     </div>
                                 </div>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div> 
                 {/* İrsaliye Grid */}
                 <div>
-                    <NdPopGrid id={"pg_dispatchGrid"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_dispatchGrid"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
                     height={'90%'}
                     selection={{mode:"multiple"}}
                     title={this.t("pg_dispatchGrid.title")} //
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <GroupPanel visible={true} allowColumnDragging={false}/>       
                         <Column dataField="REFERANS" caption={this.t("pg_dispatchGrid.clmReferans")} width={200} defaultSortOrder="asc" groupIndex={0}/>
@@ -1994,9 +1976,9 @@ export default class DocBase extends React.PureComponent
                 </div>
                 {/* Stok Grid */}
                 <div>
-                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
@@ -2014,42 +1996,42 @@ export default class DocBase extends React.PureComponent
                             e.rowElement.style.color ="Black"
                         }
                     }}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
-                        {(()=>
+                    {(()=>
+                    {
+                        if(this.type == 0)
                         {
-                            if(this.type == 0)
-                            {
-                                let tmpArr = []
-                                tmpArr.push(<Column key={"CODE"} dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={200}/>)
-                                tmpArr.push(<Column key={"NAME"} dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc"/>)
-                                tmpArr.push(<Column key={"MULTICODE"} dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>)
-                                tmpArr.push(<Column key={"PRICE"} dataField="PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>)
-                                return tmpArr
-                            }
-                            else
-                            {
-                                let tmpArr = []
-                                tmpArr.push(<Column key={"CODE"} dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={200}/>)
-                                tmpArr.push(<Column key={"NAME"} dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc"/>)
-                                tmpArr.push(<Column key={"PRICE"} dataField="PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>)
-                                return tmpArr
-                            }
-                        })()}
+                            let tmpArr = []
+                            tmpArr.push(<Column key={"CODE"} dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={200}/>)
+                            tmpArr.push(<Column key={"NAME"} dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc"/>)
+                            tmpArr.push(<Column key={"MULTICODE"} dataField="MULTICODE" caption={this.t("pg_txtItemsCode.clmMulticode")} width={200}/>)
+                            tmpArr.push(<Column key={"PRICE"} dataField="PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>)
+                            return tmpArr
+                        }
+                        else
+                        {
+                            let tmpArr = []
+                            tmpArr.push(<Column key={"CODE"} dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={200}/>)
+                            tmpArr.push(<Column key={"NAME"} dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={300} defaultSortOrder="asc"/>)
+                            tmpArr.push(<Column key={"PRICE"} dataField="PRICE" caption={this.t("pg_txtItemsCode.clmPrice")} width={200} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>)
+                            return tmpArr
+                        }
+                    })()}
                     </NdPopGrid>
                 </div>
                 {/* Hizmet Grid */}
                 <div>
-                    <NdPopGrid id={"pg_service"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_service"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_service.title")} //
                     data={{source:{select:{query : "SELECT *,1 AS ITEM_TYPE,'00000000-0000-0000-0000-000000000000' AS UNIT FROM SERVICE_ITEMS_VW_01 WHERE STATUS = 1"},sql:this.core.sql}}}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Column dataField="CODE" caption={this.t("pg_service.clmCode")} width={200}/>
                         <Column dataField="NAME" caption={this.t("pg_service.clmName")} width={300} defaultSortOrder="asc"/>
@@ -2062,11 +2044,11 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popMultiItem.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'1100'}
-                    height={'750'}
-                    position={{of:'#root'}}
-                    deferRendering={true}
+                    height={'auto'}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    deferRendering={false}
                     onHiding={()=>
                     {
                         this.popMultiItem.tmpTagItemCode = this.tagItemCode.value
@@ -2138,8 +2120,7 @@ export default class DocBase extends React.PureComponent
                             <EmptyItem />   
                             <Item>
                                 <div className='row'>
-                                    <div className='col-6'>
-                                    
+                                    <div className='col-6'>                                    
                                     </div>
                                     <div className='col-6'>
                                         <NdButton text={this.t("popMultiItem.btnSave")} type="normal" stylingMode="contained" width={'100%'}
@@ -2160,11 +2141,11 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popUnit2.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'500'}
-                    height={'250'}
-                    position={{of:'#root'}}
-                    deferRendering={true}
+                    height={'auto'}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -2194,11 +2175,11 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.lang.t("popVatRate.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'500'}
-                    height={'300'}
-                    position={{of:'#root'}}
-                    deferRendering={true}
+                    height={'auto'}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item >
@@ -2210,9 +2191,6 @@ export default class DocBase extends React.PureComponent
                                 height={'100%'} 
                                 width={'100%'}
                                 dbApply={false}
-                                onRowRemoved={async (e)=>{
-                                
-                                }}
                                 >
                                     <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                     <Scrolling mode="standart" />
@@ -2230,7 +2208,7 @@ export default class DocBase extends React.PureComponent
                                         {       
                                             let tmpConfObj =
                                             {
-                                                id:'msgVatDelete',showTitle:true,title:this.t("msgVatDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgVatDelete',showTitle:true,title:this.t("msgVatDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgVatDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgVatDelete.msg")}</div>)
                                             }
@@ -2267,12 +2245,13 @@ export default class DocBase extends React.PureComponent
                                         {       
                                             let tmpConfObj =
                                             {
-                                                id:'msgVatCalculate',showTitle:true,title:this.lang.t("msgVatCalculate.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgVatCalculate',showTitle:true,title:this.lang.t("msgVatCalculate.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("msgVatCalculate.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgVatCalculate.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgVatCalculate.msg")}</div>)
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+                                            
                                             if(pResult == 'btn01')
                                             {
                                                 for (let i = 0; i < this.docDetailObj.dt().length; i++) 
@@ -2283,11 +2262,14 @@ export default class DocBase extends React.PureComponent
                                                         param : ['ITEM:string|50'],
                                                         value : [this.docDetailObj.dt()[i].ITEM]
                                                     }
+                                            
                                                     let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            
                                                     if(typeof tmpData.result.recordset.length != 'undefined' && tmpData.result.recordset.length > 0)
                                                     {
                                                         this.docDetailObj.dt()[i].VAT_RATE = tmpData.result.recordset[0].VAT
                                                     }
+                                            
                                                     this.docDetailObj.dt()[i].VAT = parseFloat(((this.docDetailObj.dt()[i].TOTALHT - this.docDetailObj.dt()[i].DOC_DISCOUNT) * (this.docDetailObj.dt()[i].VAT_RATE / 100)).toFixed(6))
                                                     this.docDetailObj.dt()[i].TOTAL = ((this.docDetailObj.dt()[i].PRICE * this.docDetailObj.dt()[i].QUANTITY) - (this.docDetailObj.dt()[i].DISCOUNT + this.docDetailObj.dt()[i].DOC_DISCOUNT)) + this.docDetailObj.dt()[i].VAT
                                                     this.calculateTotal()
@@ -2303,17 +2285,16 @@ export default class DocBase extends React.PureComponent
                 </div>  
                 {/* notCustomer Dialog  */}
                 <div>
-                    <NdDialog id={"msgCustomerNotFound"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
+                    <NdDialog id={"msgCustomerNotFound"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.t("msgCustomerNotFound.title")} 
                     showCloseButton={false}
                     width={"500px"}
-                    height={"250px"}
+                    height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgCustomerNotFound.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCustomerNotFound.btn02"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCustomerNotFound.msg")}</div>
                             </div>
@@ -2331,17 +2312,16 @@ export default class DocBase extends React.PureComponent
                 </div>  
                 {/* combineItem Dialog  */}
                 <div>
-                    <NdDialog id={"msgCombineItem"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
+                    <NdDialog id={"msgCombineItem"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.t("msgCombineItem.title")} 
                     showCloseButton={false}
                     width={"500px"}
-                    height={"250px"}
+                    height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
                             </div>
@@ -2359,17 +2339,16 @@ export default class DocBase extends React.PureComponent
                 </div>
                 {/* Yeni Fiyat Dialog  */}
                 <div>
-                    <NdDialog id={"msgNewPrice"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
+                    <NdDialog id={"msgNewPrice"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.t("msgNewPrice.title")} 
                     showCloseButton={false}
                     width={"1000px"}
-                    height={"800PX"}
+                    height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgNewPrice.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewPrice.btn02"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewPrice.msg")}</div>
                             </div>
@@ -2394,6 +2373,7 @@ export default class DocBase extends React.PureComponent
                                             let tmpMargin = tmpExVat -  e.key.PRICE;
                                             let tmpMarginRate = ((tmpMargin /  e.key.PRICE)) * 100
                                             e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+                                  
                                             let tmpNetExVat = e.key.SALE_PRICE / ((e.key.ITEM_VAT / 100) + 1)
                                             let tmpNetMargin = (tmpNetExVat - e.key.PRICE) / 1.15;
                                             let tmpNetMarginRate = (((tmpNetMargin / e.key.PRICE) )) * 100
@@ -2422,17 +2402,16 @@ export default class DocBase extends React.PureComponent
                 </div>
                 {/* Yeni Fiyat Dialog  */}
                 <div>
-                    <NdDialog id={"msgNewPriceDate"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
+                    <NdDialog id={"msgNewPriceDate"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.t("msgNewPriceDate.title")} 
                     showCloseButton={false}
                     width={"1000px"}
-                    height={"800PX"}
+                    height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgNewPriceDate.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewPriceDate.btn02"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewPriceDate.msg")}</div>
                             </div>
@@ -2457,6 +2436,7 @@ export default class DocBase extends React.PureComponent
                                             let tmpMargin = tmpExVat -  e.key.PRICE;
                                             let tmpMarginRate = ((tmpMargin /  e.key.PRICE)) * 100
                                             e.key.PRICE_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+                                  
                                             let tmpNetExVat = e.key.SALE_PRICE / ((e.key.VAT_RATE / 100) + 1)
                                             let tmpNetMargin = (tmpNetExVat - e.key.PRICE) / 1.15;
                                             let tmpNetMarginRate = (((tmpNetMargin / e.key.PRICE) )) * 100
@@ -2483,17 +2463,16 @@ export default class DocBase extends React.PureComponent
                 </div>
                 {/* Yeni KDV Dialog  */}
                 <div>
-                    <NdDialog id={"msgNewVat"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
+                    <NdDialog id={"msgNewVat"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.t("msgNewVat.title")} 
                     showCloseButton={false}
                     width={"800px"}
-                    height={"600PX"}
+                    height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgNewVat.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewVat.btn02"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewVat.msg")}</div>
                             </div>
@@ -2529,17 +2508,16 @@ export default class DocBase extends React.PureComponent
                 </div>
                 {/* Miktar Dialog  */}
                 <div>
-                    <NdDialog id={"msgQuantity"} container={"#root"} parent={this}
-                    position={{of:'#root'}} 
+                    <NdDialog id={"msgQuantity"} container={"#" + this.props.data.id + this.tabIndex} parent={this}
                     showTitle={true} 
                     title={this.lang.t("msgQuantity.title")} 
                     showCloseButton={false}
                     width={"400px"}
-                    height={"550px"}
+                    height={"auto"}
                     button={[{id:"btn01",caption:this.lang.t("msgQuantity.btn01"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgQuantity.msg")}</div>
                             </div>
@@ -2554,6 +2532,7 @@ export default class DocBase extends React.PureComponent
                                         onValueChanged={(async(e)=>
                                         {
                                             this.txtPopQteUnitFactor.value = this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].FACTOR
+                                
                                             if(this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].TYPE == 1)
                                             {
                                                 this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value / this.txtPopQteUnitFactor.value).toFixed(3))
@@ -2569,12 +2548,8 @@ export default class DocBase extends React.PureComponent
                                     <Item>
                                         <Label text={this.lang.t("msgQuantity.txtQuantity")} alignment="right" />
                                         <NdNumberBox id="txtPopQuantity" parent={this} simple={true}  
-                                        onEnterKey={(async(e)=>
-                                        {
-                                            this.txtPopQteUnitPrice.focus()
-                                        }).bind(this)}
-                                        onValueChanged={(async(e)=>
-                                        {
+                                        onEnterKey={(async(e)=>{this.txtPopQteUnitPrice.focus()}).bind(this)}
+                                        onValueChanged={(async(e)=>{
                                             if(this.cmbPopQteUnit.data.datatable.where({'GUID':this.cmbPopQteUnit.value})[0].TYPE == 1)
                                             {
                                                 this.txtPopQteUnitQuantity.value = Number((this.txtPopQuantity.value / this.txtPopQteUnitFactor.value).toFixed(3))
@@ -2588,22 +2563,16 @@ export default class DocBase extends React.PureComponent
                                     </Item>
                                     <Item>
                                         <Label text={this.lang.t("msgQuantity.txtUnitFactor")} alignment="right" />
-                                        <NdNumberBox id="txtPopQteUnitFactor" parent={this} simple={true} readOnly={true} maxLength={32}>
-                                        </NdNumberBox>
+                                        <NdNumberBox id="txtPopQteUnitFactor" parent={this} simple={true} readOnly={true} maxLength={32}/>
                                     </Item>
                                     <Item>
                                         <Label text={this.lang.t("msgQuantity.txtTotalQuantity")} alignment="right" />
-                                        <NdNumberBox id="txtPopQteUnitQuantity" parent={this} simple={true} readOnly={true} maxLength={32}>
-                                        </NdNumberBox>
+                                        <NdNumberBox id="txtPopQteUnitQuantity" parent={this} simple={true} readOnly={true} maxLength={32}/>
                                     </Item>
                                     <Item>
                                         <Label text={this.lang.t("msgQuantity.txtUnitPrice")} alignment="right" />
                                         <NdNumberBox id="txtPopQteUnitPrice" parent={this} simple={true} maxLength={32}
-                                        onEnterKey={(async(e)=>
-                                        {
-                                            this.msgQuantity._onClick()
-                                        }).bind(this)}
-                                        />
+                                        onEnterKey={(async(e)=>{this.msgQuantity._onClick()}).bind(this)}/>
                                     </Item>
                                     <Item>
                                         <Label text={this.lang.t("msgQuantity.txtPopQteDepotQty")} alignment="right" />
@@ -2624,16 +2593,16 @@ export default class DocBase extends React.PureComponent
                 </div>
                 {/* Barkod PopUp */}
                 <div>
-                    <NdPopGrid id={"pg_txtBarcode"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_txtBarcode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_txtBarcode.title")} //
                     search={true}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Column dataField="BARCODE" caption={this.t("pg_txtBarcode.clmBarcode")} width={150} />
                         <Column dataField="CODE" caption={this.t("pg_txtBarcode.clmCode")} width={150} />
@@ -2643,16 +2612,16 @@ export default class DocBase extends React.PureComponent
                 </div>
                 {/* Sipariş Grid */}
                 <div>
-                    <NdPopGrid id={"pg_ordersGrid"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_ordersGrid"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
                     height={'90%'}
                     selection={{mode:"multiple"}}
                     title={this.lang.t("pg_ordersGrid.title")} //
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Paging defaultPageSize={22} />
                         <Column dataField="REFERANS" caption={this.lang.t("pg_ordersGrid.clmReferans")} width={100} defaultSortOrder="asc"/>
@@ -2667,16 +2636,16 @@ export default class DocBase extends React.PureComponent
                 </div>
                 {/* Teklif Grid */}
                 <div>
-                    <NdPopGrid id={"pg_offersGrid"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_offersGrid"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
                     height={'90%'}
                     selection={{mode:"multiple"}}
                     title={this.t("pg_offersGrid.title")} //
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Paging defaultPageSize={22} />
                         <Column dataField="REFERANS" caption={this.t("pg_offersGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
@@ -2689,16 +2658,16 @@ export default class DocBase extends React.PureComponent
                 </div>
                 {/* Iade Grid */}
                 <div>
-                    <NdPopGrid id={"pg_getRebate"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_getRebate"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
                     height={'90%'}
                     selection={{mode:"multiple"}}
                     title={this.t("pg_getRebate.title")} //
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Paging defaultPageSize={22} />
                         <Column dataField="REFERANS" caption={this.t("pg_getRebate.clmReferans")} width={200} defaultSortOrder="asc"/>
@@ -2716,64 +2685,64 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("popExcel.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'600'}
-                    height={'450'}
-                    position={{of:'#root'}}
-                    deferRendering={true}
+                    height={'auto'}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    deferRendering={false}
                     >
-                        <Form colCount={1} height={'fit-content'}>
-                            <Item>
-                                <Label text={this.t("grdPurcInv.clmItemCode")} alignment="right" />
+                        <NdForm colCount={1} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("grdPurcInv.clmItemCode")} alignment="right" />
                                 <NdTextBox id="txtPopExcelCode" parent={this} simple={true} notRefresh={true} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                     <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
                                         <RequiredRule message={this.t("validExcel")} />
                                     </Validator>  
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("grdPurcInv.clmQuantity")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("grdPurcInv.clmQuantity")} alignment="right" />
                                 <NdTextBox id="txtPopExcelQty" parent={this} simple={true} notRefresh={true} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                     <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
                                         <RequiredRule message={this.t("validExcel")} />
                                     </Validator>  
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("grdPurcInv.clmPrice")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("grdPurcInv.clmPrice")} alignment="right" />
                                 <NdTextBox id="txtPopExcelPrice" parent={this} simple={true} notRefresh={true} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                     <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
                                         <RequiredRule message={this.t("validExcel")} />
                                     </Validator>  
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("grdPurcInv.clmDiscount")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("grdPurcInv.clmDiscount")} alignment="right" />
                                 <NdTextBox id="txtPopExcelDisc" parent={this} simple={true} notRefresh={true} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                     <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
                                         <RequiredRule message={this.t("validExcel")} />
                                     </Validator>  
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("grdPurcInv.clmDiscountRate")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("grdPurcInv.clmDiscountRate")} alignment="right" />
                                 <NdTextBox id="txtPopExcelDiscRate" parent={this} simple={true} notRefresh={true} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                     <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
                                         <RequiredRule message={this.t("validExcel")} />
                                     </Validator>  
                                 </NdTextBox>
-                            </Item>
-                            <Item>
-                                <Label text={this.t("grdPurcInv.clmVat")} alignment="right" />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("grdPurcInv.clmVat")} alignment="right" />
                                 <NdTextBox id="txtPopExcelVat" parent={this} simple={true} notRefresh={true} upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
                                     <Validator validationGroup={"frmInvExcel"  + this.tabIndex}>
                                         <RequiredRule message={this.t("validExcel")} />
                                     </Validator>  
                                 </NdTextBox>
-                            </Item>
-                        </Form>
-                        <Form colCount={2}>
-                            <Item>
+                            </NdItem>
+                        </NdForm>
+                        <NdForm colCount={2}>
+                            <NdItem>
                                 <input type="file" name="upload" id="upload" text={"Excel Aktarım"} onChange={(e)=>
                                 {
                                     e.preventDefault();
@@ -2793,17 +2762,18 @@ export default class DocBase extends React.PureComponent
                                         reader.readAsArrayBuffer(e.target.files[0]);
                                     }
                                 }}/>    
-                            </Item>
-                            <Item>
+                            </NdItem>
+                            <NdItem>
                                 <NdButton id="btnShemaSave" parent={this} text={this.t('shemaSave')} type="default"
                                 onClick={async()=>
                                 {
                                     let shemaJson={CODE:this.txtPopExcelCode.value,QTY:this.txtPopExcelQty.value,PRICE:this.txtPopExcelPrice.value,DISC:this.txtPopExcelDisc.value,DISC_PER:this.txtPopExcelDiscRate.value,TVA:this.txtPopExcelVat.value}
+                                    
                                     this.prmObj.add({ID:'excelFormat',VALUE:shemaJson,USERS:this.user.CODE,APP:'OFF',TYPE:1,PAGE:this.props.data.id})
                                     await this.prmObj.save()
                                 }}/>
-                            </Item>
-                        </Form>
+                            </NdItem>
+                        </NdForm>
                     </NdPopUp>
                 </div>  
                 {/* Adres Seçim PopUp */}
@@ -2816,7 +2786,7 @@ export default class DocBase extends React.PureComponent
                     width={'90%'}
                     height={'90%'}
                     title={this.t("pg_adress.title")} //
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Column dataField="ADRESS" caption={this.t("pg_adress.clmAdress")} width={250} />
                         <Column dataField="CITY" caption={this.t("pg_adress.clmCiyt")} width={150} />
@@ -2831,12 +2801,11 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("msgUnit.title")}
-                    container={"#root"} 
+                    container={"#" + this.props.data.id + this.tabIndex} 
                     width={'500'}
-                    height={'400'}
-                    position={{of:'#root'}}
+                    height={'auto'}
                     button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -2870,33 +2839,10 @@ export default class DocBase extends React.PureComponent
                             <Item>
                                 <Form colCount={1}>
                                     <Item>
-                                        <Label text={this.t("txtUnitFactor")} alignment="right" />
+                                        <NdLabel text={this.t("txtUnitFactor")} alignment="right" />
                                         <NdNumberBox id="txtUnitFactor" parent={this} simple={true} readOnly={true} maxLength={32}>
                                         </NdNumberBox>
                                     </Item>
-                                    {/* <Item>
-                                        <NdButton id="btnFactorSave" parent={this} text={this.t("msgUnit.btnFactorSave")} type="default"
-                                        onClick={async()=>
-                                        {
-                                            let tmpQuery = 
-                                            {
-                                                query : "EXEC [dbo].[PRD_ITEM_UNIT_UPDATE] @GUID = @PGUID, @CUSER = @PCUSER, @FACTOR = @PFACTOR", 
-                                                param : ['PGUID:string|50','PCUSER:string|25','PFACTOR:float'],
-                                                value : [this.cmbUnit.value,this.user.CODE,this.txtUnitFactor.value]
-                                            }
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            if(typeof tmpData.result.err != 'undefined')
-                                            {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                await dialog(tmpConfObj1);
-                                            }
-                                        }}/>
-                                    </Item> */}
                                 </Form>
                             </Item>
                             <Item>
@@ -2918,20 +2864,7 @@ export default class DocBase extends React.PureComponent
                             </Item>
                             <Item>
                                 <Label text={this.t("txtTotalQuantity")} alignment="right" />
-                                <NdNumberBox id="txtTotalQuantity" parent={this} simple={true} maxLength={32} readOnly={true}
-                                // onValueChanged={(async(e)=>
-                                // {
-                                //     if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
-                                //     {
-                                //         this.txtUnitFactor.value = Number((this.txtUnitQuantity.value / this.txtTotalQuantity.value).toFixed(3))
-                                //     }
-                                //     else
-                                //     {
-                                //         this.txtUnitFactor.value = Number((this.txtTotalQuantity.value / this.txtUnitQuantity.value).toFixed(3))
-                                //     }
-                                // }).bind(this)}
-                                >
-                                </NdNumberBox>
+                                <NdNumberBox id="txtTotalQuantity" parent={this} simple={true} maxLength={32} readOnly={true}/>
                             </Item>
                             <Item>
                                 <Label text={this.t("txtUnitPrice")} alignment="right" />
@@ -2947,12 +2880,11 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("msgDiscountEntry.title")}
-                    container={"#root"} 
+                    container={"#" + this.props.data.id + this.tabIndex} 
                     width={'500'}
-                    height={'400'}
-                    position={{of:'#root'}}
+                    height={'auto'}
                     button={[{id:"btn01",caption:this.t("msgDiscountEntry.btn01"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -2962,8 +2894,7 @@ export default class DocBase extends React.PureComponent
                                 {
                                     this.txtTotalDiscount.value = this.txtDiscount1.value + this.txtDiscount2.value + this.txtDiscount3.value
                                 }).bind(this)}
-                                >
-                                </NdNumberBox>
+                               />
                             </Item>
                             <Item>
                                 <Label text={this.t("txtDiscount2")} alignment="right" />
@@ -2972,8 +2903,7 @@ export default class DocBase extends React.PureComponent
                                 {
                                     this.txtTotalDiscount.value = this.txtDiscount1.value + this.txtDiscount2.value + this.txtDiscount3.value
                                 }).bind(this)}
-                                >
-                                </NdNumberBox>
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.t("txtDiscount3")} alignment="right" />
@@ -2982,13 +2912,11 @@ export default class DocBase extends React.PureComponent
                                 {
                                     this.txtTotalDiscount.value = this.txtDiscount1.value + this.txtDiscount2.value + this.txtDiscount3.value
                                 }).bind(this)}
-                                >
-                                </NdNumberBox>
+                                />
                             </Item>
                             <Item>
                                 <Label text={this.t("txtTotalDiscount")} alignment="right" />
-                                <NdNumberBox id="txtTotalDiscount" parent={this} simple={true} readOnly={true} maxLength={32}>
-                                </NdNumberBox>
+                                <NdNumberBox id="txtTotalDiscount" parent={this} simple={true} readOnly={true} maxLength={32}/>
                             </Item>
                         </Form>
                     </NdDialog>
@@ -3000,44 +2928,40 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("msgDiscountPerEntry.title")}
-                    container={"#root"} 
+                    container={"#" + this.props.data.id + this.tabIndex} 
                     width={'500'}
-                    height={'400'}
-                    position={{of:'#root'}}
+                    height={'auto'}
                     button={[{id:"btn01",caption:this.t("msgDiscountPerEntry.btn01"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
                                 <Label text={this.t("txtDiscountPer1")} alignment="right" />
-                                <NdNumberBox id="txtDiscountPer1" parent={this} simple={true} maxLength={32}>
-                                </NdNumberBox>
+                                <NdNumberBox id="txtDiscountPer1" parent={this} simple={true} maxLength={32}/>
                             </Item>
                             <Item>
                                 <Label text={this.t("txtDiscountPer2")} alignment="right" />
-                                <NdNumberBox id="txtDiscountPer2" parent={this} simple={true} maxLength={32}>
-                                </NdNumberBox>
+                                <NdNumberBox id="txtDiscountPer2" parent={this} simple={true} maxLength={32}/>
                             </Item>
                             <Item>
                                 <Label text={this.t("txtDiscountPer3")} alignment="right" />
-                                <NdNumberBox id="txtDiscountPer3" parent={this} simple={true} maxLength={32}>
-                                </NdNumberBox>
+                                <NdNumberBox id="txtDiscountPer3" parent={this} simple={true} maxLength={32}/>
                             </Item>
                         </Form>
                     </NdDialog>
                 </div> 
                 {/* Proforma Grid */}
                 <div>
-                    <NdPopGrid id={"pg_proformaGrid"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_proformaGrid"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
                     height={'90%'}
                     selection={{mode:"multiple"}}
                     title={this.t("pg_proformaGrid.title")}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Column dataField="REFERANS" caption={this.t("pg_proformaGrid.clmReferans")} width={200} defaultSortOrder="asc"/>
                         <Column dataField="ITEM_CODE" caption={this.t("pg_proformaGrid.clmCode")} width={200}/>
@@ -3054,12 +2978,11 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.t("msgGrdOrigins.title")}
-                    container={"#root"} 
+                    container={"#" + this.props.data.id + this.tabIndex} 
                     width={'500'}
-                    height={'200'}
-                    position={{of:'#root'}}
+                    height={'auto'}
                     button={[{id:"btn01",caption:this.t("msgGrdOrigins.btn01"),location:'after'}]}
-                    deferRendering={true}
+                    deferRendering={false}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -3071,9 +2994,8 @@ export default class DocBase extends React.PureComponent
                                 searchEnabled={true} showClearButton={true}
                                 param={this.param.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
                                 access={this.access.filter({ELEMENT:'cmbOrigin',USERS:this.user.CODE})}
-                                data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
-                                >
-                                </NdSelectBox>                                    
+                                data={{source:{select:{query : `SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC`},sql:this.core.sql}}}
+                                />                                    
                             </Item>                    
                         </Form>
                     </NdDialog>
@@ -3102,11 +3024,11 @@ export default class DocBase extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.lang.t("popTransport.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'800'}
-                    height={'700'}
-                    position={{of:'#root'}}
-                    deferRendering={true}
+                    height={'auto'}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    deferRendering={false}
                     >
                         <Form colCount={2} height={'fit-content'}>
                             <Item>
@@ -3167,7 +3089,7 @@ export default class DocBase extends React.PureComponent
                                             {
                                                 let tmpQuery = 
                                                 {
-                                                    query : "SELECT RECIEVER_NAME AS NAME, RECIEVER_ADRESS AS ADRESS, RECIEVER_CITY AS CITY, RECIEVER_ZIPCODE AS ZIPCODE, RECIEVER_COUNTRY AS COUNTRY FROM TRANSPORT_INFORMATION WHERE RECIEVER_NAME IS NOT NULL AND RECIEVER_NAME <> '' GROUP BY RECIEVER_NAME, RECIEVER_ADRESS, RECIEVER_CITY, RECIEVER_ZIPCODE, RECIEVER_COUNTRY ORDER BY RECIEVER_NAME ASC"
+                                                    query : `SELECT RECIEVER_NAME AS NAME, RECIEVER_ADRESS AS ADRESS, RECIEVER_CITY AS CITY, RECIEVER_ZIPCODE AS ZIPCODE, RECIEVER_COUNTRY AS COUNTRY FROM TRANSPORT_INFORMATION WHERE RECIEVER_NAME IS NOT NULL AND RECIEVER_NAME <> '' GROUP BY RECIEVER_NAME, RECIEVER_ADRESS, RECIEVER_CITY, RECIEVER_ZIPCODE, RECIEVER_COUNTRY ORDER BY RECIEVER_NAME ASC`
                                                 }
                                                 
                                                 let tmpData = await this.core.sql.execute(tmpQuery) 
@@ -3230,9 +3152,8 @@ export default class DocBase extends React.PureComponent
                                 searchEnabled={true} showClearButton={true}
                                 dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"SENDER_COUNTRY"}}
                                 param={this.param.filter({ELEMENT:'cmbSenderCountry',USERS:this.user.CODE})}
-                                data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
-                                >
-                                </NdSelectBox>     
+                                data={{source:{select:{query : `SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC`},sql:this.core.sql}}}
+                                />     
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.cmbRecieverCountry")} alignment="right" />
@@ -3243,9 +3164,8 @@ export default class DocBase extends React.PureComponent
                                 searchEnabled={true} showClearButton={true}
                                 dt={{data:this.docObj.transportInfermotion.dt('TRANSPORT_INFORMATION'),field:"RECIEVER_COUNTRY"}}
                                 param={this.param.filter({ELEMENT:'cmbRecieverCountry',USERS:this.user.CODE})}
-                                data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
-                                >
-                                </NdSelectBox>     
+                                data={{source:{select:{query : `SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC`},sql:this.core.sql}}}
+                                />     
                             </Item>
                             <Item>
                                 <Label text={this.lang.t("popTransport.txtSenderNote")} alignment="right" />
@@ -3304,9 +3224,9 @@ export default class DocBase extends React.PureComponent
                 </div>   
                  {/* Cari Seçim PopUp */}
                  <div>
-                    <NdPopGrid id={"pg_transportSelect"} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_transportSelect"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}
@@ -3324,23 +3244,23 @@ export default class DocBase extends React.PureComponent
                 </div>
                 <div>
                     {/*PARTI LOT SECIMI POPUP */}
-                    <NdPopGrid id={"pg_partiLot"} parent={this} container={"#root"}
-                        visible={false}
-                        position={{of:'#root'}} 
-                        showTitle={true} 
-                        showBorders={true}
-                        width={'90%'}
-                        height={'90%'}
-                        title={this.t("pg_partiLot.title")} 
-                        search={true}
-                        deferRendering={true}
-                        showCloseButton={this.sysParam.filter({ID:'sansPartiLot',USERS:this.user.CODE}).getValue()}
-                        >
-                            <Column dataField="LOT_CODE" caption={this.lang.t("pg_partiLot.clmLotCode")} width={150} />
-                            {/* <Column dataField="QUANTITY" caption={this.lang.t("pg_partiLot.clmQuantity")} width={300} defaultSortOrder="asc" /> */}
-                            <Column dataField="SKT" caption={this.lang.t("pg_partiLot.clmSkt")} width={300} dataType={"date"} format={"dd/MM/yyyy"} defaultSortOrder="asc" />
+                    <NdPopGrid id={"pg_partiLot"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
+                    visible={false}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_partiLot.title")} 
+                    search={true}
+                    showCloseButton={this.sysParam.filter({ID:'sansPartiLot',USERS:this.user.CODE}).getValue()}
+                    >
+                        <Column dataField="LOT_CODE" caption={this.lang.t("pg_partiLot.clmLotCode")} width={150} />
+                        {/* <Column dataField="QUANTITY" caption={this.lang.t("pg_partiLot.clmQuantity")} width={300} defaultSortOrder="asc" /> */}
+                        <Column dataField="SKT" caption={this.lang.t("pg_partiLot.clmSkt")} width={300} dataType={"date"} format={"dd/MM/yyyy"} defaultSortOrder="asc" />
                     </NdPopGrid>
-                </div>           
+                </div>  
+                <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 73px'}}/>         
             </div>
         )
     }

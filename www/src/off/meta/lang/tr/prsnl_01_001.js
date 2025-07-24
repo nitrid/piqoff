@@ -116,7 +116,7 @@ const prsnl_01_001 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kayıt etmek istediğinize eminmisiniz !"
+        msg: "Kayıt etmek istediğinize emin misiniz !"
     },
     msgSaveResult:
     {
@@ -154,7 +154,7 @@ const prsnl_01_001 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        msg: "Kaydı silmek istediğinize emin misiniz ?"
     },
     cmbTypeData : 
     {
@@ -248,6 +248,10 @@ const prsnl_01_001 =
         title : "Alt Grup Seçim",
         clmName : "Adı",
     },
+    msgDeleteSuccess :
+    {
+        msg: "Silme işleminiz başarılı !"
+    }
 }
 
 export default prsnl_01_001

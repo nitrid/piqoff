@@ -1,25 +1,15 @@
 import React from 'react';
 import App from '../../lib/app';
-import {datatable} from '../../../core/core.js'
+import { datatable } from '../../../core/core.js'
 
-import ScrollView from 'devextreme-react/scroll-view';
-import NbButton from '../../../core/react/bootstrap/button';
-import Form, { Item } from 'devextreme-react/form';
 import NdTextBox from '../../../core/react/devex/textbox';
-import NdSelectBox from '../../../core/react/devex/selectbox';
-import NdDatePicker from '../../../core/react/devex/datepicker';
 import NdPopGrid from '../../../core/react/devex/popgrid';
-import NdCheckBox  from '../../../core/react/devex/checkbox';
-import NdNumberBox from '../../../core/react/devex/numberbox';
-import NdPopUp from '../../../core/react/devex/popup';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,ColumnChooser,StateStoring} from '../../../core/react/devex/grid';
-import NdDialog, { dialog } from '../../../core/react/devex/dialog.js';
+import NdGrid,{Column, Editing, Paging, Scrolling, KeyboardNavigation } from '../../../core/react/devex/grid';
+import { dialog } from '../../../core/react/devex/dialog.js';
 import NbLabel from '../../../core/react/bootstrap/label';
 
 import { PageBar } from '../../tools/pageBar';
 import { PageView,PageContent } from '../../tools/pageView';
-import moment from 'moment';
-
 export default class customerCheck extends React.PureComponent
 {
     constructor(props)
@@ -29,21 +19,20 @@ export default class customerCheck extends React.PureComponent
         this.itemDt = new datatable();
         this.customerDt = new datatable();
 
-
         this.itemDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE ) OR (@CODE = '')",
+            query : `SELECT * FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE (CODE = @CODE OR BARCODE = @CODE ) OR (@CODE = '')`,
             param : ['CODE:string|25'],
         }
         this.customerDt.selectCmd = 
         {
-            query : "SELECT * FROM ITEM_MULTICODE_VW_01 WHERE (ITEM_CODE = @CODE) OR (@CODE = '')",
+            query : `SELECT * FROM ITEM_MULTICODE_VW_01 WHERE (ITEM_CODE = @CODE) OR (@CODE = '')`,
             param : ['CODE:string|25'],
         }
 
         this.alertContent = 
         {
-            id:'msgAlert',showTitle:true,title:this.t("msgAlert.title"),showCloseButton:true,width:'90%',height:'200px',
+            id:'msgAlert',showTitle:true,title:this.t("msgAlert.title"),showCloseButton:true,width:'90%',height:'auto',
             button:[{id:"btn01",caption:this.t("msgAlert.btn01"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}></div>)
         }
@@ -62,7 +51,6 @@ export default class customerCheck extends React.PureComponent
     clearEntry()
     {
         this.itemDt.clear();
-
     }
     getItem(pCode)
     {
@@ -83,6 +71,7 @@ export default class customerCheck extends React.PureComponent
             else
             {                               
                 document.getElementById("Sound").play(); 
+
                 this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgBarcodeNotFound")}</div>)
                 await dialog(this.alertContent);
                 this.txtBarcode.value = ""
@@ -96,23 +85,17 @@ export default class customerCheck extends React.PureComponent
         return(
             <div>
                 <div>
-                <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.stk_02")} content=
-                {[
-                    {
-                        name : 'Main',isBack : false,isTitle : true,
-                        menu :
-                        [
-                        ]
-                    },
-                ]}
-                onBackClick={()=>{this.pageView.activePage('Main')}}/>
+                    <PageBar id={"pageBar"} parent={this} title={this.lang.t("menu.stk_02")} content=
+                    {[
+                        {
+                            name : 'Main',isBack : false,isTitle : true,
+                            menu : []
+                        },
+                    ]}
+                    onBackClick={()=>{this.pageView.activePage('Main')}}/>
                 </div>
                 <div style={{position:'relative',top:'35px',height:'calc(100vh - 35px)',overflow:'hidden'}}>
-                    <PageView id={"pageView"} parent={this} 
-                    onActivePage={(e)=>
-                    {
-                        this.pageBar.activePage(e)
-                    }}>
+                    <PageView id={"pageView"} parent={this} onActivePage={(e)=>{this.pageBar.activePage(e)}}>
                         <PageContent id={"Main"}>
                             <div className='row px-2'>
                                 <div className='col-12'>
@@ -126,56 +109,53 @@ export default class customerCheck extends React.PureComponent
                                                     await this.getItem(this.txtBarcode.value)
                                                 }
                                             }).bind(this)}
-                                            button=
-                                            {
-                                                [
+                                            button={[
+                                                {
+                                                    id:'01',
+                                                    icon:'more',
+                                                    onClick:async()=>
                                                     {
-                                                        id:'01',
-                                                        icon:'more',
-                                                        onClick:async()=>
+                                                        this.popItem.show()
+                                                        this.popItem.onClick = (data) =>
                                                         {
-                                                            this.popItem.show()
-                                                            this.popItem.onClick = (data) =>
+                                                            if(data.length > 0)
                                                             {
-                                                                if(data.length > 0)
-                                                                {
-                                                                    this.getItem(data[0].CODE)
-                                                                }
+                                                                this.getItem(data[0].CODE)
                                                             }
-                                                        }
-                                                    },
-                                                    {
-                                                        id:'02',
-                                                        icon:'photo',
-                                                        onClick:()=>
-                                                        {
-                                                            if(typeof cordova == "undefined")
-                                                            {
-                                                                return;
-                                                            }
-                                                            cordova.plugins.barcodeScanner.scan(
-                                                                async function (result) 
-                                                                {
-                                                                    if(result.cancelled == false)
-                                                                    {
-                                                                        this.txtBarcode.value = result.text;
-                                                                        this.getItem(result.text)
-                                                                    }
-                                                                }.bind(this),
-                                                                function (error) 
-                                                                {
-                                                                    
-                                                                },
-                                                                {
-                                                                  prompt : "Scan",
-                                                                  orientation : "portrait"
-                                                                }
-                                                            );
                                                         }
                                                     }
-                                                ]
-                                            }>
-                                            </NdTextBox>
+                                                },
+                                                {
+                                                    id:'02',
+                                                    icon:'photo',
+                                                    onClick:()=>
+                                                    {
+                                                        if(typeof cordova == "undefined")
+                                                        {
+                                                            return;
+                                                        }
+
+                                                        cordova.plugins.barcodeScanner.scan(
+                                                            async function (result) 
+                                                            {
+                                                                if(result.cancelled == false)
+                                                                {
+                                                                    this.txtBarcode.value = result.text;
+                                                                    this.getItem(result.text)
+                                                                }
+                                                            }.bind(this),
+                                                            function (error) 
+                                                            {
+                                                                
+                                                            },
+                                                            {
+                                                                prompt : "Scan",
+                                                                orientation : "portrait"
+                                                            }
+                                                        );
+                                                    }
+                                                }
+                                            ]}/>
                                             {/*STOK SEÇİM */}
                                             <NdPopGrid id={"popItem"} parent={this} container={"#root"}
                                             selection={{mode:"single"}}
@@ -193,7 +173,8 @@ export default class customerCheck extends React.PureComponent
                                                 {
                                                     select:
                                                     {
-                                                        query : "SELECT CODE,NAME FROM ITEMS_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))",
+                                                        query : `SELECT CODE,NAME FROM ITEMS_VW_01 
+                                                                WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL))`,
                                                         param : ['VAL:string|50']
                                                     },
                                                     sql:this.core.sql

@@ -28,7 +28,7 @@ const sip_04_001 =
         title: "Dikkat",
         btn01: "Onayla",
         btn02: "Vazgeç",
-        msg: "Seçili Satırları Sipariş Etmek İstediğinize Eminmisiniz ?"
+        msg: "Seçili Satırları Sipariş Etmek İstediğinize Emin misiniz ?"
     },
     msgSaveResult:
     {

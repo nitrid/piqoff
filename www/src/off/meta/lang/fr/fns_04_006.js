@@ -1,7 +1,8 @@
  // "Tahsilat Raporu"
  const fns_04_006 =
  {
-     btnGet :"Rchercher",
+     btnGet :"Rechercher",
+     dtDate : "Date",
      grdListe : 
      {
          clmCustomerCode : "Code Client",

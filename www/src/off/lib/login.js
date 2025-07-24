@@ -33,8 +33,8 @@ export default class Login extends React.PureComponent
                 position: 'inherit',
                 margin:'auto',
                 top: '40%',
-                width: '500px',
-                height: '540px',
+                width: '450px',
+                height: '450px',
             },
 
         }  
@@ -267,7 +267,7 @@ export default class Login extends React.PureComponent
         {
             let tmpConfObj =
             {
-                id:'msgInvalidUser',showTitle:true,title:this.lang.t("msgInvalidUser"),showCloseButton:true,width:'500px',height:'200px',
+                id:'msgInvalidUser',showTitle:true,title:this.lang.t("msgInvalidUser"),showCloseButton:true,width:'500px',height:'auto',
                 button:[{id:"btn01",caption:this.lang.t("btnOk"),location:'after'}],
                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgInvalidUser")}</div>)
             }
@@ -351,8 +351,8 @@ export default class Login extends React.PureComponent
                                 <h6 className="text-center" style={{color:'#ff7675'}}>{this.state.alert}</h6>
                             </div>
                         </div>
-                        <div className="dx-field">
-                            <div className="dx-field-label">{this.lang.t("txtLangSelect")}</div>
+                        <div className="dx-field" style={{margin:'0px'}}>
+                            <div className="dx-field-label" style={{textAlign:'right',paddingRight:'10px',paddingTop:'3px'}}>{this.lang.t("txtLangSelect")}</div>
                             <div className="dx-field-value">
                                 <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content'
                                 displayExpr="text"                       
@@ -370,16 +370,16 @@ export default class Login extends React.PureComponent
                             </div>
                         </div>
                         {this.dbSelectedView()}
-                        <div className="dx-field">
-                            <div className="dx-field-label">{this.lang.t("txtUser")}</div>
+                        <div className="dx-field" style={{margin:'0px'}}>
+                            <div className="dx-field-label" style={{textAlign:'right',paddingRight:'10px',paddingTop:'3px'}}>{this.lang.t("txtUser")}</div>
                             <div className="dx-field-value">
                                 <NdTextBox id="Kullanici" parent={this} simple={true} showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged} 
                                 placeholder={this.lang.t("txtUser")}
                                 />
                             </div>
                         </div>
-                        <div className="dx-field">
-                            <div className="dx-field-label">{this.lang.t("txtPass")}</div>
+                        <div className="dx-field" style={{margin:'0px'}}>
+                            <div className="dx-field-label" style={{textAlign:'right',paddingRight:'10px',paddingTop:'3px'}}>{this.lang.t("txtPass")}</div>
                             <div className="dx-field-value">
                                 <NdTextBox id="Sifre" parent={this} mode="password" showClearButton={true} height='fit-content' valueChangeEvent="keyup" onValueChanged={this.textValueChanged}
                                 onEnterKey={this.onLoginClick}
@@ -387,7 +387,7 @@ export default class Login extends React.PureComponent
                                 />
                             </div>
                         </div>
-                        <div className="row py-1">
+                        <div className="row">
                             <div className="col-12">
                                 <div className="dx-field">
                                     <Button
@@ -401,7 +401,7 @@ export default class Login extends React.PureComponent
                                 </div>
                             </div>
                         </div>
-                        <div className="row py-1">
+                        <div className="row">
                             <div className="col-6">
                                 <div className="dx-field">
                                     <Button
@@ -427,7 +427,7 @@ export default class Login extends React.PureComponent
                                 </div>
                             </div>
                         </div>
-                        <div className="row py-1">
+                        <div className="row">
                             <div className="col-12">
                                 <div className="dx-field">
                                     <Button
@@ -441,7 +441,7 @@ export default class Login extends React.PureComponent
                                 </div>
                             </div>                            
                         </div>
-                        <div className="row">
+                        <div className="row pt-1">
                             <div className="col-3">
                                 
                             </div>

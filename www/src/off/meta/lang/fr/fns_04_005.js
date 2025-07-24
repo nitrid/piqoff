@@ -2,7 +2,7 @@
 const fns_04_005 =
 {
     txtCustomerCode: "Code du client",
-    btnGet: "Obtenir",
+    btnGet: "Rechercher",
     pg_txtCustomerCode: {
         "title": "Sélection du client",
         "clmCode": "Code",

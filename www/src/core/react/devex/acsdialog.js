@@ -44,7 +44,7 @@ export default class NdAcsDialog extends NdBase
                     {
                         let tmpConfObj =
                         {
-                            id:'msgAlert',showTitle:true,title:this.lang.t("acsDialog.msgAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                            id:'msgAlert',showTitle:true,title:this.lang.t("acsDialog.msgAlert.title"),showCloseButton:true,width:'500px',height:'auto',
                             button:[{id:"btn01",caption:this.lang.t("acsDialog.msgAlert.btn01"),location:'before'}],
                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("acsDialog.msgAlert.msg")}</div>)
                         }
@@ -100,7 +100,7 @@ export default class NdAcsDialog extends NdBase
                 {
                     let tmpConfObj =
                     {
-                        id:'msgAlert',showTitle:true,title:this.lang.t("acsDialog.msgAlert.title"),showCloseButton:true,width:'500px',height:'200px',
+                        id:'msgAlert',showTitle:true,title:this.lang.t("acsDialog.msgAlert.title"),showCloseButton:true,width:'500px',height:'auto',
                         button:[{id:"btn01",caption:this.lang.t("acsDialog.msgAlert.btn01"),location:'before'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("acsDialog.msgAlert.msg")}</div>)
                     }

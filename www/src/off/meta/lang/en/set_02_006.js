@@ -12,6 +12,10 @@ const set_02_006 =
         btn01: "OK",
         msgSuccess: "Send operation successful !",
         msgFailed: "Send operation failed !"
+    },  
+    msgDeleteResult:
+    {
+        msgSuccess: "Enregistrement réussi !"
     },
 }
 

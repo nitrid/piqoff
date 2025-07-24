@@ -2,23 +2,24 @@ import React from 'react';
 import App from '../../../lib/app.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item } from 'devextreme-react/form';
 
 import NdButton from '../../../../core/react/devex/button.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox';
 import {ItemBuild,ItemSet,ItemGet} from '../../../../admin/tools/itemOp';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable,param } from '../../../../core/core.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
+import { param } from '../../../../core/core.js';
 
 export default class piqPoidDeviceCard extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
         this.prmData = null
@@ -269,7 +270,7 @@ export default class piqPoidDeviceCard extends React.PureComponent
                                     valueExpr="CODE"
                                     value={""}
                                     showClearButton={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM BALANCE_DEVICES ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM BALANCE_DEVICES ORDER BY NAME ASC`},sql:this.core.sql}}}
                                     onValueChanged={async(e)=>
                                     {
                                         await this.prmData.load({APP:'POID'})
@@ -288,11 +289,11 @@ export default class piqPoidDeviceCard extends React.PureComponent
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'msgSaveResult',showTitle:true,title:this.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgSaveResult',showTitle:true,title:this.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn02",caption:this.t("msgSaveResult.btn01"),location:'after'}],
                                         }
 
-                                        App.instance.setState({isExecute:true})
+                                        App.instance.loading.show()
                                         for (let x = 0; x < this.state.metaPrm.length; x++) 
                                         {
                                             this.prmData.add
@@ -311,19 +312,21 @@ export default class piqPoidDeviceCard extends React.PureComponent
                                         }
                                         let tmpResult = await this.prmData.save()                                            
                                         await this.prmData.load({APP:'POID'})
-                                        App.instance.setState({isExecute:false})
+                                        App.instance.loading.hide()
 
                                         if(tmpResult == 0)
                                         {
-                                            tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
+                                           this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
                                         }
                                         else
                                         {
                                             tmpConfObj.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                            await dialog(tmpConfObj);
                                         }
-                                        await dialog(tmpConfObj);
+                                        
                                     }}></NdButton>
                                 </Item>
+
                             </Form>
                         </div>
                     </div>
@@ -334,6 +337,7 @@ export default class piqPoidDeviceCard extends React.PureComponent
                             </Form>  
                         </div>
                     </div>
+                    <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )

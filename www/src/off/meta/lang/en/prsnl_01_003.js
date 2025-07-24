@@ -68,6 +68,10 @@ const prsnl_01_003 =
     validation : //BAK
     {
         frmCustomerAddress: "You cannot leave the code blank !",
+    },
+    msgDeleteSuccess :
+    {
+        msg: "Delete operation successful !"
     }
 }
 

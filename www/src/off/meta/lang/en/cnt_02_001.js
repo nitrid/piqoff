@@ -36,7 +36,7 @@ const cnt_02_001 =
         clmCode :  "PRODUCT CODE",
         clmName : "PRODUCT NAME",
         clmMulticode : "SUPPLIER CODE"
-    },
+    },  
     msgContractValid:
     {
         title: "Attention",
@@ -57,11 +57,17 @@ const cnt_02_001 =
         msgSuccess: "Your record has been successfully saved !",
         msgFailed: "Your record has been failed to save !"
     },
+    msgDeleteResult:
+    {
+        msg: "Record deleted successfully !"
+    },
     msgSaveValid:
     {
         title: "Attention",
         btn01: "OK",
-        msg: "Please fill in the required fields !"
+        msg: "Please fill in the required fields !",
+        msgSuccess: "Your record has been successfully saved !",
+        msgFailed: "Your record has been failed to save !"
     },
     msgNotCustomerCount:
     {

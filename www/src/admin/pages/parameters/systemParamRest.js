@@ -23,6 +23,7 @@ export default class systemParamRest extends React.PureComponent
         {
             metaPrm : []
         }
+        
         this.ItemBuild = ItemBuild.bind(this)
         this.ItemSet = ItemSet.bind(this)
         this.ItemGet = ItemGet.bind(this)
@@ -68,7 +69,7 @@ export default class systemParamRest extends React.PureComponent
                                     valueExpr="CODE"
                                     value={""}
                                     showClearButton={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM USERS ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM USERS ORDER BY NAME ASC`},sql:this.core.sql}}}
                                     onValueChanged={async(e)=>
                                     {
                                         if(e.value == null)
@@ -96,11 +97,12 @@ export default class systemParamRest extends React.PureComponent
                                         await this.prmData.load({APP:'REST',USERS:''})
                                         let tmpConfObj =
                                         {
-                                            id:'msgSaveResult',showTitle:true,title:App.instance.lang.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgSaveResult',showTitle:true,title:App.instance.lang.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn02",caption:App.instance.lang.t("msgSaveResult.btn01"),location:'after'}],
                                         }
 
                                         App.instance.setState({isExecute:true})
+        
                                         for (let x = 0; x < this.state.metaPrm.length; x++) 
                                         {
                                             this.prmData.add
@@ -117,6 +119,7 @@ export default class systemParamRest extends React.PureComponent
                                                 }
                                             )
                                         }
+        
                                         let tmpResult = await this.prmData.save()                                            
                                         await this.prmData.load({APP:'REST'})
                                         App.instance.setState({isExecute:false})
@@ -141,11 +144,12 @@ export default class systemParamRest extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSaveResult',showTitle:true,title:App.instance.lang.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSaveResult',showTitle:true,title:App.instance.lang.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn02",caption:App.instance.lang.t("msgSaveResult.btn01"),location:'after'}],
                                             }
 
                                             App.instance.setState({isExecute:true})
+        
                                             for (let i = 0; i < data.length; i++) 
                                             {
                                                 for (let x = 0; x < this.state.metaPrm.length; x++) 
@@ -165,6 +169,7 @@ export default class systemParamRest extends React.PureComponent
                                                     )
                                                 }
                                             }
+        
                                             let tmpResult = await this.prmData.save()                                            
                                             await this.prmData.load({APP:'REST'})
                                             App.instance.setState({isExecute:false})

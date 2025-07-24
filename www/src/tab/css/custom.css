@@ -41,6 +41,44 @@
     margin-left: 7px;
     font-size: 12px;
 }
+
+/* Sadece Plus/Minus İcon Renkleri - Güçlü Override */
+.item-quantity-box .dx-texteditor-buttons-container .dx-button .dx-icon-minus {
+    color: #dc3545 !important;
+    font-size: 28px !important;
+    font-weight: bold !important;
+}
+
+.item-quantity-box .dx-texteditor-buttons-container .dx-button .dx-icon-plus {
+    color: #28a745 !important;
+    font-size: 28px !important;
+    font-weight: bold !important;
+}
+
+/* Alternatif selector - eğer yukarısi çalışmazsa */
+.dx-texteditor .dx-texteditor-buttons-container .item-quantity-box .dx-icon {
+    font-size: 24px !important;
+}
+
+.dx-texteditor .dx-texteditor-buttons-container .item-quantity-box .dx-icon-minus {
+    color: #dc3545 !important;
+}
+
+.dx-texteditor .dx-texteditor-buttons-container .item-quantity-box .dx-icon-plus {
+    color: #28a745 !important;
+}
+
+/* En güçlü override - tüm ihtimaller */
+div .dx-icon-minus {
+    color: #dc3545 !important;
+    font-size: 28px !important;
+}
+
+div .dx-icon-plus {
+    color: #28a745 !important;
+    font-size: 28px !important;
+}
+
 .dx-checkbox-container
 {
     height: fit-content;
@@ -128,6 +166,20 @@
 .dx-popup-content {
     -webkit-user-drag: none;
     padding: 3px;
+}
+.item-quantity-box .dx-texteditor-input {
+    font-weight: bold !important;
+    font-size: 18px !important;
+    color: #333 !important;
+    text-align: center !important;
+}
+.item-quantity-box .dx-texteditor-buttons-container .dx-button {
+    width: 60px !important;
+    height: 60px !important;
+    min-width: 60px !important;
+}
+.item-quantity-box .dx-texteditor-buttons-container .dx-button .dx-icon {
+    font-size: 32px !important;
 }
 /* .dx-button-content {
     height: 35px;

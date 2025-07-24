@@ -3,7 +3,8 @@ const fns_04_001 =
 {
     cmbBank : "Bank Selection",
     btnCheck : "Active",
-    btnGet :"Get",
+    btnGet :"Get",  
+    dtDate : "Date",
     grdListe : 
     {
         clmOutputName : "Output Account",

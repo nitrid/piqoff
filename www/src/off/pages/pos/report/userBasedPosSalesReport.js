@@ -2,13 +2,12 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
+import Form, {Item, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdPivot,{FieldChooser,Export} from '../../../../core/react/devex/pivot.js';
@@ -22,6 +21,8 @@ export default class userBasedPosSalesReport extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
+
+        this.tabIndex = props.data.tabkey
     }
     async componentDidMount()
     {
@@ -38,8 +39,9 @@ export default class userBasedPosSalesReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID," + 
-                    "ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID =POS_VW_01.GUID AND TAG = 'PARK DESC' ),'') AS DESCRIPTION FROM POS_VW_01 WHERE STATUS IN (0,2) ORDER BY DOC_DATE "
+                    query : 
+                        `SELECT *,CONVERT(NVARCHAR,DOC_DATE,104) AS DATE,SUBSTRING(CONVERT(NVARCHAR(50),GUID),20,25) AS TICKET_ID,
+                        ISNULL((SELECT TOP 1 DESCRIPTION FROM POS_EXTRA WHERE POS_EXTRA.POS_GUID =POS_VW_01.GUID AND TAG = 'PARK DESC' ),'') AS DESCRIPTION FROM POS_VW_01 WHERE STATUS IN (0,2) ORDER BY DOC_DATE `
                 },
                 sql : this.core.sql
             }
@@ -54,38 +56,39 @@ export default class userBasedPosSalesReport extends React.PureComponent
     {
         let tmpQuery = 
         {
-            query:  "SELECT " +
-                    "POS.DOC_DATE AS DOC_DATE, " +
-                    "'UTILISATEUR    :' + POS.LUSER AS LUSER, " +
-                    "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
-                    "'SALES' AS TITLE, " +
-                    "'HT' AS TYPE, " +
-                    "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = 72),'') AS PATH,   " +
-                    "POS.VAT_RATE AS VAT_RATE, " +
-                    "CASE WHEN POS.TYPE = 0 THEN SUM(POS.FAMOUNT) ELSE SUM(POS.FAMOUNT) * -1 END AS AMOUNT " +
-                    "FROM POS_SALE_VW_01 AS POS " +
-                    "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 " +
-                    "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.LUSER " +
-                    "UNION ALL " +
-                    "SELECT " +
-                    "POS.DOC_DATE AS DOC_DATE, " +
-                    "'UTILISATEUR :' + POS.LUSER AS LUSER, " +
-                    "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
-                    "'SALES' AS TITLE, " +
-                    "'TVA' AS TYPE, " +
-                    "ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = 72),'') AS PATH,   " +
-                    "POS.VAT_RATE AS VAT_RATE, " +
-                    "CASE WHEN POS.TYPE = 0 THEN SUM(POS.VAT) ELSE SUM(POS.VAT) * -1 END AS AMOUNT " +
-                    "FROM POS_SALE_VW_01 AS POS " +
-                    "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 " +
-                    "GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.LUSER " ,
+            query:  
+                    `SELECT 
+                    POS.DOC_DATE AS DOC_DATE, 
+                    'UTILISATEUR    :' + POS.LUSER AS LUSER, 
+                    CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, 
+                    'SALES' AS TITLE, 
+                    'HT' AS TYPE, 
+                    ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = 72),'') AS PATH,  
+                    POS.VAT_RATE AS VAT_RATE, 
+                    CASE WHEN POS.TYPE = 0 THEN SUM(POS.FAMOUNT) ELSE SUM(POS.FAMOUNT) * -1 END AS AMOUNT 
+                    FROM POS_SALE_VW_01 AS POS 
+                    WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 
+                    GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.LUSER 
+                    UNION ALL 
+                    SELECT 
+                    POS.DOC_DATE AS DOC_DATE, 
+                    'UTILISATEUR :' + POS.LUSER AS LUSER, 
+                    CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, 
+                    'SALES' AS TITLE, 
+                    'TVA' AS TYPE, 
+                    ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = 72),'') AS PATH,  
+                    POS.VAT_RATE AS VAT_RATE, 
+                    CASE WHEN POS.TYPE = 0 THEN SUM(POS.VAT) ELSE SUM(POS.VAT) * -1 END AS AMOUNT 
+                    FROM POS_SALE_VW_01 AS POS 
+                    WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 
+                    GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.LUSER `,
             param : ['START:date','END:date'],
             value : [this.dtDate.startDate,this.dtDate.endDate]
         }
         
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         let tmpData = await this.core.sql.execute(tmpQuery) 
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
         
         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
         {
@@ -102,17 +105,14 @@ export default class userBasedPosSalesReport extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnPrint" parent={this} icon="print" type="default"
-                                    onClick={async()=>
-                                    {
-                                        this.printReport()
-                                    }}/>
+                                    onClick={async()=> { this.printReport() }}/>
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -126,7 +126,7 @@ export default class userBasedPosSalesReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -152,13 +152,11 @@ export default class userBasedPosSalesReport extends React.PureComponent
                             <Form colCount={4} parent={this} id="frmPurcoffer">
                                 <Item  >
                                     <Label text={this.lang.t("txtTotalTicket")} alignment="right" />
-                                    <NdTextBox id="txtTotalTicket" parent={this} simple={true} readOnly={true} 
-                                    maxLength={32}/>
+                                    <NdTextBox id="txtTotalTicket" parent={this} simple={true} readOnly={true} maxLength={32}/>
                                 </Item>
                                 <Item  >
                                     <Label text={this.lang.t("txtTicketAvg")} alignment="right" />
-                                    <NdTextBox id="txtTicketAvg" parent={this} simple={true} readOnly={true} 
-                                    maxLength={32}/>
+                                    <NdTextBox id="txtTicketAvg" parent={this} simple={true} readOnly={true} maxLength={32}/>
                                 </Item>
                             </Form>
                         </div>
@@ -169,7 +167,7 @@ export default class userBasedPosSalesReport extends React.PureComponent
                             onClick={async (e)=>
                             {
                                 let tmpTicketQuery = {
-                                    query :"SELECT COUNT(GUID) AS TICKET,ISNULL(AVG(TOTAL),0) AS AVGTOTAL FROM POS_VW_01 WHERE STATUS = 1 AND  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE ",
+                                    query :`SELECT COUNT(GUID) AS TICKET,ISNULL(AVG(TOTAL),0) AS AVGTOTAL FROM POS_VW_01 WHERE STATUS = 1 AND  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE `,
                                     param : ['FISRT_DATE:date','LAST_DATE:date'],
                                     value : [this.dtDate.startDate,this.dtDate.endDate]
                                 }
@@ -181,51 +179,52 @@ export default class userBasedPosSalesReport extends React.PureComponent
                                 }
                                 let tmpQuery = 
                                 {
-                                    query : "SELECT " +
-                                            "POS.DOC_DATE AS DOC_DATE, " +
-                                            "POS.DEVICE AS DEVICE, " +
-                                            "POS.CUSER AS CUSER, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
-                                            "'SALES' AS TITLE, " +
-                                            "'HT' AS TYPE, " +
-                                            "POS.VAT_RATE AS VAT_RATE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN SUM(POS.FAMOUNT) ELSE SUM(POS.FAMOUNT) * -1 END AS AMOUNT " +
-                                            "FROM POS_SALE_VW_01 AS POS " +
-                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 " +
-                                            "GROUP BY POS.DOC_DATE, POS.TYPE, POS.VAT_RATE, POS.DEVICE, POS.CUSER " +
-                                            "UNION ALL " +
-                                            "SELECT " +
-                                            "POS.DOC_DATE AS DOC_DATE, " +
-                                            "POS.DEVICE AS DEVICE, " +
-                                            "POS.CUSER AS CUSER, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
-                                            "'SALES' AS TITLE, " +
-                                            "'TVA' AS TYPE, " +
-                                            "POS.VAT_RATE AS VAT_RATE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN SUM(POS.VAT) ELSE SUM(POS.VAT) * -1 END AS AMOUNT " +
-                                            "FROM POS_SALE_VW_01 AS POS " +
-                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 " +
-                                            "GROUP BY POS.DOC_DATE, POS.TYPE, POS.VAT_RATE, POS.DEVICE, POS.CUSER " +
-                                            "UNION ALL " +
-                                            "SELECT " +
-                                            "POS.DOC_DATE AS DOC_DATE, " +
-                                            "POS.DEVICE AS DEVICE, " +
-                                            "POS.CUSER AS CUSER, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, " +
-                                            "'PAYMENT' AS TITLE, " +
-                                            "PAY_TYPE_NAME AS TYPE, " +
-                                            "0 AS VAT_RATE, " +
-                                            "CASE WHEN POS.TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT - CHANGE) * -1 END AS AMOUNT " +
-                                            "FROM POS_PAYMENT_VW_01 AS POS " +
-                                            "WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' " +
-                                            "GROUP BY POS.DOC_DATE, POS.TYPE, POS.PAY_TYPE_NAME, POS.PAY_TYPE, POS.DEVICE, POS.CUSER " , 
+                                    query : `SELECT 
+                                            POS.DOC_DATE AS DOC_DATE, 
+                                            POS.DEVICE AS DEVICE, 
+                                            POS.CUSER AS CUSER, 
+                                            CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, 
+                                            'SALES' AS TITLE, 
+                                            'HT' AS TYPE, 
+                                            POS.VAT_RATE AS VAT_RATE, 
+                                            CASE WHEN POS.TYPE = 0 THEN SUM(POS.FAMOUNT) ELSE SUM(POS.FAMOUNT) * -1 END AS AMOUNT 
+                                            FROM POS_SALE_VW_01 AS POS 
+                                            WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 
+                                            GROUP BY POS.DOC_DATE, POS.TYPE, POS.VAT_RATE, POS.DEVICE, POS.CUSER 
+                                            UNION ALL 
+                                            SELECT 
+                                            POS.DOC_DATE AS DOC_DATE, 
+                                            POS.DEVICE AS DEVICE, 
+                                            POS.CUSER AS CUSER, 
+                                            CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, 
+                                            'SALES' AS TITLE, 
+                                            'TVA' AS TYPE, 
+                                            POS.VAT_RATE AS VAT_RATE, 
+                                            CASE WHEN POS.TYPE = 0 THEN SUM(POS.VAT) ELSE SUM(POS.VAT) * -1 END AS AMOUNT 
+                                            FROM POS_SALE_VW_01 AS POS 
+                                            WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 
+                                            GROUP BY POS.DOC_DATE, POS.TYPE, POS.VAT_RATE, POS.DEVICE, POS.CUSER 
+                                            UNION ALL 
+                                            SELECT 
+                                            POS.DOC_DATE AS DOC_DATE, 
+                                            POS.DEVICE AS DEVICE, 
+                                            POS.CUSER AS CUSER, 
+                                            CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, 
+                                            'PAYMENT' AS TITLE, 
+                                            PAY_TYPE_NAME AS TYPE, 
+                                            0 AS VAT_RATE, 
+                                            CASE WHEN POS.TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT - CHANGE) * -1 END AS AMOUNT 
+                                            FROM POS_PAYMENT_VW_01 AS POS 
+                                            WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' 
+                                            GROUP BY POS.DOC_DATE, POS.TYPE, POS.PAY_TYPE_NAME, POS.PAY_TYPE, POS.DEVICE, POS.CUSER `, 
                                     param : ['START:date','END:date'],
                                     value : [this.dtDate.startDate,this.dtDate.endDate]
                                 }
-                                App.instance.setState({isExecute:true})
-                                let tmpData = await this.core.sql.execute(tmpQuery)
 
-                                App.instance.setState({isExecute:false})
+                                App.instance.loading.show()
+                                let tmpData = await this.core.sql.execute(tmpQuery)
+                                App.instance.loading.hide()
+
                                 if(tmpData.result.recordset.length > 0)
                                 {
                                     this.pvtData.setDataSource(tmpData.result.recordset)
@@ -387,10 +386,10 @@ export default class userBasedPosSalesReport extends React.PureComponent
                     showCloseButton={true}
                     showTitle={true}
                     title={this.lang.t("popOpenTike.title")}
-                    container={"#root"} 
+                    container={'#' + this.props.data.id + this.tabIndex} 
                     width={'900'}
                     height={'500'}
-                    position={{of:'#root'}}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <Form colCount={1} height={'fit-content'}>
                             <Item>
@@ -403,11 +402,6 @@ export default class userBasedPosSalesReport extends React.PureComponent
                                     height={350} 
                                     width={'100%'}
                                     dbApply={false}
-                                    onRowDblClick={async(e)=>
-                                    {
-                                    }}
-                                    onRowRemoved={async (e)=>{
-                                    }}
                                     >
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={false} allowDeleting={false} />

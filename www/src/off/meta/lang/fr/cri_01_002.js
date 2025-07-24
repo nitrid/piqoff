@@ -6,6 +6,7 @@ const cri_01_002 =
     txtTitle : "Titre",
     txtCustomerName : "Nom",
     tabTitleAdress : "Adresse",
+    codeFailedMsg : "Ce client valide n'a pas été trouvé. Veuillez entrer un code client valide.",
     pg_txtCode : 
     {
         title : "Sélectionner Client",
@@ -54,7 +55,9 @@ const cri_01_002 =
         title: "Attention",
         btn01: "OK",
         btn02: "Abandonner",
-        msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?"
+        msg: "Etes-vous sûr(e) de vouloir supprimer l'enregistrement ?",
+        msgFailed: "Suppression de l'enregistrement échouée !",
+        msgSuccess: "Suppression de l'enregistrement réussie !"
     },
     msgCode : 
     {

@@ -4,26 +4,24 @@ import { transportTypeCls} from '../../../../core/cls/doc.js';
 
 
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import TabPanel from 'devextreme-react/tab-panel';
+import Toolbar,{ Item } from 'devextreme-react/toolbar';
 import { Button } from 'devextreme-react/button';
-import FileUploader from 'devextreme-react/file-uploader';
 import * as xlsx from 'xlsx'
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
-import NdButton from '../../../../core/react/devex/button.js';
+import { Column } from '../../../../core/react/devex/grid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { datatable } from '../../../../core/core.js';
-
+import { NdForm, NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 export default class excelItemImport extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.transportObj = new transportTypeCls();
@@ -62,71 +60,74 @@ export default class excelItemImport extends React.PureComponent
     }
     async excelAdd(pData)
     {
-        console.log(pData)
-        let Empty = {
-           CUSER  : this.user.CODE,
-           TYPE   : 0,
-           CODE   : '',
-           NAME   : '',
-           SNAME  : '',
-           VAT  :0,
-           COST_PRICE  : 0,
-           MIN_PRICE   : 0,
-           MAX_PRICE   : 0,
-           STATUS  : 1,
-           MAIN_CODE  : '',
-           ORGINS   : '',
-           SALE_JOIN_LINE  : 0,
-           TICKET_REST  : 0,
-           SUGAR_RATE   : 0,
-           DESCRIPTION   : '',
-           CUSTOMER  : this.customerGuid,
-           SALE_PRICE  : 0,
-           UNIT_CODE   : '001',
-           UNIT_CODE_2  : '001',
-           BARCODE  : '',
-           MULTICODE  : '',
-           FACTOR_2   : 1
+        let empty = 
+        {
+           CUSER:this.user.CODE,
+           TYPE:0,
+           CODE:'',
+           NAME:'',
+           SNAME:'',
+           VAT:0,
+           COST_PRICE:0,
+           MIN_PRICE:0,
+           MAX_PRICE:0,
+           STATUS:1,
+           MAIN_CODE:'',
+           ORGINS:'',
+           SALE_JOIN_LINE:0,
+           TICKET_REST:0,
+           SUGAR_RATE:0,
+           DESCRIPTION:'',
+           CUSTOMER:this.customerGuid,
+           SALE_PRICE:0,
+           UNIT_CODE:'001',
+           UNIT_CODE_2:'001',
+           BARCODE:'',
+           MULTICODE:'',
+           FACTOR_2:1
         }
+
         this.excelData.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_ITEMS_EXCEL_INSERT] " + 
-            "@CUSER  = @PCUSER,  " +
-            "@TYPE   = @PTYPE ,  " +
-            "@CODE   = @PCODE ,  " +
-            "@NAME   = @PNAME ,  " +
-            "@SNAME  = @PSNAME,  " +
-            "@VAT  = @PVAT,   " +
-            "@COST_PRICE = @PCOST_PRICE,  " +
-            "@MIN_PRICE  = @PMIN_PRICE,   " +
-            "@MAX_PRICE  = @PMAX_PRICE,   " +
-            "@STATUS  = @PSTATUS,   " +
-            "@MAIN_CODE  = @PMAIN_CODE,  " +
-            "@ORGINS = @PORGINS,  " +
-            "@SALE_JOIN_LINE  = @PSALE_JOIN_LINE,   " +
-            "@TICKET_REST  = @PTICKET_REST,   " +
-            "@SUGAR_RATE  = @PSUGAR_RATE,   " +
-            "@DESCRIPTION = @PDESCRIPTION,   " +
-            "@CUSTOMER = @PCUSTOMER,   " +
-            "@SALE_PRICE  = @PSALE_PRICE ,  " +
-            "@UNIT_CODE  = @PUNIT_CODE,   " +
-            "@UNIT_CODE_2 = @PUNIT_CODE_2 , " +
-            "@BARCODE  = @PBARCODE,   " +
-            "@MULTICODE = @PMULTICODE,  " +
-            "@FACTOR_2   = @PFACTOR_2   " ,
-            param : ['PCUSER:string|50','PTYPE:int','PCODE:string|50','PNAME:string|250','PSNAME:string|32','PVAT:float','PCOST_PRICE:float','PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:int',
-            'PMAIN_CODE:string|50','PORGINS:string|50','PSALE_JOIN_LINE:int','PTICKET_REST:int','PSUGAR_RATE:float','PDESCRIPTION:string|max','PCUSTOMER:string|50','PSALE_PRICE:float','PUNIT_CODE:string|50',
-            'PUNIT_CODE_2:string|50','PBARCODE:string|50','PMULTICODE:string|50','PFACTOR_2:float'],
-            dataprm : ['CUSER','TYPE','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_CODE','ORGINS','SALE_JOIN_LINE','TICKET_REST','SUGAR_RATE','DESCRIPTION'
-            ,'CUSTOMER','SALE_PRICE','UNIT_CODE','UNIT_CODE_2','BARCODE','MULTICODE','FACTOR_2']
+            query : `EXEC [dbo].[PRD_ITEMS_EXCEL_INSERT] 
+                    @CUSER  = @PCUSER, 
+                    @TYPE   = @PTYPE, 
+                    @CODE   = @PCODE, 
+                    @NAME   = @PNAME, 
+                    @SNAME  = @PSNAME, 
+                    @VAT  = @PVAT, 
+                    @COST_PRICE = @PCOST_PRICE, 
+                    @MIN_PRICE  = @PMIN_PRICE, 
+                    @MAX_PRICE  = @PMAX_PRICE, 
+                    @STATUS  = @PSTATUS, 
+                    @MAIN_CODE  = @PMAIN_CODE, 
+                    @ORGINS = @PORGINS, 
+                    @SALE_JOIN_LINE  = @PSALE_JOIN_LINE, 
+                    @TICKET_REST  = @PTICKET_REST, 
+                    @SUGAR_RATE  = @PSUGAR_RATE, 
+                    @DESCRIPTION = @PDESCRIPTION, 
+                    @CUSTOMER = @PCUSTOMER, 
+                    @SALE_PRICE  = @PSALE_PRICE, 
+                    @UNIT_CODE  = @PUNIT_CODE, 
+                    @UNIT_CODE_2 = @PUNIT_CODE_2, 
+                    @BARCODE  = @PBARCODE, 
+                    @MULTICODE = @PMULTICODE, 
+                    @FACTOR_2   = @PFACTOR_2`,
+            param : ['PCUSER:string|50','PTYPE:int','PCODE:string|50','PNAME:string|250','PSNAME:string|32','PVAT:float','PCOST_PRICE:float',
+                    'PMIN_PRICE:float','PMAX_PRICE:float','PSTATUS:int','PMAIN_CODE:string|50','PORGINS:string|50','PSALE_JOIN_LINE:int',
+                    'PTICKET_REST:int','PSUGAR_RATE:float','PDESCRIPTION:string|max','PCUSTOMER:string|50','PSALE_PRICE:float','PUNIT_CODE:string|50',
+                    'PUNIT_CODE_2:string|50','PBARCODE:string|50','PMULTICODE:string|50','PFACTOR_2:float'],
+            dataprm :   ['CUSER','TYPE','CODE','NAME','SNAME','VAT','COST_PRICE','MIN_PRICE','MAX_PRICE','STATUS','MAIN_CODE','ORGINS','SALE_JOIN_LINE',
+                        'TICKET_REST','SUGAR_RATE','DESCRIPTION','CUSTOMER','SALE_PRICE','UNIT_CODE','UNIT_CODE_2','BARCODE','MULTICODE','FACTOR_2']
         } 
-        App.instance.setState({isExecute:true})
+
+        App.instance.loading.show()
+        
         for (let i = 0; i < pData.length; i++) 
         {
             if(typeof pData[i].CODE != 'undefined' && pData[i].CODE != '')
             {
-
-                let tmpEmpty =  {...Empty};
+                let tmpEmpty =  {...empty};
 
                 tmpEmpty.TYPE = typeof pData[i].TYPE == 'undefined' ? 0 : pData[i].TYPE;
                 tmpEmpty.CODE = typeof pData[i].CODE == 'undefined' ? '' : pData[i].CODE;
@@ -154,23 +155,17 @@ export default class excelItemImport extends React.PureComponent
                 this.excelData.push(tmpEmpty)
             }
         }
+
         await this.excelData.update()
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
         this.excelData.clear()
-        let tmpConfObj =
-        {
-            id:'msgSucces',showTitle:true,title:this.t("msgSucces.title"),showCloseButton:true,width:'500px',height:'200px',
-            button:[{id:"btn01",caption:this.t("msgSucces.btn01"),location:'after'}],
-            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSucces.msg")}</div>)
-        }
 
-        await dialog(tmpConfObj);
-
+        this.toast.show({message:this.t("msgSucces.msg"),type:"success"})
     }
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -187,12 +182,13 @@ export default class excelItemImport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+                                            
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -205,26 +201,26 @@ export default class excelItemImport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={3} id="frmCustoms">
-                                   {/* txtCustomerCode */}
-                                   <Item>
-                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
+                            <NdForm colCount={3} id="frmCustoms">
+                                {/* txtCustomerCode */}
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     onEnterKey={(async()=>
+                                    {
+                                        await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
+                                        this.pg_txtCustomerCode.show()
+                                        this.pg_txtCustomerCode.onClick = async(data) =>
                                         {
-                                            await this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
-                                            this.pg_txtCustomerCode.show()
-                                            this.pg_txtCustomerCode.onClick = async(data) =>
+                                            if(data.length > 0)
                                             {
-                                                if(data.length > 0)
-                                                {
-                                                    this.customerGuid = data[0].GUID
-                                                    this.txtCustomerCode.value = data[0].CODE
-                                                    this.txtCustomerName.value  = data[0].TITLE
-                                                }
+                                                this.customerGuid = data[0].GUID
+                                                this.txtCustomerCode.value = data[0].CODE
+                                                this.txtCustomerName.value  = data[0].TITLE
                                             }
-                                        }).bind(this)}
+                                        }
+                                    }).bind(this)}
                                     button=
                                     {
                                         [
@@ -253,9 +249,9 @@ export default class excelItemImport extends React.PureComponent
                                         </Validator>  
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -268,43 +264,30 @@ export default class excelItemImport extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] 
+                                                        FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                                 param : ['VAL:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
                                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                         <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                         <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
-                                        
                                     </NdPopGrid>
-                                </Item> 
+                                </NdItem> 
                                 {/* txtCustomerName */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
-                                    <NdTextBox id="txtCustomerName" parent={this} simple={true}  
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerName")} alignment="right" />
+                                    <NdTextBox id="txtCustomerName" parent={this} simple={true} readOnly={true} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    readOnly={true}
-                                    >
-                                    </NdTextBox>
-                                </Item> 
-                                <EmptyItem />
-                                <Item>
-                                <Button icon="xlsxfile" text={this.t("excelAdd")}
+                                    />
+                                </NdItem> 
+                                <NdEmptyItem />
+                                <NdItem>
+                                    <Button icon="xlsxfile" text={this.t("excelAdd")}
                                     validationGroup={"frmslsDoc"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
@@ -312,12 +295,13 @@ export default class excelItemImport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:false,width:'500px',height:'200px',
+                                                id:'msgNotCustomer',showTitle:true,title:this.t("msgNotCustomer.title"),showCloseButton:false,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgNotCustomer.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNotCustomer.msg")}</div>)
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                return
@@ -325,8 +309,8 @@ export default class excelItemImport extends React.PureComponent
                                         }
                                         this.popExcel.show()
                                     }}/>  
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                        {/* Excel PopUp */}
@@ -336,155 +320,135 @@ export default class excelItemImport extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popExcel.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'650'}
                         height={'650'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
-                            <Form colCount={2} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopCode")} alignment="right" />
+                            <NdForm colCount={2} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopCode")} alignment="right" />
                                     <NdTextBox id="txtPopCode" parent={this} simple={true}  notRefresh = {true} readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopName")} alignment="right" />
-                                    <NdTextBox id="txtPopName" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopName")} alignment="right" />
+                                    <NdTextBox id="txtPopName" parent={this} simple={true}  notRefresh = {true} readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopType")} alignment="right" />
-                                    <NdTextBox id="txtPopType" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopType")} alignment="right" />
+                                    <NdTextBox id="txtPopType" parent={this} simple={true}  notRefresh = {true} readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopStatus")} alignment="right" />
-                                    <NdTextBox id="txtPopStatus" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopStatus")} alignment="right" />
+                                    <NdTextBox id="txtPopStatus" parent={this} simple={true}  notRefresh = {true} readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopVat")} alignment="right" />
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopVat")} alignment="right" />
                                     <NdTextBox id="txtPopVat" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopCostPrice")} alignment="right" />
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopCostPrice")} alignment="right" />
                                     <NdTextBox id="txtPopCostPrice" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopMinPrice")} alignment="right" />
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopMinPrice")} alignment="right" />
                                     <NdTextBox id="txtPopMinPrice" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopMaxPrice")} alignment="right" />
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopMaxPrice")} alignment="right" />
                                     <NdTextBox id="txtPopMaxPrice" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopMainCode")} alignment="right" />
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopMainCode")} alignment="right" />
                                     <NdTextBox id="txtPopMainCode" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopOrgins")} alignment="right" />
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopOrgins")} alignment="right" />
                                     <NdTextBox id="txtPopOrgins" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopSaleJoinLine")} alignment="right" />
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopSaleJoinLine")} alignment="right" />
                                     <NdTextBox id="txtPopSaleJoinLine" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopTicketRest")} alignment="right" />
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopTicketRest")} alignment="right" />
                                     <NdTextBox id="txtPopTicketRest" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopSugerRate")} alignment="right" />
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopSugerRate")} alignment="right" />
                                     <NdTextBox id="txtPopSugerRate" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item> 
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopDescription")} alignment="right" />
+                                    />
+                                </NdItem> 
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopDescription")} alignment="right" />
                                     <NdTextBox id="txtPopDescription" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item> 
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopSalePrice")} alignment="right" />
+                                    />
+                                </NdItem> 
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopSalePrice")} alignment="right" />
                                     <NdTextBox id="txtPopSalePrice" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item> 
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopUnitId")} alignment="right" />
+                                    />
+                                </NdItem> 
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopUnitId")} alignment="right" />
                                     <NdTextBox id="txtPopUnitId" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopUnitId2")} alignment="right" />
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopUnitId2")} alignment="right" />
                                     <NdTextBox id="txtPopUnitId2" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopBarcode")} alignment="right" />
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopBarcode")} alignment="right" />
                                     <NdTextBox id="txtPopBarcode" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopMulticode")} alignment="right" />
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopMulticode")} alignment="right" />
                                     <NdTextBox id="txtPopMulticode" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popExcel.txtPopFactor2")} alignment="right" />
+                                    />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popExcel.txtPopFactor2")} alignment="right" />
                                     <NdTextBox id="txtPopFactor2" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    >
-                                    </NdTextBox>
-                                </Item>
-                            </Form>
-                            <Form colCount={2}>
-                                <Item>
+                                    />
+                                </NdItem>
+                            </NdForm>
+                            <NdForm colCount={2}>
+                                <NdItem>
                                     <input type="file" name="upload" id="upload" text={"Excel Aktarım"} onChange={(e)=>
                                     {
                                         e.preventDefault();
@@ -499,30 +463,25 @@ export default class excelItemImport extends React.PureComponent
                                                 const worksheet = workbook.Sheets[sheetName];
                                                 const json = xlsx.utils.sheet_to_json(worksheet);
                                                 this.popExcel.hide()
+
                                                 for(let i = 0; i < json.length; i++)
                                                 {
                                                     if(json[i].VAT == undefined)
                                                     {
-                                                        let tmpConfObj =
-                                                        {
-                                                            id:'msgVat',showTitle:true,title:this.t("msgVat.title"),showCloseButton:false,width:'500px',height:'200px',
-                                                            button:[{id:"btn01",caption:this.t("msgVat.btn01"),location:'after'}],
-                                                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgVat.msg") + " " + json[i].CODE}</div>)
-                                                        }
-                                                        dialog(tmpConfObj);
+                                                        this.toast.show({message:this.t("msgVat.msg") + " " + json[i].CODE,type:"warning"})
                                                         return
                                                     }
-                                                   
                                                 }
                                                 this.excelAdd(json)
                                             };
                                             reader.readAsArrayBuffer(e.target.files[0]);
                                         }
                                     }}/>    
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
-                    </div>  
+                    </div>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )

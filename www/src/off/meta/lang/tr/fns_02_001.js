@@ -68,7 +68,7 @@ const fns_02_001 =
         clmAmount : "Tutar",
         clmOutputName : "Kasa/Banka",
         clmDescription : "Açıklama",
-        clmInvoice : "Ödenen Fatura",
+        clmInvoice : "Fatura Referansı",
         clmFacDate : "Fatura Tarihi",
         clmDocDate : "Tarih"
     },
@@ -83,7 +83,7 @@ const fns_02_001 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kayıt etmek istediğinize eminmisiniz !"
+        msg: "Kayıt etmek istediğinize emin misiniz !"
     },
     msgSaveResult:
     {
@@ -103,7 +103,7 @@ const fns_02_001 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        msg: "Kaydı silmek istediğinize emin misiniz ?"
     },
     msgLocked:
     {
@@ -167,6 +167,7 @@ const fns_02_001 =
         btn01: "Tamam",
         msg: "Fatura seçmeden ödeme ekleyemezsiniz !"
     },
+    msgNotBank : "Lütfen bir hesap seçiniz",
 }
 
 export default fns_02_001

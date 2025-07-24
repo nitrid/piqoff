@@ -73,7 +73,7 @@ export default class elementParamOff extends React.PureComponent
                                     valueExpr="CODE"
                                     value={""}
                                     showClearButton={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM USERS ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM USERS ORDER BY NAME ASC`},sql:this.core.sql}}}
                                     onValueChanged={async(e)=>
                                     {
                                         if(e.value == null)
@@ -130,7 +130,7 @@ export default class elementParamOff extends React.PureComponent
 
                                         let tmpConfObj =
                                         {
-                                            id:'msgSaveResult',showTitle:true,title:App.instance.lang.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgSaveResult',showTitle:true,title:App.instance.lang.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn02",caption:App.instance.lang.t("msgSaveResult.btn01"),location:'after'}],
                                         }
 
@@ -177,7 +177,7 @@ export default class elementParamOff extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSaveResult',showTitle:true,title:App.instance.lang.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSaveResult',showTitle:true,title:App.instance.lang.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn02",caption:App.instance.lang.t("msgSaveResult.btn01"),location:'after'}],
                                             }
 
@@ -244,7 +244,7 @@ export default class elementParamOff extends React.PureComponent
                             {
                                 select:
                                 {
-                                    query : "SELECT CODE,NAME FROM USERS ORDER BY CODE ASC"
+                                    query : `SELECT CODE,NAME FROM USERS ORDER BY CODE ASC`
                                 },
                                 sql:this.core.sql
                             }

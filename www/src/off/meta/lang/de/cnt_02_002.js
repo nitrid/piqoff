@@ -1,4 +1,4 @@
-// "Satış Anlaşması"
+        // "Satış Anlaşması"
 const cnt_02_002 = 
 {
     validDate: "Bitte Datum auswählen.",
@@ -77,6 +77,35 @@ const cnt_02_002 =
         title: "Achtung",
         btn01: "OK",
         msg: "Kunde nicht gefunden!"
+    },
+    msgSave:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        btn02: "Abbrechen",
+        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+    },
+    msgSaveResult:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
+        msgFailed: "Fehler beim Speichern Ihres Eintrags!"
+    },
+    msgSaveValid:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Bitte füllen Sie alle erforderlichen Felder aus!",
+        msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
+        msgFailed: "Fehler beim Speichern Ihres Eintrags!"
+    },
+    msgDelete:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        btn02: "Abbrechen",
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
     },
     grdContracts:
     {
@@ -195,6 +224,10 @@ const cnt_02_002 =
         btn01: "OK",
         msgSuccess: "E-Mail erfolgreich gesendet!",
         msgFailed: "E-Mail konnte nicht gesendet werden!"
+    },
+    msgDeleteResult:
+    {
+        msg: "Eintrag erfolgreich gelöscht !"
     },
 }
 export default cnt_02_002

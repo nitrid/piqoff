@@ -3,6 +3,8 @@ const stk_02_002 =
 {
     txtRefRefno : "Seri-Sıra",
     validRef : "Seri-Sıra Boş Geçilemez",
+    validDepot : "Depo Seçmelisiniz",
+    validDesign : "Dizayn Seçmelisiniz",
     cmbOutDepot: "Çıkış Deposu",
     cmbInDepot: "Giriş Deposu",
     dtDocDate : "Tarih",
@@ -61,7 +63,7 @@ const stk_02_002 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kayıt etmek istediğinize eminmisiniz !"
+        msg: "Kayıt etmek istediğinize emin misiniz !"
     },
     msgSaveResult:
     {
@@ -81,7 +83,7 @@ const stk_02_002 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        msg: "Kaydı silmek istediğinize emin misiniz ?"
     },
     msgLocked:
     {
@@ -148,5 +150,12 @@ const stk_02_002 =
         msg: "Lütfen Miktar Giriniz !"
     },
     txtQuantity : "Miktar",
+    msgCode :
+    {
+        title: "Dikkat",
+        btn01: "Evrağa Git",
+        btn02: "Vazgeç",
+        msg: "Evrak Bulundu"
+    },
 }
 export default stk_02_002

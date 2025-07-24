@@ -28,6 +28,12 @@ export default class NdDatePicker extends Base
     _onInitialized(e) 
     {
         this.dev = e.component;   
+        
+        if(this.state.value && this.state.value !== '1970-01-01') 
+        {
+            this.dev.option('value', this.state.value);
+        }
+        
         if(typeof this.props.dt != 'undefined' && typeof this.props.dt.data != 'undefined' && typeof this.props.dt.field != 'undefined')
         {
             this.onRefresh()
@@ -35,10 +41,42 @@ export default class NdDatePicker extends Base
     }
     _onValueChanged(e) 
     {           
-        this.value = e.value;
+        if(typeof this.props.dt != 'undefined' && typeof this.props.dt.data != 'undefined' && this.props.dt.data.length > 0 && typeof this.props.dt.field != 'undefined')
+        {            
+            if(typeof this.props.dt.filter == 'undefined')
+            {
+                if(typeof this.props.dt.row != 'undefined' && typeof this.props.dt.data.find(x => x === this.props.dt.row) != 'undefined')
+                {
+                    this.props.dt.data.find(x => x === this.props.dt.row)[this.props.dt.field] = e.value
+                }
+                else
+                {
+                    this.props.dt.data[this.props.dt.data.length-1][this.props.dt.field] = e.value
+                }
+            }   
+            else
+            {
+                let tmpData = this.props.dt.data.where(this.props.dt.filter);
+                if(tmpData.length > 0)
+                {
+                    if(typeof this.props.dt.row != 'undefined' && typeof tmpData.find(x => x === this.props.dt.row) != 'undefined')
+                    {
+                        tmpData.find(x => x === this.props.dt.row)[this.props.dt.field] = e.value
+                    }
+                    else
+                    {
+                        tmpData[tmpData.length-1][this.props.dt.field] = e.value
+                    }
+                }
+            }
+        }
+        
+        let newVal = e.value ? new Date(e.value) : null;
+        this.setState({value: newVal});
+        
         if(typeof this.props.onValueChanged != 'undefined')
         {
-            this.props.onValueChanged();
+            this.props.onValueChanged({...e, value: newVal});
         }
     }
     _onEnterKey()
@@ -48,7 +86,11 @@ export default class NdDatePicker extends Base
         let tmpDateFromat = numbers[2] + numbers[3] +  '.' + numbers[0] + numbers[1] + '.' + numbers[4] + numbers[5] + numbers[6] + numbers[7]
         if(moment(tmpDateFromat).format("YYYY-MM-DD") != 'Invalid date')
         {
-           this.value = moment(tmpDateFromat).format("YYYY-MM-DD")
+            const newValue = moment(tmpDateFromat).format("YYYY-MM-DD");
+            if(newValue !== this.state.value) 
+            {
+               this.setState({value: newValue});
+            }
         }
         if(typeof this.props.onEnterKey != 'undefined')
         {
@@ -66,7 +108,7 @@ export default class NdDatePicker extends Base
             pickerType={this.state.pickerType} 
             height='fit-content' 
             valueChangeEvent="keyup" 
-            value={moment(this.state.value).format("YYYY-MM-DD") == '1970-01-01' ? null : moment(this.state.value)} 
+            value={this.state.value && moment(this.state.value).format("YYYY-MM-DD") !== '1970-01-01' ? moment(this.state.value).toDate() : null}
             disabled={this.state.editable}
             readOnly={this.state.readOnly}
             type={this.state.type}
@@ -82,6 +124,10 @@ export default class NdDatePicker extends Base
     //#endregion
     get value()
     {
+        if(this.dev && this.dev.option) 
+        {
+            return this.dev.option('value') || new Date(0);
+        }
         return this.state.value == null ? new Date(0) : this.state.value
     }
     set value(e)
@@ -90,7 +136,7 @@ export default class NdDatePicker extends Base
         {
             e = '1970-01-01';
         }
-        //VALUE DEĞİŞTİĞİNDE BU DEĞİŞİKLİK DATATABLE A YANSITMAK İÇİN YAPILDI.
+        
         if(typeof this.props.dt != 'undefined' && typeof this.props.dt.data != 'undefined' && this.props.dt.data.length > 0 && typeof this.props.dt.field != 'undefined')
         {            
             if(typeof this.props.dt.filter == 'undefined')
@@ -121,7 +167,15 @@ export default class NdDatePicker extends Base
             }
         }
         
-        this.setState({value:e})        
+        if(e !== this.state.value) 
+        {
+            this.setState({value: e});
+        }
+        
+        if(this.dev && this.dev.option) 
+        {
+            this.dev.option('value', e);
+        }
     } 
     get readOnly()
     {

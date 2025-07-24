@@ -1,6 +1,7 @@
 // "Ürün Detaylı Satış Raporu"
 const slsRpt_01_008 =
 {
+    dtDate : "Tarih",
     btnGet :"Getir",
     grdListe :
     {

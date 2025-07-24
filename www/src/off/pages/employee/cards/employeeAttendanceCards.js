@@ -1,7 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { employeesCls,employeeAttendanceCls,} from '../../../../core/cls/employees.js';
-
+import { employeesCls} from '../../../../core/cls/employees.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
@@ -9,33 +8,30 @@ import Form, { Label,Item } from 'devextreme-react/form';
 import TabPanel from 'devextreme-react/tab-panel';
 import { Button } from 'devextreme-react/button';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
+import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-
+import { NdToast } from '../../../../core/react/devex/toast.js';
+import { NdForm, NdItem, NdLabel } from '../../../../core/react/devex/form.js';
 export default class employeeAttendanceCards extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.employeeObj = new employeesCls();
+
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
-        
-
-        this._onItemRendered = this._onItemRendered.bind(this)
+        this.onItemRendered  = this.onItemRendered .bind(this)
         
     }
     async componentDidMount()
@@ -122,7 +118,7 @@ export default class employeeAttendanceCards extends React.PureComponent
                         title:this.t("msgCode.title"),
                         showCloseButton:true,
                         width:'500px',
-                        height:'200px',
+                        height:'auto',
                         button:[{id:"btn01",caption:this.t("msgCode.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCode.btn02"),location:'after'}],
                         content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCode.msg")}</div>)
                     }
@@ -156,14 +152,13 @@ export default class employeeAttendanceCards extends React.PureComponent
             if(pCode !== '')
             {
                 let tmpQuery = {
-                    query :"SELECT COUNTRY_CODE,PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE ",
+                    query : `SELECT COUNTRY_CODE,PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE`,
                     param : ['ZIPCODE:string|50'],
                     value : [pCode]
                 }
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    
                     this.cmbPopCity.value = tmpData.result.recordset[0].PLACE
                     this.cmbPopCountry.value = tmpData.result.recordset[0].COUNTRY_CODE
                     resolve(1)
@@ -179,11 +174,7 @@ export default class employeeAttendanceCards extends React.PureComponent
             }
         });
     }
-    async _onEmployeeRendered(e)
-    {
-        await this.core.util.waitUntil(10)
-    }
-    async _onItemRendered(e)
+    async onItemRendered (e)
     {
         await this.core.util.waitUntil(10)
         if(e.itemData.title == this.t("tabTitleAttendance"))
@@ -194,7 +185,7 @@ export default class employeeAttendanceCards extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -211,10 +202,7 @@ export default class employeeAttendanceCards extends React.PureComponent
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmEmployeeAttendance"  + this.tabIndex}
@@ -224,7 +212,7 @@ export default class employeeAttendanceCards extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
@@ -234,14 +222,13 @@ export default class employeeAttendanceCards extends React.PureComponent
                                             {
                                                 let tmpConfObj1 =
                                                 {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
                                                 }
                                                 
                                                 if((await this.employeeObj.save()) == 0)
                                                 {                                                    
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
+                                                    this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
                                                 }
@@ -256,7 +243,7 @@ export default class employeeAttendanceCards extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
                                             }
@@ -269,10 +256,9 @@ export default class employeeAttendanceCards extends React.PureComponent
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
                                     onClick={async()=>
                                     {
-                                        
                                         let tmpConfObj =
                                         {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
@@ -282,17 +268,14 @@ export default class employeeAttendanceCards extends React.PureComponent
                                         {
                                             this.employeeObj.dt('EMPLOYEE_GUID').removeAt(0)
                                             await this.employeeObj.dt('EMPLOYEE_GUID').delete();
+                                            this.toast.show({message:this.t("msgDeleteSuccess.msg"),type:"success"})
                                             this.init(); 
                                         }
                                         
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"
-                                    onClick={()=>
-                                    {
-                                        
-                                    }}/>
+                                    <NdButton id="btnCopy" parent={this} icon="copy" type="default"/>
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -306,7 +289,7 @@ export default class employeeAttendanceCards extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -324,10 +307,10 @@ export default class employeeAttendanceCards extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id={"frmEmployeeAttendance"  + this.tabIndex}>
+                            <NdForm colCount={2} id={"frmEmployeeAttendance"  + this.tabIndex}>
                                 {/* txtCode */}
-                                <Item>
-                                    <Label text={this.t("txtCode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCode")} alignment="right" />
                                     <NdTextBox id="txtCode" parent={this} simple={true} placeholder={this.t("employeePlace")} dt={{data:this.employeeObj.dt('EMPLOYEE'),field:"CODE"}}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
@@ -351,10 +334,7 @@ export default class employeeAttendanceCards extends React.PureComponent
                                             {
                                                 id:'02',
                                                 icon:'arrowdown',
-                                                onClick:()=>
-                                                {
-                                                    this.txtCode.value = Math.floor(Date.now() / 1000)
-                                                }
+                                                onClick:()=> { this.txtCode.value = Math.floor(Date.now() / 1000)}
                                             }
                                         ]
                                     }
@@ -386,9 +366,9 @@ export default class employeeAttendanceCards extends React.PureComponent
                                         </Validator>  
                                     </NdTextBox>
                                     {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCode"} parent={this} container={"#root"}
+                                    <NdPopGrid id={"pg_txtCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}      
                                     visible={false}
-                                    position={{of:'#root'}} 
+                                    position={{of:'#' + this.props.data.id + this.tabIndex}}  
                                     showTitle={true} 
                                     showBorders={true}
                                     width={'90%'}
@@ -401,47 +381,32 @@ export default class employeeAttendanceCards extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : "SELECT * FROM EMPLOYEE_VW_01 WHERE (((NAME like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) OR ((CODE like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) )",
+                                                query : `SELECT CODE, INSURANCE_NO, NAME, LAST_NAME FROM EMPLOYEE_VW_01 WHERE (((NAME like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) OR ((CODE like '%' + @EMPLOYEE_NAME + '%') OR (@EMPLOYEE_NAME = '')) )`,
                                                 param : ['EMPLOYEE_NAME:string|50']
                                             },
                                             sql:this.core.sql
                                         }
                                     }}
-                                    button=
-                                    {
-                                        {
-                                            id:'01',
-                                            icon:'more',
-                                            onClick:()=>
-                                            {
-                                                console.log(1111)
-                                            }
-                                        }
-                                    }
                                     >
-                                         <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
+                                        <Column dataField="CODE" caption={this.t("pg_txtCode.clmCode")} width={150} />
                                         <Column dataField="INSURANCE_NO" caption={this.t("pg_txtCode.clmInsuranceNo")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="NAME" caption={this.t("pg_txtCode.clmName")} width={300} defaultSortOrder="asc" />
                                         <Column dataField="LAST_NAME" caption={this.t("pg_txtCode.clmLastName")} width={300} defaultSortOrder="asc" />
                                     </NdPopGrid>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                          {/* PERSONEL BİLGİ POPUP */}
                          <div className='row px-2 pt-2'>
                             <div className='col-12'>
-                                <TabPanel height="100%" onItemRendered={this._onItemRendered} deferRendering={false}>
+                                <TabPanel height="100%" onItemRendered={this.onItemRendered } deferRendering={false}>
                                     <Item title={this.t("tabTitleAttendance")}>
                                         <div className='row px-2 py-2'>
                                             <div className='col-12'>
                                                 <Toolbar>
                                                     <Item location="after">
                                                         <Button icon="add"
-                                                        onClick={async ()=>
-                                                        {
-                                                           
-                                                            this.popAttendance.show();
-                                                        }}/>
+                                                        onClick={()=> { this.popAttendance.show() }}/>
                                                     </Item>
                                                 </Toolbar>
                                             </div>
@@ -472,8 +437,7 @@ export default class employeeAttendanceCards extends React.PureComponent
                                 </TabPanel>
                             </div>
                         </div>  
-                       
-                        </div> 
+                    </div> 
                      {/* PERSONEL BİLGİ POPUP */}
                      <div>
                         <NdPopUp parent={this} id={"popAttendance"} 
@@ -481,10 +445,10 @@ export default class employeeAttendanceCards extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popAttendance.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
                         height={'350'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -519,8 +483,7 @@ export default class employeeAttendanceCards extends React.PureComponent
                                     ]}
                                     displayExpr="text"  
                                     valueExpr="id"      
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                />
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} />
                                 </Item>
                                 <Item>
                                     <Label text={this.t("popAttendance.cmbPopAbsent_Reason")} alignment="right" />
@@ -535,7 +498,6 @@ export default class employeeAttendanceCards extends React.PureComponent
                                             {
                                                 let tmpEmpty = {...this.employeeObj.employeeAttendance.empty};
                                                
-                                                
                                                 tmpEmpty.ATTENDANCE_DATE = this.txtPopAttendance_Date.value
                                                 tmpEmpty.CHECK_IN_TIME = this.cmbPopCheck_In_Tıme.value
                                                 tmpEmpty.CHECK_OUT_TIME = this.cmbPopCheck_Out_Tıme.value
@@ -560,6 +522,7 @@ export default class employeeAttendanceCards extends React.PureComponent
                             </Form>
                         </NdPopUp>
                     </div> 
+                    <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )

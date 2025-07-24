@@ -4,7 +4,8 @@ const slsRpt_02_002 =
     chkZeroBalance : "Afficher Soldes 0",      
     txtCustomerCode : "Fournisseur ou Client",     
     btnCheck : "Actif",      
-    btnGet :"Rechercher",     
+    btnGet :"Rechercher",       
+    dtDate : "Date",
     grdListe :       
     {    
         clmAdress : "Adresse",     

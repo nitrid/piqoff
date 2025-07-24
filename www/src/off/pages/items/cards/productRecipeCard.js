@@ -4,18 +4,16 @@ import App from '../../../lib/app.js';
 import {productRecipeCls} from '../../../../core/cls/items.js'
 
 import ScrollView from 'devextreme-react/scroll-view';
-import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item, EmptyItem } from 'devextreme-react/form';
+import Toolbar, { Item } from 'devextreme-react/toolbar';
 import NdButton from '../../../../core/react/devex/button.js';
 import { NdLayout,NdLayoutItem } from '../../../../core/react/devex/layout';
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdTextBox, { Validator, RequiredRule } from '../../../../core/react/devex/textbox.js'
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdGrid,{Column,Editing,Paging,Scrolling,Button as grdbutton} from '../../../../core/react/devex/grid.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdAccessEdit from '../../../../core/react/devex/accesEdit.js';
-import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
-
+import { dialog } from '../../../../core/react/devex/dialog.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 export default class productRecipeCard extends React.PureComponent
 {
     constructor(props)
@@ -26,7 +24,7 @@ export default class productRecipeCard extends React.PureComponent
 
         this.productObj = new productRecipeCls();
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
     }
@@ -93,7 +91,7 @@ export default class productRecipeCard extends React.PureComponent
             this.btnDelete.setState({disabled:false});
         })
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == "RAW_ITEM_CODE")
         {
@@ -116,17 +114,14 @@ export default class productRecipeCard extends React.PureComponent
                         this.pg_txtItemCode.setVal(e.value)
                     }
                 }}
-                onValueChanged={(v)=>
-                {
-                    e.value = v.value
-                }}
+                onValueChanged={(v)=>{e.value = v.value}}
                 onChange={(async(r)=>
                 {
                     if(typeof r.event.isTrusted == 'undefined')
                     {
                         let tmpQuery = 
                         {
-                            query :"SELECT * FROM ITEMS_VW_01 WHERE CODE = @CODE",
+                            query : `SELECT TOP 1 GUID,CODE,NAME FROM ITEMS_VW_04 WHERE CODE = @CODE`,
                             param : ['CODE:string|50'],
                             value : [r.component._changedValue]
                         }
@@ -137,13 +132,7 @@ export default class productRecipeCard extends React.PureComponent
                         }
                         else
                         {
-                            let tmpConfObj =
-                            {
-                                id:'msgItemNotFound',showTitle:true,title:this.t("msgItemNotFound.title"),showCloseButton:true,width:'500px',height:'200px',
-                                button:[{id:"btn01",caption:this.t("msgItemNotFound.btn01"),location:'after'}],
-                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemNotFound.msg")}</div>)
-                            }
-                            await dialog(tmpConfObj);
+                            this.toast.show({message:this.t("msgItemNotFound.msg"),type:'warning'})
                         }
                     }
                 }).bind(this)}
@@ -180,7 +169,7 @@ export default class productRecipeCard extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query : "SELECT * FROM ITEMS_VW_01 WHERE CODE = @CODE",
+                query : `SELECT TOP 1 GUID,CODE,NAME FROM ITEMS_VW_01 WHERE CODE = @CODE`,
                 param : ['CODE:string|25'],
                 value : [pCode]
             }
@@ -230,7 +219,7 @@ export default class productRecipeCard extends React.PureComponent
     render()
     {
         return (
-            <React.Fragment>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -257,7 +246,7 @@ export default class productRecipeCard extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgItemBack',showTitle:true,title:this.t("msgItemBack.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgItemBack',showTitle:true,title:this.t("msgItemBack.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgItemBack.btn01"),location:'before'},{id:"btn02",caption:this.t("msgItemBack.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgItemBack.msg")}</div>)
                                             }
@@ -277,7 +266,7 @@ export default class productRecipeCard extends React.PureComponent
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'msgNewItem',showTitle:true,title:this.t("msgNewItem.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgNewItem',showTitle:true,title:this.t("msgNewItem.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgNewItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgNewItem.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgNewItem.msg")}</div>)
                                         }
@@ -298,7 +287,7 @@ export default class productRecipeCard extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgSave',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'before'},{id:"btn02",caption:this.t("msgSave.btn02"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
@@ -306,36 +295,27 @@ export default class productRecipeCard extends React.PureComponent
                                             let pResult = await dialog(tmpConfObj);
                                             if(pResult == 'btn01')
                                             {
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
-                                                
                                                 if((await this.productObj.save()) == 0)
                                                 {         
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                    await dialog(tmpConfObj1);
+                                                    this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:'success'})
                                                     this.btnSave.setState({disabled:true});
                                                     this.btnNew.setState({disabled:false});
                                                 }
                                                 else
                                                 {
-                                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    let tmpConfObj1 =
+                                                    {
+                                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                        content:(<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                                    }
                                                     await dialog(tmpConfObj1);
                                                 }
                                             }
                                         }                              
                                         else
                                         {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgSaveValid',showTitle:true,title:this.t("msgSaveValid.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                button:[{id:"btn01",caption:this.t("msgSaveValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSaveValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
+                                            this.toast.show({message:this.t("msgSaveValid.msg"),type:'warning'})
                                         }                                                 
                                     }}/>
                                 </Item>
@@ -345,7 +325,7 @@ export default class productRecipeCard extends React.PureComponent
                                     {
                                         let tmpConfObj =
                                         {
-                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'200px',
+                                            id:'msgDelete',showTitle:true,title:this.t("msgDelete.title"),showCloseButton:true,width:'500px',height:'auto',
                                             button:[{id:"btn01",caption:this.t("msgDelete.btn01"),location:'before'},{id:"btn02",caption:this.t("msgDelete.btn02"),location:'after'}],
                                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDelete.msg")}</div>)
                                         }
@@ -354,7 +334,6 @@ export default class productRecipeCard extends React.PureComponent
                                         if(pResult == 'btn01')
                                         {
                                             this.productObj.dt().removeAll()
-                                            
                                             await this.productObj.dt().delete();
                                             this.init(); 
                                         }
@@ -371,7 +350,7 @@ export default class productRecipeCard extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -428,9 +407,9 @@ export default class productRecipeCard extends React.PureComponent
                                                 </Validator>
                                             </NdTextBox>      
                                             {/* STOK SEÇİM POPUP */}
-                                            <NdPopGrid id={"pg_txtItemCode"} parent={this} container={"#root"} 
+                                            <NdPopGrid id={"pg_txtItemCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
                                             visible={false}
-                                            position={{of:'#root'}} 
+                                            position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                             showTitle={true} 
                                             showBorders={true}
                                             width={'90%'}
@@ -443,7 +422,7 @@ export default class productRecipeCard extends React.PureComponent
                                                 {
                                                     select:
                                                     {
-                                                        query : "SELECT GUID,CODE,NAME,STATUS FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                                        query : `SELECT GUID,CODE,NAME,STATUS FROM ITEMS_VW_04 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)`,
                                                         param : ['VAL:string|50']
                                                     },
                                                     sql:this.core.sql
@@ -467,9 +446,7 @@ export default class productRecipeCard extends React.PureComponent
                                         <div className="col-8 p-0">
                                             <NdTextBox id="txtItemName" parent={this} tabIndex={this.tabIndex} readOnly={true} simple={true}
                                             param={this.param.filter({ELEMENT:'txtItemName',USERS:this.user.CODE})} 
-                                            selectAll={true}
-                                            >
-                                            </NdTextBox>      
+                                            selectAll={true}/>
                                         </div>
                                     </div>
                                 </NdLayoutItem>
@@ -541,13 +518,7 @@ export default class productRecipeCard extends React.PureComponent
                                                 }
                                                 else
                                                 {
-                                                    let tmpConfObj =
-                                                    {
-                                                        id:'msgAddItemWarning',showTitle:true,title:this.t("msgAddItemWarning.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                        button:[{id:"btn01",caption:this.t("msgAddItemWarning.btnOk"),location:'before'}],
-                                                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAddItemWarning.msg")}</div>)
-                                                    }
-                                                    await dialog(tmpConfObj);
+                                                    this.toast.show({message:this.t("msgAddItemWarning.msg"),type:'warning'})
                                                 }
                                             }}/>
                                         </div>
@@ -570,9 +541,10 @@ export default class productRecipeCard extends React.PureComponent
                                                 await this.grdList.dataRefresh({source:this.productObj.dt()});
                                             }}
                                             >
-                                                <Paging defaultPageSize={6} />
+                                                <Paging enabled={false} />
+                                                <Scrolling mode="virtual" />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                                <Column dataField="RAW_ITEM_CODE" caption={this.t("grdList.clmCode")} allowEditing={true} width={'30%'} editCellRender={this._cellRoleRender}/>
+                                                <Column dataField="RAW_ITEM_CODE" caption={this.t("grdList.clmCode")} allowEditing={true} width={'30%'} editCellRender={this.cellRoleRender}/>
                                                 <Column dataField="RAW_ITEM_NAME" caption={this.t("grdList.clmName")} allowEditing={false} width={'60%'}/>
                                                 <Column dataField="RAW_QTY" caption={this.t("grdList.clmQuantity")} visible={true} allowEditing={true} width={'10%'}/>
                                             </NdGrid>
@@ -586,8 +558,9 @@ export default class productRecipeCard extends React.PureComponent
                     <div>
                         <NdAccessEdit id={"accesComp"} parent={this}/>
                     </div>                            
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
-            </React.Fragment>
+            </div>
         )
     }
 }

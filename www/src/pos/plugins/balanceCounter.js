@@ -101,10 +101,11 @@ posDoc.prototype.getItem = async function(pCode)
     let tmpTicketNo = getBarPattern(pCode)
     if(typeof tmpTicketNo != 'undefined')
     {
-        if(!this.loading.current.instance.option('visible'))
+        console.log('tmpTicketNo',tmpTicketNo)
+        if(!this.state.loading)
         {
             this.txtBarcode.value = "";
-            this.loading.current.instance.show()
+            this.loading.show()
             let tmpBalanceDt = await getBalanceCounter(tmpTicketNo,pCode)
 
             if(tmpBalanceDt.length > 0)
@@ -145,7 +146,7 @@ posDoc.prototype.getItem = async function(pCode)
         
                         if(tmpQuantity == 0)
                         {
-                            this.loading.current.instance.hide()
+                            this.loading.hide()
                             return
                         }
                         let resultQuantity = Number((tmpDQuantity) - (tmpQuantity)).round(3)
@@ -157,7 +158,7 @@ posDoc.prototype.getItem = async function(pCode)
                             
                             let tmpConfObj =
                             {
-                                id:'msgBarcodeWeighing',showTitle:true,title:this.lang.t("msgBarcodeWeighing.title"),showCloseButton:true,width:'400px',height:'200px',
+                                id:'msgBarcodeWeighing',showTitle:true,title:this.lang.t("msgBarcodeWeighing.title"),showCloseButton:true,width:'400px',height:'auto',
                                 button:[{id:"btn01",caption:this.lang.t("msgBarcodeWeighing.btn01"),location:'before'}],
                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{tmpLangMsg} {Number.money.sign}</div>)
                             }
@@ -200,21 +201,23 @@ posDoc.prototype.getItem = async function(pCode)
                                 )
                             }
                             let tmpConfResult = await dialog(tmpConfObj)
+                            
                             if(tmpConfResult == 'btn01')
                             {
-                                this.loading.current.instance.hide()
+                                this.loading.hide()
                                 return
                             }
                             else
                             {
                                 let tmpBalResult = await this.popBalanceCounterDesc.show()
+                                
                                 if(typeof tmpBalResult != 'undefined')
                                 {
                                     await this.descSave("BALANCE COUNTER",tmpBalResult,"00000000-0000-0000-0000-000000000000")
                                 }
                                 else
                                 {
-                                    this.loading.current.instance.hide()
+                                    this.loading.hide()
                                     return
                                 }
                             }
@@ -246,12 +249,12 @@ posDoc.prototype.getItem = async function(pCode)
                             title:this.lang.t("msgBarcodeNotFound.title"),
                             showCloseButton:true,
                             width:'500px',
-                            height:'200px',
+                            height:'auto',
                             button:[{id:"btn01",caption:this.lang.t("msgBarcodeNotFound.btn01"),location:'after'}],
                             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeNotFound.msg")}</div>)
                         }
                         await dialog(tmpConfObj);
-                        this.loading.current.instance.hide()
+                        this.loading.hide()
                         return
                     }
                 }
@@ -300,7 +303,6 @@ posDoc.prototype.getItem = async function(pCode)
                         console.log(this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl)
                         if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl != 'undefined' && this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl)
                         {
-                            console.log(tmpBalanceDt[0].STATUS)
                             if(typeof tmpBalanceDt[0].STATUS == 'undefined')
                             {
                                 //BALANCE COUNTER STATUS INSERT İŞLEMİ
@@ -352,13 +354,13 @@ posDoc.prototype.getItem = async function(pCode)
                     title:this.lang.t("msgBarcodeBalanceNotFound.title"),
                     showCloseButton:true,
                     width:'500px',
-                    height:'200px',
+                    height:'auto',
                     button:[{id:"btn01",caption:this.lang.t("msgBarcodeBalanceNotFound.btn01"),location:'after'}],
                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeBalanceNotFound.msg")}</div>)
                 }
                 await dialog(tmpConfObj);
             }
-            this.loading.current.instance.hide()
+            this.loading.hide()
         }
     }
     else

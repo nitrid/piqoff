@@ -6,9 +6,7 @@ import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar,{ Item } from 'devextreme-react/toolbar';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import NdButton from '../../../../core/react/devex/button.js';
-import NbTableView from "../../../../rest/tools/tableView.js"
-import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
+import NbTableView from "../../../../rest/tools/tableView.js";
 
 export default class TableWatch extends React.PureComponent
 {
@@ -16,14 +14,14 @@ export default class TableWatch extends React.PureComponent
     {
         super(props)
 
+        this.core = App.instance.core;
+        this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+        this.tableObj = new restTableCls();
+
         this.state = 
         {
             isLoading : true
         } 
-
-        this.core = App.instance.core;
-        this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
-        this.tableObj = new restTableCls();
         this.prevCode = "";
         this.tabIndex = props.data.tabkey
     }
@@ -38,7 +36,7 @@ export default class TableWatch extends React.PureComponent
 
         this.tableView.items.selectCmd = 
         {
-            query : "SELECT * FROM REST_TABLE_VW_01 ORDER BY CODE ASC"
+            query : `SELECT * FROM REST_TABLE_VW_01 ORDER BY CODE ASC`
         }
         await this.tableView.items.refresh()
         this.tableView.updateState()
@@ -54,10 +52,7 @@ export default class TableWatch extends React.PureComponent
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnRefresh" parent={this} icon="refresh" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init()
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                             </Toolbar>
                         </div>

@@ -67,6 +67,10 @@ const prsnl_01_002 =
     validation : 
     {
         frmEmployeeAddress: "Le code ne peut être vide !",
+    },
+    msgDeleteSuccess :
+    {
+        msg: "Suppression réussie !"
     }
 }
 export default prsnl_01_002

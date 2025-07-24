@@ -1,36 +1,24 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { docCls,docItemsCls,docCustomerCls,deptCreditMatchingCls } from '../../../../core/cls/doc.js';
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import ContextMenu from 'devextreme-react/context-menu';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
+import  { Item } from 'devextreme-react/form';   
 
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export,Summary,StateStoring,ColumnChooser,TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Scrolling,Export,Summary,StateStoring,ColumnChooser,TotalItem} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
-import fr from '../../../meta/lang/devexpress/fr.js';
-import tr from '../../../meta/lang/tr/tr.js';
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
+import {NdForm,NdItem, NdLabel} from '../../../../core/react/devex/form.js';   
 
 export default class customerProfitReport extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+
         this.state = 
         {
             itemOptions: [],
@@ -41,7 +29,7 @@ export default class customerProfitReport extends React.PureComponent
         
         this.cmbItem = null;
 
-        this._btnGetirClick = this._btnGetirClick.bind(this)
+        this.btnGetirClick = this.btnGetirClick.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
     }
@@ -49,6 +37,19 @@ export default class customerProfitReport extends React.PureComponent
     {
         await this.core.util.waitUntil(0)
     }
+
+    loadState() 
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
+
     render(){
         return (
             <div>
@@ -68,7 +69,7 @@ export default class customerProfitReport extends React.PureComponent
                                             {
                                                 let tmpConfObj =
                                                 {
-                                                    id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                    id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                     button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                                 }
@@ -85,44 +86,36 @@ export default class customerProfitReport extends React.PureComponent
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
-                        <div className="col-6">
-                            <NbDateRange id={"dtDate"} parent={this} 
-                            startDate={moment().startOf('month')} 
-                            endDate={moment().endOf('month')}/>
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-6">
-                            <NdSelectBox simple={true} parent={this} id="cmbCustomerMainGrp"
-                            value={''}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            placeholder={this.t("selectCustomerMainGrp")}
-                            showClearButton={true}
-                            data={{
-                                source:{
-                                    select:{
-                                        query:  "SELECT NAME,CODE FROM CUSTOMER_GROUP " +
-                                                "ORDER BY NAME",
-                                    },
-                                    sql: this.core.sql
-                                }
-                            }}
-                            />
+                        <div className="col-12">
+                            <NdForm colCount={2} id="frmKriter">
+                                <NdItem>
+                                    <NdLabel text={this.t("grdListe.clmDocDate")}/>
+                                    <NbDateRange id={"dtDate"} parent={this} 
+                                    startDate={moment().startOf('month')} 
+                                    endDate={moment().endOf('month')}/>
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("grdListe.clmCustomerMainGrp")}/>
+                                    <NdSelectBox simple={true} parent={this} id="cmbCustomerMainGrp"
+                                    value={''}
+                                    displayExpr="NAME"                       
+                                    valueExpr="CODE"
+                                    placeholder={this.t("selectCustomerMainGrp")}
+                                    showClearButton={true}
+                                    />
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                                
                         </div>
                         <div className="col-3">
-                                
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -147,7 +140,7 @@ export default class customerProfitReport extends React.PureComponent
                                     <ColumnChooser enabled={true} />
                                     {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={true} />}
                                     {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,20,50]} showPageSizeSelector={true} /> : <Paging enabled={true} />}
-                                    {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                    {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
                                     <Export fileName={this.lang.t("menuOff.slsRpt_01_013")} enabled={true} allowExportSelectedData={true} />
                                     <Column dataField="ROW_NO" caption={this.t("grdListe.clmRowNo")}  width={70} visible={true}/>
                                     <Column dataField="INPUT_CODE" caption={this.t("grdListe.clmInputCode")} width={130} visible={true}/>
@@ -189,60 +182,45 @@ export default class customerProfitReport extends React.PureComponent
             </div>
         )
     }
-
-    async _btnGetirClick()
+    async btnGetirClick()
     {
             let tmpSource =
             {
                 source : 
                 {
-                    groupBy : this.groupList,
                     select: 
                     {
-                        query: "SELECT " +
-                        "ROW_NUMBER() OVER(ORDER BY INPUT_CODE) AS ROW_NO, " +
-                        "CUSTOMER_GROUP_NAME, " +
-                        "CUSTOMER_GROUP_CODE, " +
-                        "INPUT_NAME, " +
-                        "INPUT_CODE, " +
-                        "SUM(QUANTITY) AS TOTAL_QUANTITY, " +
-                        "ROUND(AVG(COST_PRICE), 2) AS AVG_COST_PRICE, " +
-                        "ROUND(SUM(TOTAL_COST), 2) AS TOTAL_COST, " +
-                        "ROUND(SUM(TOTALHT), 2) AS TOTALHT, " +
-                        "ROUND((SUM(TOTALHT) - SUM(TOTAL_COST)), 2) AS TOTAL_PROFIT, " +
-                        "ROUND(AVG(TOTALHT / NULLIF(QUANTITY, 0)), 2) AS AVG_SELL_PRICE, " +
-                        "CASE WHEN SUM(TOTAL_COST) > 0 THEN " +
-                        "ROUND(((SUM(TOTALHT) - SUM(TOTAL_COST)) / SUM(TOTAL_COST)) * 100, 2) " +
-                        "ELSE 0 END AS PROFIT_PERCENT " +
-                        "FROM DOC_ITEMS_DETAIL_VW_01 " +
-                        "WHERE TYPE = 1 AND REBATE= 0 AND " +
-                        "(DOC_TYPE = 20 OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) " +
-                        "AND (CUSTOMER_GROUP_CODE = @MAIN_CODE OR @MAIN_CODE = '')  " +
-                        "AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE  " +
-                        "GROUP BY CUSTOMER_GROUP_NAME, CUSTOMER_GROUP_CODE, INPUT_NAME, INPUT_CODE " +
-                        "ORDER BY CUSTOMER_GROUP_NAME, INPUT_NAME",
+                        query: 
+                            `SELECT 
+                            ROW_NUMBER() OVER(ORDER BY INPUT_CODE) AS ROW_NO, 
+                            CUSTOMER_GROUP_NAME, 
+                            CUSTOMER_GROUP_CODE, 
+                            INPUT_NAME, 
+                            INPUT_CODE, 
+                            SUM(QUANTITY) AS TOTAL_QUANTITY, 
+                            ROUND(AVG(COST_PRICE), 2) AS AVG_COST_PRICE, 
+                            ROUND(SUM(TOTAL_COST), 2) AS TOTAL_COST, 
+                            ROUND(SUM(TOTALHT), 2) AS TOTALHT, 
+                            ROUND((SUM(TOTALHT) - SUM(TOTAL_COST)), 2) AS TOTAL_PROFIT, 
+                            ROUND(AVG(TOTALHT / NULLIF(QUANTITY, 0)), 2) AS AVG_SELL_PRICE, 
+                            CASE WHEN SUM(TOTAL_COST) > 0 THEN 
+                            ROUND(((SUM(TOTALHT) - SUM(TOTAL_COST)) / SUM(TOTAL_COST)) * 100, 2) 
+                            ELSE 0 END AS PROFIT_PERCENT 
+                            FROM DOC_ITEMS_DETAIL_VW_01 
+                            WHERE TYPE = 1 AND REBATE= 0 AND 
+                            (DOC_TYPE = 20 OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) 
+                            AND (CUSTOMER_GROUP_CODE = @MAIN_CODE OR @MAIN_CODE = '')  
+                            AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE  
+                            GROUP BY CUSTOMER_GROUP_NAME, CUSTOMER_GROUP_CODE, INPUT_NAME, INPUT_CODE 
+                            ORDER BY CUSTOMER_GROUP_NAME, INPUT_NAME`,
                     param : ['FIRST_DATE:date','LAST_DATE:date','MAIN_CODE:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbCustomerMainGrp.value]
                     },
                     sql : this.core.sql
                 }
             }
-    
-            await this.grdListe.dataRefresh(tmpSource)
-    }
 
-    loadState() 
-    {
-        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
-        return tmpLoad.getValue()
-    }
-    saveState(e)
-    {
-        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
-        tmpSave.setValue(e)
-        console.log(e)
-        console.log(tmpSave)
-        tmpSave.save()
+            await this.grdListe.dataRefresh(tmpSource)
     }
 }
 

@@ -4,6 +4,7 @@ const fns_04_001 =
     cmbBank : "Bankwählen",  
     btnCheck : "Aktiv",  
     btnGet :"Suchen",  
+    dtDate : "Datum",
     grdListe : 
     {
         clmOutputName : "Versandkonto",   

@@ -1,56 +1,44 @@
 import React from 'react';
 import App from '../../../lib/app.js';
 import {editItemCls} from '../../../../core/cls/items.js'
-import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import ContextMenu from 'devextreme-react/context-menu';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
+import NdTextBox, { Validator, StringLengthRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,Pager,KeyboardNavigation,Export} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Editing,Paging,Pager,Export} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import NdTagBox from '../../../../core/react/devex/tagbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
-import tr from '../../../meta/lang/devexpress/tr.js';
-
+import { NdForm, NdItem, NdLabel } from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 export default class collectiveItemEdit extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.editObj = new editItemCls();
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
-        this._btnGetClick = this._btnGetClick.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
+        this.btnGetClick = this.btnGetClick.bind(this)
     }
-    componentDidMount()
+    async componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.init()
-        }, 1000);
+        await this.core.util.waitUntil(0)
+        this.init()
     }
     async init()
     {
         this.editObj.clearAll()
         await this.grdItemList.dataRefresh({source:this.editObj.dt('ITEM_EDIT')});
     }
-    async _btnGetClick()
+    async btnGetClick()
     {
         if(this.txtName.value != '' && this.txtName.value.slice(-1) != '*')
         {
@@ -73,13 +61,15 @@ export default class collectiveItemEdit extends React.PureComponent
             }
             tmpSrc = "((CODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (BARCODE IN (" + TmpVal.substring(1,TmpVal.length) + ")) OR (MULTICODE IN (" + TmpVal.substring(1,TmpVal.length) + "))) AND"
         }
-        App.instance.setState({isExecute:true})
+
+        App.instance.loading.show()
         await this.editObj.load({NAME:this.txtName.value.replaceAll("*", "%"),MAIN_GRP:this.cmbItemGroup.value,CUSTOMER_CODE:this.cmbTedarikci.value,QUERY:tmpSrc})
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
+
         this.netMargin()
         this.grossMargin()
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == 'ORGINS')
         {
@@ -96,8 +86,7 @@ export default class collectiveItemEdit extends React.PureComponent
                 searchEnabled={true} pageSize ={50} showClearButton={true}
                 onValueChanged={onValueChanged}
                 data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY CODE ASC"},sql:this.core.sql}}}
-                >
-                </NdSelectBox>      
+                />
             )
         }
         else if(e.column.dataField == 'VAT')
@@ -107,7 +96,7 @@ export default class collectiveItemEdit extends React.PureComponent
                 e.setValue(data.value)
             }
             return (
-            <NdSelectBox simple={true} parent={this} id="clmVat"
+                <NdSelectBox simple={true} parent={this} id="clmVat"
                 displayExpr="VAT"                       
                 valueExpr="VAT"
                 notRefresh = {true}
@@ -115,8 +104,7 @@ export default class collectiveItemEdit extends React.PureComponent
                 searchEnabled={true} pageSize ={50} showClearButton={true}
                 onValueChanged={onValueChanged}
                 data={{source:{select:{query : "SELECT VAT FROM VAT ORDER BY ID ASC"},sql:this.core.sql}}}
-                >
-            </NdSelectBox>    
+                />
             ) 
         }
         else if(e.column.dataField == 'UNDER_UNIT_NAME')
@@ -126,7 +114,7 @@ export default class collectiveItemEdit extends React.PureComponent
                 e.setValue(data.value)
             }
             return (
-            <NdSelectBox simple={true} parent={this} id="clmUnit"
+                <NdSelectBox simple={true} parent={this} id="clmUnit"
                 displayExpr="SYMBOL"                       
                 valueExpr="SYMBOL"
                 notRefresh = {true}
@@ -134,8 +122,7 @@ export default class collectiveItemEdit extends React.PureComponent
                 searchEnabled={true} pageSize ={50} showClearButton={true}
                 onValueChanged={onValueChanged}
                 data={{source:{select:{query : "SELECT SYMBOL FROM UNIT ORDER BY ID"},sql:this.core.sql}}}
-                >
-            </NdSelectBox>    
+                />
             ) 
         }
         else if(e.column.dataField == 'CUSTOMS')
@@ -148,29 +135,23 @@ export default class collectiveItemEdit extends React.PureComponent
                 <NdTextBox id={"txtCustoms"+e.rowIndex} parent={this} simple={true} tabIndex={this.tabIndex}
                 upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} 
                 onValueChanged={async (v)=>
+                {
+                    const punctuationKeyCodes = [' ','.',',', ';', ':', '/', '?', '%', ']', '[', '{', '}','\n'];
+
+                    if (punctuationKeyCodes.includes(v.event.key)) 
                     {
-                        const punctuationKeyCodes = [' ','.',',', ';', ':', '/', '?', '%', ']', '[', '{', '}','\n'];
-    
-                        if (punctuationKeyCodes.includes(v.event.key)) 
-                        {
-                            this["txtCustoms"+e.rowIndex].value = v.previousValue
-                        }
-                       
-                        onValueChanged(this["txtCustoms"+e.rowIndex].value)
-                    }}
+                        this["txtCustoms"+e.rowIndex].value = v.previousValue
+                    }
+                    
+                    onValueChanged(this["txtCustoms"+e.rowIndex].value)
+                }}
                 >     
                     <Validator validationGroup={"frmItems" + this.tabIndex}>
-                    <StringLengthRule 
-                        message={this.t("validOriginMax8")}   
-                        max={8}
-                        min={8}
-                        ignoreEmptyValue={true}
-                    />
-                </Validator>
+                        <StringLengthRule message={this.t("validOriginMax8")} max={8} min={8} ignoreEmptyValue={true}/>
+                    </Validator>
                 </NdTextBox>      
             )
         }
-        
     }
     async grossMargin()
     {
@@ -217,12 +198,13 @@ export default class collectiveItemEdit extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -235,36 +217,31 @@ export default class collectiveItemEdit extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmCriter">
+                            <NdForm colCount={2} id="frmCriter">
                                 {/* txtCode */}
-                                <Item>
-                                    <Label text={this.t("txtCode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCode")} alignment="right" />
                                     <NdTagBox id="txtCode" parent={this} simple={true} value={[]} placeholder={this.t("codePlaceHolder")}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
-                                        <NdSelectBox simple={true} parent={this} id="cmbTedarikci" showClearButton={true} notRefresh={true}  searchEnabled={true} 
-                                        displayExpr="TITLE"                       
-                                        valueExpr="CODE"
-                                        data={{source: {select : {query:"SELECT CODE,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2) ORDER BY TITLE ASC"},sql : this.core.sql}}}
-                                        />
-                                </Item>
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbTedarikci" showClearButton={true} notRefresh={true}  searchEnabled={true} 
+                                    displayExpr="TITLE"                       
+                                    valueExpr="CODE"
+                                    data={{source: {select : {query:"SELECT CODE,TITLE FROM CUSTOMER_VW_01 WHERE GENUS IN(1,2) ORDER BY TITLE ASC"},sql : this.core.sql}}}
+                                    />
+                                </NdItem>
                                 {/* txtName */}
-                                <Item>
-                                    <Label text={this.t("txtName")} alignment="right" />
-                                    <NdTextBox id="txtName" parent={this} simple={true}  placeholder={this.t("namePlaceHolder")} onEnterKey={this._btnGetClick}
-                                    onChange={(async()=>
-                                    {
-                                      
-                                    }).bind(this)}
+                                <NdItem>
+                                    <NdLabel text={this.t("txtName")} alignment="right" />
+                                    <NdTextBox id="txtName" parent={this} simple={true}  placeholder={this.t("namePlaceHolder")} onEnterKey={this.btnGetClick}
                                     param={this.param.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtName',USERS:this.user.CODE})}
-                                    >
-                                    </NdTextBox>
-                                </Item>
+                                    />
+                                </NdItem>
                                  {/* cmbItemGroup */}
-                                 <Item>
-                                    <Label text={this.t("cmbItemGroup")} alignment="right" />
+                                 <NdItem>
+                                    <NdLabel text={this.t("cmbItemGroup")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbItemGroup"
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
@@ -272,9 +249,6 @@ export default class collectiveItemEdit extends React.PureComponent
                                     showClearButton={true}
                                     searchEnabled={true}
                                     notRefresh = {true}
-                                    onValueChanged={(async()=>
-                                        {
-                                        }).bind(this)}
                                     data={{source:{select:{query : "SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql:this.core.sql}}}
                                     param={this.param.filter({ELEMENT:'cmbItemGroup',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbItemGroup',USERS:this.user.CODE})}
@@ -291,23 +265,14 @@ export default class collectiveItemEdit extends React.PureComponent
                                             },
                                         ]
                                     }
-                                    >
-                                    </NdSelectBox>
-                                </Item>
-                            </Form>
+                                    />
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
-                        <div className="col-3">
-                          
-                        </div>
-                        <div className="col-3">
-                            
-                        </div>
-                        <div className="col-3">
-                        </div>
-                        <div className="col-3">
-                        <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                        <div className="col-3 offset-9">
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -337,28 +302,27 @@ export default class collectiveItemEdit extends React.PureComponent
                             }}
                             onSaving={async(e)=>
                             {
-                                App.instance.setState({isExecute:true})
+                                App.instance.loading.show()
                             }}
                             onSaved={async(e)=>
                             {
-                                App.instance.setState({isExecute:true})
-                                let tmpConfObj1 =
-                                {
-                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                }
+                                App.instance.loading.show()
                                 
-                                console.log(this.editObj.dt())
+                                
                                 if(await this.editObj.save() == 0)
                                 {                                                    
-                                    App.instance.setState({isExecute:false})
-                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                    await dialog(tmpConfObj1);
+                                    App.instance.loading.hide()
+                                    this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
                                 }
                                 else
                                 {
-                                    App.instance.setState({isExecute:false})
-                                    tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                    App.instance.loading.hide()
+                                    let tmpConfObj1 =
+                                    {
+                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
+                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                        content: (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                    }
                                     await dialog(tmpConfObj1);
                                 }
                             }}
@@ -368,10 +332,12 @@ export default class collectiveItemEdit extends React.PureComponent
                                 {
                                     e.cellElement.style.color = e.data.GROSS_MARGIN_RATE < 30 ? "red" : "blue";
                                 }
+
                                 if(e.rowType === "data" && e.column.dataField === "NET_MARGIN")
                                 {
                                     e.cellElement.style.color = e.data.NET_MARGIN_RATE < 30 ? "red" : "blue";
                                 }
+
                                 if(e.rowType === "data" && e.column.dataField === "PRICE_SALE")
                                 {
                                     //GROSS_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
@@ -405,26 +371,22 @@ export default class collectiveItemEdit extends React.PureComponent
                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdItemList.clmCustomerPrice")} visible={true} width={75}/> 
                                 <Column dataField="MAIN_UNIT_NAME" caption={this.t("grdItemList.clmMainUnit")} visible={false} width={100} allowEditing={false}/> 
                                 <Column dataField="PRICE_SALE" caption={this.t("grdItemList.clmPriceSale")} visible={true} width={75} /> 
-                                <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={130} editCellRender={this._cellRoleRender}/> 
+                                <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={130} editCellRender={this.cellRoleRender}/> 
                                 <Column dataField="GROSS_MARGIN" caption={this.t("grdItemList.clmGrossMargin")} visible={true} width={75} allowEditing={false}/> 
                                 <Column dataField="NET_MARGIN" caption={this.t("grdItemList.clmNetMargin")} visible={true} width={75} allowEditing={false}/> 
                                 <Column dataField="MARGIN" caption={this.t("grdItemList.clmMargin")} visible={true} width={75} allowEditing={false}/>
-                                <Column dataField="CUSTOMS" caption={this.t("grdItemList.clmCustoms")} visible={true} width={75} editCellRender={this._cellRoleRender}>
-                                <StringLengthRule 
-                                    message={this.t("validOriginMax8")}   
-                                    max={8}
-                                    min={8}
-                                    ignoreEmptyValue={true}
-                                />    
+                                <Column dataField="CUSTOMS" caption={this.t("grdItemList.clmCustoms")} visible={true} width={75} editCellRender={this.cellRoleRender}>
+                                    <StringLengthRule message={this.t("validOriginMax8")} max={8} min={8} ignoreEmptyValue={true}/>    
                                 </Column>   
-                                <Column dataField="UNDER_UNIT_NAME" caption={this.t("grdItemList.clmUnderUnit")} visible={true} width={100}  editCellRender={this._cellRoleRender}/> 
+                                <Column dataField="UNDER_UNIT_NAME" caption={this.t("grdItemList.clmUnderUnit")} visible={true} width={100}  editCellRender={this.cellRoleRender}/> 
                                 <Column dataField="UNDER_FACTOR" caption={this.t("grdItemList.clmUnderFactor")} visible={true} width={70}/> 
-                                <Column dataField="VAT" caption={this.t("grdItemList.clmVat")} visible={true} width={110} editCellRender={this._cellRoleRender}/>    
+                                <Column dataField="VAT" caption={this.t("grdItemList.clmVat")} visible={true} width={110} editCellRender={this.cellRoleRender}/>    
                                 <Column dataField="WEIGHING" caption={this.t("grdItemList.clmWeighing")} visible={true} width={70}/>  
                                 <Column dataField="STATUS" caption={this.t("grdItemList.clmStatus")} visible={true} width={50}/>    
                             </NdGrid>
                         </div>
                     </div>
+                    <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )

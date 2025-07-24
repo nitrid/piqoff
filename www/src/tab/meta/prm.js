@@ -335,5 +335,21 @@ export const prm =
             CAPTION : "Müşteri tanimlama menü"
         }
     },
+     // Müsteri tanimlama menü
+     {
+        TYPE : 3,
+        ID :"openInvoiceList",
+        VALUE : true,
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "TAB",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "menu",
+            CAPTION : "Açık Fatura Listesi menü"
+        }
+    },
     //#endregion
 ]

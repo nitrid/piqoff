@@ -5,6 +5,7 @@ const slsRpt_02_003 =
     txtCustomerCode : "Müşteri",   
     btnCheck : "Aktif",   
     btnGet :"Getir",   
+    dtDate : "Tarih",
     grdListe :    
     {   
         clmRef: "Fatura Seri",

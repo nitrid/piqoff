@@ -23,15 +23,15 @@ const lang =
         title : "Uyarı",
         btn01 : "Evet",
         btn02 : "Hayır",
-        msg : "Seçilmeyen toplam {{count}} ürün var ! Seçili ürünleri satış işlemine çevirmek istediğinize eminmisiniz ?",
-        msg1 : "Seçili ürünleri satış işlemine çevirmek istediğinize eminmisiniz ?"
+        msg : "Seçilmeyen toplam {{count}} ürün var ! Seçili ürünleri satış işlemine çevirmek istediğinize emin misiniz ?",
+        msg1 : "Seçili ürünleri satış işlemine çevirmek istediğinize emin misiniz ?"
     },
     msgRestDiscount : 
     {
         title : "Uyarı",
         btn01 : "Evet",
         btn02 : "Hayır",
-        msg : "Seçili ürünü bedava vermek istediğinize eminmisiniz ?",
+        msg : "Seçili ürünü bedava vermek istediğinize emin misiniz ?",
     },
     popRestNP :
     {
@@ -59,7 +59,7 @@ const lang =
         title : "Uyarı",
         btn01 : "Evet",
         btn02 : "Hayır",
-        msg : "Satış ekranında önceden eklenmiş satırlar var. Devam etmek istediğinize eminmisiniz ?"
+        msg : "Satış ekranında önceden eklenmiş satırlar var. Devam etmek istediğinize emin misiniz ?"
     },
     msgAllreadySale : 
     {

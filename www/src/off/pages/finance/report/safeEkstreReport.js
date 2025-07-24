@@ -3,19 +3,14 @@ import App from '../../../lib/app.js';
 import moment from 'moment';
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label,EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
-import NdTextBox from '../../../../core/react/devex/textbox.js'
+import NdGrid,{Column,ColumnChooser,Paging,Pager,Scrolling,Export,Summary,TotalItem,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import { NdForm,NdItem,NdLabel } from '../../../../core/react/devex/form.js';
 
 export default class safeEkstreReport extends React.PureComponent
 {
@@ -23,99 +18,28 @@ export default class safeEkstreReport extends React.PureComponent
     {
         super(props)
 
-        this.state = 
-        {
-            columnListValue : ['INPUT_NAME','OUTPUT_NAME','REF','REF_NO','DOC_DATE','DOC_AMOUNT']
-        }
-        
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "INPUT_NAME",NAME : this.t("grdListe.clmInputName")},                                   
-            {CODE : "OUTPUT_NAME",NAME : this.t("grdListe.clmOutputName")},                                   
-            {CODE : "REF",NAME : this.t("grdListe.clmRef")},
-            {CODE : "REF_NO",NAME : this.t("grdListe.clmRefNo")},
-            {CODE : "DOC_DATE",NAME : this.t("grdListe.clmDocDate")},
-            {CODE : "DOC_AMOUNT",NAME : this.t("grdListe.clmAmount")},
-        ]
-      
-        this.groupList = [];
-        this._btnGetirClick = this._btnGetirClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
+
+        this.btnGetirClick = this.btnGetirClick.bind(this)
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-        }, 1000);
+        setTimeout(async () => { this.Init() }, 1000);
     }
-    _columnListBox(e)
+    loadState()
     {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'OUTPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('OUTPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('INPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }                
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'DOC_AMOUNT') != 'undefined')
-                {
-                    this.groupList.push('DOC_AMOUNT')
-                }
-                
-                for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdListe.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
+        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
     }
-    async _btnGetirClick()
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE, PAGE:this.props.data.id, APP:"OFF"})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
+    async btnGetirClick()
     {
        
         let tmpSource =
@@ -125,7 +49,7 @@ export default class safeEkstreReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *,CASE WHEN INPUT = @SAFE THEN AMOUNT ELSE (AMOUNT * -1) END AS DOC_AMOUNT FROM DOC_CUSTOMER_VW_01 WHERE ((INPUT = @SAFE) OR (OUTPUT  = @SAFE)) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE" ,
+                    query : `SELECT *,CASE WHEN INPUT = @SAFE THEN AMOUNT ELSE (AMOUNT * -1) END AS DOC_AMOUNT FROM DOC_CUSTOMER_VW_01 WHERE ((INPUT = @SAFE) OR (OUTPUT  = @SAFE)) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE`,
                     param : ['FIRST_DATE:date','LAST_DATE:date','SAFE:string|50'],
                     value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbSafe.value]
                 },
@@ -134,12 +58,11 @@ export default class safeEkstreReport extends React.PureComponent
         }
 
         await this.grdListe.dataRefresh(tmpSource)
-      
     }
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -156,7 +79,7 @@ export default class safeEkstreReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -174,47 +97,35 @@ export default class safeEkstreReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmKriter">
-                                <Item>
-                                    <Label text={this.t("cmbSafe")} alignment="right" />
+                            <NdForm colCount={2} id="frmKriter">
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbSafe")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbSafe"
                                     displayExpr="NAME"                       
                                     valueExpr="GUID"
                                     value=""
                                     searchEnabled={true}
                                     notRefresh={true}
-                                    onValueChanged={(async()=>
-                                        {
-
-                                        }).bind(this)}
-                                    data={{source:{select:{query : "SELECT * FROM SAFE_VW_01"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT * FROM SAFE_VW_01`},sql:this.core.sql}}}
                                     >
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("dtDate")} alignment="right" />
                                     <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('month')} endDate={moment().endOf('month')}/>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
                         </div>
                         <div className="col-3">
-                      
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -228,14 +139,17 @@ export default class safeEkstreReport extends React.PureComponent
                             width={'100%'}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
+                            showRowLines={true}
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
                             >
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdListe"}/>
+                                <ColumnChooser enabled={true} />
                                 <Export fileName={this.lang.t("menuOff.slsRpt_01_003")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="DOC_DATE" caption={this.t("grdListe.clmDocDate")} visible={true} dataType="date" width={100}
+                                <Column dataField="DOC_DATE" caption={this.t("grdListe.clmDocDate")} visible={true} dataType="date" width={120}
                                 editorOptions={{value:null}}
                                 cellRender={(e) => 
                                 {
@@ -243,14 +157,13 @@ export default class safeEkstreReport extends React.PureComponent
                                     {
                                         return e.text
                                     }
-                                    
                                     return
                                 }}/>
-                                <Column dataField="OUTPUT_NAME" caption={this.t("grdListe.clmOutputName")} width={120} visible={true}/> 
-                                <Column dataField="INPUT_NAME" caption={this.t("grdListe.clmInputName")} width={120} visible={true}/> 
-                                <Column dataField="REF" caption={this.t("grdListe.clmRef")} width={90} visible={true}/> 
-                                <Column dataField="REF_NO" caption={this.t("grdListe.clmRefNo")} width={90} visible={true}/> 
-                                <Column dataField="DOC_AMOUNT" caption={this.t("grdListe.clmCode")} width={100} visible={true}/> 
+                                <Column dataField="OUTPUT_NAME" caption={this.t("grdListe.clmOutputName")} width={300} visible={true}/> 
+                                <Column dataField="INPUT_NAME" caption={this.t("grdListe.clmInputName")} width={220} visible={true}/> 
+                                <Column dataField="REF" caption={this.t("grdListe.clmRef")} width={120} visible={true}/> 
+                                <Column dataField="REF_NO" caption={this.t("grdListe.clmRefNo")} width={120} visible={true}/> 
+                                <Column dataField="DOC_AMOUNT" caption={this.t("grdListe.clmAmount")} visible={true} format={{ style: "currency", currency: Number.money.code,precision: 2}} /> 
                                 <Summary>
                                     <TotalItem column="DEBIT" summaryType="sum" valueFormat={{ style: "currency", currency: "EUR", precision: 2}} />
                                     <TotalItem column="CREDIT" summaryType="sum" valueFormat={{ style: "currency", currency: "EUR", precision: 2}} />

@@ -2,6 +2,8 @@ const slsRpt_01_009 =
 {
     menu : "Facture de vente",
     btnGet: "Rechercher",
+    dtDate : "Date",
+    btnPrint : "Imprimer",
     txtCustomerCode : "Client", 
     btnMailSend : "Envoyer un mail",
     placeMailHtmlEditor : "Contenu du mail",

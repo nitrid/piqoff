@@ -68,7 +68,7 @@ const fns_02_001 =
         clmAmount : "Amount",
         clmOutputName : "Cash/Bank",
         clmDescription : "Description",
-        clmInvoice : "Paid Invoice",
+        clmInvoice : "Invoice Reference",
         clmFacDate : "Invoice Date",
         clmDocDate : "Date"
     },
@@ -167,6 +167,7 @@ const fns_02_001 =
         btn01: "OK",
         msg: "You cannot add a payment without selecting an invoice !"
     },
+    msgNotBank : "Please select an account",
 }
 
 export default fns_02_001

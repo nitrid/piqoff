@@ -129,7 +129,7 @@ export default class NdNumberBox extends Base
     _txtView()
     {
         return (
-            <NumberBox showClearButton={this.state.showClearButton} height='fit-content' 
+            <NumberBox id={this.props.id} showClearButton={this.state.showClearButton} height='fit-content' 
                 elementAttr={this.props.elementAttr}
                 style={this.props.style}
                 valueChangeEvent="keyup" onValueChanged={this._onValueChanged} 
@@ -190,8 +190,10 @@ export default class NdNumberBox extends Base
                 }
             }
         }
-        
-        this.setState({value:e})        
+        if(!this.isUnmounted)
+        {
+            this.setState({value:e})        
+        }
     } 
     get readOnly()
     {
@@ -199,7 +201,10 @@ export default class NdNumberBox extends Base
     }
     set readOnly(e)
     {
-        this.setState({readOnly:e})
+        if(!this.isUnmounted)
+        {
+            this.setState({readOnly:e})
+        }
     }
     focus()
     {

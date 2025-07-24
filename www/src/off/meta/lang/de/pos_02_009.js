@@ -11,6 +11,20 @@ const pos_02_009 =
     txtRestTotal: "Gesamter Gewinn ohne Steuern",
     btnGetAnalysis: "Diagrammansicht",
     chkTicket: "Berechne Beleganzahl pro Gruppe",
+    chart :
+    {
+        salesAmount : "Verkaufsbetrag (€)",
+        productGroups : "Artikelgruppen",
+        highestSales : "Höchste Verkäufe",
+        group : "Gruppe",
+        groupCode : "Artikelgruppencode",
+        quantity : "Menge",
+        ticket : "Belege",
+        cost : "Gesamtkosten",
+        profit : "Gesamter Gewinn ohne Steuern",
+        vat : "Steuerbetrag",
+        famount : "Betrag ohne Steuern"
+    },
     grdGroupSalesReport:
     {
         clmGrpCode: "Artikelgruppencode",

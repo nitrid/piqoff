@@ -2,16 +2,13 @@ import React from 'react';
 import App from '../../../lib/app.js';
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export} from '../../../../core/react/devex/grid.js';
+import { NdForm, NdItem, NdLabel, NdEmptyItem }from '../../../../core/react/devex/form.js';
+import NdGrid,{Column, ColumnChooser, Paging,Pager,Scrolling,Export,StateStoring} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 
 export default class barcodeList extends React.PureComponent
@@ -20,111 +17,30 @@ export default class barcodeList extends React.PureComponent
     {
         super(props)
 
-        this.state = 
-        {
-            columnListValue : ['CODE','TITLE','TYPE_NAME','GENUS_NAME','ADRESS','CITY','COUNTRY','ZIPCODE']
-        }
-        
         this.core = App.instance.core;
-        this.columnListData = 
-        [
-            {CODE : "CODE",NAME : this.t("grdListe.clmCode")},
-            {CODE : "TITLE",NAME : this.t("grdListe.clmTitle")},
-            {CODE : "TYPE_NAME",NAME : this.t("grdListe.clmType")},
-            {CODE : "GENUS_NAME",NAME : this.t("grdListe.clmGenus")},    
-            {CODE : "ADRESS",NAME : this.t("grdListe.clmAddress")},    
-            {CODE : "CITY",NAME : this.t("grdListe.clmCity")},                                   
-            {CODE : "COUNTRY",NAME : this.t("grdListe.clmCountry")},    
-            {CODE : "ZIPCODE",NAME : this.t("grdListe.clmZipcode")},    
-        ]
+
         this.groupList = [];
-        this._btnGetirClick = this._btnGetirClick.bind(this)
-        this._columnListBox = this._columnListBox.bind(this)
+        this.btnGetirClick = this.btnGetirClick.bind(this)
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
         
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-
-        }, 1000);
+        setTimeout(async () => {}, 1000)
     }
-    _columnListBox(e)
+    loadState()
     {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'CODE') != 'undefined')
-                {
-                    this.groupList.push('CODE')
-                }                
-                if(typeof e.value.find(x => x == 'TITLE') != 'undefined')
-                {
-                    this.groupList.push('TITLE')
-                }
-                if(typeof e.value.find(x => x == 'TYPE_NAME') != 'undefined')
-                {
-                    this.groupList.push('TYPE_NAME')
-                }
-                if(typeof e.value.find(x => x == 'GENUS_NAME') != 'undefined')
-                {
-                    this.groupList.push('GENUS_NAME')
-                }
-                if(typeof e.value.find(x => x == 'ADRESS') != 'undefined')
-                {
-                    this.groupList.push('ADRESS')
-                }
-                if(typeof e.value.find(x => x == 'CITY') != 'undefined')
-                {
-                    this.groupList.push('CITY')
-                }
-                if(typeof e.value.find(x => x == 'COUNTRY') != 'undefined')
-                {
-                    this.groupList.push('COUNTRY')
-                }
-                if(typeof e.value.find(x => x == 'ZIPCODE') != 'undefined')
-                {
-                    this.groupList.push('ZIPCODE')
-                }
-
-                
-                for (let i = 0; i < this.grdListe.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdListe.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdListe.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                    {
-                        columnListValue : e.value
-                    }
-                )
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            >
-            </NdListBox>
-        )
+        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
     }
-    async _btnGetirClick()
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
+    async btnGetirClick()
     {
         
         let tmpSource =
@@ -134,23 +50,22 @@ export default class barcodeList extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT * FROM CUSTOMER_VW_02 WHERE ((TITLE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) AND " +
-                            " ((GENUS = @GENUS) OR (@GENUS = -1))  ",
+                    query : `SELECT GUID, CODE, TITLE, TYPE_NAME, GENUS_NAME, CUSTOMER_TYPE, GENUS, ADRESS,CITY, COUNTRY, ZIPCODE, STATUS  FROM CUSTOMER_VW_02 WHERE ((TITLE like '%' + @CUSTOMER_NAME + '%') OR (@CUSTOMER_NAME = '')) AND ((GENUS = @GENUS) OR (@GENUS = -1))`,
                     param : ['CUSTOMER_NAME:string|250','GENUS:string|25'],
                     value : [this.txtCustomerName.value,this.cmbGenus.value]
                 },
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdListe.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
         
     }
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -186,7 +101,7 @@ export default class barcodeList extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -204,43 +119,34 @@ export default class barcodeList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id="frmKriter">
-                                <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
-                                        <NdTextBox id="txtCustomerName" parent={this} simple={true} placeholder={this.t("customerPlace")}
-                                        upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("cmbGenus")} alignment="right" />
+                            <NdForm colCount={2} id="frmKriter">
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerName")} alignment="right" />
+                                    <NdTextBox id="txtCustomerName" parent={this} simple={true} onEnterKey={this.btnGetirClick} placeholder={this.t("customerPlace")}
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbGenus")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbGenus" height='fit-content'
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     value={-1}
                                     data={{source:[{ID:-1,VALUE:this.t("cmbGenusData.allGenus")},{ID:0,VALUE:this.t("cmbGenusData.Customer")},{ID:1,VALUE:this.t("cmbGenusData.supplier")},{ID:2,VALUE:this.t("cmbGenusData.both")}]}}
                                     />
-                                </Item>       
-                                <Item> </Item>
-                            </Form>
+                                </NdItem>       
+                                <NdEmptyItem />
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetirClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -254,10 +160,22 @@ export default class barcodeList extends React.PureComponent
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            onRowDblClick={async(e)=>
+                            {
+                                App.instance.menuClick(
+                                {
+                                    id: 'cri_01_001',
+                                    text: e.data.TITLE.substring(0,10),
+                                    path: 'customers/cards/customerCard.js',
+                                    pagePrm:{GUID:e.data.GUID}
+                                })
+                            }}
                             >                            
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdListe"}/>
+                                <ColumnChooser enabled={true} />
                                 <Export fileName={this.lang.t("menuOff.cri_02_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
                                 <Column dataField="TITLE" caption={this.t("grdListe.clmTitle")} visible={true}/> 

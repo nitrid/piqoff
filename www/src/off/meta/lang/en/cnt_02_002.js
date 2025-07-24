@@ -64,7 +64,9 @@ const cnt_02_002 =
     {
         title: "Attention",
         btn01: "OK",
-        msg: "Please fill in the required fields !"
+        msg: "Please fill in the required fields !",
+        msgSuccess: "Your record has been successfully saved !",
+        msgFailed: "Your record has been failed to save !"
     },
     msgDelete:
     {
@@ -72,6 +74,10 @@ const cnt_02_002 =
         btn01: "OK",
         btn02: "Cancel",
         msg: "Are you sure you want to delete the record ?"
+    },
+    msgDeleteResult:
+    {
+        msg: "Record deleted successfully !"
     },
     msgNotCustomer:
     {

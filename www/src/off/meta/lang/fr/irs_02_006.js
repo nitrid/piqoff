@@ -48,6 +48,7 @@ const irs_02_006 =
         clmName : "Nom Produit",
         clmPrice : "Prix de Vente",
         clmBarcode : "Code Barre",
+        clmMulticode : "Code Fournisseur"
     },
     pg_txtCustomerCode : 
     {

@@ -209,7 +209,7 @@ const ftr_02_001 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kayıt etmek istediğinize eminmisiniz !"
+        msg: "Kayıt etmek istediğinize emin misiniz !"
     },
     msgSaveResult:
     {
@@ -229,14 +229,14 @@ const ftr_02_001 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        msg: "Kaydı silmek istediğinize emin misiniz ?"
     },
     msgVatDelete:
     {
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Vergiyi Sıfırlamak istediğinize eminmisiniz !"
+        msg: "Vergiyi Sıfırlamak istediğinize emin misiniz !"
     },
     msgDiscountPrice:
     {

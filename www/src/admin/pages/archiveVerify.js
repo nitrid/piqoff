@@ -27,6 +27,7 @@ export default class deviceChoose extends React.PureComponent
                             {
                                 let tmpTxtSign = ""
                                 let tmpBinary = undefined
+     
                                 for (let i = 0; i < e.target.files.length; i++) 
                                 {
                                     if(e.target.files[i].type == 'text/plain')
@@ -51,7 +52,7 @@ export default class deviceChoose extends React.PureComponent
                                 {
                                     let tmpConfObj =
                                     {
-                                        id:'msgVerify',showTitle:true,title:this.t("msgVerify.title"),showCloseButton:true,width:'500px',height:'200px',
+                                        id:'msgVerify',showTitle:true,title:this.t("msgVerify.title"),showCloseButton:true,width:'500px',height:'auto',
                                         button:[{id:"btn01",caption:this.t("msgVerify.btn01"),location:'after'}],
                                     }
 

@@ -322,7 +322,7 @@ const  tkf_02_003 =
     popMultiItem:
     {
         title: "Ajout Multiple d'Articles",
-        btnApprove: "Obtenir les Articles",
+        btnApprove: "Rechercher les Articles",
         btnClear : "Effacer",
         btnSave : "Ajouter les Lignes",
     },

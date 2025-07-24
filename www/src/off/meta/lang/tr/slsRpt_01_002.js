@@ -1,6 +1,7 @@
 // "Ürün Grubu Raporu"
 const slsRpt_01_002 =
 {
+    dtDate : "Tarih",
     btnGet :"Getir",
     txtAmount : "Toplam Tutar",
     txtTotalTicket : "Toplam Evrak Sayısı",

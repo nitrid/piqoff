@@ -1,38 +1,37 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import { customersCls,customerAdressCls, customerOfficalCls } from '../../../../core/cls/customers.js';
+
+import { customersCls } from '../../../../core/cls/customers.js';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar from 'devextreme-react/toolbar';
-import Form, { Label,Item } from 'devextreme-react/form';
-import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
+import { Item } from 'devextreme-react/form';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
+import NdTextBox, { Validator, NumericRule, EmailRule } from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling} from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdImageUpload from '../../../../core/react/devex/imageupload.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { datatable } from '../../../../core/core.js';
+import { NdForm, NdItem, NdLabel }from '../../../../core/react/devex/form.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
+
 
 export default class collectiveCustomer extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
+        
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
+        this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
+
         this.customerObj = new customersCls();
+
         this.prevCode = "";
         this.state={officalVisible:true}
         this.tabIndex = props.data.tabkey
-        this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
         this.btnRun = this.btnRun.bind(this)
         
     }
@@ -44,8 +43,6 @@ export default class collectiveCustomer extends React.PureComponent
     async init()
     {
         this.customerObj.clearAll();
-
-
     }
     async checkZipcode(pCode)
     {
@@ -54,14 +51,13 @@ export default class collectiveCustomer extends React.PureComponent
             if(pCode !== '')
             {
                 let tmpQuery = {
-                    query :"SELECT COUNTRY_CODE,PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE ",
+                    query : `SELECT COUNTRY_CODE, PLACE FROM ZIPCODE WHERE ZIPCODE = @ZIPCODE`,
                     param : ['ZIPCODE:string|50'],
                     value : [pCode]
                 }
                 let tmpData = await this.core.sql.execute(tmpQuery) 
                 if(tmpData.result.recordset.length > 0)
                 {
-                    
                     this.cmbPopCity.value = tmpData.result.recordset[0].PLACE
                     this.cmbPopCountry.value = tmpData.result.recordset[0].COUNTRY_CODE
                     resolve(1)
@@ -77,29 +73,21 @@ export default class collectiveCustomer extends React.PureComponent
             }
         });
     }
-    async _onCustomerRendered(e)
-    {
-        await this.core.util.waitUntil(10)
-    }
     async btnRun()
     {
-        console.log(this)
         this.popSettingCustomer.show()
     }
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
-                                    onClick={()=>
-                                    {
-                                        this.init(); 
-                                    }}/>
+                                    onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
@@ -113,7 +101,7 @@ export default class collectiveCustomer extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -131,25 +119,21 @@ export default class collectiveCustomer extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={2} id={"frmCustomers"  + this.tabIndex}>
+                            <NdForm colCount={2} id={"frmCustomers"  + this.tabIndex}>
                                 {/* cmbType */}
-                                <Item>
-                                    <Label text={this.t("cmbType")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbType")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbType" height='fit-content' dt={{data:this.customerObj.dt('CUSTOMERS'),field:"TYPE"}}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
                                     data={{source:[{ID:0,VALUE:this.t("cmbTypeData.individual")},{ID:1,VALUE:this.t("cmbTypeData.company")}]}}
-                                    onValueChanged={(async(e)=>
-                                        {
-                                                
-                                        }).bind(this)}
                                     param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     />
-                                </Item>       
+                                </NdItem>       
                                 {/* cmbGenus */}
-                                <Item>
-                                    <Label text={this.t("cmbGenus")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbGenus")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbGenus" height='fit-content' dt={{data:this.customerObj.dt('CUSTOMERS'),field:"GENUS"}}
                                     displayExpr="VALUE"                       
                                     valueExpr="ID"
@@ -157,33 +141,31 @@ export default class collectiveCustomer extends React.PureComponent
                                     param={this.param.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'cmbType',USERS:this.user.CODE})}
                                     />
-                                </Item>       
+                                </NdItem>       
                                 {/* txtCustomerName */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true} tabIndex={this.tabIndex} dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"NAME",filter:{TYPE:0}}}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     maxLength={32}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    >                                      
-                                    </NdTextBox>
-                                </Item>
+                                    />
+                                </NdItem>
                                 {/* txtCustomerLastname */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerLastname")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerLastname")} alignment="right" />
                                         <NdTextBox id="txtCustomerLastname" parent={this} simple={true} tabIndex={this.tabIndex} 
                                         upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                         dt={{data:this.customerObj.dt('CUSTOMER_OFFICAL'),field:"LAST_NAME",filter:{TYPE:0}}}
                                         maxLength={32}
                                         param={this.param.filter({ELEMENT:'txtCustomerLastname',USERS:this.user.CODE})}
                                         access={this.access.filter({ELEMENT:'txtCustomerLastname',USERS:this.user.CODE})}
-                                        >                                      
-                                    </NdTextBox>
-                                </Item>
+                                        />
+                                </NdItem>
                                  {/* txtPhone1 */}
-                                 <Item>
-                                    <Label text={this.t("txtPhone1")} alignment="right" />
+                                 <NdItem>
+                                    <NdLabel text={this.t("txtPhone1")} alignment="right" />
                                     <NdTextBox id="txtPhone1" 
                                         parent={this} 
                                         simple={true} 
@@ -196,10 +178,10 @@ export default class collectiveCustomer extends React.PureComponent
                                             <NumericRule message={this.lang.t("phoneIsInvalid")}/>
                                         </Validator>
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                  {/* txtPhone2 */}
-                                 <Item>
-                                    <Label text={this.t("txtPhone2")} alignment="right" />
+                                 <NdItem>
+                                    <NdLabel text={this.t("txtPhone2")} alignment="right" />
                                     <NdTextBox id="txtPhone2" 
                                         parent={this} 
                                         simple={true} 
@@ -212,10 +194,10 @@ export default class collectiveCustomer extends React.PureComponent
                                             <NumericRule message={this.lang.t("phoneIsInvalid")}/>
                                         </Validator>
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                  {/* txtGsmPhone */}
-                                 <Item>
-                                    <Label text={this.t("txtGsmPhone")} alignment="right" />
+                                 <NdItem>
+                                    <NdLabel text={this.t("txtGsmPhone")} alignment="right" />
                                     <NdTextBox id="txtGsmPhone" 
                                         parent={this} 
                                         simple={true} 
@@ -228,10 +210,10 @@ export default class collectiveCustomer extends React.PureComponent
                                             <NumericRule message={this.lang.t("phoneIsInvalid")}/>
                                         </Validator>
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                  {/* txtOtherPhone */}
-                                 <Item>
-                                    <Label text={this.t("txtOtherPhone")} alignment="right" />
+                                 <NdItem>
+                                    <NdLabel text={this.t("txtOtherPhone")} alignment="right" />
                                     <NdTextBox id="txtOtherPhone"  
                                         parent={this} 
                                         simple={true} 
@@ -244,10 +226,10 @@ export default class collectiveCustomer extends React.PureComponent
                                             <NumericRule message={this.lang.t("phoneIsInvalid")}/>
                                         </Validator>
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                  {/* txtEmail */}
-                                 <Item>
-                                    <Label text={this.t("txtEmail")} alignment="right" />
+                                 <NdItem>
+                                    <NdLabel text={this.t("txtEmail")} alignment="right" />
                                     <NdTextBox id="txtEmail" 
                                         parent={this} 
                                         simple={true} 
@@ -260,10 +242,10 @@ export default class collectiveCustomer extends React.PureComponent
                                             <EmailRule message={this.lang.t("mailIsInvalid")}/>
                                         </Validator>
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                  {/* txtWeb */}
-                                 <Item>
-                                    <Label text={this.t("txtWeb")} alignment="right" />
+                                 <NdItem>
+                                    <NdLabel text={this.t("txtWeb")} alignment="right" />
                                     <NdTextBox id="txtWeb" 
                                         parent={this} 
                                         simple={true} 
@@ -272,14 +254,14 @@ export default class collectiveCustomer extends React.PureComponent
                                         maxLength={32}
                                         access={this.access.filter({ELEMENT:'txtWeb',USERS:this.user.CODE})}
                                     />
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popAdress.txtPopAdress")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popAdress.txtPopAdress")} alignment="right" />
                                     <NdTextBox id={"txtPopAdress"} parent={this} simple={true} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popAdress.cmbPopZipcode")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopZipcode" acceptCustomValue={true}
                                     displayExpr="ZIPNAME"                       
                                     valueExpr="ZIPCODE"
@@ -288,11 +270,11 @@ export default class collectiveCustomer extends React.PureComponent
                                     showClearButton={true}
                                     pageSize={50}
                                     notRefresh={true}
-                                    data={{source:{select:{query : "SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT [COUNTRY_CODE],[ZIPCODE],[PLACE],ZIPCODE + ' ' + PLACE AS ZIPNAME  FROM [dbo].[ZIPCODE]`},sql:this.core.sql}}}
                                     />
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popAdress.cmbPopCity")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popAdress.cmbPopCity")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopCity"
                                     displayExpr="CITYNAME"                       
                                     valueExpr="PLACE"
@@ -301,34 +283,32 @@ export default class collectiveCustomer extends React.PureComponent
                                     showClearButton={true}
                                     pageSize ={50}
                                     notRefresh = {true}
-                                    data={{source:{select:{query : "SELECT COUNTRY_CODE,ZIPCODE,PLACE,PLACE + ' ' + ZIPCODE AS CITYNAME  FROM [dbo].[ZIPCODE]"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT COUNTRY_CODE, ZIPCODE, PLACE, PLACE + ' ' + ZIPCODE AS CITYNAME  FROM [dbo].[ZIPCODE]`},sql:this.core.sql}}}
                                     />
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popAdress.cmbPopCountry")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popAdress.cmbPopCountry")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbPopCountry"
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
                                     value="FR"
                                     searchEnabled={true}
                                     showClearButton={true}
-                                    data={{source:{select:{query : "SELECT CODE,NAME FROM COUNTRY ORDER BY NAME ASC"},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE, NAME FROM COUNTRY ORDER BY NAME ASC`},sql:this.core.sql}}}
                                     />
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-3">
-                          
-                        </div>
-                        <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                        <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnRun}></NdButton>
+                        </div>
+                        <div className="col-3">
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnRun}/>
                         </div>
                     </div>
                     {/* Ayar PopUp */}
@@ -338,38 +318,38 @@ export default class collectiveCustomer extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popSettingCustomer.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex}     
                         width={'500'}
                         height={'350'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popSettingCustomer.txtStartRef")} alignment="right" />
+                            <NdForm colCount={1} height={'fit-content'}>
+                                <NdItem>
+                                    <NdLabel text={this.t("popSettingCustomer.txtStartRef")} alignment="right" />
                                     <NdTextBox id={"txtStartRef"} parent={this} simple={true} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popSettingCustomer.txtFinishRef")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popSettingCustomer.txtFinishRef")} alignment="right" />
                                     <NdTextBox id={"txtFinishRef"} parent={this} simple={true} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("popSettingCustomer.txtTotal")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popSettingCustomer.txtTotal")} alignment="right" />
                                     <NdTextBox id={"txtTotal"} parent={this} simple={true} 
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}/>
-                                </Item>
-                               <Item>
-                                    <Label text={this.t("popSettingCustomer.chkDigit")} alignment="right" />
-                                        <NdCheckBox id="chkDigit" parent={this} value={false} ></NdCheckBox>
-                                </Item>
-                                <Item>
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("popSettingCustomer.chkDigit")} alignment="right" />
+                                    <NdCheckBox id="chkDigit" parent={this} value={false} />
+                                </NdItem>
+                                <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {     
-                                                App.instance.setState({isExecute:true})
+                                                App.instance.loading.show()
 
                                                 let tmpCounter
                                                 if(this.txtTotal.value == '')
@@ -403,7 +383,6 @@ export default class collectiveCustomer extends React.PureComponent
                                                     tmpCode = tmpCode.toString()
                                                     if(this.chkDigit.value == true)
                                                     {
-                                                        console.log( tmpCode.length)
                                                         let output = []
                                                         for (var x = 0, len = tmpCode.length; x < len; x += 1) 
                                                         {
@@ -441,29 +420,21 @@ export default class collectiveCustomer extends React.PureComponent
                                                     this.customerObj.customerAdress.dt('CUSTOMER_ADRESS')[0].COUNTRY =  this.cmbPopCountry.value
                                                     await this.customerObj.save()
                                                 }
-                                                App.instance.setState({isExecute:false})
+                                                App.instance.loading.hide()
 
-                                                let tmpConfObj1 =
-                                                {
-                                                    id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'200px',
-                                                    button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                                }
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
-                                                await dialog(tmpConfObj1);
+                                                this.toast.show({type:"success",message:this.t("msgSaveResult.msgSuccess")})
                                                 this.popSettingCustomer.hide();  
                                             }}/>
                                         </div>
                                         <div className='col-6'>
                                             <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popSettingCustomer.hide();  
-                                            }}/>
+                                            onClick={()=> { this.popSettingCustomer.hide() }}/>
                                         </div>
                                     </div>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </NdPopUp>
+                        <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                     </div> 
                 </ScrollView>
             </div>

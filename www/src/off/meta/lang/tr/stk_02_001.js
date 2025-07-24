@@ -56,7 +56,7 @@ const stk_02_001 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kayıt etmek istediğinize eminmisiniz !"
+        msg: "Kayıt etmek istediğinize emin misiniz !"
     },
     msgQuantity:
     {
@@ -83,14 +83,14 @@ const stk_02_001 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kaydı silmek istediğinize eminmisiniz ?"
+        msg: "Kaydı silmek istediğinize emin misiniz ?"
     },
     msgBigQuantity:
     {
         title: "Dikkat",
         btn01: "Devam Et",
         btn02: "Vazgeç",
-        msg: "Girdiğiniz Miktar 1000'den Büyük Devam Etmek İstediğinize Eminmisiniz ?"
+        msg: "Girdiğiniz Miktar 1000'den Büyük Devam Etmek İstediğinize Emin misiniz ?"
     },
     msgLocked:
     {
@@ -159,6 +159,7 @@ const stk_02_001 =
     {
         title: "Dikkat",
         btn01: "Evrağa Git",
+        btn02: "Vazgeç",
         msg: "Evrak Bulundu"
     },
 }

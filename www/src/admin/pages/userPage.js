@@ -2,9 +2,8 @@ import React from 'react';
 import App from '../lib/app.js';
 import NdGrid,{Column,Editing,Popup,Paging,Scrolling,KeyboardNavigation,Lookup} from  '../../core/react/devex/grid.js';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
-import NdSelectBox from '../../core/react/devex/selectbox.js';
 import { userCls } from '../../core/cls/users.js';
-import ScrollView from 'devextreme-react/scroll-view.js';
+import ScrollView from 'devextreme-react/scroll-view';
 import DropDownBox from 'devextreme-react/drop-down-box';
 import NdListBox from '../../core/react/devex/listbox.js';
 import List from 'devextreme-react/list';
@@ -89,7 +88,7 @@ export default class userPage extends React.Component
                                 
                                 let tmpQuery = 
                                 {
-                                    query :"SELECT GUID,CODE FROM USERS WHERE CODE = @CODE " ,
+                                    query :`SELECT GUID,CODE FROM USERS WHERE CODE = @CODE ` ,
                                     param : ['CODE:string|50'],
                                     value : [e.data.CODE]
                                 }

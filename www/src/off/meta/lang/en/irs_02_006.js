@@ -55,7 +55,8 @@ const irs_02_006 =
         clmCode :  "ÜRÜN KODU",
         clmName : "ÜRÜN ADI",
         clmPrice : "SATIŞ FIYATI",
-        clmPartiLot : "LOT NUMARASI"
+        clmPartiLot : "LOT NUMARASI",
+        clmMulticode : "TEDARİKÇİ KODU"
     },
     grdSlsDispatch: 
     {
@@ -126,7 +127,7 @@ const irs_02_006 =
         title: "Dikkat",
         btn01: "Tamam",
         btn02: "Vazgeç",
-        msg: "Kayıt etmek istediğinize eminmisiniz !"
+        msg: "Kayıt etmek istediğinize emin misiniz !"
     },
     msgSaveResult:
     {

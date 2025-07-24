@@ -2,27 +2,19 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
+import Form, {Item, Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
+import NdGrid,{Column,ColumnChooser,StateStoring,Paging,Pager,Scrolling,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
+import NdTextBox from '../../../../core/react/devex/textbox.js'
 
-import NdGrid,{Column,Editing,ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export,Summary,TotalItem} from '../../../../core/react/devex/grid.js';
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NbRadioButton from "../../../../core/react/bootstrap/radiogroup.js";
-import NbLabel from "../../../../core/react/bootstrap/label.js";
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
-import NbButton from "../../../../core/react/bootstrap/button.js";
-import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
-import { dataset,datatable,param,access } from "../../../../core/core.js";
-import { posExtraCls,posDeviceCls} from "../../../../core/cls/pos.js";
+import  { dialog } from '../../../../core/react/devex/dialog.js';
+import { datatable} from "../../../../core/core.js";
+import {posDeviceCls} from "../../../../core/cls/pos.js";
 import { nf525Cls } from "../../../../core/cls/nf525.js";
 
 
@@ -33,8 +25,8 @@ export default class freeDiscountsReport extends React.PureComponent
         super(props)
         
         this.core = App.instance.core;
-        this.groupList = [];
-        this._btnGetClick = this._btnGetClick.bind(this)
+
+        this.btnGetClick = this.btnGetClick.bind(this)
         this.btnGetDetail = this.btnGetDetail.bind(this)
         this.posDevice = new posDeviceCls();
         this.lastPosDt = new datatable();
@@ -43,18 +35,16 @@ export default class freeDiscountsReport extends React.PureComponent
         this.lastPosPromoDt = new datatable();  
         this.nf525 = new nf525Cls();
         this.state={ticketId :""}
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
         
         Number.money = this.sysParam.filter({ID:'MoneySymbol',TYPE:0}).getValue()
-
 
         this.tabIndex = props.data.tabkey
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () =>  { this.Init() }, 1000);
     }
     async Init()
     {
@@ -62,35 +52,47 @@ export default class freeDiscountsReport extends React.PureComponent
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
     }
-    async _btnGetClick()
+
+    loadState()
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdSaleTicketReportState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdSaleTicketReportState',USERS:this.user.CODE, PAGE:this.props.data.id, APP:"OFF"})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
+
+    async btnGetClick()
     {
         let tmpSource =
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query :  "SELECT * "  +
-                    "FROM POS_VW_01 "  +
-                    " WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND   "  +
-                    " ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND  "  +
-                    "DISCOUNT > 0 ",
+                    query : `SELECT * 
+                            FROM POS_VW_01 
+                            WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND  
+                            ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) AND 
+                            DISCOUNT > 0 `,
                     param : ['FIRST_DATE:date','LAST_DATE:date','CUSTOMER_CODE:string|50'],
                     value : [this.dtFirst.value,this.dtLast.value,this.txtCustomerCode.value]
                 },
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdSaleTicketReport.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async btnGetDetail(pGuid)
     {
         this.lastPosSaleDt.selectCmd = 
         {
-            query :  "SELECT CONVERT(NVARCHAR,CDATE,108) AS TIME,* FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID ",
+            query : `SELECT CONVERT(NVARCHAR,CDATE,108) AS TIME,* FROM POS_SALE_VW_01  WHERE POS_GUID = @POS_GUID `,
             param : ['POS_GUID:string|50'],
             value : [pGuid]
         }
@@ -103,7 +105,7 @@ export default class freeDiscountsReport extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
@@ -120,7 +122,7 @@ export default class freeDiscountsReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -142,16 +144,12 @@ export default class freeDiscountsReport extends React.PureComponent
                                 {/* dtFirst */}
                                 <Item>
                                     <Label text={this.t("dtFirst")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"}
-                                    >
-                                    </NdDatePicker>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtFirst"} />
                                 </Item>
                                 {/* dtLast */}
                                 <Item>
                                     <Label text={this.t("dtLast")} alignment="right" />
-                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"}
-                                    >
-                                    </NdDatePicker>
+                                    <NdDatePicker simple={true}  parent={this} id={"dtLast"} />
                                 </Item>
                                 <Item>
                                 <Label text={this.t("txtCustomerCode")} alignment="right" />
@@ -187,16 +185,16 @@ export default class freeDiscountsReport extends React.PureComponent
                                             {
                                                 this.txtCustomerCode.setState({value:data[0].CODE})
                                                 this.txtCustomerName.setState({value:data[0].TITLE})
-                                                this._btnGetClick()
+                                                this.btnGetClick()
                                             }
                                         }
                                     }).bind(this)}
                                 >
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}  
                                 visible={false}
-                                position={{of:'#root'}} 
+                                position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                 showTitle={true} 
                                 showBorders={true}
                                 width={'90%'}
@@ -209,23 +207,12 @@ export default class freeDiscountsReport extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql
                                     }
                                 }}
-                                button=
-                                {
-                                    {
-                                        id:'01',
-                                        icon:'more',
-                                        onClick:()=>
-                                        {
-                                            console.log(1111)
-                                        }
-                                    }
-                                }
                                 >
                                     <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
@@ -241,13 +228,11 @@ export default class freeDiscountsReport extends React.PureComponent
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -265,9 +250,13 @@ export default class freeDiscountsReport extends React.PureComponent
                             onRowDblClick={async(e)=>
                             {
                                 this.btnGetDetail(e.data.GUID)
-
                             }}
-                            >                            
+                            >    
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}                      
+                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSaleTicketReport"}/>
+                                <ColumnChooser enabled={true} />
                                 <Scrolling mode="standart" />
                                 <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="DOC_DATE" caption={this.t("grdSaleTicketReport.clmDate")} visible={true} width={150} dataType="datetime" format={"dd/MM/yyyy"}/>
@@ -284,10 +273,10 @@ export default class freeDiscountsReport extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDetail.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'100%'}
                         height={'100%'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                           <div className="row">
                           <div className="col-1 pe-0"></div>
@@ -301,11 +290,10 @@ export default class freeDiscountsReport extends React.PureComponent
                                 columnAutoWidth={true}
                                 allowColumnReordering={true}
                                 allowColumnResizing={true}
-                               
                                 >                            
                                     {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                     {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                    {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                    {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
                                     <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
                                     <Column dataField="TIME" caption={this.t("grdSaleTicketItems.clmTime")} visible={true} width={100}/> 
                                     <Column dataField="BARCODE" caption={this.t("grdSaleTicketItems.clmBarcode")} visible={true} width={150}/> 
@@ -316,13 +304,13 @@ export default class freeDiscountsReport extends React.PureComponent
                                     <Column dataField="TOTAL" caption={this.t("grdSaleTicketItems.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
                                     <Summary>
                                     <TotalItem
-                                    column="DISCOUNT"
-                                    summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                                        column="DISCOUNT"
+                                        summaryType="sum"
+                                        valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                     <TotalItem
-                                    column="TOTAL"
-                                    summaryType="sum"
-                                    valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                                        column="TOTAL"
+                                        summaryType="sum"
+                                        valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                 </Summary>
                             </NdGrid>
                             </div>

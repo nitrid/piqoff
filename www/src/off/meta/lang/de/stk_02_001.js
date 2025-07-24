@@ -159,6 +159,7 @@ const stk_02_001 =
     {
         title: "Achtung",
         btn01: "Zum Dokument gehen",
+        btn02: "Abbrechen",
         msg: "Dokument gefunden"
     },
 }

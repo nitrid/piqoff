@@ -1,8 +1,8 @@
 // "Ürün Detaylı Satış Raporu"
 const pos_02_010 =
 {
-    chkItemCreated: "Récupérer en fonction de la date de création des produits",
-    btnGet :"Apporter", 
+    chkItemCreated: "Rechercher en fonction de la date de création des produits",
+    btnGet :"Rechercher", 
     grdListe : 
     {
         clmDate: "Date", 

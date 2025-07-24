@@ -53,6 +53,9 @@ function checkBoxSet(pItem,pThis)
 }
 function checkBoxGet(pItem,pThis)
 {
+    console.log(pItem)
+    console.log(pThis)
+    console.log(pThis[pItem.ID])
     if(typeof pThis[pItem.ID] != 'undefined')
     {
         if(typeof pItem.VALUE == 'boolean')

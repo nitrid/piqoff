@@ -1835,8 +1835,12 @@ export class deptCreditMatchingCls
             resolve()
         })
     }
-    async showPopUp(pCustomer)
+    async showPopUp(pCustomer,pContainer)
     {
+        if(typeof pContainer == 'undefined')
+        {
+            pContainer = 'root'
+        }
         this.pCustomer = pCustomer
         this.popUpList = new datatable()
         let tmpJsx = 
@@ -1847,10 +1851,10 @@ export class deptCreditMatchingCls
                 showCloseButton={true}
                 showTitle={true}
                 title={this.lang.t("popDeptCreditList.title")}
-                container={"#root"} 
+                container={"#" + pContainer } 
                 width={'90%'}
                 height={'90%'}
-                position={{of:'#root'}}
+                position={{of:"#" + pContainer}}
                 >
                     <div className="row p-2">
                         <div className="col-10">

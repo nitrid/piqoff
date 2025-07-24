@@ -2,8 +2,8 @@ import React from 'react';
 import App from '../../../lib/app.js';
 import moment from 'moment';
 
-import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label } from 'devextreme-react/form';
+import Toolbar from 'devextreme-react/toolbar';
+import Form, { Label,Item } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import { docCls,docExtraCls} from '../../../../core/cls/doc.js';
 import { nf525Cls } from '../../../../core/cls/nf525.js';
@@ -16,6 +16,7 @@ import NdTabPanel from '../../../../core/react/devex/tabpanel.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
+import {NdToast} from '../../../../core/react/devex/toast.js';
 
 export default class saleList extends React.PureComponent
 {
@@ -23,154 +24,162 @@ export default class saleList extends React.PureComponent
     {
         super(props)
 
-     
         this.core = App.instance.core;
         this.nf525 = new nf525Cls();
         this.extraObj = new docExtraCls();
 
-        this.groupList = [];
-        this._btnOffersGetClick = this._btnOffersGetClick.bind(this)
-        this._btnOrdersGetClick = this._btnOrdersGetClick.bind(this)
-        this._btnDispatchGetClick = this._btnDispatchGetClick.bind(this)
-        this._btnInvoiceGetClick = this._btnInvoiceGetClick.bind(this)
+        this.btnOffersGetClick = this.btnOffersGetClick.bind(this)
+        this.btnOrdersGetClick = this.btnOrdersGetClick.bind(this)
+        this.btnDispatchGetClick = this.btnDispatchGetClick.bind(this)
+        this.btnInvoiceGetClick = this.btnInvoiceGetClick.bind(this)
+        this.loadState = this.loadState.bind(this)
+        this.saveState = this.saveState.bind(this)
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.init()
-        }, 1000);
+        setTimeout(async () => { this.init() }, 1000);
     }
+
+    loadState()
+    {
+        let tmpLoad = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
+    }
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdListeState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
+
     async init()
     {
         this.dtFirst.startDate=moment(new Date()).format("YYYY-MM-DD");
         this.dtFirst.endDate=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = ''
     }
-    async _btnOffersGetClick()
+    async btnOffersGetClick()
     {
         let tmpSource =
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *, " +
-                            "CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, " +
-                            "(SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   " +
-                            "(SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   " +
-                            "FROM DOC_VW_01 " +
-                            "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) " + 
-                            " AND TYPE = 1 AND DOC_TYPE = 61  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                    query : `SELECT *, 
+                            CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, 
+                            (SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   
+                            (SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   
+                            FROM DOC_VW_01 
+                            WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND 
+                            ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) 
+                            AND TYPE = 1 AND DOC_TYPE = 61  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC`,
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,this.cmbMainGrp.value]
                 },
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdOfferList.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
-    async _btnOrdersGetClick()
+    async btnOrdersGetClick()
     {
         let tmpSource1 =
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *, " +
-                            "CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, " +
-                            "(SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   " +
-                            "(SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   " +
-                            "FROM DOC_VW_01 " +
-                            "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) " + 
-                            " AND TYPE = 1 AND DOC_TYPE = 60  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                    query : `SELECT *, 
+                            CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, 
+                            (SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   
+                            (SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   
+                            FROM DOC_VW_01 
+                            WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND 
+                            ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) 
+                            AND TYPE = 1 AND DOC_TYPE = 60  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC`,
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,this.cmbMainGrp.value]
                 },
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdOrderList.dataRefresh(tmpSource1)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
-    async _btnDispatchGetClick()
+    async btnDispatchGetClick()
     {
         let tmpSource2 =
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *, " +
-                            "CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, " +
-                            "(SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   " +
-                            "(SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   " +
-                            "FROM DOC_VW_01 " +
-                            "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) " + 
-                            " AND TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                    query : `SELECT *, 
+                            CASE WHEN ISNULL((SELECT TOP 1 TYPE_TO FROM DOC_CONNECT_VW_01 WHERE DOC_CONNECT_VW_01.DOC_FROM = DOC_VW_01.GUID),0) <> 0 THEN  'OK' ELSE 'X' END AS FACTURE, 
+                            (SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   
+                            (SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   
+                            FROM DOC_VW_01 
+                            WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND 
+                            ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) 
+                            AND TYPE = 1 AND DOC_TYPE = 40  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC`,
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,this.cmbMainGrp.value]
                 },
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdDispatchList.dataRefresh(tmpSource2)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
-    async _btnInvoiceGetClick()
+    async btnInvoiceGetClick()
     {
         let tmpSource3 =
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT *, " +
-                            "CASE WHEN ISNULL((SELECT TOP 1 RECIEVER_MAIL FROM MAIL_STATUS WHERE MAIL_STATUS.DOC_GUID = DOC_VW_01.GUID),'') <> '' THEN  'OK' ELSE 'X' END AS MAIL, " +
-                            "(SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   " +
-                            "(SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   " +
-                            "FROM DOC_VW_01 " +
-                            "WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND "+ 
-                            "((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) " + 
-                            " AND TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC",
+                    query : `SELECT *, 
+                            CASE WHEN ISNULL((SELECT TOP 1 RECIEVER_MAIL FROM MAIL_STATUS WHERE MAIL_STATUS.DOC_GUID = DOC_VW_01.GUID),'') <> '' THEN  'OK' ELSE 'X' END AS MAIL, 
+                            (SELECT TOP 1 MAIN_GROUP_NAME FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_NAME,   
+                            (SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) AS MAIN_GROUP_CODE   
+                            FROM DOC_VW_01 
+                            WHERE ((INPUT_CODE = @INPUT_CODE) OR (@INPUT_CODE = '')) AND 
+                            ((DOC_DATE >= @FIRST_DATE) OR (@FIRST_DATE = '19700101')) AND ((DOC_DATE <= @LAST_DATE) OR (@LAST_DATE = '19700101')) AND (((SELECT TOP 1 MAIN_GROUP_CODE FROM CUSTOMER_VW_01 WHERE CUSTOMER_VW_01.GUID = DOC_VW_01.INPUT) = @MAIN_GROUP_CODE) OR (@MAIN_GROUP_CODE = '')) 
+                            AND TYPE = 1 AND DOC_TYPE = 20  AND REBATE = 0 ORDER BY DOC_DATE DESC,REF_NO DESC`,
                     param : ['INPUT_CODE:string|50','FIRST_DATE:date','LAST_DATE:date','MAIN_GROUP_CODE:string|50'],
                     value : [this.txtCustomerCode.CODE,this.dtFirst.startDate,this.dtFirst.endDate,this.cmbMainGrp.value]
                 },
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdInvoiceList.dataRefresh(tmpSource3)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async convertInvoice()
     {
         let tmpConfObj =
         {
-            id:'msgConvertInvoices',showTitle:true,title:this.t("msgConvertInvoices.title"),showCloseButton:false,width:'500px',height:'200px',
+            id:'msgConvertInvoices',showTitle:true,title:this.t("msgConvertInvoices.title"),showCloseButton:false,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgConvertInvoices.btn01"),location:'before'},{id:"btn02",caption:this.t("msgConvertInvoices.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertInvoices.msg")}</div>)
         }
         
         let pResult = await dialog(tmpConfObj);
+
         if(pResult == 'btn02')
         {
             return
         }
         let tmpDocGuids = []
-        App.instance.setState({isExecute:true})
+
+        App.instance.loading.show()
 
         for (let i = 0; i < this.grdSlsDisList.getSelectedData().length; i++) 
         {
@@ -195,17 +204,23 @@ export default class saleList extends React.PureComponent
             tmpDoc.REF = this.grdSlsDisList.getSelectedData()[i].REF
             tmpDoc.LOCKED = 1
             tmpDoc.PRICE_LIST_NO = this.grdSlsDisList.getSelectedData()[i].PRICE_LIST_NO
+
             let tmpQuery = 
             {
-                query :"SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 --AND REF = @REF ",
+                query :`SELECT ISNULL(MAX(REF_NO) + 1,1) AS REF_NO FROM DOC WHERE TYPE = 1 AND DOC_TYPE = 20 --AND REF = @REF `,
             }
+
             let tmpData = await this.core.sql.execute(tmpQuery) 
+
             if(tmpData.result.recordset.length > 0)
             {
                 tmpDoc.REF_NO = tmpData.result.recordset[0].REF_NO
             }
+
             tmpDocCls.addEmpty(tmpDoc);   
+
             let tmpDocCustomer = {...tmpDocCls.docCustomer.empty}
+
             tmpDocCustomer.DOC_GUID = tmpDocCls.dt()[0].GUID
             tmpDocCustomer.TYPE = 1
             tmpDocCustomer.DOC_TYPE = 20    
@@ -216,25 +231,32 @@ export default class saleList extends React.PureComponent
             tmpDocCustomer.OUTPUT = tmpDocCls.dt()[0].OUTPUT
             tmpDocCustomer.DESCRIPTION = tmpDocCls.dt()[0].DESCRIPTION
             tmpDocCustomer.AMOUNT = tmpDocCls.dt()[0].TOTAL
+
             let tmpCusotmerQuery = 
             {
-                query :"SELECT * FROM CUSTOMER_VW_02 WHERE GUID = @INPUT ",
+                query :`SELECT * FROM CUSTOMER_VW_02 WHERE GUID = @INPUT `,
                 param : ['INPUT:string|50'],
                 value : [ tmpDocCls.dt()[0].INPUT]
             }
+
             let tmpCustomerData = await this.core.sql.execute(tmpCusotmerQuery) 
+
             if(tmpCustomerData.result.recordset.length > 0)
             {
                 tmpDocCustomer.EXPIRY_DATE =  moment(new Date()).add(tmpCustomerData.result.recordset[0].EXPIRY_DAY, 'days')
             }   
+
             tmpDocCls.docCustomer.addEmpty(tmpDocCustomer);
+
             let tmpLineQuery = 
             {
-                query :"SELECT * FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID ",
+                query :`SELECT * FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @DOC_GUID `,
                 param : ['DOC_GUID:string|50'],
                 value : [this.grdSlsDisList.getSelectedData()[i].GUID]
             }
+
             let tmpLineData = await this.core.sql.execute(tmpLineQuery) 
+
             if(tmpLineData.result.recordset.length > 0)
             {
                 for (let x = 0; x < tmpLineData.result.recordset.length; x++) 
@@ -242,6 +264,7 @@ export default class saleList extends React.PureComponent
                     if(tmpLineData.result.recordset[x].INVOICE_DOC_GUID ==  '00000000-0000-0000-0000-000000000000')
                     {
                         let tmpDocItems = {...tmpDocCls.docItems.empty}
+
                         tmpDocItems.GUID =tmpLineData.result.recordset[x].GUID
                         tmpDocItems.DOC_GUID =tmpLineData.result.recordset[x].DOC_GUID
                         tmpDocItems.TYPE =tmpLineData.result.recordset[x].TYPE
@@ -298,66 +321,83 @@ export default class saleList extends React.PureComponent
                         tmpDocItems.COST_PRICE =tmpLineData.result.recordset[x].COST_PRICE
         
                         await tmpDocCls.docItems.addEmpty(tmpDocItems,false)
+
                         await this.core.util.waitUntil(100)
+
                         tmpDocCls.docItems.dt()[tmpDocCls.docItems.dt().length - 1].stat = 'edit'
                     }
                 }
             }
-            console.log(tmpDocCls.dt()[0]) 
-            console.log(tmpDocCls.docItems.dt())
+
             if(tmpDocCls.docItems.dt().length > 0)
             {
-                let tmpSignedData = await this.nf525.signatureDoc(tmpDocCls.dt()[0],tmpDocCls.docItems.dt())                
+                let tmpSignedData = await this.nf525.signatureDoc(tmpDocCls.dt()[0],tmpDocCls.docItems.dt())  
+
                 tmpDocCls.dt()[0].SIGNATURE = tmpSignedData.SIGNATURE
                 tmpDocCls.dt()[0].SIGNATURE_SUM = tmpSignedData.SIGNATURE_SUM
-               await tmpDocCls.save()
+
+                await tmpDocCls.save()
                 
                 if(this.sysParam.filter({ID:'autoFactureMailSend',USERS:this.user.CODE}).getValue().value == true)
                 {
                     await this.mailSend(tmpDocCls.dt()[0].GUID,tmpDocCls.dt()[0].INPUT,tmpDocCls.dt()[0].REF_NO)
                 }
+
                 tmpDocGuids.push(tmpDocCls.dt()[0])
             }
         }
-        App.instance.setState({isExecute:false})
+
+        App.instance.loading.hide()
+        
         let tmpConfObj2 =
         {
-            id:'msgConvertSucces',showTitle:true,title:this.t("msgConvertSucces.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgConvertSucces',showTitle:true,title:this.t("msgConvertSucces.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgConvertSucces.btn01"),location:'before'},{id:"btn02",caption:this.t("msgConvertSucces.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgConvertSucces.msg")}</div>)
         }
 
         let tmpPrintDialog = await dialog(tmpConfObj2);
-        console.log(tmpPrintDialog)
+
         if(tmpPrintDialog == 'btn01')
         {
             let tmpLines = []
-            App.instance.setState({isExecute:true})
+
+            App.instance.loading.show()
+
             for (let i = 0; i < tmpDocGuids.length; i++) 
             {
                 let tmpLastSignature = await this.nf525.signatureDocDuplicate(tmpDocGuids[i])
+
                 this.extraObj.clearAll()
+
                 let tmpExtra = {...this.extraObj.empty}
+
                 tmpExtra.DOC = tmpDocGuids[i].GUID
                 tmpExtra.DESCRIPTION = ''
                 tmpExtra.TAG = 'PRINT'
                 tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
                 tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
+
                 this.extraObj.addEmpty(tmpExtra);
+
                 await this.extraObj.save()
+
                 let tmpQuery = 
                 {
-                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                    query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO `,
                     param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                     value:  [tmpDocGuids[i].GUID,'333',localStorage.getItem('lang').toUpperCase()]
                 }
-                App.instance.setState({isExecute:true})
+
+                App.instance.loading.show()
                 let tmpData = await this.core.sql.execute(tmpQuery) 
-                App.instance.setState({isExecute:false})
+                App.instance.loading.hide()
+
                 for (let x = 0; x < tmpData.result.recordset.length; x++) 
                 {
                     tmpLines.push(tmpData.result.recordset[x])
                 }
+
                 this.core.socket.emit('piqXInvoiceInsert',
                 {
                     fromUser : tmpData.result.recordset[0].LUSER,
@@ -386,14 +426,15 @@ export default class saleList extends React.PureComponent
                         } 
                     }
                 });
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
+            this.toast.show({message:this.t("msgConvertSucces.msg"),type:"success"})
         }
     }
     async printDispatch()
     {
         let tmpConfObj =
         {
-            id:'msgPrintDispatch',showTitle:true,title:this.t("msgPrintDispatch.title"),showCloseButton:true,width:'500px',height:'200px',
+            id:'msgPrintDispatch',showTitle:true,title:this.t("msgPrintDispatch.title"),showCloseButton:true,width:'500px',height:'auto',
             button:[{id:"btn01",caption:this.t("msgPrintDispatch.btn01"),location:'before'},{id:"btn02",caption:this.t("msgPrintDispatch.btn02"),location:'after'}],
             content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgPrintDispatch.msg")}</div>)
         }
@@ -403,16 +444,18 @@ export default class saleList extends React.PureComponent
             return
         }
         let tmpLines = []
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         for (let i = 0; i < this.grdSlsDisList.getSelectedData().length; i++) 
         {
             let tmpQuery = 
             {
-                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                query:  `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO `,
                 param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
                 value:  [this.grdSlsDisList.getSelectedData()[i].GUID,'444',localStorage.getItem('lang').toUpperCase()]
             }
+
             let tmpData = await this.core.sql.execute(tmpQuery) 
+
             for (let x = 0; x < tmpData.result.recordset.length; x++) 
             {
                 tmpLines.push(tmpData.result.recordset[x])
@@ -421,8 +464,6 @@ export default class saleList extends React.PureComponent
        
         this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
         {
-            console.log(pResult.split('|')[0])
-            console.log(pResult.split('|')[1])
             if(pResult.split('|')[0] != 'ERR')
             {
                 var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
@@ -432,36 +473,41 @@ export default class saleList extends React.PureComponent
                 } 
             }
         });
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
+
     async mailSend(pGuid,pCustomer,pRefno)
     {
         let tmpMAilQuery = 
         {
-            query :"SELECT EMAIL,TITLE FROM CUSTOMER_VW_02 WHERE GUID = @GUID",
+            query :`SELECT EMAIL,TITLE FROM CUSTOMER_VW_02 WHERE GUID = @GUID`,
             param:  ['GUID:string|50'],
             value:  [pCustomer]
         }
+
         let tmpMailAdress = await this.core.sql.execute(tmpMAilQuery) 
+
         if(tmpMailAdress.result.recordset.length > 0 && tmpMailAdress.result.recordset[0].EMAIL != '')
         {
             let txtSendMail = tmpMailAdress.result.recordset[0].EMAIL
+
             let tmpQuery = 
             {
-            query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO " ,
+            query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG)ORDER BY DOC_DATE,LINE_NO `,
             param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
             value:  [pGuid,this.sysParam.filter({ID:'autoFactureMailSend',USERS:this.user.CODE}).getValue().design,this.lang.languages[0].toString().toUpperCase()]
             }
-            App.instance.setState({isExecute:true})
+
+            App.instance.loading.show()
             let tmpData = await this.core.sql.execute(tmpQuery)
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
+
             this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',(pResult) => 
             {
-                App.instance.setState({isExecute:true})
+                App.instance.loading.show()
+
                 let  tmpHtml = this.sysParam.filter({ID:'MailExplanation',USERS:this.user.CODE}).getValue()
-                if(pResult.split('|')[0] != 'ERR')
-                {
-                }
+
                 let tmpMailData = {html:tmpHtml,subject:"Facture-" + pRefno ,sendMail:txtSendMail,attachName:"Facture-" + pRefno + ".pdf",attachData:pResult.split('|')[1],text:""}
                 this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
                 {
@@ -469,39 +515,42 @@ export default class saleList extends React.PureComponent
                     {  
                         let tmpQuery = 
                         {
-                            query :"EXEC [dbo].[PRD_MAIL_STATUS_INSERT]  " +
-                            "@CUSER = @PCUSER, " +
-                            "@DOC_GUID = @PDOC_GUID, " + 
-                            "@SENDER_MAIL = @PSENDER_MAIL, " +
-                            "@RECIEVER_MAIL = @PRECIEVER_MAIL",
+                            query :`EXEC [dbo].[PRD_MAIL_STATUS_INSERT] 
+                                    @CUSER = @PCUSER, 
+                                    @DOC_GUID = @PDOC_GUID, 
+                                    @SENDER_MAIL = @PSENDER_MAIL, 
+                                    @RECIEVER_MAIL = @PRECIEVER_MAIL`,
                             param : ['PCUSER:string|25','PDOC_GUID:string|50','PSENDER_MAIL:string|50','PRECIEVER_MAIL:string|50'],
                             value : [this.user.CODE,pGuid,'',txtSendMail]
                         }
                         await this.core.sql.execute(tmpQuery) 
                     }
-                    App.instance.setState({isExecute:false})
+                    App.instance.loading.hide()
                 });
             }); 
         } 
         else
         {
             let tmpText = this.t("msgNoMailAddress") + tmpMailAdress.result.recordset[0].TITLE
+
             let tmpMailData = {html:'',subject:"Facture-" + pRefno,sendMail:this.sysParam.filter({ID:'autoFactureMailSend',USERS:this.user.CODE}).getValue().mail,text:tmpText}
+           
             this.core.socket.emit('mailer',tmpMailData,async(pResult1) => 
             {
-                App.instance.setState({isExecute:false})
+                App.instance.loading.hide()
             });
         }    
     }
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
+                <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                 <Item location="after"
+                                <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
                                 options=
@@ -513,7 +562,7 @@ export default class saleList extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
@@ -575,14 +624,24 @@ export default class saleList extends React.PureComponent
                                                 }
                                             }
                                         },
+                                        {
+                                            id:'02',
+                                            icon:'clear',
+                                            onClick:()=>
+                                            {
+                                                this.txtCustomerCode.setState({value:''})
+                                                this.txtCustomerCode.CODE =''
+                                            }
+                                        }
                                     ]
                                 }
                                 >
                                 </NdTextBox>
                                 {/*CARI SECIMI POPUP */}
-                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={"#root"}
+                                <NdPopGrid id={"pg_txtCustomerCode"} parent={this} 
+                                container={"#" + this.props.data.id + this.tabIndex}
                                 visible={false}
-                                position={{of:'#root'}} 
+                                position={{of:'#' + this.props.data.id + this.tabIndex}} 
                                 showTitle={true} 
                                 showBorders={true}
                                 width={'90%'}
@@ -595,29 +654,17 @@ export default class saleList extends React.PureComponent
                                     {
                                         select:
                                         {
-                                            query : "SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1",
+                                            query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
                                             param : ['VAL:string|50']
                                         },
                                         sql:this.core.sql
                                     }
                                 }}
-                                button=
-                                {
-                                    {
-                                        id:'01',
-                                        icon:'more',
-                                        onClick:()=>
-                                        {
-                                            console.log(1111)
-                                        }
-                                    }
-                                }
                                 >
                                     <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                                     <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
                                     <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
                                     <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150}/>
-                                    
                                 </NdPopGrid>
                                 </Item> 
                                 <Item>
@@ -625,7 +672,7 @@ export default class saleList extends React.PureComponent
                                     <NdSelectBox simple={true} parent={this} id="cmbMainGrp" showClearButton={true} notRefresh={true}  searchEnabled={true}
                                     displayExpr="NAME"                       
                                     valueExpr="CODE"
-                                    data={{source: {select : {query:"SELECT CODE,NAME FROM CUSTOMER_GROUP ORDER BY NAME ASC"},sql : this.core.sql}}}
+                                    data={{source: {select : {query:`SELECT CODE,NAME FROM CUSTOMER_GROUP ORDER BY NAME ASC`},sql : this.core.sql}}}
                                     />
                                 </Item>
                             </Form>
@@ -637,10 +684,9 @@ export default class saleList extends React.PureComponent
                                 <Item title={this.t("tabTitleOffer")} text={"tbOffer"}>
                                     <div className="row px-2 pt-2">
                                         <div className="col-9">
-                                        
                                         </div>
                                         <div className="col-3">
-                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnOffersGetClick}></NdButton>
+                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnOffersGetClick} />
                                         </div>
                                     </div>
                                     <div className="row px-2 pt-2">
@@ -653,10 +699,7 @@ export default class saleList extends React.PureComponent
                                         columnAutoWidth={true}
                                         allowColumnReordering={true}
                                         allowColumnResizing={true}
-                                        onSelectionChanged={(e)=>
-                                        {
-                                            e.component.refresh(true);
-                                        }}
+                                        onSelectionChanged={(e)=>  {  e.component.refresh(true) }}
                                         onRowDblClick={async(e)=>
                                             {
                                                 App.instance.menuClick(
@@ -672,7 +715,7 @@ export default class saleList extends React.PureComponent
                                             <ColumnChooser enabled={true} />                                                                                       
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
                                             <Export fileName={this.lang.t("menuOff.stk_02_001")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="REF" caption={this.t("grdSlsDisList.clmRef")} visible={true} width={200}/> 
                                             <Column dataField="REF_NO" caption={this.t("grdSlsDisList.clmRefNo")} visible={true} width={100}/> 
@@ -700,6 +743,7 @@ export default class saleList extends React.PureComponent
                                                         }
                                                     }
                                                 }
+
                                                 if (options.name === 'SelectedRowsTotalHT') 
                                                 {
                                                     if (options.summaryProcess === 'start') 
@@ -714,6 +758,7 @@ export default class saleList extends React.PureComponent
                                                         }
                                                     }
                                                 }
+
                                                 if (options.name === 'SelectedRowsTotalVAT') 
                                                 {
                                                     if (options.summaryProcess === 'start') 
@@ -739,10 +784,9 @@ export default class saleList extends React.PureComponent
                                 <Item title={this.t("tabTitleOrder")} text={"tbOrder"}>
                                     <div className="row px-2 pt-2">
                                         <div className="col-9">
-                                        
                                         </div>
                                         <div className="col-3">
-                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnOrdersGetClick}></NdButton>
+                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnOrdersGetClick} />
                                         </div>
                                     </div>
                                     <div className="row px-2 pt-2">
@@ -755,10 +799,7 @@ export default class saleList extends React.PureComponent
                                         columnAutoWidth={true}
                                         allowColumnReordering={true}
                                         allowColumnResizing={true}
-                                        onSelectionChanged={(e)=>
-                                        {
-                                            e.component.refresh(true);
-                                        }}
+                                        onSelectionChanged={(e)=>  {  e.component.refresh(true) }}
                                         onRowDblClick={async(e)=>
                                         {                                            
                                             App.instance.menuClick(
@@ -774,7 +815,7 @@ export default class saleList extends React.PureComponent
                                             <ColumnChooser enabled={true} />                                                                                  
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
                                             <Export fileName={this.lang.t("menuOff.stk_02_001")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="REF" caption={this.t("grdSlsDisList.clmRef")} visible={true} width={200}/> 
                                             <Column dataField="REF_NO" caption={this.t("grdSlsDisList.clmRefNo")} visible={true} width={100}/> 
@@ -802,6 +843,7 @@ export default class saleList extends React.PureComponent
                                                         }
                                                     }
                                                 }
+
                                                 if (options.name === 'SelectedRowsTotalHT') 
                                                 {
                                                     if (options.summaryProcess === 'start') 
@@ -816,6 +858,7 @@ export default class saleList extends React.PureComponent
                                                         }
                                                     }
                                                 }
+
                                                 if (options.name === 'SelectedRowsTotalVAT') 
                                                 {
                                                     if (options.summaryProcess === 'start') 
@@ -841,10 +884,9 @@ export default class saleList extends React.PureComponent
                                 <Item title={this.t("tabTitleDispatch")} text={"tbDispatch"}>
                                     <div className="row px-2 pt-2">
                                         <div className="col-9">
-                                        
                                         </div>
                                         <div className="col-3">
-                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnDispatchGetClick}></NdButton>
+                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnDispatchGetClick}/>
                                         </div>
                                     </div>
                                     <div className="row px-2 pt-2">
@@ -857,10 +899,7 @@ export default class saleList extends React.PureComponent
                                         columnAutoWidth={true}
                                         allowColumnReordering={true}
                                         allowColumnResizing={true}
-                                        onSelectionChanged={(e)=>
-                                        {
-                                            e.component.refresh(true);
-                                        }}
+                                        onSelectionChanged={(e)=>  {  e.component.refresh(true) }}
                                         onRowDblClick={async(e)=>
                                         {                                            
                                             App.instance.menuClick(
@@ -876,7 +915,7 @@ export default class saleList extends React.PureComponent
                                             <ColumnChooser enabled={true} />                                                                                   
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
                                             <Export fileName={this.lang.t("menuOff.stk_02_001")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="REF" caption={this.t("grdSlsDisList.clmRef")} visible={true} width={200}/> 
                                             <Column dataField="REF_NO" caption={this.t("grdSlsDisList.clmRefNo")} visible={true} width={100}/> 
@@ -904,6 +943,7 @@ export default class saleList extends React.PureComponent
                                                         }
                                                     }
                                                 }
+
                                                 if (options.name === 'SelectedRowsTotalHT') 
                                                 {
                                                     if (options.summaryProcess === 'start') 
@@ -918,6 +958,7 @@ export default class saleList extends React.PureComponent
                                                         }
                                                     }
                                                 }
+
                                                 if (options.name === 'SelectedRowsTotalVAT') 
                                                 {
                                                     if (options.summaryProcess === 'start') 
@@ -943,10 +984,9 @@ export default class saleList extends React.PureComponent
                                 <Item title={this.t("tabTitleInvoice")} text={"tbInvoice"}>
                                     <div className="row px-2 pt-2">
                                         <div className="col-9">
-                                        
                                         </div>
                                         <div className="col-3">
-                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnInvoiceGetClick}></NdButton>
+                                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnInvoiceGetClick}/>
                                         </div>
                                     </div>
                                     <div className="row px-2 pt-2">
@@ -959,10 +999,7 @@ export default class saleList extends React.PureComponent
                                         columnAutoWidth={true}
                                         allowColumnReordering={true}
                                         allowColumnResizing={true}
-                                        onSelectionChanged={(e)=>
-                                        {
-                                            e.component.refresh(true);
-                                        }}
+                                        onSelectionChanged={(e)=>  {  e.component.refresh(true) }}
                                         onRowDblClick={async(e)=>
                                             {                                            
                                                 App.instance.menuClick(
@@ -978,7 +1015,7 @@ export default class saleList extends React.PureComponent
                                             <ColumnChooser enabled={true} />                       
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                             {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
                                             <Export fileName={this.lang.t("menuOff.stk_02_001")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="REF" caption={this.t("grdSlsDisList.clmRef")} visible={true} width={200}/> 
                                             <Column dataField="REF_NO" caption={this.t("grdSlsDisList.clmRefNo")} visible={true} width={100}/> 
@@ -1006,6 +1043,7 @@ export default class saleList extends React.PureComponent
                                                         }
                                                     }
                                                 }
+
                                                 if (options.name === 'SelectedRowsTotalHT') 
                                                 {
                                                     if (options.summaryProcess === 'start') 
@@ -1020,6 +1058,7 @@ export default class saleList extends React.PureComponent
                                                         }
                                                     }
                                                 }
+                                                
                                                 if (options.name === 'SelectedRowsTotalVAT') 
                                                 {
                                                     if (options.summaryProcess === 'start') 

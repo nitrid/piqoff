@@ -3,55 +3,52 @@ import App from '../../../lib/app.js';
 import moment from 'moment';
 
 import Toolbar,{Item} from 'devextreme-react/toolbar';
-import Form, { Label,EmptyItem } from 'devextreme-react/form';
+import Form, { Label} from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column, ColumnChooser,ColumnFixing,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column, Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdSelectBox from '../../../../core/react/devex/selectbox.js';
-import NdNumberBox from '../../../../core/react/devex/numberbox.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdButton from '../../../../core/react/devex/button.js';
-import NdCheckBox from '../../../../core/react/devex/checkbox.js';
-import NdDatePicker from '../../../../core/react/devex/datepicker.js';
-import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
-import {  Chart, Series, CommonSeriesSettings,  Format, Legend } from 'devextreme-react/chart';
+import {  Chart, Series, CommonSeriesSettings,  Format} from 'devextreme-react/chart';
 import { dialog } from '../../../../core/react/devex/dialog.js';
+import { NdForm, NdItem, NdLabel} from '../../../../core/react/devex/form.js';
 
 export default class itemGrpSalesReport extends React.PureComponent
 {
     constructor(props)
     {
         super(props)
-        this.state = {dataSource : {}} 
+
         this.core = App.instance.core;
-        this.groupList = [];
-        this._btnGetClick = this._btnGetClick.bind(this)
+
+        this.state = {dataSource : {}} 
+        this.btnGetClick = this.btnGetClick.bind(this)
         this.getDetail = this.getDetail.bind(this)
         this.btnAnalysis = this.btnAnalysis.bind(this)
+        this.tabIndex = props.data.tabkey   
     }
     componentDidMount()
     {
-        setTimeout(async () => 
-        {
-            this.Init()
-        }, 1000);
+        setTimeout(async () => {  this.Init()}, 1000);
     }
+
     async Init()
     {
 
     }
-    async _btnGetClick()
+    async btnGetClick()
     {
         let tmpQuery = {
-            query :"SELECT COUNT(GUID) AS TICKET,ISNULL(AVG(TOTAL),0) AS AVGTOTAL FROM DOC_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 AND  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE ",
+            query :`SELECT COUNT(GUID) AS TICKET,ISNULL(AVG(TOTAL),0) AS AVGTOTAL FROM DOC_VW_01 
+                    WHERE TYPE = 1 AND DOC_TYPE = 20 AND REBATE = 0 AND  DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE `,
             param : ['FISRT_DATE:date','LAST_DATE:date'],
             value : [this.dtDate.startDate,this.dtDate.endDate]
         }
+
         let tmpData = await this.core.sql.execute(tmpQuery) 
+
         if(tmpData.result.recordset.length > 0)
         {
             this.txtTotalTicket.value = tmpData.result.recordset[0].TICKET
@@ -65,22 +62,26 @@ export default class itemGrpSalesReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query : "SELECT ITEM_GRP_NAME,ITEM_GRP_CODE, " +
-                    "ROUND(SUM(TOTAL),2) AS TOTAL,  " +
-                    "ROUND(SUM(TOTALHT),2) AS FAMOUNT,  " +
-                    "ROUND(SUM(VAT),2) AS VAT,  " +
-                    "ROUND(SUM(COST_PRICE * QUANTITY),2) AS TOTAL_COST,  " +
-                    "(SUM(TOTALHT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL  " +
-                    "FROM [SALES_FACTURE_LINE_VW_01] WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE GROUP BY ITEM_GRP_NAME,ITEM_GRP_CODE ORDER BY ITEM_GRP_CODE " ,
+                    query :
+                    `SELECT ITEM_GRP_NAME,ITEM_GRP_CODE, 
+                    ROUND(SUM(TOTAL),2) AS TOTAL,  
+                    ROUND(SUM(TOTALHT),2) AS FAMOUNT,  
+                    ROUND(SUM(VAT),2) AS VAT,  
+                    ROUND(SUM(COST_PRICE * QUANTITY),2) AS TOTAL_COST,  
+                    (SUM(TOTALHT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL  
+                    FROM [SALES_FACTURE_LINE_VW_01] 
+                    WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE 
+                    GROUP BY ITEM_GRP_NAME,ITEM_GRP_CODE 
+                    ORDER BY ITEM_GRP_CODE `,
                     param : ['FISRT_DATE:date','LAST_DATE:date'],
                     value : [this.dtDate.startDate,this.dtDate.endDate]
                 },
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grdGroupSalesReport.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     async getDetail(pGrp)
     {
@@ -91,26 +92,28 @@ export default class itemGrpSalesReport extends React.PureComponent
                 groupBy : this.groupList,
                 select : 
                 {
-                    query :"SELECT  " +
-                   "ITEM_CODE, " +
-                   "ITEM_NAME, " +
-                   "SUM(QUANTITY) AS QUANTITY, " +
-                   "ROUND(SUM(TOTAL),2) AS TOTAL, " +
-                   "ROUND(SUM(TOTALHT),2) AS FAMOUNT, " +
-                   "ROUND(SUM(VAT),2) AS VAT, " +
-                   "ROUND(SUM(COST_PRICE * QUANTITY),2) AS COST_PRICE, " +
-                   "(SUM(TOTALHT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL " +
-                   "FROM SALES_FACTURE_LINE_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND ITEM_GRP_NAME = @ITEM_GRP_NAME " +
-                   " GROUP BY  ITEM_CODE,ITEM_NAME ORDER BY ITEM_NAME " ,
+                    query :
+                        `SELECT 
+                        ITEM_CODE,  
+                        ITEM_NAME,  
+                        SUM(QUANTITY) AS QUANTITY,  
+                        ROUND(SUM(TOTAL),2) AS TOTAL,  
+                        ROUND(SUM(TOTALHT),2) AS FAMOUNT,  
+                        ROUND(SUM(VAT),2) AS VAT,  
+                        ROUND(SUM(COST_PRICE * QUANTITY),2) AS COST_PRICE,  
+                        (SUM(TOTALHT) - SUM(COST_PRICE * QUANTITY)) AS REST_TOTAL  
+                        FROM SALES_FACTURE_LINE_VW_01 WHERE DOC_DATE >= @FISRT_DATE AND DOC_DATE <= @LAST_DATE AND ITEM_GRP_NAME = @ITEM_GRP_NAME  
+                        GROUP BY  ITEM_CODE,ITEM_NAME ORDER BY ITEM_NAME `,
                    param : ['FISRT_DATE:date','LAST_DATE:date','ITEM_GRP_NAME:string|50'],
                    value : [this.dtDate.startDate,this.dtDate.endDate,pGrp]
                 },
                 sql : this.core.sql
             }
         }
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         await this.grpGrpDetail.dataRefresh(tmpSource)
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
+
         this.popGrpDetail.show()
     }
     btnPointPopup()
@@ -125,13 +128,16 @@ export default class itemGrpSalesReport extends React.PureComponent
         this.setState({dataSource:{}})
         let tmpQuery = 
         {
-            query : "SELECT ITEM_GRP_CODE AS ITEM_GRP_CODE,ITEM_GRP_NAME, " +
-            "ROUND(SUM(TOTAL),2) AS TOTAL  " +
-            "FROM SALES_FACTURE_LINE_VW_01 WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE GROUP BY ITEM_GRP_CODE,ITEM_GRP_NAME ORDER BY ITEM_GRP_CODE,ITEM_GRP_NAME",
+            query : `SELECT ITEM_GRP_CODE AS ITEM_GRP_CODE,ITEM_GRP_NAME, 
+                    ROUND(SUM(TOTAL),2) AS TOTAL  
+                    FROM SALES_FACTURE_LINE_VW_01 WHERE DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE 
+                    GROUP BY ITEM_GRP_CODE,ITEM_GRP_NAME ORDER BY ITEM_GRP_CODE,ITEM_GRP_NAME`,
             param : ['FIRST_DATE:date','LAST_DATE:date'],
             value : [this.dtDate.startDate,this.dtDate.endDate]
         }
+
         let tmpData = await this.core.sql.execute(tmpQuery) 
+
         if(tmpData.result.recordset.length > 0)
         {
             this.setState({dataSource:tmpData.result.recordset})
@@ -145,12 +151,11 @@ export default class itemGrpSalesReport extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                              
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -163,12 +168,13 @@ export default class itemGrpSalesReport extends React.PureComponent
                                         {
                                             let tmpConfObj =
                                             {
-                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'200px',
+                                                id:'msgClose',showTitle:true,title:this.lang.t("msgWarning"),showCloseButton:true,width:'500px',height:'auto',
                                                 button:[{id:"btn01",caption:this.lang.t("btnYes"),location:'before'},{id:"btn02",caption:this.lang.t("btnNo"),location:'after'}],
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgClose")}</div>)
                                             }
                                             
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 App.instance.panel.closePage()
@@ -181,37 +187,35 @@ export default class itemGrpSalesReport extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
+                            <NdForm colCount={2} id="frmKriter">
+                                <NdItem>
+                                    <NdLabel text={this.t("dtDate")} alignment="right" />
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-6">
-                            <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                         </div>
+                        <div className="col-3">
                         </div>
                         <div className="col-3">
-                          
-                        </div>
-                        <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
                         <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmPurcoffer">
-                                <Item  >
-                                    <Label text={this.t("txtTotalTicket")} alignment="right" />
-                                    <NdTextBox id="txtTotalTicket" parent={this} simple={true} readOnly={true} 
-                                    maxLength={32}
-                                   
-                                    ></NdTextBox>
-                                </Item>
-                                <Item  >
-                                    <Label text={this.t("txtTicketAvg")} alignment="right" />
-                                    <NdTextBox id="txtTicketAvg" parent={this} simple={true} readOnly={true} 
-                                    maxLength={32}
-                                   
-                                    ></NdTextBox>
-                                </Item>
-                            </Form>
+                            <NdForm colCount={4} parent={this} id="frmPurcoffer">
+                                <NdItem  >
+                                    <NdLabel text={this.t("txtTotalTicket")} alignment="right" />
+                                    <NdTextBox id="txtTotalTicket" parent={this} simple={true} readOnly={true} maxLength={32} />
+                                </NdItem>
+                                <NdItem  >
+                                    <NdLabel text={this.t("txtTicketAvg")} alignment="right" />
+                                    <NdTextBox id="txtTicketAvg" parent={this} simple={true} readOnly={true} maxLength={32} />
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -219,7 +223,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                             <NdGrid id="grdGroupSalesReport" parent={this} 
                             selection={{mode:"single"}} 
                             showBorders={true}
-                            height={'700'} 
+                            height={'600'} 
                             width={'100%'}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -233,7 +237,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                             >                            
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
                                 <Export fileName={this.lang.t("menuOff.slsRpt_01_003")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="ITEM_GRP_CODE" caption={this.t("grdGroupSalesReport.clmGrpCode")} visible={true} width={100}/> 
                                 <Column dataField="ITEM_GRP_NAME" caption={this.t("grdGroupSalesReport.clmGrpName")} visible={true} width={300}/> 
@@ -247,7 +251,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                                     column="TOTAL_COST"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                                     <TotalItem
+                                    <TotalItem
                                     column="FAMOUNT"
                                     summaryType="sum"
                                     valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
@@ -271,10 +275,9 @@ export default class itemGrpSalesReport extends React.PureComponent
                         <div className="col-6">
                         </div>
                         <div className="col-3">
-                            
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGetAnalysis")} type="danger" width="100%" onClick={this.btnAnalysis}></NdButton>
+                            <NdButton text={this.t("btnGetAnalysis")} type="danger" width="100%" onClick={this.btnAnalysis}/>
                         </div>
                     </div>
                     <div>
@@ -283,10 +286,10 @@ export default class itemGrpSalesReport extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popGrpDetail.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'1200'}
                         height={'800'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={1} height={'fit-content'}>
                                 <Item>
@@ -300,13 +303,6 @@ export default class itemGrpSalesReport extends React.PureComponent
                                     columnAutoWidth={true}
                                     allowColumnReordering={true}
                                     allowColumnResizing={true}
-                                    onCellPrepared={(e) =>
-                                    {
-
-                                    }}
-                                    onRowDblClick={async(e)=>
-                                    {
-                                    }}
                                     >                            
                                         <Scrolling mode="standart" />
                                         <Export fileName={this.lang.t("menuOff.pos_02_009")} enabled={true} allowExportSelectedData={true} />
@@ -352,10 +348,10 @@ export default class itemGrpSalesReport extends React.PureComponent
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popAnalysis.title")}
-                        container={"#root"} 
+                        container={'#' + this.props.data.id + this.tabIndex} 
                         width={'1400'}
                         height={'800'}
-                        position={{of:'#root'}}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={3} height={'fit-content'}>
                                 <Item colSpan={3}>

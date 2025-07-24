@@ -2,6 +2,8 @@ import React from 'react';
 import DataGrid,{Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,KeyboardNavigation,Form,Lookup,Export,Button,GroupPanel,Summary,TotalItem,StateStoring,GroupItem} from 'devextreme-react/data-grid';
 import Toolbar,{Item} from 'devextreme-react/toolbar';
 import { exportDataGrid } from 'devextreme/excel_exporter';
+import { Workbook } from 'exceljs';
+import { saveAs } from 'file-saver';
 import Base from './base.js';
 
 export {Column,ColumnChooser,ColumnFixing,Pager,Paging,Scrolling,Selection,Editing,FilterRow,SearchPanel,HeaderFilter,Popup,Toolbar,Item,KeyboardNavigation,Form,Lookup,Export,Button,GroupPanel,Summary,TotalItem,StateStoring,GroupItem}
@@ -235,9 +237,71 @@ export default class NdGrid extends Base
     }
     _onExporting(e)
     {
+        console.log('eeeeeeeeeeeeeee',e)
         if(typeof this.props.onExporting != 'undefined')
         {
             this.props.onExporting(e);
+        }
+        else
+        {
+            // excel ve pdf export edebilme yetenegi devex 25 ile degistiginden manuel eklemeler yapildi.
+            let fileName = e.fileName
+            if (fileName === 'DataGrid' && this.props.children) 
+            {
+                let children = Array.isArray(this.props.children) ? this.props.children : [this.props.children];
+                let exportChild = children.find(child => 
+                    child && child.props && child.props.fileName
+                );
+                if (exportChild && exportChild.props.fileName) 
+                {
+                    fileName = exportChild.props.fileName;
+                }
+            }
+
+            // Dosya uzantısına göre format belirle
+            if (e.format == 'pdf' || e.format == 'PDF') 
+            {
+                // PDF Export
+                const { jsPDF } = require('jspdf');
+                const { exportDataGrid: exportDataGridToPdf } = require('devextreme/pdf_exporter');
+                
+                const doc = new jsPDF();
+                exportDataGridToPdf({
+                    jsPDFDocument: doc,
+                    component: e.component
+                })
+                .then(() => 
+                {
+                    doc.save(fileName);
+                });
+            } 
+            else 
+            {
+                // XLSX Export (varsayılan)
+                let workbook = new Workbook();
+                let worksheet = workbook.addWorksheet('Sheet');
+                
+                // Eğer uzantı yoksa .xlsx ekle
+                if (!fileName.toLowerCase().includes('.')) 
+                {
+                    fileName += '.xlsx';
+                }
+                
+                exportDataGrid(
+                {
+                    component: e.component,
+                    worksheet,
+                    autoFilterEnabled: true
+                })
+                .then(() => 
+                {
+                    workbook.xlsx.writeBuffer().then((buffer) => 
+                    {
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), fileName);
+                    });
+                });
+            }
+            e.cancel = true;
         }
     }
     _onToolbarPreparing(e)
