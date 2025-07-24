@@ -2290,7 +2290,7 @@ export default class salesInvoice extends DocBase
                         showTitle={true}
                         title={this.t("popDesign.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
-                        width={'350'}
+                        width={'500'}
                         height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={false}

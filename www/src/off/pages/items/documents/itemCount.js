@@ -17,8 +17,6 @@ import NdGrid,{Column,Editing,Paging,Scrolling,KeyboardNavigation,Pager,Export} 
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
-import NdListBox from '../../../../core/react/devex/listbox.js';
 import { datatable } from '../../../../core/core.js';
 import { NdForm, NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
 import { NdToast } from '../../../../core/react/devex/toast.js';
@@ -33,30 +31,9 @@ export default class itemCount extends React.PureComponent
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.countObj = new itemCountCls();
         this.tabIndex = props.data.tabkey
-
-        this.state = 
-        {
-            columnListValue : ['CDATE_FORMAT','ITEM_CODE','ITEM_NAME','QUANTITY','COST_PRICE','TOTAL_COST','MULTICODE','CUSTOMER_NAME','BARCODE']
-        }
         
-        this.columnListData = 
-        [
-            {CODE : "CDATE_FORMAT",NAME : this.t("grdItemCount.clmCreateDate")},
-            {CODE : "ITEM_CODE",NAME : this.t("grdItemCount.clmItemCode")},
-            {CODE : "ITEM_NAME",NAME : this.t("grdItemCount.clmItemName")},                                   
-            {CODE : "QUANTITY",NAME : this.t("grdItemCount.clmQuantity")},
-            {CODE : "COST_PRICE",NAME : this.t("grdItemCount.clmCostPrice")},
-            {CODE : "TOTAL_COST",NAME : this.t("grdItemCount.clmTotalCost")},
-            {CODE : "CUSTOMER_NAME",NAME : this.t("grdItemCount.clmCustomerName")},
-            {CODE : "MULTICODE",NAME : this.t("grdItemCount.clmMulticode")},
-            {CODE : "BARCODE",NAME : this.t("grdItemCount.clmBarcode")},
-            
-        ]
-
-        this.groupList = [];
-
         this.cellRoleRender = this.cellRoleRender.bind(this)
-        this.columnListBox = this.columnListBox.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
 
         this.frmCount = undefined;
         this.docLocked = false;        
@@ -477,74 +454,6 @@ export default class itemCount extends React.PureComponent
         let totalPrice= await this.countObj.dt().sum("TOTAL_COST",2)
         this.txtAmount.setState({value :totalPrice})
     }
-    columnListBox(e)
-    {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'CDATE_FORMAT') != 'undefined')
-                {
-                    this.groupList.push('CDATE_FORMAT')
-                }
-                if(typeof e.value.find(x => x == 'ITEM_CODE') != 'undefined')
-                {
-                    this.groupList.push('ITEM_CODE')
-                }             
-                if(typeof e.value.find(x => x == 'BARCODE') != 'undefined')
-                {
-                    this.groupList.push('BARCODE')
-                }   
-                if(typeof e.value.find(x => x == 'ITEM_NAME') != 'undefined')
-                {
-                    this.groupList.push('ITEM_NAME')
-                }
-                if(typeof e.value.find(x => x == 'QUANTITY') != 'undefined')
-                {
-                    this.groupList.push('QUANTITY')
-                }
-                if(typeof e.value.find(x => x == 'COST_PRICE') != 'undefined')
-                {
-                    this.groupList.push('COST_PRICE')
-                }
-                if(typeof e.value.find(x => x == 'TOTAL_COST') != 'undefined')
-                {
-                    this.groupList.push('TOTAL_COST')
-                }
-                if(typeof e.value.find(x => x == 'CUSTOMER_NAME') != 'undefined')
-                {
-                    this.groupList.push('CUSTOMER_NAME')
-                }
-
-                for (let i = 0; i < this.grdItemCount.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdItemCount.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdItemCount.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdItemCount.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-                this.setState({columnListValue : e.value})
-            }
-        }
-        
-        return(
-            <NdListBox id='columnListBox' parent={this}
-            data={{source: this.columnListData}}
-            width={'100%'}
-            showSelectionControls={true}
-            selectionMode={'multiple'}
-            displayExpr={'NAME'}
-            keyExpr={'CODE'}
-            value={this.state.columnListValue}
-            onOptionChanged={onOptionChanged}
-            />
-        )
-    }
     async checkRow()
     {
         for (let i = 0; i < this.countObj.dt().length; i++) 
@@ -553,13 +462,122 @@ export default class itemCount extends React.PureComponent
             this.countObj.dt()[i].DOC_DATE = this.countObj.dt()[0].DOC_DATE
         }
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push(
+        {
+            location: 'before',
+            widget: 'dxButton',     
+            options: 
+            {
+                icon: 'add',    
+                validationGroup: 'frmCountFrom' + this.tabIndex,
+                onClick: (async(c) => 
+                {   
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        if(typeof this.countObj.dt()[0] != 'undefined')
+                        {
+                            if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
+                            {
+                                this.pg_txtItemsCode.show()
+                                this.pg_txtItemsCode.onClick = async(data) =>
+                                {
+                                    if(data.length > 0)
+                                    {
+                                        if(data.length == 1)
+                                        {
+                                            this.addItem(data[0],this.countObj.dt().length -1)
+                                        }
+                                        else if(data.length > 1)
+                                        {
+                                            for (let i = 0; i < data.length; i++) 
+                                            {
+                                                if(i == 0)
+                                                {
+                                                    this.addItem(data[i],this.countObj.dt().length -1)
+                                                }
+                                                else
+                                                {
+                                                    let tmpDocItems = {...this.countObj.empty}
+                                                    tmpDocItems.LINE_NO = this.countObj.dt().length
+                                                    tmpDocItems.REF = this.txtRef.value
+                                                    tmpDocItems.REF_NO = this.txtRefno.value
+                                                    tmpDocItems.DEPOT = this.cmbDepot.value
+                                                    tmpDocItems.DOC_DATE = this.dtDocDate.value
+                                                    this.txtRef.readOnly = true
+                                                    this.txtRefno.readOnly = true
+                                                    this.countObj.addEmpty(tmpDocItems)
+                                                    this.addItem(data[i],this.countObj.dt().length-1)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                return
+                            }
+                        }
+                        
+                        this.pg_txtItemsCode.show()
+                        this.pg_txtItemsCode.onClick = async(data) =>
+                        {
+                            let tmpDocItems = {...this.countObj.empty}
+                            tmpDocItems.LINE_NO = this.countObj.dt().length
+                            tmpDocItems.REF = this.txtRef.value
+                            tmpDocItems.REF_NO = this.txtRefno.value
+                            tmpDocItems.DEPOT = this.cmbDepot.value
+                            tmpDocItems.DOC_DATE = this.dtDocDate.value
+                            this.txtRef.readOnly = true
+                            this.txtRefno.readOnly = true
+                            this.countObj.addEmpty(tmpDocItems)
+
+                            if(data.length > 0)
+                            {
+                                if(data.length == 1)
+                                {
+                                    this.addItem(data[0],this.countObj.dt().length -1)
+                                }
+                                else if(data.length > 1)
+                                {
+                                    for (let i = 0; i < data.length; i++) 
+                                    {
+                                        if(i == 0)
+                                        {
+                                            this.addItem(data[i],e.rowIndex)
+                                        }
+                                        else
+                                        {
+                                            let tmpDocItems = {...this.countObj.empty}
+                                            tmpDocItems.LINE_NO = this.countObj.dt().length
+                                            tmpDocItems.REF = this.txtRef.value
+                                            tmpDocItems.REF_NO = this.txtRefno.value
+                                            tmpDocItems.DEPOT = this.cmbDepot.value
+                                            tmpDocItems.DOC_DATE = this.dtDocDate.value
+                                            this.txtRef.readOnly = true
+                                            this.txtRefno.readOnly = true
+                                            this.countObj.addEmpty(tmpDocItems)
+                                            this.addItem(data[i],this.countObj.dt().length-1)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgItemNotFound.msg"),type:"warning"})
+                    }   
+                }).bind(this)
+            }
+        });
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -732,7 +750,7 @@ export default class itemCount extends React.PureComponent
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '11%'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmCountFrom">
                                 {/* txtRef-Refno */}
@@ -1021,136 +1039,17 @@ export default class itemCount extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this.columnListBox}
-                            />
-                        </div>
-                        <div className="col-3">
-                            
-                        </div>
-                        <div className="col-3">
-                            
-                        </div>
-                        <div className="col-3">
-                        </div>
-                    </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '77%'}}>
                         <div className="col-12">
-                            <NdForm colCount={1} onInitialized={(e)=>{this.frmCount = e.component}}>
-                                <NdItem location="after">
-                                    <Button icon="add"
-                                    validationGroup={"frmCountFrom" + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.countObj.dt()[0] != 'undefined')
-                                            {
-                                                if(this.countObj.dt()[this.countObj.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    this.pg_txtItemsCode.show()
-                                                    this.pg_txtItemsCode.onClick = async(data) =>
-                                                    {
-                                                        if(data.length > 0)
-                                                        {
-                                                            if(data.length == 1)
-                                                            {
-                                                                this.addItem(data[0],this.countObj.dt().length -1)
-                                                            }
-                                                            else if(data.length > 1)
-                                                            {
-                                                                for (let i = 0; i < data.length; i++) 
-                                                                {
-                                                                    if(i == 0)
-                                                                    {
-                                                                        this.addItem(data[i],this.countObj.dt().length -1)
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        let tmpDocItems = {...this.countObj.empty}
-                                                                        tmpDocItems.LINE_NO = this.countObj.dt().length
-                                                                        tmpDocItems.REF = this.txtRef.value
-                                                                        tmpDocItems.REF_NO = this.txtRefno.value
-                                                                        tmpDocItems.DEPOT = this.cmbDepot.value
-                                                                        tmpDocItems.DOC_DATE = this.dtDocDate.value
-                                                                        this.txtRef.readOnly = true
-                                                                        this.txtRefno.readOnly = true
-                                                                        this.countObj.addEmpty(tmpDocItems)
-                                                                        this.addItem(data[i],this.countObj.dt().length-1)
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    return
-                                                }
-                                            }
-                                           
-                                            this.pg_txtItemsCode.show()
-                                            this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                let tmpDocItems = {...this.countObj.empty}
-                                                tmpDocItems.LINE_NO = this.countObj.dt().length
-                                                tmpDocItems.REF = this.txtRef.value
-                                                tmpDocItems.REF_NO = this.txtRefno.value
-                                                tmpDocItems.DEPOT = this.cmbDepot.value
-                                                tmpDocItems.DOC_DATE = this.dtDocDate.value
-                                                this.txtRef.readOnly = true
-                                                this.txtRefno.readOnly = true
-                                                this.countObj.addEmpty(tmpDocItems)
-
-                                                if(data.length > 0)
-                                                {
-                                                    if(data.length == 1)
-                                                    {
-                                                        this.addItem(data[0],this.countObj.dt().length -1)
-                                                    }
-                                                    else if(data.length > 1)
-                                                    {
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            if(i == 0)
-                                                            {
-                                                                this.addItem(data[i],e.rowIndex)
-                                                            }
-                                                            else
-                                                            {
-                                                                let tmpDocItems = {...this.countObj.empty}
-                                                                tmpDocItems.LINE_NO = this.countObj.dt().length
-                                                                tmpDocItems.REF = this.txtRef.value
-                                                                tmpDocItems.REF_NO = this.txtRefno.value
-                                                                tmpDocItems.DEPOT = this.cmbDepot.value
-                                                                tmpDocItems.DOC_DATE = this.dtDocDate.value
-                                                                this.txtRef.readOnly = true
-                                                                this.txtRefno.readOnly = true
-                                                                this.countObj.addEmpty(tmpDocItems)
-                                                                this.addItem(data[i],this.countObj.dt().length-1)
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgItemNotFound.msg"),type:"warning"})
-                                        }
-                                    }}/>
-                                </NdItem>
-                                <NdItem>
+                            <NdForm colCount={1} onInitialized={(e)=>{this.frmCount = e.component}} style={{height: '100%'}}>
+                                <NdItem style={{height: '100%'}}>
                                     <NdGrid parent={this} id={"grdItemCount"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'595'} 
+                                    height={'100%'} 
                                     width={'100%'}
                                     dbApply={false}
                                     filterRow={{visible:true}} 
@@ -1164,6 +1063,7 @@ export default class itemCount extends React.PureComponent
                                             this.txtAmount.setState({value :totalPrice})
                                         }
                                     }}
+                                    onToolbarPreparing={this.onGridToolbarPreparing}
                                     >
                                         {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                         {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
@@ -1186,8 +1086,8 @@ export default class itemCount extends React.PureComponent
                                 </NdItem>
                             </NdForm>
                         </div>
-                        <div className="row px-2 pt-2">
-                            <div className="col-12">
+                        <div className="row px-0 pt-1">
+                            <div className="col-12 p-0">
                                 <NdForm colCount={4} parent={this} id="frmslsDoc">
                                     <NdEmptyItem colSpan={3}/>
                                     {/*  Toplam Maliyet */}
@@ -1243,7 +1143,7 @@ export default class itemCount extends React.PureComponent
                     height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgQuantity.btn02"),location:'after'}]}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
                             </div>
@@ -1311,7 +1211,7 @@ export default class itemCount extends React.PureComponent
                     title={this.t("popDesign.title")}
                     container={'#' + this.props.data.id + this.tabIndex} 
                     width={'500'}
-                    height={'250'}
+                    height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <NdForm colCount={1} height={'fit-content'}>
@@ -1390,7 +1290,7 @@ export default class itemCount extends React.PureComponent
                     title={this.t("popPassword.title")}
                     container={'#' + this.props.data.id + this.tabIndex} 
                     width={'500'}
-                    height={'200'}
+                    height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <NdForm colCount={1} height={'fit-content'}>
