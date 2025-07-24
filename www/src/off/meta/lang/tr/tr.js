@@ -988,6 +988,7 @@ export const langTr =
     comparedWith: "Karşılaştırılan",
     period1: "Dönem 1",
     period2: "Dönem 2",
+    updateChart: "Grafiği Güncelle",
     
     analyticsChart: {
         stockStatus: "Stok Yeterli",

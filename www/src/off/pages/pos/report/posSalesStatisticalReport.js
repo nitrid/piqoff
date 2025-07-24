@@ -1957,8 +1957,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 {
                                                     this.handlePeriodComparisonChange();
                                                 });
-                                            }}
-                                        />
+                                            }}/>
                                     </div>
                                 </div>
 
@@ -2040,7 +2039,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                         icon="refresh"
                                         type="default"
                                         stylingMode="contained"
-                                        text="Grafiği Güncelle"
+                                        text={this.lang.t("updateChart")}
                                         onClick={() => 
                                         {
                                             // Ref'lerden tarihleri oku
@@ -2086,10 +2085,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         nameField="series"
                                                         />
                                                         <ValueAxis>
-                                                            <Label>
-                                                                <Format type="fixedPoint" precision="2" />
-                                                            </Label>
-                                                            <Title text={this.lang.t("productAnalysis.amount")} />
+                                                            <Title text={this.lang.t("productAnalysis.amount") + ' €'} />
+                                                            <Grid visible={true} opacity={0.2} />
                                                         </ValueAxis>
                                                         <Legend visible={true} />
                                                         <Tooltip enabled={true} customizeTooltip={arg => 

@@ -755,7 +755,7 @@ export const langDe =
     comparedWith: "Verglichen mit",
     period1: "Zeitraum 1",
     period2: "Zeitraum 2",
-    
+    updateChart: "Diagramm aktualisieren",
     // Gün Bazlı Analizler
     bestMonday : "Beste Montage",
     bestTuesday : "Beste Dienstag",

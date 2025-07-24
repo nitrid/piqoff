@@ -810,7 +810,7 @@ export const langEn =
     comparedWith: "Compared With",
     period1: "Period 1",
     period2: "Period 2",
-    
+    updateChart: "Update Chart",
     // Day-based Analysis
     bestMonday : "Best Mondays",
     bestTuesday : "Best Tuesdays",

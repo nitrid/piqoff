@@ -803,7 +803,7 @@ export const langFr =
     comparedWith: "Comparé avec",
     period1: "Période 1",
     period2: "Période 2",
-    
+    updateChart: "Mettre à jour le graphique",
     // Analyses par jour de la semaine
     bestMonday : "Meilleurs Lundis",
     bestTuesday : "Meilleurs Mardis",
