@@ -945,7 +945,7 @@ export default class rebateInvoice extends DocBase
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -1276,7 +1276,7 @@ export default class rebateInvoice extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={3} id={"frmDocItems"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
@@ -1714,7 +1714,7 @@ export default class rebateInvoice extends DocBase
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={1} onInitialized={(e)=>
                             {
@@ -2017,11 +2017,11 @@ export default class rebateInvoice extends DocBase
                             </NdForm>
                         </div>
                     </div>
-                    <div className='row px-2 pt-2'>
+                    <div className='row px-2 pt-1'>
                         <div className='col-12'>
                             <TabPanel height="100%">
                                 <Item title={this.t("tabTitleSubtotal")}>
-                                    <div className="row px-2 pt-2">
+                                    <div className="row px-2 pt-1">
                                     <div className="col-12">
                                         <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
                                             {/* Ara Toplam */}
