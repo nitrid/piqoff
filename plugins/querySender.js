@@ -21,7 +21,7 @@ class querySender
             this.host = typeof config.plugins.querySender.host == 'undefined' ? this.host : config?.plugins?.querySender?.host
         }
         
-        this.processRun()
+        //this.processRun()
     }
     async connEvt(pSocket)
     {

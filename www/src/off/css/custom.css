@@ -505,6 +505,34 @@
 .top-bar-dropdown-lang
 {
     height: 30px !important;
+    background-color: #482e70 !important;
+    -webkit-app-region: no-drag;
+}
+.top-bar-dropdown-lang .dx-dropdowneditor-input-wrapper .dx-texteditor-container .dx-texteditor-input-container .dx-texteditor-input
+{
+    color: #ffffff !important;
+}
+.top-bar-dropdown-lang .dx-dropdowneditor-input-wrapper .dx-texteditor-container .dx-texteditor-input-container .dx-texteditor-input:focus
+{
+    background-color: #482e70 !important;
+}
+.top-bar-dropdown-lang .dx-dropdowneditor-input-wrapper .dx-texteditor-container .dx-texteditor-buttons-container .dx-dropdowneditor-button 
+.dx-button-content .dx-dropdowneditor-icon
+{
+    color: #ffffff !important;
+}
+.top-bar-btn
+{
+    background-color: #482e70 !important;
+    -webkit-app-region: no-drag;
+}
+.top-bar-btn .dx-button-content .dx-icon
+{
+    color: #ffffff !important;
+}
+.top-bar-btn .dx-button-content .dx-button-text
+{
+    color: #ffffff !important;
 }
 .col-form-label
 {
