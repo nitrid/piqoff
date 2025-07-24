@@ -6,7 +6,7 @@ import Toolbar from 'devextreme-react/toolbar';
 import Form, {Item,  Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import { Chart, Series, CommonSeriesSettings, Legend, ValueAxis, Title, Tooltip, Border, ArgumentAxis, CommonAxisSettings, Grid, Margin, Label as ChartLabel, Format, Strips, Strip, ZoomAndPan } from 'devextreme-react/chart';
+import { Chart, Series, SeriesTemplate, CommonSeriesSettings, Legend, ValueAxis, Title, Tooltip, Border, ArgumentAxis, CommonAxisSettings, Grid, Margin, Label as ChartLabel, Format, Strips, Strip, ZoomAndPan } from 'devextreme-react/chart';
 import PieChart, { Legend as PieLegend, Series as PieSeries, Tooltip as PieTooltip, Label as PieLabel , Connector as PieConnector, LoadingIndicator as PieLoadingIndicator} from 'devextreme-react/pie-chart';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js'
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
@@ -43,7 +43,16 @@ export default class posSalesStatisticalReport extends React.PureComponent
             selectBoxResetKey: Date.now(),
             popAnalysisResetKey: Date.now(),
             // Saatlik satış verisi için
-            hourlySalesData: []
+            hourlySalesData: [],
+            // periodComparison için yeni state'ler
+            periodGranularity: 'day',
+            period1StartDate: null,
+            period1EndDate: null,
+            period2StartDate: null,
+            period2EndDate: null,
+            periodChartData: [],
+            periodChartLoading: false,
+            periodSeriesMap: {}
         },
         this.tabIndex = props.data.tabkey
 
@@ -52,6 +61,18 @@ export default class posSalesStatisticalReport extends React.PureComponent
     async componentDidMount()
     {
         await this.init()
+        // periodComparison için default tarihler - bu ay ve geçen ay
+        let thisMonthStart = moment().startOf('month');
+        let thisMonthEnd = moment().endOf('month');
+        let lastMonthStart = moment().subtract(1, 'month').startOf('month');
+        let lastMonthEnd = moment().subtract(1, 'month').endOf('month');
+        
+        this.setState({
+            period1StartDate: lastMonthStart,
+            period1EndDate: lastMonthEnd,
+            period2StartDate: thisMonthStart,
+            period2EndDate: thisMonthEnd
+        });
     }
     async init()
     {
@@ -133,8 +154,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     { id: 'aboveAverage', name: this.lang.t("aboveAverage") },
                     { id: 'belowAverage', name: this.lang.t("belowAverage") },
                     { id: 'firstWeekVsLastWeek', name: this.lang.t("firstWeekVsLastWeek") },
-                    { id: 'weeklyComparison', name: this.lang.t("weeklyComparison") },
-                    { id: 'monthlyComparison', name: this.lang.t("monthlyComparison") }
+                    { id: 'periodComparison', name: this.lang.t('periodComparison') }
                 ];
             case 'distribution':
                 return [
@@ -1021,10 +1041,27 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form>
-                                <Item>
-                                    <Label text={this.lang.t("dtDate")} alignment="right" />
-                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
-                                </Item>
+                                {this.state.selectedAnalysisType === 'comparison' && this.state.selectedSubOption === 'periodComparison' ? (
+                                    <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
+                                        <Label text={this.lang.t("period1")} alignment="right" style={{minWidth: '80px'}} />
+                                        <span style={{fontSize: '14px', fontWeight: 'bold', color: '#1db2f5', minWidth: '200px'}}>
+                                            {this.state.period1StartDate && this.state.period1EndDate ? 
+                                                `${moment(this.state.period1StartDate).format('DD/MM/YYYY')} - ${moment(this.state.period1EndDate).format('DD/MM/YYYY')}` 
+                                                : ''}
+                                        </span>
+                                        <Label text={this.lang.t("period2")} alignment="right" style={{minWidth: '80px'}} />
+                                        <span style={{fontSize: '14px', fontWeight: 'bold', color: '#f57c00', minWidth: '200px'}}>
+                                            {this.state.period2StartDate && this.state.period2EndDate ? 
+                                                `${moment(this.state.period2StartDate).format('DD/MM/YYYY')} - ${moment(this.state.period2EndDate).format('DD/MM/YYYY')}` 
+                                                : ''}
+                                        </span>
+                                    </div>
+                                ) : (
+                                    <Item>
+                                        <Label text={this.lang.t("dtDate")} alignment="right" />
+                                        <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                                    </Item>
+                                )}
                             </Form>
                         </div>
                     </div>
@@ -1723,14 +1760,25 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             width="100%"
                                             onValueChanged={async (e) => 
                                             {
-                                                this.setState({ 
-                                                    selectedSubOption: e.value,
-                                                    selectedAnalysis: e.value
-                                                })
-                                                
-                                                // Ürün analizleri seçildiğinde ilgili veriyi yükle
-                                                if (this.state.selectedAnalysisType === 'products') 
+                                            this.setState(
+                                            { 
+                                                selectedSubOption: e.value,
+                                                selectedAnalysis: e.value
+                                            })
+                                            
+                                            // periodComparison seçildiğinde veriyi yükle
+                                            if (this.state.selectedAnalysisType === 'comparison' && e.value === 'periodComparison') 
+                                            {
+                                                // Kısa bir gecikme sonrası veriyi yükle (state güncellensin diye)
+                                                setTimeout(() => 
                                                 {
+                                                    this.handlePeriodComparisonChange();
+                                                }, 100);
+                                            }
+                                            
+                                            // Ürün analizleri seçildiğinde ilgili veriyi yükle
+                                            if (this.state.selectedAnalysisType === 'products') 
+                                            {
                                                     try 
                                                     {
                                                         if (e.value === 'topSellingProductsInGroup') 
@@ -1859,15 +1907,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     }
                                                 }}
                                                 />
-                                                <div style={{
-                                                position: 'absolute',
-                                                left: 0,
-                                                right: 0,
-                                                top: '100%',
-                                                marginTop: 4,
-                                                marginBottom: 10,
-                                                zIndex: 10
-                                                }}>
+                                                <div style={{ position: 'absolute', left: 0, right: 0, top: '100%', marginTop: 4, marginBottom: 10,  zIndex: 10}}>
                                                     <div className="alert alert-info" role="alert" style={{fontSize: '13px', padding: '8px 12px'}}>
                                                         {this.lang.t("topSellingProductsInGroupNote")}
                                                     </div>
@@ -1884,7 +1924,194 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                 <div style={{ minHeight: '600px', border: '2px solid #e2e8f0', borderRadius: '12px', padding: '25px', 
                                 position: 'relative',background: 'white',boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
                                 }}>
-                                    {/* Ana grafik render kısmı */}
+                                    {/* periodComparison için özel alan */}
+                                    {this.state.selectedAnalysisType === 'comparison' && this.state.selectedSubOption === 'periodComparison' && (
+                                                         <div style={{ background: '#f8f9fa', borderRadius: '8px', padding: '20px', marginBottom: '20px', border: '1px solid #dee2e6'}}>
+                             <h5 style={{ textAlign: 'center', color: '#495057', marginBottom: '20px', fontSize: '18px', fontWeight: '500'}}>
+                                 {this.lang.t('periodComparison')}
+                             </h5>
+                             
+                             <div className="row mb-3">
+                                 {/* Granularity Seçimi */}
+                                 <div className="col-md-3">
+                                     <div>
+                                         <label style={{fontWeight: 'bold', marginBottom: '5px',marginLeft: '100px', color: '#495057', fontSize: '14px'}}>
+                                             {this.lang.t('granularity')}
+                                         </label>
+                                        <NdSelectBox
+                                            id="periodGranularity"
+                                            parent={this}
+                                            dataSource={
+                                            [
+                                                { id: 'year', name: this.lang.t('year') },
+                                                { id: 'month', name: this.lang.t('month') },
+                                                { id: 'week', name: this.lang.t('week') },
+                                                { id: 'day', name: this.lang.t('day') }
+                                            ]}
+                                            displayExpr="name"
+                                            valueExpr="id"
+                                            value={this.state.periodGranularity}
+                                            onValueChanged={e => 
+                                            {
+                                                this.setState({ periodGranularity: e.value }, () => 
+                                                {
+                                                    this.handlePeriodComparisonChange();
+                                                });
+                                            }}/>
+                                    </div>
+                                </div>
+
+                                {/* Period 1 */}
+                                <div className="col-md-4">
+                                    <div>
+                                        <label style={{fontWeight: 'bold', marginBottom: '5px', color: '#495057', fontSize: '14px'}}>
+                                            {this.lang.t('period1')} ({this.lang.t('comparedWith')})
+                                        </label>
+                                        <NbDateRange
+                                        id="period1Range"
+                                        parent={this}
+                                        startDate={this.state.period1StartDate}
+                                        endDate={this.state.period1EndDate}
+                                        ref={(el) => { this.period1Range = el; }}
+                                        onValueChanged={e => 
+                                        {
+                                            console.log('Period1 date changed:', e.startDate, e.endDate);
+                                            this.setState(
+                                            { 
+                                                period1StartDate: e.startDate, 
+                                                period1EndDate: e.endDate 
+                                            }, () => 
+                                            {
+                                                console.log('Period1 state updated, calling handlePeriodComparisonChange');
+                                                this.handlePeriodComparisonChange();
+                                            });
+                                        }}
+                                        onFocusOut={() => {
+                                            console.log('Period1 focus out - checking dates');
+                                            if (this.period1Range && this.period1Range.startDate && this.period1Range.endDate) {
+                                                this.setState({
+                                                    period1StartDate: this.period1Range.startDate,
+                                                    period1EndDate: this.period1Range.endDate
+                                                }, () => {
+                                                    this.handlePeriodComparisonChange();
+                                                });
+                                            }
+                                        }}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Period 2 */}
+                                <div className="col-md-5">
+                                    <div>
+                                        <label style={{fontWeight: 'bold', marginBottom: '5px', color: '#495057', fontSize: '14px'}}>
+                                            {this.lang.t('period2')} ({this.lang.t('comparedWith')})
+                                        </label>
+                                        <NbDateRange
+                                        id="period2Range"
+                                        parent={this}
+                                        startDate={this.state.period2StartDate}
+                                        endDate={this.state.period2EndDate}
+                                        ref={(el) => { this.period2Range = el; }}
+                                        onValueChanged={e => 
+                                        {
+                                            console.log('Period2 date changed:', e.startDate, e.endDate);
+                                            this.setState(
+                                            { 
+                                                period2StartDate: e.startDate, 
+                                                period2EndDate: e.endDate 
+                                            }, () => 
+                                            {
+                                                console.log('Period2 state updated, calling handlePeriodComparisonChange');
+                                                this.handlePeriodComparisonChange();
+                                            });
+                                        }}
+                                        />
+                                    </div>
+                                </div>
+                                
+                                {/* Manuel Güncelleme Butonu */}
+                                <div className="row mt-3">
+                                    <div className="col-12 text-center">
+                                        <NdButton
+                                        id="btnUpdateComparison"
+                                        parent={this}
+                                        icon="refresh"
+                                        type="default"
+                                        stylingMode="contained"
+                                        text={this.lang.t("updateChart")}
+                                        onClick={() => 
+                                        {
+                                            // Ref'lerden tarihleri oku
+                                            if (this.period1Range && this.period2Range) 
+                                            {
+                                                this.setState(
+                                                {
+                                                    period1StartDate: this.period1Range.startDate || this.state.period1StartDate,
+                                                    period1EndDate: this.period1Range.endDate || this.state.period1EndDate,
+                                                    period2StartDate: this.period2Range.startDate || this.state.period2StartDate,
+                                                    period2EndDate: this.period2Range.endDate || this.state.period2EndDate
+                                                }, () => 
+                                                {
+                                                    this.handlePeriodComparisonChange();
+                                                });
+                                            } 
+                                            else 
+                                            {
+                                                this.handlePeriodComparisonChange();
+                                            }
+                                        }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                                                <div style={{minHeight: '400px'}}>
+                                                {this.state.periodChartLoading ? (
+                                                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px'}}>
+                                                        <span>{this.lang.t('loading')}</span>
+                                                    </div>
+                                                ) : (
+                                                    <Chart
+                                                    dataSource={this.state.periodChartData}
+                                                    palette={["#1db2f5", "#f57c00", "#43a047", "#e91e63", "#607d8b"]}
+                                                    style={{minHeight: '400px'}}
+                                                    >
+                                                        <CommonSeriesSettings 
+                                                        argumentField="category" 
+                                                        valueField="value"
+                                                        type="bar" 
+                                                        />
+                                                        <SeriesTemplate 
+                                                        nameField="series"
+                                                        />
+                                                        <ValueAxis>
+                                                            <Title text={this.lang.t("productAnalysis.amount") + ' €'} />
+                                                            <Grid visible={true} opacity={0.2} />
+                                                        </ValueAxis>
+                                                        <Legend visible={true} />
+                                                        <Tooltip enabled={true} customizeTooltip={arg => 
+                                                        {
+                                                            // Sadece tarih aralığı yerine kategori bilgisi göster
+                                                            let periodInfo = this.state.periodGranularity === 'day' ? arg.argumentText :
+                                                                           this.state.periodGranularity === 'week' ? arg.argumentText :
+                                                                           this.state.periodGranularity === 'month' ? arg.argumentText :
+                                                                           arg.argumentText;
+                                                            
+                                                            let dateRangeInfo = arg.seriesName;
+                                                            
+                                                            return { 
+                                                                text: `${periodInfo} - ${dateRangeInfo}: ${parseFloat(arg.valueText).toFixed(2)} €` 
+                                                            };
+                                                        }} />
+                                                    </Chart>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                    
+                                    {/* Ana grafik render kısmı - periodComparison dışındaki tüm analizler için */}
+                                    {!(this.state.selectedAnalysisType === 'comparison' && this.state.selectedSubOption === 'periodComparison') && (
+                                    <>
                                     {this.state.selectedAnalysisType === 'products' && this.state.productAnalysisData && this.state.productAnalysisData[this.state.selectedAnalysis] ? (
                                         this.state.chartType === 'pie' ? (
                                             <PieChart
@@ -2270,8 +2497,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         {    
                                                             tooltipText += `\n${this.lang.t("quantity")}: ${dataItem.quantity}`
                                                         }
-                                                        if (dataItem.saleCount) {
-                                                            tooltipText += `\n${this.lang.t("saleCount")}: ${dataItem.saleCount}`
+                                                        if (dataItem.itemCount) 
+                                                        {
+                                                            tooltipText += `\n${this.lang.t("itemCount")}: ${dataItem.itemCount}`
                                                         }
                                                     }
                                                     
@@ -2514,6 +2742,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                         }}
                                         />
                                         </Chart>
+                                    )}
+                                    </>
                                     )}
                                 </div>
                             </div>
@@ -3081,5 +3311,204 @@ export default class posSalesStatisticalReport extends React.PureComponent
             console.error(this.lang.t("hourlySalesChart.error"), error);
             return [];
         }
+    }
+
+    async getFirstAndLastSaleDate() 
+    {
+    
+        let query = 
+        {
+            query: `SELECT MIN(DOC_DATE) as FIRST_DATE, MAX(DOC_DATE) as LAST_DATE FROM POS_SALE_VW_01 WHERE STATUS = 1 AND DEVICE <> '9999' AND TOTAL > 0 AND TYPE = 0`
+        };
+
+        let result = await this.core.sql.execute(query);
+        if (result?.result?.recordset?.length > 0) 
+        {
+            return {
+                first: result.result.recordset[0].FIRST_DATE,
+                last: result.result.recordset[0].LAST_DATE
+            }
+        }
+        return null;
+    }
+
+    handlePeriodComparisonChange = async () => 
+    {
+        // İki farklı tarih aralığını al
+        if (!this.state.period1StartDate || !this.state.period1EndDate || 
+            !this.state.period2StartDate || !this.state.period2EndDate) {
+            return;
+        }
+
+        let period1Start = moment(this.state.period1StartDate).format('YYYY-MM-DD');
+        let period1End = moment(this.state.period1EndDate).format('YYYY-MM-DD');
+        let period2Start = moment(this.state.period2StartDate).format('YYYY-MM-DD');
+        let period2End = moment(this.state.period2EndDate).format('YYYY-MM-DD');
+        
+        console.log('SQL dates:', period1Start, period1End, period2Start, period2End);
+        
+        this.setState({ periodChartLoading: true });
+
+        const granularity = this.state.periodGranularity;
+        
+        let selectExpr, groupExpr, labelFunc;
+
+        if (granularity === 'year') {
+            selectExpr = `YEAR(DOC_DATE) as PERIOD_VALUE`;
+            groupExpr = `YEAR(DOC_DATE)`;
+            labelFunc = row => row.PERIOD_VALUE.toString();
+        } 
+        else if (granularity === 'month') {
+            selectExpr = `MONTH(DOC_DATE) as PERIOD_VALUE`;
+            groupExpr = `MONTH(DOC_DATE)`;
+            labelFunc = row => moment().month(row.PERIOD_VALUE - 1).format('MMMM');
+        } 
+        else if (granularity === 'week') {
+            // Ay içindeki hafta numarası: 1, 2, 3, 4, 5
+            selectExpr = `CEILING(DAY(DOC_DATE) / 7.0) as PERIOD_VALUE`;
+            groupExpr = `CEILING(DAY(DOC_DATE) / 7.0)`;
+            labelFunc = row => `${row.PERIOD_VALUE}. Hafta`;
+        } 
+        else {
+            // Ay içindeki gün numarası: 1, 2, 3, ..., 31
+            selectExpr = `DAY(DOC_DATE) as PERIOD_VALUE`;
+            groupExpr = `DAY(DOC_DATE)`;
+            labelFunc = row => `${row.PERIOD_VALUE}. Gün`;
+        }
+        
+        App.instance.loading.show();
+        
+        // Period 1 sorgusu
+        let query1 = {
+            query: `SELECT ${selectExpr}, SUM(TOTAL) as TOTAL_AMOUNT
+                    FROM POS_SALE_VW_01
+                    WHERE DOC_DATE >= @START AND DOC_DATE <= @END
+                    AND STATUS = 1 AND DEVICE <> '9999' AND TOTAL > 0 AND TYPE = 0
+                    GROUP BY ${groupExpr}
+                    ORDER BY ${groupExpr}`,
+            param: ['START:date', 'END:date'],
+            value: [period1Start, period1End]
+        };
+        
+        // Period 2 sorgusu
+        let query2 = {
+            query: `SELECT ${selectExpr}, SUM(TOTAL) as TOTAL_AMOUNT
+                    FROM POS_SALE_VW_01
+                    WHERE DOC_DATE >= @START AND DOC_DATE <= @END
+                    AND STATUS = 1 AND DEVICE <> '9999' AND TOTAL > 0 AND TYPE = 0
+                    GROUP BY ${groupExpr}
+                    ORDER BY ${groupExpr}`,
+            param: ['START:date', 'END:date'],
+            value: [period2Start, period2End]
+        };
+        
+        let [result1, result2] = await Promise.all(
+        [
+            this.core.sql.execute(query1),
+            this.core.sql.execute(query2)
+        ]);
+        
+        App.instance.loading.hide();
+        
+        let period1Data = {};
+        let period2Data = {};
+        let categories = [];
+        
+        // Period 1 verilerini işle
+        if (result1?.result?.recordset?.length > 0) 
+        {
+            result1.result.recordset.forEach(row => 
+            {
+                let label = labelFunc(row);
+
+                period1Data[label] = parseFloat(row.TOTAL_AMOUNT);
+
+                if (!categories.includes(label)) categories.push(label);
+            });
+        }
+        
+        // Period 2 verilerini işle
+        if (result2?.result?.recordset?.length > 0) 
+        {
+            result2.result.recordset.forEach(row => 
+            {
+                let label = labelFunc(row);
+
+                period2Data[label] = parseFloat(row.TOTAL_AMOUNT);
+
+                if (!categories.includes(label)) categories.push(label);
+            });
+        }
+        // Kategorileri doğru sıraya koy
+        categories.sort((a, b) => 
+        {
+            if (granularity === 'year') 
+            {
+                return parseInt(a) - parseInt(b);
+            }
+            if (granularity === 'month') 
+            {
+                let monthA = moment().month(a).month();
+                let monthB = moment().month(b).month();
+
+                return monthA - monthB;
+            }
+            if (granularity === 'week') 
+            {
+                // "1. Hafta", "2. Hafta" şeklinde
+                let weekNumA = parseInt(a.split('.')[0]);
+                let weekNumB = parseInt(b.split('.')[0]);
+
+                return weekNumA - weekNumB;
+            }
+            if (granularity === 'day') 
+            {
+                // "1. Gün", "2. Gün" şeklinde  
+                let dayNumA = parseInt(a.split('.')[0]);
+                let dayNumB = parseInt(b.split('.')[0]);
+
+                return dayNumA - dayNumB;
+            }
+            return 0;
+        });
+        
+        // Chart data oluştur
+        let chartData = [];
+        let period1Label = `${moment(this.state.period1StartDate).format('DD/MM/YYYY')} - ${moment(this.state.period1EndDate).format('DD/MM/YYYY')}`;
+        let period2Label = `${moment(this.state.period2StartDate).format('DD/MM/YYYY')} - ${moment(this.state.period2EndDate).format('DD/MM/YYYY')}`;
+        
+        categories.forEach(category => 
+        {
+            // Period 1 verisi
+            chartData.push(
+            {
+                category: category,
+                value: period1Data[category] || 0,
+                series: period1Label
+            });
+            
+            // Period 2 verisi
+            chartData.push(
+            {
+                category: category,
+                value: period2Data[category] || 0,
+                series: period2Label
+            });
+        });
+        
+        let seriesMap = {};
+        seriesMap[period1Label] = period1Data;
+        seriesMap[period2Label] = period2Data;
+        
+        console.log('Final period1Data:', period1Data);
+        console.log('Final period2Data:', period2Data);
+        console.log('Final chartData length:', chartData.length);
+        
+        this.setState(
+        { 
+            periodChartData: chartData, 
+            periodChartLoading: false, 
+            periodSeriesMap: seriesMap 
+        });
     }
 }

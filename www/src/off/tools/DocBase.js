@@ -269,7 +269,6 @@ export default class DocBase extends React.PureComponent
                     }
                     this.txtPopQuantity.value = 1
                     this.txtPopQuantity.focus()
-
                 }
             }
             this.msgUnit.onShowed = async ()=>
@@ -768,9 +767,9 @@ export default class DocBase extends React.PureComponent
 
         this.pg_ordersGrid.onClick = async(data) =>
         {
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             await this.convertDocOrders(data)
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
     }
     async getOffers()
@@ -791,9 +790,9 @@ export default class DocBase extends React.PureComponent
 
         this.pg_offersGrid.onClick = async(data) =>
         {
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
             await this.convertDocOffers(data)
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
     }
     async getProforma()
@@ -815,7 +814,7 @@ export default class DocBase extends React.PureComponent
 
         this.pg_proformaGrid.onClick = async(data) =>
         {
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
 
             for (let i = 0; i < data.length; i++) 
             {
@@ -868,7 +867,7 @@ export default class DocBase extends React.PureComponent
             }
             
             this.calculateTotal()
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
 
             setTimeout(() => 
             {
@@ -895,7 +894,7 @@ export default class DocBase extends React.PureComponent
 
         this.pg_getRebate.onClick = async(data) =>
         {
-            App.instance.setState({isExecute:true})
+            App.instance.loading.show()
 
             for (let i = 0; i < data.length; i++) 
             {
@@ -953,7 +952,7 @@ export default class DocBase extends React.PureComponent
             }
 
             this.calculateTotal()
-            App.instance.setState({isExecute:false})
+            App.instance.loading.hide()
         }
     }
     async mergeItem(pCode)
@@ -963,7 +962,7 @@ export default class DocBase extends React.PureComponent
             let tmpMergeDt = this.docDetailObj.dt().where({ITEM_CODE:pCode})
             if(tmpMergeDt.length > 0)
             {
-                App.instance.setState({isExecute:false})
+                App.instance.loading.hide()
                 
                 if(this.combineControl == true)
                 {
@@ -1259,7 +1258,7 @@ export default class DocBase extends React.PureComponent
     {
         this.grid.devGrid.beginUpdate()
         
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         
         for (let i = 0; i < data.length; i++) 
         {
@@ -1328,7 +1327,7 @@ export default class DocBase extends React.PureComponent
         this.docDetailObj.dt().emit('onRefresh')
         this.calculateTotal()
         
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
         
         setTimeout(() => 
         {

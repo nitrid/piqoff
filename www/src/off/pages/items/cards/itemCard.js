@@ -1682,9 +1682,12 @@ export default class itemCard extends React.PureComponent
                                     </div>
                                 </NdLayoutItem>
                                 {/* chkTaxSugarControlLy */}
-                                <NdLayoutItem key={"chkTaxSugarControlLy"} id={"chkTaxSugarControlLy"} parent={this} data-grid={{x:4,y:0,h:1,w:1}}>
-                                    <div className="row">
-                                        <div className="col-12 d-flex align-items-center justify-content-center">
+                                <NdLayoutItem key={"chkTaxSugarControlLy"} id={"chkTaxSugarControlLy"} parent={this} data-grid={{x:4,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkTaxSugarControlLy',USERS:this.user.CODE})}>
+                                    <div className="row pe-3">
+                                        <div className='col-10 p-0 pe-1'>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("chkTaxSugarControl") + " :"}</label>
+                                        </div>
+                                        <div className="col-2 p-0 d-flex align-items-center">
                                             <NdCheckBox id="chkTaxSugarControl" parent={this}  
                                             dt={{data:this.itemsObj.dt('ITEMS'),field:"TAX_SUGAR"}}
                                             onValueChanged={(e) => {this.taxSugarValidCheck();}}

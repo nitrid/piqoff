@@ -801,7 +801,16 @@ export const langEn =
     worst20Days : "Worst 20 Days",
     top50Days : "Top 50 Days",
     worst50Days : "Worst 50 Days",
-    
+    periodComparison: "Period Comparison",
+    granularity: "Period",
+    year: "Year",
+    month: "Month",
+    week: "Week",
+    day: "Day",
+    comparedWith: "Compared With",
+    period1: "Period 1",
+    period2: "Period 2",
+    updateChart: "Update Chart",
     // Day-based Analysis
     bestMonday : "Best Mondays",
     bestTuesday : "Best Tuesdays",
