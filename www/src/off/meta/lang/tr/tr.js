@@ -831,7 +831,7 @@ export const langTr =
     worstProducts : "En Kötü Ürünler",
     topProductGroups : "Ürün Grupları",
     selectProductGroup : "Ürün Grubu Seçin",
-    topSellingProductsInGroup : "Gruptaki En Çok Satan 20 Ürün",
+    topSellingProductsInGroup : "Gruptaki En Çok Satan 50 Ürün",
     chartType : "Grafik Türü",
     barChartPop : "Çubuk Grafik",
     pieChartPop : "Pasta Grafik",

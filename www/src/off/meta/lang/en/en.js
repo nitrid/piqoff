@@ -852,7 +852,7 @@ export const langEn =
     worstProducts : "Worst Products",
     topProductGroups : "Product Groups",
     selectProductGroup : "Select Product Group",
-    topSellingProductsInGroup : "Top 20 Products in Group",
+    topSellingProductsInGroup : "Top 50 Products in Group",
     chartType : "Chart Type",
     barChartPop : "Bar Chart",
     pieChartPop : "Pie Chart",
@@ -861,7 +861,7 @@ export const langEn =
         topSellingProducts : "Top Selling Products",
         worstSellingProducts : "Worst Selling Products",
         topSellingProductGroups : "Top Selling Product Groups",
-        topSellingProductsInGroup : "Top 20 Products in Group",
+        topSellingProductsInGroup : "Top 50 Products in Group",
     },
     paretoChart : {
         title : "Pareto Chart",

@@ -925,7 +925,7 @@ export default class purchaseProInvoice extends DocBase
             <div>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -1140,7 +1140,7 @@ export default class purchaseProInvoice extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Form colCount={3} id={"frmPurcInv"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
@@ -1541,7 +1541,7 @@ export default class purchaseProInvoice extends DocBase
                         </div>
                     </div>                    
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Form colCount={1} onInitialized={(e)=>
                             {
@@ -1859,11 +1859,11 @@ export default class purchaseProInvoice extends DocBase
                             </Form>
                         </div>
                     </div>
-                    <div className='row px-2 pt-2'>
+                    <div className='row px-2 pt-1'>
                         <div className='col-12'>
                             <TabPanel height="100%" onItemRendered={this._onItemRendered}>
                                 <Item title={this.t("tabTitleSubtotal")}>
-                                <div className="row px-2 pt-2">
+                                <div className="row px-2 pt-1">
                                     <div className="col-12">
                                         <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
                                             {/* Ara Toplam */}
@@ -2013,7 +2013,7 @@ export default class purchaseProInvoice extends DocBase
                                 </div>
                                 </Item>
                                 <Item title={this.t("tabTitlePayments")}>
-                                <div className="row px-2 pt-2">
+                                <div className="row px-2 pt-1">
                                     <div className="col-12">
                                         <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
                                             {/* Ödeme Toplam */}

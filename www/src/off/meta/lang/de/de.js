@@ -837,7 +837,7 @@ export const langDe =
     worstProducts : "Schlechteste Produkte",
     topProductGroups : "Produktgruppen",
     selectProductGroup : "Produktgruppe auswählen",
-    topSellingProductsInGroup : "Top 20 Produkte in Gruppe",
+    topSellingProductsInGroup : "Top 50 Produkte in Gruppe",
     chartType : "Diagrammtyp",
     barChartPop : "Balkendiagramm",
     pieChartPop : "Kreisdiagramm",
@@ -846,7 +846,7 @@ export const langDe =
         topSellingProducts : "Beste Produkte",
         worstSellingProducts : "Schlechteste Produkte",
         topSellingProductGroups : "Beste Produktgruppen",
-        topSellingProductsInGroup : "Top 20 Produkte in Gruppe",
+        topSellingProductsInGroup : "Top 50 Produkte in Gruppe",
     },
     paretoChart : {
         title : "Pareto-Diagramm",

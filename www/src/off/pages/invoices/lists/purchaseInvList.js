@@ -118,7 +118,7 @@ export default class purchaseInvList extends React.PureComponent
         return(
             <div id={this.props.data.id + this.props.data.tabkey}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -175,7 +175,7 @@ export default class purchaseInvList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Form colCount={2} id="frmCriter">
                                 {/* dtFirst */}
@@ -280,7 +280,7 @@ export default class purchaseInvList extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                             <NdDropDownBox simple={true} parent={this} id="cmbColumn"
                             value={this.state.columnListValue}
@@ -300,7 +300,7 @@ export default class purchaseInvList extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdPurcIvcList" parent={this} 
                             selection={{mode:"multiple"}} 
