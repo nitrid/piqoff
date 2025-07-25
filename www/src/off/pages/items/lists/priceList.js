@@ -39,12 +39,9 @@ export default class priceList extends React.PureComponent
     }
     saveState(e)
     {
-        let tmpSave = this.access.filter({ELEMENT:'grdPriceListe',USERS:this.user.CODE})
+        let tmpSave = this.access.filter({ELEMENT:'grdPriceListe',USERS:this.user.CODE, ID:this.props.data.id, APP: 'OFF'})
         tmpSave.setValue(e)
         tmpSave.save()
-    }
-    componentDidMount()
-    {
     }
     async getItem(pCode)
     {
@@ -55,10 +52,11 @@ export default class priceList extends React.PureComponent
     {
         if(this.cmbPricingList.value == '')
         {
-            App.instance.alert(this.lang.t("msgWarning"),"error")
+            this.toast.show({message:this.t("msgWarning"),type:"warning"})
             return;
         }
         let tmpQuery = '';
+
         if(this.chkCatalog.value == false)
         {
             tmpQuery = `SELECT * FROM ITEM_PRICE_VW_01 WHERE LIST_NO = @LIST_NO AND CUSTOMER_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 0`;
@@ -96,7 +94,7 @@ export default class priceList extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -154,7 +152,7 @@ export default class priceList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={2} id="frmKriter">
                                 <NdItem>
@@ -176,14 +174,14 @@ export default class priceList extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3 offset-9">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <NdForm colCount={3} id="frmKriter">
+                            <NdForm colCount={3} id="frmTotalCount">
                                 <NdItem>
                                     <NdLabel text={this.t("txtTotalCount")} alignment="right" />
                                     <NdTextBox id="txtTotalCount" parent={this} simple={true} readOnly={true}/>
@@ -191,11 +189,11 @@ export default class priceList extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdPriceListe" parent={this} 
-                            selection={{mode:"multiple"}} 
-                            height={600}
+                             selection={{mode:"multiple"}} 
+                            height={'710px'}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -241,7 +239,7 @@ export default class priceList extends React.PureComponent
                         title={this.t("popDesign.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'280'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={false}
                         >
@@ -352,7 +350,7 @@ export default class priceList extends React.PureComponent
                     title={this.t("popMailSend.title")}
                     container={'#' + this.props.data.id + this.tabIndex} 
                     width={'600'}
-                    height={'600'}
+                    height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
                     deferRendering={true}
                     >

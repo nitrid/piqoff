@@ -15,7 +15,8 @@ const stk_05_003 =
         clmTotalCost : "Envanter Değeri", 
         clmSalePrice : "Satış Fiyatı", 
         clmTotalPrice : "Toplam Satış Değeri" ,
-        clmUnitSymbol : 'Birim'
+        clmUnitSymbol : 'Birim',
+        clmDate : "Tarih"
     },
     txtTotalQuantity : "Toplam Miktar",
     txtTotalCost : "Envanter Değeri",

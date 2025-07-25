@@ -1311,7 +1311,7 @@ export default class salesInvoice extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-1" style={{height: '15%'}}>
+                    <div className="row px-2 pt-1" style={{height: '120px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmDoc">
                                 {/* txtRef-Refno */}
@@ -1779,7 +1779,7 @@ export default class salesInvoice extends DocBase
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-1" style={{height: '60%'}}>
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={1} onInitialized={(e)=>{this.frmDocItems = e.component}} style={{height: '100%'}}> 
                                 <NdItem style={{height: '100%'}}>
@@ -1791,7 +1791,7 @@ export default class salesInvoice extends DocBase
                                         onColumnReorder={this.handleColumnReorder}
                                         allowColumnResizing={true} 
                                         filterRow={{visible:true}}
-                                        height={'100%'} 
+                                        height={'590px'} 
                                         width={'100%'}
                                         dbApply={false}
                                         sorting={{mode:'none'}}

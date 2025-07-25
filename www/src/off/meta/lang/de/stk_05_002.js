@@ -22,6 +22,10 @@ const stk_05_002 =
         clmMargin : "Bruttomarge",
         clmNetMargin : "Nettomarge",
     },
+    grdListe :
+    {
+        clmDate : "Datum"
+    }
 }
 
 export default stk_05_002

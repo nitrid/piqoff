@@ -2,7 +2,7 @@
 const stk_04_001 =
 {
     txtCustomerCode : "Fournisseur",
-    codePlaceHolder : "Veuillez saisir le code produit, le code-barres ou le code fournisseur que vous souhaitez Chercher",  
+    codePlaceHolder : "Veuillez saisir le code produit, le code-barres ou le code fournisseur que vous souhaitez Rechercher",  
     namePlaceHolder :"Saissir le nom complet ou une syllabe du produit",  
     pg_txtCustomerCode : 
     {
@@ -13,7 +13,7 @@ const stk_04_001 =
         clmGenusName : "Genre"
     },
     cmbItemGroup : "Groupe Produit",
-    btnGet : 'Chercher',
+    btnGet : 'Rechercher',
     txtCode : "Référence Produit",
     txtName : "Nom Produit",
     grdItemList : 

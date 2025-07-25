@@ -21,7 +21,12 @@ const stk_05_002 =
         clmFisrtCost : "Previous Purchase Price",
         clmMargin : "Gross Margin",
         clmNetMargin : "Net Margin",
+        clmDate : "Date"
     },
+    grdListe :
+    {
+        clmDate : "Date"
+    }
 }
 
 export default stk_05_002

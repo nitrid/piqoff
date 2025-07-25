@@ -17,7 +17,8 @@ const stk_05_004 =
         clmDocDate : "Tarih", 
         clmRef : "Seri",
         clmRefNo : "Sıra", 
-        clmDescription : "Açıklama"
+        clmDescription : "Açıklama",
+        clmDate : "Tarih"
     },
     txtTotalQuantity : "Toplam Miktar",
     txtTotalCost : "Envanter Değeri",

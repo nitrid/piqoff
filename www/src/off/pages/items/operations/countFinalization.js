@@ -204,7 +204,7 @@ export default class countFinalization extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -236,11 +236,11 @@ export default class countFinalization extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '120px'}}>
                         <div className="col-12">
-                            <NdForm colCount={3} id="frmCriter">
+                            <NdForm colCount={2} id="frmCriter">
                                {/* cmbDepot */}
-                               <NdItem colSpan={2}>
+                               <NdItem>
                                     <NdLabel text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot"
                                     displayExpr="NAME"                       
@@ -275,7 +275,7 @@ export default class countFinalization extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick} validationGroup={"frmValidCount"  + this.tabIndex}></NdButton>
                         </div>
@@ -289,37 +289,41 @@ export default class countFinalization extends React.PureComponent
                             <NdButton text={this.t("btnAddCount")} type="default" width="100%" onClick={()=>{this.calculateCountItems()}}></NdButton>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
-                            <NdGrid id="grdCountDocument" parent={this} 
-                            selection={{mode:"multiple"}} 
-                            height={'700'} 
-                            width={'100%'}
-                            showBorders={true}
-                            filterRow={{visible:true}} 
-                            columnAutoWidth={true}
-                            allowColumnReordering={true}
-                            allowColumnResizing={true}
-                            onRowDblClick={async(e)=>
-                            {
-                                App.instance.menuClick(
+                    <div className="row px-2 pt-1">
+                        <div className="col-12" style={{height: '100%'}}>
+                            <NdForm height={'100%'}>
+                                <NdItem height={'100%'}>
+                                <NdGrid id="grdCountDocument" parent={this} 
+                                selection={{mode:"multiple"}} 
+                                height={'590px'} 
+                                width={'100%'}
+                                showBorders={true}
+                                filterRow={{visible:true}} 
+                                columnAutoWidth={true}
+                                allowColumnReordering={true}
+                                allowColumnResizing={true}
+                                onRowDblClick={async(e)=>
                                 {
-                                    id: 'stk_02_001',
-                                    text: 'Sayım',
-                                    path: 'items/documents/itemCount.js',
-                                    pagePrm:{REF:e.data.REF,REF_NO:e.data.REF_NO}
-                                })
-                            }}
-                            >                            
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
-                                <Export fileName={this.lang.t("menuOff.stk_04_003")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="REF" caption={this.t("grdCountDocument.clmRef")} visible={true} /> 
-                                <Column dataField="REF_NO" caption={this.t("grdCountDocument.clmRefNo")} visible={true}/> 
-                                <Column dataField="DOC_DATE" caption={this.t("grdCountDocument.clmDate")} visible={true}/> 
-                                <Column dataField="QUANTITY" caption={this.t("grdCountDocument.clmQuantity")} visible={true}/>                                           
-                            </NdGrid>
+                                    App.instance.menuClick(
+                                    {
+                                        id: 'stk_02_001',
+                                        text: 'Sayım',
+                                        path: 'items/documents/itemCount.js',
+                                        pagePrm:{REF:e.data.REF,REF_NO:e.data.REF_NO}
+                                    })
+                                }}
+                                >                            
+                                    {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                    {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                    {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
+                                    <Export fileName={this.lang.t("menuOff.stk_04_003")} enabled={true} allowExportSelectedData={true} />
+                                    <Column dataField="REF" caption={this.t("grdCountDocument.clmRef")} visible={true} /> 
+                                    <Column dataField="REF_NO" caption={this.t("grdCountDocument.clmRefNo")} visible={true}/> 
+                                    <Column dataField="DOC_DATE" caption={this.t("grdCountDocument.clmDate")} visible={true}/> 
+                                    <Column dataField="QUANTITY" caption={this.t("grdCountDocument.clmQuantity")} visible={true}/>                                           
+                                    </NdGrid>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     {/* CountItems PopUp */}

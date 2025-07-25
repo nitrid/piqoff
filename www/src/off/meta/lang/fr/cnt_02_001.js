@@ -138,7 +138,7 @@ const cnt_02_001 =
     popMultiItem:    
     {    
         title: "Ajouté plusieurs produits",    
-        btnApprove: "Chercher Produits",    
+        btnApprove: "Rechercher Produits",    
         btnClear : "Vider",    
         btnSave : "Ajouter les lignes",    
     },    

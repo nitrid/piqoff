@@ -39,6 +39,7 @@ export default class outageDoc extends React.PureComponent
         this.combineControl = true
         this.combineNew = false  
         this.tabIndex = props.data.tabkey
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
         
         this.rightItems = [{ text: this.t("getDispatch"), }]
     }
@@ -533,13 +534,139 @@ export default class outageDoc extends React.PureComponent
             this.docObj.docItems.dt()[i].DOC_DATE = this.docObj.dt()[0].DOC_DATE
         }
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push(
+        {
+            location: 'before',
+            widget: 'dxButton',     
+            options: 
+            {
+                icon: 'add',    
+                validationGroup: 'frmOutwasFrom' + this.tabIndex,
+                onClick: (async(c) => 
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
+                            {
+                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                                {
+                                    this.pg_txtItemsCode.show()
+                                    this.pg_txtItemsCode.onClick = async(data) =>
+                                    {
+                                        this.combineControl = true
+                                        this.combineNew = false  
+
+                                        if(data.length == 1)
+                                        {
+                                            await this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                        }
+                                        else if(data.length > 1)
+                                        {
+                                            for (let i = 0; i < data.length; i++) 
+                                            {
+                                                if(i == 0)
+                                                {
+                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                }
+                                                else
+                                                {
+                                                    let tmpDocItems = {...this.docObj.docItems.empty}
+                                                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                                    tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                                    tmpDocItems.REF = this.docObj.dt()[0].REF
+                                                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                                    tmpDocItems.INPUT = '00000000-0000-0000-0000-000000000000'
+                                                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                                    this.txtRef.readOnly = true
+                                                    this.txtRefno.readOnly = true
+                                                    this.docObj.docItems.addEmpty(tmpDocItems)
+                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                                }
+                                            }
+                                        }
+                                    }
+                                    return
+                                }
+                            }
+                           
+                            this.pg_txtItemsCode.show()
+                            this.pg_txtItemsCode.onClick = async(data) =>
+                            {
+                                let tmpDocItems = {...this.docObj.docItems.empty}
+                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                tmpDocItems.REF = this.docObj.dt()[0].REF
+                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                tmpDocItems.INPUT = '00000000-0000-0000-0000-000000000000'
+                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                this.txtRef.readOnly = true
+                                this.txtRefno.readOnly = true
+                                this.docObj.docItems.addEmpty(tmpDocItems)
+                                this.combineControl = true
+                                this.combineNew = false  
+
+                                if(data.length == 1)
+                                {
+                                    await this.addItem(data[0],this.docObj.docItems.dt().length-1)
+                                }
+                                else if(data.length > 1)
+                                {
+                                    for (let i = 0; i < data.length; i++) 
+                                    {
+                                        if(i == 0)
+                                        {
+                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                        }
+                                        else
+                                        {
+                                            let tmpDocItems = {...this.docObj.docItems.empty}
+                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
+                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
+                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
+                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
+                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
+                                            tmpDocItems.REF = this.docObj.dt()[0].REF
+                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
+                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
+                                            tmpDocItems.INPUT = '00000000-0000-0000-0000-000000000000'
+                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
+                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
+                                            this.txtRef.readOnly = true
+                                            this.txtRefno.readOnly = true
+                                            this.docObj.docItems.addEmpty(tmpDocItems)
+                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
+                                        }
+                                    }
+                                }
+                            }
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
+                    }
+                }).bind(this)
+            }
+        })
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -721,7 +848,7 @@ export default class outageDoc extends React.PureComponent
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '120px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmOutwasFrom">
                                 {/* txtRef-Refno */}
@@ -1023,126 +1150,9 @@ export default class outageDoc extends React.PureComponent
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <NdForm colCount={1} onInitialized={(e)=>{this.frmOutwas = e.component}}>
-                                <NdItem location="after">
-                                    <Button icon="add"
-                                    validationGroup={"frmOutwasFrom" + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    this.pg_txtItemsCode.show()
-                                                    this.pg_txtItemsCode.onClick = async(data) =>
-                                                    {
-                                                        this.combineControl = true
-                                                        this.combineNew = false  
-
-                                                        if(data.length == 1)
-                                                        {
-                                                            await this.addItem(data[0],this.docObj.docItems.dt().length-1)
-                                                        }
-                                                        else if(data.length > 1)
-                                                        {
-                                                            for (let i = 0; i < data.length; i++) 
-                                                            {
-                                                                if(i == 0)
-                                                                {
-                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                                                }
-                                                                else
-                                                                {
-                                                                    let tmpDocItems = {...this.docObj.docItems.empty}
-                                                                    tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                                    tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                                    tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                                    tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                                    tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                                    tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                                    tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                                    tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                                    tmpDocItems.INPUT = '00000000-0000-0000-0000-000000000000'
-                                                                    tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                                    tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                                    this.txtRef.readOnly = true
-                                                                    this.txtRefno.readOnly = true
-                                                                    this.docObj.docItems.addEmpty(tmpDocItems)
-                                                                    await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    return
-                                                }
-                                            }
-                                           
-                                            this.pg_txtItemsCode.show()
-                                            this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                let tmpDocItems = {...this.docObj.docItems.empty}
-                                                tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                tmpDocItems.INPUT = '00000000-0000-0000-0000-000000000000'
-                                                tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                this.txtRef.readOnly = true
-                                                this.txtRefno.readOnly = true
-                                                this.docObj.docItems.addEmpty(tmpDocItems)
-                                                this.combineControl = true
-                                                this.combineNew = false  
-
-                                                if(data.length == 1)
-                                                {
-                                                    await this.addItem(data[0],this.docObj.docItems.dt().length-1)
-                                                }
-                                                else if(data.length > 1)
-                                                {
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        if(i == 0)
-                                                        {
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                                        }
-                                                        else
-                                                        {
-                                                            let tmpDocItems = {...this.docObj.docItems.empty}
-                                                            tmpDocItems.DOC_GUID = this.docObj.dt()[0].GUID
-                                                            tmpDocItems.TYPE = this.docObj.dt()[0].TYPE
-                                                            tmpDocItems.DOC_TYPE = this.docObj.dt()[0].DOC_TYPE
-                                                            tmpDocItems.REBATE = this.docObj.dt()[0].REBATE
-                                                            tmpDocItems.LINE_NO = this.docObj.docItems.dt().length
-                                                            tmpDocItems.REF = this.docObj.dt()[0].REF
-                                                            tmpDocItems.REF_NO = this.docObj.dt()[0].REF_NO
-                                                            tmpDocItems.OUTPUT = this.docObj.dt()[0].OUTPUT
-                                                            tmpDocItems.INPUT = '00000000-0000-0000-0000-000000000000'
-                                                            tmpDocItems.DOC_DATE = this.docObj.dt()[0].DOC_DATE
-                                                            tmpDocItems.SHIPMENT_DATE = this.docObj.dt()[0].SHIPMENT_DATE
-                                                            this.txtRef.readOnly = true
-                                                            this.txtRefno.readOnly = true
-                                                            this.docObj.docItems.addEmpty(tmpDocItems)
-                                                            await this.addItem(data[i],this.docObj.docItems.dt().length-1)
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
-                                        }
-                                    }}/>
-                                </NdItem>
+                            <NdForm colCount={1} onInitialized={(e)=>{this.frmOutwas = e.component}} style={{height: '100%'}}>
                                 <NdItem>
                                     <React.Fragment>    
                                         <NdGrid parent={this} id={"grdOutwasItems"} 
@@ -1151,6 +1161,7 @@ export default class outageDoc extends React.PureComponent
                                         width={'100%'}
                                         dbApply={false}
                                         loadPanel={{enabled:true}}
+                                        onToolbarPreparing={this.onGridToolbarPreparing}
                                         onRowUpdating={async(e)=>
                                         {
                                             if(this.quantityControl == true)
@@ -1198,7 +1209,7 @@ export default class outageDoc extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1 pb-2" style={{height: '170px'}}>
                         <div className="col-12">
                             <NdForm colCount={4} parent={this} id="frmPurcoffer">
                                 {/* TOPLAM MALIYET */}
@@ -1267,7 +1278,7 @@ export default class outageDoc extends React.PureComponent
                         title={this.t("popPassword.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'200'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -1296,6 +1307,7 @@ export default class outageDoc extends React.PureComponent
                                                     this.docObj.dt()[0].LOCKED = 0
                                                     this.frmOutwas.option('disabled',false)
                                                     this.docLocked = false
+                                                    await this.grdOutwasItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')})
                                                     this.toast.show({message:this.t("msgPasswordSucces.msg"),type:"success"})
                                                     this.popPassword.hide();  
                                                 }
@@ -1349,7 +1361,7 @@ export default class outageDoc extends React.PureComponent
                     title={this.t("popQDescAdd.title")}
                     container={'#' + this.props.data.id + this.tabIndex} 
                     width={'500'}
-                    height={'200'}
+                    height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <NdForm colCount={1} height={'fit-content'}>
@@ -1388,7 +1400,7 @@ export default class outageDoc extends React.PureComponent
                     height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
                             </div>
@@ -1412,7 +1424,7 @@ export default class outageDoc extends React.PureComponent
                         title={this.t("popDesign.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'250'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -1530,7 +1542,7 @@ export default class outageDoc extends React.PureComponent
                         setTimeout(() => {this.txtQuantity.focus()}, 500);
                     }}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
                             </div>

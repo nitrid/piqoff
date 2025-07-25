@@ -36,6 +36,7 @@ export default class itemEntryOutDoc extends React.PureComponent
         this.docOutObj = new docCls();
 
         this.cellRoleRender = this.cellRoleRender.bind(this)
+        this.onToolbarPreparing = this.onToolbarPreparing.bind(this)
 
         this.combineControl = true
         this.combineNew = false  
@@ -70,6 +71,8 @@ export default class itemEntryOutDoc extends React.PureComponent
         this.InOutDt.clear()
         this.docInObj.clearAll()
         this.docOutObj.clearAll()
+
+        this.dtDocDate.value = moment(new Date()).format("YYYY-MM-DD")
 
         this.InOutDt.on('onAddRow',async(pData) =>
         {
@@ -496,13 +499,38 @@ export default class itemEntryOutDoc extends React.PureComponent
             }
         }
     }
+    onToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push(
+        {
+            location: 'before',
+            widget: 'dxButton',
+            options: 
+            {
+                icon: 'add',
+                onClick: (async()=>
+                {
+                    this.pg_txtItemsCode.show()
+                    this.pg_txtItemsCode.onClick = async(data) =>
+                    {
+                        this.combineControl = true
+                        this.combineNew = false  
+                        for (let i = 0; i < data.length; i++) 
+                        {
+                            await this.addItem(data[i])
+                        }
+                    }
+                }).bind(this)
+            }
+        })
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -665,7 +693,7 @@ export default class itemEntryOutDoc extends React.PureComponent
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '120px'}}>
                         <div className="col-12">
                             <NdLayout parent={this} id={"frmFrom" + this.tabIndex} cols={4}>
                                 {/* txtRef */}
@@ -902,27 +930,6 @@ export default class itemEntryOutDoc extends React.PureComponent
                                         </div>
                                     </div>
                                 </NdLayoutItem>
-                                {/* ButtonBar */}
-                                <NdLayoutItem key={"ButtonBarLy"} id={"ButtonBarLy"} parent={this} data-grid={{x:0,y:3,h:1,w:4}} access={this.access.filter({ELEMENT:'ButtonBarLy',USERS:this.user.CODE})}>
-                                    <div className="row">
-                                        <div className='col-1 p-0 pe-1'>
-                                            <NdButton id="btnAdd" parent={this} icon="plus" type="normal"
-                                            onClick={async()=>
-                                            {
-                                                this.pg_txtItemsCode.show()
-                                                this.pg_txtItemsCode.onClick = async(data) =>
-                                                {
-                                                    this.combineControl = true
-                                                    this.combineNew = false  
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.addItem(data[i])
-                                                    }
-                                                }
-                                            }}/>
-                                        </div>
-                                    </div>
-                                </NdLayoutItem>
                                 {/* grdListLy */}
                                 <NdLayoutItem key={"grdListLy"} id={"grdListLy"} parent={this} data-grid={{x:0,y:4,h:10,w:4}} access={this.access.filter({ELEMENT:'grdListLy',USERS:this.user.CODE})}>
                                     <div className="row" style={{height:'100%'}}>
@@ -930,10 +937,11 @@ export default class itemEntryOutDoc extends React.PureComponent
                                             <React.Fragment>
                                                 <NdGrid parent={this} id={"grdList"} 
                                                 filterRow={{visible:true}} 
-                                                height={'100%'} 
+                                                height={'590px'} 
                                                 width={'100%'}
                                                 dbApply={false}
                                                 loadPanel={{enabled:true}}
+                                                onToolbarPreparing={this.onToolbarPreparing}
                                                 onRowUpdating={async(e)=>
                                                 {
                                                     if(this.quantityControl == true)
@@ -1187,10 +1195,10 @@ export default class itemEntryOutDoc extends React.PureComponent
                     title={this.t("msgCombineItem.title")} 
                     showCloseButton={false}
                     width={"500px"}
-                    height={"250px"}
+                    height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgCombineItem.btn01"),location:'before'},{id:"btn02",caption:this.t("msgCombineItem.btn02"),location:'after'}]}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgCombineItem.msg")}</div>
                             </div>
@@ -1245,7 +1253,7 @@ export default class itemEntryOutDoc extends React.PureComponent
                     title={this.t("msgQuantity.title")} 
                     showCloseButton={false}
                     width={"500px"}
-                    height={"250px"}
+                    height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'before'},{id:"btn02",caption:this.t("msgQuantity.btn02"),location:'after'}]}
                     onShowed={()=>
                     {
@@ -1253,7 +1261,7 @@ export default class itemEntryOutDoc extends React.PureComponent
                         setTimeout(() => {this.txtQuantity.focus()}, 500);
                     }}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
                             </div>

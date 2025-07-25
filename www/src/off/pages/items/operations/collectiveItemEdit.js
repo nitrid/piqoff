@@ -183,7 +183,7 @@ export default class collectiveItemEdit extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -215,7 +215,7 @@ export default class collectiveItemEdit extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '120px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="frmCriter">
                                 {/* txtCode */}
@@ -270,120 +270,124 @@ export default class collectiveItemEdit extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3 offset-9">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <NdGrid id="grdItemList" parent={this} 
-                            showBorders={true}
-                            filterRow={{visible:true}} 
-                            columnAutoWidth={true}
-                            allowColumnReordering={false}
-                            allowColumnResizing={true}
-                            loadPanel={{enabled:true}}
-                            height={'100%'} 
-                            width={'100%'}
-                            dbApply={false}
-                            selection={{mode:"single"}}
-                            onRowClick={async(e)=>
-                            {
-                                let tmpIndexes = []
-                                for (let i = 0; i <this.editObj.dt().length; i++) 
-                                {
-                                    if(this.editObj.dt()[i].CODE == e.data.CODE)
+                            <NdForm height={'100%'}>
+                                <NdItem height={'100%'}>
+                                    <NdGrid id="grdItemList" parent={this} 
+                                    showBorders={true}
+                                    filterRow={{visible:true}} 
+                                    columnAutoWidth={true}
+                                    allowColumnReordering={false}
+                                    allowColumnResizing={true}
+                                    loadPanel={{enabled:true}}
+                                    height={'590px'} 
+                                    width={'100%'}
+                                    dbApply={false}
+                                    selection={{mode:"single"}}
+                                    onRowClick={async(e)=>
                                     {
-                                        tmpIndexes.push(this.grdItemList.devGrid.getRowIndexByKey(this.editObj.dt()[i]))
-                                    }
-                                }
-                                this.grdItemList.devGrid.selectRowsByIndexes(tmpIndexes)
-                            }}
-                            onSaving={async(e)=>
-                            {
-                                App.instance.loading.show()
-                            }}
-                            onSaved={async(e)=>
-                            {
-                                App.instance.loading.show()
-                                
-                                
-                                if(await this.editObj.save() == 0)
-                                {                                                    
-                                    App.instance.loading.hide()
-                                    this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
-                                }
-                                else
-                                {
-                                    App.instance.loading.hide()
-                                    let tmpConfObj1 =
+                                        let tmpIndexes = []
+                                        for (let i = 0; i <this.editObj.dt().length; i++) 
+                                        {
+                                            if(this.editObj.dt()[i].CODE == e.data.CODE)
+                                            {
+                                                tmpIndexes.push(this.grdItemList.devGrid.getRowIndexByKey(this.editObj.dt()[i]))
+                                            }
+                                        }
+                                        this.grdItemList.devGrid.selectRowsByIndexes(tmpIndexes)
+                                    }}
+                                    onSaving={async(e)=>
                                     {
-                                        id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
-                                        button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
-                                        content: (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                    }
-                                    await dialog(tmpConfObj1);
-                                }
-                            }}
-                            onCellPrepared={(e) =>
-                            {
-                                if(e.rowType === "data" && e.column.dataField === "GROSS_MARGIN")
-                                {
-                                    e.cellElement.style.color = e.data.GROSS_MARGIN_RATE < 30 ? "red" : "blue";
-                                }
+                                        App.instance.loading.show()
+                                    }}
+                                    onSaved={async(e)=>
+                                    {
+                                        App.instance.loading.show()
+                                        
+                                        
+                                        if(await this.editObj.save() == 0)
+                                        {                                                    
+                                            App.instance.loading.hide()
+                                            this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
+                                        }
+                                        else
+                                        {
+                                            App.instance.loading.hide()
+                                            let tmpConfObj1 =
+                                            {
+                                                id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                button:[{id:"btn01",caption:this.t("msgSave.btn01"),location:'after'}],
+                                                content: (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                            }
+                                            await dialog(tmpConfObj1);
+                                        }
+                                    }}
+                                    onCellPrepared={(e) =>
+                                    {
+                                        if(e.rowType === "data" && e.column.dataField === "GROSS_MARGIN")
+                                        {
+                                            e.cellElement.style.color = e.data.GROSS_MARGIN_RATE < 30 ? "red" : "blue";
+                                        }
 
-                                if(e.rowType === "data" && e.column.dataField === "NET_MARGIN")
-                                {
-                                    e.cellElement.style.color = e.data.NET_MARGIN_RATE < 30 ? "red" : "blue";
-                                }
+                                        if(e.rowType === "data" && e.column.dataField === "NET_MARGIN")
+                                        {
+                                            e.cellElement.style.color = e.data.NET_MARGIN_RATE < 30 ? "red" : "blue";
+                                        }
 
-                                if(e.rowType === "data" && e.column.dataField === "PRICE_SALE")
-                                {
-                                    //GROSS_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
-                                    let tmpExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
-                                    let tmpMargin = e.data.CUSTOMER_PRICE == 0 || tmpExVat == 0 ? 0 : tmpExVat - e.data.CUSTOMER_PRICE;
-                                    let tmpMarginRate = tmpMargin == 0 ? 0 : (tmpMargin /  e.data.CUSTOMER_PRICE) * 100   //((tmpExVat - e.data.CUSTOMER_PRICE)/tmpExVat) * 100
-                                    e.data.GROSS_MARGIN =  tmpMarginRate.toFixed(2) + "% / " + Number.money.sign + tmpMargin.toFixed(2);        
-                                    e.data.GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2); 
-                                    e.values[8] = tmpMarginRate.toFixed(2) + "% / " + Number.money.sign + tmpMargin.toFixed(2); 
-                                    e.values[10] =  Number(tmpMargin / Number(tmpExVat) * 100).round(2)
+                                        if(e.rowType === "data" && e.column.dataField === "PRICE_SALE")
+                                        {
+                                            //GROSS_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
+                                            let tmpExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
+                                            let tmpMargin = e.data.CUSTOMER_PRICE == 0 || tmpExVat == 0 ? 0 : tmpExVat - e.data.CUSTOMER_PRICE;
+                                            let tmpMarginRate = tmpMargin == 0 ? 0 : (tmpMargin /  e.data.CUSTOMER_PRICE) * 100   //((tmpExVat - e.data.CUSTOMER_PRICE)/tmpExVat) * 100
+                                            e.data.GROSS_MARGIN =  tmpMarginRate.toFixed(2) + "% / " + Number.money.sign + tmpMargin.toFixed(2);        
+                                            e.data.GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2); 
+                                            e.values[8] = tmpMarginRate.toFixed(2) + "% / " + Number.money.sign + tmpMargin.toFixed(2); 
+                                            e.values[10] =  Number(tmpMargin / Number(tmpExVat) * 100).round(2)
 
-                                    // NET_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
-                                    let tmpNetExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
-                                    let tmpNetMargin = tmpNetExVat == 0 || e.data.CUSTOMER_PRICE == 0 ? 0 : (tmpNetExVat - e.data.CUSTOMER_PRICE) / 1.15;
-                                    let tmpNetMarginRate = tmpNetMargin == 0 ? 0 : (tmpNetMargin / e.data.CUSTOMER_PRICE) * 100
-                                    e.data.NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2);
-                                    e.data.NET_MARGIN_RATE = tmpNetMarginRate.toFixed(2);    
-                                    e.values[9] =   tmpNetMargin.toFixed(2) + Number.money.sign + "  %" +  tmpNetMarginRate.toFixed(2);
-                                }
-                            }}
-                            >                            
-                                <Paging defaultPageSize={14} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Editing mode="batch" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
-                                <Export fileName={this.lang.t("menuOff.stk_04_001")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="CODE" caption={this.t("grdItemList.clmCode")} visible={true} width={110} allowEditing={false}/> 
-                                <Column dataField="BARCODE" caption={this.t("grdItemList.clmBarcode")} visible={true} width={130} allowEditing={false}/> 
-                                <Column dataField="NAME" caption={this.t("grdItemList.clmName")} visible={true} width={320} defaultSortOrder="asc"  /> 
-                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdItemList.clmCustomerName")} visible={true}  width={110} allowEditing={false}/> 
-                                <Column dataField="MULTICODE" caption={this.t("grdItemList.clmMulticode")} visible={true} width={110}/> 
-                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdItemList.clmCustomerPrice")} visible={true} width={75}/> 
-                                <Column dataField="MAIN_UNIT_NAME" caption={this.t("grdItemList.clmMainUnit")} visible={false} width={100} allowEditing={false}/> 
-                                <Column dataField="PRICE_SALE" caption={this.t("grdItemList.clmPriceSale")} visible={true} width={75} /> 
-                                <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={130} editCellRender={this.cellRoleRender}/> 
-                                <Column dataField="GROSS_MARGIN" caption={this.t("grdItemList.clmGrossMargin")} visible={true} width={75} allowEditing={false}/> 
-                                <Column dataField="NET_MARGIN" caption={this.t("grdItemList.clmNetMargin")} visible={true} width={75} allowEditing={false}/> 
-                                <Column dataField="MARGIN" caption={this.t("grdItemList.clmMargin")} visible={true} width={75} allowEditing={false}/>
-                                <Column dataField="CUSTOMS" caption={this.t("grdItemList.clmCustoms")} visible={true} width={75} editCellRender={this.cellRoleRender}>
-                                    <StringLengthRule message={this.t("validOriginMax8")} max={8} min={8} ignoreEmptyValue={true}/>    
-                                </Column>   
-                                <Column dataField="UNDER_UNIT_NAME" caption={this.t("grdItemList.clmUnderUnit")} visible={true} width={100}  editCellRender={this.cellRoleRender}/> 
-                                <Column dataField="UNDER_FACTOR" caption={this.t("grdItemList.clmUnderFactor")} visible={true} width={70}/> 
-                                <Column dataField="VAT" caption={this.t("grdItemList.clmVat")} visible={true} width={110} editCellRender={this.cellRoleRender}/>    
-                                <Column dataField="WEIGHING" caption={this.t("grdItemList.clmWeighing")} visible={true} width={70}/>  
-                                <Column dataField="STATUS" caption={this.t("grdItemList.clmStatus")} visible={true} width={50}/>    
-                            </NdGrid>
+                                            // NET_MARGIN ANINDA ETKI ETSİN DİYE YAPILDI
+                                            let tmpNetExVat = e.data.PRICE_SALE / ((e.data.VAT / 100) + 1)
+                                            let tmpNetMargin = tmpNetExVat == 0 || e.data.CUSTOMER_PRICE == 0 ? 0 : (tmpNetExVat - e.data.CUSTOMER_PRICE) / 1.15;
+                                            let tmpNetMarginRate = tmpNetMargin == 0 ? 0 : (tmpNetMargin / e.data.CUSTOMER_PRICE) * 100
+                                            e.data.NET_MARGIN = tmpNetMargin.toFixed(2) + Number.money.sign + " / %" +  tmpNetMarginRate.toFixed(2);
+                                            e.data.NET_MARGIN_RATE = tmpNetMarginRate.toFixed(2);    
+                                            e.values[9] =   tmpNetMargin.toFixed(2) + Number.money.sign + "  %" +  tmpNetMarginRate.toFixed(2);
+                                        }
+                                    }}
+                                    >                            
+                                        <Paging defaultPageSize={14} />
+                                        <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                        <Editing mode="batch" allowUpdating={true} allowDeleting={false} confirmDelete={false}/>
+                                        <Export fileName={this.lang.t("menuOff.stk_04_001")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="CODE" caption={this.t("grdItemList.clmCode")} visible={true} width={110} allowEditing={false}/> 
+                                        <Column dataField="BARCODE" caption={this.t("grdItemList.clmBarcode")} visible={true} width={130} allowEditing={false}/> 
+                                        <Column dataField="NAME" caption={this.t("grdItemList.clmName")} visible={true} width={320} defaultSortOrder="asc"  /> 
+                                        <Column dataField="CUSTOMER_NAME" caption={this.t("grdItemList.clmCustomerName")} visible={true}  width={110} allowEditing={false}/> 
+                                        <Column dataField="MULTICODE" caption={this.t("grdItemList.clmMulticode")} visible={true} width={110}/> 
+                                        <Column dataField="CUSTOMER_PRICE" caption={this.t("grdItemList.clmCustomerPrice")} visible={true} width={75}/> 
+                                        <Column dataField="MAIN_UNIT_NAME" caption={this.t("grdItemList.clmMainUnit")} visible={false} width={100} allowEditing={false}/> 
+                                        <Column dataField="PRICE_SALE" caption={this.t("grdItemList.clmPriceSale")} visible={true} width={75} /> 
+                                        <Column dataField="ORGINS" caption={this.t("grdItemList.clmOrgins")} visible={true} width={130} editCellRender={this.cellRoleRender}/> 
+                                        <Column dataField="GROSS_MARGIN" caption={this.t("grdItemList.clmGrossMargin")} visible={true} width={75} allowEditing={false}/> 
+                                        <Column dataField="NET_MARGIN" caption={this.t("grdItemList.clmNetMargin")} visible={true} width={75} allowEditing={false}/> 
+                                        <Column dataField="MARGIN" caption={this.t("grdItemList.clmMargin")} visible={true} width={75} allowEditing={false}/>
+                                        <Column dataField="CUSTOMS" caption={this.t("grdItemList.clmCustoms")} visible={true} width={75} editCellRender={this.cellRoleRender}>
+                                            <StringLengthRule message={this.t("validOriginMax8")} max={8} min={8} ignoreEmptyValue={true}/>    
+                                        </Column>   
+                                        <Column dataField="UNDER_UNIT_NAME" caption={this.t("grdItemList.clmUnderUnit")} visible={true} width={100}  editCellRender={this.cellRoleRender}/> 
+                                        <Column dataField="UNDER_FACTOR" caption={this.t("grdItemList.clmUnderFactor")} visible={true} width={70}/> 
+                                        <Column dataField="VAT" caption={this.t("grdItemList.clmVat")} visible={true} width={110} editCellRender={this.cellRoleRender}/>    
+                                        <Column dataField="WEIGHING" caption={this.t("grdItemList.clmWeighing")} visible={true} width={70}/>  
+                                        <Column dataField="STATUS" caption={this.t("grdItemList.clmStatus")} visible={true} width={50}/>    
+                                    </NdGrid>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>

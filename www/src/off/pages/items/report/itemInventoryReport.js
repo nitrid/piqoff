@@ -78,7 +78,7 @@ export default class itemInventoryReport extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -110,7 +110,7 @@ export default class itemInventoryReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '80px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="frmKriter">
                                 <NdItem>
@@ -124,14 +124,17 @@ export default class itemInventoryReport extends React.PureComponent
                                     data={{source: {select : {query:"SELECT GUID,CODE,NAME FROM DEPOT ORDER BY CODE ASC"},sql : this.core.sql}}}
                                     />
                                 </NdItem>
+                                <NdEmptyItem/>
+                                <NdItem style={{margin: '20px 20px'}}>
+                                    <NdCheckBox id="chkZeroQuantity" parent={this} text={this.t("chkZeroQuantity")}  value={false} />
+                                </NdItem>
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
-                            <NdCheckBox id="chkZeroQuantity" parent={this} text={this.t("chkZeroQuantity")}  value={false} ></NdCheckBox>
                         </div>
                         <div className="col-3">
                         </div>
@@ -139,35 +142,40 @@ export default class itemInventoryReport extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <NdGrid id="grdListe" parent={this} 
-                            selection={{mode:"multiple"}} 
-                            showBorders={true}
-                            filterRow={{visible:true}} 
-                            headerFilter={{visible:true}}
-                            height={'690'} 
-                            width={'100%'}
-                            columnAutoWidth={true}
-                            allowColumnReordering={true}
-                            allowColumnResizing={true}
-                            loadPanel={{enabled:true}}
-                            >                            
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
-                                <ColumnChooser enabled={true} />
-                                <Export fileName={this.lang.t("menuOff.stk_05_001")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
-                                <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
-                                <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true} defaultSortOrder="desc"/> 
-                                <Column dataField="UNIT_SYMBOL" caption={this.t("grdListe.clmUnitSymbol")} visible={true}/> 
-                                <Column dataField="BARCODE" caption={this.t("grdListe.clmBarcode")} visible={true}/> 
-                                <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} visible={true}/> 
-                                <Column dataField="TOTAL_COST" caption={this.t("grdListe.clmTotalCost")} visible={true}/> 
-                                <Column dataField="SALE_PRICE" caption={this.t("grdListe.clmSalePrice")} visible={false}/> 
-                                <Column dataField="TOTAL_PRICE" caption={this.t("grdListe.clmTotalPrice")} visible={false}/> 
-                            </NdGrid>
+                            <NdForm colCount={1} id="frmGrid" height={'100%'}>
+                                <NdItem height={'100%'}>
+                                    <NdGrid id="grdListe" parent={this} 
+                                    selection={{mode:"multiple"}} 
+                                    showBorders={true}
+                                    filterRow={{visible:true}} 
+                                    headerFilter={{visible:true}}
+                                    height={'690'} 
+                                    width={'100%'}
+                                    columnAutoWidth={true}
+                                    allowColumnReordering={true}
+                                    allowColumnResizing={true}
+                                    loadPanel={{enabled:true}}
+                                    >                            
+                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
+                                        <ColumnChooser enabled={true} />
+                                        <Export fileName={this.lang.t("menuOff.stk_05_001")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true}/> 
+                                        <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true} /> 
+                                        <Column dataField="QUANTITY" caption={this.t("grdListe.clmQuantity")} visible={true} defaultSortOrder="desc"/> 
+                                        <Column dataField="UNIT_SYMBOL" caption={this.t("grdListe.clmUnitSymbol")} visible={true}/> 
+                                        <Column dataField="BARCODE" caption={this.t("grdListe.clmBarcode")} visible={true}/> 
+                                        <Column dataField="COST_PRICE" caption={this.t("grdListe.clmCostPrice")} visible={true}/> 
+                                        <Column dataField="TOTAL_COST" caption={this.t("grdListe.clmTotalCost")} visible={true}/> 
+                                        <Column dataField="SALE_PRICE" caption={this.t("grdListe.clmSalePrice")} visible={false}/> 
+                                        <Column dataField="TOTAL_PRICE" caption={this.t("grdListe.clmTotalPrice")} visible={false}/> 
+                                    </NdGrid>
+                                </NdItem>
+                            </NdForm>
+
                         </div>
                     </div>
                     <NdForm colCount={4}>

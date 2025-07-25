@@ -845,19 +845,6 @@ export default class itemCount extends React.PureComponent
                                     height={'90%'}
                                     title={this.t("pg_Docs.title")} 
                                     data={{source:{select:{query : `SELECT REF,REF_NO,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE,DEPOT_NAME,SUM(QUANTITY) AS QUANTITY,COUNT(REF) AS TOTAL_LINE FROM ITEM_COUNT_VW_01 GROUP BY REF,REF_NO,DOC_DATE,DEPOT_NAME ORDER BY DOC_DATE DESC`},sql:this.core.sql}}}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                   
-                                                }
-                                            }
-                                        ]
-                                    }
                                     >
                                         <Column dataField="REF" caption={this.t("pg_Docs.clmRef")} width={70} />
                                         <Column dataField="REF_NO" caption={this.t("pg_Docs.clmRefNo")} width={70}  />                                        
@@ -1322,6 +1309,7 @@ export default class itemCount extends React.PureComponent
                                                 }
                                                 this.frmCount.option('disabled',false)
                                                 this.docLocked = false
+                                                await this.grdItemCount.dataRefresh({source:this.countObj.dt('ITEM_COUNT')})
                                                 this.toast.show({message:this.t("msgPasswordSucces.msg"),type:"success"})
                                                 this.popPassword.hide();  
                                             }

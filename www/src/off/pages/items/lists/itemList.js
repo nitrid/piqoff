@@ -478,7 +478,7 @@ export default class itemList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '120px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="frmKriter">
                                 <NdItem>
@@ -521,30 +521,35 @@ export default class itemList extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-3">                            
-                        </div>
-                        <div className="col-2">
-                            <NdCheckBox id="chkMasterBarcode" parent={this} text={this.t("chkMasterBarcode")}  value={true} ></NdCheckBox>
-                        </div>
-                        <div className="col-2">
-                            <NdCheckBox id="chkLastCustomer" parent={this} text={this.t("chkLastCustomer")}  value={false} 
-                            onValueChanged={(e)=>
-                            {
-                                if(e.value == true)
-                                {
-                                    this.chkMasterBarcode.value = true
-                                }
-                            }}></NdCheckBox>
-                        </div>
-                        <div className="col-2">
-                            <NdCheckBox id="chkAktif" text={this.t("btnCheck")} parent={this} value={true}></NdCheckBox>
-                        </div>
-                        <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}></NdButton>
+                    <div className="row px-2 pt-1">
+                        <div className="col-12">
+                            <NdForm colCount={4} id="frmOptions">
+                                <NdItem>
+                                    <NdLabel text={this.t("chkMasterBarcode")} alignment="right" />
+                                    <NdCheckBox id="chkMasterBarcode" parent={this} value={true} />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("chkLastCustomer")} alignment="right" />
+                                    <NdCheckBox id="chkLastCustomer" parent={this} value={false} 
+                                    onValueChanged={(e) =>
+                                    {
+                                        if (e.value == true)
+                                        {
+                                            this.chkMasterBarcode.value = true
+                                        }
+                                    }}/>
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("btnCheck")} alignment="right" />
+                                    <NdCheckBox id="chkAktif" parent={this} value={true}/>
+                                </NdItem>
+                                <NdItem>
+                                    <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={3} id="frmKriter">
                                 <NdItem>
@@ -562,11 +567,11 @@ export default class itemList extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdListe" parent={this} 
                             selection={{mode:"multiple"}} 
-                            height={600}
+                            height={'690px'}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}

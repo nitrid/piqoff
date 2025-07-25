@@ -15,7 +15,8 @@ const stk_05_003 =
         clmTotalCost : "Inventory Value", 
         clmSalePrice : "Sale Price", 
         clmTotalPrice : "Total Sale Value" ,
-        clmUnitSymbol : 'Unit'
+        clmUnitSymbol : 'Unit',
+        clmDate : "Date"
     },
     txtTotalQuantity : "Total Quantity",
     txtTotalCost : "Inventory Value",

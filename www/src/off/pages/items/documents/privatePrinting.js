@@ -128,7 +128,7 @@ export default class privatePrinting extends React.PureComponent
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" >
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -321,7 +321,7 @@ export default class privatePrinting extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">                        
+                    <div className="row px-2 pt-1" style={{height: '120px'}}>                        
                         <div className="col-9">
                             <NdForm colCount={2} id={"frmPriLabel" + this.tabIndex}>
                                 <NdItem>
@@ -490,19 +490,19 @@ export default class privatePrinting extends React.PureComponent
                             title={this.t("popUniqCodeList.title")}
                             container={'#' + this.props.data.id + this.tabIndex} 
                             width={'800'}
-                            height={'800'}
+                            height={'auto'}
                             position={{of:'#' + this.props.data.id + this.tabIndex}}
                             >
                                 <NdForm colCount={1} height={'fit-content'}>
                                     <NdItem>
                                         <NdGrid parent={this} id={"grdUniqList"} 
                                         filterRow={{visible:true}} 
-                                        height={'700'} 
+                                        height={'auto'} 
                                         width={'100%'}
                                         dbApply={false}
                                         loadPanel={{enabled:true}}
                                         >
-                                            <Paging defaultPageSize={18} />
+                                            <Paging defaultPageSize={20} />
                                             <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                             <Scrolling mode="standart"/>
@@ -529,7 +529,7 @@ export default class privatePrinting extends React.PureComponent
                         title={this.t("popDesign.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'180'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
