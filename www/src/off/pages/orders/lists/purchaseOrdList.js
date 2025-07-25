@@ -300,7 +300,7 @@ export default class purchaseOrdList extends React.PureComponent
                                 App.instance.menuClick(
                                 {
                                     id: 'sip_02_001',
-                                    text: this.t('menu'),
+                                    text: this.lang.t('menuOff.sip_02_001'),
                                     path: 'orders/documents/purchaseOrder.js',
                                     pagePrm:{GUID:e.data.GUID}
                                 })

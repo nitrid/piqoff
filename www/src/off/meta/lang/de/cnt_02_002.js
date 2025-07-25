@@ -1,233 +1,209 @@
-        // "Satış Anlaşması"
+// "Satış Anlaşması"
 const cnt_02_002 = 
 {
-    validDate: "Bitte Datum auswählen.",
+    validDate : "Datum auswählen.",
     cmbDepot: "Lager",
-    txtCustomerCode: "Kundennummer",
-    txtCustomerName: "Kundenname",
-    validItemsCode: "Artikelauswahl",
-    btnMailsend: "E-Mail senden",
+    txtCustomerCode : "Kundenauswahl",
+    txtCustomerName : "Kundenname",
+    placeMailHtmlEditor : "Bitte geben Sie Ihren Text ein.", 
+    validItemsCode : "Produkt auswählen",
+    validDesign : "Bitte wählen Sie das Design aus.",  
+    btnMailsend : "E-Mail senden",
     cmbVatType : 
     {
-        title : "Steuerart",
-        vatInc : "inkl. MwSt.",
-        vatExt : "exkl. MwSt."
+        title : "Steuertyp",
+        vatInc : "Inkl. MwSt.",
+        vatExt : "Ohne MwSt."
     },
-    pg_Docs:
+    pg_Docs :      
+    {     
+        title : "Dokumentenauswahl",     
+        clmDate : "Datum",
+        clmCode : "Code",     
+        clmName : "Name",     
+        clmOutputName : "Kundenname",     
+        clmOutputCode  : "Kundencode",     
+        clmTotal : "Gesamtsumme inkl. MwSt."
+    },     
+    pg_txtCustomerCode : 
     {
-        title: "Dokumentauswahl",
-        clmDate: "DATUM",
-        clmCode: "CODE",
-        clmName: "NAME",
-        clmOutputName: "KUNDENNAME",
-        clmOutputCode: "KUNDENNUMMER",
+        title : "Kundenauswahl",
+        clmCode :  "Kundencode",
+        clmTitle : "Kundenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Gattung"
     },
-    pg_txtCustomerCode:
+    pg_txtPopItemsCode : 
     {
-        title: "Kundenauswahl",
-        clmCode: "KUNDENNUMMER",
-        clmTitle: "KUNDENNAME",
-        clmTypeName: "TYP",
-        clmGenusName: "ART"
-    },
-    pg_txtPopItemsCode:
-    {
-        title: "Artikelauswahl",
-        clmCode: "ARTIKELNUMMER",
-        clmName: "ARTIKELNAME",
-        clmGrpName: "GRUPPENNAME",
-        clmCostPrice: "EINKAUFSPREIS",
-        clmSalesPrice: "VERKAUFSPREIS"
+        title : "Produkt auswählen",
+        clmCode :  "Produktreferenz",
+        clmName : "Produktname",
+        clmGrpName : "Gruppe",
+        clmCostPrice :  "Einkaufspreis",
+        clmSalesPrice : "Verkaufspreis"
     },
     msgContractValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es kann keine Zeile hinzugefügt werden, ohne einen Kunden auszuwählen!"
-    },
-    msgSpeichern:
-    {
-        title: "Achtung",
-        btn01: "OK",
-        btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie speichern möchten?"
-    },
-    msgSpeichernResult:
-    {
-        title: "Achtung",
-        btn01: "OK",
-        msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
-        msgFailed: "Fehler beim Speichern Ihres Eintrags!"
-    },
-    msgSpeichernValid:
-    {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
-    },
-    msgDelete:
-    {
-        title: "Achtung",
-        btn01: "OK",
-        btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
-    },
-    msgNotCustomer:
-    {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Kunde nicht gefunden!"
+        msg: "Bitte wählen Sie zuerst den Kunden aus!"
     },
     msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
     msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
-        msgFailed: "Fehler beim Speichern Ihres Eintrags!"
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
+    },
+    msgDeleteResult:
+    {
+        msg: "Datensatz erfolgreich gelöscht!"
     },
     msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!",
-        msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
-        msgFailed: "Fehler beim Speichern Ihres Eintrags!"
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!",
+        msgSuccess: "Speichern erfolgreich!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
     msgDelete:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
+        msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
     },
-    grdContracts:
+    msgNotCustomer:
     {
-        clmItemCode: "Nummer",
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Unbekannter Kunde"
+    },
+    grdContracts: 
+    {
+        clmItemCode: "Code",
         clmItemName: "Name",
         clmGrpName: "Gruppe",
-        clmPrice: "Preis",
-        clmQuantity: "Menge",
-        clmStartDate: "Startdatum",
-        clmFinishDate: "Enddatum",
-        clmCreateDate: "Erstellungsdatum",
-        clmDepotName: "Lager",
-        clmMargin: "Marge",
-        clmVatExtPrice: "Nettopreis",
-        clmCostPrice: "Einkaufspreis",
-        clmUnit: "Einheit",
-        clmUnitPrice: "Stückpreis",
-        clmOrgins: "Ursprung",
+        clmPrice: "Preis inkl. MwSt.",
+        clmQuantity : "Menge",
+        clmStartDate : "Beginn",
+        clmFinishDate : "Ende",
+        clmCreateDate: "Registrierungsdatum",
+        clmDepotName : "Lager",
+        clmMargin :"Marge", 
+        clmVatExtPrice : "Preis ohne MwSt.", 
+        clmCostPrice : "Kosten", 
+        clmUnit : "Einheit",
+        clmUnitPrice : "Stückpreis ohne MwSt.",
+        clmOrgins : "Herkunft",
     },
-    popItems:
+    popItems: 
     {
-        title: "Vertrag hinzufügen",
-        txtPopItemsCode: "Artikelnummer",
-        txtPopItemsName: "Artikelname",
-        txtPopItemsPrice: "Preis",
-        txtPopItemsQuantity: "Menge",
-        dtPopStartDate: "Startdatum",
-        dtPopEndDate: "Enddatum"
+        title: "In Vertrag einbeziehen",
+        txtPopItemsCode : "Produktreferenz",
+        txtPopItemsName: "Produktname",
+        txtPopItemsPrice : "Preis",
+        txtPopItemsQuantity : "Menge",
+        dtPopStartDate :"Beginn",
+        dtPopEndDate : "Ende"
     },
     msgDiscount:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es ist nicht möglich, einen Rabatt über dem zulässigen Betrag zu gewähren! Zulässiger Betrag: "
+        msg: "Rabatt kann nicht höher als autorisiert sein!! Autorisierter Betrag: "
     },
-    validCustomerCode: "Kundennummer darf nicht leer sein",
-    txtCode: 'Nummer',
-    txtName: "Name",
-    startDate: 'Startdatum',
-    finishDate: 'Enddatum',
-    docDate: "Datum",
-    msgMissItemCode:
-    {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Nicht gefundene Codes:"
+    validCustomerCode : "Der Kunden-Code kann nicht leer sein",
+    txtCode : "Code",
+    txtName : "Name",
+    startDate :"Startdatum",   
+    finishDate : "Enddatum",   
+    docDate : "Datum", 
+    msgMissItemCode:   
+    {   
+        title: "Achtung",   
+        btn01: "OK",   
+        msg: "Code nicht gefunden:"   
+    },   
+    msgMultiCodeCount:   
+    {   
+        title: "Achtung",   
+        btn01: "OK",   
+        msg: "Anzahl der hinzugefügten Produkte"   
+    },   
+    popMultiItem:   
+    {   
+        title: "Mehrere Produkte hinzugefügt",   
+        btnApprove: "Produkte suchen",   
+        btnClear : "Leeren",   
+        btnSave : "Zeilen hinzufügen",   
+    },   
+    cmbMultiItemType :    
+    {   
+        title : "Suchtyp",   
+        customerCode : "Nach Kundencode",   
+        ItemCode : "Nach Produktcode"   
+    },   
+    grdMultiItem :    
+    {   
+        clmCode : "Produktreferenz",   
+        clmMulticode : "KUN.Code",   
+        clmName : "Produktname",   
+        clmQuantity : "Menge",   
+        clmPrice : "Einkaufspreis"   
+    },   
+    msgMultiData:   
+    {   
+        title: "Achtung",   
+        btn01: "Liste leeren und alles hinzufügen",   
+        btn02: "Neue zur Liste hinzufügen",   
+        msg: "Produkte bereits vorhanden!"   
+    },   
+    tagItemCodePlaceholder: "Codes eingeben, die Sie hinzufügen möchten",   
+    msgDocValid:   
+    {   
+        title: "Achtung",   
+        btn01: "OK",   
+        msg: "Bitte geben Sie die Kopfzeilen vor dem Abschluss ein!"   
     },
-    msgMultiCodeCount:
-    {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Anzahl hinzugefügter Artikel"
-    },
-    popMultiItem:
-    {
-        title: "Massenartikel hinzufügen",
-        btnApprove: "Artikel Suchen",
-        btnClear: "Löschen",
-        btnSpeichern: "Zeilen hinzufügen",
-    },
-    cmbMultiItemType:
-    {
-        title: "Suchmethode",
-        customerCode: "Nach Kundennummer",
-        ItemCode: "Nach Artikelnummer"
-    },
-    grdMultiItem:
-    {
-        clmCode: "Artikelnummer",
-        clmMulticode: "Kundennummer",
-        clmName: "Artikelname",
-        clmQuantity: "Menge",
-        clmPrice: "Preis"
-    },
-    msgMultiData:
-    {
-        title: "Achtung",
-        btn01: "Liste leeren und alle hinzufügen",
-        btn02: "Neue Einträge zur Liste hinzufügen",
-        msg: "Die Liste enthält Artikel!"
-    },
-    tagItemCodePlaceholder: "Bitte geben Sie die Codes ein, die Sie hinzufügen möchten",
-    msgDocValid:
-    {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Der Dokumentenkopf muss ausgefüllt sein, um Bestände eingeben zu können!"
-    },
-    validCode : "Der Code darf nicht leer sein!",
+    validCode :"Code kann nicht leer sein!",
     popDesign : 
     {
-        title: "Designauswahl",
-        design : "Design",
-        lang : "Dokumentsprache"
+        title: "Design-Auswahl",
+        design : "Design" ,
+        lang : "Dokumentsprache" 
     },
     msgUnit:
     {
-        title: "Einheitsauswahl",
+        title: "Einheitenauswahl",
         btn01: "Bestätigen",
-    },
-    txtUnitFactor : "Einheitsfaktor",
-    txtUnitQuantity : "Einheitsmenge",
-    txtTotalQuantity : "Gesamtmenge",
-    txtUnitPrice: "Stückpreis",
+    }, 
+    txtUnitFactor : "Einheitsfaktor",  
+    txtUnitQuantity : "Einheitsmenge",  
+    txtTotalQuantity : "Gesamtmenge",  
+    txtUnitPrice : "Stückpreis",
     popMailSend : 
     {
-        title :"E-Mail senden",
-        txtMailSubject : "E-Mail-Betreff",
-        txtSendMail : "E-Mail-Adresse",
+        title :"E-Mail senden",   
+        txtMailSubject : "E-Mail-Betreff",   
+        txtSendMail : "E-Mail-Adresse",   
         btnSend : "Senden",
-        cmbMailAddress : "Gesendete Mailadresse" 
+        cmbMailAddress : "E-Mail-Adresse des Absenders" // BAK
     },
     msgMailSendResult:
     {
-        title: "Achtung",
-        btn01: "OK",
-        msgSuccess: "E-Mail erfolgreich gesendet!",
-        msgFailed: "E-Mail konnte nicht gesendet werden!"
-    },
-    msgDeleteResult:
-    {
-        msg: "Eintrag erfolgreich gelöscht !"
+        title: "Achtung",   
+        btn01: "OK",   
+        msgSuccess: "E-Mail erfolgreich gesendet!",   
+        msgFailed: "E-Mail-Versand fehlgeschlagen!"   
     },
 }
 export default cnt_02_002

@@ -1,124 +1,124 @@
 // Ödeme
 const fns_02_001 =
 {
-    txtRefRefno : "Seriennummer",
+    txtRefRefno : "Ref.-Ref. Nr.",
     menu  : "Zahlung",
     cmbDepot: "Lager",
-    cmbCashSafe : "Kasse Auswahl",
-    cmbCheckSafe : "Scheckkonto",
-    cmbBank : "Bank Auswahl",
-    txtCustomerCode : "Kunden-Code",
+    cmbCashSafe : "Kasse auswählen",
+    cmbCheckSafe : "Scheck",
+    cmbBank : "Bankauswahl",
+    txtCustomerCode : "Kundencode",
     txtCustomerName : "Kundenname",
     dtDocDate : "Datum",
-    txtAmount : "Betrag",
-    txtDiscount : "Zeilenrabatt",
-    txtDocDiscount : "Dokumentenrabatt",
-    txtSubTotal : "Zwischensumme",
+    txtAmount : "Gesamt",
+    txtDiscount : "Promotion",
     txtMargin : "Marge",
     txtVat : "MwSt.",
     txtTotal : "Gesamtsumme",
-    dtShipDate :"Lieferdatum",
-    getDispatch : "Lieferschein Suchen",
-    cash : "Betrag",
-    description :"Beschreibung",
+    dtShipDate :"Versanddatum",
+    getDispatch : "Lieferschein abrufen",
+    cash : "Gesamt",
+    description :"Grund",
     checkReference : "Referenz",
-    btnAddPay : "Zahlung eingeben",
+    btnAddPay : "Zahlungseingang",
     invoiceSelect : "Rechnungsauswahl",
-    btnCash : "Zahlung eingeben",
-    ValidCash : "Bitte geben Sie einen Betrag größer als 0 ein",
-    cmbPayType : {
+    btnCash : "Zahlungseingang",
+    ValidCash : "Bitte geben Sie einen Betrag größer als 0 ein", 
+    cmbPayType : 
+    {
         title : "Zahlungsart",
-        cash : "Bar",
+        cash : "Bargeld",
         check : "Scheck",
-        bankTransfer : "Banküberweisung",
-        otoTransfer : "Automatische Überweisung",
-        foodTicket : "Essensgutschein",
-        bill : "Wechsel",
+        bankTransfer : "Kontoüberweisung",
+        otoTransfer : "Lastschrift",
+        foodTicket : "Restaurantgutschein",
+        bill : "Rechnung",
     },
     pg_Docs : 
     {
         title : "Dokumentenauswahl",
-        clmDate : "DATUM",
-        clmRef : "Serie",
-        clmRefNo : "NUMMER",
+        clmDate : "Datum",
+        clmRef : "Referenz",
+        clmRefNo : "Sequenz",
         clmInputName : "Kundenname",
-        clmInputCode  : "Kunden-Code",
+        clmInputCode  : "Kundencode",
+        clmTotal : "Gesamt inkl. MwSt."
     },
-    pg_invoices:
+    pg_invoices : 
     {
-        title: "Rechnungsauswahl",
-        clmReferans: "REFERENZ",
-        clmOutputName: "KUNDENAME",
-        clmDate: "DATUM",
-        clmTotal: "GESAMT",
-        clmRemaining: "OFFEN",
+        title : "Rechnungsauswahl",
+        clmReferans : "Referenz",
+        clmOutputName : "Kundenname",
+        clmDate : "Datum",
+        clmTotal : "Gesamt",
+        clmRemaining  : "Rest",
     },
-    pg_txtCustomerCode:
+    pg_txtCustomerCode : 
     {
-        title: "Kundenauswahl",
-        clmCode: "KUNDENCODE",
-        clmTitle: "KUNDENAME",
-        clmTypeName: "TYP",
-        clmGenusName: "ART"
+        title : "Kundenauswahl",
+        clmCode :  "Kundencode",
+        clmTitle : "Kundenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Typ"
     },
-    grdDocPayments:
+    grdDocPayments: 
     {
-        clmCreateDate: "Erstellungsdatum",
-        clmAmount: "Betrag",
-        clmOutputName: "Kasse/Bank",
-        clmDescription: "Beschreibung",
-        clmInvoice: "Rechnungsreferenz",
-        clmFacDate: "Rechnungsdatum",
-        clmDocDate: "Zahlungsdatum"
+        clmCreateDate: "Registrierungsdatum",
+        clmAmount : "Gesamt",
+        clmOutputName : "Kasse/Bank",
+        clmDescription : "Grund",
+        clmInvoice : "Rechnungsreferenz",
+        clmFacDate : "Rechnungsdatum",
+        clmDocDate : "Datum"
     },
     msgDocValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es können keine Bestandsdaten erfasst werden, solange die Dokumentkopfdaten nicht vollständig sind!"
+        msg: "Das Inventar kann nicht eingegeben werden, bevor die Dokumentkopfzeilen vollständig sind!"
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
         msg: "Sind Sie sicher, dass Sie speichern möchten?"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihr Speichervorgang war erfolgreich!",
+        msgSuccess: "Speichern erfolgreich!",
         msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        msg: "Bitte füllen Sie die Pflichtfelder aus!"
     },
     msgDelete:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
+        msg: "Möchten Sie den Datensatz wirklich löschen?"
     },
     msgLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Das Dokument wurde gespeichert und gesperrt!"
+        msg: "Dokument gespeichert und gesperrt!"
     },
     msgPasswordSucces:
     {
-        title: "Erfolgreich",
+        title: "Erfolg",
         btn01: "OK",
-        msg: "Die Dokumentensperre wurde aufgehoben!"
+        msg: "Dokument entsperrt!",
     },
     msgPasswordWrong:
     {
-        title: "Fehlgeschlagen",
+        title: "Fehler",
         btn01: "OK",
         msg: "Ihr Passwort ist falsch!"
     },
@@ -126,46 +126,46 @@ const fns_02_001 =
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Das Dokument ist gesperrt! Sie müssen das Kennwort des Administrators verwenden, um die Änderungen zu speichern!"
+        msg: "Dokument gesperrt! \n Um Änderungen zu speichern, müssen Sie es mit dem Administrator-Passwort entsperren!"
     },
     msgDocLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es können keine Aktionen ausgeführt werden, solange das Dokument nicht entsperrt ist!"
+        msg: "Keine Transaktion kann durchgeführt werden, ohne das Dokument zu entsperren!"
     },
     msgNotCustomer:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Kunde nicht gefunden!"
+        msg: "Kunde nicht gefunden!!"
     },
-    popCash:
+    popCash : 
     {
-        title: "Einzahlung",
-        btnApprove: "Hinzufügen"
+        title: "Zahlungseingang",
+        btnApprove : "Hinzufügen"
     },
-    popCheck:
+    popCheck : 
     {
         title: "Scheck-Eingabe",
-        btnApprove: "Hinzufügen"
+        btnApprove : "Hinzufügen"
     },
-    popBank:
+    popBank : 
     {
-        title: "Banküberweisung",
-        btnApprove: "Hinzufügen"
+        title: "Bankeinzug-Eingabe",
+        btnApprove : "Hinzufügen"
     },
-    validRef: "Seriennummer darf nicht leer sein",
-    validRefNo: "Nummer darf nicht leer sein",
-    validDepot: "Sie müssen ein Lager auswählen",
-    validCustomerCode: "Kundencode darf nicht leer sein",
-    validDocDate: "Bitte wählen Sie ein Datum",
+    validRef :"Die Referenz kann nicht leer sein",
+    validRefNo : "Ref. Nr. kann nicht leer sein",
+    validDepot : "Sie müssen das Lager auswählen",
+    validCustomerCode : "Der aktuelle Code kann nicht leer sein",
+    validDocDate : "Sie müssen ein Datum auswählen",
     msgInvoiceSelect:
     {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Sie können keine Zahlung hinzufügen, ohne eine Rechnung auszuwählen!"
-    },
-    msgNotBank : "Bitte wählen Sie ein Konto",
+        title: "Achtung",   
+        btn01: "OK",    
+        msg: "Sie können den Vorgang nicht durchführen, ohne eine Rechnung auszuwählen!"  
+    },  
+    msgNotBank : "Bitte wählen Sie ein Konto aus",
 }
 export default fns_02_001

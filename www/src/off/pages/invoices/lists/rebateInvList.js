@@ -363,7 +363,7 @@ export default class rebateInvList extends React.PureComponent
                                 App.instance.menuClick(
                                 {
                                     id: 'ftr_02_003',
-                                    text: this.t('menu'),
+                                    text: this.lang.t('menuOff.ftr_02_003'),
                                     path: 'invoices/documents/rebateInvoice.js',
                                     pagePrm:{GUID:e.data.GUID}
                                 })

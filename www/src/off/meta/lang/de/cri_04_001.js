@@ -1,34 +1,34 @@
 // "Müşteri Extre Raporu"
 const cri_04_001 =
 {
-    txtCustomerCode : "Kunde",
-    btnGet :"Suchen",
+    txtCustomerCode : "Kunde/Lieferant", 
+    btnGet :"Suchen", 
     txtDate : "Datum",
     grdListe : 
     {
-        clmDocDate: "Datum",
-        clmTypeName : "Dokumenttyp",           
-        clmRef : "Dokumentennummer",
-        clmRefNo : "Dokumentennummer",
-        clmDebit : "Soll",
-        clmReceive : "Haben",
-        clmBalance : "Saldo",
+        clmDocDate: "Datum",  
+        clmTypeName : "Dokumenttyp",      
+        clmRef : "Dokumentserie",   
+        clmRefNo : "Dokumentnummer",   
+        clmDebit : "Soll",   
+        clmReceive : "Haben",   
+        clmBalance : "Saldo",   
     },
-    txtTotalBalance : "Kontostand",
+    txtTotalBalance :"Saldo", 
     pg_txtCustomerCode : 
     {
-        title : "Kundenauswahl",
-        clmCode :  "KUNDENCODE",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "GESCHLECHT",
-        clmBalance : "KONTOSTAND",
+        title : "Kunde/Lieferant Auswahl",
+        clmCode :  "Kunde/Lieferant Code",
+        clmTitle : "Kunde/Lieferant Name",
+        clmTypeName : "Typ",
+        clmGenusName : "Gattung",
+        clmBalance : "Saldo",  
     },
     msgNotCustomer:
     {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Bitte wählen Sie ein Kunde aus!"
+        title: "Achtung", 
+        btn01: "OK", 
+        msg:  "Bitte wählen Sie den Kunde/Lieferant aus"
     },
 }
 export default cri_04_001

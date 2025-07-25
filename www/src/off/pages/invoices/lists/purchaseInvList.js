@@ -316,7 +316,7 @@ export default class purchaseInvList extends React.PureComponent
                                 App.instance.menuClick(
                                 {
                                     id: 'ftr_02_001',
-                                    text: this.t('menu'),
+                                    text: this.lang.t('menuOff.ftr_02_001'),
                                     path: 'invoices/documents/purchaseInvoice.js',
                                     pagePrm:{GUID:e.data.GUID}
                                 })
