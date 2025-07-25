@@ -555,7 +555,7 @@ export default class App extends React.PureComponent
                 showPane={true}
                 showMessage={true} 
                 message={this.lang.t("loading")} 
-                timeout={4000} 
+                timeout={60000} 
                 timeoutPopup={
                 {
                     title:this.lang.t("msgisExecuteClose.title"),

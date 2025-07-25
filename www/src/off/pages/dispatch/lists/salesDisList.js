@@ -400,7 +400,7 @@ export default class salesDisList extends React.PureComponent
             App.instance.loading.hide()
         }
 
-        this._btnGetClick()
+        this.btnGetClick()
     }
     async printDispatch()
     {
@@ -747,7 +747,7 @@ export default class salesDisList extends React.PureComponent
                             </Form>
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
