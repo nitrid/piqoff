@@ -1,18 +1,18 @@
 // "Adres Tanımları"
 const cri_01_002 =
 {
-    customerPlace: "Geben Sie bitte den Kundennamen oder die Kundennummer zum Suchen ein.",
-    txtCode : "Kundennummer",
-    txtTitle : "Überschrift",
+    customerPlace: "Bitte geben Sie den Kundennamen oder Code für die Suche ein.", 
+    txtCode : "Code",
+    txtTitle : "Titel",
     txtCustomerName : "Name",
     tabTitleAdress : "Adresse",
-    codeFailedMsg : "Ein gültiger Kunde wurde nicht gefunden. Bitte geben Sie einen gültigen Kundenkode ein.",
+    codeFailedMsg : "Dieser gültige Kunde wurde nicht gefunden. Bitte geben Sie einen gültigen Kundencode ein.",
     pg_txtCode : 
     {
-        title : "Kunden auswählen",
-        clmCode : "KUNDENNUMMER",
-        clmTitle : "Überschrift",
-        clmName : "Name",
+        title : "Kunde auswählen",
+        clmCode : "Code",
+        clmTitle : "Titel",
+        clmName : "Vorname",
         clmLastName  : "Nachname",
     },
     grdAdress : 
@@ -30,25 +30,25 @@ const cri_01_002 =
         cmbPopCity :"Stadt",
         cmbPopCountry :"Land",
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Der Speichervorgang war erfolgreich!",
-        msgFailed: "Der Speichervorgang ist fehlgeschlagen!"
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
@@ -56,19 +56,19 @@ const cri_01_002 =
         btn01: "OK",
         btn02: "Abbrechen",
         msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?",
-        msgFailed: "Datensatzlöschung fehlgeschlagen!",
-        msgSuccess: "Datensatzlöschung erfolgreich!"
+        msgFailed: "Löschen des Datensatzes fehlgeschlagen!",
+        msgSuccess: "Datensatz erfolgreich gelöscht!"
     },
     msgCode : 
     {
         title: "Achtung",
-        btn01: "Zur Kasse gehen",
-        btn02: "Ok",
-        msg : "Der eingegebene Kunde ist im System registriert!"
+        btn01: "Kunde suchen",
+        btn02: "OK",
+        msg : "Kunde bereits vorhanden!"
     },
-    validation : //ÜBERPRÜFEN
+    validation : 
     {
-        frmCustomerAddress: "Sie können das Feld 'Code' nicht leer lassen!",
+        frmCustomerAddress: "Der Code kann nicht leer sein!",
     }
 }
 export default cri_01_002

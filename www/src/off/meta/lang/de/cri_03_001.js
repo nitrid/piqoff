@@ -2,29 +2,29 @@
 const cri_03_001 =
 {
     cmbType :"Typ",
-    cmbGenus :"Geschlecht",
+    cmbGenus :"Gattung",
     txtCode : "Code",
-    txtTitle : "Firma",
-    txtCustomerName : "Name",
+    txtTitle : "Titel",
+    txtCustomerName : "Vorname",
     txtCustomerLastname : "Nachname",
     txtPhone1 : "Telefon 1",
     txtPhone2 : "Telefon 2",
     txtGsmPhone : "Mobiltelefon",
-    txtOtherPhone : "Sonstiges Telefon",
+    txtOtherPhone : "Anderes Telefon",
     txtEmail : "E-Mail",
-    txtWeb : "Webseite",
+    txtWeb : "Web",
     tabTitleAdress : "Adresse",
     tabTitleLegal : "Rechtlich",
-    tabTitleOffical : "Ansprechpartner",
+    tabTitleOffical : "Administrator",
     tabCustomerBank : "Bankdaten",
-    txtLegal :"Rechtliche Informationen",
-    chkRebate :"Rabatt gewähren",
+    txtLegal :"Rechtsdaten",
+    chkRebate :"Rücksendung-Rücknahme",
     pg_txtCode : 
     {
-        title : "Kundenauswahl",
-        clmCode : "CODE",
-        clmTitle : "Firma",
-        clmName : "Name",
+        title : "Kunde auswählen",
+        clmCode : "Code",
+        clmTitle : "Titel",
+        clmName : "Vorname",
         clmLastName  : "Nachname",
     },
     grdAdress : 
@@ -36,16 +36,16 @@ const cri_03_001 =
     },
     grdLegal : 
     {
-        clmSiretID : "Handelsregisternummer",
-        clmApeCode : "APE-Code",
+        clmSiretID : "Siret Nr.",
+        clmApeCode : "Ape Code",
         clmTaxOffice : "Steueramt",
         clmTaxNo : "Steuernummer",
-        clmIntVatNo : "Umsatzsteuer-Identifikationsnummer",
-        clmTaxType : "Steuerart",
-        clmSirenID : "Steuernummer",
-        clmRcs : "Handelsregister",
+        clmIntVatNo : "EORI Nr.",
+        clmTaxType : "Steuertyp",
+        clmSirenID : "Siren Nr.",
+        clmRcs : "RCS",
         clmCapital : "Kapital",
-        clmInsurance : "Versicherungsnummer"
+        clmInsurance : "Versicherung Nr." 
     },
     grdOffical : 
     {
@@ -61,7 +61,7 @@ const cri_03_001 =
         clmName : "Bankname",
         clmIban : "IBAN",
         clmOffice : "Filiale",
-        clmSwift : "SWIFT-Code",
+        clmSwift : "Swift Code",
     },
     popAdress : 
     {
@@ -77,91 +77,91 @@ const cri_03_001 =
         txtName : "Bankname",
         txtIban :"IBAN",
         txtOffice :"Filiale",
-        txtSwift :"SWIFT-Code",
+        txtSwift :"Swift Code",
     },
     popOffical : 
     {
-        title : "Ansprechpartner",
+        title : "Administrator",
         txtPopName : "Name",
         txtPopLastName : "Nachname",
         txtPopPhone1 :"Telefon 1",
         txtPopPhone2 :"Telefon 2",
         txtPopGsmPhone : "Mobiltelefon",
-        txtPopOtherPhone : "Sonstiges Telefon",
+        txtPopOtherPhone : "Anderes Telefon",
         txtPopMail :"E-Mail"
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
-        btn01: "Ok",
+        btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie den Eintrag speichern?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
-        btn01: "Ok",
-        msgSuccess: "Der Eintrag wurde erfolgreich gespeichert!",
-        msgFailed: "Das Speichern des Eintrags ist fehlgeschlagen!"
+        btn01: "OK",
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
-        btn01: "Ok",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        btn01: "OK",
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgLegalNotValid:
     {
         title: "Achtung",
-        btn01: "Ok",
-        msg: "Bitte füllen Sie die Felder im Rechtlichen-Bereich aus!"
+        btn01: "OK",
+        msg: "Bitte füllen Sie die rechtlichen Felder aus!"
     },
     msgAdressNotValid:
     {
         title: "Achtung",
-        btn01: "Ok",
-        msg: "Bitte wählen Sie das Land des Kunden im Adressbereich aus!"
+        btn01: "OK",
+        msg: "Wohnsitzland eingeben!"
     },
     msgDelete:
     {
         title: "Achtung",
-        btn01: "Ok",
+        btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie den Eintrag löschen?"
+        msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
     },
     cmbTypeData : 
     {
-        individual : "Einzelperson",
-        company : "Firma",
-        association : "Vereinigung"
+        individual :  "Einzelperson",
+        company :  "Unternehmen",
+        association : "Verein"
     },
     cmbGenusData:
     {
         Customer : "Kunde",
         supplier : "Lieferant",
         both : "Beide",
-        branch : "Filiale"
+        branch : "Filiale" 
     },
     cmbTaxTypeData : 
     {
-        individual : "Einzelperson",
-        company : "Firma"
+        individual :  "Einzelperson",
+        company :  "Unternehmen"
     },
     msgCode : 
     {
         title: "Achtung",
-        btn01: "Zu Kunde gehen",
-        btn02: "Ok",
-        msg : "Der eingegebene Kunde ist bereits im System vorhanden!"
+        btn01: "Zum Kunden gehen",
+        btn02: "OK",
+        msg : "Kunde bereits vorhanden!"
     },
-    popSettingCustomer : 
-    {
-        title : "Einstellungen",
-        txtStartRef : "Startreferenz",
-        txtFinishRef : "Endereferenz",
-        txtTotal : "Gesamtanzahl",
-        chkDigit : "EAN-Ziffer"
-    },
-    btnGet : "Speichern",
+    popSettingCustomer :     
+    {    
+        title : "Einstellungen",    
+        txtStartRef : "Startcode",    
+        txtFinishRef : "Endcode",    
+        txtTotal : "Gesamtanzahl",    
+        chkDigit : "EAN Code"    
+    },  
+    btnGet : "Speichern"    
 }
 export default cri_03_001

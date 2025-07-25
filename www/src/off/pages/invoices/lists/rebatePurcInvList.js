@@ -94,7 +94,7 @@ export default class rebateInvList extends React.PureComponent
         }
         
     }
-    async _btnGetClick()
+    async btnGetClick()
     {
         
         let tmpSource =
@@ -333,7 +333,7 @@ export default class rebateInvList extends React.PureComponent
                             
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-1">
@@ -352,7 +352,7 @@ export default class rebateInvList extends React.PureComponent
                                 App.instance.menuClick(
                                 {
                                     id: 'ftr_02_007',
-                                    text: this.t('menu'),
+                                    text: this.lang.t('menuOff.ftr_02_007'),
                                     path: 'invoices/documents/rebatePurcInvoice.js',
                                     pagePrm:{GUID:e.data.GUID}
                                 })

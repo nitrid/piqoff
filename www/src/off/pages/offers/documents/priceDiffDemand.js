@@ -1146,10 +1146,10 @@ export default class priceDiffDemand extends DocBase
                     {/* Form */}
                     <div className="row px-2 pt-1" style={{height: '150px'}}>
                         <div className="col-12">
-                            <Form colCount={3} id={"frmPriceDiffOff"  + this.tabIndex}>
+                            <NdForm colCount={3} id={"frmPriceDiffOff"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
-                                <Item>
-                                    <Label text={this.t("txtRefRefno")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtRefRefno")} alignment="right" />
                                     <div className="row">
                                         <div className="col-6 pe-0">
                                             <NdTextBox id="txtRef" parent={this} simple={true} dt={{data:this.docObj.dt('DOC'),field:"REF"}}
@@ -1234,10 +1234,10 @@ export default class priceDiffDemand extends DocBase
                                             </NdTextBox>
                                         </div>
                                     </div>
-                                </Item>
+                                </NdItem>
                                 {/* cmbDepot */}
-                                <Item>
-                                    <Label text={this.t("cmbDepot")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbDepot")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbDepot" notRefresh={true}
                                     dt={{data:this.docObj.dt('DOC'),field:"OUTPUT"}}  
                                     displayExpr="NAME"                       
@@ -1261,9 +1261,9 @@ export default class priceDiffDemand extends DocBase
                                             <RequiredRule message={this.t("validDepot")} />
                                         </Validator> 
                                     </NdSelectBox>
-                                </Item>
-                                <Item>
-                                    <Label text={this.t("txtDocNo")} alignment="right" />
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("txtDocNo")} alignment="right" />
                                     <NdTextBox id="txtDocNo" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_NO"}} 
@@ -1274,10 +1274,10 @@ export default class priceDiffDemand extends DocBase
                                     }}
                                     >
                                     </NdTextBox>
-                                </Item>
+                                </NdItem>
                                 {/* txtCustomerCode */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerCode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
                                     <NdTextBox id="txtCustomerCode" parent={this} simple={true}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
@@ -1416,10 +1416,10 @@ export default class priceDiffDemand extends DocBase
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
-                                </Item> 
+                                </NdItem> 
                                 {/* txtCustomerName */}
-                                <Item>
-                                    <Label text={this.t("txtCustomerName")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtCustomerName")} alignment="right" />
                                     <NdTextBox id="txtCustomerName" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}} 
@@ -1428,12 +1428,12 @@ export default class priceDiffDemand extends DocBase
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item> 
+                                </NdItem> 
                                 {/* Boş */}
-                                <EmptyItem />
+                                <NdEmptyItem />
                                 {/* dtDocDate */}
-                                <Item>
-                                    <Label text={this.t("dtDocDate")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                     onValueChanged={(async()=>
@@ -1445,10 +1445,10 @@ export default class priceDiffDemand extends DocBase
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
-                                </Item>
+                                </NdItem>
                                 {/* dtShipDate */}
-                                <Item>
-                                        <Label text={this.t("dtShipDate")} alignment="right" />
+                                <NdItem>
+                                        <NdLabel text={this.t("dtShipDate")} alignment="right" />
                                         <NdDatePicker simple={true}  parent={this} id={"dtShipDate"}
                                         dt={{data:this.docObj.dt('DOC'),field:"SHIPMENT_DATE"}}
                                         onValueChanged={(async()=>
@@ -1460,12 +1460,12 @@ export default class priceDiffDemand extends DocBase
                                                 <RequiredRule message={this.t("validDocDate")} />
                                             </Validator> 
                                         </NdDatePicker>
-                                </Item>
+                                </NdItem>
                                 {/* Boş */}
-                                <EmptyItem />
+                                <NdEmptyItem />
                                 {/* Barkod Ekleme */}
-                                <Item>
-                                    <Label text={this.t("txtBarcode")} alignment="right" />
+                                <NdItem>
+                                    <NdLabel text={this.t("txtBarcode")} alignment="right" />
                                     <NdTextBox id="txtBarcode" parent={this} simple={true}  placeholder={this.t("txtBarcodePlace")}
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     button=
@@ -1566,8 +1566,8 @@ export default class priceDiffDemand extends DocBase
                                     access={this.access.filter({ELEMENT:'txtBarcode',USERS:this.user.CODE})}
                                     >
                                     </NdTextBox>
-                                </Item>
-                            </Form>
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                     {/* Grid */}

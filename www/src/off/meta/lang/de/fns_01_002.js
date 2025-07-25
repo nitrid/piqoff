@@ -3,29 +3,35 @@ const fns_01_002 =
 {
     txtCustomerCode : "Kunde",
     txtTotal : "Gesamt",
-    menu : "Einzahlung",
+    validDesign : "Bitte wählen Sie das Design aus",
+    menu : "Kassierung",
     pg_txtCustomerCode : 
     {
         title : "Kundenauswahl",
-        clmCode :  "KUNDENCODE",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
+        clmCode :  "Kundencode",
+        clmTitle : "Kundenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Gattung"
     },
     btnGet :"Suchen",
-    dtFirst : "Anfangsdatum",
+    dtFirst : "Startdatum",
     dtLast : "Enddatum",
     grdColList: 
     {
-        clmRef: "Serie",
-        clmRefNo: "Nummer",
+        clmRef: "Referenz",
+        clmRefNo: "Ref.Nr.",
         clmPrice: "Preis",
-        clmOutputCode : "Kunden-Code",
+        clmOutputCode : "Dokumentenauswahl",
         clmOutputName : "Kundenname",
         clmDate: "Datum",
-        clmTotal : "Betrag",
+        clmTotal : "Gesamt",
         clmInputName :"Kasse/Bank",
         clmPayTypeName : "Zahlungsart",
+    },
+    popDesign : 
+    {
+        title: "Design-Auswahl",
+        design : "Design",
     },
 }
 export default fns_01_002

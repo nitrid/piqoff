@@ -447,7 +447,7 @@ export default class salesInvList extends React.PureComponent
                                 App.instance.menuClick(
                                 {
                                     id: 'ftr_02_002',
-                                    text: this.t('menu'),
+                                    text: this.lang.t('menuOff.ftr_02_002'),
                                     path: 'invoices/documents/salesInvoice.js',
                                     pagePrm:{GUID:e.data.GUID}
                                 })

@@ -1,17 +1,17 @@
 //  "Adres Listesi"
 const cri_02_002 =
 {
-    customerPlace: "Bitte geben Sie den Kundennamen oder -code zum Suchen ein.",
-    txtCustomerName : "Kundenname",
-    cmbGenus :"Geschlecht",
-    menu: "Kundenbezeichnungen",
+    customerPlace: "Bitte geben Sie den Namen oder Code für die Suche ein.", 
+    txtCustomerName : "Lieferantenname",
+    cmbGenus :"Gattung",
+    menu: "Lieferanten Eingabe",
     btnGet : "Suchen",
     grdListe : 
     {
-        clmCode: "Kunden-Code",
-        clmTitle : "Firma",
+        clmCode: "Dokumentenauswahl",
+        clmTitle : "Titel",
         clmType : "Typ",
-        clmGenus : "Geschlecht",
+        clmGenus : "Gattung",
         clmAddress : "Adresse",
         clmCity : "Stadt",
         clmCountry : "Land",
@@ -19,11 +19,11 @@ const cri_02_002 =
     },
     cmbGenusData:
     {
-        allGenus : "Alle Geschlechter",
+        allGenus : "Alle",
         Customer : "Kunde",
         supplier : "Lieferant",
-        both : "Beides",
-        branch : "Filiale"
+        both : "Beide",
+        branch : "Filiale" 
     },
 }
 export default cri_02_002

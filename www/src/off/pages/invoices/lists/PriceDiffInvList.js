@@ -265,7 +265,7 @@ export default class PriceDiffInvList extends React.PureComponent
                                     App.instance.menuClick(
                                         {
                                             id: 'ftr_02_004',
-                                            text: this.t('menu'),
+                                            text: this.lang.t('menuOff.ftr_02_004'),
                                             path: 'invoices/documents/priceDifferenceInvoice.js',
                                             pagePrm:{GUID:e.data.GUID}
                                         })

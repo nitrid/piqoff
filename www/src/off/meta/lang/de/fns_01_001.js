@@ -1,29 +1,29 @@
 // "Ödeme Listesi",
 const fns_01_001 =
 {
-    txtCustomerCode : "Kunde",
+    txtCustomerCode : "Lieferant",
     menu  : "Zahlung",
     txtTotal : "Gesamt",
     pg_txtCustomerCode : 
     {
-        title : "Kundenauswahl",
-        clmCode :  "KUNDENCODE",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
+        title : "Lieferantenauswahl",
+        clmCode :  "Kundencode",
+        clmTitle : "Lieferantenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Gattung"
     },
     btnGet :"Suchen",
-    dtFirst : "Anfangsdatum",
+    dtFirst : "Startdatum",
     dtLast : "Enddatum",
     grdPayList: 
     {
-        clmRef: "Serie",
-        clmRefNo: "Nummer",
+        clmRef: "Referenz",
+        clmRefNo: "Zeile",
         clmPrice: "Preis",
-        clmInputCode : "Kunden-Code",
-        clmInputName : "Kundenname",
+        clmInputCode : "Dokumentenauswahl",
+        clmInputName : "Lieferantenname",
         clmDate: "Datum",
-        clmTotal : "Betrag",
+        clmTotal : "Gesamt",
         clmOutputName :"Kasse/Bank",
     },
 }

@@ -1,52 +1,52 @@
 // "Sektör Tanımları"
 const cri_01_005 =
 {
-    txtCode : "CODE",
+    txtCode : "Code",
     txtName :"Name",
-    cmbType :"Art",
-    validCode :"CODE darf nicht leer bleiben!",
+    cmbType :"Typ",
+    validCode :"Bitte geben Sie einen Code ein!",
     pg_txtCode : 
     {
-        title : "Auswahl der Regioni",
-        clmCode : "CODE",
-        clmName : "NAME",
-        clmType : "Art",
+        title : "Sektorauswahl",
+        clmCode : "Code",
+        clmName : "Name",
+        clmType : "Typ",
     },
     msgSave:
     {
         title: "Achtung",
-        btn01: "OK",
+        btn01: "Einverstanden",
         btn02: "Abbrechen",
-        msg: "Wollen Sie speichern!"
+        msg: "Sind Sie sicher, dass Sie speichern möchten?"
     },
     msgSaveResult:
     {
         title: "Achtung",
-        btn01: "OK",
-        msgSuccess: "Speichern erfolgreich!",
-        msgFailed: "Speichern nicht erfolgreich!"
+        btn01: "Einverstanden",
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
     msgSaveValid:
     {
         title: "Achtung",
-        btn01: "OK",
-        msg: "Bitte alle notwendigen Felder ausfüllen!"
+        btn01: "Einverstanden",
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
         title: "Achtung",
-        btn01: "OK",
+        btn01: "Einverstanden",
         btn02: "Abbrechen",
         msg: "Sind Sie sicher, dass Sie löschen möchten?",
-        msgSuccess: "Löschen erfolgreich!",
+        msgSuccess: "Erfolgreich gelöscht!",
         msgFailed: "Löschen fehlgeschlagen!"
     },
     msgCode : 
     {
         title: "Achtung",
-        btn01: "Gehe zur Kasse",
-        btn02: "OK",
-        msg : "Eingegebene Kasse existiert bereits im System!"
+        btn01: "Zur Kasse gehen",
+        btn02: "Einverstanden",
+        msg : "Die eingegebene Kassennummer ist im System registriert!"
     },
 }
 export default cri_01_005

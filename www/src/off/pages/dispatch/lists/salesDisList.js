@@ -400,7 +400,7 @@ export default class salesDisList extends React.PureComponent
             App.instance.loading.hide()
         }
 
-        this._btnGetClick()
+        this.btnGetClick()
     }
     async printDispatch()
     {
@@ -747,7 +747,7 @@ export default class salesDisList extends React.PureComponent
                             </Form>
                         </div>
                         <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this._btnGetClick}></NdButton>
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
                     <div className="row px-2 pt-2">
@@ -766,7 +766,7 @@ export default class salesDisList extends React.PureComponent
                                     App.instance.menuClick(
                                         {
                                             id: 'irs_02_002',
-                                            text: this.t('menu'),
+                                            text: this.lang.t('menuOff.ftr_02_002'),
                                             path: 'dispatch/documents/salesDispatch.js',
                                             pagePrm:{GUID:e.data.GUID}
                                         })

@@ -263,7 +263,7 @@ export default class purchaseOfrList extends React.PureComponent
                                 App.instance.menuClick(
                                 {
                                     id: 'tfr_02_001',
-                                    text: this.t('menuOff.tfr_02_001'),
+                                    text: this.lang.t('menuOff.tfr_02_001'),
                                     path: 'orders/documents/purchaseOrder.js',
                                     pagePrm:{GUID:e.data.GUID}
                                 })

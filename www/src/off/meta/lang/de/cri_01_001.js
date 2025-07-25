@@ -2,37 +2,37 @@
 const cri_01_001 =
 {
     cmbType :"Typ",
-    cmbGenus :"Geschlecht",
+    cmbGenus :"Gattung",
     txtCode : "Code",
-    txtTitle : "Firma",
+    txtTitle : "Titel",
     txtCustomerName : "Vorname",
     txtCustomerLastname : "Nachname",
     txtPhone1 : "Telefon 1",
     txtPhone2 : "Telefon 2",
     txtGsmPhone : "Mobiltelefon",
-    txtOtherPhone : "Andere Telefonnummer",
+    txtOtherPhone : "Anderes Telefon",
     txtEmail : "E-Mail",
-    txtWeb : "Website",
+    txtWeb : "Web",
     tabTitleAdress : "Adresse",
     tabTitleLegal : "Rechtlich",
-    tabTitleOffical : "Kontakt",
+    tabTitleOffical : "Administrator",
     tabCustomerBank : "Bankdaten",
-    tabTitleFinanceDetail : "Finanzliche Informationen",
-    txtLegal :"Rechtliche Informationen",
-    chkRebate :"Rabatt gewähren",
-    chkVatZero : "Ohne MwSt", 
-    txtExpiryDay : "Zahlungsziel",
-    txtRiskLimit : "Kreditlimit",
-    expDay : "(Tage)",
+    tabTitleFinanceDetail : "Finanzinformationen", 
+    txtLegal :"Rechtsdaten",
+    chkRebate :"Rücksendung-Rücknahme",
+    chkVatZero :"Ohne MwSt.",
+    txtExpiryDay : "Fälligkeit",  
+    txtRiskLimit : "Risikolimit",  
+    expDay : "(Tag)", 
     chkActive: "Aktiv",
     pg_txtCode : 
     {
-        title : "Kundenauswahl",
-        clmCode : "CODE",
-        clmTitle : "Firma",
+        title : "Kunde auswählen",
+        clmCode : "Code",
+        clmTitle : "Titel",
         clmName : "Vorname",
         clmLastName  : "Nachname",
-        clmStatus  : "Statut",
+        clmStatus  : "Status",
     },
     grdAdress : 
     {
@@ -41,24 +41,24 @@ const cri_01_001 =
         clmCity :"Stadt",
         clmCountry : "Land",
         clmSiret : "Siret",
-        clmFacturation : "Faktura Adresse"
+        clmFacturation : "Rechnungsadresse"
     },
     grdLegal : 
     {
-        clmSiretID : "Handelsregistereintrag",
-        clmApeCode : "APE-Code",
-        clmTaxOffice : "Finanzamt",
+        clmSiretID : "Siret Nr.",
+        clmApeCode : "Ape Code",
+        clmTaxOffice : "Steueramt",
         clmTaxNo : "Steuernummer",
-        clmIntVatNo : "Internationale USt-IdNr.",
+        clmIntVatNo : "EORI Nr.",
         clmTaxType : "Steuertyp",
-        clmSirenID : "Handelsregisternummer",
-        clmRcs : "Handelskammer",
+        clmSirenID : "Siren Nr.",
+        clmRcs : "RCS",
         clmCapital : "Kapital",
-        clmInsurance : "Versicherungsnummer"
+        clmInsurance : "Versicherung Nr." 
     },
     grdOffical : 
     {
-        clmName :"Vorname",
+        clmName :"Name",
         clmLastName : "Nachname",
         clmPhone1 : "Telefon 1",
         clmPhone2 : "Telefon 2",
@@ -70,7 +70,7 @@ const cri_01_001 =
         clmName : "Bankname",
         clmIban : "IBAN",
         clmOffice : "Filiale",
-        clmSwift : "Swift-Code",
+        clmSwift : "Swift Code",
     },
     popAdress : 
     {
@@ -80,7 +80,7 @@ const cri_01_001 =
         cmbPopCity :"Stadt",
         cmbPopCountry :"Land",
         txtPopAdressSiret : "Siret",
-        txtPopAdressFacturation : "Faktura Adresse"
+        txtPopAdressFacturation : "Rechnungsadresse"
     },
     popBank : 
     {
@@ -88,175 +88,165 @@ const cri_01_001 =
         txtName : "Bankname",
         txtIban :"IBAN",
         txtOffice :"Filiale",
-        txtSwift :"Swift-Code",
+        txtSwift :"Swift Code",
     },
     popOffical : 
     {
-        title : "Kontakt",
-        txtPopName : "Vorname",
+        title : "Administrator",
+        txtPopName : "Name",
         txtPopLastName : "Nachname",
         txtPopPhone1 :"Telefon 1",
         txtPopPhone2 :"Telefon 2",
         txtPopGsmPhone : "Mobiltelefon",
-        txtPopOtherPhone : "Andere Telefonnummer",
+        txtPopOtherPhone : "Anderes Telefon",
         txtPopMail :"E-Mail"
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Der Speichervorgang war erfolgreich!",
-        msgFailed: "Der Speichervorgang ist fehlgeschlagen!"
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgLegalNotValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie die erforderlichen Felder im Abschnitt 'Rechtliche Informationen' aus!"
+        msg: "Bitte füllen Sie die rechtlichen Felder aus!"
     },
     msgTaxNo:
     {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Bitte geben Sie die Steuernummer ein!"
-    },
-    msgSave :
-    {
-        title: "Achtung",
-        btn01: "OK",
-        btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie speichern möchten?"
-    },
-    msgSaveValid :
-    {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        title: "Achtung",   
+        btn01: "OK",   
+        msg: "Bitte geben Sie die MwSt.-Nummer ein!"   
     },
     msgAdressNotValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte wählen Sie das Land des Kunden aus dem Adressabschnitt aus!"
+        msg: "Wohnsitzland eingeben!"
     },
     msgDelete:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
+        msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?",
+        msgFailed: "Löschen fehlgeschlagen, da ein mit dem Kunden verknüpftes Dokument existiert!",
+        msgSuccess: "Erfolgreich gelöscht!"
     },
     cmbTypeData : 
     {
-        individual : "Einzelunternehmen",
-        company : "Unternehmen"
+        individual :  "Einzelperson",
+        company :  "Unternehmen",
+        association : "Verein"
     },
     cmbGenusData:
     {
         Customer : "Kunde",
         supplier : "Lieferant",
         both : "Beide",
-        branch : "Filiale"
+        branch : "Filiale" 
     },
     cmbTaxTypeData : 
     {
-        individual : "Einzelunternehmen",
-        company : "Unternehmen"
+        individual :  "Einzelperson",
+        company :  "Unternehmen"
     },
     msgCode : 
     {
         title: "Achtung",
-        btn01: "Zum Konto wechseln",
+        btn01: "Kunde suchen",
         btn02: "OK",
-        msg : "Der eingegebene Kunde ist bereits im System registriert!"
+        msg : "Kunde bereits vorhanden!"
     },
     chkTaxSucre : "Zuckersteuer",
-    txtAccountingCode : "Kontokonto",
+    txtAccountingCode : "Buchungscode",
     tabTitleDetail : "Detailinformationen",
-    validation :
+    validation : 
     {
-        frmCustomers: "Das Feld 'Kundennummer' darf nicht leer sein!",
+        frmCustomers: "Der Code kann nicht leer sein!",
     },
-    txtSubCustomer : "Unterkunde",  
+    txtSubCustomer : "Tochterlieferant", 
     pg_subCustomer : 
     {
-        title : "Auswahl Unterkunde",   
-        clmCode : "CODE",   
-        clmTitle : "Titel",   
-        clmName : "Name",   
-        clmLastName  : "Nachname",   
+        title : "Auswahl des Tochterlieferanten",  
+        clmCode : "Code", 
+        clmTitle : "Titel", 
+        clmName : "Vorname",  
+        clmLastName  : "Nachname", 
     },
-    txtMainCustomer : "Hauptkunde",  
+    txtMainCustomer : "Hauptlieferant",
     pg_mainCustomer : 
     {
-        title : "Auswahl Hauptkunde",  
-        clmCode : "CODE",   
-        clmTitle : "Titel",   
-        clmName : "Name",   
-        clmLastName  : "Nachname",   
+        title : "Auswahl des Hauptlieferanten", 
+        clmCode : "Code",   
+        clmTitle : "Titel",  
+        clmName : "Vorname",   
+        clmLastName  : "Nachname", 
     },
-    txtArea : "Region",   
+    txtArea : "Gebiet", 
     pg_AreaCode : 
     {
-        title : "Auswahl der Region",   
-        clmCode : "CODE",   
-        clmName : "Name",   
+        title : "Gebietsauswahl", 
+        clmCode : "Code", 
+        clmName : "Name", 
     },
-    txtSector : "Branche",   
+    txtSector : "Sektor",
     pg_SectorCode : 
     {
-        title : "Auswahl der Region",    
-        clmCode : "CODE",    
-        clmName : "Name",    
+        title : "Sektorauswahl",  
+        clmCode : "Code",  
+        clmName : "Name", 
     },
-    txtPriceListNo: "Preislistennummer", 
-    pg_priceListNo: 
+    txtPriceListNo: "Preislisten-Nummer", //BAK
+    pg_priceListNo: //BAK
     {
-        title: "Auswahl der Preisliste",
+        title: "Preislisten-Auswahl",
         clmNo: "Nummer",
         clmName: "Name"
     },
     popNote : 
     {
-        title : "Notitz hinzufügen",  
+        title : "Notiz hinzufügen", 
     },
-    tabTitleNote : "Notitzen",   
+    tabTitleNote : "Notizen", 
     grdNote:
     {
-        clmNote : "Notitz", 
-        clmName : "Name",
+        clmNote : "Notiz",
+        clmName : "Name", 
     },
     txtMainGroup : "Hauptgruppe",
     pg_MainGroup : 
     {
-        title : "Hauptgruppenwahl",
-        clmCode : "CODE",
-        clmName : "NAME",
+        title : "Gruppenauswahl",
+        clmCode : "Code",
+        clmName : "Name",
     },
-    btnSubGroup: "Untergruppe Hinzufügen",
+    btnSubGroup: "Untergruppe hinzufügen",
     pg_subGroup: 
     {
-        title: "Untergruppenauswahl",
+        title: "Untergruppen-Auswahl",
         clmName: "Name",
     },
     msgTaxInSpace: 
     {
         title: "Achtung",
-        btn01: "OK",
-        msg: "Bitte geben Sie die Steuernummer ohne Leerzeichen ein!"
+        btn01: "Einverstanden",
+        msg: "Bitte geben Sie die MwSt.-Nummer ohne Leerzeichen ein!"
     }
 }
 export default cri_01_001

@@ -60,6 +60,7 @@ export default class excelItemImport extends React.PureComponent
     }
     async excelAdd(pData)
     {
+        console.log(pData)
         let empty = 
         {
            CUSER:this.user.CODE,

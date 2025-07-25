@@ -1,26 +1,26 @@
 //  "Kasa Hareketleri Listesi"
 const fns_01_004 =
 {
-    cmbSafe : "Konto",
-    txtAmount : "Kassenguthaben",
-    menu : "Einzahlung",
+    cmbSafe : "Kasse",
+    txtAmount : "Kassensaldo",
+    menu : "Kassenbewegung",
     btnGet :"Suchen",
-    dtFirst : "Anfangsdatum",
+    dtFirst : "Startdatum",
     dtLast : "Enddatum",
     grdSafeList: 
     {
-        clmRef: "Serie",
-        clmRefNo: "Nummer",
-        clmOutputName : "Versandkonto",
-        clmInputName : "Eingangskonto",
+        clmRef: "Referenz",
+        clmRefNo: "Zeile",
+        clmOutputName :  "Ausgehende Kasse",
+        clmInputName :  "Eingehende Kasse",
         clmDate: "Datum",
-        clmAmount : "Betrag",
+        clmAmount : "Gesamt",
         clmDate : "Datum",
-    },  
+    },
     msgNotBank : {
         title : "Achtung",
         btn01 : "OK",
-        msg : "Bitte wählen Sie ein Konto"
+        msg : "Bitte wählen Sie eine Kasse aus"
     },
 }
 export default fns_01_004

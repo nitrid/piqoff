@@ -1,85 +1,85 @@
 // "Müşteri Puanı Raporu"
 const cri_04_003 =
 {
-    cmbCustomer :"Kunde",
+    cmbCustomer :"Lieferant",
     btnGet :"Suchen",
-    txtCustomerCode : "Kundencode",
+    txtCustomerCode : "Kundenauswahl",
     txtCustomerName : "Kundenname",
-    txtAmount : "Gesamtbetrag",
+    txtAmount : "Gesamtpunkte", 
     pg_txtCustomerCode : 
     {
         title : "Kundenauswahl",
-        clmCode :  "KUNDENCODE",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
+        clmCode :  "Kundencode",
+        clmTitle : "Kundenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Gattung"
     },
     grdCustomerPointReport: 
     {
         clmCode: "Code",
         clmTitle: "Name",
         clmPoint: "Punkte",
-        clmLdate : "Letztes Aktualisierungsdatum",
+        clmLdate : "Letztes Update-Datum",
         clmEur : "EURO"
     },
     popPointDetail : 
     {
-        title: "Punktdetails"
+        title: "Punkt-Detail"
     },
     grdPointDetail : 
     {
         clmDate : "Datum",
-        clmPoint : "Punkte",
+        clmPoint : "Punkt",
         clmPointType : "Typ",
-        clmPosId :"Belegnummer",
-        clmDescription :"Beschreibung",
+        clmPosId :"Ticket-Nummer",
+        clmDescription :"Grund",
     },
     grdSaleTicketItems :
     {
         clmBarcode : "Barcode",
-        clmName : "Artikelname",
+        clmName : "Produktname",
         clmQuantity : "Menge",
         clmPrice : "Preis",
         clmTotal : "Betrag"
     },
     grdSaleTicketPays : 
     {
-        clmPayName : "Zahlungsmethode", 
-        clmTotal : "Betrag",
+        clmPayName : "Zahlungsart", 
+        clmTotal : "Gesamt",
     },
     popDetail : 
     {
-        title : "Belegdetails"
+        title : "Ticket-Detail"
     },
-    TicketId :"Beleg-ID",
+    TicketId :"Ticket Nr.", 
     popLastTotal : 
     {
         title : "Zahlung"
     },
-    trDeatil: "Gutscheindetails", 
-    lineDelete :"Zeile stornieren", 
-    Abbrechen : "Abbrechen", 
-    btnAddpoint : "Punkte hinzufügen/abziehen",
-    popPointEntry : 
-    {
-        title : "Punkte hinzufügen/abziehen"
-    },
-    txtPoint : "Punkte",
-    txtPointAmount : "Betrag",
-    cmbPointType : "Transaktionstyp",
-    cmbTypeData : 
-    {
-        in : "Punkte hinzufügen",
-        out : "Punkte abziehen"
-    },
-    txtDescription : "Beschreibung",
+    trDeatil: "T.R Detail", 
+    lineDelete :"Zeile storniert", 
+    cancel : "Abbrechen", 
+    btnAddpoint : "Punkt Ein- und Ausgang",     
+    popPointEntry :     
+    {    
+        title : "Punkt Ein- und Ausgang"     
+    },    
+    txtPoint : "Punkt",     
+    txtPointAmount : "Gegenwert Summe",     
+    cmbPointType : "Eingabetyp",     
+    cmbTypeData :    
+    {     
+        in : "Punkt Eingang",     
+        out : "Punkt Ausgang"     
+    },     
+    txtDescription : "Information",
     msgDescription:
     {
         title: "Achtung",  
         btn01: "OK",   
-        msg: "Bitte geben Sie einen Text mit mindestens 15 Zeichen ein."
+        msg: "Bitte geben Sie mindestens 15 Zeichen ein.."  
     },
-    btnAdd : "Hinzufügen",
-    descriptionPlace : "Bitte geben Sie einen Text mit mindestens 15 Zeichen ein."
+    btnAdd : "Hinzufügen", 
+    descriptionPlace : "Bitte geben Sie mindestens 15 Zeichen ein.."
 }
 export default cri_04_003

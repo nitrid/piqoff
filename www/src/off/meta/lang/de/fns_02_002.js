@@ -1,172 +1,180 @@
 // Tahsilat
 const fns_02_002 = 
 {
-    txtRefRefno: "Seriennummer-Nummer",
-    menu: "Zahlungseingang",
+    txtRefRefno : "Ref.-Ref. Nr.",
+    menu : "Kassierung",
     cmbDepot: "Lager",
-    cmbCashSafe: "Kassenauswahl",
-    cmbCheckSafe: "Scheckkasse",
-    cmbBank: "Bankauswahl",
-    txtCustomerCode: "Kundencode",
-    txtCustomerName: "Kundenname",
-    dtDocDate: "Datum",
-    txtAmount: "Betrag",
-    txtTotal: "Gesamtsumme",
-    dtShipDate: "Lieferdatum",
-    cash: "Betrag",
-    description: "Beschreibung",
-    checkReference: "Referenz",
-    btnCash: "Bargeld-Eingabe",
-    invoiceSelect: "Rechnungsauswahl",
-    ValidCash: "Bitte geben Sie einen Betrag größer als 0 ein",
-    checkDate: "Scheckdatum",
-    extraAmount: " Zusätzlicher Betrag",
-    matchedDocs: "Übereinstimmende Dokumente",
-    invoices: "Rechnungen",
-    payments: "Zahlungen",
-    cmbPayType: {
-        title: "Zahlungsart",
-        cash: "Bargeld",
-        check: "Scheck",
-        bankTransfer: "Banküberweisung",
-        otoTransfer: "Automatische Zahlung",
-        foodTicket: "Essensgutschein",
-        bill: "Wechsel",
-    },
+    cmbCashSafe : "Kasse auswählen",
+    cmbCheckSafe : "Scheck",
+    cmbBank : "Bank auswählen",
+    txtCustomerCode : "Kundencode",
+    txtCustomerName : "Kundenname",
+    dtDocDate : "Datum",
+    txtAmount : "Gesamt",
+    txtTotal : "Gesamtsumme",
+    dtShipDate :"Versanddatum",
+    cash : "Gesamt",
+    description :"Grund",
+    checkReference : "Referenz",
+    checkDate : "Scheckdatum",
+    btnCash : "Kassierung eingeben",
+    invoiceSelect : "Rechnung auswählen",
+    installmentSelect : "Rate auswählen",
+    ValidCash : "Bitte geben Sie einen Betrag größer als 0 ein", 
+    extraAmount : "Überschussbetrag",
+    matchedDocs : "Übereinstimmende Dokumente",
+    invoices : "Rechnungen",
+    payments : "Zahlungen",
     msgClearGrid : 
     {
         title : "Achtung",
         btn01 : "Ja, Löschen",
         btn02 : "Abbrechen",
-        msg : "Sie haben bereits Rechnungen ausgewählt. Möchten Sie die Seite für neue Rechnungseingaben neu starten?"
+        msg : "Sie haben bereits Rechnungen ausgewählt. Möchten Sie wirklich die neuen Rechnungen löschen?"
     },
-    pg_Docs:
+    cmbPayType : 
     {
-        title: "Dokumentenauswahl",
-        clmDate: "DATUM",
-        clmRef: "Serie",
-        clmRefNo: "NUMMER",
-        clmOutputName: "KUNDENNAME",
-        clmOutputCode: "KUNDENCODE",
+        title : "Zahlungsart",
+        cash : "Bargeld",
+        check : "Scheck",
+        bankTransfer : "Kontoüberweisung",
+        otoTransfer : "Lastschrift",
+        foodTicket : "Restaurantgutschein",
+        bill : "Rechnung",
+    },
+    pg_Docs : 
+    {
+        title : "Dokumentenauswahl",
+        clmDate : "Datum",
+        clmRef : "Referenz",
+        clmRefNo : "Ref. Nr.",
+        clmOutputName : "Kundenname",
+        clmOutputCode  : "Kundencode",
+        clmTotal : "Gesamt inkl. MwSt."
     },
     pg_txtCustomerCode : 
     {
         title : "Kundenauswahl",
-        clmCode :  "KUNDENCODE",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
+        clmCode :  "Kundencode",
+        clmTitle : "Kundenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Typ"
     },
     grdDocPayments: 
     {
-        clmCreateDate: "Erstellungsdatum",
-        clmAmount : "Betrag",
+        clmCreateDate: "Registrierungsdatum",
+        clmAmount : "Gesamt",
         clmInputName : "Kasse/Bank",
-        clmDescription : "Beschreibung",
+        clmDescription : "Grund",
         clmInvoice : "Bezahlte Rechnung",
         clmFacDate : "Rechnungsdatum",
-        clmDocDate : "Zahlungsdatum"
+        clmDocDate : "Datum",
+        clmMatchedDoc : "Verknüpfte Rechnung"
     },
     msgDocValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es können keine Lagerbestände erfasst werden, solange die Dokumentkopfdaten nicht vollständig sind!"
+        msg: "Das Inventar kann nicht eingegeben werden, bevor die Dokumentkopfzeilen vollständig sind!"
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie speichern möchten!"
+        msg: "Sind Sie sicher, dass Sie speichern möchten?"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihr Speichervorgang war erfolgreich!",
+        msgSuccess: "Speichern erfolgreich!",
         msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        msg: "Bitte füllen Sie die Pflichtfelder aus!"
     },
     msgDelete:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
+        msg: "Möchten Sie den Datensatz wirklich löschen?"
     },
     msgLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Das Dokument wurde gespeichert und gesperrt!"
+        msg: "Dokument gespeichert und gesperrt!"
     },
     msgPasswordSucces:
     {
-        title: "Erfolgreich",
+        title: "Erfolg!",
         btn01: "OK",
-        msg: "Das Dokument wurde entsperrt!",
+        msg: "Dokument entsperrt!",
     },
     msgPasswordWrong:
     {
-        title: "Fehlgeschlagen",
+        title: "Fehler!",
         btn01: "OK",
-        msg: "Ihr Passwort ist falsch!"
+        msg: "Falsches Passwort!"
     },
     msgGetLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Das Dokument ist gesperrt! Änderungen und Speichern nur mit dem Administratorpasswort möglich!"
+        msg: "Dokument gesperrt! \n Um Änderungen zu speichern, müssen Sie es mit dem Administrator-Passwort entsperren!"
     },
     msgDocLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es können keine Vorgänge durchgeführt werden, solange das Dokument nicht entsperrt ist!"
+        msg: "Keine Transaktion kann durchgeführt werden, ohne das Dokument zu entsperren!"
     },
     msgNotCustomer:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Kunde nicht gefunden!"
+        msg: "Kunde nicht gefunden!!"
     },
     popCash : 
     {
-        title: "Einzahlung Bargeld",
+        title: "Kassierung eingeben",
         btnApprove : "Hinzufügen"
     },
     popCheck : 
     {
-        title: "Scheck Einzahlung",
+        title: "Scheck eingeben",
         btnApprove : "Hinzufügen"
     },
     popBank : 
     {
-        title: "Banküberweisung",
+        title: "Überweisung eingeben",
         btnApprove : "Hinzufügen"
     },
-    validRef :"Seriennummer darf nicht leer sein",
-    validRefNo : "Laufende Nummer darf nicht leer sein",
-    validDepot : "Sie müssen ein Lager auswählen",
-    validCustomerCode : "Kundencode darf nicht leer sein",
-    validDocDate : "Bitte wählen Sie ein Datum aus",
+    popCloseInvoice : 
+    {
+        title: "Bezahlte Rechnungen",
+    },
+    validRef :"Die Referenz kann nicht leer sein",
+    validRefNo : "Die Referenznummer kann nicht leer sein",
+    validDepot : "Sie müssen das Lager auswählen",
+    validCustomerCode : "Der aktuelle Code kann nicht leer sein",
+    validDocDate : "Sie müssen ein Datum auswählen",
     msgInvoiceSelect:
     {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Sie können keine Vorgänge durchführen, ohne eine Rechnung auszuwählen!"
+        title: "Achtung",   
+        btn01: "OK",    
+        msg: "Sie können den Vorgang nicht durchführen, ohne eine Rechnung auszuwählen!"   
     },
     msgRowNotUpdate:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Trennen Sie die entsprechende Verbindung, um diese Aktion auszuführen.",
+        msg: "Trennen Sie die zugehörige Verbindung, um diesen Vorgang durchzuführen.",
     },
 }
 export default fns_02_002

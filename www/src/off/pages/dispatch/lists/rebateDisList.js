@@ -262,7 +262,7 @@ export default class rebateDisList extends React.PureComponent
                                     App.instance.menuClick(
                                         {
                                             id: 'irs_02_003',
-                                            text: this.t('menu'),
+                                            text: this.lang.t('menuOff.ftr_02_003'),
                                             path: 'dispatch/documents/rebateDispatch.js',
                                             pagePrm:{GUID:e.data.GUID}
                                         })
