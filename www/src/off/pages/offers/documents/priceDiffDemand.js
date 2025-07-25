@@ -30,6 +30,7 @@ export default class priceDiffDemand extends DocBase
         this.docType = 63;
         this.rebate = 0;
 
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
         this.cellRoleRender = this.cellRoleRender.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
@@ -797,13 +798,150 @@ export default class priceDiffDemand extends DocBase
         }
         await dialog(tmpConfObj);
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: 
+            {
+                icon: 'add',
+                validationGroup: 'frmDoc' + this.tabIndex,
+                onClick: (async (c)=>
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        if(typeof this.docObj.docDemand.dt()[0] != 'undefined')
+                        {
+                            if(this.docObj.docDemand.dt()[this.docObj.docDemand.dt().length - 1].ITEM_CODE == '')
+                            {
+                                this.pg_txtItemsCode.onClick = async(data) =>
+                                {
+                                    this.checkboxReset()
+                                    
+                                    this.grid.devGrid.beginUpdate()
+                                    for (let i = 0; i < data.length; i++) 
+                                    {
+                                        await this.addItem(data[i],null)
+                                    }
+                                    this.grid.devGrid.endUpdate()
+                                }
+                                this.pg_txtItemsCode.show()
+                                return
+                            }
+                        }
+                        this.pg_txtItemsCode.onClick = async(data) =>
+                        {
+                            this.checkboxReset()
+                            
+                            this.grid.devGrid.beginUpdate()
+                            for (let i = 0; i < data.length; i++) 
+                            {
+                                await this.addItem(data[i],null)
+                            }
+                            this.grid.devGrid.endUpdate()
+                        }
+                        this.pg_txtItemsCode.show()
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
+                    }
+                }).bind(this)
+            }
+        });
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: 
+            {
+                icon: 'add',
+                text: this.t("serviceAdd"),
+                validationGroup: 'frmDoc' + this.tabIndex,
+                onClick: (async (c)=>
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                        {
+                            if(typeof this.docObj.docDemand.dt()[0] != 'undefined')
+                            {
+                                if(this.docObj.docDemand.dt()[this.docObj.docDemand.dt().length - 1].ITEM_CODE == '')
+                                {
+                                    this.pg_service.onClick = async(data) =>
+                                    {
+                                        this.checkboxReset()
+                                        
+                                        this.grid.devGrid.beginUpdate()
+                        
+                                        for (let i = 0; i < data.length; i++) 
+                                        {
+                                            await this.addItem(data[i],null)
+                                        }
+                                        this.grid.devGrid.endUpdate()
+                                    }
+                                    await this.pg_service.show()
+                                    return
+                                }
+                            }
+                            
+                            this.pg_service.onClick = async(data) =>
+                            {
+                                this.checkboxReset()
+                                
+                                this.grid.devGrid.beginUpdate()
+                                for (let i = 0; i < data.length; i++) 
+                                {
+                                    await this.addItem(data[i],null)
+                                }
+                                this.grid.devGrid.endUpdate()
+                            }
+                        
+                            await this.pg_service.show()   
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
+                    }
+                }).bind(this)
+            }
+        });
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: 
+            {
+                icon: 'add',
+                text: this.lang.t("collectiveItemAdd"),
+                validationGroup: 'frmDoc' + this.tabIndex,
+                onClick: (async (c)=>
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                        {
+                            await this.popMultiItem.show()
+                            await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                        
+                            if( typeof this.docObj.docDemand.dt()[this.docObj.docDemand.dt().length - 1] != 'undefined' && this.docObj.docDemand.dt()[this.docObj.docDemand.dt().length - 1].ITEM_CODE == '')
+                            {
+                                await this.grid.devGrid.deleteRow(this.docObj.docDemand.dt().length - 1)
+                            }
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
+                    }
+                }).bind(this)
+            }
+        });
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.props.data.tabkey}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -1006,7 +1144,7 @@ export default class priceDiffDemand extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '150px'}}>
                         <div className="col-12">
                             <Form colCount={3} id={"frmPriceDiffOff"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
@@ -1433,131 +1571,22 @@ export default class priceDiffDemand extends DocBase
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <NdForm colCount={1} onInitialized={(e)=>
+                            <NdForm colCount={1} height={'100%'} onInitialized={(e)=>
                             {
                                 this.frmDocItems = e.component
                             }}> 
-                                <NdItem>
-                                    <Button icon="add"
-                                        validationGroup={"frmDoc"  + this.tabIndex}
-                                        onClick={async (e)=>
-                                        {
-                                            if(e.validationGroup.validate().status == "valid")
-                                            {
-                                                if(typeof this.docObj.docDemand.dt()[0] != 'undefined')
-                                                {
-                                                    if(this.docObj.docDemand.dt()[this.docObj.docDemand.dt().length - 1].ITEM_CODE == '')
-                                                    {
-                                                        this.pg_txtItemsCode.onClick = async(data) =>
-                                                        {
-                                                            this.checkboxReset()
-                                                            
-                                                            this.grid.devGrid.beginUpdate()
-                                                            for (let i = 0; i < data.length; i++) 
-                                                            {
-                                                                await this.addItem(data[i],null)
-                                                            }
-                                                            this.grid.devGrid.endUpdate()
-                                                        }
-                                                        this.pg_txtItemsCode.show()
-                                                        return
-                                                    }
-                                                }
-                                                this.pg_txtItemsCode.onClick = async(data) =>
-                                                {
-                                                    this.checkboxReset()
-                                                    
-                                                    this.grid.devGrid.beginUpdate()
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.addItem(data[i],null)
-                                                    }
-                                                    this.grid.devGrid.endUpdate()
-                                                }
-                                                this.pg_txtItemsCode.show()
-                                            }
-                                            else
-                                            {
-                                                this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
-                                            }
-                                    }}/>
-                                    <Button icon="add" text={this.t("serviceAdd")}
-                                    validationGroup={"frmDoc"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.docObj.docDemand.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docDemand.dt()[this.docObj.docDemand.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    this.pg_service.onClick = async(data) =>
-                                                    {
-                                                        this.checkboxReset()
-                                                        
-                                                        this.grid.devGrid.beginUpdate()
-                                        
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            await this.addItem(data[i],null)
-                                                        }
-                                                        this.grid.devGrid.endUpdate()
-                                                    }
-                                                    await this.pg_service.show()
-                                                    return
-                                                }
-                                            }
-                                            
-                                            this.pg_service.onClick = async(data) =>
-                                            {
-                                                this.checkboxReset()
-                                                
-                                                this.grid.devGrid.beginUpdate()
-                                                for (let i = 0; i < data.length; i++) 
-                                                {
-                                                    await this.addItem(data[i],null)
-                                                }
-                                                this.grid.devGrid.endUpdate()
-                                            }
-                                        
-                                            await this.pg_service.show()   
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
-                                        }
-                                    }}/>
-                                    <Button icon="add" text={this.lang.t("collectiveItemAdd")}
-                                    validationGroup={"frmDoc"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            await this.popMultiItem.show()
-                                            await this.grdMultiItem.dataRefresh({source:this.multiItemData});
-                                        
-                                            if( typeof this.docObj.docDemand.dt()[this.docObj.docDemand.dt().length - 1] != 'undefined' && this.docObj.docDemand.dt()[this.docObj.docDemand.dt().length - 1].ITEM_CODE == '')
-                                            {
-                                                await this.grid.devGrid.deleteRow(this.docObj.docDemand.dt().length - 1)
-                                            }
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
-                                        }
-                                    }}/> 
-                                </NdItem>
-                                <NdItem>
+                                <NdItem style={{height: '100%'}}>
                                     <React.Fragment>
                                         <NdGrid parent={this} id={"grdDiffOff"+this.tabIndex} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true} 
                                         allowColumnResizing={true} 
+                                        onToolbarPreparing={this.onGridToolbarPreparing}
                                         filterRow={{visible:true}}
-                                        height={'400'} 
+                                        height={'590px'} 
                                         width={'100%'}
                                         dbApply={false}
                                         sorting={{mode:'none'}}
@@ -1701,7 +1730,7 @@ export default class priceDiffDemand extends DocBase
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '140px'}}>
                     <div className="col-12">
                         <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
                             {/* Ara Toplam */}
