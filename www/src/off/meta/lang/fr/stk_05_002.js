@@ -1,7 +1,7 @@
 // Alış Fiyatı Raporuu"
 const stk_05_002 =
 {
-    btnGet :"Aller", 
+    btnGet :"Rechercher", 
     dtFirst : "Date de début", 
     graphicTitle : "Graphique de changement de prix", 
     typePurc : "Achat", 
@@ -21,6 +21,11 @@ const stk_05_002 =
         clmFisrtCost : "Dernier prix d'achat", 
         clmMargin : "Marge brute", 
         clmNetMargin : "Marge nette", 
+        clmDate : "Date"
     },
+    grdListe :
+    {
+        clmDate : "Date"
+    }
 }
 export default stk_05_002

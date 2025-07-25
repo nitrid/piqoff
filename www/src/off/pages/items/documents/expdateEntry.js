@@ -19,9 +19,9 @@ import { NdForm, NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/dev
 import { NdToast } from '../../../../core/react/devex/toast.js';
 export default class expdateEntry extends React.Component
 {
-    constructor()
+    constructor(props)
     {
-        super()
+        super(props)
         
         this.core = App.instance.core;
         this.prmObj = this.param.filter({TYPE:1,USERS:this.user.CODE});
@@ -29,6 +29,7 @@ export default class expdateEntry extends React.Component
         this.tabIndex = props.data.tabkey
         
         this.expObj = new itemExpDateCls();
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
     }
     async componentDidMount()
     {
@@ -44,7 +45,6 @@ export default class expdateEntry extends React.Component
             {
                 this.btnNew.setState({disabled:false});
                 this.btnSave.setState({disabled:false});
-                this.btnPrint.setState({disabled:true});
                 this.btnDelete.setState({disabled:false});
             }
         })
@@ -54,7 +54,6 @@ export default class expdateEntry extends React.Component
             {
                 this.btnNew.setState({disabled:true});
                 this.btnSave.setState({disabled:false});
-                this.btnPrint.setState({disabled:true});
                 this.btnDelete.setState({disabled:false});
 
                 pData.rowData.CUSER = this.user.CODE
@@ -63,15 +62,13 @@ export default class expdateEntry extends React.Component
         this.expObj.ds.on('onRefresh',(pTblName) =>
         {           
             this.btnNew.setState({disabled:false});
-            this.btnSave.setState({disabled:true});
-            this.btnPrint.setState({disabled:true});       
+            this.btnSave.setState({disabled:true});     
             this.btnDelete.setState({disabled:false});   
         })
         this.expObj.ds.on('onDelete',(pTblName) =>
         {
             this.btnNew.setState({disabled:false});
             this.btnSave.setState({disabled:false});
-            this.btnPrint.setState({disabled:true});
             this.btnDelete.setState({disabled:true});
         })
 
@@ -89,7 +86,6 @@ export default class expdateEntry extends React.Component
     {
         this.expObj.clearAll()
         await this.expObj.load({GUID:pGuid,REF:pRef,REF_NO:pRefno});
-        this.btnPrint.setState({disabled:false});
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
     }
@@ -135,13 +131,30 @@ export default class expdateEntry extends React.Component
             this.expObj.dt()[pIndex].DEPOT = this.cmbDepot.value
         }
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push(
+        {
+            location: 'before',
+            widget: 'dxButton',
+            options: 
+            {
+                icon: 'add',
+                onClick: (async() => 
+                {
+                    await this.core.util.waitUntil(100)
+                    this.popItems.show()
+                }).bind(this)
+            }
+        })
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -172,7 +185,6 @@ export default class expdateEntry extends React.Component
                                                 this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
                                                 this.btnSave.setState({disabled:true});
                                                 this.btnNew.setState({disabled:false});
-                                                this.btnPrint.setState({disabled:false});
                                             }
                                             else
                                             {
@@ -186,9 +198,6 @@ export default class expdateEntry extends React.Component
                                             }
                                         }
                                     }}/>
-                                </Item>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default" onClick={()=>{this.popDesign.show()}}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnDelete" parent={this} icon="trash" type="danger"
@@ -247,8 +256,8 @@ export default class expdateEntry extends React.Component
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
-                        <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
+                        <div className="row px-2 pt-1" style={{height: '120px'}}>
                             <div className="col-12">
                                 <NdForm colCount={3} id="frmExpDate">
                                     {/* txtRef-Refno */}
@@ -502,46 +511,6 @@ export default class expdateEntry extends React.Component
                                 </NdForm>
                             </div>
                         </div>
-                        <NdForm colCount={1}>
-                            <NdItem location="after">
-                                <NdButton icon="add"
-                                onClick={async (e)=>
-                                {
-                                    await this.core.util.waitUntil(100)
-                                    this.popItems.show()
-                                }}/>
-                            </NdItem>
-                            <NdItem>
-                                <NdGrid parent={this} id={"grdExpDate"} 
-                                showBorders={true} 
-                                columnsAutoWidth={true} 
-                                allowColumnReordering={true} 
-                                allowColumnResizing={true} 
-                                filterRow={{visible:true}} 
-                                height={'600'} 
-                                width={'100%'}
-                                dbApply={false}
-                                >
-                                    <Scrolling mode="standart" />
-                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                    <Column dataField="CUSER_NAME" caption={this.t("grdExpDate.clmCuser")} width={100} allowEditing={false}/>
-                                    <Column dataField="ITEM_NAME" caption={this.t("grdExpDate.clmName")} width={250} />
-                                    <Column dataField="ITEM_CODE" caption={this.t("grdExpDate.clmCode")} width={150}/>
-                                    <Column dataField="QUANTITY" caption={this.t("grdExpDate.clmQuantity")} width={150}/>
-                                    <Column dataField="EXP_DATE" caption={this.t("grdExpDate.clmDate")} width={250}dataType="date"
-                                    editorOptions={{value:null}}
-                                    cellRender={(e) => 
-                                    {
-                                        if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
-                                        {
-                                            return e.text
-                                        }
-                                        return
-                                    }}/>
-                                    <Column dataField="DESCRIPTION" caption={this.t("grdExpDate.clmDescription")} width={150}/>
-                                </NdGrid>
-                            </NdItem>
-                        </NdForm>
                         {/* Stok Popup*/}
                         <div>
                             <NdPopUp parent={this} id={"popItems"} 
@@ -550,7 +519,7 @@ export default class expdateEntry extends React.Component
                             showTitle={true}
                             title={this.t("popItems.title")}
                             container={'#' + this.props.data.id + this.tabIndex} 
-                            width={'500'}
+                            width={'350'}
                             height={'auto'}
                             position={{of:'#' + this.props.data.id + this.tabIndex}}
                             >
@@ -668,6 +637,7 @@ export default class expdateEntry extends React.Component
                                 </NdForm>
                             </NdPopUp>
                         </div>
+
                         {/* Stok Seçim */}
                         <NdPopGrid id={"popItemsCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
                         visible={false}
@@ -694,6 +664,45 @@ export default class expdateEntry extends React.Component
                             <Column dataField="CODE" caption={this.t("popItemsCode.clmCode")} width={150} />
                             <Column dataField="NAME" caption={this.t("popItemsCode.clmName")} width={300} defaultSortoffer="asc" />
                         </NdPopGrid>
+                    </div>
+                    {/* Grid */}
+                    <div className="row px-2 pt-1" >
+                            <div className="col-12">
+                                <NdForm colCount={1} style={{height: '100%'}}>
+                                    <NdItem style={{height: '100%'}}>
+                                        <NdGrid parent={this} id={"grdExpDate"} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        filterRow={{visible:true}} 
+                                        onToolbarPreparing={this.onGridToolbarPreparing}
+                                        height={'590px'} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        loadPanel={{enabled:true}}
+                                        >
+                                            <Scrolling mode="standart" />
+                                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                            <Column dataField="CUSER_NAME" caption={this.t("grdExpDate.clmCuser")} width={100} allowEditing={false}/>
+                                            <Column dataField="ITEM_NAME" caption={this.t("grdExpDate.clmName")} width={250} />
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdExpDate.clmCode")} width={150}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdExpDate.clmQuantity")} width={150}/>
+                                            <Column dataField="EXP_DATE" caption={this.t("grdExpDate.clmDate")} width={250}dataType="date"
+                                            editorOptions={{value:null}}
+                                            cellRender={(e) => 
+                                            {
+                                                if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                                {
+                                                    return e.text
+                                                }
+                                                return
+                                            }}/>
+                                            <Column dataField="DESCRIPTION" caption={this.t("grdExpDate.clmDescription")} width={150}/>
+                                        </NdGrid>
+                                    </NdItem>
+                                </NdForm>
+                            </div>
                     </div>
                     {/* BARKOD POPUP */}
                     <NdPopGrid id={"pg_txtBarcode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
@@ -741,7 +750,7 @@ export default class expdateEntry extends React.Component
                     height={"auto"}
                     button={[{id:"btn01",caption:this.t("msgQuantity.btn01"),location:'after'}]}
                     >
-                        <div className="row">
+                        <div className="row" style={{'--bs-gutter-x': '0px'}}>
                             <div className="col-12 py-2">
                                 <div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgQuantity.msg")}</div>
                             </div>

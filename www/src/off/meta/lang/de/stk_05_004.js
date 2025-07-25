@@ -17,7 +17,8 @@ const stk_05_004 =
         clmDocDate : "Datum",   
         clmRef : "Serie",
         clmRefNo : "Reihe",   
-        clmDescription : "Beschreibung"  
+        clmDescription : "Beschreibung",
+        clmDate : "Datum"
     },
     txtTotalQuantity : "Gesamtzahl", 
     txtTotalCost : "Inventurwerte/-angaben",  

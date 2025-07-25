@@ -12,7 +12,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import { Chart, Series, CommonSeriesSettings, Legend, ArgumentAxis, Grid, Title } from 'devextreme-react/chart';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { NdForm, NdItem, NdLabel } from '../../../../core/react/devex/form.js';
+import { NdForm, NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
 import { NdToast } from '../../../../core/react/devex/toast.js';
 export default class itemPurcPriceReport extends React.PureComponent
 {
@@ -86,7 +86,7 @@ export default class itemPurcPriceReport extends React.PureComponent
         let tmpSaleQuery = 
         {
             query : `SELECT CONVERT(NVARCHAR,CONVERT(DATETIME,CDATE),104) AS CONVERT_DATE, CDATE AS DATE, 
-                    PRICE AS SALE 
+                    LAST_PRICE AS SALE 
                     FROM [dbo].[PRICE_HISTORY_VW_01] WHERE ITEM = @ITEM_GUID AND TYPE = 0 
                     UNION ALL 
                     SELECT CONVERT(NVARCHAR,LDATE,104) AS CONVERT_DATE,LDATE AS DATE,PRICE AS SALE FROM ITEM_PRICE_VW_01 
@@ -96,6 +96,8 @@ export default class itemPurcPriceReport extends React.PureComponent
         }
         
         let tmpSaleData = await this.core.sql.execute(tmpSaleQuery) 
+        console.log(tmpSaleData)
+
         let tmpRecordset = []
 
         for (let i = 0; i < tmpData.result.recordset.length; i++) 
@@ -103,10 +105,12 @@ export default class itemPurcPriceReport extends React.PureComponent
             tmpRecordset.push(tmpData.result.recordset[i])
         }
 
+
         for (let i = 0; i < tmpSaleData.result.recordset.length; i++) 
         {
             tmpRecordset.push(tmpSaleData.result.recordset[i])
         }
+        console.log(tmpRecordset)
 
         function dateShot(a, b)
         {
@@ -136,9 +140,9 @@ export default class itemPurcPriceReport extends React.PureComponent
     render()
     {
         return(
-            <div>
+            <div id={this.props.data.id+this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -170,25 +174,15 @@ export default class itemPurcPriceReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-6">
-                           {/* dtFirst */}
-                           <NdForm colCount={2}>
-                                <NdItem colSpan={3}>
+                    <div className="row px-2 pt-1" style={{height: '80px'}}>
+                        <div className="col-12">
+                            <NdForm colCount={3}>
+                                <NdItem>
+                                    <NdLabel text={this.t("grdListe.clmDate")}/>
                                     <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
                                 </NdItem>
-                           </NdForm>
-                        </div>
-                        <div className="col-3">
-                            
-                        </div>
-                        <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-6">
-                            <NdForm colCount={2}>
+                                <NdEmptyItem />
+                                <NdEmptyItem />
                                 <NdItem>
                                     <NdLabel text={this.t("cmbCustomer")} alignment="right" />
                                     <NdSelectBox simple={true} parent={this} id="cmbTedarikci" showClearButton={true} notRefresh={true}  searchEnabled={true} 
@@ -205,20 +199,26 @@ export default class itemPurcPriceReport extends React.PureComponent
                                     data={{source: {select : {query:"SELECT CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC"},sql : this.core.sql}}}
                                     />
                                 </NdItem>
+                                <NdEmptyItem />
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            {this.t("dlbClikMsg")}
+                            <div className="col-6" style={{fontStyle: 'italic', backgroundColor: 'darkblue', color: 'white', padding: '8px', textAlign: 'center', float: 'left'}}>
+                                {this.t("dlbClikMsg")}
+                            </div>
+                            <div className="col-3" style={{float: 'right'}}>
+                                <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
+                            </div>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdItemPurcPriceReport" parent={this} 
                             selection={{mode:"single"}} 
                             showBorders={true}
-                            height={'700'} 
+                            height={'690px'} 
                             width={'100%'}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -248,7 +248,7 @@ export default class itemPurcPriceReport extends React.PureComponent
                             >                            
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="infinite" />}
+                                {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
                                 <Export fileName={this.lang.t("menuOff.stk_05_002")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CODE" caption={this.t("grdItemPurcPriceReport.clmCode")} visible={true} width={150}/> 
                                 <Column dataField="NAME" caption={this.t("grdItemPurcPriceReport.clmName")} visible={true} width={350}/> 
@@ -277,10 +277,10 @@ export default class itemPurcPriceReport extends React.PureComponent
                         visible={false}
                         showCloseButton={true}
                         showTitle={true}
-                        container={"#root"} 
+                        container={"#"+this.props.data.id+this.tabIndex} 
                         width={'1200'}
                         height={'800'}
-                        position={{of:'#root'}}
+                        position={{of:'#'+this.props.data.id+this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
                                 <NdItem>

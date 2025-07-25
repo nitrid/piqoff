@@ -970,7 +970,7 @@ export default class labelPrinting extends React.PureComponent
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-1" style={{height: '12%'}}>
+                    <div className="row px-2 pt-1" style={{height: '120px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmLabelQeueu">
                                 {/* txtRef-Refno */}
@@ -1257,7 +1257,7 @@ export default class labelPrinting extends React.PureComponent
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-1" style={{height: '81%'}}>
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={1} onInitialized={(e)=>{this.frmOutwas = e.component}} style={{height: '100%'}}>
                                 <NdItem style={{height: '100%'}}>
@@ -1268,7 +1268,7 @@ export default class labelPrinting extends React.PureComponent
                                     allowColumnResizing={true} 
                                     filterRow={{visible:true}}
                                     paging={{enabled:false}}
-                                    height={'100%'} 
+                                    height={'590px'} 
                                     width={'100%'}
                                     dbApply={false}
                                     loadPanel={{enabled:true}}
@@ -1396,7 +1396,7 @@ export default class labelPrinting extends React.PureComponent
                     title={this.t("popWizard.title")}
                     container={'#' + this.props.data.id + this.tabIndex} 
                     width={'50%'}
-                    height={'45%'}
+                    height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <NdForm colCount={2} height={'fit-content'}>

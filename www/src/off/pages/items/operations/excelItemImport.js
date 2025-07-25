@@ -167,7 +167,7 @@ export default class excelItemImport extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -199,7 +199,7 @@ export default class excelItemImport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '80px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmCustoms">
                                 {/* txtCustomerCode */}
@@ -248,35 +248,6 @@ export default class excelItemImport extends React.PureComponent
                                             <RequiredRule message={this.t("validCustomerCode")} />
                                         </Validator>  
                                     </NdTextBox>
-                                    {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
-                                    visible={false}
-                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_txtCustomerCode.title")} //
-                                    search={true}
-                                    data = 
-                                    {{
-                                        source:
-                                        {
-                                            select:
-                                            {
-                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] 
-                                                        FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
-                                                param : ['VAL:string|50']
-                                            },
-                                            sql:this.core.sql
-                                        }
-                                    }}
-                                    >
-                                        <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
-                                        <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
-                                        <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
-                                    </NdPopGrid>
                                 </NdItem> 
                                 {/* txtCustomerName */}
                                 <NdItem>
@@ -285,6 +256,9 @@ export default class excelItemImport extends React.PureComponent
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     />
                                 </NdItem> 
+                                <NdEmptyItem />
+                                <NdEmptyItem />
+                                <NdEmptyItem />
                                 <NdEmptyItem />
                                 <NdItem>
                                     <Button icon="xlsxfile" text={this.t("excelAdd")}
@@ -313,174 +287,201 @@ export default class excelItemImport extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                       {/* Excel PopUp */}
-                       <div>
-                        <NdPopUp parent={this} id={"popExcel"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popExcel.title")}
-                        container={'#' + this.props.data.id + this.tabIndex} 
-                        width={'650'}
-                        height={'650'}
-                        position={{of:'#' + this.props.data.id + this.tabIndex}}
-                        >
-                            <NdForm colCount={2} height={'fit-content'}>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopCode")} alignment="right" />
-                                    <NdTextBox id="txtPopCode" parent={this} simple={true}  notRefresh = {true} readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopName")} alignment="right" />
-                                    <NdTextBox id="txtPopName" parent={this} simple={true}  notRefresh = {true} readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopType")} alignment="right" />
-                                    <NdTextBox id="txtPopType" parent={this} simple={true}  notRefresh = {true} readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopStatus")} alignment="right" />
-                                    <NdTextBox id="txtPopStatus" parent={this} simple={true}  notRefresh = {true} readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopVat")} alignment="right" />
-                                    <NdTextBox id="txtPopVat" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopCostPrice")} alignment="right" />
-                                    <NdTextBox id="txtPopCostPrice" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopMinPrice")} alignment="right" />
-                                    <NdTextBox id="txtPopMinPrice" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopMaxPrice")} alignment="right" />
-                                    <NdTextBox id="txtPopMaxPrice" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopMainCode")} alignment="right" />
-                                    <NdTextBox id="txtPopMainCode" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopOrgins")} alignment="right" />
-                                    <NdTextBox id="txtPopOrgins" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopSaleJoinLine")} alignment="right" />
-                                    <NdTextBox id="txtPopSaleJoinLine" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopTicketRest")} alignment="right" />
-                                    <NdTextBox id="txtPopTicketRest" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopSugerRate")} alignment="right" />
-                                    <NdTextBox id="txtPopSugerRate" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem> 
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopDescription")} alignment="right" />
-                                    <NdTextBox id="txtPopDescription" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem> 
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopSalePrice")} alignment="right" />
-                                    <NdTextBox id="txtPopSalePrice" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem> 
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopUnitId")} alignment="right" />
-                                    <NdTextBox id="txtPopUnitId" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopUnitId2")} alignment="right" />
-                                    <NdTextBox id="txtPopUnitId2" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopBarcode")} alignment="right" />
-                                    <NdTextBox id="txtPopBarcode" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopMulticode")} alignment="right" />
-                                    <NdTextBox id="txtPopMulticode" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popExcel.txtPopFactor2")} alignment="right" />
-                                    <NdTextBox id="txtPopFactor2" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                    />
-                                </NdItem>
-                            </NdForm>
-                            <NdForm colCount={2}>
-                                <NdItem>
-                                    <input type="file" name="upload" id="upload" text={"Excel Aktarım"} onChange={(e)=>
+                    {/* Excel PopUp */}
+                    <NdPopUp parent={this} id={"popExcel"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.t("popExcel.title")}
+                    container={'#' + this.props.data.id + this.tabIndex} 
+                    width={'650'}
+                    height={'auto'}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}}
+                    >
+                        <NdForm colCount={2} height={'fit-content'}>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopCode")} alignment="right" />
+                                <NdTextBox id="txtPopCode" parent={this} simple={true}  notRefresh = {true} readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopName")} alignment="right" />
+                                <NdTextBox id="txtPopName" parent={this} simple={true}  notRefresh = {true} readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopType")} alignment="right" />
+                                <NdTextBox id="txtPopType" parent={this} simple={true}  notRefresh = {true} readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopStatus")} alignment="right" />
+                                <NdTextBox id="txtPopStatus" parent={this} simple={true}  notRefresh = {true} readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopVat")} alignment="right" />
+                                <NdTextBox id="txtPopVat" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopCostPrice")} alignment="right" />
+                                <NdTextBox id="txtPopCostPrice" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopMinPrice")} alignment="right" />
+                                <NdTextBox id="txtPopMinPrice" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopMaxPrice")} alignment="right" />
+                                <NdTextBox id="txtPopMaxPrice" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopMainCode")} alignment="right" />
+                                <NdTextBox id="txtPopMainCode" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopOrgins")} alignment="right" />
+                                <NdTextBox id="txtPopOrgins" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopSaleJoinLine")} alignment="right" />
+                                <NdTextBox id="txtPopSaleJoinLine" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopTicketRest")} alignment="right" />
+                                <NdTextBox id="txtPopTicketRest" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopSugerRate")} alignment="right" />
+                                <NdTextBox id="txtPopSugerRate" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem> 
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopDescription")} alignment="right" />
+                                <NdTextBox id="txtPopDescription" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem> 
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopSalePrice")} alignment="right" />
+                                <NdTextBox id="txtPopSalePrice" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem> 
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopUnitId")} alignment="right" />
+                                <NdTextBox id="txtPopUnitId" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopUnitId2")} alignment="right" />
+                                <NdTextBox id="txtPopUnitId2" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopBarcode")} alignment="right" />
+                                <NdTextBox id="txtPopBarcode" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopMulticode")} alignment="right" />
+                                <NdTextBox id="txtPopMulticode" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                            <NdItem>
+                                <NdLabel text={this.t("popExcel.txtPopFactor2")} alignment="right" />
+                                <NdTextBox id="txtPopFactor2" parent={this} simple={true}  notRefresh = {true}  readOnly={true}
+                                upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                />
+                            </NdItem>
+                        </NdForm>
+                        <NdForm colCount={2}>
+                            <NdItem>
+                                <input type="file" name="upload" id="upload" text={"Excel Aktarım"} onChange={(e)=>
+                                {
+                                    e.preventDefault();
+                                    if (e.target.files) 
                                     {
-                                        e.preventDefault();
-                                        if (e.target.files) 
+                                        const reader = new FileReader();
+                                        reader.onload = (e) => 
                                         {
-                                            const reader = new FileReader();
-                                            reader.onload = (e) => 
-                                            {
-                                                const data = e.target.result;
-                                                const workbook = xlsx.read(data, { type: "array" });
-                                                const sheetName = workbook.SheetNames[0];
-                                                const worksheet = workbook.Sheets[sheetName];
-                                                const json = xlsx.utils.sheet_to_json(worksheet);
-                                                this.popExcel.hide()
+                                            const data = e.target.result;
+                                            const workbook = xlsx.read(data, { type: "array" });
+                                            const sheetName = workbook.SheetNames[0];
+                                            const worksheet = workbook.Sheets[sheetName];
+                                            const json = xlsx.utils.sheet_to_json(worksheet);
+                                            this.popExcel.hide()
 
-                                                for(let i = 0; i < json.length; i++)
+                                            for(let i = 0; i < json.length; i++)
+                                            {
+                                                if(json[i].VAT == undefined)
                                                 {
-                                                    if(json[i].VAT == undefined)
-                                                    {
-                                                        this.toast.show({message:this.t("msgVat.msg") + " " + json[i].CODE,type:"warning"})
-                                                        return
-                                                    }
+                                                    this.toast.show({message:this.t("msgVat.msg") + " " + json[i].CODE,type:"warning"})
+                                                    return
                                                 }
-                                                this.excelAdd(json)
-                                            };
-                                            reader.readAsArrayBuffer(e.target.files[0]);
-                                        }
-                                    }}/>    
-                                </NdItem>
-                            </NdForm>
-                        </NdPopUp>
-                    </div>
+                                            }
+                                            this.excelAdd(json)
+                                        };
+                                        reader.readAsArrayBuffer(e.target.files[0]);
+                                    }
+                                }}/>    
+                            </NdItem>
+                        </NdForm>
+                    </NdPopUp>
+                    {/*CARI SECIMI POPUP */}
+                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
+                    visible={false}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'700px'}
+                    title={this.t("pg_txtCustomerCode.title")} //
+                    search={true}
+                    data = 
+                    {{
+                        source:
+                        {
+                            select:
+                            {
+                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] 
+                                        FROM CUSTOMER_VW_03 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
+                                param : ['VAL:string|50']
+                            },
+                            sql:this.core.sql
+                        }
+                    }}
+                    >
+                        <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
+                        <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
+                        <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
+                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
+                    </NdPopGrid>
                     <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>

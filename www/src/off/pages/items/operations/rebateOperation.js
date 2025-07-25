@@ -243,7 +243,7 @@ export default class rebateOperation extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -278,7 +278,7 @@ export default class rebateOperation extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '80px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="frmCriter">
                                {/* cmbDepot */}
@@ -381,7 +381,7 @@ export default class rebateOperation extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
@@ -393,28 +393,33 @@ export default class rebateOperation extends React.PureComponent
                             <NdButton text={this.t("btnDispatch")} type="default" width="100%" onClick={()=>{this.btnSave(0)}}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <NdGrid id="grdRebateList" parent={this} 
-                            selection={{mode:"multiple"}} 
-                            showBorders={true}
-                            filterRow={{visible:true}} 
-                            height={'700'} 
-                            width={'100%'}
-                            columnAutoWidth={true}
-                            allowColumnReordering={true}
-                            loadPanel={{enabled:true}}
-                            allowColumnResizing={true}
-                            >                            
-                                <Paging defaultPageSize={20} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
-                                <Export fileName={this.lang.t("menuOff.stk_04_002")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="ITEM_CODE" caption={this.t("grdRebateList.clmCode")} visible={true} width={200}/> 
-                                <Column dataField="ITEM_NAME" caption={this.t("grdRebateList.clmName")} visible={true} width={300}/> 
-                                <Column dataField="QUANTITY" caption={this.t("grdRebateList.clmQuantity")} visible={true}/> 
-                                <Column dataField="CUSTOMER_NAME" caption={this.t("grdRebateList.clmCustomer")} visible={true}/> 
-                                <Column dataField="CUSTOMER_PRICE" caption={this.t("grdRebateList.clmPrice")} visible={true}/> 
-                            </NdGrid>
+                            <NdForm colCount={1} id="frmGrid" height={'100%'}>
+                                <NdItem height={'100%'}>
+                                    <NdGrid id="grdRebateList" parent={this} 
+                                    selection={{mode:"multiple"}} 
+                                    showBorders={true}
+                                    filterRow={{visible:true}} 
+                                    height={'690px'} 
+                                    width={'100%'}
+                                    columnAutoWidth={true}
+                                    allowColumnReordering={true}
+                                    loadPanel={{enabled:true}}
+                                    allowColumnResizing={true}
+                                    >                            
+                                    <Paging defaultPageSize={20} />
+                                    <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />
+                                    <Export fileName={this.lang.t("menuOff.stk_04_002")} enabled={true} allowExportSelectedData={true} />
+                                    <Column dataField="ITEM_CODE" caption={this.t("grdRebateList.clmCode")} visible={true} width={200}/> 
+                                    <Column dataField="ITEM_NAME" caption={this.t("grdRebateList.clmName")} visible={true} width={300}/> 
+                                    <Column dataField="QUANTITY" caption={this.t("grdRebateList.clmQuantity")} visible={true}/> 
+                                    <Column dataField="CUSTOMER_NAME" caption={this.t("grdRebateList.clmCustomer")} visible={true}/> 
+                                    <Column dataField="CUSTOMER_PRICE" caption={this.t("grdRebateList.clmPrice")} visible={true}/> 
+                                    </NdGrid> 
+                                </NdItem>
+                            </NdForm>
+
                         </div>
                     </div>
                     <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>

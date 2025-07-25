@@ -17,7 +17,8 @@ const stk_05_004 =
         clmDocDate : "Date", 
         clmRef : "Series",
         clmRefNo : "Sequence", 
-        clmDescription : "Description"
+        clmDescription : "Description",
+        clmDate : "Date"
     },
     txtTotalQuantity : "Total Quantity",
     txtTotalCost : "Inventory Value",

@@ -416,7 +416,7 @@ const  ftr_02_002 =
     popMultiItem:
     {
         title: "Ajout Groupé de Produit",
-        btnApprove: "Chercher Produit",
+        btnApprove: "Rechercher Produit",
         btnClear : "Supprimer",
         btnSave : "Ajouter Lignes",
     },

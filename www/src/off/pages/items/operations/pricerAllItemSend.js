@@ -9,7 +9,7 @@ import NdGrid,{Column,Editing,Paging,Pager,Scrolling} from '../../../../core/rea
 import NdButton from '../../../../core/react/devex/button.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { NdForm, NdItem } from '../../../../core/react/devex/form.js';
+import { NdForm, NdItem, NdLabel } from '../../../../core/react/devex/form.js';
 export default class priceAllItemSend extends React.PureComponent
 {
     constructor(props)
@@ -79,7 +79,7 @@ export default class priceAllItemSend extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -111,22 +111,27 @@ export default class priceAllItemSend extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-6">
-                            <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}
-                            onApply={(async()=>{this.getItems()}).bind(this)}/>
+                    <div className="row px-2 pt-1">
+                        <div className="col-6" style={{height: '60px'}}>
+                            <NdForm colCount={1} id="frmDate">
+                                <NdItem>
+                                    <NdLabel text={this.t("grdItems.clmDate")}/>
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}
+                                    onApply={(async()=>{this.getItems()}).bind(this)}/>
+                                </NdItem>
+                            </NdForm>
                         </div>  
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <NdForm colCount={1} id="frmGrid">
-                                <NdItem>
+                            <NdForm colCount={1} id="frmGrid" height={'100%'}>
+                                <NdItem height={'100%'}>
                                     <NdGrid parent={this} id={"grdItems"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'500'} 
+                                    height={'690px'} 
                                     width={'100%'}
                                     dbApply={false}
                                     >
@@ -134,20 +139,20 @@ export default class priceAllItemSend extends React.PureComponent
                                         <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                         <Scrolling mode="standart" />
                                         <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdItems.clmItemCode")} width={100}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdItems.clmItemName")} width={200}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdItems.clmItemCode")} width={160}/>
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdItems.clmItemName")} width={600}/>
                                         <Column dataField="PRICE" caption={this.t("grdItems.clmPrice")} format={{ style: "currency", currency: Number.money.code,precision: 2}} />
                                     </NdGrid>
                                 </NdItem>
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdButton text={this.t("btnDateItemsSend")} type="default" width="100%" onClick={this.btnDateItemsSend}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-2   ">
                         <div className="col-12">
                             <NdButton text={this.t("btnItemsSend")} type="default" width="100%" onClick={this.btnItemsSend}/>
                         </div>

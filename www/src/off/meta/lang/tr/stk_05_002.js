@@ -21,7 +21,12 @@ const stk_05_002 =
         clmFisrtCost : "Önceki Alış Fiyatı",
         clmMargin : "Brüt Marj",
         clmNetMargin : "Net Marj",
+        clmDate : "Tarih"
     },
+    grdListe :
+    {
+        clmDate : "Tarih"
+    }
 }
 
 export default stk_05_002

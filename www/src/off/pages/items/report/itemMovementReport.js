@@ -122,7 +122,7 @@ export default class itemMovementReport extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -154,7 +154,7 @@ export default class itemMovementReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '80px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmCriter">
                                 {/* txtRef */}
@@ -280,38 +280,43 @@ export default class itemMovementReport extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <NdGrid id="grdItemMovementReport" parent={this} 
-                            selection={{mode:"single"}} 
-                            showBorders={true}
-                            filterRow={{visible:true}} 
-                            headerFilter={{visible:true}}
-                            sorting={{ mode: 'single' }}
-                            height={600}
-                            width={"100%"}
-                            columnAutoWidth={true}
-                            allowColumnReordering={true}
-                            allowColumnResizing={true}
-                            >                            
-                                <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsInv"}/>
-                                <ColumnChooser enabled={true} />
-                                <Paging defaultPageSize={10} />
-                                <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
-                                <Scrolling mode="standart" />
-                                <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                <Export fileName={this.lang.t("menuOff.stk_05_006")} enabled={true} allowExportSelectedData={true} />                                
-                                <Column dataField="LUSER" caption={this.t("grdItemMovementReport.clmLuser")} visible={true} width={80}/> 
-                                <Column dataField="LDATE" caption={this.t("grdItemMovementReport.clmLdate")} visible={true} width={150}  dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
-                                <Column dataField="TYPE_NAMES" caption={this.t("grdItemMovementReport.clmTypeName")} visible={true} width={130}/>
-                                <Column dataField="REF" caption={this.t("grdItemMovementReport.clmRef")} visible={true} width={150}/> 
-                                <Column dataField="REF_NO" caption={this.t("grdItemMovementReport.clmRefNo")} visible={true}  width={70}/> 
-                                <Column dataField="DOC_DATE" caption={this.t("grdItemMovementReport.clmDocDate")} visible={true}  width={100} dataType="datetime" format={"dd/MM/yyyy"}/> 
-                                <Column dataField="ITEM_NAME" caption={this.t("grdItemMovementReport.clmItemName")} visible={true}  width={150}/> 
-                                <Column dataField="QUANTITY" caption={this.t("grdItemMovementReport.clmQuantity")} visible={true}  width={100}/> 
-                                <Column dataField="INPUT_NAME" caption={this.t("grdItemMovementReport.clmInputName")} visible={true}  width={150}/> 
-                                <Column dataField="OUTPUT_NAME" caption={this.t("grdItemMovementReport.clmOutputName")} visible={true}  width={150}/> 
-                            </NdGrid>
+                            <NdForm colCount={1} id="frmGrid" height={'100%'}>
+                                <NdItem height={'100%'}>
+                                <NdGrid id="grdItemMovementReport" parent={this} 
+                                selection={{mode:"single"}} 
+                                showBorders={true}
+                                filterRow={{visible:true}} 
+                                headerFilter={{visible:true}}
+                                sorting={{ mode: 'single' }}
+                                height={'690px'}
+                                width={"100%"}
+                                columnAutoWidth={true}
+                                allowColumnReordering={true}
+                                allowColumnResizing={true}
+                                >                            
+                                    <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSlsInv"}/>
+                                    <ColumnChooser enabled={true} />
+                                    <Paging defaultPageSize={10} />
+                                    <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
+                                    <Scrolling mode="standart" />
+                                    <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                    <Export fileName={this.lang.t("menuOff.stk_05_006")} enabled={true} allowExportSelectedData={true} />                                
+                                    <Column dataField="LUSER" caption={this.t("grdItemMovementReport.clmLuser")} visible={true} width={80}/> 
+                                    <Column dataField="LDATE" caption={this.t("grdItemMovementReport.clmLdate")} visible={true} width={150}  dataType="datetime" format={"dd/MM/yyyy - HH:mm:ss"}/>
+                                    <Column dataField="TYPE_NAMES" caption={this.t("grdItemMovementReport.clmTypeName")} visible={true} width={130}/>
+                                    <Column dataField="REF" caption={this.t("grdItemMovementReport.clmRef")} visible={true} width={150}/> 
+                                    <Column dataField="REF_NO" caption={this.t("grdItemMovementReport.clmRefNo")} visible={true}  width={70}/> 
+                                    <Column dataField="DOC_DATE" caption={this.t("grdItemMovementReport.clmDocDate")} visible={true}  width={100} dataType="datetime" format={"dd/MM/yyyy"}/> 
+                                    <Column dataField="ITEM_NAME" caption={this.t("grdItemMovementReport.clmItemName")} visible={true}  width={150}/> 
+                                    <Column dataField="QUANTITY" caption={this.t("grdItemMovementReport.clmQuantity")} visible={true}  width={100}/> 
+                                    <Column dataField="INPUT_NAME" caption={this.t("grdItemMovementReport.clmInputName")} visible={true}  width={150}/> 
+                                    <Column dataField="OUTPUT_NAME" caption={this.t("grdItemMovementReport.clmOutputName")} visible={true}  width={150}/> 
+                                </NdGrid>
+                                </NdItem>
+                            </NdForm>
+
                         </div>
                     </div>
                     <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>

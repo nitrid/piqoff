@@ -9,7 +9,7 @@ import NdGrid,{Column,Paging,Pager,Scrolling,Export,Summary,TotalItem} from '../
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
-import { NdForm, NdItem } from '../../../../core/react/devex/form.js';
+import { NdForm, NdItem, NdLabel } from '../../../../core/react/devex/form.js';
 
 export default class itemOutageReport extends React.PureComponent
 {
@@ -26,7 +26,6 @@ export default class itemOutageReport extends React.PureComponent
         {
             source : 
             {
-                groupBy : this.groupList,
                 select : 
                 {
                     query : `SELECT * FROM DOC_ITEMS_VW_01 WHERE TYPE = 1 AND DOC_TYPE = 1 AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE ORDER BY DOC_DATE` ,
@@ -43,7 +42,7 @@ export default class itemOutageReport extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -75,16 +74,17 @@ export default class itemOutageReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '80px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="frmKriter">
                                 <NdItem>
+                                    <NdLabel text={this.t("grdListe.clmDate")}/>
                                     <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('month')} endDate={moment().endOf('month')}/>
                                 </NdItem>
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" >
                         <div className="col-3 offset-9">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>

@@ -685,10 +685,12 @@ export default class depotTransfer extends React.PureComponent
                                     <NdButton id="btnLock" parent={this} icon="key" type="default"
                                     onClick={async ()=>
                                     {
+                                        console.log(this.docObj.dt()[0].LOCKED)
                                         if(this.docObj.dt()[0].LOCKED == 0)
                                         {
-                                            this.docLocked = true
                                             this.docObj.dt()[0].LOCKED = 1
+                                            this.docLocked = true
+                                            this.frmTrnsfItems.option('disabled',true)
 
                                             if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
                                             {
@@ -710,10 +712,10 @@ export default class depotTransfer extends React.PureComponent
                                                 await dialog(tmpConfObj1);
                                             }
                                         }
-                                        else if(this.docObj.dt()[0].LOCKED == 1)
+                                        else 
                                         {
-                                            this.popPassword.show()
                                             this.txtPassword.value = ''
+                                            await this.popPassword.show()
                                         }
                                     }}/>
                                 </Item>
@@ -750,7 +752,7 @@ export default class depotTransfer extends React.PureComponent
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-1" style={{height: '12%'}}>
+                    <div className="row px-2 pt-1" style={{height: '120px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmTrnsfr">
                                 {/* txtRef-Refno */}
@@ -1088,7 +1090,7 @@ export default class depotTransfer extends React.PureComponent
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-1" style={{height: '80%'}}>
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={1} onInitialized={(e)=>{this.frmTrnsfItems = e.component}} style={{height: '100%'}}>
                                 <NdItem style={{height: '100%'}}>
@@ -1098,7 +1100,7 @@ export default class depotTransfer extends React.PureComponent
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
                                     filterRow={{visible:true}} 
-                                    height={'100%'} 
+                                    height={'590px'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdating={async(e)=>
@@ -1284,6 +1286,7 @@ export default class depotTransfer extends React.PureComponent
                                         onClick={async ()=>
                                         {       
                                             let tmpPass = btoa(this.txtPassword.value);
+
                                             let tmpQuery = 
                                             {
                                                 query : `SELECT TOP 1 * FROM USERS WHERE PWD = @PWD AND ROLE = 'Administrator' AND STATUS = 1`, 
@@ -1291,11 +1294,13 @@ export default class depotTransfer extends React.PureComponent
                                                 value : [tmpPass],
                                             }
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
+
                                             if(tmpData.result.recordset.length > 0)
                                             {
                                                 this.docObj.dt()[0].LOCKED = 0
                                                 this.frmTrnsfItems.option('disabled',false)
                                                 this.docLocked = false
+                                                await this.grdTrnsfItems.dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')})
                                                 this.toast.show({message:this.t("msgPasswordSucces.msg"),type:'success'})
                                                 this.popPassword.hide();  
                                             }

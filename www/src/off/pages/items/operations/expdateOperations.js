@@ -45,6 +45,8 @@ export default class expdateOperations extends React.PureComponent
         this.txtCustomerCode.CODE = ''
         this.txtCustomerCode.value = ''
         this.txtRef.value = ''
+        this.dtFirstdate.value = moment(new Date()).format("YYYY-MM-DD")
+        this.dtLastDate.value = moment(new Date()).format("YYYY-MM-DD")
     }
     async btnGetClick()
     {
@@ -201,7 +203,7 @@ export default class expdateOperations extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -236,8 +238,8 @@ export default class expdateOperations extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
+                    <div className="row px-2 pt-1">
+                        <div className="col-12" style={{height: '120px'}}>
                             <NdForm colCount={2} id="frmCriter">
                                 {/* txtRef */}
                                 <NdItem>                                    
@@ -280,46 +282,6 @@ export default class expdateOperations extends React.PureComponent
                                     }).bind(this)}
                                     selectAll={true}                           
                                     />     
-                                    {/* STOK SEÇİM POPUP */}
-                                    <NdPopGrid id={"pg_txtRef"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
-                                    visible={false}
-                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_txtRef.title")} 
-                                    search={true}
-                                    data = 
-                                    {{
-                                        source:
-                                        {
-                                            select:
-                                            {
-                                                query : "SELECT GUID,CODE,NAME,STATUS FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
-                                                param : ['VAL:string|50']
-                                            },
-                                            sql:this.core.sql
-                                        }
-                                    }}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'tst',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {
-                                                    console.log(1111)
-                                                }
-                                            }
-                                        ]
-                                    }
-                                    >
-                                        <Column dataField="CODE" caption={this.t("pg_txtRef.clmCode")} width={'20%'} />
-                                        <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={'70%'} defaultSortOrder="asc" />
-                                        <Column dataField="STATUS" caption={this.t("pg_txtRef.clmStatus")} width={'10%'} />
-                                    </NdPopGrid>
                                 </NdItem>
                                 <NdItem>
                                     <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
@@ -368,35 +330,7 @@ export default class expdateOperations extends React.PureComponent
                                         ]
                                     }
                                     >
-                                    </NdTextBox>
-                                    {/*CARI SECIMI POPUP */}
-                                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
-                                    visible={false}
-                                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
-                                    showTitle={true} 
-                                    showBorders={true}
-                                    width={'90%'}
-                                    height={'90%'}
-                                    title={this.t("pg_txtCustomerCode.title")} //
-                                    search={true}
-                                    data = 
-                                    {{
-                                        source:
-                                        {
-                                            select:
-                                            {
-                                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
-                                                param : ['VAL:string|50']
-                                            },
-                                            sql:this.core.sql
-                                        }
-                                    }}
-                                    >
-                                        <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
-                                        <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
-                                        <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
-                                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
-                                    </NdPopGrid>
+                                    </NdTextBox> 
                                 </NdItem> 
                                 <NdItem>
                                     <NdLabel text={this.t("dtFirstdate")} alignment="right" />
@@ -437,7 +371,7 @@ export default class expdateOperations extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
@@ -451,45 +385,49 @@ export default class expdateOperations extends React.PureComponent
                             <NdButton text={this.t("btnPrint")} type="default" width="100%" onClick={()=>{this.btnPrint()}}></NdButton>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <NdGrid id="grdExpdateList" parent={this} 
-                            selection={{mode:"single"}} 
-                            showBorders={true}
-                            height={'650'} 
-                            width={'100%'}
-                            filterRow={{visible:true}} 
-                            columnAutoWidth={true}
-                            allowColumnReordering={true}
-                            loadPanel={{enabled:true}}
-                            allowColumnResizing={true}
-                            >                            
-                                <Paging defaultPageSize={20} />
-                                <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true}/>
-                                <Export fileName={this.lang.t("menuOff.stk_04_004")} enabled={true} allowExportSelectedData={true} />
-                                <Column dataField="CDATE_FORMAT" caption={this.t("grdExpdateList.clmCDate")} visible={true} width={150}/> 
-                                <Column dataField="CUSER_NAME" caption={this.t("grdExpdateList.clmUser")} visible={true} width={100}/> 
-                                <Column dataField="ITEM_CODE" caption={this.t("grdExpdateList.clmCode")} visible={true} width={110}/> 
-                                <Column dataField="ITEM_NAME" caption={this.t("grdExpdateList.clmName")} visible={true} width={260}/> 
-                                <Column dataField="QUANTITY" caption={this.t("grdExpdateList.clmQuantity")} visible={true} width={50}/> 
-                                <Column dataField="DIFF" caption={this.t("grdExpdateList.clmDiff")} visible={true} width={150}/> 
-                                <Column dataField="REMAINDER" caption={this.t("grdExpdateList.clmRemainder")} visible={true} width={50}/> 
-                                <Column dataField="PRINT_COUNT" caption={this.t("grdExpdateList.clmPrintCount")} visible={true} width={100}/>
-                                <Column dataField="LUSER_NAME" caption={this.t("grdExpdateList.clmLUser")} visible={true} width={100}/> 
-                                <Column dataField="EXP_DATE" caption={this.t("grdExpdateList.clmDate")} width={100} dataType="date" allowEditing={false}
-                                editorOptions={{value:null}}
-                                cellRender={(e) => 
-                                {
-                                    if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
-                                    {
-                                        return e.text
-                                    }
-                                    return
-                                }}/>
-                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdExpdateList.clmCustomer")} visible={true} width={120}  allowEditing={false}/> 
-                                 <Column dataField="REBATE" caption={this.t("grdExpdateList.clmRebate")} visible={true} width={65} allowEditing={false}/> 
-                                 <Column dataField="DESCRIPTION" caption={this.t("grdExpdateList.clmDescription")} visible={true}  allowEditing={false}/> 
-                            </NdGrid>
+                            <NdForm height={'100%'}>
+                                <NdItem height={'100%'}>
+                                    <NdGrid id="grdExpdateList" parent={this} 
+                                    selection={{mode:"single"}} 
+                                    showBorders={true}
+                                    height={'590px'} 
+                                    width={'100%'}
+                                    filterRow={{visible:true}} 
+                                    columnAutoWidth={true}
+                                    allowColumnReordering={true}
+                                    loadPanel={{enabled:true}}
+                                    allowColumnResizing={true}
+                                    >                            
+                                        <Paging defaultPageSize={20} />
+                                        <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true}/>
+                                        <Export fileName={this.lang.t("menuOff.stk_04_004")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdExpdateList.clmCDate")} visible={true} width={150}/> 
+                                        <Column dataField="CUSER_NAME" caption={this.t("grdExpdateList.clmUser")} visible={true} width={100}/> 
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdExpdateList.clmCode")} visible={true} width={110}/> 
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdExpdateList.clmName")} visible={true} width={260}/> 
+                                        <Column dataField="QUANTITY" caption={this.t("grdExpdateList.clmQuantity")} visible={true} width={50}/> 
+                                        <Column dataField="DIFF" caption={this.t("grdExpdateList.clmDiff")} visible={true} width={150}/> 
+                                        <Column dataField="REMAINDER" caption={this.t("grdExpdateList.clmRemainder")} visible={true} width={50}/> 
+                                        <Column dataField="PRINT_COUNT" caption={this.t("grdExpdateList.clmPrintCount")} visible={true} width={100}/>
+                                        <Column dataField="LUSER_NAME" caption={this.t("grdExpdateList.clmLUser")} visible={true} width={100}/> 
+                                        <Column dataField="EXP_DATE" caption={this.t("grdExpdateList.clmDate")} width={100} dataType="date" allowEditing={false}
+                                        editorOptions={{value:null}}
+                                        cellRender={(e) => 
+                                        {
+                                            if(moment(e.value).format("YYYY-MM-DD") != '1970-01-01')
+                                            {
+                                                return e.text
+                                            }
+                                            return
+                                        }}/>
+                                            <Column dataField="CUSTOMER_NAME" caption={this.t("grdExpdateList.clmCustomer")} visible={true} width={120}  allowEditing={false}/> 
+                                            <Column dataField="REBATE" caption={this.t("grdExpdateList.clmRebate")} visible={true} width={65} allowEditing={false}/> 
+                                            <Column dataField="DESCRIPTION" caption={this.t("grdExpdateList.clmDescription")} visible={true}  allowEditing={false}/> 
+                                        </NdGrid>
+                                    </NdItem>
+                            </NdForm>
                         </div>
                     </div>
                      {/* Miktar Fiyat PopUp */}
@@ -526,7 +464,75 @@ export default class expdateOperations extends React.PureComponent
                                 </NdItem>
                             </NdForm>
                         </NdPopUp>
-                    </div>  
+                    </div> 
+                    {/*CARI SECIMI POPUP */}
+                    <NdPopGrid id={"pg_txtCustomerCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
+                    visible={false}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_txtCustomerCode.title")} //
+                    search={true}
+                    data = 
+                    {{
+                        source:
+                        {
+                            select:
+                            {
+                                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,[TYPE_NAME],[GENUS_NAME] FROM CUSTOMER_VW_01 WHERE (UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(TITLE) LIKE UPPER(@VAL)) AND STATUS = 1`,
+                                param : ['VAL:string|50']
+                            },
+                            sql:this.core.sql
+                        }
+                    }}
+                    >
+                        <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
+                        <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
+                        <Column dataField="TYPE_NAME" caption={this.t("pg_txtCustomerCode.clmTypeName")} width={150} />
+                        <Column dataField="GENUS_NAME" caption={this.t("pg_txtCustomerCode.clmGenusName")} width={150} />
+                    </NdPopGrid>
+                    {/* STOK SEÇİM POPUP */}
+                    <NdPopGrid id={"pg_txtRef"} parent={this} container={'#' + this.props.data.id + this.tabIndex} 
+                    visible={false}
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
+                    showTitle={true} 
+                    showBorders={true}
+                    width={'90%'}
+                    height={'90%'}
+                    title={this.t("pg_txtRef.title")} 
+                    search={true}
+                    data = 
+                    {{
+                        source:
+                        {
+                            select:
+                            {
+                                query : "SELECT GUID,CODE,NAME,STATUS FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                                param : ['VAL:string|50']
+                            },
+                            sql:this.core.sql
+                        }
+                    }}
+                    button=
+                    {
+                        [
+                            {
+                                id:'tst',
+                                icon:'more',
+                                onClick:()=>
+                                {
+                                    console.log(1111)
+                                }
+                            }
+                        ]
+                    }
+                    >
+                        <Column dataField="CODE" caption={this.t("pg_txtRef.clmCode")} width={'20%'} />
+                        <Column dataField="NAME" caption={this.t("pg_txtRef.clmName")} width={'70%'} defaultSortOrder="asc" />
+                        <Column dataField="STATUS" caption={this.t("pg_txtRef.clmStatus")} width={'10%'} />
+                    </NdPopGrid>
                     <NdToast id={"toast"} parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
