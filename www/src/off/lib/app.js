@@ -85,6 +85,7 @@ export default class App extends React.PureComponent
                 location : 'before',
                 options : 
                 {
+                    elementAttr: {class: 'top-bar-btn'},
                     icon : 'menu',
                     onClick : () => this.setState({opened: !this.state.opened})
                 }
@@ -94,6 +95,7 @@ export default class App extends React.PureComponent
                 location : 'after',
                 options : 
                 {
+                    elementAttr: {class: 'top-bar-btn'},
                     text:"",
                     icon : 'refresh',
                     onClick : () => window.location.reload()
@@ -124,6 +126,7 @@ export default class App extends React.PureComponent
                 location : 'after',
                 options : 
                 {
+                    elementAttr: {class: 'top-bar-btn'},
                     text:this.lang.t("passChange"),
                     icon : 'repeat',
                     onClick : this.passChange
@@ -134,6 +137,7 @@ export default class App extends React.PureComponent
                 icon : 'card',
                 options : 
                 {
+                    elementAttr: {class: 'top-bar-btn'},
                     icon : 'refresh',
                     onClick :this.UserChange
                 }
@@ -143,6 +147,7 @@ export default class App extends React.PureComponent
                 location : 'after',
                 options : 
                 {
+                    elementAttr: {class: 'top-bar-btn'},
                     icon : 'fa-solid fa-arrow-right-to-bracket',
                     onClick : () => 
                     {                                                        
@@ -358,6 +363,7 @@ export default class App extends React.PureComponent
                 location : 'before',
                 options : 
                 {
+                    elementAttr: {class: 'top-bar-btn'},
                     icon : 'menu',
                     onClick : () => this.setState({opened: !this.state.opened})
                 }
@@ -367,6 +373,7 @@ export default class App extends React.PureComponent
                 location : 'after',
                 options : 
                 {
+                    elementAttr: {class: 'top-bar-btn'},
                     text:this.lang.t("passChange"),
                     icon : 'repeat',
                     onClick : this.passChange
@@ -377,6 +384,7 @@ export default class App extends React.PureComponent
                 location : 'after',
                 options : 
                 {
+                    elementAttr: {class: 'top-bar-btn'},
                     text:this.core.auth.data.NAME,
                     icon : 'card',
                     onClick : this.UserChange
@@ -407,6 +415,7 @@ export default class App extends React.PureComponent
                 location : 'after',
                 options : 
                 {
+                    elementAttr: {class: 'top-bar-btn'},
                     icon : 'refresh',
                     onClick : () => window.location.reload()
                 }
@@ -416,6 +425,7 @@ export default class App extends React.PureComponent
                 location : 'after',
                 options : 
                 {
+                    elementAttr: {class: 'top-bar-btn'},
                     icon : 'fa-solid fa-arrow-right-to-bracket',
                     onClick : () => 
                     {    
@@ -562,7 +572,7 @@ export default class App extends React.PureComponent
                     button:this.lang.t("msgisExecuteClose.btn01"),
                     msg:this.lang.t("msgisExecuteClose.msg")
                 }}/>
-                <div className="top-bar">
+                <div className="top-bar" style={{WebkitAppRegion:'drag'}}>
                     <Toolbar className="main-toolbar" items={this.state.toolbarItems}/>
                 </div>
                 <div>

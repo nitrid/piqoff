@@ -2129,12 +2129,12 @@ export default class salesInvoice extends DocBase
                             </NdForm>
                         </div>
                     </div>
-                    <div className='row px-2 pt-1' style={{height: '18%'}}>
+                    <div className='row px-2 pt-1 pb-2' style={{height: '170px'}}>
                         <div className='col-12'>
                             <TabPanel height="100%">
                                 <Item title={this.t("tabTitleSubtotal")}>
                                     <ScrollView>
-                                        <div className="row px-2 pt-1">
+                                        <div className="row px-2 pt-1 pb-2">
                                             <div className="col-12">
                                                 <NdForm colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
                                                     {/* Ara Toplam */}
