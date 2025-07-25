@@ -1144,7 +1144,7 @@ export default class priceDiffDemand extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-1" style={{height: '150px'}}>
+                    <div className="row px-2 pt-1" style={{height: '130px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id={"frmPriceDiffOff"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
@@ -1730,7 +1730,7 @@ export default class priceDiffDemand extends DocBase
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-1" style={{height: '140px'}}>
+                    <div className="row px-2 pt-1" style={{height: '160px'}}>
                     <div className="col-12">
                         <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
                             {/* Ara Toplam */}

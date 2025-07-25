@@ -39,6 +39,7 @@ export default class purchaseOffer extends DocBase
         this.combineNew = false
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
     }
     async componentDidMount()
     {
@@ -691,13 +692,94 @@ export default class purchaseOffer extends DocBase
             this.popMultiItem.hide()
         }
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options:                    
+            {
+                icon: 'add',
+                validationGroup: 'frmPurcoffer' + this.tabIndex,
+                onClick: (async (c)=>
+                {
+                    if(e.validationGroup.validate().status == "valid")
+                    {
+                        if(typeof this.docObj.docOffers.dt()[0] != 'undefined')
+                            {
+                                if(this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
+                                {
+                                    this.pg_txtItemsCode.onClick = async(data) =>
+                                    {
+                                        this.checkboxReset()
+                                        this.grid.devGrid.beginUpdate()                                              
+                                        for (let i = 0; i < data.length; i++) 
+                                        {
+                                            await this.addItem(data[i],null)
+                                        }
+                                        this.grid.devGrid.endUpdate()
+                                    }
+                                    this.pg_txtItemsCode.show()
+                                    return
+                                }
+                            }
+                            this.pg_txtItemsCode.onClick = async(data) =>
+                            {
+                                this.checkboxReset()
+                                this.grid.devGrid.beginUpdate()
+                                for (let i = 0; i < data.length; i++) 
+                                {
+                                    await this.addItem(data[i],null)
+                                }
+                                this.grid.devGrid.endUpdate()
+                            }
+                            this.pg_txtItemsCode.show()
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
+                    }
+                }).bind(this)
+            }
+        });
+
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: 
+            {
+                icon: 'increaseindent',
+                text: this.lang.t("collectiveItemAdd"),
+                validationGroup: 'frmPurcoffer' + this.tabIndex,
+                onClick: (async (c)=>
+                {
+                    if(e.validationGroup.validate().status == "valid")
+                        {
+                            await this.popMultiItem.show()
+                            await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+        
+                            if( typeof this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1] != 'undefined' && this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
+                            {
+                                await this.grdPurcInv.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
+                            }
+                        }
+                        else
+                        {
+                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
+                        }
+                }).bind(this)
+            }
+        });
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -900,7 +982,7 @@ export default class purchaseOffer extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '130px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmPurcoffer">
                                 {/* txtRef-Refno */}
@@ -1226,85 +1308,20 @@ export default class purchaseOffer extends DocBase
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <NdForm colCount={1} onInitialized={(e)=>
-                            {
-                                this.frmDocItems = e.component
-                            }}>
-                                <NdItem location="after">
-                                    <Button icon="add"
-                                    validationGroup={"frmPurcoffer"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            
-                                            if(typeof this.docObj.docOffers.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    this.pg_txtItemsCode.onClick = async(data) =>
-                                                    {
-                                                        this.checkboxReset()
-                                                        this.grid.devGrid.beginUpdate()                                              
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            await this.addItem(data[i],null)
-                                                        }
-                                                        this.grid.devGrid.endUpdate()
-                                                    }
-                                                    this.pg_txtItemsCode.show()
-                                                    return
-                                                }
-                                            }
-                                            this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                this.checkboxReset()
-                                                this.grid.devGrid.beginUpdate()
-                                                for (let i = 0; i < data.length; i++) 
-                                                {
-                                                    await this.addItem(data[i],null)
-                                                }
-                                                this.grid.devGrid.endUpdate()
-                                            }
-                                            this.pg_txtItemsCode.show()
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
-                                        }
-                                    }}/>
-                                     <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
-                                    validationGroup={"frmPurcoffer"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            await this.popMultiItem.show()
-                                            await this.grdMultiItem.dataRefresh({source:this.multiItemData});
-
-                                            if( typeof this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1] != 'undefined' && this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
-                                            {
-                                                await this.grdPurcInv.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
-                                            }
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
-                                        }
-                                    }}/>
-                                </NdItem>
+                            <NdForm colCount={1} onInitialized={(e)=> { this.frmDocItems = e.component}}>
                                 <NdItem>
                                     <NdGrid parent={this} id={"grdPurcoffers"+this.tabIndex} 
                                     showBoffers={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReoffering={true} 
                                     allowColumnResizing={true} 
-                                    height={'500'} 
+                                    height={'590px'} 
                                     width={'100%'}
                                     dbApply={false}
                                     filterRow={{visible:true}}
+                                    onToolbarPreparing={this.onGridToolbarPreparing}
                                     onRowPrepared={(e) =>
                                     {
                                         if(e.rowType == 'data' && (e.data.ORDER_LINE_GUID  != '00000000-0000-0000-0000-000000000000' || e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000'))
@@ -1470,7 +1487,7 @@ export default class purchaseOffer extends DocBase
                                         <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPurcOffers"}/>
                                         <ColumnChooser enabled={true}/>
                                         <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menuOff.sip_02_001")} enabled={true} allowExportSelectedData={true} />
+                                        <Export fileName={this.lang.t("menuOff.tkf_02_001")} enabled={true} allowExportSelectedData={true} />
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcoffers.clmCreateDate")} width={80} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdPurcoffers.clmCuser")} width={90} allowEditing={false}/>
@@ -1493,7 +1510,7 @@ export default class purchaseOffer extends DocBase
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '160px'}}>
                     <div className="col-12">
                         <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
                             {/* Ara Toplam */}
