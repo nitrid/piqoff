@@ -15,13 +15,13 @@ class querySender
         this.active = false
         this.host = 'localhost:3333'
 
-        if(config?.plugins?.querySender?.active)
-        {
-            this.active = config?.plugins?.querySender?.active
-            this.host = typeof config.plugins.querySender.host == 'undefined' ? this.host : config?.plugins?.querySender?.host
-        }
+        // if(config?.plugins?.querySender?.active)
+        // {
+        //     this.active = config?.plugins?.querySender?.active
+        //     this.host = typeof config.plugins.querySender.host == 'undefined' ? this.host : config?.plugins?.querySender?.host
+        // }
         
-        this.processRun()
+    //    this.processRun()
     }
     async connEvt(pSocket)
     {
