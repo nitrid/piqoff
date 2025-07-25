@@ -335,7 +335,7 @@ export default class Login extends React.PureComponent
     {
         return (
             <div style={this.style.body}>
-                <div className="p-5"></div>
+                <div className="p-5" style={{WebkitAppRegion:'drag'}}></div>
                 <div className="card" style={this.style.login_box}>
                     <div className="card-header">
                         <div className='row'>
