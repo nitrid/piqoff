@@ -1,29 +1,29 @@
 // "Fiyat Farkı Fatura Listesi"
 const ftr_01_004 =
 {
-    txtCustomerCode : "Kunde",
+    txtCustomerCode : "Lieferant",
     menu:"Preisdifferenzrechnung",
     pg_txtCustomerCode : 
     {
-        title : "Kundenauswahl",
-        clmCode :  "KUNDENCODE",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
+        title : "Lieferantenauswahl",
+        clmCode :  "Lieferantencode",
+        clmTitle : "Lieferantenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Art"
     },
     btnGet :"Suchen",
-    dtFirst : "Anfangsdatum",
+    dtFirst : "Startdatum",
     dtLast : "Enddatum",
     grdSlsIvcList: 
     {
-        clmRef: "Serie",
-        clmRefNo: "Nummer",
+        clmRef: "Referenz",
+        clmRefNo: "Zeile",
         clmPrice: "Preis",
-        clmInputCode : "Kundencode",
-        clmInputName : "Kundenname",
+        clmInputCode : "Lieferantenauswahl",
+        clmInputName : "Lieferantenname",
         clmDate: "Datum",
-        clmVat : "..",
-        clmAmount : "Betrag",
+        clmVat : "MwSt.",
+        clmAmount : "Gesamt" ,
         clmTotal : "Gesamt",
     },
 }

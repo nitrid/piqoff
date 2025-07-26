@@ -1,11 +1,11 @@
 // "Pos Plu Kopyalama",
 const pos_01_002 =
 {
-    cmbUser : "Zu duplizierende Benutzer",  // BAK
-    btnSave :"Speichern", 
+    cmbUser : "Zu kopierender Benutzer", 
+    btnSave :"Speichern",  
     grdUserList : 
     {
-        clmCode : "Benutzercode",  
+        clmCode : "Benutzerpasswort",  
         clmName : "Benutzername",  
     },
     msgSave:
@@ -13,20 +13,20 @@ const pos_01_002 =
         title: "Achtung",   
         btn01: "OK",   
         btn02: "Abbrechen",  
-        msg: "Wollen Sie speichern!"  
+        msg: "Sind Sie sicher, dass Sie speichern möchten?"  
     },
     msgSaveResult:
     {
-        title: "Achtung", 
+        title: "Achtung",  
         btn01: "OK",  
-        msgSuccess: "Speichern erfolgreich!", 
-        msgFailed: "Speichern nicht erfolgreich!"  
+        msgSuccess: "Erfolgreich gespeichert!",  
+        msgFailed: "Speichern fehlgeschlagen!"  
     },
     msgUserNotFound:
     {  
         title: "Achtung", 
         btn01: "OK", 
-        msg: "Bitte Benutzer wählen"  
+        msg: "Bitte wählen Sie einen Benutzer!"  
     },
 }
 export default pos_01_002

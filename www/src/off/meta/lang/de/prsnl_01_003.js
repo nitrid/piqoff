@@ -2,34 +2,34 @@
 const prsnl_01_003 =
 {
     employeePlace: "Bitte geben Sie den Kundennamen oder -code zur Suche ein.",
-    txtCode : "Code",
-    txtTitle : "Titel",
-    txtCustomerName : "Name",
-    tabTitleAttendance : "Anwesenheitsstatus",
-    pg_txtCode : 
+    txtCode: "Code",
+    txtTitle: "Titel",
+    txtCustomerName: "Name",
+    tabTitleAttendance: "Arbeitsstatus",
+    pg_txtCode:
     {
-        title : "Kundenauswahl",
-        clmCode : "CODE",
-        clmInsuranceNo : "Versicherungsnummer",
-        clmName : "Name",
-        clmLastName  : "Nachname",
+        title: "Kundenauswahl",
+        clmCode: "Code",
+        clmInsuranceNo: "Versicherungsnummer",
+        clmName: "Name",
+        clmLastName: "Nachname",
     },
-    grdAttendance : 
+    grdAttendance:
     {
-        clmAttendance_Date : "Anwesenheitsdatum",
-        clmCheck_In_Tıme : "Check-In-Zeit",
-        clmCheck_Out_Tıme :"Check-Out-Zeit",
-        clmIs_Absent : "Anwesenheit",
-        clmAbsence_Reason : "Grund",
+        clmAttendance_Date: "Arbeitsbeginn",
+        clmCheck_In_Tıme: "Ankunftszeit",
+        clmCheck_Out_Tıme: "Abreisezeit",
+        clmIs_Absent: "Ist zur Arbeit gekommen",
+        clmAbsence_Reason: "Abwesenheitsgrund",
     },
-    popAttendance : 
+    popAttendance:
     {
-        title : "Status",
-        txtPopAttendance_Date : "Anwesenheitsdatum",
-        cmbPopCheck_In_Tıme : "Check-In-Zeit",
-        cmbPopCheck_Out_Tıme :"Check-Out-Zeit",
-        cmbPopIs_Absent : "Anwesenheit",
-        cmbPopAbsent_Reason : "Grund",
+        title: "Status",
+        txtPopAttendance_Date: "Arbeitsbeginn",
+        cmbPopCheck_In_Tıme: "Ankunftszeit",
+        cmbPopCheck_Out_Tıme: "Abreisezeit",
+        cmbPopIs_Absent: "Ist zur Arbeit gekommen",
+        cmbPopAbsent_Reason: "Abwesenheitsgrund",
     },
     msgSave:
     {
@@ -42,8 +42,8 @@ const prsnl_01_003 =
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Datensatz erfolgreich gespeichert!",
-        msgFailed: "Datensatz konnte nicht gespeichert werden!"
+        msgSuccess: "Ihr Speichervorgang war erfolgreich!",
+        msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
     },
     msgSaveValid:
     {
@@ -58,18 +58,18 @@ const prsnl_01_003 =
         btn02: "Abbrechen",
         msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
     },
-    msgCode : 
+    msgCode:
     {
         title: "Achtung",
         btn01: "Zum Kunden gehen",
         btn02: "OK",
-        msg : "Der eingegebene Kunde ist bereits im System vorhanden!"
+        msg: "Der eingegebene Kunde ist bereits im System vorhanden!"
     },
-    validation : //BAK
+    validation:
     {
         frmCustomerAddress: "Sie dürfen den Code nicht leer lassen!",
     },
-    msgDeleteSuccess :
+    msgDeleteSuccess:
     {
         msg: "Löschvorgang erfolgreich!"
     }

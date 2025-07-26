@@ -4,39 +4,39 @@ const fns_03_001 =
     txtCode : "Code",
     txtName :"Name",
     cmbType :"Typ",
-    validCode :"Der Code darf nicht leer sein!",
+    validCode :"Sie können den Code nicht leer lassen!",
     cmbTypeData : 
     {
         cash : "Bargeld",
         check : "Scheck",
-        pos : "POS"
+        pos : "Kasse"
     },
     pg_txtCode : 
     {
         title : "Kassenauswahl",
-        clmCode : "CODE",
-        clmName : "NAME",
-        clmType : "TYP",
+        clmCode : "Code",
+        clmName : "Name",
+        clmType : "Typ",
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
         msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihr Speichervorgang war erfolgreich!",
-        msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
@@ -48,9 +48,10 @@ const fns_03_001 =
     msgCode : 
     {
         title: "Achtung",
-        btn01: "Zur Kasse gehen",
+        btn01: "Kassenauswahl",
         btn02: "OK",
-        msg : "Die eingegebene Kasse ist im System vorhanden!"
+        msg : "Kasse bereits in unserer Datenbank registriert!"
     }
+  
 }
 export default fns_03_001

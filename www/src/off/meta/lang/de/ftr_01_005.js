@@ -1,29 +1,30 @@
 // "Şube Satış Fatura Listesi"
 const ftr_01_005 =
 {
-    txtCustomerCode : "Kunde",
-    menu:"Filialverkaufsrechnung",
+    txtCustomerCode : "Kundencode",
+    txtCustomerName : "Kundenname",
+    menu:"Interne Verkaufsrechnungsliste",
     pg_txtCustomerCode : 
     {
-        title : "Kundenauswahl",
-        clmCode :  "KUNDENCODE",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
+        title : "Filialauswahl",
+        clmCode :  "Filialcode",
+        clmTitle : "Filialname",
+        clmTypeName : "Modus",
+        clmGenusName : "Art"
     },
     btnGet :"Suchen",
-    dtFirst : "Anfangsdatum",
+    dtFirst : "Startdatum",
     dtLast : "Enddatum",
     grdSlsIvcList: 
     {
-        clmRef: "Serie",
-        clmRefNo: "Nummer",
+        clmRef: "Referenz",
+        clmRefNo: "Ref.Nr.:",
         clmPrice: "Preis",
-        clmInputCode : "Kundennummer",
-        clmInputName : "Kundenname",
+        clmInputCode : "Filialcode",
+        clmInputName : "Filialname",
         clmDate: "Datum",
-        clmVat : "..",
-        clmAmount : "Betrag",
+        clmVat : "MwSt.",
+        clmAmount : "Gesamt",
         clmTotal : "Gesamt",
         clmOutputName :"Lager",
     },

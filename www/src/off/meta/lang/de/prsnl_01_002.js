@@ -2,46 +2,47 @@
 const prsnl_01_002 =
 {
     employeePlace: "Bitte geben Sie den Kundennamen oder -code zur Suche ein.",
-    txtCode : "Code",
-    txtTitle : "Titel",
-    txtCustomerName : "Name",
-    tabTitleAdress : "Adresse",
-    pg_txtCode : 
+    txtCode: "Code",
+    txtTitle: "Titel",
+    txtEmployeeName: "Name",
+    tabTitleAdress: "Adresse",
+    pg_txtCode:
     {
-        title : "Kundenauswahl",
-        clmCode : "Code",
-        clmInsuranceNo : "Versicherungsnummer",
-        clmName : "Name",
-        clmLastName  : "Nachname",
+        title: "Kundenauswahl",
+        clmCode: "Code",
+        clmTitle: "Titel",
+        clmName: "Nachname",
+        clmLastName: "Name",
+        clmInsuranceNo: "Versicherungsnummer",
     },
-    grdAdress : 
+    grdAdress:
     {
-        clmAdress : "Adresse",
-        clmZipcode : "Postleitzahl",
-        clmCity :"Stadt",
-        clmCountry : "Land",
+        clmAdress: "Adresse",
+        clmZipcode: "Postleitzahl",
+        clmCity: "Stadt",
+        clmCountry: "Land",
     },
-    popAdress : 
+    popAdress:
     {
-        title : "Adresse",
-        txtPopAdress : "Adresse",
-        cmbPopZipcode :"Postleitzahl",
-        cmbPopCity :"Stadt",
-        cmbPopCountry :"Land",
+        title: "Adresse",
+        txtPopAdress: "Adresse",
+        cmbPopZipcode: "Postleitzahl",
+        cmbPopCity: "Stadt",
+        cmbPopCountry: "Land",
     },
     msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
     msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Datensatz erfolgreich gespeichert!",
-        msgFailed: "Datensatz konnte nicht gespeichert werden!"
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
     msgSaveValid:
     {
@@ -56,18 +57,18 @@ const prsnl_01_002 =
         btn02: "Abbrechen",
         msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
     },
-    msgCode : 
+    msgCode:
     {
         title: "Achtung",
-        btn01: "Zum Kunden gehen",
+        btn01: "Kunde suchen",
         btn02: "OK",
-        msg : "Der eingegebene Kunde ist bereits im System vorhanden!"
+        msg: "Kunde bereits vorhanden!"
     },
-    validation : //BAK
+    validation:
     {
-        frmCustomerAddress: "Der Code darf nicht leer sein!",
+        frmEmployeeAddress: "Der Code darf nicht leer sein!",
     },
-    msgDeleteSuccess :
+    msgDeleteSuccess:
     {
         msg: "Löschvorgang erfolgreich!"
     }

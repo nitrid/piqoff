@@ -1,43 +1,43 @@
 // "Müşteri Bazlı Ürün Satış Raporu"
 const pos_02_015 = 
 {
-    btnGet : "Suchen",
-    dtDate : "Zeitraum",
-    txtCustomer : "Kunde",
-    txtTotal : "Gesamt",
-    grdList: 
+    btnGet: "Suchen",
+    dtDate: "Zeitraum",
+    txtCustomer: "Kunde",
+    txtTotal: "Gesamt",
+    grdList:
     {
-        cuserName: "Erstellt von: ",
+        cuserName: "Erstellt von:",
         luserName: "Geändert von:",
         device: "Kasse",
-        ref: "Referenz",
+        ref: "Ref",
         docDate: "Datum",
         itemCode: "Artikelcode",
         itemName: "Artikelname",
         itemGrpName: "Artikelgruppe",
-        barcode: "Barcode",
-        clmQuantity: "Anzahl",
+        barcode: "Strichcode",
+        clmQuantity: "Menge",
         unitShort: "Einheit",
-        clmPrice : "Preis",
-        clmFAmount : "Betrag ohne MwSt.",
-        clmAmount : "Betrag",
-        clmDiscount : "Rabatt",
-        clmLoyalty : "Treuerabatt",
-        clmVat : "Steuer",
-        clmVatRate : "Steuersatz",
-        clmTotal : "Gesamt"
+        clmPrice: "Preis",
+        clmFAmount: "Gesamt ohne MwSt.",
+        clmAmount: "Gesamt",
+        clmDiscount: "Rabatt",
+        clmLoyalty: "Treuerabatt",
+        clmVat: "MwSt.",
+        clmVatRate: "MwSt.-Satz",
+        clmTotal: "Gesamtbetrag"
     },
     pg_txtCustomer:
     {
-        title: "Kundenwahl",
-        clmCode: "CODE",
-        clmName: "NAME"
+        title: "Kundenauswahl",
+        clmCode: "Code",
+        clmName: "Name"
     },
     msgCustomerSelect:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte Kunde wählen!"
+        msg: "Bitte wählen Sie einen Kunden!"
     },
 }
 export default pos_02_015

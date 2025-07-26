@@ -1,110 +1,112 @@
 // "İade Alış Faturası"
 const ftr_02_007 =
 {
-    txtRefRefno : "Seriennummer-Folge",
+    txtRefRefno : "Ref. Ref Nr",
     cmbDepot: "Lager",
-    txtCustomerCode : "Kundennummer",
+    txtCustomerCode : "Kundencode",
     txtCustomerName : "Kundenname",
     dtDocDate : "Datum",
-    txtAmount : "Betrag",
-    txtDiscount : "Zeilenrabatt",
-    txtDocDiscount : "Dokumentenrabatt",
-    txtSubTotal : "Zwischensumme",
+    txtAmount : "Gesamt" ,
+    txtDiscount : "Zeilenrabatt",    
+    txtDocDiscount : "Belegrabatt",    
+    txtSubTotal : "Zwischensumme",   
     txtMargin : "Marge",
-    txtVat : "..",
+    txtVat : "MwSt.",
     txtTotal : "Gesamtsumme",
     dtShipDate :"Versanddatum",
-    getPayment : "Zahlungseingang",
-    getDispatch : "Lieferschein abrufen",
-    getRebate: "Mit der Rechnung verbinden",
-    cash : "Betrag",
-    description :"Beschreibung",
+    getPayment : "Kassierung",
+    getDispatch : "Lieferschein suchen",
+    getRebate: "Mit Rechnung verknüpfen",
+    cash : "Gesamt" ,
+    description :"Grund",
     checkReference : "Referenz",
-    btnCash : "Zahlung hinzufügen",
+    btnCash : "Bargeld",
     btnCheck : "Scheck",
-    btnBank : "Banküberweisung",
-    cmbCashSafe : "Kasse auswählen",
+    btnBank : "Überweisung",
+    cmbCashSafe : "Bargeldkasse",
     cmbCheckSafe : "Scheckkasse",
-    cmbBank : "Bank auswählen",
-    txtPayInvoiceTotal : "Rechnungsbetrag",
-    txtPayTotal : "Gesamtzahlung",
-    txtRemainder : "Restbetrag",
-    txtBarcode : "Barcode hinzufügen",
-    txtBarcodePlace: "Barcode scannen",
-    txtQuantity :"Menge",
-    tabTitleSubtotal : "Rechnungssumme",
-    tabTitlePayments : "Zahlungsinformationen",
-    tabTitleOldInvoices : "Alte Rechnungen",
-    getRemainder : "Restbetrag Suchen",
-    txtbalance : "Gesamtsaldo",
-    txtUnitFactor : "Einheitsfaktor",
-    txtUnitQuantity : "Einheitsmenge",
-    txtTotalQuantity : "Gesamtmenge",
-    txtUnitPrice: "Einheitspreis",
-    txtExpFee : "Verzugsgebühr",
+    LINE_NO: "Zeilennummer",
+    cmbBank : "Bankauswahl",
+    txtPayInvoıceTotal : "Rechnungssumme",
+    txtPayTotal : "Kassierungssumme",
+    txtRemainder : "Rest",
+    txtBarcode: "Strichcode",
+    txtBarcodePlace: "Strichcode scannen...",
+    txtQuantity : "Menge", 
+    tabTitleSubtotal : "Rechnungssumme",  
+    tabTitlePayments : "Zahlungsinformationen",  
+    tabTitleOldInvoices : "Informationen zu früheren Rechnungen",  
+    getRemainder : "Restbetrag suchen",  
+    txtbalance : "Aktueller Gesamtsaldo",   
+    txtUnitFactor : "Einheitsfaktor",  
+    txtUnitQuantity : "Einheitsmenge",  
+    txtTotalQuantity : "Gesamtmenge",  
+    txtUnitPrice : "Stückpreis", 
+    txtExpFee : "Verzugsstrafe", 
     dtExpDate : "Fälligkeitsdatum", 
-    getProforma : "Proforma Suchen",
-    txtTotalHt : "Nettobetrag",
-    txtDocNo : "Dokumentennummer",
+    getProforma : "Proforma suchen", 
+    txtTotalHt : "Gesamt ohne MwSt.",
+    txtDocNo : "Belegnummer", 
     btnView : "Anzeigen",
     btnMailsend : "E-Mail senden",
-    validDesign : "Bitte wählen Sie ein Design aus.",
-    validMail : "Bitte füllen Sie dieses Feld aus.",
-    placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",   
+    validDesign : "Bitte wählen Sie ein Design.",
+    validMail : "Bitte nicht leer lassen.",
+    placeMailHtmlEditor : "Sie können eine Beschreibung für Ihre E-Mail eingeben.",  
     pg_partiLot : 
     {
-        title : "Parti Lotauswahl",
-        clmLotCode : "Lot Code",
+        title : "Losauswahl",
+        clmLotCode : "Loscode",
         clmSkt : "MHD",
     },
     pg_Docs : 
     {
-        title : "Dokumentauswahl",
-        clmDate : "DATUM",
-        clmRef : "Serie",
-        clmRefNo : "FOLGE",
-        clmOutputName : "KUNDENNAME",
-        clmOutputCode  : "KUNDENNUMMER",
-        clmTotal : "TOTAL"
+        title : "Dokumentenauswahl",
+        clmDate : "Datum",
+        clmRef : "Referenz",
+        clmRefNo : "Nummer",
+        clmOutputName : "Lieferantenname",
+        clmOutputCode  : "Kundencode",
+        clmTotal : "Gesamt inkl. MwSt."
     },
     pg_txtCustomerCode : 
     {
-        title : "Kundenauswahl",
-        clmCode :  "KUNDENNUMMER",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "KATEGORIE"
+        title : "Lieferantenauswahl",
+        clmCode :  "Kundencode",
+        clmTitle : "Lieferantenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Art"
     },
     pg_txtItemsCode : 
     {
-        title : "Artikelauswahl",
-        clmCode :  "ArtikelCODE",
-        clmName : "ArtikelNAME",
-        clmPrice : "VERKAUFSPREIS"
+        title : "Artikel auswählen",
+        clmCode :  "Artikelreferenz",
+        clmName : "Artikelname",
+        clmMulticode : "LFR.Code",
+        clmPrice : "Verkaufspreis" 
     },
     pg_dispatchGrid : 
     {
-        title : "Lieferscheinauswahl",
-        clmReferans : "Seriennummer-Folge",
+        title : "Lieferschein auswählen" ,
+        clmReferans : "Referenzen",
         clmCode : "Code",
         clmName : "Name",
         clmQuantity : "Menge",
         clmPrice : "Preis",
-        clmTotal : "Betrag",
+        clmTotal : "Gesamt" ,
         clmDate : "Datum",
-        clmDocNo: "Dokumentnummer"
+        clmDocNo : "Belegnummer",
     },
     pg_getRebate : 
     {
-        title : "Rechnung verbinden",
-        clmReferans : "Seriennummer-Folge",
+        title : "Rechnung auswählen" ,
+        clmReferans : "Referenzen",
         clmCode : "Code",
         clmName : "Name",
         clmQuantity : "Menge",
         clmPrice : "Preis",
-        clmTotal : "Betrag",
+        clmTotal : "Gesamt" ,
         clmDate : "Datum",
-        clmDocNo: "Dokumentnummer"
+        clmDocNo : "Belegnummer",
     },
     grdRebtInv: 
     {
@@ -113,22 +115,22 @@ const ftr_02_007 =
         clmPrice: "Preis",
         clmQuantity : "Menge",
         clmDiscount : "Rabatt",
-        clmDiscountRate : "Rabattsatz %",
-        clmVat : "..",
-        clmAmount : "Betrag",
+        clmDiscountRate : "Rabatt %",
+        clmVat : "MwSt.",
+        clmAmount : "Gesamt",
         clmTotal : "Gesamtsumme",
-        clmTotalHt : "Nettobetrag",
+        clmTotalHt : "Gesamt ohne MwSt.",
         clmDispatch : "Lieferschein Nr.",
         clmDateDispatch : "Datum",
-        clmCreateDate: "Erstellungsdatum",
+        clmCreateDate: "Registrierungsdatum",
         clmMargin :"Marge",
-        clmDescription :"Beschreibung",
+        clmDescription :"Grund",
         clmCuser :"Benutzer",
-        clmMulticode : "Lieferantencode",
-        clmBarcode : "Barcode",
-        clmVatRate :".. %",
-        clmSubQuantity : "Untereinheit",
-        clmSubPrice : "Untereinheitspreis",
+        clmMulticode : "LFR.Code",    
+        clmBarcode : "Strichcode",    
+        clmVatRate :"MwSt. %",
+        clmSubQuantity : "Einheitsmenge",
+        clmSubPrice : "Stückpreis",
         clmSubFactor : "Faktor",
         clmPartiLot : "Losnummer",
     },
@@ -137,38 +139,38 @@ const ftr_02_007 =
         clmInputName: "Kasse",
         clmTypeName: "Typ",
         clmPrice: "Preis",
-        clmCreateDate: "Erstellungsdatum",
+        clmCreateDate: "Registrierungsdatum",
 
     },
     popPayment:
     {
-        title: "Zahlungen",
+        title: "Kassierung",
     },
     popDiscount : 
     {
-        title: "Zeilenrabatt",
-        chkFirstDiscount : "Ersten Rabatt in der Zeile aktualisieren",
-        chkDocDiscount : "Als Dokumentenrabatt anwenden",
-        Percent1 : "1. Rabatt in %",
-        Price1 : "1. Rabattbetrag",
-        Percent2 : "2. Rabatt in %",
-        Price2 : "2. Rabattbetrag",
-        Percent3 : "3. Rabatt in %",
-        Price3 : "3. Rabattbetrag"
+       title: "Zeilenrabatt",
+        chkFirstDiscount : "Rabatte der 1. Zeile nicht ändern",
+        chkDocDiscount : "Belegrabatt",
+        Percent1 : "1. Rabatt %",
+        Price1 : "1. Rabatt",
+        Percent2 : "2. Rabatt %",
+        Price2 : "2. Rabatt",
+        Percent3 : "3. Rabatt %",
+        Price3 : "3. Rabatt"
     },
     popDocDiscount : 
     {
-        title: "Dokumentenrabatt",
-        Percent1 : "1. Rabatt in %",
-        Price1 : "1. Rabattbetrag",
-        Percent2 : "2. Rabatt in %",
-        Price2 : "2. Rabattbetrag",
-        Percent3 : "3. Rabatt in %",
-        Price3 : "3. Rabattbetrag"
+       title: "Belegrabatt",
+        Percent1 : "1. Rabatt %",
+        Price1 : "1. Rabatt",
+        Percent2 : "2. Rabatt %",
+        Price2 : "2. Rabatt",
+        Percent3 : "3. Rabatt %",
+        Price3 : "3. Rabatt"
     },
     popPassword : 
     {
-        title: "Geben Sie das Administratorpasswort ein, um das Dokument zu öffnen",
+        title: "Bitte Administrator-Passwort für Dokumentzugriff eingeben",
         Password : "Passwort",
         btnApprove : "Bestätigen"
     },
@@ -176,33 +178,54 @@ const ftr_02_007 =
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es können keine Bestände erfasst werden, solange die Dokumentkopfinformationen nicht vollständig sind!"
+        msg: "Bitte geben Sie die Kopfzeile vor dem Abschluss ein!"
     },
     msgMoreAmount:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es können keine Zahlungen über dem verbleibenden Betrag erfasst werden!"
+        msg: "Der Restbetrag kann nicht höher als die Summe sein!"
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihr Speichervorgang war erfolgreich!",
-        msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    isMsgSave: 
+    {  
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Der Vorgang kann nicht ohne Speichern des Dokuments durchgeführt werden!"
+    },
+    msgMailSendResult: 
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        msgSuccess: "E-Mail erfolgreich gesendet!",
+        msgFailed: "E-Mail senden fehlgeschlagen!"
+    },
+    popMailSend: 
+    {
+        title: "E-Mail senden",
+        txtMailSubject: "E-Mail Betreff",
+        txtSendMail: "E-Mail Adresse",
+        btnSend: "Senden",
+        cmbMailAddress : "Absender E-Mail Adresse"
+    },        
+    msgSaveValid:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Bitte füllen Sie die erforderlichen Bereiche aus!"
     },
     msgDelete:
     {
@@ -216,170 +239,153 @@ const ftr_02_007 =
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie die Steuer wirklich auf Null setzen?"
+        msg: "Sind Sie sicher, dass Sie die MwSt. auf Null setzen möchten!"
     },
-    isMsgSave: {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Der Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden !"
-    },
-    msgMailSendResult: {
-        title: "Achtung",
-        btn01: "OK",
-        msgSuccess: "E-Mail-Versand erfolgreich !",
-        msgFailed: "E-Mail-Versand fehlgeschlagen !"
-    },
-    popMailSend: {
-        title: "E-Mail senden",
-        txtMailSubject: "Betreff der E-Mail",
-        txtSendMail: "E-Mail-Adresse",
-        btnSend: "Senden",
-        cmbMailAddress : "Gesendete Mailadresse" // 
-    },        
     msgDiscountPrice:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es kann kein Rabatt gewährt werden, der den Betrag überschreitet!"
+        msg: "Sie können keinen Rabatt höher als den Gesamtbetrag gewähren!"
     },
     msgDiscountPercent:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es kann kein Rabatt gewährt werden, der den Betrag überschreitet!"
+        msg: "Sie können keinen Rabatt höher als den Gesamtbetrag gewähren!"
     },
     msgLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Das Dokument wurde gespeichert und gesperrt!"
+        msg: "Dokument gespeichert und gesperrt!"
     },
     msgPasswordSucces:
     {
-        title: "Erfolgreich",
+        title: "Erfolg",
         btn01: "OK",
-        msg: "Das Dokument wurde entsperrt!"
+        msg: "Dokument entsperrt!",
     },
     msgPasswordWrong:
     {
-        title: "Fehlgeschlagen",
+        title: "Fehler",
         btn01: "OK",
-        msg: "Ihr Passwort ist falsch!"
+        msg: "Falsches Passwort"
     },
     msgGetLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Das Dokument ist gesperrt! Sie müssen das Administratorpasswort eingeben, um Änderungen zu speichern!"
+        msg: "Dokument gesperrt! \n Bitte entsperren Sie es, um Änderungen zu speichern!"
     },
     msgPayNotDeleted:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Ein bezahltes Dokument kann nicht gelöscht werden!"
+        msg: "Dokument kann nicht gelöscht werden, da Zahlung erfasst!" 
     },
-    msgDocLocked:
+    msgDoclocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es können keine Aktionen durchgeführt werden, solange das Dokument gesperrt ist!"
+        msg: "Sie können nicht speichern, ohne zu entsperren!"
     },
     msgDiscount:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Der Rabattbetrag darf nicht höher als der Gesamtbetrag sein!"
+        msg: "Rabatt kann nicht höher als die Summe sein!"
     },
     msgItemNotFound:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Artikel nicht gefunden!"
+        msg: "Artikel nicht gefunden!!"
     },
     msgNotCustomer:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Kunde nicht gefunden!"
+        msg: "Unbekannter Lieferant"
     },
     msgCombineItem:
     {
         title: "Achtung",
-        btn01: "Kombinieren",
+        btn01: "Zusammenfassen",
         btn02: "Neu hinzufügen",
-        msg: "Der Artikel, den Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen kombiniert werden?"
+        msg: "Artikel bereits im Dokument vorhanden! Möchten Sie kombinieren?"
     },
     msgCustomerSelect:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte wählen Sie einen Kunden aus!"
+        msg: "Bitte geben Sie einen Kunden ein!"
     },
     popCash : 
     {
-        title: "Bargeld-Eingabe",
+        title: "Bargeld-Eintrag",
         btnApprove : "Hinzufügen"
     },
     popCheck : 
     {
-        title: "Scheck-Eingabe",
+        title: "Scheck-Eintrag",
         btnApprove : "Hinzufügen"
     },
     popBank : 
     {
-        title: "Banküberweisungs-Eingabe",
+        title: "Überweisungseintrag",
         btnApprove : "Hinzufügen"
     },
     popDesign : 
     {
-        title: "Designauswahl",
+        title: "Design-Auswahl",
         design : "Design",
-        lang : "Dokumentsprache"
+        lang : "Dokumentsprache" 
     },
     msgUnit:
     {
-        title: "Einheitenauswahl",
+        title: "Einheitsauswahl",
         btn01: "Bestätigen",
-    },
-    validRef :"Seriennummer darf nicht leer sein",
-    validRefNo : "Nummer darf nicht leer sein",
-    validDepot : "Sie müssen ein Lager auswählen",
-    validCustomerCode : "Kundennummer darf nicht leer sein",
-    validDocDate : "Bitte wählen Sie ein Datum",
+    }, 
+    validRef :"Referenz eingeben",
+    validRefNo : "Ref Nr eingeben",
+    validDepot : "Lager auswählen",
+    validCustomerCode : "Lieferanten-Kundencode kann nicht leer sein",
+    validDocDate : "Datum auswählen",
     pg_txtBarcode : 
     {
-        title : "Barcode-Auswahl",
-        clmCode :  "Artikelnummer",
+        title : "Strichcode auswählen",
+        clmCode :  "Artikelreferenz",
         clmName : "Artikelname",
-        clmMulticode : "Lieferantencode",
-        clmBarcode : "Barcode"
+        clmMulticode : "Lieferantenreferenz",
+        clmBarcode : "Strichcode"
     },
     msgQuantity:
     {
         title: "Menge",
         btn01: "Hinzufügen",
-        msg: "Bitte geben Sie die Menge ein"
+        msg: "Menge hinzufügen"
     },
-    cmbPayType : {
-        title : "Zahlungsart",
-        cash : "Bargeld",
-        check : "Scheck",
-        bankTransfer : "Banküberweisung",
-        otoTransfer : "Automatische Überweisung",
-        foodTicket : "Essensgutschein",
-        bill : "Wechsel",
+    cmbPayType : 
+    {
+        title : "Zahlungsart",   
+        cash : "Bargeld",   
+        check : "Scheck",   
+        bankTransfer : "Kontoüberweisung",   
+        otoTransfer : "Lastschrift",   
+        foodTicket : "Essensgutschein",   
+        bill : "Rechnung",   
     },
     popDetail:
     {
         title: "Dokumentinhalt",
-        count: "Gesamtzeilen",
+        count:  "Zeilenanzahl",
         quantity: "Gesamtmenge",
-        quantity2: "Gesamtmenge (2. Einheit)",
-        margin : "Marge"
+        quantity2: "Gesamt 2. Einheit",
+        margin: "Marge"
     },
     popUnit2 : 
     {
-        title : "Einheitsdetails"
+        title : "Inhaltsdetails"
     },
     grdUnit2 : 
     {
@@ -388,124 +394,124 @@ const ftr_02_007 =
     },
     pg_adress : 
     {
-        title : "Adressauswahl",
-        clmAdress : "Adresse",
-        clmCiyt : "Stadt",
-        clmZipcode : "Postleitzahl",
-        clmCountry : "Land",
+        title : "Adressauswahl",   
+        clmAdress : "Adresse",   
+        clmCiyt : "Stadt",   
+        clmZipcode : "Postleitzahl",   
+        clmCountry : "Land",   
     },
     msgCode : 
     {
         title: "Achtung",
-        btn01: "Zum Dokument gehen",
-        msg: "Dokument gefunden"
+        btn01:"Zum Dokument gehen",
+        msg: "Dokument gefunden!"
     },
     pg_proformaGrid : 
     {
-        title : "Proforma-Auswahl",
-        clmReferans : "Seriennummer - Nummer",
-        clmCode : "Code",
-        clmName : "Name",
-        clmQuantity : "Menge",
-        clmPrice : "Preis",
-        clmTotal : "Gesamtbetrag"
+        title : "Proforma-Auswahl",   
+        clmReferans : "Ref. Ref Nr",   
+        clmCode : "Code",   
+        clmName : "Name",   
+        clmQuantity : "Menge",   
+        clmPrice : "Preis",   
+        clmTotal : "Gesamt"   
     },
-    popRound :
+    popRound : 
     {
-        title : "Bitte geben Sie den Betrag ein, den Sie runden möchten",
+        title : "Bitte geben Sie den Betrag ein, den Sie runden möchten", 
         total : "Betrag",
     },
     msgWorngRound:
-    {
-        title: "Achtung",
-        btn01: "OK",
-        msg1: "Es darf höchstens ein Unterschied von ",
-        msg2: " zwischen den zu rundenden Beträgen geben!"
+    {  
+        title: "Achtung",  
+        btn01: "OK",  
+        msg1: "Der Betrag, den Sie runden möchten, beträgt maximal",  
+        msg2: "Es kann einen Unterschied geben"  
     },
-    msgDiscountEntry :
+    msgDiscountEntry : 
     {
-        title : "Rabattbetrag eingeben",
-        btn01 : "Bestätigen"
+        title : "Rabattbetrag eingeben",  
+        btn01 : "Bestätigen" 
     },
-    txtDiscount1 : "1. Rabattbetrag",
-    txtDiscount2 : "2. Rabattbetrag",
-    txtDiscount3 : "3. Rabattbetrag",
-    txtTotalDiscount :"Gesamtrabattbetrag",
-    msgDiscountPerEntry :
+    txtDiscount1 : "1. Rabatt", 
+    txtDiscount2 : "2. Rabatt", 
+    txtDiscount3 : "3. Rabatt", 
+    txtTotalDiscount :"Gesamtrabatt", 
+    msgDiscountPerEntry : 
     {
-    title : "Prozentualer Rabatteingabe",
-    btn01 : "Bestätigen"
+        title : "Rabatt in % eingeben", 
+        btn01 : "Bestätigen" 
     },
-    txtDiscountPer1 : "1. Rabattprozentsatz",
-    txtDiscountPer2 : "2. Rabattprozentsatz",
-    txtDiscountPer3 : "3. Rabattprozentsatz",
-    serviceAdd : "Service hinzufügen",
-    pg_service :
+    txtDiscountPer1 : "1. Rabatt %", 
+    txtDiscountPer2 : "2. Rabatt %", 
+    txtDiscountPer3 : "3. Rabatt %",  
+    serviceAdd : "Service hinzufügen",  
+    pg_service : 
     {
-        title : "Services",
-        clmCode : "Code",
-        clmName : "Name"
+        title : "Dienstleistungen",   
+        clmCode : "Code",   
+        clmName : "Name"   
     },
     msgMissItemCode:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Nicht gefundene Codes:"
+        msg: "Code nicht gefunden"
     },
     msgMultiCodeCount:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Anzahl der hinzugefügten Artikel"
+        msg: "Anzahl hinzugefügter Artikel"
     },
     popMultiItem:
     {
-        title: "Massenhinzufügung von Artikeln",
-        btnApprove: "Artikel Suchen",
-        btnClear : "Löschen",
-        btnSpeichern : "Zeilen hinzufügen",
+        title: "Sammel-Artikelzufügung",
+        btnApprove: "Artikel suchen",
+        btnClear : "Liste leeren",
+        btnSave : "Zeilen hinzufügen",
     },
-    cmbMultiItemType :
+    cmbMultiItemType : 
     {
-        title : "Suchmethode",
+        title : "Suchmodus",
         customerCode : "Nach Lieferantencode",
-        ItemCode : "Nach Artikelcode",
+        ItemCode : "Nach Artikelcode"
     },
-    grdMultiItem :
+    grdMultiItem : 
     {
-        clmCode : "Artikelcode",
-        clmMulticode : "Lieferantencode",
+        clmCode : "Artikelreferenz",
+        clmMulticode : "LFR.Code",
         clmName : "Artikelname",
-        clmQuantity : "Menge",
+        clmQuantity : "Menge"
     },
     msgMultiData:
     {
         title: "Achtung",
-        btn01: "Liste löschen und alle hinzufügen",
-        btn02: "Neue Einträge zur Liste hinzufügen",
-        msg: "Es sind Artikel in der Liste vorhanden!",
+        btn01: "Liste leeren und alles hinzufügen",
+        btn02: "Neue Eingaben zur Liste hinzufügen",
+        msg: "Artikel bereits in der Liste vorhanden!"
     },
-    tagItemCodePlaceholder: "Bitte geben Sie die gewünschten Codes ein",
+    tagItemCodePlaceholder: "Bitte geben Sie die hinzuzufügenden Codes ein",
     popMailSend : 
     {
-        title :"E-Mail senden",
-        txtMailSubject : "E-Mail-Betreff",
-        txtSendMail : "E-Mail-Adresse",
+        title :"E-Mail senden",   
+        txtMailSubject : "E-Mail Betreff",   
+        txtSendMail : "E-Mail Adresse",   
         btnSend : "Senden",
-        cmbMailAddress : "Gesendete Mailadresse" 
+        cmbMailAddress : "Absender E-Mail Adresse"
     },
     msgMailSendResult:
     {
-        title: "Achtung",
-        btn01: "OK",
-        msgSuccess: "E-Mail erfolgreich gesendet!",
-        msgFailed: "E-Mail konnte nicht gesendet werden!"
+        title: "Achtung",   
+        btn01: "OK",   
+        msgSuccess: "E-Mail erfolgreich gesendet!",   
+        msgFailed: "E-Mail senden fehlgeschlagen!"   
     },
     msgCustomerLock: 
     {
         title: "Achtung", 
         btn01: "OK", 
-        msg: "Nach Hinzufügen von Artikel kann Kunde nicht geändert werden" 
+        msg: "Lieferant kann nach Hinzufügen des Artikels nicht geändert werden!" 
     },
 }
 export default ftr_02_007

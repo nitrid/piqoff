@@ -1,14 +1,14 @@
 // "Pos Cihaz Tanıtım",
 const pos_01_001 =
 {
-    txtCode : "Code",
-    txtName :"Name",
+    txtCode : "Kassen-Nr.",
+    txtName :"Kassenname",
     txtIban :"IBAN",
     validCode :"Der Code darf nicht leer sein!",
-    txtScalePort : "Scale-Anschluss",
+    txtScalePort : "Waagenanschluss",
     txtLcdPort : "LCD-Anschluss",
-    txtPayCardPort : "Pay Card-Anschluss",
-    txtPrintDesing : "Beleglayout",
+    txtPayCardPort : "TPE-Anschluss",
+    txtPrintDesing : "Beleg-Design",
     txtMacId : "Mac Id",
     cmbDepot : "Lager",
     txtPrinterPort : "Druckeranschluss",
@@ -16,46 +16,46 @@ const pos_01_001 =
     pg_txtCode : 
     {
         title : "Kassenauswahl",
-        clmCode : "CODE",
-        clmName : "NAME",
+        clmCode : "Code",
+        clmName : "Name",
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
-        btn01: "Ok",
+        btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag speichern möchten?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten?"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
-        btn01: "Ok",
-        msgSuccess: "Der Eintrag wurde erfolgreich gespeichert!",
-        msgFailed: "Fehler beim Speichern des Eintrags!"
+        btn01: "OK",
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
-        btn01: "Ok",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        btn01: "OK",
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
         title: "Achtung",
-        btn01: "Ok",
+        btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie den Eintrag wirklich löschen?"
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
     },
     msgDeleteResult:
     {
-        msgSuccess: "Der Eintrag wurde erfolgreich gelöscht!"
+        msgSuccess: "Eintrag erfolgreich gelöscht!"
     },
     msgCode : 
     {
         title: "Achtung",
-        btn01: "Zum Gerät gehen",
-        btn02: "Ok",
-        msg : "Der eingegebene Gerätecode ist bereits im System registriert!"
-    }
+        btn01: "Zum Gerät gehen", 
+        btn02: "OK",
+        msg : "Der eingegebene Gerätecode ist bereits im System registriert!" 
+    }  
 }
 export default pos_01_001

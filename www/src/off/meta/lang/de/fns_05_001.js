@@ -1,123 +1,85 @@
 //"Toplu Tahsilat Girişi"
 const fns_05_001 =
 {
-    txtRefRefno : "Seriennummer",
-    cmbCashSafe : "Tresor auswählen",
-    cmbCheckSafe : "Scheck-Tresor",
-    checkReference : "Referenz",
-    cmbBank : "Bank auswählen",
-    txtCustomerCode : "Kundennummer",
-    txtCustomerName : "Kundenname",
-    dtDocDate : "Datum",
-    txtAmount : "Betrag",
-    cash : "Betrag",
-    description :"Beschreibung",
-    checkReference : "Referenz",
-    btnCash : "Einzugseingabe",
-    ValidCash : "Geben Sie einen Betrag größer als 0 ein",
+    txtRefRefno : "Ref. Ref Nr:",
+    validRef :"Referenz eingeben",
+    checkReference : "Scheck-Referenz",
     excelAdd : "Eintrag aus Excel",
-    popExcel : 
-    {
-        title:"Die Spaltenüberschriften in Ihrer Excel-Datei müssen korrekt sein",
-        clmDate : "Datum",
-        clmDesc : "Beschreibung",
-        clmAmount : "Betrag",
-        shemaSpeichern : "Schema speichern",
-        clmOutputCode : "Kundennummer"
-    },
-    cmbPayType : 
-    {
-        title : "Zahlungstyp",
-        cash : "Bar",
-        check : "Scheck",
-        bankTransfer : "Banküberweisung",
-        otoTransfer : "Automatische Zahlung",
-        foodTicket : "Essensgutschein",
-        bill : "Wechsel",
-    },
-    pg_txtCustomerCode : 
-    {
-        title : "Kunden auswählen",
-        clmCode :  "KUNDENNUMMER",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
-    },
-    grdDocPayments: 
-    {
-        clmDate : "Datum",
-        clmCustomerCode : "Kundennummer",
-        clmCustomerName : "Kundenname",
-        clmAmount : "Betrag",
-        clmInputName : "Tresor/Bank",
-        clmDescription : "Beschreibung",
-        clmDocDate : "Zahlungsdatum"
-    },
+    popExcel : {title:"Die Spaltenüberschriften Ihrer Excel-Datei müssen korrekt sein"}, 
     msgDocValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Dokumentenkopf muss ausgefüllt werden, bevor Lagerbestand eingegeben werden kann!"
+        msg: "Bitte geben Sie die Kopfzeile vor dem Abschluss ein!"
     },
-    msgSpeichern:
+    pg_txtCustomerCode : {
+        title : "Kunde auswählen",
+        clmCode : "Kundencode",
+        clmTitle : "Kundenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Art"
+    },
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+        msg: "Bitte füllen Sie die entsprechenden Felder aus!"
     },
-    msgSpeichernResult:
+    cmbPayType : 
     {
-        title: "Achtung",
-        btn01: "OK",
-        msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
-        msgFailed: "Speichern fehlgeschlagen!"
+        title : "Zahlungsart",
+        cash:"Bargeld",
+        check : "Scheck",
+        bankTransfer : "Überweisung",
+        otoTransfer : "Lastschrift",
+        foodTicket : "Essensgutschein",
+        bill : "Wechsel"
     },
-    msgSpeichernValid:
+    popExcel :
     {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        title : "Excel",
+        txtMulticode : "Kundencode",
+        txtCustoms : "Nomenklatur",
+        txtOrigin :"Herkunft",
+       clmDesc :"Beschreibung" ,
+       clmAmount :"Betrag",
+        clmDate :"Datum",
+        shemaSave :"Speichern" ,
+        clmOutputCode : "Kundencode"
     },
-    msgNotCustomer:
+    grdDocPayments: 
     {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Kunde nicht gefunden!"
-    },
-    pg_txtCustomerCode : 
-    {
-        title : "Kunden auswählen",
-        clmCode : "KUNDENNUMMER",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
+        clmCreateDate: "Registrierungsdatum",
+        clmAmount : "Gesamt",
+        clmCustomerName : "Kunde",    
+        clmCustomerCode : "Code",    
+        clmCustomerDate : "Datum",
+        clmInputName :  "Eingehendes Konto",
+        clmOutputName : "Tresor/Bank",
+        clmDescription : "Grund",
+        clmInvoice : "Bezahlte Rechnung",
+        clmFacDate : "Rechnungsdatum",
+        clmDate :"Datum",
+        clmDocDate : "Datum"
     },
     popCash : 
     {
-        title: "Einzugseingabe",
+        title: "Kasseneintrag",
         btnApprove : "Hinzufügen",
         btnCancel : "Abbrechen",
         dtDocDate : "Datum",
         cash : "Betrag",
-        txtCustomerCode : "Kundennummer",
+        txtCustomerCode : "Kundencode",
         txtCustomerName : "Kundenname",
-        description : "Beschreibung",
-        cmbCashSafe : "Tresor auswählen",
+        description : "Grund",
+        cmbCashSafe : "Kasse auswählen",
     },
     popCheck : 
     {
-        title: "Scheckeinzug",
+        title: "Scheck-Eintrag",
         btnApprove : "Hinzufügen",
         btnCancel : "Abbrechen",
     },
-    popBank : 
-    {
-        title: "Banküberweisung",
-        btnApprove : "Hinzufügen",
-        btnCancel : "Abbrechen",
-    },
-    validRef :"Serie darf nicht leer sein",
-    validCustomerCode : "Kundennummer darf nicht leer sein",
+ 
 }
 export default fns_05_001

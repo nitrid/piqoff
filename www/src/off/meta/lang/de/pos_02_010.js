@@ -1,17 +1,17 @@
-// "Ürün Grubu Raporu"
+// "Ürün Detaylı Satış Raporu"
 const pos_02_010 =
 {
-    chkItemCreated: "Nach Erstellungsdatum der Produkte Suchen",
+    chkItemCreated: "Nach Erstellungsdatum der Produkte suchen",
     btnGet: "Suchen",
     grdListe:
     {
-        clmDate: "Dattum",
+        clmDate: "Datum",
         clmCode: "Code",
         clmName: "Name",
         clmQuantity: "Menge",
-        clmAmount: "Betrag",
-        clmVat: "Steuer",
-        clmTotal: "Gesamt",
+        clmAmount: "Gesamt",
+        clmVat: "MwSt.",
+        clmTotal: "Gesamtbetrag",
     },
 }
 export default pos_02_010

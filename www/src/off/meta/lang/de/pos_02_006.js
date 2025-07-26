@@ -13,17 +13,17 @@ const pos_02_006 =
         clmCash: "Eingezahltes Bargeld",
         clmCredit: "Eingezahlte Kartenzahlungen",
         clmCheck: "Eingezogener Scheck",
-        clmTicket: "Eingezahltes Restaurant Ticket",
+        clmTicket: "Eingezahltes Restaurantticket",
         clmPosCash: "Bargeld",
-        clmPosCredit: "Kartenzahlungen",
+        clmPosCredit: "Kreditkarte",
         clmPosCheck: "Scheck",
-        clmPosTicket: "Restaurant Ticket",
-        clmAdvance: "Vorschuss",
-        clmSafe: "Tresor/Kasse",
-        clmDiffCash : "Bargeldunterschied", 
-        clmDiffCredit : "Kreditkartenunterschied", 
-        clmDiffCheck :"Scheckunterschied", 
-        clmDiffTicket : "Unterschied" 
+        clmPosTicket: "Restaurantticket",
+        clmAdvance: "Kassenbestand",
+        clmSafe: "Kasse",
+        clmDiffCash: "Bargeldunterschied",
+        clmDiffCredit: "Kreditkartenunterschied",
+        clmDiffCheck: "Scheckunterschied",
+        clmDiffTicket: "Restaurantticket-Unterschied"
     },
 }
 export default pos_02_006
