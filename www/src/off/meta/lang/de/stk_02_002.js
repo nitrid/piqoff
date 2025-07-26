@@ -1,29 +1,29 @@
-// Depo/Mağaza Arası Sevk
+// "Lager/Filiale-Transfer"
 const stk_02_002 = 
 {
-    txtRefRefno : "Seriennummer-Reihenfolge",
-    validRef : "Seriennummer darf nicht leer sein",
-    validDepot : "Sie müssen einen Lager auswählen",
+    txtRefRefno : "Ref. Ref Nr",
+    validRef : "Zeile-Spalte darf nicht leer bleiben",
+    validDepot : "Lager auswählen",
     validDesign : "Bitte Design auswählen",
-    cmbOutDepot: "Ausgangsdepot",
-    cmbInDepot: "Eingangsdepot",
+    cmbOutDepot: "Ausgangslager",
+    cmbInDepot: "Eingangslager",
     dtDocDate : "Datum",
     txtBarcode : "Barcode hinzufügen",
     pg_Docs : 
     {
         title : "Dokumentauswahl",
-        clmDate : "DATUM",
-        clmRef : "Serie",
-        clmRefNo : "REIHENFOLGE",
-        clmDocDate : "DATUM",
-        clmInputName : "EINGANG",
-        clmOutputName : "AUSGANG",
+        clmDate : "Datum",
+        clmRef : "Referenz",
+        clmRefNo : "Nummer",
+        clmDocDate : "Datum",
+        clmInputName : "Eingang",
+        clmOutputName : "Ausgang",
     },
     pg_txtItemsCode : 
     {
-        title : "Artikelauswahl",
-        clmCode :  "Artikelnummer",
-        clmName : "Artikelname",
+        title : "Produkt auswählen",
+        clmCode :  "Produktreferenz",
+        clmName : "Produktname",
     },
     grdTrnsfItems: 
     {
@@ -31,12 +31,12 @@ const stk_02_002 =
         clmItemName: "Name",
         clmQuantity : "Menge",
         clmCreateDate: "Erstellungsdatum",
-        clmDescription :"Beschreibung",
-        clmCuser : "Benutzer"
+        clmDescription :"Motiv",
+        clmCuser : "Benutzer",
     },
     popPassword : 
     {
-        title: "Geben Sie das Administratorpasswort ein, um das Dokument zu entsperren",
+        title: "Bitte geben Sie das Administratorpasswort ein, um auf das Dokument zuzugreifen",
         Password : "Passwort",
         btnApprove : "Bestätigen"
     },
@@ -44,35 +44,35 @@ const stk_02_002 =
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Sie können keine Bestände hinzufügen, solange die Dokumentkopfdaten unvollständig sind!"
+        msg: "Bitte geben Sie die Überschriften vor dem Abschluss ein!"
     },
-    msgNotQuantity:
+    msgNotQuantity: 
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Die Lagermenge kann nicht negativ sein! Höchstmenge, die hinzugefügt werden kann:"
+        msg: "Die im Lager vorhandene Menge kann nicht negativ sein! Maximale Menge, die eingegeben werden kann:"
     },
     msgDblDepot:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Das Eingangs- und Ausgangsdepot können nicht identisch sein!"
+        msg: "Eingangs- und Ausgangslager können nicht identisch sein!"
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie den Eintrag speichern?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihr Transfer wurde erfolgreich durchgeführt und gespeichert!",
-        msgFailed: "Fehler beim Speichern des Transfers!"
+        msgSuccess: "Transfer erfolgreich und erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
@@ -83,63 +83,63 @@ const stk_02_002 =
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie den Eintrag löschen?"
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
     },
     msgLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Dokument wurde gespeichert und gesperrt!"
+        msg: "Dokument gespeichert und gesperrt!"
     },
     msgPasswordSucces:
     {
         title: "Erfolgreich",
         btn01: "OK",
-        msg: "Das Dokument wurde entsperrt!",
+        msg: "Dokument entsperrt!",
     },
     msgPasswordWrong:
     {
-        title: "Fehler",
+        title: "Fehlgeschlagen",
         btn01: "OK",
-        msg: "Falsches Passwort!"
+        msg: "Falsches Passwort"
     },
     msgGetLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Dokument gesperrt! \n Sie müssen das Dokument mit dem Administratorpasswort entsperren, um Änderungen zu speichern!"
+        msg: "Dokument gesperrt! Bitte entsperren Sie es, um Änderungen zu speichern!"
     },
-    msgDocLocked:
+    msgDoclocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Vorgang nicht möglich, solange das Dokument nicht entsperrt ist!"
+        msg: "Sie können nicht speichern, ohne zu entsperren!"
     },
     msgItemNotFound:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Artikel nicht gefunden!"
+        msg: "Produkt nicht gefunden!"
     },
     msgCombineItem:
     {
         title: "Achtung",
-        btn01: "Kombinieren",
+        btn01: "Zusammenfassen",
         btn02: "Neu hinzufügen",
-        msg: "Der Artikel, den Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen zusammengeführt werden?"
+        msg: "Produkt bereits im Dokument vorhanden! Möchten Sie zusammenfassen?"
     },
     popDesign : 
     {
         title: "Designauswahl",
         design : "Design",
-        lang : "Sprache des Dokuments"
+        lang : "Dokumentsprache"
     },
     pg_txtBarcode : 
     {
-        title : "Barcodeauswahl",
-        clmCode :  "Artikelnummer",
-        clmName : "Artikelname",
-        clmMulticode : "Lieferantennummer",
+        title : "Barcode auswählen",
+        clmCode :  "Produktreferenz",
+        clmName : "Produktname",
+        clmMulticode : "Lieferantenreferenz",
         clmBarcode : "Barcode"
     },
     msgQuantity:
@@ -147,15 +147,15 @@ const stk_02_002 =
         title: "Achtung",
         btn01: "Hinzufügen",
         btn02: "Abbrechen",
-        msg: "Menge eingeben!"
+        msg: "Bitte geben Sie die Menge ein!",
     },
-    txtQuantity : "Menge",
-    msgCode :
+    txtQuantity :"Menge",
+    msgCode : 
     {
         title: "Achtung",
         btn01: "Zum Dokument gehen",
         btn02: "Abbrechen",
-        msg: "Dokument gefunden"
+        msg: "Dokument gefunden!"
     },
 }
 export default stk_02_002

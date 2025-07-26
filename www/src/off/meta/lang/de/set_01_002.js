@@ -1,26 +1,26 @@
 // "Interfel"
 const set_01_002 = 
 {
-    txtFrRate : "Rate für Frankreich - Inlandverkauf",
-    txtNotFrRate : "Rate für Frankreich - Auslandverkauf",
-    msgSpeichern:
+    txtFrRate: "Zuschlagssatz für Verkäufe in Frankreich",
+    txtNotFrRate: "Zuschlagssatz für Verkäufe ins Ausland",
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
         msg: "Sind Sie sicher, dass Sie speichern möchten?"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
         msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
         msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
-        btn01: "Ok",
+        btn01: "OK",
         msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
 }

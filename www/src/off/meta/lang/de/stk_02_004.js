@@ -1,169 +1,170 @@
-// Etiket Bas
+// "Etiketten drucken"
 const stk_02_004 = 
 {
-    txtRefRefno : "Seriennummer",
+    txtRefRefno : "Ref. Ref Nr",
     design : "Design",
     txtPage : "Seite",
-    txtFreeLabel : "Freies Feld",
-    txtLineCount : "Zeilenanzahl",
-    chkLastChange : "Geändert seit letztem Druck",
-    chkSelectChange : "Geändert seit ausgewähltem Datum",
-    chkSelectPriceChange :"Verkaufspreis geändert seit ausgewähltem Datum",
-    btnLabelCombine : "Etiketten kombinieren",
+    txtFreeLabel : "Leeres Feld",
+    txtLineCount : "Zeilenlesung",
+    chkLastChange : "Letzte Änderung nach Druck",
+    chkSelectChange :"Letzte Änderung nach ausgewähltem Datum",
+    chkSelectPriceChange :"Verkaufspreis-Änderung nach ausgewähltem Datum",
+    chkPromotionItems : "Promotionsprodukt",
+    btnLabelCombine : "Eingegebene Etiketten zusammenfassen",
     chkGroup : "Gruppe",
-    chkCustomer : "LieferantenArtikel",
-    chkAllItems : "Alle Artikel",
+    chkCustomer : "Lieferantenprodukte",
+    chkAllItems : "Produkte",
     AddItems : "Hinzufügen",
     txtBarcode : "Barcode hinzufügen",
-    validDesign : "Bitte Design auswählen",
+    validDesign : "Bitte wählen Sie das Etikettendesign",
     pg_Docs : 
     {
         title : "Dokumentauswahl",
-        clmDate : "DATUM",
-        clmRef : "Serie",
+        clmDate : "Datum",
+        clmRef : "Referenz",
         clmRefNo : "Nummer",
         clmDocDate : "Datum",
-        clmCount : "Artikelanzahl",
-        clmPrint : "Gedruckt",
+        clmCount : "Menge Scan",
+        clmPrint : "Drucken",
     },
     pg_DocsCombine : 
     {
         title : "Dokumentauswahl",
-        clmRef : "Serie",
+        clmRef : "Referenz",
         clmRefNo : "Nummer",
         clmDocDate : "Datum",
-        clmCount : "Artikelanzahl"
+        clmCount : "Menge Scan"
     },
     pg_txtItemsCode : 
     {
-        title : "Artikelauswahl",
-        clmCode :  "Artikelcode",
-        clmName : "Artikelname",
+        title : "Produkt auswählen",
+        clmCode :  "Produktreferenz",
+        clmName : "Produktname",
     },
     grdLabelQueue: 
     {
         clmItemCode: "Code",
         clmBarcode : "Barcode",
         clmItemName: "Name",
-        clmItemGrpName : "Artikelgruppe",
+        clmItemGrpName : "Produktfamilie",
         clmPrice: "Preis",
-        clmUnderUnit : "Untere Einheit",
-        clmUnderUnit : "Untere Einheit",
-        clmUnderUnitPrice : "Untere Einheitspreis",
-        clmDescription :"Beschreibung",
-        clmOrgins : "Land",
-        clmCuser : "Benutzer"
+        clmUnderUnit : "Produktinhalt",
+        clmUnderUnit : "Produktinhalt",
+        clmUnderUnitPrice : "Preis Inhaltseinheit",
+        clmDescription :"Motiv",
+        clmOrgins : "Herkunft",
+        clmCuser : "Benutzer",
     },
     msgDocValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Artikel können nicht hinzugefügt werden, solange die Dokumentkopfdaten nicht vollständig sind!"
+        msg: "Bitte geben Sie die Überschriften vor dem Abschluss ein!"
     },
-    msgNotSpeichern:
+    msgNotSave:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Änderungen am Dokument wurden vorgenommen! Bitte speichern oder Änderungen rückgängig machen"
+        msg: "Änderungen im Dokument vorgenommen! Bitte speichern oder Änderungen rückgängig machen"
     },
     msgAddItems:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Artikel, die den ausgewählten Kriterien entsprechen, werden hinzugefügt. Sind Sie sicher?"
+        msg: "Produkte werden nach Ihren Kriterien hinzugefügt. Bestätigen Sie?"
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie speichern?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Speichern erfolgreich!",
+        msgSuccess: "Erfolgreich gespeichert!",
         msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie den Datensatz löschen?"
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
     },
     msgLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Das Dokument wurde gespeichert und gesperrt!"
+        msg: "Dokument gespeichert und gesperrt!"
     },
     msgPasswordSucces:
     {
         title: "Erfolgreich",
         btn01: "OK",
-        msg: "Das Dokument wurde entsperrt!"
+        msg: "Dokument entsperrt!",
     },
     msgPasswordWrong:
     {
-        title: "Fehler",
+        title: "Fehlgeschlagen",
         btn01: "OK",
-        msg: "Das Passwort ist falsch!"
+        msg: "Falsches Passwort"
     },
     msgGetLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Das Dokument ist gesperrt! Änderungen und Speichern nur mit dem Administratorpasswort möglich!"
+        msg: "Dokument gesperrt! Bitte entsperren Sie es, um Änderungen zu speichern!"
     },
-    msgDocLocked:
+    msgDoclocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es können keine Aktionen durchgeführt werden, solange das Dokument gesperrt ist!"
+        msg: "Sie können nicht speichern, ohne zu entsperren!"
     },
     msgItemNotFound:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Artikel nicht gefunden!"
+        msg: "Produkt nicht gefunden!"
     },
     msgCombineItem:
     {
         title: "Achtung",
         btn01: "Abbrechen",
-        btn02: "Neue Zeile hinzufügen",
-        msg: "Der ausgewälte Artikel ist im Dokument vorhanden! Soll eine neue Zeile hinzugefügt werden?"
+        btn02: "Neu hinzufügen",
+        msg: "Ausgewähltes Produkt bereits im Dokument vorhanden! Möchten Sie eine Zeile hinzufügen?"
     },
     popWizard : 
     {
-        title : "Artikelauswahl-Assistent",
+        title : "Produktauswahl-Assistent",
     },
-    validRef :"Die Serie darf nicht leer sein",
-    validRefNo : "Die Nummer darf nicht leer sein",
-    validDepot : "Bitte wählen Sie ein Lager aus",
-    validCustomerCode : "Der Kundencode darf nicht leer sein",
-    validDocDate : "Bitte wählen Sie ein Datum aus",
+    validRef :"Ref eingeben",
+    validRefNo : "Ref Nr eingeben",
+    validDepot : "Lager auswählen",
+    validCustomerCode : "Der Lieferanten-Kundencode darf nicht leer sein",
+    validDocDate : "Datum auswählen",
     popDesign : 
     {
         title: "Designauswahl",
         design : "Design",
-        lang : "Sprache des Dokuments"
+        lang : "Dokumentsprache"
     },
     pg_txtBarcode : 
     {
-        title : "Barcode-Auswahl",
-        clmCode :  "Artikelcode",
-        clmName : "Artikelname",
-        clmMulticode : "Lieferantencode",
+        title : "Barcode auswählen",
+        clmCode :  "Produktreferenz",
+        clmName : "Produktname",
+        clmMulticode : "Lieferantenreferenz",
         clmBarcode : "Barcode"
     },
 }

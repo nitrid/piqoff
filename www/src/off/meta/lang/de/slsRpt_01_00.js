@@ -1,26 +1,26 @@
 
 const slsRpt_01_00 =
 {
-    btnGet: "Getir",
-    txtCustomerCode : "Müşteri", 
+    btnGet: "Holen",
+    txtCustomerCode : "Kunde", 
     grdListe : 
     {
-        clmDate : "Tarih",
-        clmCode: "Kodu",
-        clmName : "Adı",           
-        clmAmount : "Tutar",
-        clmRefNo: "Sıra",
-        clmRemainder : "Kalan",
-        clmTotal : "Toplam",
-        clmRef : "Seri-Sıra"
+        clmDate : "Datum",
+        clmCode: "Code",
+        clmName : "Name",           
+        clmAmount : "Betrag",
+        clmRefNo: "Zeile",
+        clmRemainder : "Rest",
+        clmTotal : "Gesamt",
+        clmRef : "Serie-Zeile"
     },
     pg_txtCustomerCode : 
     {
-        title : "Müşteri Seçimi",
-        clmCode :  "CARİ KODU",
-        clmTitle : "CARİ ADI",
-        clmTypeName : "TİPİ",
-        clmGenusName : "CİNSİ"
+        title : "Kundenauswahl",
+        clmCode :  "KUNDENCODE",
+        clmTitle : "KUNDENNAME",
+        clmTypeName : "TYP",
+        clmGenusName : "GESCHLECHT"
     },
 }
 

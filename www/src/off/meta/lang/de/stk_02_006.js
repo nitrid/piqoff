@@ -1,65 +1,65 @@
-// "Özel Etiket Basım"
+// "Spezielle Etiketten drucken"
 const stk_02_006 = 
 {
-    txtBarcode: "Barcode",
+    txtBarkod: "Barcode", 
     txtRef: "Referenz",
     txtPrice : "Preis",
-    txtPriceRate : "Preisverhältnis", 
-    txtDescription : "Beschreibung",
-    txtItemName : "Artikelname",
-    txtQuantity : "Menge",
-    valPrice : "Preis darf nicht kleiner als 0 sein",
-    valCode : "Bitte geben Sie den Bestand ein",
-    valName : "Artikelname darf nicht leer sein",
+    txtPriceRate : "Preisrate",
+    txtDescription : "Motiv",
+    txtItemName : "Produktname",
+    txtQuantity : "Menge", 
+    valPrice : "Der Preis kann nicht kleiner als 0 sein", 
+    valCode : "Bitte geben Sie das Produkt ein", 
+    valName : "Der Produktname darf nicht leer sein", 
     pg_txtRef:
     {
-        title: "Artikelauswahl",
-        clmCode: "KODE",
-        clmName: "NAME", 
-        clmPrice: "PREIS"
+        title: "Produkt auswählen",
+        clmCode: "Code",
+        clmName: "Name", 
+        clmPrice: "Preis"             
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
         msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihr Speichervorgang war erfolgreich!",
-        msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
-    msgPrice:
+    msgPrice: 
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es kann kein Preis eingegeben werden, der kleiner als der Einkaufspreis ist!"
+        msg: "Es kann kein Preis eingegeben werden, der niedriger als der Einkaufspreis ist!"
     },
     msgItemName:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Artikelname ist zu lang. Bitte korrigieren Sie ihn und speichern Sie erneut!"
+        msg: "Produktname zu lang. Bitte korrigieren Sie ihn und geben Sie ihn erneut ein!"
     },
     grdUniqList : 
     { 
         clmName : "Name",  
         clmPrice : "Preis",  
-        clmDescription : "Beschreibung",  
-        clmQuantity : "Anzahl"  
+        clmDescription : "Beschreibung", 
+        clmQuantity : "Menge"  
     },
     popUniqCodeList : 
     {
-        title : "Etiket Listesi"  
+        title : "Etikettenliste"  
     },
     popDesign : 
     {

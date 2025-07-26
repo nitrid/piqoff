@@ -1,4 +1,4 @@
-// Eigenschaftsdefinitionen
+// "Eigenschaftsdefinitionen"
 const stk_01_018 = 
 {
     txtCode : "Eigenschaftscode",

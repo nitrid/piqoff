@@ -1,64 +1,64 @@
-// Hizmet Tanımları
+// "Dienstleistungsdefinitionen"
 const stk_01_007 = 
 {
-    txtCode: "Code",
-    txtName: "Name",
-    cmbType: "Type",
-    validCode: "Code-Feld darf nicht leer sein!",
-    pg_txtCode:
+    txtCode : "Code",
+    txtName :"Name",
+    cmbType :"Typ",
+    validCode :"Das Code-Feld darf nicht leer sein!",      
+    pg_txtCode : 
     {
-        title: "Servicekartenauswahl",
-        clmCode: "Code",
-        clmName: "Name",
-        clmType: "Type",
+        title : "Dienstleistungskartenauswahl",
+        clmCode : "Code",
+        clmName : "Name",
+        clmType : "Typ",
     },
-    msgSpeichern:
+    msgSave:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag speichern möchten?",
+        msg: "Sind Sie sicher, dass Sie speichern möchten? "
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Eintrag erfolgreich gespeichert! ",
-        msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!",
+        msgSuccess: "Speichern erfolgreich!",
+        msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!",
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?",
+        msg: "Möchten Sie den Eintrag wirklich löschen?"
     },
-    msgCode:
+    msgCode : 
     {
-        title: "Achtung!",
-        btn01: "Gehen Sie zur Karte",
+        title: "Achtung",
+        btn01: "Zur Karte gehen", 
         btn02: "OK",
-        msg: "Der eingegebene Servicecode ist bereits im System registriert!",
+        msg : "Der eingegebene Dienstleistungscode ist im System registriert!"
     },
     chkActive: "Aktiv",
-    cmbTax: "Steuer",
-    msgNotDelete:
+    cmbTax : "MwSt.",
+    msgNotDelete : 
     {
-        title: "Achtung!",
-        btn01: "OK",
-        msg: "Dieser Karte kann nicht gelöscht werden, da Transaktione exisieren!",
+        title: "Achtung", 
+        btn01: "OK", 
+        msg : "Löschen nicht möglich, da bereits Einträge mit dieser Karte vorhanden sind!" 
     },
-    msgNotUpdate:
+    msgNotUpdate : 
     {
-        title: "Achtung!",
-        btn01: "OK",
-        msg: "Änderungen auf dieser Karte nicht möglich, da Transaktione exisieren!",
+        title: "Achtung", 
+        btn01: "OK", 
+        msg : "Änderung nicht möglich, da bereits Einträge mit dieser Karte vorhanden sind!" 
     },
 }
 export default stk_01_007

@@ -1,70 +1,77 @@
-// Barkod Tanımları
+// "Barcode-Definitionen"
 const stk_01_002 = 
 {
     txtBarcode: "Barcode",
-    txtItem: "Artikelcode",
-    txtItemName: "Artikelname",
+    txtItem: "Produktreferenz",
+    txtItemName: "Produktname",
     cmbBarUnit: "Einheit",
     txtBarUnitFactor: "Faktor",
     cmbPopBarType : "Typ",
-    MainUnit :"Dieser Barcode wird der Basiseinheit zugeordnet",
-    SubUnit : "Dieser Barcode wird der Unterunit zugeordnet",
+    MainUnit : "Barcode der Basiseinheit zugeordnet" , 
+    SubUnit : "Barcode der Untereinheit zugeordnet",
     txtUnitTypeName :"Beschreibung",
-    BarcodePlace : "Geben Sie den Barcode ein, den Sie für den ausgewählten Artikel hinzufügen möchten.",
+    barcodePlace : "Bitte fügen Sie den Barcode zum ausgewählten Produkt hinzu.", 
+    txtPartiLot : "Losnummer",
+    pg_partiLot:
+    {
+        title: "Losauswahl",
+        clmLotCode: "Losnummer",
+        clmSkt: "MHD"
+    },
     pg_txtItem:
     {
-        title: "Artikelauswahl",
-        clmCode: "CODE",
-        clmName: "NAME", 
+        title: "Produktauswahl",
+        clmCode: "Code",
+        clmName: "Name", 
     },
     pg_txtBarcode:
     {
         title: "Barcode-Auswahl",
         clmBarcode: "Barcode",
-        clmItemName: "ARTIKELNAME", 
-        clmItemCode: "ARTIKELCODE"
-    },      
+        clmItemName: "Produktname", 
+        clmItemCode: "Produktreferenz"
+    },
+   
     msgCheckBarcode:
     {
         title: "Achtung",
-        btn01: "Zum Barcode gehen",
-        btn02: "OK",
-        msg: "Der eingegebene Barcode ist bereits im System registriert! Artikel wurde gefunden."
+        btn01: "OK",
+        msg: "Eingegebener Barcode ist bereits registriert! Bestand importiert.",
     },
     msgBarcode:
     {
         title: "Achtung",
-        btn01: "Zum Barcode gehen",
+        btn01: "Barcode suchen",
         btn02: "OK",
-        msg: "Der eingegebene Barcode ist bereits im System registriert!"
+        msg: "Eingegebener Barcode existiert bereits!",
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag speichern möchten?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten?"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
-        msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!"
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!",
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!" ,
     },
     msgDelete:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?" ,
     },
-    validCode :"Sie müssen einen Artikel auswählen",
+    validCode :"Bitte wählen Sie ein Produkt aus",
 }
 export default stk_01_002

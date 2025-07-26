@@ -1,54 +1,55 @@
-//"Toplu Ürün Düzenleme"
+//"Massenprodukt-Bearbeitung"
 const stk_04_001 =
 {
-    txtCustomerCode: "Kunde",
-    codePlaceHolder: "Geben Sie den Artikelcode, Barcode oder Lieferantencode ein, nach dem Sie suchen möchten",
-    namePlaceHolder: "Geben Sie den vollständigen Artikelnamen oder einen Teil davon ein",
-    pg_txtCustomerCode:
+    txtCustomerCode : "Lieferant",
+    codePlaceHolder : "Bitte geben Sie den Produktcode, Barcode oder Lieferantencode ein, den Sie suchen möchten",  
+    namePlaceHolder :"Geben Sie den vollständigen Namen oder eine Silbe des Produkts ein",  
+    pg_txtCustomerCode : 
     {
-        title: "Kundenauswahl",
-        clmCode: "KUNDENCODE",
-        clmTitle: "KUNDENNAME",
-        clmTypeName: "TYP",
-        clmGenusName: "ART"
+        title : "Lieferantenauswahl",
+        clmCode :  "Dokumentauswahl",
+        clmTitle : "Lieferantenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Gattung"
     },
-    cmbItemGroup: 'Artikelgruppe',
-    btnGet: 'Suchen',
-    txtCode: 'Artikelcode',
-    txtName: 'Artikelname',
-    grdItemList:
+    cmbItemGroup : "Produktgruppe",
+    btnGet : 'Suchen',
+    txtCode : "Produktreferenz",
+    txtName : "Produktname",
+    grdItemList : 
     {
         clmCode: "Code",
-        clmName: "Name",
-        clmBarcode: "Barcode",
-        clmMulticode: "Multicode",
-        clmCustomerName: "Kunde",
-        clmCustomerPrice: "Kundenpreis",
-        clmPriceSale: "Verkaufspreis",
-        clmVat: "Steuer",
-        clmOrgins: "Herkunft",
-        clmStatus: "Aktiv",
-        clmUnderUnit: "Untere Einheit",
-        clmMainUnit: 'Haupteinheit',
-        clmUnderFactor: "Faktor",
-        clmWeighing: "Gewogen",
-        clmNetMargin: "Nettomarge",
-        clmGrossMargin: "Bruttomarge",
+        clmName : "Name",
+        clmBarcode : "Barcode",
+        clmMulticode : "LFR.Code",
+        clmCustomerName : "Lieferant",
+        clmCustomerPrice : "Lieferantenpreis",
+        clmPriceSale : "Verkaufspreis",
+        clmVat : "Steuer",
+        clmOrgins : "Herkunft",
+        clmStatus : "Aktiv",
+        clmUnderUnit : "Produktinhalt",
+        clmMainUnit : "Haupteinheit",
+        clmUnderFactor : "Koeffizient",
+        clmWeighing : "Gewogen", 
+        clmNetMargin :  "Nettomarge",
+        clmGrossMargin : "Bruttomarge",
+        clmCustoms : "Zollcode",
         clmMargin : "Marge %"
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "Bestätigen",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag speichern möchten?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Eintrag erfolgreich gespeichert!",
-        msgFailed: "Fehler beim Speichern des Eintrags!"
+        msgSuccess: "Erfolgreich gespeichert..!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
 }
 export default stk_04_001

@@ -1,68 +1,68 @@
-// "Ürün Giriş Çıkış Operasyonu"
+// "Produkt-Ein-/Ausgangs-Operation"
 const stk_04_005 =
 {
-    txtRef: "Seriennummer-Reihenfolge",
+    txtRef : "Ref. Ref No",
     cmbDepot: "Ausgangslager",
-    dtDocDate: "Datum",
-    txtBarcode: "Barcode hinzufügen",
+    dtDocDate : "Datum",
+    txtBarcode : "Barcode hinzufügen",
     getRecipe : "Produktrezept",
-    pg_Docs:
+    pg_Docs : 
     {
-        title: "Dokumentauswahl",
-        clmDate: "DATUM",
-        clmRef: "SERIE",
-        clmRefNo: "REIHENFOLGE",
-        clmDocDate: "DATUM",
-        clmInputName: "EINGABE",
-        clmOutputName: "AUSGABE",
+        title : "Dokumentauswahl",
+        clmDate : "Datum",
+        clmRef : "Referenz",
+        clmRefNo : "Nummer",
+        clmDocDate : "Datum",
+        clmInputName : "Eingang",
+        clmOutputName : "Eingang",
     },
-    pg_txtItemsCode:
+    pg_txtItemsCode : 
     {
-        title: "Artikelauswahl",
-        clmCode: "ARTIKELNUMMER",
-        clmName: "ARTIKELNAME",
+        title : "Produkt auswählen",
+        clmCode :  "Produktreferenz",
+        clmName : "Produktname",
     },
-    grdList:
+    grdList: 
     {
         clmType: "Typ",
         clmItemCode: "Code",
         clmItemName: "Name",
-        clmQuantity: "Anzahl",
-        clmDescription: "Beschreibung",
+        clmQuantity : "Menge",
+        clmDescription :"Grund",
     },
-    popPassword:
+    popPassword : 
     {
-        title: "Sie müssen das Administratorpasswort eingeben, um das Dokument zu öffnen",
-        Password: "Passwort",
-        btnApprove: "Bestätigen"
+        title: "Bitte geben Sie das Administrator-Passwort ein, um auf das Dokument zuzugreifen",
+        Password : "Passwort",
+        btnApprove : "Bestätigen"
     },
     msgDocValid:
     {
         title: "Achtung",
-        btn01: "Ok",
-        msg: "Die Oberen Dokumentinformationen müssen ausgefüllt sein, bevor Sie Artikel hinzufügen können!"
+        btn01: "OK",
+        msg: "Bitte füllen Sie die Kopfzeilen vor dem Abschluss aus!"
     },
     msgEmpDescription:
     {
         title: "Achtung",
-        btn01: "Ok",
-        msg: "Beschreibungen dürfen nicht leer sein!"
+        btn01: "OK",
+        msg: "Zeileninformationen dürfen nicht leer sein!"
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
-        btn01: "Ok",
+        btn01: "OK",
         btn02: "Abbrechen",
         msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
-        btn01: "Ok",
-        msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
-        msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!"
+        btn01: "OK",
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
@@ -79,71 +79,71 @@ const stk_04_005 =
     {
         title: "Erfolgreich",
         btn01: "OK",
-        msg: "Die Dokumentsperre wurde aufgehoben!",
+        msg: "Dokument entsperrt!",
     },
     msgPasswordWrong:
     {
         title: "Fehlgeschlagen",
         btn01: "OK",
-        msg: "Das Passwort ist falsch!"
+        msg: "Falsches Passwort"
     },
     msgItemNotFound:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Artikel nicht gefunden!"
+        msg: "Produkt nicht gefunden!!"
     },
     msgCombineItem:
     {
         title: "Achtung",
         btn01: "Zusammenführen",
         btn02: "Neu hinzufügen",
-        msg: "Der Artikel, den Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen zusammengeführt werden?"
+        msg: "Produkt bereits im Dokument vorhanden! Möchten Sie zusammenführen?"
     },
-    validRef: "Die Seriennummer darf nicht leer sein",
-    validRefNo: "Die Reihenfolge darf nicht leer sein",
-    validDepot: "Sie müssen ein Lager auswählen",
-    validCustomerCode: "Der Kundencode darf nicht leer sein",
-    validDocDate: "Sie müssen ein Datum auswählen",
-    pg_quickDesc:
+    validRef :"Ref eingeben",
+    validRefNo : "Ref No eingeben",
+    validDepot : "Lager auswählen",
+    validCustomerCode : "Der Lieferanten-Kundencode darf nicht leer sein",
+    validDocDate : "Datum auswählen",
+    pg_quickDesc : 
     {
-        title: "Kurzbeschreibungsauswahl",
-        clmDesc: "BESCHREIBUNG"
+        title : "Schnellauswahl",
+        clmDesc: "Grund"
     },
-    popQDescAdd:
+    popQDescAdd : 
     {
-        title: "Kurzbeschreibung hinzufügen",
-        description: "Neue Beschreibung",
-        btnApprove: "Speichern"
+        title : "Schnelleingabe hinzufügen",
+        description : "Neue Eingabe",
+        btnApprove : "speichern"
     },
-    msgNotQuantity:
+    msgNotQuantity: 
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Der Lagerbestand darf nicht ins Minus fallen! Höchstmenge, die hinzugefügt werden kann:"
+        msg: "Die eingegebene Lagermenge kann nicht negativ sein! Vorhandene Menge:"
     },
-    pg_txtBarcode:
+    pg_txtBarcode : 
     {
-        title: "Barcode-Auswahl",
-        clmCode: "Artikelnummer",
-        clmName: "Artikelname",
-        clmMulticode: "Lieferantennummer",
-        clmBarcode: "Barcode"
+        title : "Barcode auswählen",
+        clmCode :  "Produktreferenz",
+        clmName : "Produktname",
+        clmMulticode : "Lieferantenreferenz",
+        clmBarcode : "Barcode"
     },
-    msgCode:
+    msgCode : 
     {
         title: "Achtung",
         btn01: "Zum Dokument gehen",
-        msg: "Dokument gefunden"
+        msg: "Dokument gefunden!"
     },
     msgQuantity:
     {
         title: "Achtung",
         btn01: "Hinzufügen",
         btn02: "Abbrechen",
-        msg: "Bitte Menge eingeben!"
+        msg: "Bitte Menge eingeben!",
     },
-    txtQuantity: "Menge",
+    txtQuantity :"Menge",
     cmbType: 
     {
         input: "Eingang",
@@ -151,7 +151,7 @@ const stk_04_005 =
     },
     popRecipe: 
     {
-        title: "Auswahl des Produktrezepts",
+        title: "Produktrezept auswählen",
         clmDate: "Datum",
         clmCode: "Produktcode",
         clmName: "Produktname",
@@ -159,7 +159,7 @@ const stk_04_005 =
     },
     popRecipeDetail: 
     {
-        title: "Detailierte Eingabe des Produktrezepts",
+        title: "Detaillierte Eingabe des Produktrezepts",
         clmType: "Typ",
         clmCode: "Produktcode",
         clmName: "Produktname",

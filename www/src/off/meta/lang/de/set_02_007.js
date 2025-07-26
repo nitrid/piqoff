@@ -16,7 +16,7 @@ const set_02_007 =
     txtPopSubject : "Betreff",
     txtPopProcess : "Durchgeführte Aktion",
     btnApprove : "Speichern",
-    btnAbbrechen : "Schließen",
+    btnCancel : "Schließen",
     txtPopUser : "Erstellender Benutzer"
 }
 export default set_02_007

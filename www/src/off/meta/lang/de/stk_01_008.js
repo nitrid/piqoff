@@ -1,50 +1,50 @@
-// Ürün Grubu Tanımları
+// "Produktgruppen-Definitionen"
 const stk_01_008 = 
 {
-    txtCode: "Code",
-    txtName: "Name",
-    cmbType: "Type",
-    validCode: "Code-Feld darf nicht leer sein!",
-    pg_txtCode:
+    txtCode : "Code",
+    txtName :"Name",
+    cmbType :"Typ",
+    validCode :"Das Code-Feld darf nicht leer sein!", 
+    pg_txtCode : 
     {
-        title: "Artikelgruppenauswahl",
-        clmCode: "Code",
-        clmName: "Name",
-        clmStatus : "Status",
+        title : "Produktgruppenauswahl",
+        clmCode : "Code",
+        clmName : "NAME",
+        clmStatus : "STATUS",
     },
-    msgSpeichern:
+    msgSave:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?",
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Eintrag erfolgreich gespeichert! ",
-        msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!",
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!",
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?",
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
     },
-    msgCode:
+    msgCode : 
     {
-        title: "Achtung!",
-        btn01: "Gehen Sie zur Kasse.",
+        title: "Achtung",
+        btn01: "Lager suchen",
         btn02: "OK",
-        msg: "Der eingegebene Code ist bereits im System registriert!",
+        msg : "Eingegebenes Lager ist bereits im System registriert!"
     },
     chkActive: "Aktiv",
 }

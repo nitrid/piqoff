@@ -1,24 +1,24 @@
-// "Sayım Envanter Raporu"
+// "Inventur-Inventar-Bericht"
 const stk_05_003 =
 {
-    chkZeroQuantity : "Nullmengen anzeigen",
-    cmbDepot : "Lager",
-    btnCheck : "Aktivieren",
-    btnGet :"Suchen",
+    chkZeroQuantity : "Nullmengen anzeigen", 
+    cmbDepot : "Lager", 
+    btnCheck : "Aktiv", 
+    btnGet :"Suchen", 
     grdListe : 
     {
-        clmCode: "Code",
+        clmCode: "Code", 
         clmName : "Name",           
-        clmQuantity : "Menge",
-        clmBarcode : "Barcode",
-        clmCostPrice : "Kaufpreis", 
-        clmTotalCost : "Bestandswert", 
-        clmSalePrice : "Verkaufspreis", 
-        clmTotalPrice : "Gesamtwert des Verkaufs" 
+        clmQuantity : "Menge", 
+        clmBarcode : "Barcode", 
+        clmCostPrice : "Einkaufspreis",    
+        clmTotalCost : "Einkaufswert",    
+        clmSalePrice : "Verkaufspreis",    
+        clmTotalPrice : "Gesamter Verkaufswert" ,
+        clmUnitSymbol : 'Einheit' 
     },
     txtTotalQuantity : "Gesamtmenge",
-    txtTotalCost : "Bestandswert",
+    txtTotalCost : "Inventarwert",
     cmbDepot : "Lager"
 }
-
 export default stk_05_003

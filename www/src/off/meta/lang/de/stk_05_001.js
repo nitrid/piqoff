@@ -1,23 +1,23 @@
-// "Depo Envanter Raporu"
+// "Lager-Inventar-Bericht"
 const stk_05_001 =
 {
-    chkZeroQuantity : "Nullmengen anzeigen",
-    cmbDepot : "Lager",
-    btnCheck : "Aktiv",
-    btnGet :"Suchen",
+    chkZeroQuantity : "Nullmengen anzeigen", 
+    cmbDepot : "Lager", 
+    btnCheck : "Aktiv", 
+    btnGet :"Suchen", 
     grdListe : 
     {
-        clmCode: "Code",
+        clmCode: "Code", 
         clmName : "Name",           
-        clmQuantity : "Anzahl",
-        clmBarcode : "Barcode",
-        clmCostPrice : "Kaufpreis", 
-        clmTotalCost : "Bestandswert", 
-        clmSalePrice : "Verkaufspreis", 
-        clmTotalPrice : "Gesamter Verkaufswert",
+        clmQuantity : "Menge", 
+        clmBarcode : "Barcode", 
+        clmCostPrice : "Einkaufspreis",    
+        clmTotalCost : "Einkaufswert",    
+        clmSalePrice : "Verkaufspreis",    
+        clmTotalPrice : "Gesamter Verkaufswert" ,
         clmUnitSymbol : "Einheit"
     },
     txtTotalQuantity : "Gesamtmenge",
-    txtTotalCost : "Bestandswert",
+    txtTotalCost : "Inventarwert",
 }
 export default stk_05_001

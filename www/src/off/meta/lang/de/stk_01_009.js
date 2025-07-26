@@ -1,4 +1,4 @@
-// Ürün Alt Grup Tanımları
+// "Produktuntergruppen-Definitionen"
 const stk_01_009 = 
 {
     tglGrp : 

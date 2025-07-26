@@ -1,36 +1,36 @@
 // "Taşıyıcı Kodu Tanımları"
 const set_03_003 = 
 {
-    txtCode : "CODE",
+    txtCode : "Code",
     txtName :"Name",
-    cmbType :"Art",
-    validCode :"CODE darf nicht leer bleiben!",
+    cmbType :"Typ",
+    validCode :"Sie müssen den Code eingeben!",
     pg_txtCode : 
     {
-        title : "Eintragauswahl",
-        clmCode : "CODE",
-        clmName : "NAME",
-        clmType : "Art",
+        title : "Eintragsauswahl",
+        clmCode : "Code",
+        clmName : "Name",
+        clmType : "Typ",
     },
     msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Wollen Sie speichern!"
+        msg: "Sind Sie sicher, dass Sie speichern möchten?"
     },
     msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Speichern erfolgreich!",
-        msgFailed: "Speichern nicht erfolgreich!"
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
     msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte alle notwendigen Felder ausfüllen!"
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
@@ -42,9 +42,9 @@ const set_03_003 =
     msgCode : 
     {
         title: "Achtung",
-        btn01: "Gehe zur Kasse",
+        btn01: "Zur Kasse gehen",
         btn02: "OK",
-        msg : "Eingegebene Kasse existiert bereits im System!"
+        msg : "Die eingegebene Kasse ist bereits im System registriert!"
     },
 }
 export default set_03_003

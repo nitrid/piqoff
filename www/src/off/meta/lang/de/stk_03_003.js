@@ -1,18 +1,18 @@
-// "Barkod Listesi"
+// "Barcode-Liste"
 const stk_03_003 =
 {
-    cmbCustomer: "Kunde",
-    txtItemName: "Artikelname",
-    cmbMainGrp: "Artikelgruppe",
-    btnCheck: "Aktiv",
-    btnGet: "Suchen",
-    grdListe:
+    cmbCustomer : "Lieferant",
+    txtItemName : "Produktname",
+    cmbMainGrp : "Produktfamilie",
+    btnCheck : "Aktiv",
+    btnGet :"Suchen",
+    grdListe : 
     {
         clmCode: "Code",
-        clmName: "Name",
-        clmBarcode: "Barcode",
-        clmUnit: "Einheit",
-        clmMainGrp: "Artikelgruppe",
+        clmName : "Name",
+        clmBarcode : "Barcode",
+        clmUnit : "Einheit",
+        clmMainGrp : "Produktfamilie",
     },
 }
 export default stk_03_003

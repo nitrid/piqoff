@@ -1,63 +1,63 @@
-// SKT operasyonu
+// "MHD-Operation"
 const stk_04_004 =
 {
-    txtRef : "Bestand",
-    dtFirstdate : "Anfangsdatum",
-    dtLastDate : "Enddatum",
-    btnGet : "Suchen",
-    btnPrint : "Etikett für ausgewähltes Artikel drucken",
-    txtCustomerCode : "Kunde",
-    cmbItemGroup : "Artikelgruppe",
-    grdExpdateList:  
-    {
-        clmQuantity : "Menge",
-        clmCode : "Code",
-        clmName : "Name",
-        clmDiff : "Verkaufte Menge seit Eingangsdatum",
-        clmDate : "Haltbarkeitsdatum",
-        clmRemainder : "Verbleibend",
-        clmCustomer :"Kunde",
-        clmRebate : "Rücknahme erlaubt",
-        clmDescription :"Beschreibung",
+    txtRef : "Produkt",   
+    dtFirstdate : "Startdatum",   
+    dtLastDate : "Enddatum",   
+    btnGet : "Suchen",   
+    btnPrint : "Spezielle Etikette für ausgewähltes Produkt drucken",   
+    txtCustomerCode : "Lieferant", 
+    cmbItemGroup : "Produktkategorie", 
+    grdExpdateList:   
+    {   
+        clmQuantity : "Menge",   
+        clmCode : "Code",   
+        clmName : "Name",   
+        clmDiff : "Verkauf seit Eingangsdatum", 
+        clmDate : "MHD",
+        clmRemainder : "Verbleibend", 
+        clmCustomer :"Lieferant",
+        clmRebate : "Rücknahme-Rückgabe",
+        clmDescription :"Bemerkung",
         clmUser : "Benutzer",
-        clmCDate : "Eingangsdatum",
-        clmPrintCount : "Druckanzahl",
-        clmLUser : "Letzter Druck/Vorgang" 
-    },
-    popQuantity : 
-    {
-        title : "Mengen- und Preisangabe",
-        txtQuantity : "Menge",
-        txtPrice : "Preis",
-        btnSpeichern : "Speichern und Drucken"
-    },
-    pg_txtRef:
-    {
-        title: "Artikelauswahl",
-        clmCode: "CODE",
-        clmName: "NAME",
-        clmStatus: "STATUS"
+        clmCDate : "Eingangsdatum" , 
+        clmPrintCount : "Zu druckende Menge", 
+        clmLUser : "Letzter Druck/Eingabe"  
+    },   
+    popQuantity :    
+    {   
+        title : "Mengen- und Preiseingabe",   
+        txtQuantity : "Menge",   
+        txtPrice : "Preis",   
+        btnSave : "Speichern und Drucken"   
+    },  
+    pg_txtRef:  
+    {  
+        title: "Produktauswahl",   
+        clmCode: "Code",   
+        clmName: "Name",   
+        clmStatus: "Status"   
     },
     pg_txtCustomerCode : 
     {
-        title : "Kundenauswahl",
-        clmCode :  "KUNDENCODE",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
+        title : "Lieferantenauswahl",
+        clmCode :  "Lieferantencode",
+        clmTitle : "Lieferantenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Gattung"
     },
     msgDoublePrint:
     {
-        title: "Achtung",
-        btn01: "OK",
-        btn02: "Abbrechen",
-        msg: "Für diesen Artikel wurde bereits ein spezielles Etikett erstellt! Möchten Sie es erneut erstellen?"
+        title: "Achtung",  
+        btn01: "OK",  
+        btn02: "Abbrechen",  
+        msg: "Spezielle Etikette bereits für ausgewähltes Produkt erstellt! Sind Sie sicher, dass Sie sie erneut erstellen möchten?" 
     },
     msgLabelCount:
     {
         title: "Achtung",  
         btn01: "OK",  
-        msg: "Sie können nicht mehr als die verbleibende Artikelmenge an Etiketten drucken." 
+        msg: "Es können nicht mehr Etiketten gedruckt werden als die verbleibende Produktmenge." 
     },
 }
 export default stk_04_004

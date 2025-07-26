@@ -1,7 +1,7 @@
-
+// "Kundenumsatzbericht"
 const slsRpt_02_006 =
 {
-    btnGet: "Holen",
+    btnGet: "Suchen",
     txtCustomerCode : "Kunde", 
     dtFirst : "Datum",
     grdListe : 
@@ -12,16 +12,16 @@ const slsRpt_02_006 =
         clmAmount : "Betrag",
         clmRefNo: "Referenznummer",
         clmRemainder : "Restbetrag",
-        clmTotal : "Gesamt",
-        clmRef : "Serie-Nummer"
+        clmTotal : "Gesamtbetrag",
+        clmRef : "Seriennummer"
     },
     pg_txtCustomerCode : 
     {
-        title : "Auswahl des Kunden",
+        title : "Kundenauswahl",
         clmCode :  "KUNDENCODE",
-        clmTitle : "NAME DES KUNDEN",
+        clmTitle : "KUNDENNAME",
         clmTypeName : "TYP",
-        clmGenusName : "ART"
+        clmGenusName : "GENUS"
     },
 }
 export default slsRpt_02_006
