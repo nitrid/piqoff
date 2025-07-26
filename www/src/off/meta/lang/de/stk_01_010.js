@@ -1,52 +1,52 @@
-// Birim Tanımları
+// "Einheitsdefinitionen"
 const stk_01_010 = 
 {
-    txtId: "ID",
-    txtName: "Name",
-    txtSymbol: "Symbol",
-    cmbType: "Type",
-    validCode: "Code-Feld darf nicht leer sein!",
-    pg_txtCode:
-    {
-        title: "Artikelgruppenauswahl",
-        clmId: "ID",
-        clmName: "Name",
-        clmSymbol: "Symbol",
+    txtId : "ID",  
+    txtName :"Name",  
+    txtSymbol : "Symbol",  
+    cmbType :"Typ",  
+    validCode :"Das Code-Feld darf nicht leer sein!", 
+    pg_txtCode :   
+    {  
+        title : "Produktgruppenauswahl",
+        clmId : "ID",  
+        clmName : "Name",  
+        clmSymbol : "Symbol",  
     },
-    msgSpeichern:
+    msgSave:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?",
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Eintrag erfolgreich gespeichert! ",
-        msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!",
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!",
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?",
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
     },
-    msgCode:
+    msgCode : 
     {
-        title: "Achtung!",
-        btn01: "Gehen Sie zur Kasse.",
-        btn02: "OK",
-        msg: "Der eingegebene ID ist bereits im System registriert!",
+        title: "Achtung",   
+        btn01: "Zur Kasse gehen",  
+        btn02: "OK",   
+        msg : "Die eingegebene ID ist im System registriert!" 
     },
-    chkActive: "Aktiv",
+    chkActive: "Aktiv", 
 }
 export default stk_01_010

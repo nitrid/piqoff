@@ -1,49 +1,49 @@
-// Ürün Cinsi Tanımları
+// "Produktgattungs-Definitionen"
 const stk_01_014 = 
 {
-    txtCode : "CODE",
+    txtCode : "Code",
     txtName :"Name",
-    cmbType :"Art",
-    validCode :"CODE darf nicht leer bleiben!",
+    cmbType :"Typ",
+    validCode :"Das Code-Feld darf nicht leer sein!",
     pg_txtCode : 
     {
-        title : "Eintragauswahl",
-        clmCode : "CODE",
-        clmName : "NAME",
+        title : "Eintragsauswahl",
+        clmCode : "Code",
+        clmName : "Name",
     },
     msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie wirklich speichern!"
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten??"
     },
     msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
         msgSuccess: "Speichern erfolgreich!",
-        msgFailed: "Speichern nicht erfolgreich!"
+        msgFailed: "Speichern fehlgeschlagen!"
     },
     msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte alle notwendigen Felder ausfüllen!"
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie löschen möchten?"
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
     },
     msgCode : 
     {
         title: "Achtung",
-        btn01: "Gehe zur Kasse",
+        btn01: "Zur Kasse gehen",
         btn02: "OK",
-        msg : "Eingegebene Kasse existiert bereits im System!" 
+        msg : "Die eingegebene Kasse ist im System registriert!"
     },
 }
 export default stk_01_014

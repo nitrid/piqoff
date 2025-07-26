@@ -13,7 +13,7 @@ const stk_04_008 =
     {
         title: "Achtung",  
         btn01: "OK",  
-        msgSuccess: "Das Update wurde für alle aktiven Produkte gesendet! Dieser Vorgang kann einige Zeit dauern.",  
-    },
+        msgSuccess: "Die Aktualisierung wurde für alle aktiven Produkte gesendet! Dies kann einige Zeit dauern.",  
+    }    
 }
 export default stk_04_008

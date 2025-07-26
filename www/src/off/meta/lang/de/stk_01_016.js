@@ -1,4 +1,4 @@
-// Ürün Recetesi Tanımları
+// "Produktrezept-Definitionen"
 const stk_01_016 = 
 {
     txtItemCode: "Produktcode",
@@ -8,41 +8,41 @@ const stk_01_016 =
     pg_txtItemCode:
     {
         title: "Produktauswahl",
-        clmCode: "KODE",
+        clmCode: "CODE",
         clmName: "NAME",
         clmStatus: "STATUS"
     },
     msgSave:
     {
         title: "Achtung",
-        btn01: "Ok",
+        btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie den Eintrag wirklich speichern?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten?"
     },
     msgSaveResult:
     {
         title: "Achtung",
-        btn01: "Ok",
-        msgSuccess: "Ihr Eintrag war erfolgreich!",
-        msgFailed: "Ihr Eintrag war nicht erfolgreich!"
+        btn01: "OK",
+        msgSuccess: "Ihr Speichervorgang war erfolgreich!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
     msgSaveValid:
     {
         title: "Achtung",
-        btn01: "Ok",
+        btn01: "OK",
         msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
         title: "Achtung",
-        btn01: "Ok",
+        btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie den Eintrag wirklich löschen?"
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
     },
     msgAddItemWarning:
     {
         title: "Achtung",
-        btnOk: "Ok",
+        btnOk: "OK",
         msg: "Bitte geben Sie die Hauptinformationen korrekt ein, um ein Produkt hinzuzufügen!"
     },
     msgNewItem:
@@ -50,12 +50,12 @@ const stk_01_016 =
         title: "Achtung",
         btn01: "Ja",
         btn02: "Abbrechen",
-        msg: "Möchten Sie wirklich zu einem neuen Produkt wechseln?"
+        msg: "Sind Sie sicher, dass Sie zu einem neuen Produkt wechseln möchten?"
     },
     msgItemNotFound:
     {
         title: "Achtung",
-        btn01: "Ok",
+        btn01: "OK",
         msg: "Produkt nicht gefunden!"
     },
     msgItemBack:
@@ -63,7 +63,7 @@ const stk_01_016 =
         title: "Achtung",
         btn01: "Ja",
         btn02: "Abbrechen",
-        msg: "Möchten Sie das Produkt wirklich zurückholen?"
+        msg: "Sind Sie sicher, dass Sie das Produkt zurückholen möchten?"
     },
     validDate: "Sie müssen ein Datum auswählen",
     grdList:

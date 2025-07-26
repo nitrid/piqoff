@@ -2,39 +2,39 @@
 const set_03_002 = 
 {
     cmbType : "Dokumenttyp",
-    btnGet : "Positionen Suchen",
+    btnGet : "Positionen suchen",
     chkDoc : "Gelöschte Dokumente anzeigen",
     mgsUnlock:
     {
         title: "Achtung",
-        btn01: "Ok",
+        btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie das ausgewählte Dokument wiederherstellen?"
+        msg: "Sind Sie sicher, dass Sie das ausgewählte Dokument wiederherstellen möchten?"
     },
     grdDeleteList : 
     {
-        clmRef : "Serie",
-        clmRefNo : "NUMMER",
-        clmCustomer : "KUNDE",
-        clmDate : "DATUM",
-        clmDescription : "BESCHREIBUNG",
-        clmItemCode : "CODE",
-        clmItemName : "NAME",
-        clmQuantity : "MENGE",
-        clmPrice : "PREIS",
-        clmTotal : "GESAMT"
+        clmRef : "REF.",
+        clmRefNo : "Zeile",
+        clmCustomer : "Kunde",
+        clmDate : "Datum",
+        clmDescription : "Beschreibung",
+        clmItemCode : "Code",
+        clmItemName : "Name",
+        clmQuantity : "Menge",
+        clmPrice : "Preis",
+        clmTotal : "Gesamt"
     },
     cmbTypeData : 
     {
         purchaseDispatch : "Einkaufsversand",
         salesDispatch : "Verkaufsversand",
-        rebateDispatch : "Rabattversand",
-        branchSaleDispatch : "Filialverkaufsversand",
+        rebateDispatch : "Rücksendungsversand",
+        branchSaleDispatch : "Interner Versand",
         purchaseInvoice : "Einkaufsrechnung",
         salesInvoice : "Verkaufsrechnung",
         priceDifferenceInvoice : "Preisdifferenzrechnung",
-        rebateInvoice : "Rabattrechnung",
-        branchSaleInvoice : "Filialverkaufsrechnung",
+        rebateInvoice : "Rücksendungsrechnung",
+        branchSaleInvoice : "Interne Verkaufsrechnung",
         purchaseOrder : "Einkaufsbestellung",
         salesOrder : "Verkaufsbestellung",
         purchaseOffer : "Einkaufsangebot",

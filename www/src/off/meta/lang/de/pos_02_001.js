@@ -3,39 +3,42 @@ const pos_02_001 =
 {
     TicketId: "Beleg-ID",
     cmbCustomer: "Kunde",
+    validDesign: "Bitte wählen Sie ein Design",
     btnGet: "Suchen",
     dtFirst: "Anfangsdatum",
     dtLast: "Enddatum",
-    txtCustomerCode: "Kunde",
+    txtCustomerCode: "Kundencode",
     cmbDevice: "Gerät",
-    txtTicketno: "Beleg-ID",
+    txtTicketno: "Belegnummer",
     numFirstTicketAmount: "Unterer Betrag",
     numLastTicketAmount: "Oberer Betrag",
     cmbUser: "Benutzer",
     txtItem: "Artikelcode",
     ckhDoublePay: "Mehrere Zahlungen",
+    chkDeletedTicket: "Gelöschte Belege anzeigen",
     pg_txtCustomerCode:
     {
         title: "Kundenauswahl",
-        clmCode: "KUNDENCODE",
-        clmTitle: "KUNDENNAME",
-        clmTypeName: "TYP",
-        clmGenusName: "ART"
+        clmCode: "Kundencode",
+        clmTitle: "Kundenname",
+        clmTypeName: "Typ",
+        clmGenusName: "Art"
     },
     grdSaleTicketReport:
     {
         clmDate: "Datum",
         clmTime: "Uhrzeit",
         slmUser: "Benutzer",
-        clmCustomer: "Kunde",
-        clmCardId: "Karten-Id",
+        clmCustomer: "Kundenname",
+        clmCardId: "Kunden-Nr.",
         clmDiscount: "Rabatt",
-        clmLoyalyt: "Loyalyt",
+        clmLoyalyt: "Treue",
         clmHT: "Zwischensumme",
-        clmVTA: "Steuern",
-        clmTTC: "Summe",
+        clmVTA: "MwSt.",
+        clmTTC: "Gesamt",
         clmTicketID: "Beleg-ID",
-        clmFacRef : "Fact. No",
+        clmFacRef: "Rechnungsnr.",
+        clmRef: "Ref Nr",
     },
     pg_txtItem:
     {
@@ -45,16 +48,17 @@ const pos_02_001 =
     },
     grdSaleTicketItems:
     {
-        clmBarcode: "Barcode",
+        clmBarcode: "Strichcode",
         clmName: "Artikelname",
         clmQuantity: "Menge",
         clmPrice: "Preis",
-        clmTotal: "Betrag"
+        clmTotal: "Gesamt",
+        clmTime: "Uhrzeit",
     },
     grdSaleTicketPays:
     {
         clmPayName: "Zahlungsart",
-        clmTotal: "Betrag",
+        clmTotal: "Gesamt",
     },
     popDetail:
     {
@@ -64,39 +68,39 @@ const pos_02_001 =
     {
         title: "Zahlungsart",
         esc: "Barzahlung",
-        cb: "Kartenzahlungen",
+        cb: "Kreditkarte",
         check: "Scheck",
-        ticket: "Ticketrestaurant",
-        bonD: "İade Beleg-",
-        Davoir: "İade",
+        ticket: "Restaurantticket",
+        bonD: "Gutschriftbeleg",
+        avoir: "Gutschrift",
         virment: "Überweisung",
         prlv: "Abbuchung/Lastschrift",
         all: "Alle",
         cbRest: "CB T.Resto"
     },
-    payChangeNote: "Änderungen am Dokument sollten ausnahmsweise vorgenommen und Fehler korrigiert werden dürfen!",
+    payChangeNote: "Änderungen am Beleg sollten nur ausnahmsweise vorgenommen und Fehler korrigiert werden dürfen!",
     payChangeNote2: "Änderungsverlauf wird gespeichert!",
-    txtPayChangeDescPlace: "Bitte geben Sie den Grund für Ihre Änderungen ein",
-    txtPayChangeDesc: "Zahlungsart wurde falsch eingegeben. Die Korrektur wurde vorgenommen.",
+    txtPayChangeDescPlace: "Bitte geben Sie eine Beschreibung ein.",
+    txtPayChangeDesc: "Die Zahlungsart wurde falsch eingegeben. Die Korrektur wurde vorgenommen.",
     popLastTotal:
     {
         title: "Zahlung"
     },
-    trDeatil: "T.R Detay",
-    lineDelete: "Satir Abbrechen",
-    Abbrechen: "Abbrechen",
+    trDeatil: "T.R Detail",
+    lineDelete: "Zeile stornieren",
+    cancel: "Abbrechen",
     popOpenTike:
     {
-        title: "Nicht validierte Belege"
+        title: "Offene Belege"
     },
     grdOpenTike:
     {
         clmUser: "Benutzer",
-        clmDevice: "Gerät",
+        clmDevice: "Kassen-Nr.",
         clmDate: "Datum",
-        clmTicketId: "Kassenzettel",
-        clmTotal: "Betrag",
-        clmDescription: "Beschreibung"
+        clmTicketId: "Beleg-Nr.",
+        clmTotal: "Gesamt",
+        clmDescription: "Grund"
     },
     popDesign:
     {
@@ -107,20 +111,24 @@ const pos_02_001 =
     btnMailSend: "E-Mail senden",
     mailPopup:
     {
-        title: "E-Mail-Adresse eingeben"
+        title: "E-Mail-Adresse eingeben",
+        cmbMailAddress: "E-Mail-Adresse",
+        txtMailSubject: "Betreff",
+        txtSendMail: "E-Mail-Adresse",
+        txtMailHtmlEditor: "Inhalt"
     },
     msgFacture:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Die ausgewählten Kassenzettel als Rechnung drucken. Sind Sie damit einverstanden?"
+        msg: "Die ausgewählten Belege werden in eine Rechnung umgewandelt. Sind Sie sicher?"
     },
     msgFactureCustomer:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Quittungen ohne definierten Kunden können nicht in eine Rechnung umgewandelt werden!"
+        msg: "Eine Rechnung kann nicht erstellt werden, wenn kein Kunde für den Beleg ausgewählt ist!"
     },
 }
 export default pos_02_001

@@ -1,34 +1,33 @@
-// "Multi Kod Listesi"
+// "Multi-Code-Liste"
 const stk_03_005 =
 {
-    txtItemName: "Artikelname",
-    txtBarcode: "Barcode",
-    cmbCustomer: "Lieferant",
-    cmbMainGrp: "Artikelgruppe",
-    btnCheck: "Aktiv",
-    btnGet: "Suchen",
-    grdListe:
+    txtItemName : "Produktname",
+    txtBarkod : "Barcode",
+    cmbCustomer : "Lieferant",
+    cmbMainGrp : "Produktfamilie",
+    btnCheck : "Aktiv",
+    btnGet :"Suchen",
+    grdListe : 
     {
-        clmCode: "Artikelcode",
-        clmName: "Artikelname",
-        clmMainGrp: "Artikelgruppe",
-        clmCustomer: "Kunde",
-        clmSname: "Artikelkurzname",
-        clmMulticode: "Lieferantencode",
-        clmUnit: "Einheit",
-        clmBarcode: "Barcode",
-        clmCostPrice: "Einkaufspreis",
-        clmVat: "Steuer",
-        clmMinPrice: "Mindestverkaufspreis",
-        clmMaxPrice: "Höchstverkaufspreis",
-        clmStatus: "Status",
-
+        clmCode: "Produktreferenz",
+        clmName : "Produktname",
+        clmMainGrp : "Produktfamilie",
+        clmCustomer : "Lieferant",
+        clmSname : "Kurzname",
+        clmMulticode : "LFR.Code",
+        clmUnit : "Einheit",
+        clmBarcode : "Barcode",
+        clmCostPrice : "Einkaufspreis",
+        clmVat : "Steuer",
+        clmMinPrice : "Mindestverkaufspreis",
+        clmMaxPrice : "Höchstverkaufspreis",
+        clmStatus : "Status",
     },
-    msgCode:
+    msgCode : 
     {
         title: "Achtung",
-        btn01: "Zur Dokumentation gehen",
-        msg: "Dokument gefunden"
+        btn01: "Zum Dokument gehen",
+        msg: "Dokument gefunden!"
     },
 }
 export default stk_03_005

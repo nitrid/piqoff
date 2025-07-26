@@ -1,22 +1,22 @@
-// "Tarih sıralı Alış raporu"
+// "Chronologischer Einkaufsbericht"
 const slsRpt_02_001 = 
 {
-    chkZeroBalance : "Nullsalden anzeigen!",   
-    txtCustomerCode : "Kunde",   
-    btnCheck : "Aktivieren",   
+    chkZeroBalance : "Nullsalden anzeigen",    
+    txtCustomerCode : "Lieferant oder Kunde",   
+    btnCheck : "Aktiv",    
     btnGet :"Suchen",   
     dtDate : "Datum",
     grdListe :    
-    {   
-        clmDate : "Datum",   
-        clmCode: "Code",   
-        clmName : "Name",              
-        clmAmount : "Betrag",   
+    {  
+        clmDate : "Datum",  
+        clmCode: "Code",  
+        clmName : "Name",  
+        clmAmount : "Betrag",    
         clmDiscount : "Rabatt",   
-        clmTotalHt : "Betrag ohne Steuer",   
-        clmVat : "Steuer",   
-        clmTotal : "Gesamt",   
-        clmRef : "Seriennummer",
+        clmTotalHt : "Preis ohne Steuer",   
+        clmVat : "MwSt.",    
+        clmTotal : "Gesamt",    
+        clmRef : "Ref. Ref Nr", 
     },
 }
 export default slsRpt_02_001

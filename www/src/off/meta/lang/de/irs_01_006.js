@@ -3,17 +3,17 @@ const irs_01_006 =
 {
     cmbCustomer: "Kunde",
     btnGet: "Suchen",
-    dtFirst: "Anfangsdatum",
+    dtFirst: "Startdatum",
     dtLast: "Enddatum",
-    txtCustomerCode: "Kundencode",
-    menu: "Verkaufsversand",
+    txtCustomerCode: "Kunde",
+    menu: "Verkaufslieferschein",
     pg_txtCustomerCode:
     {
-        title: "Kunden auswählen",
+        title: "Kundenauswahl",
         clmCode: "Kundencode",
         clmTitle: "Kundenname",
-        clmTypeName: "TYPE",
-        clmGenusName: "GENUS"
+        clmTypeName: "Typ",
+        clmGenusName: "Art"
     },
     grdSlsDisList:
     {
@@ -23,10 +23,11 @@ const irs_01_006 =
         clmInputCode: "Kundencode",
         clmInputName: "Kundenname",
         clmDate: "Datum",
-        clmVat: "Steuern",
+        clmVat: "MwSt.",
         clmAmount: "Betrag",
-        clmTotal: "Summe",
+        clmTotal: "Gesamt",
         clmOutputName: "Lager",
     },
 }
+
 export default irs_01_006

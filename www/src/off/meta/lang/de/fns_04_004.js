@@ -1,8 +1,8 @@
 
 const fns_04_004 =
 {
-    txtCustomerCode: "Kundenr",
-    btnGet: "Erhalten",
+    txtCustomerCode: "Kundencode",
+    btnGet: "Suchen",
     dtDate: "Datum",
     pg_txtCustomerCode: 
     {
@@ -10,25 +10,25 @@ const fns_04_004 =
         clmCode: "Code",
         clmTitle: "Titel",
         clmTypeName: "Typ",
-        clmGenusName: "Genre",
+        clmGenusName: "Art",
         clmBalance: "Saldo"
     },
     grdListe: {
-        clmCustomerCode: "Kundenr",
-        clmCustomerName: "Name des Kunden",
-        clmDocDate: "Datum des Dokuments",
-        clmTypeName: "Typ der Operation",
+        clmCustomerCode: "Kundencode",
+        clmCustomerName: "Kundenname",
+        clmDocDate: "Belegdatum",
+        clmTypeName: "Operationstyp",
         clmRef: "Referenz",
-        clmRefNo: "Ref. No",
+        clmRefNo: "Ref. Nr.",
         clmDebit: "Soll",
         clmReceive: "Haben",
         clmAmount: "Betrag"
     },
     popDesign : 
     {
-        title: "Druck",
+        title: "Design-Auswahl",
         design : "Design" ,
-        lang : "Dokument Sprache" 
+        lang : "Dokumentsprache" 
     },
 }
 export default fns_04_004

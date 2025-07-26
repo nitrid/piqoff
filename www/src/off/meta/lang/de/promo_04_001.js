@@ -1,19 +1,19 @@
 const promo_04_001 =
 {
-    btnPromoSend : "Promosyon Fiyatlarını Gönder", // BAK
+    btnPromoSend: "Promotionspreise senden",
     msgSaveResult:
     {
-        title: "Dikkat",  // BAK
-        btn01: "Tamam",  // BAK
-        msgSuccess: "Fiyat Güncellemesi Gönderildi !",  // BAK
+        title: "Achtung",
+        btn01: "OK",
+        msgSuccess: "Preisaktualisierung gesendet!",
     },
-    grdPromotion : 
+    grdPromotion:
     {
-        clmCode : "Promosyon Kodu",  // BAK
-        clmName : "Promosyon Adı",  // BAK
-        clmPrice : "Fiyat",  // BAK
-        clmItemCode : "Ürün Kodu",  // BAK
-        clmItemName : "Ürün Adı"  // BAK
+        clmCode: "Promotionscode",
+        clmName: "Promotionsname",
+        clmPrice: "Preis",
+        clmItemCode: "Artikelcode",
+        clmItemName: "Artikelname"
     },
 }
 export default promo_04_001

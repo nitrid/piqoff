@@ -1,30 +1,37 @@
 // "İade Fatura Listesi"
 const  ftr_01_003 =
 {
-    txtCustomerCode : "Kunde",
-    menu:"Retourerechnung",
+    txtCustomerCode : "Lieferant",
+    menu:"Rückgaberechnung",
     pg_txtCustomerCode : 
     {
-        title : "Kundenauswahl",
-        clmCode :  "KUNDENCODE",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
+        title : "Lieferantenauswahl",
+        clmCode :  "Lieferantencode",
+        clmTitle : "Lieferantenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Art"
     },
     btnGet :"Suchen",
-    dtFirst : "Anfangsdatum",
+    dtFirst : "Startdatum",
     dtLast : "Enddatum",
     grdSlsIvcList: 
     {
-        clmRef: "Serie",
-        clmRefNo: "Nummer",
+        clmRef: "Referenz",
+        clmRefNo: "Zeile",
         clmPrice: "Preis",
-        clmInputCode : "Kundencode",
-        clmInputName : "Kundenname",
+        clmInputCode : "Lieferantenauswahl",
+        clmInputName : "Lieferantenname",
         clmDate: "Datum",
-        clmVat : "..",
-        clmAmount : "Betrag",
+        clmVat : "MwSt.",
+        clmAmount : "Gesamt" ,
         clmTotal : "Gesamt",
     },
+    popDesign :
+    {
+        title : "Design-Auswahl",
+        design : "Bitte wählen Sie ein Design",
+        btnPrint : "Drucken"
+    },
+    validDesign : "Bitte wählen Sie ein Design.",
 }
 export default ftr_01_003

@@ -1,40 +1,40 @@
-// Ürün Resim Tanımlama
+// "Produktbild-Definitionen"
 const stk_01_013 = 
 {
-    txtRef: "Referenz",
+    txtRef : "Referenz",
     pg_txtRef:
     {
-        title: "Artikelauswahl",
+        title: "Produktauswahl",
         clmCode: "Code",
         clmName: "Name",
-        clmStatus: "Status",
+        clmStatus: "Status"
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie den Datensatz speichern?",
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten??"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Datensatz erfolgreich gespeichert!",
-        msgFailed: "Fehler beim Speichern des Datensatzes!",
+        msgSuccess: "Ihr Eintrag wurde erfolgreich durchgeführt!",
+        msgFailed: "Ihr Eintrag wurde nicht durchgeführt!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie die erforderlichen Felder aus!",
+        msg: "Bitte füllen Sie die erforderlichen Felder aus."
     },
     msgDelete:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie den Datensatz löschen?",
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
     },
 }
 export default stk_01_013

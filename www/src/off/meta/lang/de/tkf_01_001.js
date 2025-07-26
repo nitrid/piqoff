@@ -1,30 +1,34 @@
-// "Alış Teklifi Listesi",
+// "Einkaufsangebot-Liste"
 const tkf_01_001 =
 {
-    cmbCustomer :"Kunde",
+    cmbCustomer :"Lieferant",
     btnGet :"Suchen",
-    dtFirst : "Anfangsdatum",
+    dtFirst : "Startdatum",
     dtLast : "Enddatum",
-    txtCustomerCode : "Kundennummer",
+    txtCustomerCode : "Lieferant",
     menu:"Einkaufsangebot",
     pg_txtCustomerCode : 
     {
-        title : "Kundenauswahl",
-        clmCode :  "KUNDENNUMMER",
-        clmTitle : "FIRMENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
+        title : "Lieferantenauswahl",
+        clmCode :  "Kundencode",
+        clmTitle : "Lieferantenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Gattung"
     },
-    grdPurcOrdList: 
+    menu : 
     {
-        clmRef: "Seriennummer",
-        clmRefNo: "Reihenfolge",
+        sip_02_001: "Einkaufsangebot",
+    },
+    grdPurcOfrList: 
+    {
+        clmRef: "Referenz",
+        clmRefNo: "Zeile",
         clmPrice: "Preis",
-        clmOutputCode : "Kundennummer",
-        clmOutputName : "Firmenname",
+        clmOutputCode : "Dokumentauswahl",
+        clmOutputName : "Lieferantenname",
         clmDate: "Datum",
         clmVat : "MwSt.",
-        clmAmount : "Betrag",
+        clmAmount : "Gesamt",
         clmTotal : "Gesamt",
         clmInputName : "Lager",
     },

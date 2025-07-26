@@ -7,7 +7,7 @@ const pos_01_004 =
     msgResult:
     {
         title: "Warnung",
-        btn01: "Ok",
+        btn01: "OK",
         msg: "Ihre Nachricht wurde erfolgreich gesendet",
     },
 }

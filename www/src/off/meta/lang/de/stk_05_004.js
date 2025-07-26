@@ -1,18 +1,18 @@
-// "Kayıp Ürün Raporu"
+// "Verlorene-Produkt-Bericht"
 const stk_05_004 =
 {
-    chkZeroQuantity : "Nullmengen anzeigen",   
+    chkZeroQuantity : "Nullmengen anzeigen",  
     cmbDepot : "Lager",  
     btnCheck : "Aktiv",  
     btnGet :"Suchen",  
     grdListe : 
     {
-        clmCode: "CODE",  
-        clmName : "Name",             
-        clmQuantity : "Stück",  
+        clmCode: "Code",  
+        clmName : "Name",  
+        clmQuantity : "Menge",  
         clmOutputCode : "Lagercode",  
         clmOutputName : "Lagername",  
-        clmCostPrice : "Selbstkosten",   
+        clmCostPrice : "Kosten",   
         clmTotalCost : "Gesamtkosten",   
         clmDocDate : "Datum",   
         clmRef : "Serie",
@@ -20,8 +20,8 @@ const stk_05_004 =
         clmDescription : "Beschreibung",
         clmDate : "Datum"
     },
-    txtTotalQuantity : "Gesamtzahl", 
-    txtTotalCost : "Inventurwerte/-angaben",  
-    cmbDepot : "Lager" 
+    txtTotalQuantity : "Gesamtmenge",  
+    txtTotalCost : "Inventarwert",  
+    cmbDepot : "Lager"  
 }
 export default stk_05_004

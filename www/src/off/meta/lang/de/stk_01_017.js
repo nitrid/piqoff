@@ -1,10 +1,10 @@
-// Ürün Parti Lot Tanımları
+// "Produktpartie-Los-Definitionen"
 const stk_01_017 = 
 {
 
     txtCode : "Produktcode",
     txtItemName : "Produktname",
-    txtPartiLotCode : "Chargennummer",
+    txtPartiLotCode : "Losnummer",
     dtFirst : "Produktionsdatum",
     dtLast : "Ablaufdatum",
     popItemSelect : 
@@ -15,25 +15,25 @@ const stk_01_017 =
     },
     popItemPartiLotSelect :
     {
-        title : "Chargenauswahl",
-        clmCode : "Chargennummer",
-        clmName : "Produktname der Chargen"
+        title : "Losauswahl",
+        clmCode : "Losnummer",
+        clmName : "Produktname des Loses"
     },
     msgSave : {
         title : "Speichern",
-        msg : "Sind Sie sicher, dass Sie speichern möchten?",
+        msg : "Möchten Sie speichern?",
         btn01 : "Speichern",
         btn02 : "Abbrechen"
     },
     msgDelete : {
         title : "Löschen",
-        msg : "Sind Sie sicher, dass Sie löschen möchten?",
+        msg : "Möchten Sie löschen?",
         btn01 : "Löschen",
         btn02 : "Abbrechen"
     },
     msgSaveResult : {
         title : "Speichern",
-        msgSuccess : "Erfolgreich gespeichert",
+        msgSuccess : "Speichern erfolgreich",
         msgError : "Fehler beim Speichern",
     },
     validCode: "Dieses Feld darf nicht leer sein",

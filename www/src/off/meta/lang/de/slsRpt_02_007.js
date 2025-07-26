@@ -1,5 +1,4 @@
-// "Satış Faturası Yaşlandırma Raporu"
-
+// "Verkaufsrechnung Altersbericht"
 const slsRpt_02_007 =
 {
     btnGet: "Suchen",
@@ -7,7 +6,6 @@ const slsRpt_02_007 =
     dtFirst : "Startdatum",
     dtLast : "Enddatum",
     grdList : 
-
     {
         clmDate : "Datum",
         clmType : "Dokument",
@@ -15,7 +13,6 @@ const slsRpt_02_007 =
         clmDebit : "Soll",
         clmCredit : "Haben",
         clmBalance : "Saldo"
-
     },
     pg_txtCustomerCode : 
     {

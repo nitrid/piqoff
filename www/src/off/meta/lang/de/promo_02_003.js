@@ -1,12 +1,12 @@
 //  "Promosyon Detay Listesi"
-const promo_02_002 =
+const promo_02_003 =
 {
     txtCode: "Code",
     txtName: "Name",
     dtStartDate: "Startdatum",
     dtFinishDate: "Enddatum",
-    txtCodePlace: "Geben Sie bitte Angebotscode oder Artikelbarcode ein.",
-    txtNamePlace: "Geben Sie bitte Angebotscode oder Artikelname ein.",
+    txtCodePlace: "Geben Sie bitte den Promo-Code oder den Produkt-Strichcode ein",
+    txtNamePlace: "Geben Sie bitte den Promo-Code oder den Produktnamen ein",
     btnGet: "Suchen",
     grdListe:
     {
@@ -17,15 +17,16 @@ const promo_02_002 =
         clmCondTypeName: "Bedingungstyp",
         clmCondItemCode: "Bedingungscode",
         clmCondItemName: "Bedingungsname",
-        clmCondBarcode: "Bedingungsbarcode",
+        clmCondBarcode: "Bedingungs-Strichcode",
         clmCondQuantity: "Bedingungsmenge",
         clmCondAmount: "Bedingungsbetrag",
         clmAppTypeName: "Anwendungstyp",
         clmAppItemCode: "Anwendungscode",
         clmAppItemName: "Anwendungsname",
-        clmAppBarcode: "Anwendungs Barcode",
+        clmAppBarcode: "Anwendungs-Strichcode",
         clmAppQuantity: "Anwendungsmenge",
         clmAppAmount: "Anwendungsbetrag",
+        clmAppValue: "Wert"
     }
 }
-export default promo_02_002
+export default promo_02_003

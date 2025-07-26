@@ -1,4 +1,4 @@
-// Fiyat Listesi Tanımları
+// "Preislisten-Definitionen"
 const stk_01_015 = 
 {
     txtNo: "Nummer",
@@ -13,7 +13,7 @@ const stk_01_015 =
     validCode: "Sie können den Code nicht leer lassen!",
     pg_txtNo:
     {
-        title: "Auswahl der Preislistenkarte",
+        title: "Preislistenkartenauswahl",
         clmNo: "NUMMER",
         clmName: "NAME"
     },
@@ -22,13 +22,13 @@ const stk_01_015 =
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten? "
     },
     msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihr Speichervorgang war erfolgreich!",
+        msgSuccess: "Speichern erfolgreich!",
         msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
     },
     msgSaveValid:
@@ -42,14 +42,14 @@ const stk_01_015 =
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
+        msg: "Möchten Sie den Eintrag wirklich löschen?"
     },
-    msgCode:
+    msgCode : 
     {
         title: "Achtung",
         btn01: "Zur Karte gehen",
         btn02: "OK",
-        msg: "Die von Ihnen eingegebene Listennummer ist im System registriert!"
+        msg : "Die eingegebene Listennummer ist bereits im System registriert!"
     }
 }
 export default stk_01_015

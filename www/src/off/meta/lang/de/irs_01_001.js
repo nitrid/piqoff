@@ -1,31 +1,31 @@
 // "Alış İrsaliye Listesi"
 const irs_01_001 =
 {
-    cmbCustomer: "Kunde",
+    cmbCustomer: "Lieferant",
     btnGet: "Suchen",
-    dtFirst: "Anfangsdatum",
+    dtFirst: "Startdatum",
     dtLast: "Enddatum",
-    txtCustomerCode: "Kunde",
-    menu: "Purchase Dispatch",
+    txtCustomerCode: "Lieferant",
+    menu: "Einkaufslieferschein",
     pg_txtCustomerCode:
     {
-        title: "Kunden auswählen",
+        title: "Lieferantenauswahl",
         clmCode: "Kundencode",
-        clmTitle: "Kundenname",
-        clmTypeName: "TYP",
-        clmGenusName: "GENUS"
+        clmTitle: "Lieferantenname",
+        clmTypeName: "Typ",
+        clmGenusName: "Art"
     },
     grdPurcDisList:
     {
-        clmRef: "Serie",
-        clmRefNo: "Nummer",
+        clmRef: "Referenz",
+        clmRefNo: "Zeile",
         clmPrice: "Preis",
-        clmOutputCode: "Kundencode",
-        clmOutputName: "Kundenname",
+        clmOutputCode: "Dokumentenauswahl",
+        clmOutputName: "Lieferantenname",
         clmDate: "Datum",
-        clmVat: "Steuern",
-        clmAmount: "Betrag",
-        clmTotal: "Summe",
+        clmVat: "MwSt.",
+        clmAmount: "Gesamt",
+        clmTotal: "Gesamt",
         clmInputName: "Lager",
     },
 }

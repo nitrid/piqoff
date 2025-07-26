@@ -2,24 +2,25 @@
 const ftr_01_006 =
 {
     txtCustomerCode : "Kunde",
-    menu:"Retourerechnung",
+    menu:"Rückgaberechnung",
     pg_txtCustomerCode : 
     {
         title : "Kundenauswahl",
         clmCode :  "Kundencode",
         clmTitle : "Kundenname",
-        clmTypeName : "Art",
-        clmGenusName : "Geschlecht"
+        clmTypeName : "Typ",
+        clmGenusName : "Art"
     },
     btnGet :"Suchen",
-    dtFirst : "Anfangsdatum",
+    dtFirst : "Startdatum",
     dtLast : "Enddatum",
     grdSlsIvcList: 
     {
-        clmRef: "Serie",
-        clmRefNo: "Reihe",
+        clmRef: "Spalte",
+        clmRefNo: "Zeile",
         clmPrice: "Preis",
         clmOutputCode : "Kundencode",
+        clmInputCode  : "Kundencode",
         clmOutputName : "Kundenname",
         clmInputName : "Lager",
         clmDate: "Datum",
@@ -27,5 +28,12 @@ const ftr_01_006 =
         clmAmount : "Betrag",
         clmTotal : "Gesamt",
     },
+    popDesign :
+    {
+        title : "Design-Auswahl",
+        design : "Bitte wählen Sie ein Design",
+        btnPrint : "Drucken"
+    },
+    validDesign : "Bitte wählen Sie ein Design.",
 }
 export default ftr_01_006

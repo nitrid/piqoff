@@ -3,8 +3,8 @@ const set_02_001 =
 {
     txtTitle : "Firmenname",
     txtBrandName : "Markenname",
-    txtCustomerName : "Kundenname",
-    txtCustomerLastname : "Kundennachname",
+    txtCustomerName : "Vorname Geschäftsführer",
+    txtCustomerLastname : "Nachname Geschäftsführer",
     txtAddress1 : "Adresse",
     txtAddress2 : "Adresse 2",
     cmbZipCode : "Postleitzahl",
@@ -12,49 +12,53 @@ const set_02_001 =
     cmbCountry : "Land",
     txtPhone : "Telefon",
     txtEmail : "E-Mail",
-    txtWeb : "Website",
-    txtSiretId : "Siret-ID",
-    txtApeCode : "Ape-Code",
-    txtTaxOffice : "Steueramt",
+    txtWeb : "Webseite",
+    txtSiretId : "Siret-Nr.",
+    txtApeCode : "APE-Code",
+    txtTaxOffice : "Finanzamt",
     txtTaxNo : "Steuernummer",
-    txtIntVatNo : "Steueridentnummer.",
-    txtSirenNo : "Siren-Nummer",
-    txtRSC : "Handelsregisternummer",
-    txtCapital : "Stamkapital",
-    msgSpeichern:
+    txtIntVatNo : "EORI",
+    txtSirenNo : "Siren-Nr.",
+    txtRSC : "RCS",
+    txtCapital : "Kapital",
+    msgSave:
     {
         title: "Achtung",
-        btn01: "Ok",
+        btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag speichern möchten?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten?"
     },
-    msgSpeichernResult:
+    msgDeleteResult:
+    {
+        msgSuccess: "Erfolgreich gespeichert!"
+    },
+    msgSaveResult:
     {
         title: "Achtung",
-        btn01: "Ok",
-        msgSuccess: "Der Eintrag wurde erfolgreich gespeichert!",
-        msgFailed: "Fehler beim Speichern des Eintrags!"
+        btn01: "OK",
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
-        btn01: "Ok",
+        btn01: "OK",
         msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
         title: "Achtung",
-        btn01: "Ok",
+        btn01: "OK",
         btn02: "Abbrechen",
         msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
     },
     validation:
     {
-        notValid: "Dieses Feld darf nicht leer sein!",
+        notValid: "Bitte füllen Sie die erforderlichen Felder aus!",
     },
-    clmBankCode: "BLZ",
-    clmAccountNo: "Konto Nr",
+    clmBankCode: "Bankleitzahl",
+    clmAccountNo: "Kontonummer",
     clmIBAN: "IBAN",
-    clmBIC: "BIC",
+    clmBIC: "Bank-Identifikationscode",
 }
 export default set_02_001

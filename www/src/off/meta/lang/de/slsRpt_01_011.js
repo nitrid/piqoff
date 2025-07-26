@@ -1,39 +1,34 @@
-// "Satış Teklifi Listesi"
+// "Verkaufsangebot-Liste"
 const slsRpt_01_011 =
 {
     cmbCustomer :"Kunde",
-    btnGet :"Holen",
-    dtFirst : "Erste Datum",
-    dtLast : "Letzte Datum",
+    btnGet :"Suchen",
+    dtFirst : "Startdatum",
+    dtLast : "Enddatum",
     txtCustomerCode : "Kunde",
-    menu:"Satış Teklif Liste",
+    menu:"Verkaufsangebot",
     pg_txtCustomerCode : 
     {
-        title : "Kunde Auswahl",
-        clmCode :  "KUNDENCODE",
-        clmTitle : "NAME DES KUNDEN",
-        clmTypeName : "TYPE",
-        clmGenusName : "ART"
+        title : "Kundenauswahl",
+        clmCode :  "Kundencode",
+        clmTitle : "Kundenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Geschlecht"
     },
     grdSlsOrdList: 
     {
-        clmRef: "Serie",
-        clmRefNo: "Reihenfolge",
+        clmRef: "Referenz",
+        clmRefNo: "Zeile",
         clmPrice: "Preis",
-        clmInputCode : "Kunden Code",
-        clmInputName : "Name des Kunden",
+        clmInputCode : "Dokumentauswahl",
+        clmInputName : "Kundenname",
         clmDate: "Datum",
-        clmVat : "MwSt",
-        clmQuantıty : "Verkaufsmenge",
-        clmCompQuantıty : "Geliefert",
-        clmPendQuantıty :"Zu liefern",
+        clmVat : "MwSt.",
+        clmQuantity : "Menge",
+        clmCompQuantity : "Geliefert",
+        clmPendQuantity :"Wird geliefert",
         clmItemName :"Produktname",
         clmLivre : "Geliefert"
-    },
-    popDesign : {
-        title : "Druckdesign",
-        clmDesign : "Druckdesign",
-        clmPath : "Pfad",
     },
     msgConvertDispatch : 
     {
@@ -42,6 +37,11 @@ const slsRpt_01_011 =
         btn01 : "OK",
         btn02 : "Abbrechen"
     },
+    popDesign : {
+        title : "Druckdesign",
+        clmDesign : "Druckdesign",
+        clmPath : "Pfad"
+    },
     msgConvertSucces : 
     {
         title : "Lieferung umwandeln",
@@ -49,7 +49,5 @@ const slsRpt_01_011 =
         btn01 : "OK",
         btn02 : "Abbrechen"
     }
-
 }
-
 export default slsRpt_01_011
