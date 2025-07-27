@@ -108,7 +108,9 @@ const  ftr_02_002 =
         title : "Product Selection",
         clmCode :  "PRODUCT CODE",
         clmName : "PRODUCT NAME",
-        clmPrice : "SALES PRICE"
+        clmPrice : "SALES PRICE",
+        clmMainGrp : "MAIN GROUP",
+        clmRayon : "RAYON"
     },
     pg_dispatchGrid : 
     {

@@ -57,7 +57,7 @@ export default class NdBase extends React.PureComponent
                         //TEXTBOX DISPLAY DEĞERİ SET EDİLİYOR
                         if(typeof this.props.dt.display != 'undefined')
                         {
-                            if(this.constructor.name == 'NdTextBox')
+                            if(this.constructor.name == 'NdTextBox' || this.constructor.name == 'NdSelectBox')
                             {
                                 if(!this.isUnmounted)
                                 {
@@ -100,7 +100,7 @@ export default class NdBase extends React.PureComponent
                             //TEXTBOX DISPLAY DEĞERİ SET EDİLİYOR
                             if(typeof this.props.dt.display != 'undefined')
                             {
-                                if(this.constructor.name == 'NdTextBox')
+                                if(this.constructor.name == 'NdTextBox' || this.constructor.name == 'NdSelectBox')
                                 {
                                     if(!this.isUnmounted)
                                     {

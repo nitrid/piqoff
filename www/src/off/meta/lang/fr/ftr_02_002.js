@@ -103,7 +103,9 @@ const  ftr_02_002 =
         title : "Sélectionner Produit",
         clmCode :  "Référence Produit",
         clmName : "Nom Produit",
-        clmPrice : "Prix de Vente" 
+        clmPrice : "Prix de Vente",
+        clmMainGrp : "Groupe",
+        clmRayon : "Rayon"
     },
     pg_dispatchGrid : 
     {
