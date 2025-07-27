@@ -47,7 +47,6 @@ export default class salesInvoice extends DocBase
         this.combineControl = true
         this.combineNew = false
 
-        this.loading = React.createRef();
         this.rightItems = [{ text: this.t("getDispatch")},{ text: this.t("getOrders")},{ text: this.t("getOffers")},{ text: this.t("getProforma")}]
     }
     async componentDidMount()
@@ -753,6 +752,7 @@ export default class salesInvoice extends DocBase
     {
         let tmpMissCodes = []
         let tmpCounter = 0
+
         if(this.multiItemData.length > 0)
         {
             let tmpConfObj =
@@ -769,19 +769,36 @@ export default class salesInvoice extends DocBase
                 this.multiItemData.clear()
             }
         }
+
+        let tmpQuery = 
+        {
+            query : `SELECT ITEMS.GUID,ITEMS.TYPE,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,1 AS QUANTITY,ITEMS.COST_PRICE,
+                    ISNULL(GRP.ORGINS,'') AS ORGINS,ISNULL(GRP.PARTILOT,0) AS PARTILOT,
+                    ISNULL(GRP.MAIN_GRP_NAME,'') AS MAIN_GRP_NAME,ISNULL(GRP.RAYON_NAME,'') AS RAYON_NAME,
+                    ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = ITEMS.GUID AND ITEM_UNIT.ID = '${this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue()}' ),1) AS SUB_FACTOR,
+                    ISNULL((SELECT TOP 1 SYMBOL FROM UNIT WHERE UNIT.ID = '${this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue()}'),'') AS SUB_SYMBOL,
+                    CASE WHEN UNIT.GUID IS NULL THEN ITEMS.UNIT ELSE UNIT.GUID END AS UNIT, 
+                    CASE WHEN UNIT.NAME IS NULL THEN ITEMS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, 
+                    CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, 
+                    CASE WHEN UNIT.FACTOR IS NULL THEN ITEMS.UNIT_FACTOR ELSE UNIT.FACTOR END AS UNIT_FACTOR, 
+                    ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].INPUT}'),'') AS MULTICODE 
+                    FROM ITEMS_VW_01 AS ITEMS 
+                    LEFT OUTER JOIN ITEM_UNIT_VW_01 AS UNIT ON 
+                    ITEMS.GUID = UNIT.ITEM_GUID AND UNIT.TYPE = 2 AND UNIT.NAME = '${this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value}' 
+                    LEFT OUTER JOIN ITEMS_GRP_VW_01 AS GRP ON 
+                    ITEMS.GUID = GRP.GUID 
+                    WHERE {0} AND ITEMS.STATUS = 1` ,
+            param : ['VALUE:string|50'],
+        }
+
         for (let i = 0; i < this.tagItemCode.value.length; i++) 
         {
             if(this.cmbMultiItemType.value == 0)
             {
-                let tmpQuery = 
-                {
-                    query : `SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT,
-                            ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_04.GUID AND CUSTOMER = '${this.docObj.dt()[0].INPUT}' AND DELETED = 0),'') AS MULTICODE,
-                            FROM ITEMS_VW_04 WHERE ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_04.GUID AND CUSTOMER = '${this.docObj.dt()[0].INPUT}' AND DELETED = 0),'') = @VALUE AND ITEMS_VW_04.STATUS = 1` ,
-                    param : ['VALUE:string|50'],
-                    value : [this.tagItemCode.value[i]]
-                }
-            
+                tmpQuery.query = tmpQuery.query.replace('{0}',`ISNULL((SELECT TOP 1 MULTICODE FROM ITEM_MULTICODE_VW_01 WHERE ITEM_GUID = ITEMS.GUID AND CUSTOMER_GUID = '${this.docObj.dt()[0].INPUT}'),'') = @VALUE `)
+                tmpQuery.param = ['VALUE:string|50']
+                tmpQuery.value = [this.tagItemCode.value[i]]
+
                 let tmpData = await this.core.sql.execute(tmpQuery) 
             
                 if(tmpData.result.recordset.length > 0)
@@ -799,17 +816,12 @@ export default class salesInvoice extends DocBase
             }
             else if (this.cmbMultiItemType.value == 1)
             {
-                let tmpQuery = 
-                {
-                    query : `SELECT GUID,CODE,NAME,VAT,1 AS QUANTITY,UNIT,
-                            ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = ITEMS_VW_04.GUID AND CUSTOMER = '${this.docObj.dt()[0].INPUT}' AND DELETED = 0),'') AS MULTICODE
-                            FROM ITEMS_VW_04 WHERE CODE = @VALUE AND STATUS = 1` ,
-                    param : ['VALUE:string|50'],
-                    value : [this.tagItemCode.value[i]]
-                }
+                tmpQuery.query = tmpQuery.query.replace('{0}',`ITEMS.CODE = @VALUE `)
+                tmpQuery.param = ['VALUE:string|50']
+                tmpQuery.value = [this.tagItemCode.value[i]]
             
                 let tmpData = await this.core.sql.execute(tmpQuery) 
-            
+                console.log(tmpData)
                 if(tmpData.result.recordset.length > 0)
                 {
                     if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
@@ -824,6 +836,7 @@ export default class salesInvoice extends DocBase
                 }
             }
         }
+
         if(tmpMissCodes.length > 0)
         {
             let tmpConfObj =
@@ -1063,15 +1076,6 @@ export default class salesInvoice extends DocBase
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <LoadPanel
-                    shadingColor="rgba(0,0,0,0.0)"
-                    position={{ of: '#' + this.props.data.id + this.tabIndex }}
-                    showIndicator={true}
-                    shading={true}
-                    showPane={true}
-                    message={""}
-                    ref={this.loading}
-                    />
                     {/* Toolbar */}
                     <div className="row px-2 pt-1">
                         <div className="col-12">
