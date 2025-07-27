@@ -1,23 +1,23 @@
-// "DEB raporu"
+// "DEB Bericht"
 const slsRpt_02_003 =
 {
-    chkZeroBalance : "Nullsalden anzeigen!",   
-    txtCustomerCode : "Kunde",   
-    btnCheck : "Aktivieren",   
-    btnGet :"Suchen",       
+    chkZeroBalance : "Nullsalden anzeigen", 
+    txtCustomerCode : "Aktuell",   
+    btnCheck : "Aktiv",    
     dtDate : "Datum",
+    btnGet :"Suchen",  
     grdListe :    
     {   
-        clmRef: "Rechnungsnummer",
-        clmRefNo : "Rechnungsreihe",
-        clmDocDate : "Rechnungsdatum",
-        clmOutputCode : "Lieferantennummer",
-        clmOutputName : "Lieferantenname",
-        clmQuantity : "Menge",   
-        clmCode: "Code",   
-        clmName : "Name",              
-        clmAmount : "Steuerbetrag",   
-        clmLitre : "Liter pro Einheit"
+        clmRef: "Ref. Rechnung",   
+        clmRefNo : "Nr. Rechnung",  
+        clmDocDate : "Rechnungsdatum",   
+        clmOutputCode : "Ref Lieferant",   
+        clmOutputName : "Lieferantenname", 
+        clmQuantity : "Menge",    
+        clmCode: "Ref. Produkt",     
+        clmName : "Produktname",               
+        clmAmount : "Steuerbetrag",     
+        clmLitre : "Liter-Einheit" 
     },
 }
 export default slsRpt_02_003

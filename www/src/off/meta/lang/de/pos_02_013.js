@@ -1,13 +1,13 @@
 // "İndirim Raporu"
 const pos_02_013 =
 {
-    btnGet :"Suchen",
-    txtTotalTicket : "Gesamtzahl der Kassenbelege",
-    dtDate : "Datum",
-    grdListe: 
+    btnGet: "Suchen",
+    txtTotalTicket: "Gesamtzahl der Kassenbelege",
+    dtDate: "Datum",
+    grdListe:
     {
         clmDocDate: "Datum",
-        clmDiscount: "Rabattbetrag",
+        clmDiscount: "Rabatt",
     },
 }
 export default pos_02_013

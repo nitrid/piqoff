@@ -6,35 +6,36 @@ const pos_02_009 =
     txtTotalTicket: "Gesamtanzahl Belege",
     txtTicketAvg: "Durchschnittlicher Belegbetrag",
     txtTotalCost: "Gesamtkosten",
-    txtFamount: "Gesamtbetrag ohne Steuern",
+    txtFamount: "Gesamt ohne MwSt.",
     txtVat: "Gesamtsteuer",
-    txtRestTotal: "Gesamter Gewinn ohne Steuern",
+    txtRestTotal: "Gesamter Gewinn ohne MwSt.",
     btnGetAnalysis: "Diagrammansicht",
-    chkTicket: "Berechne Beleganzahl pro Gruppe",
-    chart :
+    chkTicket: "Beleganzahl pro Gruppe berechnen",
+    chart:
     {
-        salesAmount : "Verkaufsbetrag (€)",
-        productGroups : "Artikelgruppen",
-        highestSales : "Höchste Verkäufe",
-        group : "Gruppe",
-        groupCode : "Artikelgruppencode",
-        quantity : "Menge",
-        ticket : "Belege",
-        cost : "Gesamtkosten",
-        profit : "Gesamter Gewinn ohne Steuern",
-        vat : "Steuerbetrag",
-        famount : "Betrag ohne Steuern"
+        salesAmount: "Gesamtumsatz (€)",
+        productGroups: "Artikelgruppen",
+        highestSales: "Höchste Verkäufe",
+        group: "Gruppe",
+        groupCode: "Artikelgruppencode",
+        quantity: "Menge",
+        ticket: "Beleganzahl",
+        cost: "Gesamtkosten",
+        profit: "Gesamter Gewinn ohne MwSt.",
+        vat: "Steuerbetrag",
+        famount: "Betrag ohne MwSt."
     },
     grdGroupSalesReport:
     {
         clmGrpCode: "Artikelgruppencode",
         clmGrpName: "Artikelgruppenname",
-        clmTicket: "Belege",
+        clmTicket: "Beleganzahl",
         clmTotalCost: "Gesamtkosten",
-        clmFamount: "Betrag ohne Steuern",
+        clmFamount: "Betrag ohne MwSt.",
         clmVat: "Steuerbetrag",
         clmTotal: "Gesamtbetrag",
-        clmRestTotal: "Gesamter Gewinn ohne Steuern"
+        clmRestTotal: "Gesamter Gewinn ohne MwSt.",
+        clmQuantity: "Artikelmenge"
     },
     grpGrpDetail:
     {
@@ -42,10 +43,10 @@ const pos_02_009 =
         clmName: "Artikelname",
         clmQuantity: "Menge",
         clmTotalCost: "Gesamtkosten",
-        clmFamount: "Betrag ohne Steuern",
+        clmFamount: "Betrag ohne MwSt.",
         clmVat: "Steuerbetrag",
         clmTotal: "Gesamtbetrag",
-        clmRestTotal: "Gesamter Gewinn ohne Steuern"
+        clmRestTotal: "Gesamter Gewinn ohne MwSt."
     },
     popGrpDetail:
     {

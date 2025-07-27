@@ -1,28 +1,28 @@
-// Kayıp Ürün Çıkışı
+// "Verlorene Produktausgabe"
 const stk_02_003 = 
 {
-    txtRefRefno : "Seriennummer",
-    cmbOutDepot: "Lagerort",
+    txtRefRefno : "Ref. Ref Nr",
+    cmbOutDepot: "Ausgangslager",
     dtDocDate : "Datum",
     txtBarcode : "Barcode hinzufügen",
-    getDispatch : "Lieferschein Suchen",
+    getDispatch : "Lieferschein suchen",
     txtTotalCost : "Gesamtkosten",
     txtTotalQuantity: "Gesamtmenge",
     pg_Docs : 
     {
         title : "Dokumentauswahl",
-        clmDate : "DATUM",
-        clmRef : "Serie",
-        clmRefNo : "NUMMER",
-        clmDocDate : "DATUM",
-        clmInputName : "EINGANG",
-        clmOutputName : "AUSGANG",
+        clmDate : "Datum",
+        clmRef : "Referenz",
+        clmRefNo : "Nummer",
+        clmDocDate : "Datum",
+        clmInputName : "Eingang",
+        clmOutputName : "Ausgang",
     },
     pg_txtItemsCode : 
     {
-        title : "Artikelauswahl",
-        clmCode :  "Artikelnummer",
-        clmName : "Artikelname",
+        title : "Produkt auswählen",
+        clmCode :  "Produktreferenz",
+        clmName : "Produktname",
     },
     grdOutwasItems: 
     {
@@ -30,23 +30,23 @@ const stk_02_003 =
         clmItemName: "Name",
         clmQuantity : "Menge",
         clmCreateDate: "Erstellungsdatum",
-        clmDescription :"Beschreibung",
-        clmCostPrice : "Einkaufspreis",
-        clmCuser : "Benutzer"
+        clmDescription :"Motiv",
+        clmCostPrice : "Selbstkostenpreis",
+        clmCuser : "Benutzer",
     },
     pg_dispatchGrid : 
     {
-        title : "Lieferscheinauswahl",
-        clmReferans : "Seriennummer",
+        title : "Lieferschein auswählen",
+        clmReferans : "Serie - Referenzen",
         clmCode : "Code",
         clmName : "Name",
         clmQuantity : "Menge",
-        clmCuStomer : "Kunde",
+        clmCuStomer : "Lieferant",
         clmDate : "Datum",
     },
     popPassword : 
     {
-        title: "Geben Sie das Administratorpasswort ein, um das Dokument zu öffnen",
+        title: "Bitte geben Sie das Administratorpasswort ein, um auf das Dokument zuzugreifen",
         Password : "Passwort",
         btnApprove : "Bestätigen"
     },
@@ -54,110 +54,110 @@ const stk_02_003 =
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Dokument ist gesperrt! Um Änderungen zu speichern, müssen Sie das Administratorpasswort verwenden, um es zu entsperren!"
+        msg: "Dokument gesperrt! Bitte entsperren Sie es, um Änderungen zu speichern!"
     },
     msgDocLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es können keine Aktionen durchgeführt werden, solange das Dokument gesperrt ist!"
+        msg: "Sie können nicht speichern, ohne zu entsperren!"
     },
     msgDocValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es können keine Bestandsänderungen vorgenommen werden, solange die Dokumenteninformationen nicht vollständig sind!"
+        msg: "Bitte geben Sie die Überschriften vor dem Abschluss ein!"
     },
     msgEmpDescription:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Zeilenbeschreibungen dürfen nicht leer sein!"
+        msg: "Zeileninformationen dürfen nicht leer sein!"
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihr Speichervorgang war erfolgreich!",
-        msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
     },
     msgLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Das Dokument wurde gespeichert und gesperrt!"
+        msg: "Dokument gespeichert und gesperrt!"
     },
     msgPasswordSucces:
     {
         title: "Erfolgreich",
         btn01: "OK",
-        msg: "Das Dokument wurde entsperrt!"
+        msg: "Dokument entsperrt!",
     },
     msgPasswordWrong:
     {
         title: "Fehlgeschlagen",
         btn01: "OK",
-        msg: "Ihr Passwort ist falsch!"
+        msg: "Falsches Passwort"
     },
     msgGetLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Das Dokument ist gesperrt! Um Änderungen zu speichern, müssen Sie das Administratorpasswort verwenden, um es zu entsperren!"
+        msg: "Dokument gesperrt! Bitte entsperren Sie es, um Änderungen zu speichern!"
     },
-    msgDocLocked:
+    msgDoclocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es können keine Aktionen durchgeführt werden, solange das Dokument gesperrt ist!"
+        msg: "Sie können nicht speichern, ohne zu entsperren!"
     },
     msgItemNotFound:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Artikel nicht gefunden!"
+        msg: "Produkt nicht gefunden!"
     },
     msgCombineItem:
     {
         title: "Achtung",
-        btn01: "Kombinieren",
+        btn01: "Zusammenfassen",
         btn02: "Neu hinzufügen",
-        msg: "Das Artikel, das Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen kombiniert werden?"
+        msg: "Produkt bereits im Dokument vorhanden! Möchten Sie zusammenfassen?"
     },
-    validRef :"Die Seriennummer darf nicht leer sein",
-    validRefNo : "Die Reihenfolge darf nicht leer sein",
-    validDepot : "Sie müssen ein Lager auswählen",
-    validCustomerCode : "Kundennummer darf nicht leer sein",
-    validDocDate : "Sie müssen ein Datum auswählen",
+    validRef :"Ref eingeben",
+    validRefNo : "Ref Nr eingeben",
+    validDepot : "Lager auswählen",
+    validCustomerCode : "Der Lieferanten-Kundencode darf nicht leer sein",
+    validDocDate : "Datum auswählen",
     pg_quickDesc : 
     {
-        title : "Kurzbeschreibungsauswahl",
-        clmDesc:  "BESCHREIBUNG"
+        title : "Schnellauswahl",
+        clmDesc: "Motiv"
     },
     popQDescAdd : 
     {
-        title : "Kurzbeschreibung hinzufügen",
-        description : "Neue Beschreibung",
+        title : "Schnelleingabe hinzufügen",
+        description : "Neue Eingabe",
         btnApprove : "Speichern"
     },
     popDesign : 
@@ -166,33 +166,33 @@ const stk_02_003 =
         design : "Design",
         lang : "Dokumentsprache"
     },
-    msgNotQuantity:
+    msgNotQuantity: 
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Die Lagermenge kann nicht negativ werden! Höchstmögliche Menge, die hinzugefügt werden kann:"
+        msg: "Die im Lager vorhandene Menge kann nicht negativ sein! Vorhandene Menge:"
     },
     pg_txtBarcode : 
     {
-        title : "Barcode-Auswahl",
-        clmCode :  "Artikelnummer",
-        clmName : "Artikelname",
-        clmMulticode : "Lieferantennummer",
+        title : "Barcode auswählen",
+        clmCode :  "Produktreferenz",
+        clmName : "Produktname",
+        clmMulticode : "Lieferantenreferenz",
         clmBarcode : "Barcode"
     },
-    msgCode :
+    msgCode : 
     {
         title: "Achtung",
         btn01: "Zum Dokument gehen",
-        msg: "Dokument gefunden"
+        msg: "Dokument gefunden!"
     },
     msgQuantity:
     {
         title: "Achtung",
         btn01: "Hinzufügen",
         btn02: "Abbrechen",
-        msg: "Menge eingeben!"
+        msg: "Bitte geben Sie die Menge ein!",
     },
-    txtQuantity : "Menge",
+    txtQuantity :"Menge",
 }
 export default stk_02_003

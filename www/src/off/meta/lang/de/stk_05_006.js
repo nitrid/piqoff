@@ -1,24 +1,24 @@
-// "Ürün Hareket Raporu"
+// "Lagerbewegungs-Bericht"
 const stk_05_006 =
 {
-    txtRef: "Artikel Code",
-    cmbCustomer: "Kunde",
-    btnGet: "Suchen",
-    dtFirst: "Anfangsdatum",
-    dtLast: "Enddatum",
-    txtCustomerCode: "Kunde",
-    cmbDevice: "Gerät",
-    txtTicketno: "Belegnummer",
-    numFirstTicketAmount: "Unterer Betrag",
-    numLastTicketAmount: "Oberer Betrag",
-    cmbUser: "Benutzer",
-    txtItem: "Artikelcode",
-    ckhDoublePay: "Mehrere Zahlungen",
-    cmbType: "Beschreibungstyp",
-    dtDate: "Datum",
-    txtTotal: "Gesamtverkauf",
+    txtRef : "Produktcode",
+    cmbCustomer :"Kunde",
+    btnGet :"Suchen",
+    dtFirst : "Startdatum",
+    dtLast : "Enddatum",
+    txtCustomerCode : "Kundencode",
+    cmbDevice :"Gerät",
+    txtTicketno : "Ticket-ID",
+    numFirstTicketAmount : "Haupteinheit",
+    numLastTicketAmount : "Hauptinhalt",
+    cmbUser :"Benutzer",
+    txtItem :"Produktcode",
+    ckhDoublePay : "Mehrfachzahlung",
+    cmbType :"Beschreibungstyp",
+    dtDate : "Datum",
+    txtTotal : "Gesamtverkauf",
     txtPartiLot : "Losnummer",
-    grdItemMovementReport:
+    grdItemMovementReport: 
     {
         clmLuser: "Benutzer",
         clmLdate: "Datum",
@@ -30,30 +30,30 @@ const stk_05_006 =
         clmInputName : "Eingang",
         clmOutputName : "Ausgang",
         clmQuantity : "Menge",
+        clmDepoQuantity: "Lagerbestand",
         clmPrice : "Preis",
-        
-        clmTotalHt : "Gesamtbetrag (ohne Steuern)",
+        clmTotalHt : "Betrag ohne MwSt.",
     },
     pg_txtRef:
     {
-        title: "Artikelauswahl",
+        title: "Produktauswahl",
         clmCode: "CODE",
-        clmName: "NAME",
-        clmBarcode : "BARCODE",
-        clmStatus: "STATUS"
+        clmName: "NAME", 
+        clmBarcode: "BARCODE", 
+        clmStatus : "STATUS"
     },
     pg_partiLot:
     {
-        title: "Lotto-Nummerauswahl",
+        title: "Losnummer-Auswahl",
         clmCode: "CODE",
         clmSkt: "MHD", 
     },
-    Abbrechen: "Abbrechen",
+    cancel : "Abbrechen",
     msgItemSelect:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte wählen Sie ein Artikel aus!"
+        msg: "Bitte wählen Sie ein Produkt aus!"
     },
 }
 export default stk_05_006

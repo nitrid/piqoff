@@ -1,17 +1,16 @@
 // "Puan Hareketleri raporu"
 const pos_02_016 = 
 {
-    btnGet :"Getir",
-    chkTicket : "Sadece Manuel Girişler",
-    grdUseingPointReport: 
+    btnGet: "Suchen",
+    chkTicket: "Nur manuelle Eingaben",
+    grdUseingPointReport:
     {
-        clmDate : "Tarih-Saat",
-        clmCustomerCode : "Müşteri Kodu",
-        clmCustomerName: "Müşteri Adı",
-        clmTicket: "Fiş ID",
-        clmPoint: "Puan",
-        clmDescription : "Açıklama",
+        clmDate: "Datum-Uhrzeit",
+        clmCustomerCode: "Kundencode",
+        clmCustomerName: "Kundenname",
+        clmTicket: "Beleg-ID",
+        clmPoint: "Punkte",
+        clmDescription: "Beschreibung",
     },
 }
-
 export default pos_02_016

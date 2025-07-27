@@ -3,9 +3,9 @@ const pos_02_002 =
 {
     cmbCustomer: "Kunde",
     btnGet: "Suchen",
-    txtCustomerCode: "Kundennummer",
+    txtCustomerCode: "Kundencode",
     txtCustomerName: "Kundenname",
-    txtAmount: "Gesamtbetrag",
+    txtAmount: "Gesamtpunkte",
     pg_txtCustomerCode:
     {
         title: "Kundenauswahl",
@@ -31,12 +31,12 @@ const pos_02_002 =
         clmDate: "Datum",
         clmPoint: "Punkte",
         clmPointType: "Typ",
-        clmPosId: "Quittungsnummer",
-        clmDescription: "Beschreibung"
+        clmDescription: "Grund",
+        clmPosId: "Belegnummer",
     },
     grdSaleTicketItems:
     {
-        clmBarcode: "Barcode",
+        clmBarcode: "Strichcode",
         clmName: "Artikelname",
         clmQuantity: "Menge",
         clmPrice: "Preis",
@@ -44,21 +44,21 @@ const pos_02_002 =
     },
     grdSaleTicketPays:
     {
-        clmPayName: "Zahlungsmethode",
+        clmPayName: "Zahlungsart",
         clmTotal: "Betrag"
     },
     popDetail:
     {
-        title: "Quittungsdetails"
+        title: "Belegdetails"
     },
-    TicketId: "Quittungs-ID",
+    TicketId: "Belegnummer",
     popLastTotal:
     {
         title: "Zahlung"
     },
-    trDeatil: "T.R. Detail",
-    lineDelete: "Zeile löschen",
-    Abbrechen: "Abbrechen",
+    trDeatil: "T.R Detail",
+    lineDelete: "Zeile stornieren",
+    cancel: "Abbrechen",
     btnAddpoint: "Punkte hinzufügen/abbuchen",
     popPointEntry:
     {
@@ -72,14 +72,14 @@ const pos_02_002 =
         in: "Punkte hinzufügen",
         out: "Punkte abbuchen"
     },
-    txtDescription: "Beschreibung",
+    txtDescription: "Information",
     msgDescription:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte geben Sie einen Text mit mindestens 15 Zeichen ein."
+        msg: "Bitte geben Sie mindestens 15 Zeichen ein."
     },
     btnAdd: "Hinzufügen",
-    descriptionPlace: "Bitte geben Sie einen Text mit mindestens 15 Zeichen ein."
+    descriptionPlace: "Bitte geben Sie mindestens 15 Zeichen ein."
 }
 export default pos_02_002

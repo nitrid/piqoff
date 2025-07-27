@@ -1,53 +1,53 @@
-// "Sipariş Ayrıştırma"
+// "Bestellungsaufschlüsselung"
 const sip_04_001 =  
 {
-    txtCustomerCode: "Kunde",
-    validDepot: "Bitte wählen Sie ein Depot aus",
-    ItemNamePlaceHolder: "Geben Sie den vollständigen Artikelnamen oder einen Teil davon ein",
-    pg_txtCustomerCode: 
+    txtCustomerCode : "Lieferant",
+    validDepot : "Bitte wählen Sie ein Lager aus",
+    ItemNamePlaceHolder :"Geben Sie den vollständigen Produktnamen oder eine Silbe ein",
+    pg_txtCustomerCode : 
     {
-        title: "Kundenauswahl",
-        clmCode: "Kundencode",
-        clmTitle: "Kundenname",
-        clmTypeName: "Typ",
-        clmGenusName: "Art"
+        title : "Lieferantenauswahl",
+        clmCode :  "Lieferantencode",
+        clmTitle : "Lieferantenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Typ"
     },
-    cmbDepot: "Depot",
-    btnGet: "Suchen",
-    btnOrder: "Bestellung erstellen",
-    grdOrderList:
+    cmbDepot : 'Lager',
+    btnGet : 'Suchen',
+    btnOrder : 'Bestellung erstellen',
+    grdOrderList : 
     {
         clmCode: "Code",
-        clmName: "Name",
-        clmQuantity: "Menge",
-        clmCustomer: "Kunde",
-        clmPrice: "Preis"
+        clmName : "Name",
+        clmQuantity : "Menge",
+        clmCustomer : "Lieferant",
+        clmPrice : "Preis"
     },
-    msgSpeichern: 
+    msgSave:
     {
         title: "Achtung",
         btn01: "Bestätigen",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie die ausgewählten Zeilen stornieren möchten?"
+        msg: "Sind Sie sicher, dass Sie die ausgewählten Zeilen bestellen möchten?"
     },
-    msgSpeichernResult: 
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihre Rücksendungen wurden erstellt!",
-        msgFailed: "Fehler beim Speichern des Eintrags!"
+        msgSuccess: "Ihre Rückgabedokumente wurden erstellt!",
+        msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
     },
-    msgDublicateItem: 
+    msgDublicateItem : 
     {
         title: "Achtung",
-        btn01: "OK",
-        msg: "Das Artikel wurde für mehrere Kunden ausgewählt. Bitte überprüfen Sie dies."
+        btn01 : "OK",
+        msg : "Das Produkt wurde für mehrere Lieferanten ausgewählt. Bitte überprüfen Sie dies."
     },
-    msgCustomerFound: 
+    msgCustomerFound : 
     {
         title: "Achtung",
-        btn01: "OK",
-        msg: "Artikel ohne Kundenzuordnung können nicht ausgewählt werden. Bitte weisen Sie einen Kunden zu."
+        btn01 : "OK",
+        msg : "Produkte ohne Lieferantenzuordnung können nicht ausgewählt werden. Bitte weisen Sie einen Lieferanten zu."
     }
 }
 export default sip_04_001

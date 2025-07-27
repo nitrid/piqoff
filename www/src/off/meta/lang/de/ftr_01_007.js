@@ -2,22 +2,22 @@
 const ftr_01_007 =
 {
     txtCustomerCode : "Kunde",
-    menu:"Retourerechnung",
+    menu:"Rückgaberechnung",
     pg_txtCustomerCode : 
     {
         title : "Kundenauswahl",
         clmCode :  "Kundencode",
         clmTitle : "Kundenname",
-        clmTypeName : "Art",
-        clmGenusName : "Geschlecht"
+        clmTypeName : "Typ",
+        clmGenusName : "Art"
     },
     btnGet :"Suchen",
-    dtFirst : "Anfangsdatum",
+    dtFirst : "Startdatum",
     dtLast : "Enddatum",
     grdSlsIvcList: 
     {
-        clmRef: "Serie",
-        clmRefNo: "Reihe",
+        clmRef: "Spalte",
+        clmRefNo: "Zeile",
         clmPrice: "Preis",
         clmOutputCode : "Kundencode",
         clmOutputName : "Kundenname",

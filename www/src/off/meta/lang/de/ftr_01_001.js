@@ -1,31 +1,38 @@
 // "Alış Fatura Listesi"
 const ftr_01_001 =
 {
-    txtCustomerCode : "Kunde",
+    txtCustomerCode : "Lieferant",
     menu:"Einkaufsrechnung",
     pg_txtCustomerCode : 
     {
-        title : "Kundenauswahl",
-        clmCode :  "KUNDENCODE",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
+        title : "Lieferantenauswahl",
+        clmCode :  "Lieferantencode",
+        clmTitle : "Lieferantenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Art"
     },
     btnGet :"Suchen",
-    dtFirst : "Anfangsdatum",
+    dtFirst : "Startdatum",
     dtLast : "Enddatum",
     grdPurcIvcList: 
     {
-        clmRef: "Serie",
-        clmRefNo: "Nummer",
+        clmRef: "Referenz",
+        clmRefNo: "Zeile",
         clmPrice: "Preis",
-        clmOutputCode : "Kundencode",
-        clmOutputName : "Kundenname",
+        clmOutputCode : "Lieferantenauswahl",
+        clmOutputName : "Lieferantenname",
         clmDate: "Datum",
-        clmVat : "..",
-        clmAmount : "Betrag",
+        clmVat : "MwSt.",
+        clmAmount : "Gesamt" ,
         clmTotal : "Gesamt",
         clmInputName : "Lager",
     },
+    popDesign :
+    {
+        title : "Design-Auswahl",
+        design : "Bitte wählen Sie ein Design",
+        btnPrint : "Drucken"
+    },
+    validDesign : "Bitte wählen Sie ein Design.",
 }
 export default ftr_01_001

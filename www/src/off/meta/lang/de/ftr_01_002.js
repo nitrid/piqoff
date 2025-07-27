@@ -6,32 +6,32 @@ const ftr_01_002 =
     pg_txtCustomerCode : 
     {
         title : "Kundenauswahl",
-        clmCode :  "KUNDENCODE",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
+        clmCode :  "Kundencode",
+        clmTitle : "Kundenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Art"
     },
     btnGet :"Suchen",
-    dtFirst : "Anfangsdatum",
+    dtFirst : "Startdatum",
     dtLast : "Enddatum",
     grdSlsIvcList: 
     {
-        clmRef: "Serie",
-        clmRefNo: "Nummer",
+        clmRef: "Referenz",
+        clmRefNo: "Zeile",
         clmPrice: "Preis",
-        clmInputCode : "Kundencode",
+        clmInputCode : "Kundenauswahl",
         clmInputName : "Kundenname",
         clmDate: "Datum",
-        clmVat : "..",
-        clmAmount : "Betrag",
+        clmVat : "MwSt.",
+        clmAmount : "Gesamt" ,
         clmTotal : "Gesamt",
         clmOutputName :"Lager",
-        clmMail : "Mail Gesendet"
+        clmMail : "E-Mail gesendet"
     },
-    popDesign:
+    popDesign : 
     {
-        title: "Designauswahl",
-        design: "Design",
+        title: "Design-Auswahl",
+        design : "Design" ,
     },
 }
 export default ftr_01_002

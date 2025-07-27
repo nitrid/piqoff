@@ -1,23 +1,23 @@
-// "Ürün Satış Raporu"
-const pos_02_008 =
+// "Lagerbewegungs-Bericht"
+const stk_05_005 =
 {
-    txtRef: "Artikel",
-    cmbCustomer: "Kunde",
-    btnGet: "Suchen",
-    dtFirst: "Anfangsdatum",
-    dtLast: "Enddatum",
-    txtCustomerCode: "Kunde",
-    cmbDevice: "Gerät",
-    txtTicketno: "Belegnummer",
-    numFirstTicketAmount: "Unterer Betrag",
-    numLastTicketAmount: "Oberer Betrag",
-    cmbUser: "Benutzer",
-    txtItem: "Artikelcode",
-    ckhDoublePay: "Mehrere Zahlungen",
-    cmbType: "Beschreibungstyp",
-    dtDate: "Datum",
-    txtTotal: "Gesamtverkauf",
-    grdItemSaleReport:
+    txtRef : "Produkt",
+    cmbCustomer :"Kunde",
+    btnGet :"Suchen",
+    dtFirst : "Startdatum",
+    dtLast : "Enddatum",
+    txtCustomerCode : "Kundencode",
+    cmbDevice :"Gerät",
+    txtTicketno : "Ticket-ID",
+    numFirstTicketAmount : "Haupteinheit",
+    numLastTicketAmount : "Hauptinhalt",
+    cmbUser :"Benutzer",
+    txtItem :"Produktcode",
+    ckhDoublePay : "Mehrfachzahlung",
+    cmbType :"Beschreibungstyp",
+    dtDate : "Datum",
+    txtTotal : "Gesamtverkauf",
+    grdItemMoveReport: 
     {
         clmLuser: "Benutzer",
         clmLdate: "Datum",
@@ -29,23 +29,24 @@ const pos_02_008 =
         clmInputName : "Eingang",
         clmOutputName : "Ausgang",
         clmQuantity : "Menge",
+        clmDepoQuantity: "Lagerbestand",
         clmPrice : "Preis",
-        clmTotalHt : "Gesamtbetrag (ohne Steuern)",
+        clmTotalHt : "Betrag ohne MwSt.",
     },
     pg_txtRef:
     {
-        title: "Artikelauswahl",
+        title: "Produktauswahl",
         clmCode: "CODE",
-        clmName: "NAME",
-        clmBarcode : "BARCODE",
-        clmStatus: "STATUS"
+        clmName: "NAME", 
+        clmBarcode: "BARCODE", 
+        clmStatus : "STATUS"
     },
-    Abbrechen: "Abbrechen",
+    cancel : "Abbrechen",
     msgItemSelect:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte wählen Sie ein Artikel aus!"
+        msg: "Bitte wählen Sie ein Produkt aus!"
     },
 }
-export default pos_02_008
+export default stk_05_005

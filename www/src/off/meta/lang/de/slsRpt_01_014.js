@@ -1,33 +1,32 @@
-// "Deb Satış Detay Raporu"
+// "DEB Verkaufsdetailbericht"
 const slsRpt_01_014 =
 {
-    chkZeroBalance : "Nullsalden anzeigen",   
-    txtCustomerCode : "Kunde",   
+    chkZeroBalance : "Nullsalden anzeigen",    
+    txtCustomerCode : "Kunde",    
     btnCheck : "Aktiv",     
     dtDate : "Datum",
-    btnGet :"Abrufen",   
+    btnGet :"Suchen",   
     grdListe :    
     {   
-        clmCustomsNo : "Zollkode",   
-        clmOrigin: "Herkunft",   
-        clmRegime : "Sektor",              
-        clmQuantity : "Wert €",   
-        clmKg : "Kilogramm",   
-        clmLinge : "Stück",   
-        clmNature : "Produkttype",
-        clmTransport : "Transporttyp",
-        clmZipcode : "Region",   
-        clmRefno : "Rechnungsnr.",   
-        clmCustomerName : "Lieferant",   
-        clmDocDate : "Rechnungstdatum",   
-        clmMulticode : "T. Kode",   
-        clmItemBarcode : "Barcode",
-        clmDescription : "Beschreibung",   
-        clmCountry : "T. Land",   
-        clmItemCode : "Produktcode",
-        clmItemName : "Produktname",
-        clmItemGroup : "Produktgruppe",
+        clmCustomsNo : "Nomenklatur",    
+        clmOrigin: "Herkunftsland",    
+        clmRegime : "Regime",              
+        clmQuantity : "Wert €",    
+        clmKg : "Nettomasse",    
+        clmLinge : "Zusätzliche Einheiten",    
+        clmNature : "Transaktionsart A",
+        clmTransport : "Transportart",
+        clmZipcode : "Abteilung",    
+        clmRefno : "Interne Referenz",    
+        clmCustomerName : "Kunde",    
+        clmDocDate : "Rechnungsdatum",    
+        clmMulticode : "FRN.Code",
+        clmItemBarcode : "Barcode", 
+        clmDescription : "Motiv",    
+        clmCountry : "HERKUNFTSLAND",    
+        clmItemName: "Produktname", 
+        clmItemCode: "Produktreferenz",
+        clmItemGroup : "Produktgruppe"
     },
 }
-
 export default slsRpt_01_014

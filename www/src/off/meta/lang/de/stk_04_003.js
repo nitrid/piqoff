@@ -1,22 +1,22 @@
-//"Sayım Kesinleştirme"
+//"Inventur-Bestätigung"
 const stk_04_003 =
 {
     cmbDepot : "Lager",
-    chkNotCountItems : "Nicht gezählte Artikel auf Null setzen",
+    chkNotCountItems : "Nicht gezählte Produkte auf Null setzen",
     btnGet : 'Suchen',
-    btnAddCount : "Zählung zusammenführen",
-    dtFirstDate :"Anfangsdatum",
+    btnAddCount : "Inventur zusammenführen",
+    dtFirstDate :"Startdatum",
     dtLastDate : "Enddatum",
     btnSuccess : "Bestätigen",
-    validDepot : "Bitte wählen Sie ein Lager aus",
+    validDepot : "Lager auswählen",
     popCount : 
     {
-        title : "Bestandsmengen",
+        title : "Produktmenge",
     },
     grdCountDocument : 
     {
-        clmRef: "Seriennummer",
-        clmRefNo : "Nummer",
+        clmRef: "Referenz",
+        clmRefNo : "Zeile",
         clmQuantity : "Gesamtmenge",
         clmDate : "Datum",
     },
@@ -26,25 +26,25 @@ const stk_04_003 =
         clmCode : "Code",
         clmQuantity : "Gezählte Menge",
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag speichern möchten?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Dokument mit Seriennummer wurde erstellt!",
-        msgFailed: "Fehler beim Speichern des Eintrags!"
+        msgSuccess: "Dokument über Serie erstellt",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
     msgNotItems:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Lagerbestände sind aktuell! Es wurde kein neuer Eintrag erstellt.",
+        msg: "Lagermenge aktuell! Keine neue Menge gespeichert",
     },
 }
 export default stk_04_003

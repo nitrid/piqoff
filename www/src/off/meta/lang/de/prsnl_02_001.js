@@ -1,42 +1,44 @@
-// "Personalliste"
+// "Müşteri Listesi"
 const prsnl_02_001 =
 {
-    employeePlace: "Bitte geben Sie den Mitarbeiternamen oder -code zur Suche ein.",
-    txtEmployeeName : "Mitarbeitername",
-    cmbGenus :"Geschlecht",
-    menu: "Mitarbeitereinstellungen",
-    btnGet : "Abrufen",
-    cmbMainGrp : "Gruppe",
-    grdListe : 
+    employeePlace: "Bitte geben Sie den aktuellen Namen oder Code zur Suche ein.",
+    txtEmployeeName: "Lieferant-Kundenname",
+    cmbGenus: "Geschlecht",
+    menu: "Lieferant-Kunde Eingabe",
+    btnGet: "Suchen",
+    cmbMainGrp: "Gruppe",
+    grdListe:
     {
-        clmCode: "Mitarbeiter-Code",
-        clmTitle : "Titel",
-        clmType : "Typ",
-        clmGenus : "Geschlecht",
-        clmAdress :"Adresse",
-        clmZipcode : "Postleitzahl",
-        clmCountry :"Land",
-        clmCity : "Stadt",
-        clmPhone1 :"Telefon",
-        clmGsm : "Handy",
-        clmEmail :"E-Mail",
-        clmAge :"Alter",
-        clmInsuranceNo : "Versicherungsnummer",
-        clmGender :"Geschlecht",
-        clmMaritalStatus : "Familienstand",
-        clmWage :"Gehalt",
-        clmName : "Name",
-        clmLastName :"Nachname",
+        clmCode: "Code",
+        clmTitle: "Titel",
+        clmType: "Typ",
+        clmGenus: "Geschlecht",
+        clmAdress: "Adresse",
+        clmZipcode: "Postleitzahl",
+        clmCountry: "Land",
+        clmCity: "Stadt",
+        clmPhone1: "Telefon",
+        clmGsm: "Handy Nr.",
+        clmEmail: "E-Mail",
+        clmIban: "IBAN",
+        clmStatus: "Status",
+        clmAge: "Alter",
+        clmInsuranceNo: "Versicherungsnummer",
+        clmGender: "Geschlecht",
+        clmMarıalStatus: "Familienstand",
+        clmWage: "Gehalt",
+        clmName: "Vorname",
+        clmLastName: "Nachname",
     },
     cmbGenusData:
     {
-        allGenus : "Alle",
-        Employee : "Mitarbeiter",
-        supplier : "Lieferant",
-        both : "Beide",
-        branch : "Filiale"
+        allGenus: "Alle",
+        Employee: "Kunde",
+        supplier: "Lieferant",
+        both: "Beide",
+        branch: "Filiale"
     },
-    msgDeleteSuccess :
+    msgDeleteSuccess:
     {
         msg: "Löschvorgang erfolgreich!"
     }

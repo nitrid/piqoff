@@ -1,4 +1,4 @@
-// "Ürün Detaylı Satış Raporu"
+// "Ürün Kıyas Raporu"
 const pos_02_011 =
 {
     btnGet: "Suchen",
@@ -9,18 +9,19 @@ const pos_02_011 =
         clmCode: "Artikelcode",
         clmName: "Artikelname",
         clmTotalCost: "Gesamtkosten",
-        clmFamount: "Betrag ohne Steuern",
-        clmVat: "Steuerbetrag",
+        clmFamount: "Betrag ohne MwSt.",
+        clmVat: "MwSt.-Betrag",
         clmTotal: "Gesamtbetrag",
-        clmRestTotal: "Gesamter Gewinn ohne Steuern",
+        clmRestTotal: "Gesamter Gewinn ohne MwSt.",
         clmMargin: "Marge",
+        clmQuantity: "Menge",
     },
     pg_txtRef:
     {
         title: "Artikelauswahl",
-        clmCode: "CODE",
-        clmName: "NAME",
-        clmStatus: "STATUS"
+        clmCode: "Code",
+        clmName: "Name",
+        clmStatus: "Status"
     },
 }
 export default pos_02_011

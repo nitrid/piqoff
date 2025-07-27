@@ -1,98 +1,100 @@
 // "Hesaplar Arası Virman",
 const fns_03_003 = 
 {
-    txtRefRefno : "Seriennummer",
-    cmbOutAccount: "Ausgehendes Konto",
-    cmbInAccount: "Eingehendes Konto",
+    txtRefRefno : "Ref.-Ref Nr:",
+    cmbOutAccount:  "Ausgehendes Konto",
+    cmbInAccount:  "Eingehendes Konto",
     dtDocDate : "Datum",
-    txtAmount : "Betrag",
+    txtAmount : "Gesamt" ,
     txtTotal : "Gesamtsumme",
-    description :"Beschreibung",
-    amount : "Betrag",
-    cmbSafe : "Ausgehendes Konto",
-    cmbSafe2 : "Eingehendes Konto",
-    btnSafeToSafe : "Kassentransfer",
-    btnSafeToBank : "Von Kasse zu Bank",
-    btnBankToSafe : "Von Bank zu Kasse",
-    btnBankToBank : "Banküberweisung",
+    description :"Grund",
+    amount : "Gesamt" ,
+    validSafe:"Konto auswählen",
+    cmbSafe :  "Eingehendes Konto",
+    cmbSafe2 :  "Eingehendes Konto",
+    btnSafeToSafe :  "Zwischen Kassen",
+    btnSafeToBank :  "Von Kasse zu Bank",
+    btnBankToSafe :  "Von Bank zu Kasse",
+    btnBankToBank :  "Zwischen Banken",
     pg_Docs : 
     {
         title : "Dokumentenauswahl",
-        clmDate : "DATUM",
-        clmRef : "Serie",
-        clmRefNo : "Seriennummer",
-        clmDate : "DATUM"
+        clmDate : "Datum",
+        clmRef : "Referenz",
+        clmRefNo : "Ref Nr",
+        clmDate : "Datum",
+        clmTotal : "Gesamt inkl. MwSt."
     },
     grdDocVirement: 
     {
-        clmCreateDate: "Erstellungsdatum",
-        clmAmount : "Betrag",
-        clmInputName : "Eingehendes Konto",
-        clmOutputName : "Ausgehendes Konto",
-        clmDescription : "Beschreibung"
+        clmCreateDate: "Registrierungsdatum",
+        clmAmount : "Gesamt" ,
+        clmInputName :  "Eingehendes Konto",
+        clmOutputName :  "Ausgehendes Konto",
+        clmDescription : "Grund"
     },
     msgDocValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Dokumentenkopf muss ausgefüllt werden, bevor Lagerbestand eingegeben werden kann!"
+        msg: "Bitte geben Sie die Kopfzeile vor dem Abschluss ein!"
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
+        msgSuccess: "Erfolgreich gespeichert!",
         msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
+        msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
     },
     msgLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Das Dokument wurde gespeichert und gesperrt!"
+        msg: "Dokument gespeichert und gesperrt!"
     },
     msgPasswordSucces:
     {
-        title: "Erfolgreich",
+        title: "Erfolg",
         btn01: "OK",
-        msg: "Das Dokument wurde entsperrt!",
+        msg: "Dokument entsperrt!",
     },
     msgPasswordWrong:
     {
-        title: "Fehlgeschlagen",
+        title: "Fehler",
         btn01: "OK",
-        msg: "Ihr Passwort ist falsch!"
+        msg: "Falsches Passwort"
     },
     msgGetLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Das Dokument ist gesperrt! Sie müssen es mit dem Administratorpasswort entsperren, um Änderungen vorzunehmen!"
+        msg: "Dokument gesperrt! \n Bitte entsperren Sie es, um Änderungen zu speichern!"
     },
-    msgDocLocked:
+    msgDoclocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Aktion kann nicht ausgeführt werden, solange das Dokument gesperrt ist!"
+        msg: "Sie können nicht speichern, ohne zu entsperren!"
     },
     msgDblAccount:
     {
@@ -102,27 +104,28 @@ const fns_03_003 =
     },
     popSafeToSafe: 
     {
-        title: "Transfer von Tresor zu Tresor",
+        title:  "Überweisung zwischen Kassen",
         btnApprove : "Hinzufügen",
     },
     popSafeToBank: 
     {
-        title: "Transfer von Tresor zur Bank",
+        title:  "Überweisung von Kasse zu Bank",
         btnApprove : "Hinzufügen",
     },
     popBankToSafe: 
     {
-        title: "Transfer von Bank zum Tresor",
+        title: "Überweisung von Bank zu Kasse",
         btnApprove : "Hinzufügen",
     },
     popBankToBank: 
     {
-        title: "Transfer von Bank zu Bank",
+        title: "Überweisung zwischen Banken",
         btnApprove : "Hinzufügen",
     },
-    validRef : "Serie darf nicht leer sein",
-    validRefNo : "Nummer darf nicht leer sein",
-    validAccount : "Bitte wählen Sie ein Konto aus",
-    validDocDate : "Bitte wählen Sie ein Datum aus",
+    
+    validRef : "Referenz eingeben",
+    validRefNo : "Ref Nr eingeben",
+    validAccount : "Konto auswählen",
+    validDocDate : "Datum auswählen",
 }
 export default fns_03_003

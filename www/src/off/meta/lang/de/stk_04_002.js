@@ -1,54 +1,54 @@
-// "İade Operasyonları"
+// "Rückgabe-Operationen"
 const stk_04_002 =
 {
-    txtCustomerCode : "Kunde",
-    validDepot : "Bitte wählen Sie ein Lager aus",
-    ItemNamePlaceHolder :"Geben Sie den vollständigen Artikelname oder einen Teil ein",
+    txtCustomerCode : "Lieferant",
+    validDepot : "Lager auswählen",
+    ItemNamePlaceHolder :"Geben Sie den vollständigen Namen oder eine Silbe des Produkts ein",
     pg_txtCustomerCode : 
     {
-        title : "Kundenauswahl",
-        clmCode :  "KUNDENCODE",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
+        title : "Lieferantenauswahl",
+        clmCode :  "Lieferantencode",
+        clmTitle : "Lieferantenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Gattung"
     },
-    cmbDepot : 'Lager',
+    cmbDepot : 'Lager',  
     btnGet : 'Suchen',
-    btnInvoice : 'In Rechnung umwandeln',
+    btnInvoice : "In Rechnung umwandeln",
     btnDispatch : 'In Lieferschein umwandeln',
     grdRebateList : 
     {
         clmCode: "Code",
         clmName : "Name",
         clmQuantity : "Menge",
-        clmCustomer : "Kunde",
+        clmCustomer : "Lieferant",
         clmPrice : "Preis"
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "Bestätigen",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie die ausgewählten Zeilen zurückgeben möchten?"
+        msg: "Sind Sie sicher, dass Sie die ausgewählten Zeilen zurückgeben möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Rückgabebelege wurden erstellt!",
-        msgFailed: "Fehler beim Speichern des Eintrags!"
+        msgSuccess: "Rückgabebelege erstellt..!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
     msgDublicateItem : 
     {
         title: "Achtung",
         btn01 : "OK",
-        msg : "Das Artikel wurde für mehrere Kunden ausgewählt. Bitte überprüfen Sie dies."
+        msg : "Produkt mehrmals ausgewählt, bitte überprüfen"
     },
     msgCustomerFound : 
     {
         title: "Achtung",
         btn01 : "OK",
-        msg : "Nicht definierte Artikel für den Kunden können nicht ausgewählt werden. Bitte definieren Sie einen Kunden."
+        msg : "Das Produkt hat keinen definierten Lieferanten. Bitte definieren Sie ihn!"
     }
 }
 export default stk_04_002

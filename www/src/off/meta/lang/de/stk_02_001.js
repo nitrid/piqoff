@@ -1,78 +1,79 @@
-// Sayım Evrakı
+// "Inventurdokument"
 const stk_02_001 = 
 {
-    txtRefRefno: "Seriennummer",
-    cmbDepot: "Artikellager",
-    dtDocDate: "Datum",
-    txtBarcode: "Barcode hinzufügen",
-    txtQuantity: "Menge",
+    txtRefRefno : "Ref. Ref Nr",
+    cmbDepot: "Inventarlager",
+    dtDocDate : "Datum",
+    txtBarcode : "Barcode hinzufügen",
+    txtQuantity :"Menge",
+    txtAmount : "Gesamtwert",
     validDesign : "Bitte Design auswählen",
-    txtAmount: "Gesamtwert",
-    pg_Docs:
+    pg_Docs : 
     {
-        title: "Dokumentenauswahl",
-        clmDate: "Datum",
-        clmRef: "Serie",
-        clmRefNo: "Nummer",
-        clmDocDate: "Datum",
-        clmDepotName: "Lager",
-        clmQuantity: "GesamtArtikelmenge",
-        clmTotalLine: "Zeilenanzahl",
+        title : "Dokumentauswahl",
+        clmDate : "Datum",
+        clmRef : "Referenz",
+        clmRefNo : "Nummer",
+        clmDocDate : "Datum",
+        clmDepotName : "Lager oder Filiale",
+        clmQuantity :"Gesamtproduktmenge",
+        clmTotalLine : "Zeilennummer"
     },
-    pg_txtItemsCode:
+    pg_txtItemsCode : 
     {
-        title: "Artikelauswahl",
-        clmCode: "Artikelcode",
-        clmName: "Artikelname",
+        title : "Produkt auswählen",
+        clmCode :  "Produktreferenz",
+        clmName : "Produktname",
+        clmPrice : "Einkaufspreis",
     },
-    grdItemCount:
+    grdItemCount: 
     {
         clmItemCode: "Code",
         clmItemName: "Name",
-        clmQuantity: "Menge",
+        clmQuantity : "Menge",
         clmCreateDate: "Erstellungsdatum",
-        clmDescription: "Beschreibung",
-        clmCostPrice: "Stückpreis",
-        clmTotalCost: "Gesamtkosten",
-        clmCustomerName: "Lieferantenkonto",
-        clmMulticode: "Lieferanten-Code",
-        clmBarcode: "Barcode",
-        clmCuser: "Benutzer",
+        clmDescription :"Motiv",
+        clmCostPrice :"Stückkosten",
+        clmTotalCost :"Gesamtkosten",
+        clmCustomerName :"Lieferantenkonto",
+        clmMulticode : "LFR.Code",
+        clmBarcode : "Barcode",
+        clmCuser : "Benutzer",
     },
-    popPassword:
+    popPassword : 
     {
-        title: "Geben Sie das Administratorpasswort ein, um das Dokument zu öffnen",
-        Password: "Passwort",
-        btnApprove: "Bestätigen",
+        title: "Bitte geben Sie das Administratorpasswort ein, um auf das Dokument zuzugreifen",
+        Password : "Passwort",
+        btnApprove : "Bestätigen",
     },
     msgDocValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Sie können keinen Artikel eingeben, ohne die Dokumentenstammdaten abzuschließen!",
+        msg: "Bitte geben Sie die Überschriften vor dem Abschluss ein!"
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie den Datensatz speichern?",
+        msg: "Sind Sie sicher, dass Sie speichern möchten!",
     },
     msgQuantity:
     {
         title: "Achtung",
         btn01: "Hinzufügen",
         btn02: "Abbrechen",
-        msg: "Bitte Menge eingeben!"
+        msg: "Bitte geben Sie die Menge ein!",
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
-        msgFailed: "Fehler beim Speichern Ihres Eintrags!",
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!",
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
@@ -83,64 +84,64 @@ const stk_02_001 =
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie den Eintrag löschen?"
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?",
     },
     msgBigQuantity:
     {
         title: "Achtung",
         btn01: "Weiter",
         btn02: "Abbrechen",
-        msg: "Die eingegebene Menge ist größer als 1000. Möchten Sie den Vorgang fortsetzen?"
+        msg: "Eingegebene Zahl größer als 1000. Möchten Sie fortfahren?",
     },
     msgLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Dokument wurde gespeichert und gesperrt!"
+        msg: "Dokument gespeichert und gesperrt!"
     },
     msgPasswordSucces:
     {
         title: "Erfolgreich",
         btn01: "OK",
-        msg: "Das Dokument wurde entsperrt!",
+        msg: "Dokument entsperrt!",
     },
     msgPasswordWrong:
     {
-        title: "Fehler",
+        title: "Fehlgeschlagen",
         btn01: "OK",
-        msg: "Falsches Passwort!"
+        msg: "Falsches Passwort",
     },
     msgGetLocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Das Dokument ist gesperrt! Änderungen vorzunehmen und zu speichern nur mit Administratorpasswort möglich!"
+        msg: "Dokument gesperrt! Bitte entsperren Sie es, um Änderungen zu speichern!"
     },
-    msgDocLocked:
+    msgDoclocked:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es können keine Aktionen auf einem gesperrten Dokument durchgeführt werden!"
+        msg: "Sie können nicht speichern, ohne zu entsperren!"
     },
     msgItemNotFound:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Artikel nicht gefunden!"
+        msg: "Produkt nicht gefunden!"
     },
     msgCombineItem:
     {
         title: "Achtung",
-        btn01: "Kombinieren",
+        btn01: "Zusammenfassen",
         btn02: "Ändern",
         btn03: "Abbrechen",
-        msg: "Der Artikel, den Sie hinzufügen möchten, ist bereits im Dokument vorhanden! Sollen die Zeilen kombiniert werden?"
+        msg: "Produkt bereits im Dokument vorhanden! Möchten Sie zusammenfassen?"
     },
-    validRef :"Seriennummer darf nicht leer sein",
-    validRefNo : "Nummer darf nicht leer sein",
-    validDepot : "Sie müssen einen Lager auswählen",
-    validCustomerCode : "Kundennummer darf nicht leer sein",
-    validDocDate : "Bitte wählen Sie ein Datum",
+    validRef :"Ref eingeben",
+    validRefNo : "Ref Nr eingeben",
+    validDepot : "Lager auswählen",
+    validCustomerCode : "Der Lieferanten-Kundencode darf nicht leer sein",
+    validDocDate : "Datum auswählen",
     popDesign : 
     {
         title: "Designauswahl",
@@ -149,18 +150,18 @@ const stk_02_001 =
     },
     pg_txtBarcode : 
     {
-        title : "Barcode-Auswahl",
-        clmCode :  "Artikelnummer",
-        clmName : "Artikelname",
-        clmMulticode : "Lieferantennummer",
+        title : "Barcode auswählen",
+        clmCode :  "Produktreferenz",
+        clmName : "Produktname",
+        clmMulticode : "Lieferantenreferenz",
         clmBarcode : "Barcode"
     },
-    msgCode :
+    msgCode : 
     {
         title: "Achtung",
         btn01: "Zum Dokument gehen",
         btn02: "Abbrechen",
-        msg: "Dokument gefunden"
+        msg: "Dokument gefunden!"
     },
 }
 export default stk_02_001

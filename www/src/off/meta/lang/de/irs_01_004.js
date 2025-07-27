@@ -2,30 +2,30 @@
 const irs_01_004 =
 {
     cmbCustomer: "Kunde",
-    btnGet: "Succhen",
-    dtFirst: "Anfangsdatum",
+    btnGet: "Suchen",
+    dtFirst: "Startdatum",
     dtLast: "Enddatum",
     txtCustomerCode: "Kundencode",
-    menu: "Filial-Verkaufsversand",
+    menu: "Interner Lieferschein",
     pg_txtCustomerCode:
     {
-        title: "Kunden auswählen",
-        clmCode: "Kundencode",
-        clmTitle: "Kundenname",
-        clmTypeName: "TYPE",
-        clmGenusName: "GENUS"
+        title: "Filialauswahl",
+        clmCode: "Filialcode",
+        clmTitle: "Aktueller Name",
+        clmTypeName: "Typ",
+        clmGenusName: "Typ"
     },
     grdSlsDisList:
     {
-        clmRef: "Serie",
-        clmRefNo: "Nummer",
+        clmRef: "Ref.",
+        clmRefNo: "Sequenz",
         clmPrice: "Preis",
-        clmInputCode: "Kundencode",
-        clmInputName: "Kundenname",
+        clmInputCode: "Filialcode",
+        clmInputName: "Filialname",
         clmDate: "Datum",
-        clmVat: "Steuern",
-        clmAmount: "Betrag",
-        clmTotal: "Summe",
+        clmVat: "MwSt.",
+        clmAmount: "Gesamt",
+        clmTotal: "Gesamt",
         clmOutputName: "Lager",
     },
 }

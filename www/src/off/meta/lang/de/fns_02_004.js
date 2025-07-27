@@ -1,48 +1,48 @@
-// "Ausgabe",
+// "Masraf Çıkış Fişi   ",
 const fns_02_004 = 
 {
-    txtRefRefno : "Ref.-Ref Nr:",
-    cmbOutAccount:  "Ausgangskonto",
-    cmbInAccount:  "Eingangskonto",
+    txtRefRefno : "Ref.-Ref Nr.:",
+    cmbOutAccount:  "Ausgehendes Konto",
+    cmbInAccount:  "Eingehendes Konto",
     dtDocDate : "Datum",
     txtAmount : "Gesamt",
     txtTotal : "Gesamtsumme",
-    description : "Beschreibung",
+    description :"Grund",
     amount : "Gesamt",
-    validSafe: "Bitte ein Konto auswählen",
-    cmbSafe :  "Eingangskonto",
-    cmbSafe2 :  "Eingangskonto",
+    validSafe:"Wählen Sie ein Konto aus",
+    cmbSafe :  "Eingehendes Konto",
+    cmbSafe2 :  "Eingehendes Konto",
     btnSafeToSafe :  "Ausgabe hinzufügen",
     cmbBank : "Bank",
     pg_Docs : 
     {
-        title : "Dokument auswählen",
+        title : "Dokumentenauswahl",
         clmDate : "Datum",
         clmRef : "Referenz",
-        clmRefNo : "Ref Nr",
+        clmRefNo : "Ref. Nr.",
         clmDate : "Datum",
-        clmTotal : "Gesamtsumme inkl. MwSt"
+        clmTotal : "Gesamt inkl. MwSt."
     },
     grdDocCostEntry: 
     {
-        clmCreateDate: "Erfassungsdatum",
+        clmCreateDate: "Registrierungsdatum",
         clmAmount : "Gesamt",
-        clmInputName :  "Eingangskonto",
-        clmOutputName :  "Ausgangskonto",
-        clmDescription : "Beschreibung"
+        clmInputName :  "Eingehendes Konto",
+        clmOutputName :  "Ausgehendes Konto",
+        clmDescription : "Grund"
     },
     msgDocValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie die Kopfzeilen aus, bevor Sie abschließen!"
+        msg: "Bitte geben Sie die Kopfzeile vor dem Abschluss ein!"
     },
     msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
     msgSaveResult:
     {
@@ -62,7 +62,7 @@ const fns_02_004 =
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
+        msg: "Sind Sie sicher, dass Sie den Datensatz löschen möchten?"
     },
     msgLocked:
     {
@@ -86,7 +86,7 @@ const fns_02_004 =
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Dokument ist gesperrt!\nBitte entsperren Sie es, um Änderungen zu speichern!"
+        msg: "Dokument gesperrt! \n Bitte entsperren Sie es, um Änderungen zu speichern!"
     },
     msgDocLocked:
     {
@@ -98,7 +98,7 @@ const fns_02_004 =
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Ein- und Ausgangskonten dürfen nicht identisch sein!"
+        msg: "Eingangs- und Ausgangskonten können nicht identisch sein!"
     },
     popCostEntry: 
     {
@@ -107,7 +107,7 @@ const fns_02_004 =
     },
     
     validRef : "Referenz eingeben",
-    validRefNo : "Ref Nr eingeben",
+    validRefNo : "Ref. Nr. eingeben",
     validAccount : "Konto auswählen",
     validDocDate : "Datum auswählen",
 }

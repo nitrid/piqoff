@@ -2,36 +2,36 @@
 const set_03_001 =
 {
     cmbType : "Dokumenttyp",
-    btnGet : "Dokumente Suchen",
+    btnGet : "Dokumente suchen",
     btnUnlock : "Gelöschtes Dokument wiederherstellen",
     mgsUnlock:
     {
         title: "Achtung",
-        btn01: "Ok",
+        btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie das ausgewählte Dokument wiederherstellen?"
+        msg: "Sind Sie sicher, dass Sie das ausgewählte Dokument wiederherstellen möchten?"
     },
     grdDeleteList : 
     {
-        clmRef : "Serie",
-        clmRefNo : "NUMMER",
+        clmRef : "REF.",
+        clmRefNo : "REF.NO.",
         clmCustomer : "KUNDE",
         clmDate : "DATUM",
-        clmDescription : "BESCHREIBUNG",
-        clmUser : "BENUTZER",
-        clmTotal : "BETRAG" 
+        clmDescription : "Beschreibung",
+        clmUser : "Benutzer",
+        clmTotal : "Betrag" 
     },
     cmbTypeData : 
     {
         purchaseDispatch : "Einkaufsversand",
         salesDispatch : "Verkaufsversand",
-        rebateDispatch : "Rabattversand",
-        branchSaleDispatch : "Filialverkaufsversand",
+        rebateDispatch : "Rücksendungsversand",
+        branchSaleDispatch : "Interner Versand",
         purchaseInvoice : "Einkaufsrechnung",
         salesInvoice : "Verkaufsrechnung",
         priceDifferenceInvoice : "Preisdifferenzrechnung",
-        rebateInvoice : "Rabattrechnung",
-        branchSaleInvoice : "Filialverkaufsrechnung",
+        rebateInvoice : "Rücksendungsrechnung",
+        branchSaleInvoice : "Interne Verkaufsrechnung",
         purchaseOrder : "Einkaufsbestellung",
         salesOrder : "Verkaufsbestellung",
         purchaseOffer : "Einkaufsangebot",
@@ -40,8 +40,8 @@ const set_03_001 =
     msgSuccess:
     {
         title: "Erfolgreich",
-        btn01: "Ok",
-        msg: "Das Dokument wurde erfolgreich wiederhergestellt."
+        btn01: "OK",
+        msg: "Dokument wurde erfolgreich wiederhergestellt."
     },
 }
 export default set_03_001

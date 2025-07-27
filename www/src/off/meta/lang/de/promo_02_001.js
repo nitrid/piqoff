@@ -5,8 +5,8 @@ const promo_02_001 =
     txtName: "Name",
     dtStartDate: "Startdatum",
     dtFinishDate: "Enddatum",
-    txtCodePlace: "Geben Sie bitte Angebotscode oder Artikelbarcode ein.",
-    txtNamePlace: "Geben Sie bitte Angebotscode oder Artikelname ein.",
+    txtCodePlace: "Geben Sie bitte den Promo-Code oder den Produkt-Strichcode ein",
+    txtNamePlace: "Geben Sie bitte den Promo-Code oder den Produktnamen ein",
     btnGet: "Suchen",
     grdListe:
     {
@@ -17,15 +17,22 @@ const promo_02_001 =
         clmCondTypeName: "Bedingungstyp",
         clmCondItemCode: "Bedingungscode",
         clmCondItemName: "Bedingungsname",
-        clmCondBarcode: "Bedingungsbarcode",
+        clmCondBarcode: "Bedingungs-Strichcode",
         clmCondQuantity: "Bedingungsmenge",
         clmCondAmount: "Bedingungsbetrag",
         clmAppTypeName: "Anwendungstyp",
         clmAppItemCode: "Anwendungscode",
         clmAppItemName: "Anwendungsname",
-        clmAppBarcode: "Anwendungsbarcode",
+        clmAppBarcode: "Anwendungs-Strichcode",
         clmAppQuantity: "Anwendungsmenge",
         clmAppAmount: "Anwendungsbetrag",
-    }
+    },
+    msgDelete:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        btn02: "Abbrechen",
+        msg: "Sind Sie sicher, dass Sie die ausgewählten Promotionen löschen möchten?"
+    },
 }
 export default promo_02_001

@@ -1,30 +1,35 @@
-// "Alış Sipariş Listesi"
+// "Einkaufsbestellungsliste"
 const sip_01_001 =
 {
-    cmbCustomer :"Kunde",
+    cmbCustomer :"Lieferant",
     btnGet :"Suchen",
-    dtFirst : "Anfangsdatum",
+    chkInvOrDisp: "Nur offene Bestellungen anzeigen",
+    dtFirst : "Startdatum",
     dtLast : "Enddatum",
-    txtCustomerCode : "Kunde",
-    menu:"Einkaufsbestellung",
+    txtCustomerCode : "Lieferant",
+    menu:"Einkaufsbestellungsliste",
     pg_txtCustomerCode : 
     {
-        title : "Kundenauswahl",
-        clmCode :  "KUNDENCODE",
-        clmTitle : "KUNDENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
+        title : "Lieferantenauswahl",
+        clmCode :  "Kundencode",
+        clmTitle : "Lieferantenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Art"
+    },
+    menu : 
+    {
+        sip_02_001 : "Einkaufsbestellung",
     },
     grdPurcOrdList: 
     {
-        clmRef: "Seriennummer",
-        clmRefNo: "Reihennummer",
+        clmRef: "Referenz",
+        clmRefNo: "Zeile",
         clmPrice: "Preis",
-        clmOutputCode : "Kundennummer",
-        clmOutputName : "Kundenname",
+        clmOutputCode : "Dokumentauswahl",
+        clmOutputName : "Lieferantenname",
         clmDate: "Datum",
         clmVat : "MwSt.",
-        clmAmount : "Betrag",
+        clmAmount : "Gesamt ohne MwSt.",
         clmTotal : "Gesamt",
         clmInputName : "Lager",
     },

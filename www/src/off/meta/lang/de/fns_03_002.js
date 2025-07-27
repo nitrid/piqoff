@@ -4,39 +4,39 @@ const fns_03_002 =
     txtCode : "Code",
     txtName :"Name",
     txtIban :"IBAN",
-    validCode :"Der Code darf nicht leer sein!",
-    validIban : "IBAN darf nicht leer sein!",
+    validCode :"Sie können den Code nicht leer lassen!",
+    validIban : "IBAN kann nicht leer sein!",
     cmbCurrentyType :"Währung",
-    txtSwift: "SWIFT",
-    txtOffical :"Ansprechpartner",
+    txtSwift: "Swift",
+    txtOffical :"Administrator",
     txtPhone :  "Telefon",
     txtAdress :"Adresse",
     pg_txtCode : 
     {
-        title : "Kassenauswahl",
-        clmCode : "CODE",
-        clmName : "NAME",
+        title : "Bankauswahl",
+        clmCode : "Code",
+        clmName : "Name",
         clmIban : "IBAN",
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
         msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihr Speichervorgang war erfolgreich!",
-        msgFailed: "Ihr Speichervorgang ist fehlgeschlagen!"
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
@@ -48,9 +48,9 @@ const fns_03_002 =
     msgCode : 
     {
         title: "Achtung",
-        btn01: "Zur Kasse gehen",
+        btn01: "Bankauswahl",
         btn02: "OK",
-        msg : "Die eingegebene Kasse ist im System vorhanden!"
+        msg : "Bank bereits in unserer Datenbank registriert!"
     }
 }
 export default fns_03_002

@@ -6,11 +6,11 @@ const pos_02_008 =
     btnGet: "Suchen",
     dtFirst: "Anfangsdatum",
     dtLast: "Enddatum",
-    txtCustomerCode: "Kunde",
+    txtCustomerCode: "Kundencode",
     cmbDevice: "Gerät",
     txtTicketno: "Belegnummer",
-    numFirstTicketAmount: "Unterer Betrag",
-    numLastTicketAmount: "Oberer Betrag",
+    numFirstTicketAmount: "Hauptmenge",
+    numLastTicketAmount: "Hauptinhalt",
     cmbUser: "Benutzer",
     txtItem: "Artikelcode",
     ckhDoublePay: "Mehrere Zahlungen",
@@ -24,25 +24,25 @@ const pos_02_008 =
         clmLastDate: "Enddatum",
         clmQuantity: "Menge",
         clmPrice: "Preis",
-        clmTotal: "Gesamt",
-        clmAmount: "Betrag",
-        clmDiscount: "Rabatt",
-        clmLoyalty: "Treuerabatt"
+        clmTotal: "Gesamt inkl. MwSt.",
+        clmAmount: "Gesamt",
+        clmDiscount: "Gesamtrabatt",
+        clmLoyalty: "Gesamttreue"
     },
     pg_txtRef:
     {
         title: "Artikelauswahl",
-        clmCode: "CODE",
-        clmName: "NAME",
-        clmBarcode : "BARCODE",
-        clmStatus: "STATUS"
+        clmCode: "Code",
+        clmName: "Name",
+        clmBarcode: "Strichcode",
+        clmStatus: "Status"
     },
-    Abbrechen: "Abbrechen",
+    cancel: "Abbrechen",
     msgItemSelect:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte wählen Sie ein Artikel aus!"
+        msg: "Bitte wählen Sie einen Artikel aus!"
     },
 }
 export default pos_02_008

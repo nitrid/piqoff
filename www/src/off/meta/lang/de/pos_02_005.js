@@ -1,27 +1,27 @@
 // "Degismis Fisler Raporu",
 const pos_02_005 =
 {
-    TicketId: "Quittungs-ID",
+    TicketId: "Belegnummer",
     cmbCustomer: "Kunde",
     btnGet: "Suchen",
     dtFirst: "Anfangsdatum",
     dtLast: "Enddatum",
-    txtCustomerCode: "Kunde",
+    txtCustomerCode: "Kundencode",
     cmbDevice: "Gerät",
-    txtTicketno: "Quittungs-ID",
+    txtTicketno: "Belegnummer",
     numFirstTicketAmount: "Unterer Betrag",
     numLastTicketAmount: "Oberer Betrag",
     cmbUser: "Benutzer",
     txtItem: "Artikelcode",
     ckhDoublePay: "Mehrere Zahlungen",
-    cmbType: "Beschreibungstyp",
+    cmbType: "Grundtyp",
     cmbTypeData:
     {
         parkDesc: "Parkvorgang",
         fullDelete: "Verkaufsstornierung",
         rowDelete: "Zeilenstornierung",
         priceChange: "Preisänderung",
-        rebate: "Rückerstattungsquittungen"
+        rebate: "Rückerstattungsbeleg"
     },
     pg_txtCustomerCode:
     {
@@ -35,73 +35,73 @@ const pos_02_005 =
     {
         clmUser: "Benutzer",
         clmDate: "Datum",
-        clmTicketId: "Quittungs-ID",
-        clmDescription: "Beschreibung",
-        clmTime: "Uhrzeit", 
-        clmTotal: "Betrag", 
+        clmTicketId: "Belegnummer",
+        clmDescription: "Grund",
+        clmTime: "Uhrzeit",
+        clmTotal: "Gesamt",
     },
     pg_txtItem:
     {
         title: "Artikelauswahl",
-        clmCode: "Code",
-        clmName: "Name",
+        clmCode: "Artikelcode",
+        clmName: "Artikelname",
     },
-    grdSaleTicketItems :
+    grdSaleTicketItems:
     {
-        clmBarcode : "Barcode",
-        clmName : "Artikelname",
-        clmQuantity : "Menge",
-        clmPrice : "Preis",
-        clmTotal : "Gesamt",
-        clmLastData : "Erster Preis",
-        clmDescription : "Beschreibung",
-        clmTime: "Uhrzeit", 
+        clmBarcode: "Strichcode",
+        clmName: "Artikelname",
+        clmQuantity: "Menge",
+        clmPrice: "Preis",
+        clmTotal: "Gesamt",
+        clmLastData: "Erster Preis",
+        clmDescription: "Grund",
+        clmTime: "Uhrzeit",
     },
-    grdSaleTicketPays : 
+    grdSaleTicketPays:
     {
-        clmPayName : "Zahlungsart",
-        clmTotal : "Betrag",
+        clmPayName: "Zahlungsart",
+        clmTotal: "Gesamt",
     },
-    popDetail : 
+    popDetail:
     {
-        title : "Belegdetails"
+        title: "Belegdetails"
     },
-    cmbPayType : 
+    cmbPayType:
     {
-        title : "Zahlungsart",
-        esc:"Bar",
-        cb : "Kartenzahlungen",
-        check : "Scheck",
-        ticket : "Restbetrag",
-        bonD : "Rückgabebeleg",
-        avoir : "Gutschrift",
-        virment : "Überweisung",
-        prlv :"Abbuchung/Lastschrift",
-        all :"Alle",
+        title: "Zahlungsart",
+        esc: "Barzahlung",
+        cb: "Kreditkarte",
+        check: "Scheck",
+        ticket: "Restaurantticket",
+        bonD: "Gutschriftbeleg",
+        avoir: "Gutschrift",
+        virment: "Überweisung",
+        prlv: "Abbuchung/Lastschrift",
+        all: "Alle",
     },
-    payChangeNote : "Änderungen an der Quittung sollten nur in Ausnahmefällen vorgenommen und Fehler korrigiert werden!",
-    payChangeNote2 : "Änderungshistorie wird gespeichert!",
-    txtPayChangeDescPlace : "Bitte geben Sie eine Beschreibung ein",
-    txtPayChangeDesc :"Falsche Zahlungsart wurde eingegeben. Korrektur wurde vorgenommen.",
-    popLastTotal : 
+    payChangeNote: "Änderungen am Beleg sollten nur ausnahmsweise vorgenommen und Fehler korrigiert werden dürfen!",
+    payChangeNote2: "Änderungsverlauf wird gespeichert!",
+    txtPayChangeDescPlace: "Bitte geben Sie eine Beschreibung ein",
+    txtPayChangeDesc: "Die Zahlungsart wurde falsch eingegeben. Die Korrektur wurde vorgenommen.",
+    popLastTotal:
     {
-        title : "Zahlungsbetrag"
+        title: "Zahlung"
     },
-    trDeatil: "TR-Detail",
-    lineDelete :"Zeile stornieren",
-    Abbrechen : "Abbrechen",
-    popOpenTike :
+    trDeatil: "T.R Detail",
+    lineDelete: "Zeile stornieren",
+    cancel: "Abbrechen",
+    popOpenTike:
     {
-        title : "Offene Belege"
+        title: "Offene Belege"
     },
-    grdOpenTike: 
+    grdOpenTike:
     {
-        clmUser : "Benutzer",
-        clmDevice : "Gerät",
-        clmDate : "Datum",
-        clmTicketId : "Beleg-Nr.",
-        clmTotal : "Betrag",
-        clmDescription :"Beschreibung",
+        clmUser: "Benutzer",
+        clmDevice: "Kassen-Nr.",
+        clmDate: "Datum",
+        clmTicketId: "Beleg-Nr.",
+        clmTotal: "Gesamt",
+        clmDescription: "Grund"
     },
 }
 export default pos_02_005

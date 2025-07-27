@@ -1,59 +1,59 @@
-// Bağlı Ürün Tanımlama
+// "Verbundene Produktdefinitionen"
 const stk_01_012 = 
 {
-    txtCode: "Code",
-    txtName: "Name",
-    txtQuantity: "Menge",
-    msgRelatedValid:
+    txtCode : "Code", 
+    txtName :"Name", 
+    txtQuantity : "Menge", 
+    msgRelatedValid: 
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Es können keine Zeilen hinzugefügt werden, ohne vorher ein Artikel ausgewählt wurde!",
+        msg: "Es können keine Zeilen hinzugefügt werden, ohne vorher ein Produkt ausgewählt zu haben!"
     },
-    grdRelated:
+    grdRelated : 
     {
-        clmItemCode: "Code",
-        clmItemName: "Name",
-        clmQuantity: "Menge",
+        clmItemCode : "Code",
+        clmItemName : "Name",
+        clmQuantity : "Menge"
     },
-    popRelatedSelect:
+    popRelatedSelect : 
     {
-        title: "Artikelauswahl",
-        clmCode: "Code",
-        clmName: "Name",
+        title : "Produktauswahl",
+        clmCode : "Code",
+        clmName : "Name",
     },
-    popItemSelect:
+    popItemSelect : 
     {
-        title: "Artikelauswahl",
-        clmCode: "Code",
-        clmName: "Name",
+        title : "Produktauswahl",
+        clmCode : "Code",
+        clmName : "Name",
     },
-    msgSpeichern:
+    msgSave : 
     {
-        title: "Achtung",
-        btn01: "OK",
-        btn02: "Abbrechen",
-        msg: "Möchten Sie den Datensatz speichern?",
+        title : "Achtung",
+        btn01 : "OK",
+        btn02 : "Abbrechen",
+        msg : "Sind Sie sicher, dass Sie speichern möchten?"
     },
-    msgSpeichernResult:
+    msgSaveResult :
     {
-        title: "Achtung",
-        btn01: "OK",
-        msgSuccess: "Datensatz erfolgreich gespeichert!",
-        msgFailed: "Fehler beim Speichern des Datensatzes!",
+        title : "Achtung",
+        btn01 : "OK",
+        msgSuccess : "Speichern erfolgreich!",
+        msgFailed : "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid : 
     {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Bitte füllen Sie die erforderlichen Felder aus!",
+        title : "Achtung",
+        btn01 : "OK",
+        msg : "Bitte füllen Sie die erforderlichen Felder aus"
     },
-    msgDelete:
+    msgDelete :
     {
-        title: "Achtung",
-        btn01: "OK",
-        btn02: "Abbrechen",
-        msg: "Möchten Sie den Datensatz löschen?",
+        title : "Achtung",
+        btn01 : "OK",
+        btn02 : "Abbrechen",
+        msg : "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
     },
 }
 export default stk_01_012

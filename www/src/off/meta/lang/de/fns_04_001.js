@@ -1,20 +1,22 @@
 // "Banka Ekstre Raporu"
 const fns_04_001 = 
 {
-    cmbBank : "Bankwählen",  
-    btnCheck : "Aktiv",  
-    btnGet :"Suchen",  
+    cmbBank : "Bankauswahl", 
+    btnCheck : "Aktiv", 
+    btnGet :"Suchen", 
     dtDate : "Datum",
     grdListe : 
     {
-        clmOutputName : "Versandkonto",   
-        clmInputName : "Empfängerkonto",   
-        clmAmount : "Betrag",    
+        clmOutputName : "Ausgehendes Konto",  
+        clmInputName : "Eingehendes Konto",   
+        clmAmount : "Betrag",   
         clmDocDate : "Datum",    
-        clmRef : "Serie",   
-        clmRefNo : "Reihe",    
+        clmRef : "Referenz",   
+        clmRefNo : "Zeile",  
+        clmCode : "Code",
         clmDescription : "Beschreibung",
         clmTypeName : "Typ",
     },
+
 }
 export default fns_04_001

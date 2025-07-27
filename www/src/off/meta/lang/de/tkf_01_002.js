@@ -1,30 +1,30 @@
-// "Satış Teklifi Listesi"
+// "Verkaufsangebot-Liste"
 const tkf_01_002 =
 {
     cmbCustomer :"Kunde",
     btnGet :"Suchen",
-    dtFirst : "Anfangsdatum",
+    dtFirst : "Startdatum",
     dtLast : "Enddatum",
-    txtCustomerCode : "Kundennummer",
+    txtCustomerCode : "Kunde",
     menu:"Verkaufsangebot",
     pg_txtCustomerCode : 
     {
         title : "Kundenauswahl",
-        clmCode :  "KUNDENNUMMER",
-        clmTitle : "FIRMENNAME",
-        clmTypeName : "TYP",
-        clmGenusName : "ART"
+        clmCode :  "Kundencode",
+        clmTitle : "Kundenname",
+        clmTypeName : "Typ",
+        clmGenusName : "Gattung"
     },
-    grdSlsOrdList: 
+    grdSlsOfrList: 
     {
-        clmRef: "Seriennummer",
-        clmRefNo: "Reihenfolge",
+        clmRef: "Referenz",
+        clmRefNo: "Zeile",
         clmPrice: "Preis",
-        clmInputCode : "Kundennummer",
-        clmInputName : "Firmenname",
+        clmInputCode : "Dokumentauswahl",
+        clmInputName : "Kundenname",
         clmDate: "Datum",
         clmVat : "MwSt.",
-        clmAmount : "Betrag",
+        clmAmount : "Gesamt",
         clmTotal : "Gesamt",
         clmOutputName :"Lager",
         clmLivre : "Geliefert"

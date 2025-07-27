@@ -1,12 +1,12 @@
-// "Satış Siparişi Dağıtım Operasyonu"
+// "Verkaufsbestellungsverteilungsoperation"
 const sip_04_002 = 
 {
     cmbCustomer: "Kunde",
-    btnGet: "Abrufen",
-    dtFirst: "Erstes Datum",
-    dtLast: "Letztes Datum",
+    btnGet: "Suchen",
+    dtFirst: "Startdatum",
+    dtLast: "Enddatum",
     cmbDepot: "Lager",
-    menu: "Verkaufsauftrag",
+    menu: "Verkaufsbestellung",
     itemTotalQyt: "Versandbereite Menge",
     popOrderDetail: 
     {
@@ -15,7 +15,7 @@ const sip_04_002 =
     pg_txtCustomerCode: 
     {
         title: "Kundenauswahl",
-        clmCode: "KUNDENNUMMER",
+        clmCode: "KUNDENCODE",
         clmTitle: "KUNDENNAME",
         clmTypeName: "TYP",
         clmGenusName: "ART"
@@ -29,7 +29,7 @@ const sip_04_002 =
         clmTotalQuantity: "Gesamt versandfähig",
         clmQuantity: "Bestellmenge",
         clmApprovedQuantity: "Genehmigte Menge",
-        clmTotalHt: "Betrag ohne Steuern",
+        clmTotalHt: "Gesamt ohne MwSt.",
         clmTotal: "Gesamt",
         clmLivre : "Geliefert"
     },
@@ -37,7 +37,7 @@ const sip_04_002 =
     msgApprovedBig: 
     {
         title: "Achtung",
-        btn01: "Okay",
+        btn01: "OK",
         msg: "Die genehmigte Menge darf nicht größer sein als die Bestellmenge!",
     },
     grdOrderDetail: 
@@ -61,9 +61,9 @@ const sip_04_002 =
     msgSaveSuccess: 
     {
         title: "Achtung",
-        btn01: "Print",
-        btn02: "Okay",
-        msg: "Die ausgewählten Zeilen wurden genehmigt",
+        btn01: "Drucken",
+        btn02: "Schließen",
+        msg: "Die ausgewählten Zeilen wurden genehmigt. Möchten Sie die Bestellungen drucken?",
     },
 }
 

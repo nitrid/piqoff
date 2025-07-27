@@ -1,31 +1,32 @@
 // "İade İrsaliye Listesi"
 const irs_01_003 =
 {
-    cmbCustomer: "Kunde",
+    cmbCustomer: "Lieferant",
     btnGet: "Suchen",
-    dtFirst: "Anfangsdatum",
+    dtFirst: "Startdatum",
     dtLast: "Enddatum",
-    txtCustomerCode: "Kundencode",
-    menu: "Rückversand",
+    txtCustomerCode: "Lieferant",
+    menu: "Rückgabe-Lieferschein",
     pg_txtCustomerCode:
     {
-        title: "Kunden auswählen",
+        title: "Lieferantenauswahl",
         clmCode: "Kundencode",
-        clmTitle: "Kundenname",
-        clmTypeName: "TYPE",
-        clmGenusName: "GENUS"
+        clmTitle: "Lieferantenname",
+        clmTypeName: "Typ",
+        clmGenusName: "Art"
     },
     grdSlsDisList:
     {
-        clmRef: "Serie",
-        clmRefNo: "Nummer",
+        clmRef: "Referenz",
+        clmRefNo: "Zeile",
         clmPrice: "Preis",
-        clmInputCode: "Kundencode",
-        clmInputName: "Kundenname",
+        clmInputCode: "Dokumentenauswahl",
+        clmInputName: "Lieferantenname",
         clmDate: "Datum",
-        clmVat: "Steuern",
-        clmAmount: "Betrag",
-        clmTotal: "Total",
+        clmVat: "MwSt.",
+        clmAmount: "Gesamt",
+        clmTotal: "Gesamt",
     },
+
 }
 export default irs_01_003

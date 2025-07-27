@@ -2,16 +2,20 @@
 const set_02_006 =
 {
     sendMail : "Mail",
-    sendMailPlace : "Geben Sie bitte Ihre E-Mail-Adresse ein",
+    sendMailPlace : "Bitte geben Sie Ihre E-Mail-Adresse ein.",
     mailSubject : "Betreff",
-    mailSubjectPlace: "Geben Sie bitte den Betreff der Support-Mail ein",
+    mailSubjectPlace: "Betreff der Support-Mail eingeben.",
     btnApprove : "Senden",
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihre Sendung war erfolgreich!",
-        msgFailed: "Ihre Sendung ist fehlgeschlagen!"
+        msgSuccess: "Versand erfolgreich!",
+        msgFailed: "Versand fehlgeschlagen!"
+    },
+    msgDeleteResult:
+    {
+        msgSuccess: "Erfolgreich gespeichert!"
     },
 }
 export default set_02_006

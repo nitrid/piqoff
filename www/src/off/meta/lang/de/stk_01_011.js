@@ -1,52 +1,52 @@
-// Vergi Tanımlama
+// "Steuerdefinitionen"
 const stk_01_011 = 
 {
-    txtId: "Belegnummer",
-    txtVat: "Steuersatz",
-    txtType: "Typ",
-    cmbType: "Typ",
-    validCode: "Das Feld 'Code' darf nicht leer sein!",
-    pg_txtCode:
-    {
-        title: "Artikelgruppenauswahl",
-        clmId: "Belegnummer",
-        clmVat: "Steuersatz",
-        clmType: "Typ",
+    txtId : "ID", 
+    txtVat :"Steuerwert", 
+    txtType : "Typ",   
+    cmbType :"Typ",   
+    validCode :"Das Code-Feld darf nicht leer sein!",  
+    pg_txtCode :    
+    {   
+        title : "Produktgruppenauswahl",  
+        clmId : "ID",   
+        clmVat : "Wert",   
+        clmType : "Typ",  
     },
-    msgSpeichern:
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie den Datensatz speichern?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten!"
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Datensatz erfolgreich gespeichert!",
-        msgFailed: "Fehler beim Speichern des Datensatzes!",
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie die erforderlichen Felder aus!",
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie den Datensatz löschen?",
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
     },
-    msgCode:
+    msgCode : 
     {
-        title: "Achtung",
-        btn01: "Zur Kasse gehen",
-        btn02: "OK",
-        msg: "Die eingegebene Belegnummer ist bereits im System registriert!",
+        title: "Achtung", 
+        btn01: "Zur Kasse gehen", 
+        btn02: "OK", 
+        msg : "Die eingegebene ID ist im System registriert!" 
     },
-    chkActive: "Aktiv",
+    chkActive: "Aktiv", 
 }
 export default stk_01_011

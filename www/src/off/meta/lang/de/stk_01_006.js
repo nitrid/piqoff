@@ -1,64 +1,64 @@
-// Depo/Mağaza Tanımları
+// "Lager/Filiale-Definitionen"
 const stk_01_006 = 
 {
     txtCode : "Code",
     txtName :"Name",
     cmbType :"Typ",
-    validCode :"Sie dürfen das Feld Code nicht leer lassen!",
+    validCode :"Das Code-Feld darf nicht leer sein!", 
     cmbTypeData : 
     {
         normal : "Zentral",
-        rebate : "Rabatt",
-        shop : "Shop",
+        rebate : "Rückgabe",
+        shop : "Filiale",
         outage : "Verderb",
     },
-    pg_txtCode :
+    pg_txtCode : 
     {
-        title: "Lager wählen.",
-        clmCode: "Code",
-        clmName: "Name",
-        clmType: "Type",
+        title : "Lagerauswahl",
+        clmCode : "Code",
+        clmName : "Name",
+        clmType : "Typ",
     },
-    msgSpeichern:
+    msgSave:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten!" ,
     },
-    msgSpeichernResult:
+    msgSaveResult:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Eintrag erfolgreich gespeichert!",
-        msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!",
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!" ,
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!",
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!" ,
     },
     msgDelete:
     {
-        title: "Achtung!",
+        title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?",
+        msg: "Sind Sie sicher, dass Sie den Eintrag löschen möchten?" ,
     },
-    msgCode:
+    msgCode : 
     {
-        title: "Achtung!",
-        btn01: "Gehen Sie zur Kasse.",
+        title: "Achtung",
+        btn01: "Lager auswählen",
         btn02: "OK",
-        msg: "Der eingegebene Code ist bereits im System registriert!",
+        msg : "Eingegebenes Lager ist bereits in der Datenbank registriert!" ,
     },
     chkActive: "Aktiv",
-    msgNotDeleted:
+    msgNotDeleted : 
     {
-        title: "Achtung!",
-        btn01: "OK",
-        msg: "Dieser Lager kann nicht gelöscht werden, da Transaktione exisieren!",
+        title: "Achtung",  
+        btn01: "OK",  
+        msg : "Löschen nicht möglich, da bereits Einträge für dieses Lager vorhanden sind!"  
     },
 }
 export default stk_01_006

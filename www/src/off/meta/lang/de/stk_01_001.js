@@ -1,70 +1,70 @@
-//Yeni Ürün Tanımlama
-const stk_01_001 = 
+// "Neues Produkt anlegen"
+const stk_01_001 =
 {
     txtRef: "Referenz",
-    cmbItemGrp: "Artikelgruppe",
+    cmbItemGrp: "Produktgruppe",
     txtCustomer: "Lieferant",
-    cmbItemGenus: "Artikelart",
+    cmbItemGenus: "Produkttyp",
     txtBarcode: "Barcode",
-    cmbTax: "Steuersatz",
+    cmbTax: "Steuerklasse",
     cmbMainUnit: "Haupteinheit",
     cmbOrigin: "Herkunft",
-    cmbUnderUnit: "Untereinheit",
-    txtItemName: "Artikelname",
-    txtShortName: "Kurzname",
-    chkActive: "Aktiv",
-    chkCaseWeighed: "An der Kasse wiegen.",
-    chkLineMerged: "Verkauf mit getrennten Positionen",
-    chkTicketRest: "Ticket-Rest.",
+    cmbUnderUnit: "Produkteinheit",
+    txtItemName: "Produktname",
+    txtShortName: "Kurzbezeichnung",
+    chkActive: "Aktives Produkt",
+    chkCaseWeighed: "Im Kassenbereich wiegen",
+    chkLineMerged: "Positionen an der Kasse trennen",
+    chkTicketRest: "Ticket Rest.",
     chkInterfel : "Interfel",
-    chkCatalog : "Katalog",
-    chkPartiLot : "Parti/Lot",
-    txtCostPrice: "Einkaufspreis",
+    chkPartiLot : "Partie/Lot",
+    txtCostPrice: "Selbstkostenpreis",
     txtSalePrice : "Verkaufspreis",
     txtMinSalePrice: "Min. Verkaufspreis",
     txtMaxSalePrice: "Max. Verkaufspreis",
     txtLastBuyPrice: "Letzter Einkaufspreis",
     txtLastSalePrice: "Letzter Verkaufspreis",
-    tabTitlePrice: "Preis",
-    tabTitleUnit: "Einheit",
+    tabTitlePrice: "Verkaufspreis",
+    tabTitleUnit: "Einheiten",
     tabTitleBarcode: "Barcode",
     tabTitleCustomer: "Lieferant",
-    tabExtraCost: "Zusätzliche Kosten",
-    tabTitleCustomerPrice: "Lieferantenpreisverlauf",
-    tabTitleSalesContract: "Verkaufsverträge",
+    tabExtraCost: "Zusatzkosten",
+    tabTitleCustomerPrice: "Lieferantenpreishistorie",
+    tabTitleSalesContract: "Verkaufsvereinbarung",
     tabTitleInfo: "Informationen",
-    tabTitleOtherShop :"Andere Filialinformationen",
-    tabTitleDetail : "Weitere Angaben", // 
+    tabTitleOtherShop :"Weitere Filialinformationen",
+    tabTitleDetail : "Detaillierte Informationen",
     txtTaxSugar: "Zuckergehalt (100ML/GR)",
-    txtTotalExtraCost : "Zusätzliche Kosten",
+    txtTotalExtraCost : "Zusatzkosten",
     clmtaxSugar : "Zuckersteuer",
-    priceUpdate : "Preisaktualisierung",
-    underUnitPrice : "Untereinheitspreis",
+    priceUpdate : "Preis hinzufügen", 
+    underUnitPrice : "Untereinheitspreis", 
     minBuyPrice : "Mindesteinkaufspreis",
     maxBuyPrice : "Maximaler Einkaufspreis",
     sellPriceAdd : "Verkaufspreis hinzufügen",
-    clmInvoiceCost : "Servicegebühr",
+    clmInvoiceCost : "Servicegebühr", 
     validOrigin : "Herkunft darf nicht leer sein!",
     validTaxSucre : "Bitte geben Sie den korrekten Zuckergehalt ein!",
     validName : "Name darf nicht leer sein!",
     validQuantity : "Menge darf nicht leer sein!" ,
     validPrice :"Preis darf nicht leer sein!",
-    validPriceFloat : "Der Preis muss größer als 0 sein!",
-    validCustomerCode :"Lieferanten-Code eingeben!",
-    validOriginMax8 :"Geben Sie maximal 8 Zeichen ein!",
-    mainUnitName: "Haupteinheit",
-    underUnitName: "Untereinheit",
-    chkDayAnalysis: "Täglich",
-    chkMountAnalysis: "Monatlich",
-
-    txtUnitFactor: "Einheitsfaktor",
-    cmbAnlysType: "Typ",
+    validPriceFloat : "Der Betrag muss größer als 0 sein!",
+    validCustomerCode :"Bitte geben Sie einen Lieferantencode ein!",
+    validOriginMax8 :"Maximal 8 Zeichen eingeben!",
+    mainUnitName :"Haupteinheit",
+    underUnitName : "Untereinheit",
+    chkDayAnalysis : "Täglich",  
+    chkMountAnalysis : "Monatlich",  
+    txtUnitFactor : "Einheitsfaktor", 
+    cmbAnlysType : "Typ", 
     txtCustoms : "Zollcode", 
-    txtGenus : "Produktart", 
-    cmbAnlysTypeData:         
+    txtGenus : "Produkttyp",
+    txtRayon : "Abteilung",
+    chkTaxSugarControl : "Zuckersteuer",
+    cmbAnlysTypeData : 
     {
-        pos: "POS",
-        invoice: "Rechnung"
+        pos: "POS", 
+        invoice : "Rechnung"
     },
     msgDateInvalid:
     {
@@ -72,86 +72,76 @@ const stk_01_001 =
         msg: "Falsches Datum",
         btn01: "Ok"
     },
-    msgSave :
+    pg_txtRef :
     {
-        title: "Achtung",
-        btn01: "OK",
-        btn02: "Abbrechen",
-        msg: "Sind Sie sicher, dass Sie speichern möchten?"
+        title: "Produkt auswählen",
+        clmCode: "Code",
+        clmName: "Name", 
+        clmStatus: "Status" 
     },
-    msgSaveValid :
+    pg_txtPopCustomerCode:
     {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        title: "Lieferantenauswahl",
+        clmCode: "Code",
+        clmName: "Name", 
     },
-    pg_txtRef: 
-    {
-        title: "Auswahl der Artikel",
-        clmCode: "CODE",
-        clmName: "NAME",
-        clmStatus: "STATUS"
-    },
-    pg_txtPopCustomerCode: 
-    {
-        title: "Kundenwahl",
-        clmCode: "CODE",
-        clmName: "NAME"
-    },
-    popPrice: 
+    popPrice:
     {
         title: "Preis hinzufügen",
         cmbPopPriListNo: "Listennummer", 
         dtPopPriStartDate: "Startdatum",
-        dtPopPriEndDate: "Enddatum",
+        dtPopPriEndDate: "Enddatum", 
+        cmbPopPriDepot: "Lager",
         txtPopPriQuantity: "Menge",
-        txtPopPriPrice: "Preis",
-        txtPopPriPriceVatExt: "Preis ohne MwSt.",
-        txtPopPriceMargin : "Marge %"
+        txtPopPriPrice: "Verkaufspreis",
+        txtPopPriHT: "Verkaufspreis ohne MwSt.",
+        txtPopPriTTC : "Verkaufspreis inkl. MwSt.",
+        txtPopPriceMargin : "Marge %",
+        txtPopPriceGrossMargin :"Bruttomarge %",
+        txtPopPriceNetMargin:"Nettomarge %",
     },
-    popUnit: 
+    popUnit:
     {
         title: "Einheit hinzufügen",
         cmbPopUnitType: "Typ",
-        cmbPopUnitName: "Einheitsname",
+        cmbPopUnitName: "Einheitsname", 
         txtPopUnitFactor: "Faktor",
         txtPopUnitWeight: "Gewicht",
         txtPopUnitVolume: "Volumen",
         txtPopUnitWidth: "Breite",
-        txtPopUnitHeight: "Höhe",
-        txtPopUnitSize: "Größe"
+        txtPopUnitHeight: "Länge",
+        txtPopUnitSize: "Höhe"
     },
-    popBarcode: 
+    popBarcode:
     {
         title: "Barcode hinzufügen",
         txtPopBarcode: "Barcode",
-        cmbPopBarUnit: "Einheit",
+        cmbPopBarUnit: "Einheit", 
         cmbPopBarType: "Typ"
     },
-    popCustomer: 
+    popCustomer:
     {
-        title: "Lieferant hinzufügen",
+        title: "Neuer Lieferant",
         txtPopCustomerCode: "Code",
-        txtPopCustomerName: "Name",
-        txtPopCustomerItemCode: "Artikelcode des Lieferanten",
-        txtPopCustomerPrice: "Preis"
+        txtPopCustomerName: "Name", 
+        txtPopCustomerItemCode: "Lieferantenreferenz",
+        txtPopCustomerPrice: "Einkaufspreis "
     },
     grdPrice: 
     {
         clmListNo: "Listennummer", 
         clmDepot: "Lager",
-        clmCustomerName: "Kunde",
+        clmCustomerName: "Lieferant",
         clmStartDate: "Startdatum",
         clmFinishDate: "Enddatum",
         clmQuantity: "Menge",
-        clmVatExt: "Preis ohne MwSt.",
+        clmPriceTTC : "Preis inkl. MwSt.",
+        clmPriceHT: "Preis ohne MwSt.",
         clmPrice: "Preis",
         clmGrossMargin: "Bruttomarge",
         clmNetMargin: "Nettomarge",
         clmMargin : "Marge %",
-        clmPriceTTC : "Preis inkl. MwSt.",
-        clmPriceHT : "Preis ohne MwSt.",
-        clmListName : "Liste"
+        clmListName: "Listenname"
     },
     grdUnit: 
     {
@@ -161,8 +151,8 @@ const stk_01_001 =
         clmWeight: "Gewicht",
         clmVolume: "Volumen",
         clmWidth: "Breite",
-        clmHeight: "Höhe",
-        clmSize: "Größe"
+        clmHeight: "Länge",
+        clmSize: "Höhe"
     },
     grdBarcode: 
     {
@@ -175,95 +165,95 @@ const stk_01_001 =
         clmDate: "Datum",
         clmPrice: "Zusatzkosten",
         clmTypeName: "Typ",
-        clmCustomerPrice: "Lieferantenpreis",
-        clmCustomer: "Lieferant",
-        clmDescription: "Beschreibung"
+        clmCustomerPrice : "Lieferantenpreis",
+        clmCustomer : "Lieferant",
+        clmDescription : "Motiv",  
     },
     grdCustomer: 
     {
         clmCode: "Code",
         clmName: "Name",
-        clmPriceUserName: "Benutzer/in",
-        clmPriceDate: "Letztes Preisdatum",
-        clmPrice: "Preis",
-        clmMulticode: "LieferantenArtikelcode"
+        clmPriceUserName: "Benutzer",
+        clmPriceDate: "Letztes Selbstkostenpreisdatum",
+        clmPrice: "Preis ",
+        clmMulticode: "Lieferantenproduktcode"
     },
     grdSalesContract: 
     {
         clmUser: "Benutzer",
         clmCode: "Code",
         clmName: "Name",
-        clmDate: "Letztes Preisdatum",
-        clmPrice: "Preis",
-        clmMulticode: "LieferantenArtikelcode"
+        clmDate: "Letztes Selbstkostenpreisdatum",
+        clmPrice: "Preis ",
+        clmMulticode: "Lieferantenproduktcode"
     },
     grdCustomerPrice: 
     {
-        clmUser: "Benutzer/in",
+        clmUser: "Benutzer",
         clmCode: "Code",
         clmName: "Name",
-        clmDate: "Letztes Preisdatum",
-        clmPrice: "Preis",
-        clmMulticode: "LieferantenArtikelcode"
+        clmDate: "Letztes Selbstkostenpreisdatum",
+        clmPrice: "Preis ",
+        clmMulticode: "Lieferantenproduktcode"
     },
     grdOtherShop: 
     {
-        clmCode: "Artikelcode",
-        clmName: "Artikelname",
+        clmCode: "Lieferantenreferenz",
+        clmName: "Produktname",
         clmBarcode: "Barcode",
-        clmPrice: "Preis",
-        clmMulticode: "LieferantenArtikelcode",
+        clmPrice: "Verkaufspreis",
+        clmMulticode: "LFR.Code",
         clmCustomer: "Lieferant",
-        clmCustomerPrice: "Lieferantenpreis",
+        clmCustomerPrice: "Einkaufspreis",
         clmShop: "Filiale",
-        clmDate: "Aktualisierungsdatum"
+        clmDate: "Letztes Kaufdatum" 
     },
-    msgRef: 
+    msgRef:
     {
         title: "Achtung",
-        btn01: "Zum Artikel gehen",
+        btn01: "Zum Produkt gehen",
         btn02: "OK",
-        msg: "Der eingegebene Bestand ist im System vorhanden!"
+        msg: "Eingegebenes Produkt existiert bereits!"
     },
-    msgBarcode: 
+    msgBarcode:
     {
         title: "Achtung",
-        btn01: "Zum Artikel gehen",
+        btn01: "Zum Produkt gehen",
         btn02: "OK",
-        msg: "Der eingegebene Barcode ist im System vorhanden!"
+        msg: "Eingegebener Barcode existiert bereits!"
     },
-    msgCustomer: 
+    msgCustomer:
     {
         title: "Achtung",
-        btn01: "Zum Artikel gehen",
+        btn01: "Zum Produkt gehen",
         btn02: "OK",
-        msg: "Der eingegebene LieferantenArtikelcode ist im System vorhanden!"
+        msg: "Eingegebener Lieferantenproduktcode existiert bereits!"
     },
-    msgPriceSpeichern: 
+    msgPriceSave:
     {
         title: "Achtung",
         btn01: "OK",
         msg: "Bitte geben Sie einen Preis ein!"
     },
-    msgSpeichern: 
+    msgSave:
     {
         title: "Achtung",
         btn01: "OK",
         btn02: "Abbrechen",
-        msg: "Möchten Sie den Eintrag speichern?"
+        msg: "Sind Sie sicher, dass Sie speichern möchten?"
     },
-    msgSpeichernResult: 
+    msgSaveResult:
     {
         title: "Achtung",
         btn01: "OK",
-        msgSuccess: "Ihr Eintrag wurde erfolgreich gespeichert!",
-        msgFailed: "Ihr Eintrag konnte nicht gespeichert werden!"
+        msgSuccess: "Erfolgreich gespeichert!",
+        msgFailed: "Speichern fehlgeschlagen!"
     },
-    msgSpeichernValid:
+    msgSaveValid:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
     msgDelete:
     {
@@ -276,53 +266,53 @@ const stk_01_001 =
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte geben Sie einen höheren Preis als den Einkaufspreis ein!"
+        msg: "Bitte geben Sie einen höheren Betrag als den Einkaufspreis ein!"
     },
     msgPriceAdd:
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Bitte füllen Sie alle erforderlichen Felder aus!"
+        msg: "Bitte füllen Sie die erforderlichen Felder aus!"
     },
-    tabTitleSalesPriceHistory : "Verkaufspreisverlauf",
+    tabTitleSalesPriceHistory : "Verkaufspreishistorie",
     grdSalesPrice : 
     {
-        clmUser : "Benutzer/in",
+        clmUser : "Benutzer",
         clmDate : "Änderungsdatum",
-        clmPrice : "Preis",
+        clmPrice : "Preis ",
     },
     grdItemInfo: 
     {
         cDate: "Erstellungsdatum",
-        cUser: "Ersteller-Benutzer/in",
+        cUser: "Ersteller",
         lDate: "Letztes Änderungsdatum",
-        lUser : "Letzter Benutzer/in",
+        lUser : "Letzter Bearbeiter",
     },
     msgCheckPrice:
     {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Sie können keinen ähnlichen Eintrag erstellen!"
+        title: "Achtung", 
+        btn01: "OK", 
+        msg: "Ähnlicher Eintrag kann nicht erstellt werden!" 
     },
     msgCheckCustomerCode:
     {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Der eingegebene Lieferantencode ist bereits vorhanden!"
+        title: "Achtung", 
+        btn01: "OK", 
+        msg: "Lieferant existiert bereits!" 
     },
     msgSalePriceToCustomerPrice:
     {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Der eingegebene Lieferantenpreis darf nicht höher sein als der Verkaufspreis! Bitte überprüfen Sie Ihren Verkaufspreis."
+        title: "Achtung", 
+        btn01: "OK", 
+        msg: "Der Einkaufspreis darf nicht höher als der Verkaufspreis sein! Bitte überprüfen Sie den Verkaufspreis." 
     },
-    popAnalysis :
+    popAnalysis :  
     {
-        title : "Verkaufsstatistik"
+        title : "Verkaufsstatistik" 
     },
     popDescription :
     {
-        title : "Produkt Sprache und Beschreibung",
+        title : "Produktsprache und Beschreibung",
         label : "Produktbeschreibung"
     },
     grdLang : 
@@ -332,11 +322,11 @@ const stk_01_001 =
     },
     popItemLang : 
     {
-        title : "Produkt Sprache",
+        title : "Produktsprache",
         cmbPopItemLanguage : "Sprache",
         cmbPopItemLangName : "Produktname",
     },
-    grdAnalysis: 
+    grdAnalysis:  
     {
         clmToday: "Heute",
         clmYesterday: "Gestern",
@@ -345,59 +335,65 @@ const stk_01_001 =
         clmYear : "Dieses Jahr",
         clmLastYear : "Letztes Jahr"
     },
-    dtFirstAnalysis : "Start",
-    dtLastAnalysis : "Ende",
-    btnGet : "Suchen",
-    msgNotDelete:
+    dtFirstAnalysis : "Start",  
+    dtLastAnalysis : "Ende", 
+    btnGet : "Bestätigen", 
+    msgNotDelete: 
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Dieser Artikel kann nicht gelöscht werden, da Transaktione exisieren!"
+        msg: "Produkt bereits verarbeitet, Löschen nicht möglich!"
     },
     cmbItemGenusData :
     {
-        item : "Ware",
+        item : "Artikel",
         service : "Dienstleistung",
-        deposit : "Kaution"
+        deposit : "Pfand"
     },
     msgUnit:
     {
-        title: "Einheitenumrechnung",
-        btn01: "Bestätigen",
+        title: "Einheitenberechnung",  
+        btn01: "Bestätigen",   
     },
     msgUnitRowNotDelete :
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Sie können die Basiseinheit oder die Unterunit nicht löschen!"
+        msg: "Sie können die Haupteinheit und die Untereinheit nicht löschen!" 
     },
     pg_customsCode : 
     {
-        title : "Zollcodes",   
-        clmCode : "CODE",   
-        clmName : "NAME" 
+        title : "Zollcodes",  
+        clmCode : "Code",  
+        clmName : "Name" 
     },
     pg_txtGenre : 
     {
-        title : "Produktart",   
-        clmCode : "CODE",   
-        clmName : "NAME"  
+        title : "Produkttyp",  
+        clmCode : "Code", 
+        clmName : "Name"  
+    },
+    pg_rayonCode : 
+    {
+        title : "Abteilungsauswahl",  
+        clmCode : "Code", 
+        clmName : "Name"  
     },
     msgNewItem:
     {
         title: "Achtung",   
-        btn01: "Ja!",   
-        btn02: "Abbrechen",   
-        msg: "Möchten Sie zu einem neuen Produkt wechseln?"  
+        btn01: "OK",
+        btn02: "Abbrechen",
+        msg: "Sind Sie sicher, dass Sie die Seite aktualisieren möchten?"  
     },
     msgItemBack:
     {
         title: "Achtung",  
-        btn01: "Ja!",  
+        btn01: "OK",  
         btn02: "Abbrechen",  
-        msg: "Möchten Sie erneut nach dem Produkt suchen?"  
+        msg: "Sind Sie sicher, dass Sie das Produkt erneut zurückholen möchten?"  
     },
-    btnSubGroup: "Untergruppe Hinzufügen",
+    btnSubGroup: "Untergruppe hinzufügen",
     pg_subGroup: 
     {
         title: "Untergruppenauswahl",
@@ -410,8 +406,8 @@ const stk_01_001 =
     },
     propertyPopup : 
     {
-        title : "Eigenschaft hinzufügen",
-        property : "Eigenschaft", 
+        title : "Eigenschaft hinzufügen", 
+        property : "Eigenschaft",
         value : "Wert",
         add : "Hinzufügen",
     },

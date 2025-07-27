@@ -3,38 +3,56 @@ const irs_01_002 =
 {
     cmbCustomer: "Kunde",
     btnGet: "Suchen",
-    dtFirst: "Anfangsdatum",
+    dtFirst: "Startdatum",
     dtLast: "Enddatum",
     txtCustomerCode: "Kunde",
-    menu: "Lieferschein",
-    chkOpenDispatch: "Noch nicht in Rechnung umgewandelten Belege anzeigen.",
+    cmbMainGrp: "Kundengruppe",
+    menu: "Verkaufslieferschein",
+    chkOpenDispatch: "Nur die ohne Rechnung anzeigen",
+    msgNoMailAddress: "Der Kunde hat keine E-Mail-Adresse.",
     pg_txtCustomerCode:
     {
-        title: "Kunden auswählen",
+        title: "Kundenauswahl",
         clmCode: "Kundencode",
         clmTitle: "Kundenname",
-        clmTypeName: "TYPE",
-        clmGenusName: "GENUS"
+        clmTypeName: "Typ",
+        clmGenusName: "Art"
     },
     popDesign :
     {
-        title : "Dizayn auswählen",
-        design : "Dizayn auswählen",
-        btnPrint : "Drucken",
-        btnCancel : "Schließen"
+        title: "Design-Auswahl",
+        design: "Design-Auswahl",
+        btnPrint: "Drucken",
+        btnCancel: "Schließen"
     },
     grdSlsDisList:
     {
-        clmRef: "Serie",
-        clmRefNo: "Nummer",
+        clmRef: "Referenz",
+        clmRefNo: "Zeile",
         clmPrice: "Preis",
-        clmInputCode: "Kundencode",
+        clmInputCode: "Dokumentenauswahl",
         clmInputName: "Kundenname",
         clmDate: "Datum",
-        clmVat: "Steuern",
-        clmAmount: "Betrag",
-        clmTotal: "Summe",
+        clmVat: "MwSt.",
+        clmAmount: "Gesamt ohne MwSt.",
+        clmTotal: "Gesamt inkl. MwSt.",
+        clmMainGroup: "Kundengruppe",
         clmOutputName: "Lager",
+        clmFacture: "In Rechnung umgewandelt"
+    },
+    msgConvertInvoices:
+    {  
+        title: "Achtung",
+        btn01: "OK",
+        btn02: "Abbrechen",
+        msg: "Sind Sie sicher, dass Sie die ausgewählten Lieferscheine in Rechnungen umwandeln möchten? Nach der Rechnungserstellung können keine Änderungen mehr vorgenommen werden!!"         
+    },
+    msgConvertSucces:
+    {  
+        title: "Achtung",
+        btn01: "Drucken",
+        btn02: "Schließen",
+        msg: "Rechnungen wurden erstellt. Möchten Sie sie drucken?"         
     },
     msgPrintDispatch :
     {  
@@ -43,5 +61,6 @@ const irs_01_002 =
         btn02: "Schließen", 
         msg: "Die Lieferscheine werden gedruckt. Möchten Sie sie drucken?"
     }
+
 }
 export default irs_01_002
