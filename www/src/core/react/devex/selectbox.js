@@ -18,6 +18,11 @@ export default class NdSelectBox extends Base
         this._onValueChanged = this._onValueChanged.bind(this);
         this._onChange = this._onChange.bind(this);
         this._onCustomItemCreating = this._onCustomItemCreating.bind(this);
+        this._onSelectionChanged = this._onSelectionChanged.bind(this);
+        this._onFocusIn = this._onFocusIn.bind(this);
+        this._onFocusOut = this._onFocusOut.bind(this);
+        this._onOpened = this._onOpened.bind(this);
+        this._onKeyDown = this._onKeyDown.bind(this);
         this.setData = this.setData.bind(this);
     }
     //#region Private
@@ -43,16 +48,24 @@ export default class NdSelectBox extends Base
             searchEnabled={this.props.searchEnabled}
             searchMode={'contains'}
             searchExpr={this.props.searchExpr}
-            searchTimeout={200}
-            minSearchLength={0}
+            searchTimeout={this.props.searchTimeout || 200}
+            minSearchLength={this.props.minSearchLength || 0}
+            openOnFieldClick={this.props.openOnFieldClick}
             onValueChanged={this._onValueChanged}
             onChange={this._onChange}
             onCustomItemCreating = {this._onCustomItemCreating}
             onInitialized={this._onInitialized}
+            onSelectionChanged={this._onSelectionChanged}
+            onFocusIn={this._onFocusIn}
+            onFocusOut={this._onFocusOut}
+            onOpened={this._onOpened}
+            onKeyDown={this._onKeyDown}
             itemRender={this.props.itemRender}
             height={this.props.height}
             style={this.props.style}
             value={this.state.value}
+            dropDownButtonRender={this.props.dropDownButtonRender}
+            buttons={this.props.buttons}
             >
                 {this.props.children}
                 {this.validationView()}
@@ -79,8 +92,7 @@ export default class NdSelectBox extends Base
         }
     }
     _onCustomItemCreating(e)
-    {
-       
+    {       
         if(typeof this.props.onCustomItemCreating != 'undefined')
         {
             this.props.onCustomItemCreating(e)
@@ -91,6 +103,41 @@ export default class NdSelectBox extends Base
         if(typeof this.props.onChange != 'undefined')
         {
             this.props.onChange();
+        }
+    }
+    _onSelectionChanged(e)
+    {
+        if(typeof this.props.onSelectionChanged != 'undefined')
+        {
+            this.props.onSelectionChanged(e);
+        }
+    }
+    _onFocusIn(e)
+    {
+        if(typeof this.props.onFocusIn != 'undefined')
+        {
+            this.props.onFocusIn(e);
+        }
+    }
+    _onFocusOut(e)
+    {
+        if(typeof this.props.onFocusOut != 'undefined')
+        {
+            this.props.onFocusOut(e);
+        }
+    }
+    _onOpened(e)
+    {
+        if(typeof this.props.onOpened != 'undefined')
+        {
+            this.props.onOpened(e);
+        }
+    }
+    _onKeyDown(e)
+    {
+        if(typeof this.props.onKeyDown != 'undefined')
+        {
+            this.props.onKeyDown(e);
         }
     }
     //#endregion

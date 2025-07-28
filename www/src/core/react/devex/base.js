@@ -405,9 +405,9 @@ export default class NdBase extends React.PureComponent
                                 }
                                 // EĞER DATA SOURCE A QUERY SET GÖNDERİLMİŞ İSE
                                 else if (typeof e != 'undefined' && typeof e.source != 'undefined' && typeof e.source == 'object' && typeof e.source.sql != 'undefined' && typeof e.source.select != 'undefined')
-                                {          
-                                    // BÜYÜK DATALARDA SÜREKLİ DATAYI GETİRMEMESİ İÇİN İF EKLENDİ
-                                    if(typeof tmpThis.state.data.datatable == 'undefined' || typeof tmpThis.props.notRefresh == 'undefined')
+                                {   
+                                    // Database üzerinde arama yapılıyorsa dbSearch true olarak gönderilir.
+                                    if(typeof e.dbSearch != 'undefined' && e.dbSearch == true)
                                     {
                                         tmpThis.state.data.source = e.source;
                                         tmpThis.state.data.datatable = new datatable();
@@ -416,10 +416,32 @@ export default class NdBase extends React.PureComponent
                                         tmpThis.state.data.datatable.insertCmd = e.source.insert;
                                         tmpThis.state.data.datatable.updateCmd = e.source.update;
                                         tmpThis.state.data.datatable.deleteCmd = e.source.delete;
-    
-                                        await tmpThis.state.data.datatable.refresh()
-                                    }   
-                                }                                
+
+                                        let searchValue = loadOption.searchValue || '';
+                                        if(searchValue != '')
+                                        {
+                                            tmpThis.state.data.datatable.selectCmd.value = [searchValue.replaceAll('*','%')];
+                                            await tmpThis.state.data.datatable.refresh()
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // BÜYÜK DATALARDA SÜREKLİ DATAYI GETİRMEMESİ İÇİN İF EKLENDİ
+                                        if(typeof tmpThis.state.data.datatable == 'undefined' || typeof tmpThis.props.notRefresh == 'undefined')
+                                        {
+                                            tmpThis.state.data.source = e.source;
+                                            tmpThis.state.data.datatable = new datatable();
+                                            tmpThis.state.data.datatable.sql = e.source.sql
+                                            tmpThis.state.data.datatable.selectCmd = e.source.select;
+                                            tmpThis.state.data.datatable.insertCmd = e.source.insert;
+                                            tmpThis.state.data.datatable.updateCmd = e.source.update;
+                                            tmpThis.state.data.datatable.deleteCmd = e.source.delete;
+
+                                            await tmpThis.state.data.datatable.refresh()
+                                        }
+                                    }
+                                }           
+
                                 if(typeof tmpThis.state.data != 'undefined' && typeof tmpThis.state.data.datatable != 'undefined')
                                 {
                                     //GROUP BY İÇİN YAPILDI
@@ -439,7 +461,7 @@ export default class NdBase extends React.PureComponent
                                     }
                                     else
                                     {
-                                        if(typeof loadOption.searchValue != 'undefined' && loadOption.searchValue != null)
+                                        if(typeof loadOption.searchValue != 'undefined' && loadOption.searchValue != null && typeof e.dbSearch == 'undefined')
                                         {
                                             function filterByValue(array, string) 
                                             {
