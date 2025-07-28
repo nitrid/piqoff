@@ -1,20 +1,20 @@
 import React from 'react';
 import App from '../../../lib/app.js';
-import {itemsCls,itemPriceCls,itemBarcodeCls,itemMultiCodeCls,unitCls,itemLogPriceCls} from '../../../../core/cls/items.js'
+import { itemsCls, itemBarcodeCls, itemMultiCodeCls, itemLogPriceCls } from '../../../../core/cls/items.js'
 import moment from 'moment';
 
 import ScrollView from 'devextreme-react/scroll-view';
 import Toolbar,{ Item } from 'devextreme-react/toolbar';
-import {  Chart, Series, CommonSeriesSettings,  Format, Legend, Export, Label } from 'devextreme-react/chart';
+import {  Chart, Series, CommonSeriesSettings,  Format, Label } from 'devextreme-react/chart';
 import { Button } from 'devextreme-react/button';
 
-import NdTextBox, { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule } from '../../../../core/react/devex/textbox.js'
+import NdTextBox, { Validator, RequiredRule, StringLengthRule, RangeRule } from '../../../../core/react/devex/textbox.js'
 import NdNumberBox from '../../../../core/react/devex/numberbox.js';
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
 import NdPopUp from '../../../../core/react/devex/popup.js';
-import NdGrid,{Column,Editing,Paging,Scrolling,Button as GrdButton,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
+import NdGrid,{ Column, Editing, Paging, Scrolling, Button as GrdButton, StateStoring, ColumnChooser } from '../../../../core/react/devex/grid.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
@@ -27,7 +27,6 @@ import { NdLayout,NdLayoutItem } from '../../../../core/react/devex/layout';
 import { NdForm, NdItem, NdLabel, NdEmptyItem } from '../../../../core/react/devex/form.js';
 import { NdToast } from '../../../../core/react/devex/toast.js';
 import { datatable } from '../../../../core/core.js';
-
 export default class itemCard extends React.PureComponent
 {
     constructor(props)
@@ -205,9 +204,6 @@ export default class itemCard extends React.PureComponent
         this.txtBarcode.readOnly = true;   
         this.imgFile.value = ""; 
         
-        let tmpUnit = new unitCls();
-        await tmpUnit.load()
-        
         if(typeof this.itemsObj.dt()[0] != 'undefined')
         {
             let tmpMainUnitObj = {...this.itemsObj.itemUnit.empty}
@@ -215,17 +211,10 @@ export default class itemCard extends React.PureComponent
             tmpMainUnitObj.TYPE_NAME = this.t("mainUnitName")   
             tmpMainUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
             
-            if(tmpUnit.dt(0).length > 0)
-            {
-                tmpMainUnitObj.ID = tmpUnit.dt(0)[0].ID
-            }
-            
             let tmpUnderUnitObj = {...this.itemsObj.itemUnit.empty}
             tmpUnderUnitObj.TYPE = 1,
             tmpUnderUnitObj.TYPE_NAME = this.t("underUnitName")   
-            tmpUnderUnitObj.ID  = this.cmbUnderUnit.value
             tmpUnderUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID    
-            tmpUnderUnitObj.FACTOR = 0
             
             let tmpBarcodeObj = {...this.itemsObj.itemBarcode.empty}
             tmpBarcodeObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
@@ -234,7 +223,7 @@ export default class itemCard extends React.PureComponent
             this.itemsObj.itemUnit.addEmpty(tmpMainUnitObj);
             this.itemsObj.itemUnit.addEmpty(tmpUnderUnitObj);
         }
-
+        
         this.core.util.logPath = "\\www\\log\\off_" + this.core.auth.data.CODE + ".txt"
 
         this.itemsObj.dt()[0].GENRE = this.prmObj.filter({ID:'txtGenre'}).getValue().value
@@ -341,9 +330,18 @@ export default class itemCard extends React.PureComponent
             if(pCode !== '')
             {
                 App.instance.loading.show()
-                let tmpData = await new itemsCls().load({CODE:pCode});
+                
+                let tmpQuery = 
+                {
+                    query : `SELECT TOP 1 CODE FROM ITEMS WHERE CODE = @CODE AND DELETED = 0`,
+                    param : ['CODE:string|50'],
+                    value : [pCode]
+                }
+                
+                let tmpData = await this.core.sql.execute(tmpQuery)
+                
                 App.instance.loading.hide()
-                if(tmpData.length > 0)
+                if(tmpData.result.recordset.length > 0)
                 {
                     let tmpConfObj =
                     {
@@ -1167,25 +1165,16 @@ export default class itemCard extends React.PureComponent
                                         this.itemsObj.dt()[0].TICKET_REST = tmpItem.TICKET_REST
                                         this.itemsObj.dt()[0].SNAME = tmpItem.SNAME
                                         this.itemsObj.dt()[0].TAX_SUGAR = tmpItem.TAX_SUGAR 
-                                        let tmpUnit = new unitCls();
-                                        await tmpUnit.load()
                                         
                                         let tmpMainUnitObj = {...this.itemsObj.itemUnit.empty}
                                         tmpMainUnitObj.TYPE = 0
                                         tmpMainUnitObj.TYPE_NAME = this.t("mainUnitName")   
                                         tmpMainUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
                                         
-                                        if(tmpUnit.dt(0).length > 0)
-                                        {
-                                            tmpMainUnitObj.ID = tmpUnit.dt(0)[0].ID
-                                        }
-                                        
                                         let tmpUnderUnitObj = {...this.itemsObj.itemUnit.empty}
                                         tmpUnderUnitObj.TYPE = 1,
                                         tmpUnderUnitObj.TYPE_NAME =this.t("underUnitName")   
-                                        tmpUnderUnitObj.ID  = this.cmbUnderUnit.value
                                         tmpUnderUnitObj.ITEM_GUID = this.itemsObj.dt()[0].GUID    
-                                        tmpUnderUnitObj.FACTOR = 0
                                         
                                         let tmpBarcodeObj = {...this.itemsObj.itemBarcode.empty}
                                         tmpBarcodeObj.ITEM_GUID = this.itemsObj.dt()[0].GUID 
@@ -1238,34 +1227,32 @@ export default class itemCard extends React.PureComponent
                                         <div className="col-8 p-0">
                                             <NdTextBox id="txtRef" parent={this} tabIndex={this.tabIndex} dt={{data:this.itemsObj.dt('ITEMS'),field:"CODE"}} simple={true}
                                             upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
-                                            button=
-                                            {
-                                                [
+                                            button={
+                                            [
+                                                {
+                                                    id:'01',
+                                                    icon:'more',
+                                                    onClick:()=>
                                                     {
-                                                        id:'01',
-                                                        icon:'more',
-                                                        onClick:()=>
+                                                        this.pg_txtRef.show()
+                                                        this.pg_txtRef.onClick = (data) =>
                                                         {
-                                                            this.pg_txtRef.show()
-                                                            this.pg_txtRef.onClick = (data) =>
+                                                            if(data.length > 0)
                                                             {
-                                                                if(data.length > 0)
-                                                                {
-                                                                    this.getItem(data[0].CODE)
-                                                                }
+                                                                this.getItem(data[0].CODE)
                                                             }
                                                         }
-                                                    },
-                                                    {
-                                                        id:'02',
-                                                        icon:'arrowdown',
-                                                        onClick:()=>
-                                                        {
-                                                            this.txtRef.value = Math.floor(Date.now() / 1000)
-                                                        }
                                                     }
-                                                ]
-                                            }
+                                                },
+                                                {
+                                                    id:'02',
+                                                    icon:'arrowdown',
+                                                    onClick:()=>
+                                                    {
+                                                        this.txtRef.value = Math.floor(Date.now() / 1000)
+                                                    }
+                                                }
+                                            ]}
                                             onChange={(async()=>
                                             {
                                                 let tmpResult = await this.checkItem(this.txtRef.value)

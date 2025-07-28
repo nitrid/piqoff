@@ -108,7 +108,9 @@ const  ftr_02_002 =
         title : "Ürün Seçimi",
         clmCode :  "ÜRÜN KODU",
         clmName : "ÜRÜN ADI",
-        clmPrice : "SATIŞ FİYATI"
+        clmPrice : "SATIŞ FİYATI",
+        clmMainGrp : "ANA GRUP",
+        clmRayon : "RAYON"
     },
     pg_dispatchGrid : 
     {

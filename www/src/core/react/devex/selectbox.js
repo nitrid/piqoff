@@ -61,14 +61,18 @@ export default class NdSelectBox extends Base
     }
     _onValueChanged(e) 
     {
-        if(e.value == null)
+        if(this.value != e.value)
         {
-            this.value = ""
+            if(e.value == null)
+            {
+                this.value = ""
+            }
+            else
+            {
+                this.value = e.value;
+            }    
         }
-        else
-        {
-            this.value = e.value;
-        }
+
         if(typeof this.props.onValueChanged != 'undefined')
         {
             this.props.onValueChanged(e);
@@ -109,7 +113,7 @@ export default class NdSelectBox extends Base
                 {
                     this.props.dt.data.find(x => x === this.props.dt.row)[this.props.dt.field] = e
                     //SELECTBOX DA DEĞİŞEN DEĞERİN DISPLAY DE DEĞERİNİ DATATABLE A YANSITILIYOR
-                    if(typeof this.props.dt.display != 'undefined')
+                    if(typeof this.props.dt.display != 'undefined' && typeof this.displayValue != 'undefined' && this.displayValue != null)
                     {
                         this.props.dt.data.find(x => x === this.props.dt.row)[this.props.dt.display] = this.displayValue
                     }
@@ -118,7 +122,7 @@ export default class NdSelectBox extends Base
                 {
                     this.props.dt.data[this.props.dt.data.length-1][this.props.dt.field] = e
                     //SELECTBOX DA DEĞİŞEN DEĞERİN DISPLAY DE DEĞERİNİ DATATABLE A YANSITILIYOR
-                    if(typeof this.props.dt.display != 'undefined')
+                    if(typeof this.props.dt.display != 'undefined' && typeof this.displayValue != 'undefined' && this.displayValue != null)
                     {
                         this.props.dt.data[this.props.dt.data.length-1][this.props.dt.display] = this.displayValue
                     }
@@ -133,7 +137,7 @@ export default class NdSelectBox extends Base
                     {
                         tmpData.find(x => x === this.props.dt.row)[this.props.dt.field] = e
                         //SELECTBOX DA DEĞİŞEN DEĞERİN DISPLAY DE DEĞERİNİ DATATABLE A YANSITILIYOR
-                        if(typeof this.props.dt.display != 'undefined')
+                        if(typeof this.props.dt.display != 'undefined' && typeof this.displayValue != 'undefined' && this.displayValue != null)
                         {
                             tmpData.find(x => x === this.props.dt.row)[this.props.dt.display] = this.displayValue
                         }
@@ -142,7 +146,7 @@ export default class NdSelectBox extends Base
                     {
                         tmpData[tmpData.length-1][this.props.dt.field] = e
                         //SELECTBOX DA DEĞİŞEN DEĞERİN DISPLAY DE DEĞERİNİ DATATABLE A YANSITILIYOR
-                        if(typeof this.props.dt.display != 'undefined')
+                        if(typeof this.props.dt.display != 'undefined' && typeof this.displayValue != 'undefined' && this.displayValue != null)
                         {
                             tmpData[tmpData.length-1][this.props.dt.display] = this.displayValue
                         }
