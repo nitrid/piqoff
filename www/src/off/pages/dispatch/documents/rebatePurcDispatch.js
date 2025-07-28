@@ -18,7 +18,7 @@ import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import NdDialog, { dialog } from '../../../../core/react/devex/dialog.js';
 import NdHtmlEditor from '../../../../core/react/devex/htmlEditor.js';
-import { NdForm,NdItem, NdEmptyItem } from '../../../../core/react/devex/form.js';
+import { NdForm,NdItem, NdEmptyItem, NdLabel } from '../../../../core/react/devex/form.js';
 import {NdToast} from '../../../../core/react/devex/toast.js';
 
 export default class rebatePurcDispatch extends DocBase
@@ -31,8 +31,9 @@ export default class rebatePurcDispatch extends DocBase
         this.docType = 40;
         this.rebate = 1;
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
-        this._getRebate = this._getRebate.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
+        this.getRebate = this.getRebate.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
 
@@ -145,7 +146,7 @@ export default class rebatePurcDispatch extends DocBase
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == "ITEM_CODE")
         {
@@ -561,7 +562,7 @@ export default class rebatePurcDispatch extends DocBase
             resolve()
         })
     }
-    async _getRebate()
+    async getRebate()
     {
         await this.pg_RebateGrid.show()
         let tmpQuery = 
@@ -613,13 +614,68 @@ export default class rebatePurcDispatch extends DocBase
         }
        
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options:
+            {
+                icon: 'add',
+                validationGroup: 'frmRebateDis' + this.tabIndex,
+                onClick: (async (c)=>
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        if(typeof this.docObj.docItems.dt()[0] != 'undefined')
+                        {
+                            if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                            {
+                                this.pg_txtItemsCode.onClick = async(data) =>
+                                {
+                                    this.checkboxReset()
+
+                                    this.grid.devGrid.beginUpdate()
+                                    for (let i = 0; i < data.length; i++) 
+                                    {
+                                        await this.addItem(data[i],null)
+                                    }
+                                    this.grid.devGrid.endUpdate()
+                                }
+                                this.pg_txtItemsCode.show()
+                                return
+                            }
+                        }
+                    
+                        this.pg_txtItemsCode.onClick = async(data) =>
+                        {
+                            this.checkboxReset()
+
+                            this.grid.devGrid.beginUpdate()
+                            for (let i = 0; i < data.length; i++) 
+                            {
+                                await this.addItem(data[i],null)
+                            }
+                            this.grid.devGrid.endUpdate()
+                        }
+                        this.pg_txtItemsCode.show()
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
+                    }
+                }).bind(this)
+            }
+        })
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.props.data.tabkey}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -833,7 +889,7 @@ export default class rebatePurcDispatch extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '120px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id={"frmRebateDis"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
@@ -1256,58 +1312,12 @@ export default class rebatePurcDispatch extends DocBase
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={1} onInitialized={(e)=>
                             {
                                 this.frmDocItems = e.component
                             }}>
-                                <NdItem location="after">
-                                    <Button icon="add"
-                                    validationGroup={"frmRebateDis"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    this.pg_txtItemsCode.onClick = async(data) =>
-                                                    {
-                                                        this.checkboxReset()
-
-                                                        this.grid.devGrid.beginUpdate()
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            await this.addItem(data[i],null)
-                                                        }
-                                                        this.grid.devGrid.endUpdate()
-                                                    }
-                                                    this.pg_txtItemsCode.show()
-                                                    return
-                                                }
-                                            }
-                                           
-                                            this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                this.checkboxReset()
-
-                                                this.grid.devGrid.beginUpdate()
-                                                for (let i = 0; i < data.length; i++) 
-                                                {
-                                                    await this.addItem(data[i],null)
-                                                }
-                                                this.grid.devGrid.endUpdate()
-                                            }
-                                            this.pg_txtItemsCode.show()
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
-                                        }
-                                    }}/>
-                                </NdItem>
                                 <NdItem>
                                     <React.Fragment>
                                         <NdGrid parent={this} id={"grdRebtDispatch"+this.tabIndex} 
@@ -1316,7 +1326,8 @@ export default class rebatePurcDispatch extends DocBase
                                         allowColumnReordering={true} 
                                         allowColumnResizing={true} 
                                         filterRow={{visible:true}}
-                                        height={'450'} 
+                                        height={'590px'} 
+                                        onToolbarPreparing={this.onGridToolbarPreparing}
                                         width={'100%'}
                                         dbApply={false}
                                         sorting={{mode:'none'}}
@@ -1462,11 +1473,11 @@ export default class rebatePurcDispatch extends DocBase
                                             <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
                                             <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtDispatch.clmCreateDate")} width={75} allowEditing={false}/>
                                             <Column dataField="CUSER_NAME" caption={this.t("grdRebtDispatch.clmCuser")} width={70} allowEditing={false}/>
-                                            <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={75} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={75} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="MULTICODE" caption={this.t("grdRebtDispatch.clmMulticode")} width={100} allowEditing={false}/>
                                             <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={240} />
                                             <Column dataField="ITEM_BARCODE" caption={this.t("grdRebtDispatch.clmBarcode")} width={100} allowEditing={false}/>
-                                            <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="SUB_FACTOR" caption={this.t("grdRebtDispatch.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdRebtDispatch.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
@@ -1485,14 +1496,14 @@ export default class rebatePurcDispatch extends DocBase
                                         target={"#grdRebtDispatch"+this.tabIndex}
                                         onItemClick={(async(e)=>
                                         {
-                                            this._getRebate()
+                                            this.getRebate()
                                         }).bind(this)} />
                                     </React.Fragment> 
                                 </NdItem>
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '160px'}}>
                         <div className="col-12">
                             <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
                                 {/* Ara Toplam */}

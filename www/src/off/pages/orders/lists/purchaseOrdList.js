@@ -57,7 +57,6 @@ export default class purchaseOrdList extends React.PureComponent
             {
                 source : 
                 {
-                    groupBy : this.groupList,
                     select : 
                     {
                         query : `SELECT * FROM DOC_VW_01 
@@ -80,7 +79,6 @@ export default class purchaseOrdList extends React.PureComponent
             {
                 source : 
                 {
-                    groupBy : this.groupList,
                     select : 
                     {
                         query : `SELECT DOC_GUID AS GUID, 
@@ -116,7 +114,7 @@ export default class purchaseOrdList extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -166,7 +164,7 @@ export default class purchaseOrdList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={2} id="frmCriter">
                                 {/* dtFirst */}
@@ -267,7 +265,7 @@ export default class purchaseOrdList extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -284,11 +282,11 @@ export default class purchaseOrdList extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGrdPrint}></NdButton>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdPurcOrdList" parent={this} 
                             selection={{mode:"multiple"}} 
-                            height={600}
+                            height={700}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}

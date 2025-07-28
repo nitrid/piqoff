@@ -32,8 +32,9 @@ export default class rebateDispatch extends DocBase
         this.docType = 40;
         this.rebate = 1;
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
-        this._getRebate = this._getRebate.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
+        this.getRebate = this.getRebate.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
 
@@ -281,7 +282,7 @@ export default class rebateDispatch extends DocBase
         super.calculateTotal()
         this.calculateTotalMargin()
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == "ITEM_CODE")
         {
@@ -764,7 +765,7 @@ export default class rebateDispatch extends DocBase
             resolve()
         })
     }
-    async _getRebate()
+    async getRebate()
     {
         await this.pg_RebateGrid.show()
         let tmpQuery = 
@@ -816,13 +817,66 @@ export default class rebateDispatch extends DocBase
             this.calculateTotal()
         }
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options:
+            {
+                icon: 'add',
+                validationGroup: 'frmRebateDis' + this.tabIndex,
+                onClick: (async (c)=>
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        if(typeof this.docObj.docItems.dt()[0] != 'undefined')
+                        {
+                            if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                            {
+                                this.pg_txtItemsCode.onClick = async(data) =>
+                                {
+                                    this.checkboxReset()
+                                    this.grid.devGrid.beginUpdate()
+                                    for (let i = 0; i < data.length; i++) 
+                                    {
+                                        await this.addItem(data[i],null)
+                                    }
+                                    this.grid.devGrid.endUpdate()
+                                }
+                                this.pg_txtItemsCode.show()
+                                return
+                            }
+                        }
+                        
+                        this.pg_txtItemsCode.onClick = async(data) =>
+                        {
+                            this.checkboxReset()
+                            this.grid.devGrid.beginUpdate()
+                            for (let i = 0; i < data.length; i++) 
+                            {
+                                await this.addItem(data[i],null)
+                            }
+                            this.grid.devGrid.endUpdate()
+                        }
+                        this.pg_txtItemsCode.show()
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
+                    } await this.popMultiItem.show()
+                }).bind(this)
+            }
+        })
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.props.data.tabkey}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -1136,7 +1190,7 @@ export default class rebateDispatch extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '120px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id={"frmRebateDis"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
@@ -1567,255 +1621,212 @@ export default class rebateDispatch extends DocBase
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={1} onInitialized={(e)=>
                             {
                                 this.frmDocItems = e.component
                             }}>
-                                <NdItem location="after">
-                                    <Button icon="add"
-                                    validationGroup={"frmRebateDis"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    this.pg_txtItemsCode.onClick = async(data) =>
-                                                    {
-                                                        this.checkboxReset()
-                                                        this.grid.devGrid.beginUpdate()
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            await this.addItem(data[i],null)
-                                                        }
-                                                        this.grid.devGrid.endUpdate()
-                                                    }
-                                                    this.pg_txtItemsCode.show()
-                                                    return
-                                                }
-                                            }
-                                           
-                                            this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                this.checkboxReset()
-                                                this.grid.devGrid.beginUpdate()
-                                                for (let i = 0; i < data.length; i++) 
-                                                {
-                                                    await this.addItem(data[i],null)
-                                                }
-                                                this.grid.devGrid.endUpdate()
-                                            }
-                                            this.pg_txtItemsCode.show()
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
-                                        }
-                                    }}/>
-                                </NdItem>
                                 <NdItem>
-                                 <React.Fragment>
-                                    <NdGrid parent={this} id={"grdRebtDispatch"+this.tabIndex} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    filterRow={{visible:true}}
-                                    height={'450'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    sorting={{mode:'none'}}
-                                    onRowPrepared={(e) =>
-                                    {
-                                        if(e.rowType == 'data' && e.data.INVOICE_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
+                                    <React.Fragment>
+                                        <NdGrid parent={this} id={"grdRebtDispatch"+this.tabIndex} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        filterRow={{visible:true}}
+                                        onToolbarPreparing={this.onGridToolbarPreparing}
+                                        height={'590px'} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        sorting={{mode:'none'}}
+                                        onRowPrepared={(e) =>
                                         {
-                                            e.rowElement.style.color ="Silver"
-                                        }
-                                    }}
-                                    onRowUpdating={async (e)=>
-                                    {
-                                        if(e.key.INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')
-                                        {
-                                            e.cancel = true
-                                            let tmpConfObj =
+                                            if(e.rowType == 'data' && e.data.INVOICE_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
                                             {
-                                                id:'msgRowNotUpdate',showTitle:true,title:this.t("msgRowNotUpdate.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.t("msgRowNotUpdate.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotUpdate.msg")}</div>)
+                                                e.rowElement.style.color ="Silver"
+                                            }
+                                        }}
+                                        onRowUpdating={async (e)=>
+                                        {
+                                            if(e.key.INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')
+                                            {
+                                                e.cancel = true
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgRowNotUpdate',showTitle:true,title:this.t("msgRowNotUpdate.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                    button:[{id:"btn01",caption:this.t("msgRowNotUpdate.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotUpdate.msg")}</div>)
+                                                }
+                                            
+                                                dialog(tmpConfObj);
+                                                e.component.cancelEditData()
                                             }
                                         
-                                            dialog(tmpConfObj);
-                                            e.component.cancelEditData()
-                                        }
-                                    
-                                        if(typeof e.newData.QUANTITY != 'undefined')
-                                        {
-                                            //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
-                                            await this.itemRelatedUpdate(e.key.ITEM,e.newData.QUANTITY)
-                                            //*****************************************/
-                                        }
-                                    }}
-                                    onRowRemoving={async (e)=>
-                                    {
-                                        if(e.key.INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')
-                                        {
-                                            e.cancel = true
-                                            let tmpConfObj =
+                                            if(typeof e.newData.QUANTITY != 'undefined')
                                             {
-                                                id:'msgRowNotDelete',showTitle:true,title:this.t("msgRowNotDelete.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.t("msgRowNotDelete.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotDelete.msg")}</div>)
+                                                //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
+                                                await this.itemRelatedUpdate(e.key.ITEM,e.newData.QUANTITY)
+                                                //*****************************************/
+                                            }
+                                        }}
+                                        onRowRemoving={async (e)=>
+                                        {
+                                            if(e.key.INVOICE_LINE_GUID != '00000000-0000-0000-0000-000000000000')
+                                            {
+                                                e.cancel = true
+                                                let tmpConfObj =
+                                                {
+                                                    id:'msgRowNotDelete',showTitle:true,title:this.t("msgRowNotDelete.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                    button:[{id:"btn01",caption:this.t("msgRowNotDelete.btn01"),location:'after'}],
+                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgRowNotDelete.msg")}</div>)
+                                                }
+                                            
+                                                dialog(tmpConfObj);
+                                                e.component.cancelEditData()
+                                            }
+                                        }}
+                                        onRowUpdated={async(e)=>
+                                        {
+                                            if(typeof e.data.QUANTITY != 'undefined')
+                                            {
+                                                e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
+                                        
+                                                let tmpQuery = 
+                                                {
+                                                    query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
+                                                    param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
+                                                    value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY]
+                                                }
+                                        
+                                                let tmpData = await this.core.sql.execute(tmpQuery) 
+                                        
+                                                if(tmpData.result.recordset.length > 0)
+                                                {
+                                                    e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
+                                                    e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) / e.key.SUB_FACTOR).round(2)
+                                                    
+                                                    this.calculateTotal()
+                                                }
                                             }
                                         
-                                            dialog(tmpConfObj);
-                                            e.component.cancelEditData()
-                                        }
-                                    }}
-                                    onRowUpdated={async(e)=>
-                                    {
-                                        if(typeof e.data.QUANTITY != 'undefined')
-                                        {
-                                            e.key.SUB_QUANTITY =  e.data.QUANTITY * e.key.SUB_FACTOR
-                                    
-                                            let tmpQuery = 
+                                            if(typeof e.data.SUB_QUANTITY != 'undefined')
                                             {
-                                                query :"SELECT dbo.FN_PRICE(@ITEM_GUID,@QUANTITY,dbo.GETDATE(),@CUSTOMER_GUID,'00000000-0000-0000-0000-000000000000',0,1,0) AS PRICE",
-                                                param : ['ITEM_GUID:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                                                value : [e.key.ITEM,this.docObj.dt()[0].INPUT,e.data.QUANTITY]
+                                                e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
                                             }
-                                    
-                                            let tmpData = await this.core.sql.execute(tmpQuery) 
-                                    
-                                            if(tmpData.result.recordset.length > 0)
-                                            {
-                                                e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4))
-                                                e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) / e.key.SUB_FACTOR).round(2)
-                                                
-                                                this.calculateTotal()
-                                            }
-                                        }
-                                      
-                                        if(typeof e.data.SUB_QUANTITY != 'undefined')
-                                        {
-                                            e.key.QUANTITY = e.data.SUB_QUANTITY * e.key.SUB_FACTOR
-                                        }
-                                    
-                                        if(typeof e.data.SUB_FACTOR != 'undefined')
-                                        {
-                                            e.key.QUANTITY = e.key.SUB_QUANTITY * e.data.SUB_FACTOR
-                                        }
-                                    
-                                        if(typeof e.data.PRICE != 'undefined')
-                                        {
-                                            e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
-                                        }
-                                    
-                                        if(typeof e.data.SUB_PRICE != 'undefined')
-                                        {
-                                            e.key.PRICE = e.data.SUB_PRICE * e.key.SUB_FACTOR
-                                        }
-                                    
-                                        if(typeof e.data.DISCOUNT_RATE != 'undefined')
-                                        {
-                                            e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
-                                            e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
-                                            e.key.DISCOUNT_2 = 0
-                                            e.key.DISCOUNT_3 = 0
-                                        }
                                         
-                                        if(typeof e.data.DISCOUNT != 'undefined')
-                                        {
-                                            e.key.DISCOUNT_1 = e.data.DISCOUNT
-                                            e.key.DISCOUNT_2 = 0
-                                            e.key.DISCOUNT_3 = 0
-                                            e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
-                                        }
+                                            if(typeof e.data.SUB_FACTOR != 'undefined')
+                                            {
+                                                e.key.QUANTITY = e.key.SUB_QUANTITY * e.data.SUB_FACTOR
+                                            }
+                                        
+                                            if(typeof e.data.PRICE != 'undefined')
+                                            {
+                                                e.key.SUB_PRICE = e.data.PRICE / e.key.SUB_FACTOR
+                                            }
+                                        
+                                            if(typeof e.data.SUB_PRICE != 'undefined')
+                                            {
+                                                e.key.PRICE = e.data.SUB_PRICE * e.key.SUB_FACTOR
+                                            }
+                                        
+                                            if(typeof e.data.DISCOUNT_RATE != 'undefined')
+                                            {
+                                                e.key.DISCOUNT = Number(e.key.PRICE * e.key.QUANTITY).rateInc(e.data.DISCOUNT_RATE,4)
+                                                e.key.DISCOUNT_1 = Number(e.key.PRICE * e.key.QUANTITY).rateInc( e.data.DISCOUNT_RATE,4)
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                            }
+                                            
+                                            if(typeof e.data.DISCOUNT != 'undefined')
+                                            {
+                                                e.key.DISCOUNT_1 = e.data.DISCOUNT
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                                e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.data.DISCOUNT)
+                                            }
 
-                                        e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
+                                            e.key.TOTALHT = Number((parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)) - (parseFloat(e.key.DISCOUNT)))).round(2)
+                                            
+                                            if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                            {
+                                                e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
+                                            }
+                                            else
+                                            {
+                                                e.key.VAT = 0
+                                                e.key.VAT_RATE = 0
+                                            }
+                                            
+                                            e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
+                                            e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
                                         
-                                        if(this.docObj.dt()[0].VAT_ZERO != 1)
+                                            if(e.key.DISCOUNT == 0)
+                                            {
+                                                e.key.DISCOUNT_RATE = 0
+                                                e.key.DISCOUNT_1 = 0
+                                                e.key.DISCOUNT_2 = 0
+                                                e.key.DISCOUNT_3 = 0
+                                            }
+                                            
+                                            if(typeof e.data.DISCOUNT_RATE == 'undefined')
+                                            {
+                                            e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
+                                            }
+                                            this.calculateTotal()
+                                        }}
+                                        onRowRemoved={async (e)=>
                                         {
-                                            e.key.VAT = parseFloat(((((e.key.TOTALHT) - (parseFloat(e.key.DOC_DISCOUNT))) * (e.key.VAT_RATE) / 100))).round(6);
-                                        }
-                                        else
+                                            this.calculateTotal()
+                                        }}
+                                        onReady={async()=>
                                         {
-                                            e.key.VAT = 0
-                                            e.key.VAT_RATE = 0
-                                        }
-                                        
-                                        e.key.AMOUNT = parseFloat((e.key.PRICE * e.key.QUANTITY).toFixed(3)).round(2)
-                                        e.key.TOTAL = Number(((e.key.TOTALHT - e.key.DOC_DISCOUNT) + e.key.VAT)).round(2)
-                                       
-                                        if(e.key.DISCOUNT == 0)
+                                            this.grid = this["grdRebtDispatch"+this.tabIndex]
+                                            await this["grdRebtDispatch"+this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
+                                        }}
+                                        >
+                                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdRebtDispatch"}/>
+                                            <ColumnChooser enabled={true} />
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
+                                            <Export fileName={this.lang.t("menuOff.irs_02_003")} enabled={true} allowExportSelectedData={true} />
+                                            <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
+                                            <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtDispatch.clmCreateDate")} width={100} allowEditing={false}/>
+                                            <Column dataField="CUSER_NAME" caption={this.t("grdRebtDispatch.clmCuser")} width={100} allowEditing={false}/>
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={150} editCellRender={this.cellRoleRender}/>
+                                            <Column dataField="MULTICODE" caption={this.t("grdRebtDispatch.clmMulticode")} width={110} allowEditing={false}/>
+                                            <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={280} />
+                                            <Column dataField="ITEM_BARCODE" caption={this.t("grdRebtDispatch.clmBarcode")} width={130} allowEditing={false}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
+                                            <Column dataField="SUB_FACTOR" caption={this.t("grdRebtDispatch.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="SUB_QUANTITY" caption={this.t("grdRebtDispatch.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                            <Column dataField="SUB_PRICE" caption={this.t("grdRebtDispatch.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
+                                            <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} width={100} allowEditing={false} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                            <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} width={75} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
+                                            <Column dataField="TOTALHT" caption={this.t("grdRebtDispatch.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
+                                            <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} width={110} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
+                                            <Column dataField="INVOICE_REF" caption={this.t("grdRebtDispatch.clmInvoiceRef")} width={110} />
+                                            <Column dataField="LOT_CODE" caption={this.t("grdRebtDispatch.clmPartiLot")} width={100} allowEditing={false} visible={false}/>
+                                            <Column dataField="DESCRIPTION" caption={this.t("grdRebtDispatch.clmDescription")} width={160}  headerFilter={{visible:true}}/>
+                                        </NdGrid>
+                                        <ContextMenu
+                                        dataSource={this.rightItems}
+                                        width={200}
+                                        target={"#grdRebtDispatch"+this.tabIndex}
+                                        onItemClick={(async(e)=>
                                         {
-                                            e.key.DISCOUNT_RATE = 0
-                                            e.key.DISCOUNT_1 = 0
-                                            e.key.DISCOUNT_2 = 0
-                                            e.key.DISCOUNT_3 = 0
-                                        }
-                                        
-                                        if(typeof e.data.DISCOUNT_RATE == 'undefined')
-                                        {
-                                           e.key.DISCOUNT_RATE = Number(e.key.PRICE * e.key.QUANTITY).rate2Num(e.key.DISCOUNT)
-                                        }
-                                        this.calculateTotal()
-                                    }}
-                                    onRowRemoved={async (e)=>
-                                    {
-                                        this.calculateTotal()
-                                    }}
-                                    onReady={async()=>
-                                    {
-                                        this.grid = this["grdRebtDispatch"+this.tabIndex]
-                                        await this["grdRebtDispatch"+this.tabIndex].dataRefresh({source:this.docObj.docItems.dt('DOC_ITEMS')});
-                                    }}
-                                    >
-                                        <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdRebtDispatch"}/>
-                                        <ColumnChooser enabled={true} />
-                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
-                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
-                                        <Export fileName={this.lang.t("menuOff.irs_02_003")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdRebtDispatch.clmCreateDate")} width={100} allowEditing={false}/>
-                                        <Column dataField="CUSER_NAME" caption={this.t("grdRebtDispatch.clmCuser")} width={100} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdRebtDispatch.clmItemCode")} width={150} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="MULTICODE" caption={this.t("grdRebtDispatch.clmMulticode")} width={110} allowEditing={false}/>
-                                        <Column dataField="ITEM_NAME" caption={this.t("grdRebtDispatch.clmItemName")} width={280} />
-                                        <Column dataField="ITEM_BARCODE" caption={this.t("grdRebtDispatch.clmBarcode")} width={130} allowEditing={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdRebtDispatch.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
-                                        <Column dataField="SUB_FACTOR" caption={this.t("grdRebtDispatch.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
-                                        <Column dataField="SUB_QUANTITY" caption={this.t("grdRebtDispatch.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
-                                        <Column dataField="PRICE" caption={this.t("grdRebtDispatch.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                                        <Column dataField="SUB_PRICE" caption={this.t("grdRebtDispatch.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdRebtDispatch.clmAmount")} width={100} allowEditing={false} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                                        <Column dataField="VAT" caption={this.t("grdRebtDispatch.clmVat")} width={75} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
-                                        <Column dataField="TOTALHT" caption={this.t("grdRebtDispatch.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
-                                        <Column dataField="TOTAL" caption={this.t("grdRebtDispatch.clmTotal")} width={110} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
-                                        <Column dataField="INVOICE_REF" caption={this.t("grdRebtDispatch.clmInvoiceRef")} width={110} />
-                                        <Column dataField="LOT_CODE" caption={this.t("grdRebtDispatch.clmPartiLot")} width={100} allowEditing={false} visible={false}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdRebtDispatch.clmDescription")} width={160}  headerFilter={{visible:true}}/>
-                                    </NdGrid>
-                                    <ContextMenu
-                                    dataSource={this.rightItems}
-                                    width={200}
-                                    target={"#grdRebtDispatch"+this.tabIndex}
-                                    onItemClick={(async(e)=>
-                                    {
-                                        this._getRebate()
-                                    }).bind(this)} />
-                                </React.Fragment> 
+                                            this.getRebate()
+                                        }).bind(this)} />
+                                    </React.Fragment> 
                                 </NdItem>
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '130px'}}>
                         <div className="col-12">
                             <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
                                 {/* Ara Toplam */}

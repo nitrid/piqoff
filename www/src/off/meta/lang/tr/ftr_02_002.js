@@ -58,11 +58,11 @@ const  ftr_02_002 =
     btnMailsend : "Mail Gönder",
     validMail : "Lütfen Boş Geçmeyin.",
     placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
-    msgControlOfDispatch: 
+    msgControlOfFacture:
     {
         title: "Dikkat",
         btn01: "Kapat",
-        msg: "Bu satış teklifi daha önce bir irsaliyeye çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden yeni bir Fatura oluşturunuz."
+        msg: "Bu irsaliye daha önce bir faturaya çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden Faturayi seçiniz. Bu islem kapatılacaktır."
     },
     isMsgSave :
     {  

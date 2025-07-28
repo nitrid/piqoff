@@ -1,6 +1,30 @@
 // "Satış Teklifi"
 const tkf_02_002 =
 {
+    menu :
+    {
+        btnSelectOrder : "Commande",
+        btnSelectInvoice : "Facture",
+        btnSelectDispatch : "Livraison",
+    },
+    msgControlOfFacture :
+    {
+        title : "Attention",
+        btn01 : "OK",
+        msg : "Voulez-vous vraiment convertir le document en facture ?"
+    },
+    msgControlOfDispatch :
+    {
+        title : "Attention",
+        btn01 : "OK",
+        msg : "Voulez-vous vraiment convertir le document en livraison ?"
+    },
+    msgControlOfOrder :
+    {
+        title : "Attention",
+        btn01 : "OK",
+        msg : "Voulez-vous vraiment convertir le document en commande ?"
+    },
     txtRefRefno : "Réf. Réf No",
     cmbDepot: "Réserve",
     txtCustomerCode : "Code du Client",
@@ -28,11 +52,13 @@ const tkf_02_002 =
     validMail : "Veuillez ne pas laisser le champs vide.",
     cmbPricingList : "Liste de prix",
     LINE_NO : "Numéro de ligne",
+    btnSelectOrder : "Convertir en Commande",
     btnSelectDispatch : "Convertir en Livraison",
     btnSelectInvoice : "Convertir en Facture",
     msgTransform :
     {
         title : "Convertir le document",
+        btnOrder : "Commande",
         btnDispatch : "Livraison",
         btnInvoice : "Facture",
         msg : "Voulez-vous vraiment convertir le document en livraison ou facture ?"
@@ -40,6 +66,7 @@ const tkf_02_002 =
     msgTransformConfirm :
     {
         title : "Convertir le document",
+        msgOrder : "Voulez-vous vraiment convertir le document en commande ?",
         msgDispatch : "Voulez-vous vraiment convertir le document en livraison ?",
         msgInvoice : "Voulez-vous vraiment convertir le document en facture ?",
         btn01 : "Oui",

@@ -9,7 +9,6 @@ import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
 import ContextMenu from 'devextreme-react/context-menu';
 import TabPanel from 'devextreme-react/tab-panel';
-import { Button } from 'devextreme-react/button';
 
 import NdTextBox, { Validator, RequiredRule, RangeRule} from '../../../../core/react/devex/textbox.js'
 import NdSelectBox from '../../../../core/react/devex/selectbox.js';
@@ -34,8 +33,9 @@ export default class priceDifferenceInvoice extends DocBase
         this.docType = 21;
         this.rebate = 1;
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
-        this._getContract = this._getContract.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
+        this.getContract = this.getContract.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
 
@@ -300,7 +300,7 @@ export default class priceDifferenceInvoice extends DocBase
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
         this.docObj.docCustomer.dt()[0].ROUND = 0
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == "ITEM_CODE")
         {
@@ -683,7 +683,7 @@ export default class priceDifferenceInvoice extends DocBase
             resolve()
         })
     }
-    async _getContract()
+    async getContract()
     {
         let tmpQuery = 
         {
@@ -895,6 +895,154 @@ export default class priceDifferenceInvoice extends DocBase
             await this.addItem(this.multiItemData[i],null,this.multiItemData[i].QUANTITY)
             this.popMultiItem.hide()
         }
+    }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options:
+            {
+                icon: 'add',
+                validationGroup: 'frmPriceDiffInv' + this.tabIndex,
+                onClick: (async (c)=>
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        if(typeof this.docObj.docItems.dt()[0] != 'undefined')
+                        {
+                            if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                            { 
+                                this.pg_txtItemsCode.onClick = async(data) =>
+                                {
+                                    this.checkboxReset()
+                                    this.grid.devGrid.beginUpdate()
+                                    for (let i = 0; i < data.length; i++) 
+                                    {
+                                        await this.addItem(data[i],null)
+                                    }
+                                    this.grid.devGrid.endUpdate()
+                                }
+                                this.pg_txtItemsCode.show()
+                                return
+                            }
+                        }
+                        this.pg_txtItemsCode.onClick = async(data) =>
+                        {
+                            this.checkboxReset()
+                            this.grid.devGrid.beginUpdate()
+                            for (let i = 0; i < data.length; i++) 
+                            {
+                                await this.addItem(data[i],null)
+                            }
+                            this.grid.devGrid.endUpdate()
+                        }
+                        this.pg_txtItemsCode.show()
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
+                    }
+                }).bind(this)
+            }
+        }),
+        
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options:
+            {
+                icon: 'add',
+                validationGroup: 'frmPriceDiffInv' + this.tabIndex,
+                text: this.t("serviceAdd"),
+                onClick: (async (c)=>
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        if(typeof this.docObj.docItems.dt()[0] != 'undefined')
+                        {
+                            if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                            {
+                                this.pg_service.onClick = async(data) =>
+                                {
+                                    this.checkboxReset()
+                
+                                    if(data.length == 1)
+                                    {
+                                        await this.addItem(data[0],null)
+                                    }
+                                    else if(data.length > 1)
+                                    {
+                                        this.grid.devGrid.beginUpdate()
+                                        for (let i = 0; i < data.length; i++) 
+                                        {
+                                            await this.addItem(data[i],null)
+                                        }
+                                        this.grid.devGrid.endUpdate()
+                                    }
+                                }
+                                this.pg_service.show()
+                                return
+                            }
+                        }
+                        
+                        this.pg_service.onClick = async(data) =>
+                        {
+                            this.checkboxReset()
+                            if(data.length == 1)
+                            {
+                                await this.addItem(data[0],null)
+                            }
+                            else if(data.length > 1)
+                            {
+                                this.grid.devGrid.beginUpdate()
+                                for (let i = 0; i < data.length; i++) 
+                                {
+                                    await this.addItem(data[i],null)
+                                }
+                                this.grid.devGrid.endUpdate()
+                            }
+                        }
+                        this.pg_service.show()
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
+                    }
+                }).bind(this)
+            }
+        }),
+
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options:
+            {
+                icon: 'add',        
+                validationGroup: 'frmPriceDiffInv' + this.tabIndex,
+                text: this.lang.t("collectiveItemAdd"),
+                onClick: (async (c)=>
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        await this.popMultiItem.show()
+                        await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                
+                        if( typeof this.docObj.docItems.dt()[0] != 'undefined' && this.docObj.docItems.dt()[0].ITEM_CODE == '')
+                        {
+                            await this.grdRebtInv.devGrid.deleteRow(0)
+                        }
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
+                    }
+                }).bind(this)
+            }
+        })
     }
     render()
     {
@@ -1108,7 +1256,7 @@ export default class priceDifferenceInvoice extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-1">
+                    <div className="row px-2 pt-1" style={{height: '130px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id={"frmPriceDiffInv"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
@@ -1531,125 +1679,6 @@ export default class priceDifferenceInvoice extends DocBase
                             {
                                 this.frmDocItems = e.component
                             }}>
-                                <NdItem location="after">
-                                    <Button icon="add"
-                                    validationGroup={"frmPriceDiffInv"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                                { 
-                                                    this.pg_txtItemsCode.onClick = async(data) =>
-                                                    {
-                                                        this.checkboxReset()
-                                                        this.grid.devGrid.beginUpdate()
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            await this.addItem(data[i],null)
-                                                        }
-                                                        this.grid.devGrid.endUpdate()
-                                                    }
-                                                    this.pg_txtItemsCode.show()
-                                                    return
-                                                }
-                                            }
-                                            this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                this.checkboxReset()
-                                                this.grid.devGrid.beginUpdate()
-                                                for (let i = 0; i < data.length; i++) 
-                                                {
-                                                    await this.addItem(data[i],null)
-                                                }
-                                                this.grid.devGrid.endUpdate()
-                                            }
-                                            this.pg_txtItemsCode.show()
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
-                                        }
-                                    }}/>
-                                    <Button icon="add" text={this.t("serviceAdd")}
-                                    validationGroup={"frmPriceDiffInv"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    this.pg_service.onClick = async(data) =>
-                                                    {
-                                                        this.checkboxReset()
-                                    
-                                                        if(data.length == 1)
-                                                        {
-                                                            await this.addItem(data[0],null)
-                                                        }
-                                                        else if(data.length > 1)
-                                                        {
-                                                            this.grid.devGrid.beginUpdate()
-                                                            for (let i = 0; i < data.length; i++) 
-                                                            {
-                                                                await this.addItem(data[i],null)
-                                                            }
-                                                            this.grid.devGrid.endUpdate()
-                                                        }
-                                                    }
-                                                    this.pg_service.show()
-                                                    return
-                                                }
-                                            }
-                                           
-                                            this.pg_service.onClick = async(data) =>
-                                            {
-                                                this.checkboxReset()
-                                                if(data.length == 1)
-                                                {
-                                                    await this.addItem(data[0],null)
-                                                }
-                                                else if(data.length > 1)
-                                                {
-                                                    this.grid.devGrid.beginUpdate()
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.addItem(data[i],null)
-                                                    }
-                                                    this.grid.devGrid.endUpdate()
-                                                }
-                                            }
-                                            this.pg_service.show()
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
-                                        }
-                                    }}/>
-                                    <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
-                                    validationGroup={"frmPriceDiffInv"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            await this.popMultiItem.show()
-                                            await this.grdMultiItem.dataRefresh({source:this.multiItemData});
-                                    
-                                            if( typeof this.docObj.docItems.dt()[0] != 'undefined' && this.docObj.docItems.dt()[0].ITEM_CODE == '')
-                                            {
-                                                await this.grdRebtInv.devGrid.deleteRow(0)
-                                            }
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
-                                        }
-                                    }}/>
-                                </NdItem>
                                 <NdItem>
                                     <React.Fragment>
                                         <NdGrid parent={this} id={"grdDiffInv"+this.tabIndex} 
@@ -1658,7 +1687,8 @@ export default class priceDifferenceInvoice extends DocBase
                                         allowColumnReordering={true} 
                                         allowColumnResizing={true} 
                                         filterRow={{visible:true}}
-                                        height={'400'} 
+                                        height={'590px'} 
+                                        onToolbarPreparing={this.onGridToolbarPreparing}
                                         width={'100%'}
                                         dbApply={false}
                                         sorting={{mode:'none'}}
@@ -1763,15 +1793,15 @@ export default class priceDifferenceInvoice extends DocBase
                                             <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
                                             <Column dataField="CDATE_FORMAT" caption={this.t("grdDiffInv.clmCreateDate")} width={80} allowEditing={false}/>
                                             <Column dataField="CUSER_NAME" caption={this.t("grdDiffInv.clmCuser")} width={90} allowEditing={false}/>
-                                            <Column dataField="ITEM_CODE" caption={this.t("grdDiffInv.clmItemCode")} width={90} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdDiffInv.clmItemCode")} width={90} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="MULTICODE" caption={this.t("grdDiffInv.clmMulticode")} width={90} />
                                             <Column dataField="ITEM_NAME" caption={this.t("grdDiffInv.clmItemName")} width={200}/>
                                             <Column dataField="CUSTOMER_PRICE" caption={this.t("grdDiffInv.clmCustomerPrice")} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={70}/>
                                             <Column dataField="PURC_PRICE" caption={this.t("grdDiffInv.clmPurcPrice")} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={70}/>
-                                            <Column dataField="QUANTITY" caption={this.t("grdDiffInv.clmQuantity")} dataType={'number'} width={70} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdDiffInv.clmQuantity")} dataType={'number'} width={70} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="PRICE" caption={this.t("grdDiffInv.clmPrice")} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={70}/>
-                                            <Column dataField="DISCOUNT" caption={this.t("grdDiffInv.clmDiscount")} dataType={'number'} editCellRender={this._cellRoleRender} format={{ style: "currency", currency: Number.money.code,precision: 2}} width={60} allowHeaderFiltering={false}/>
-                                            <Column dataField="DISCOUNT_RATE" caption={this.t("grdDiffInv.clmDiscountRate")} dataType={'number'} width={60} editCellRender={this._cellRoleRender} allowHeaderFiltering={false}/>
+                                            <Column dataField="DISCOUNT" caption={this.t("grdDiffInv.clmDiscount")} dataType={'number'} editCellRender={this.cellRoleRender} format={{ style: "currency", currency: Number.money.code,precision: 2}} width={60} allowHeaderFiltering={false}/>
+                                            <Column dataField="DISCOUNT_RATE" caption={this.t("grdDiffInv.clmDiscountRate")} dataType={'number'} width={60} editCellRender={this.cellRoleRender} allowHeaderFiltering={false}/>
                                             <Column dataField="AMOUNT" caption={this.t("grdDiffInv.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={90} allowEditing={false}/>
                                             <Column dataField="VAT" caption={this.t("grdDiffInv.clmVat")} format={{ style: "currency", currency: Number.money.code,precision: 3}} width={75} allowEditing={false}/>
                                             <Column dataField="VAT_RATE" caption={this.t("grdDiffInv.clmVatRate")} width={50} allowEditing={false}/>
@@ -1788,7 +1818,7 @@ export default class priceDifferenceInvoice extends DocBase
                                         {
                                             if(e.itemData.text == this.t("getContract"))
                                             {
-                                                this._getContract()
+                                                this.getContract()
                                             }
                                             else if(e.itemData.text == this.t("getProforma"))
                                             {
@@ -1801,7 +1831,7 @@ export default class priceDifferenceInvoice extends DocBase
                             </NdForm>
                         </div>
                     </div>
-                    <div className='row px-2 pt-1'>
+                    <div className='row px-2 pt-1' style={{height: '160px'}}>
                         <div className='col-12'>
                             <TabPanel height="100%">
                                 <Item title={this.t("tabTitleSubtotal")}>

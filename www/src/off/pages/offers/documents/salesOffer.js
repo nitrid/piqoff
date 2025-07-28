@@ -141,7 +141,6 @@ export default class salesOffer extends DocBase
     }
     cellRoleRender(e)
     {
-        console.log(this.grid)
         if(e.column.dataField == "ITEM_CODE")
         {
             return (
@@ -232,8 +231,6 @@ export default class salesOffer extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    console.log(r.component._changedValue,this.grid,e.rowIndex)
-
                     this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
@@ -2185,7 +2182,60 @@ export default class salesOffer extends DocBase
                         deferRendering={true}
                         >
                             <div className="row" style={{padding: '20px'}}>
-                                <div className="col-6 text-center">
+                            <div className="col-4 text-center">
+                                    <div 
+                                        style={{
+                                            display: 'flex', 
+                                            flexDirection: 'column', 
+                                            alignItems: 'center', 
+                                            justifyContent: 'center',
+                                            width: '100%',
+                                            height: '150px',
+                                            border: '1px solid #ccc',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                            backgroundColor: '#fff',
+                                            padding: '10px',
+                                            gap: '8px',
+                                            transition: 'all 0.2s ease'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.target.style.backgroundColor = '#f5f5f5';
+                                            e.target.style.borderColor = '#0078d4';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.target.style.backgroundColor = '#fff';
+                                            e.target.style.borderColor = '#ccc';
+                                        }}
+                                        onClick={async()=>
+                                        {
+                                            this.popTransformSelect.hide()
+                                            
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgTransformConfirm',showTitle:true,title:this.t("msgTransformConfirm.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgTransformConfirm.btn01"),location:'before'},{id:"btn02",caption:this.t("msgTransformConfirm.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgTransformConfirm.msgOrder")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.menuClick(
+                                                {
+                                                    id: 'sip_02_002',
+                                                    text: this.t("menu.btnSelectOrder"),
+                                                    path: 'orders/documents/salesOrder.js',
+                                                    pagePrm: {offerGuid: this.docObj.dt()[0].GUID, type: 30}
+                                                })
+                                            }
+                                        }}
+                                    >
+                                        <i className="fa-solid fa-clipboard-list" style={{fontSize: '36px', color: '#0078d4'}}></i>
+                                        <span style={{fontSize: '14px', fontWeight: '500', color: '#333'}}>{this.t("btnSelectOrder")}</span>
+                                    </div>
+                                </div>
+                                <div className="col-4 text-center">
                                     <div 
                                         style={{
                                             display: 'flex', 
@@ -2230,7 +2280,7 @@ export default class salesOffer extends DocBase
                                                 App.instance.menuClick(
                                                 {
                                                     id: 'irs_02_002',
-                                                    text: this.lang.t("menuOff.irs_02_002"),
+                                                    text: this.t("menu.btnSelectDispatch"),
                                                     path: 'dispatch/documents/salesDispatch.js',
                                                     pagePrm: {offerGuid: this.docObj.dt()[0].GUID, type: 40}
                                                 })
@@ -2240,7 +2290,7 @@ export default class salesOffer extends DocBase
                                         <span style={{fontSize: '14px', fontWeight: '500', color: '#333'}}>{this.t("btnSelectDispatch")}</span>
                                     </div>
                                 </div>
-                                <div className="col-6 text-center">
+                                <div className="col-4 text-center">
                                     <div 
                                         style={{
                                             display: 'flex', 
@@ -2248,7 +2298,7 @@ export default class salesOffer extends DocBase
                                             alignItems: 'center', 
                                             justifyContent: 'center',
                                             width: '100%',
-                                            height: '150px',
+                                            height: 'auto',
                                             border: '1px solid #ccc',
                                             borderRadius: '4px',
                                             cursor: 'pointer',
@@ -2285,7 +2335,7 @@ export default class salesOffer extends DocBase
                                                 App.instance.menuClick(
                                                 {
                                                     id: 'ftr_02_002',
-                                                    text: this.lang.t("menuOff.ftr_02_002"),
+                                                    text: this.t("menu.btnSelectInvoice"),
                                                     path: 'invoices/documents/salesInvoice.js',
                                                     pagePrm: {offerGuid: this.docObj.dt()[0].GUID, type: 20}
                                                 })

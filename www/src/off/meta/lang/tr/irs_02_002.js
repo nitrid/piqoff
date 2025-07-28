@@ -37,6 +37,41 @@ const irs_02_002 =
     validMail : "Lütfen Boş Geçmeyin.",
     placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
     clmPartiLot : "Parti Lot",
+    popTransformSelect:
+    {
+        title: "Dönüştürme Seçimi"
+    },
+    msgTransformConfirm:
+    {
+        title: "Dikkat",
+        btn01: "Evet",
+        btn02: "Hayır",
+        msgDispatch: "Bu siparişi irsaliyeye çevirmek istediğinize emin misiniz?",
+        msgInvoice: "Bu siparişi faturaya çevirmek istediğinize emin misiniz?"
+    },
+    btnSelectInvoice: "Satış Faturasına Çevir",
+    msgControlOfDispatch:
+    {
+        title: "Dikkat",
+        btn01: "Kapat",
+        msg: "Bu sipariş daha önce bir irsaliyeye çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden yeni bir Fatura oluşturunuz."
+    },
+    menu:
+    {
+        btnSelectInvoice: "Satış Faturası"
+    },
+    msgControlOfOrder:
+    {
+        title: "Dikkat",
+        btn01: "Kapat",
+        msg: "Bu sipariş daha önce bir faturaya çevrilmiştir. İrsaliye oluşturmak istiyorsanız, Satış İrsaliyesi bölümünden yeni bir İrsaliye oluşturunuz."
+    },
+    msgLocked:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+    },
     msgControlOfFacture:
     {
         title: "Dikkat",

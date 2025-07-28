@@ -30,6 +30,43 @@ const sip_02_002 =
     txtTotalHt : "Discounted Total",
     txtDocNo : "Document No",
     cmbPricingList : "Price List",
+    popTransformSelect:
+    {
+        title: "Conversion Selection"
+    },
+    msgTransformConfirm:
+    {
+        title: "Attention",
+        btn01: "OK",
+        btn02: "Cancel",
+        msgDispatch: "Do you want to convert the document to a dispatch ?",
+        msgInvoice: "Do you want to convert the document to an invoice ?"
+    },
+    btnSelectDispatch: "Convert to Dispatch",
+    btnSelectInvoice: "Convert to Invoice",
+    msgControlOfDispatch:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "This document has already been converted to a dispatch. If you want to create a dispatch, please create a new dispatch in the dispatch module."
+    },
+    menu:
+    {
+        btnSelectDispatch: "Sales Dispatch",
+        btnSelectInvoice: "Sales Invoice"
+    },
+    msgControlOfOrder:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "This document has already been converted to an invoice. If you want to create an invoice, please create a new invoice in the invoice module."
+    },
+    msgLocked:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+    },
     pg_Docs : 
     {
         title : "Document Selection",

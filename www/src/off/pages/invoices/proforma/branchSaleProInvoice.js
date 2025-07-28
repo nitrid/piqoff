@@ -32,10 +32,11 @@ export default class branchSaleInvoice extends DocBase
         this.docType = 122;
         this.rebate = 0;
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
-        this._getPayment = this._getPayment.bind(this)
-        this._addPayment = this._addPayment.bind(this)
-        this._onItemRendered = this._onItemRendered.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
+        this.getPayment = this.getPayment.bind(this)
+        this.addPayment = this.addPayment.bind(this)
+        this.onItemRendered = this.onItemRendered.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
@@ -142,7 +143,7 @@ export default class branchSaleInvoice extends DocBase
         this.txtRefno.readOnly = true
         this.frmDocItems.option('disabled',false)
         
-        this._getPayment(this.docObj.dt()[0].GUID)
+        this.getPayment(this.docObj.dt()[0].GUID)
     }
     async calculateTotal()
     {
@@ -150,7 +151,7 @@ export default class branchSaleInvoice extends DocBase
 
         this.docObj.docCustomer.dt()[0].AMOUNT = this.docObj.dt()[0].TOTAL
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == "ITEM_CODE")
         {
@@ -284,12 +285,12 @@ export default class branchSaleInvoice extends DocBase
             )
         }
     }
-    async _onItemRendered(e)
+    async onItemRendered(e)
     {
         await this.core.util.waitUntil(10)
         if(e.itemData.title == this.t("tabTitlePayments"))
         {
-            this._getPayment(this.docObj.dt()[0].GUID)
+            this.getPayment(this.docObj.dt()[0].GUID)
         }
     }
     async addItem(pData,pIndex,pQuantity)
@@ -437,7 +438,7 @@ export default class branchSaleInvoice extends DocBase
         }
         super.getOrders(tmpQuery)
     }
-    async _getPayment()
+    async getPayment()
     {
         if(typeof this.txtRemainder == 'undefined')
         {
@@ -463,7 +464,7 @@ export default class branchSaleInvoice extends DocBase
         }
        
     }
-    async _addPayment(pType,pAmount)
+    async addPayment(pType,pAmount)
     {
         if(pAmount > this.txtRemainder.value)
         {
@@ -553,7 +554,7 @@ export default class branchSaleInvoice extends DocBase
         }
         
         await this.popPayment.show()
-        await this._getPayment()
+        await this.getPayment()
         await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
     }
     async multiItemAdd()
@@ -659,8 +660,108 @@ export default class branchSaleInvoice extends DocBase
             this.popMultiItem.hide()
         }
     } 
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push(
+        {
+            location: 'after',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: 
+            {
+                icon: 'add',
+                validationGroup: 'frmSalesInv' + this.tabIndex,
+                onClick: ((c) => 
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        if(typeof this.docObj.docItems.dt()[0] != 'undefined')
+                        {
+                            if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                            {
+                                this.pg_txtItemsCode.onClick = async(data) =>
+                                {
+                                    this.combineControl = true
+                                    this.combineNew = false
+                                    if(data.length == 1)
+                                    {
+                                        await this.addItem(data[0],null)
+                                    }
+                                    else if(data.length > 1)
+                                    {
+                                        for (let i = 0; i < data.length; i++) 
+                                        {
+                                            await this.core.util.waitUntil(100)
+                                            await this.addItem(data[i],null)
+                                        }
+                                    }
+                                }
+                                this.pg_txtItemsCode.show()
+                                return
+                            }
+                        }
+                        
+                        this.pg_txtItemsCode.onClick = async(data) =>
+                        {
+                            await this.core.util.waitUntil(100)
+                            this.combineControl = true
+                            this.combineNew = false
+                            if(data.length == 1)
+                            {
+                                await this.addItem(data[0],null)
+                            }
+                            else if(data.length > 1)
+                            {
+                                for (let i = 0; i < data.length; i++) 
+                                {
+                                    await this.core.util.waitUntil(100)
+                                    await this.addItem(data[i],null)
+                                }
+                            }
+                        }
+                        this.pg_txtItemsCode.show()
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
+                    }
+                }).bind(this)
+            }
+        }),
+        e.toolbarOptions.items.push(
+        {
+            location: 'after',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: 
+            {
+
+                icon: 'add',
+                text: this.t("collectiveItemAdd"),
+                validationGroup: 'frmSalesInv' + this.tabIndex,
+                onClick: (async(c) => 
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        await this.popMultiItem.show()
+                        this.multiItemData.clear()
+                        await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                        if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                        {
+                            await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                        }
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
+                    }
+                }).bind(this)
+            }
+        })
+    }
     render()
     {
+
         return(
             <div>
                 <ScrollView>
@@ -727,7 +828,7 @@ export default class branchSaleInvoice extends DocBase
                                                 
                                                 if((await this.docObj.save()) == 0)
                                                 {       
-                                                    this._getPayment()   
+                                                    this.getPayment()   
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
@@ -913,7 +1014,7 @@ export default class branchSaleInvoice extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-1">
+                    <div className="row px-2 pt-1" style={{height:'130px'}}>
                         <div className="col-12">
                             <Form colCount={3} id="frmDocItems">
                                 {/* txtRef-Refno */}
@@ -1276,102 +1377,7 @@ export default class branchSaleInvoice extends DocBase
                     {/* Grid */}
                     <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>
-                            {
-                                this.frmDocItems = e.component
-                            }}>
-                                <Item location="after">
-                                    <Button icon="add"
-                                    validationGroup={"frmDocItems"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    this.pg_txtItemsCode.onClick = async(data) =>
-                                                    {
-                                                        this.combineControl = true
-                                                        this.combineNew = false
-                                                        if(data.length == 1)
-                                                        {
-                                                            await this.addItem(data[0],null)
-                                                        }
-                                                        else if(data.length > 1)
-                                                        {
-                                                            for (let i = 0; i < data.length; i++) 
-                                                            {
-                                                                await this.core.util.waitUntil(100)
-                                                                await this.addItem(data[i],null)
-                                                            }
-                                                        }
-                                                    }
-                                                    this.pg_txtItemsCode.show()
-                                                    return
-                                                }
-                                            }
-                                           
-                                            this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                await this.core.util.waitUntil(100)
-                                                this.combineControl = true
-                                                this.combineNew = false
-                                                if(data.length == 1)
-                                                {
-                                                    await this.addItem(data[0],null)
-                                                }
-                                                else if(data.length > 1)
-                                                {
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        await this.core.util.waitUntil(100)
-                                                        await this.addItem(data[i],null)
-                                                    }
-                                                }
-                                            }
-                                            this.pg_txtItemsCode.show()
-                                        }
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                        }
-                                    }}/>
-                                     <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
-                                    validationGroup={"frmDocItems"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            await this.popMultiItem.show()
-                                            this.multiItemData.clear()
-                                            await this.grdMultiItem.dataRefresh({source:this.multiItemData});
-                                            if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                            {
-                                                await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
-                                            }
-                                        }
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                        }
-                                    }}/>
-                                </Item>
+                            <Form colCount={1} onInitialized={(e)=> { this.frmDocItems = e.component }}>
                                 <Item>
                                     <React.Fragment>
                                         <NdGrid parent={this} id={"grdSlsInv"} 
@@ -1380,7 +1386,8 @@ export default class branchSaleInvoice extends DocBase
                                         allowColumnReordering={true} 
                                         allowColumnResizing={true} 
                                         filterRow={{visible:true}}
-                                        height={'400'} 
+                                        onToolbarPreparing={this.onGridToolbarPreparing}
+                                        height={'590px'} 
                                         width={'100%'}
                                         dbApply={false}
                                         onRowUpdating={async(e)=>
@@ -1467,9 +1474,9 @@ export default class branchSaleInvoice extends DocBase
                                             <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                             <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsInv.clmCreateDate")} width={80} allowEditing={false}/>
                                             <Column dataField="CUSER_NAME" caption={this.t("grdSlsInv.clmCuser")} width={90} allowEditing={false}/>
-                                            <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={100} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={100} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={330}/>
-                                            <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} dataType={'number'} width={70} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} dataType={'number'} width={70} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} dataType={'number'} width={75} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                             <Column dataField="AMOUNT" caption={this.t("grdSlsInv.clmAmount")} width={90} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                             <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} width={60} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
@@ -1494,7 +1501,7 @@ export default class branchSaleInvoice extends DocBase
                                             else if(e.itemData.text == this.t("getPayment"))
                                             {
                                                 await this.popPayment.show()
-                                                await this._getPayment()
+                                                await this.getPayment()
                                                 await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
                                             }
                                             else if(e.itemData.text == this.t("getOrders"))
@@ -1507,9 +1514,9 @@ export default class branchSaleInvoice extends DocBase
                             </Form>
                         </div>
                     </div>
-                    <div className='row px-2 pt-1'>
+                    <div className='row px-2 pt-1' style={{height:'160px'}}>
                         <div className='col-12'>
-                            <TabPanel height="100%" onItemRendered={this._onItemRendered}>
+                            <TabPanel height="100%" onItemRendered={this.onItemRendered}>
                                 <Item title={this.t("tabTitleSubtotal")}>
                                 <div className="row px-2 pt-1">
                                     <div className="col-12">
@@ -1616,13 +1623,12 @@ export default class branchSaleInvoice extends DocBase
                                             <Label text={this.t("txtExpFee")} alignment="right" />
                                                 <NdNumberBox id="txtExpFee" format={{ style: "currency", currency: Number.money.code,precision: 2}} parent={this} simple={true} dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_FEE"}}
                                                 maxLength={32}
-                                                ></NdNumberBox>
+                                                />
                                             </Item>
                                             <Item>
                                             <Label text={this.t("txtPayTotal")} alignment="right" />
                                                 <NdTextBox id="txtPayTotal" format={{ style: "currency", currency: Number.money.code,precision: 2}} parent={this} simple={true} readOnly={true} dt={{data:this.payObj.dt('DOC'),field:"TOTAL"}}
-                                                maxLength={32}
-                                                ></NdTextBox>
+                                                maxLength={32} />
                                             </Item>
                                             {/* Kalan */}
                                             <EmptyItem colSpan={3}/>
@@ -1647,7 +1653,7 @@ export default class branchSaleInvoice extends DocBase
                                                     onClick={async (e)=>
                                                     {   
                                                         await this.popPayment.show()    
-                                                        await this._getPayment()
+                                                        await this.getPayment()
                                                         await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
                                                     }}/>
                                                 </div>
