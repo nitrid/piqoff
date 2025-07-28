@@ -150,7 +150,7 @@ const cri_01_001 =
     },
     cmbTypeData : 
     {
-        individual :  "Einzelperson",
+        individual :  "Privat person",
         company :  "Unternehmen",
         association : "Verein"
     },
@@ -163,7 +163,7 @@ const cri_01_001 =
     },
     cmbTaxTypeData : 
     {
-        individual :  "Einzelperson",
+        individual :  "Privat person",
         company :  "Unternehmen"
     },
     msgCode : 
