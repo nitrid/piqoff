@@ -545,7 +545,7 @@ export default class salesDisList extends React.PureComponent
         return(
             <div id={this.props.data.id + this.props.data.tabkey}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -624,7 +624,7 @@ export default class salesDisList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '80px'}}>
                         <div className="col-12">
                             <Form colCount={2} id="frmCriter">
                                 {/* dtFirst */}
@@ -731,7 +731,7 @@ export default class salesDisList extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                           
                         </div>
@@ -750,11 +750,11 @@ export default class salesDisList extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdSlsDisList" parent={this} 
                             selection={{mode:"multiple"}} 
-                            height={600}
+                            height={700}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -793,53 +793,53 @@ export default class salesDisList extends React.PureComponent
                     </div>
                 </ScrollView>
                   {/* Dizayn Seçim PopUp */}
-                  <div>
-                        <NdPopUp parent={this} id={"popAllDesign"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popDesign.title")}
-                        container={"#" + this.props.data.id + this.props.data.tabkey} 
-                        width={'500'}
-                        height={'auto'}
-                        position={{of:'#' + this.props.data.id + this.props.data.tabkey}}
-                        >
-                            <Form colCount={1} height={'fit-content'}>
-                                <Item>
-                                    <Label text={this.t("popDesign.design")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbAllDesignList" notRefresh = {true}
-                                    displayExpr="DESIGN_NAME"                       
-                                    valueExpr="TAG"
-                                    value=""
-                                    searchEnabled={true}
-                                    data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '112'`},sql:this.core.sql}}}
-                                    param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
-                                    >
-                                    </NdSelectBox>
-                                </Item>
-                             
-                                <Item>
-                                    <div className='row'>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmSlsOrderMail" + this.tabIndex}
-                                            onClick={async (e)=>
-                                            {       
-                                                this.printDispatch()
-                                            }}/>
-                                        </div>
-                                        <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                            onClick={()=>
-                                            {
-                                                this.popAllDesign.hide();  
-                                            }}/>
-                                        </div>
+                <div>
+                    <NdPopUp parent={this} id={"popAllDesign"} 
+                    visible={false}
+                    showCloseButton={true}
+                    showTitle={true}
+                    title={this.t("popDesign.title")}
+                    container={"#" + this.props.data.id + this.props.data.tabkey} 
+                    width={'500'}
+                    height={'auto'}
+                    position={{of:'#' + this.props.data.id + this.props.data.tabkey}}
+                    >
+                        <Form colCount={1} height={'fit-content'}>
+                            <Item>
+                                <Label text={this.t("popDesign.design")} alignment="right" />
+                                <NdSelectBox simple={true} parent={this} id="cmbAllDesignList" notRefresh = {true}
+                                displayExpr="DESIGN_NAME"                       
+                                valueExpr="TAG"
+                                value=""
+                                searchEnabled={true}
+                                data={{source:{select:{query : `SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '112'`},sql:this.core.sql}}}
+                                param={this.param.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                access={this.access.filter({ELEMENT:'cmbDesignList',USERS:this.user.CODE})}
+                                >
+                                </NdSelectBox>
+                            </Item>
+                            
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmSlsOrderMail" + this.tabIndex}
+                                        onClick={async (e)=>
+                                        {       
+                                            this.printDispatch()
+                                        }}/>
                                     </div>
-                                </Item>
-                            </Form>
-                        </NdPopUp>
-                    </div>  
+                                    <div className='col-6'>
+                                        <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>
+                                        {
+                                            this.popAllDesign.hide();  
+                                        }}/>
+                                    </div>
+                                </div>
+                            </Item>
+                        </Form>
+                    </NdPopUp>
+                </div>  
             </div>
         )
     }

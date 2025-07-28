@@ -318,7 +318,7 @@ export default class salesInvList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-1">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={2} id="frmCriter">
                                 {/* dtFirst */}
@@ -435,7 +435,7 @@ export default class salesInvList extends React.PureComponent
                         <div className="col-12">
                             <NdGrid id="grdSlsIvcList" parent={this} 
                             selection={{mode:"multiple"}} 
-                            height={600}
+                            height={700}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:false}}
@@ -481,7 +481,7 @@ export default class salesInvList extends React.PureComponent
                         title={this.t("popDesign.title")}
                         container={'#' + this.props.data.id + this.props.data.tabkey} 
                         width={'500'}
-                        height={'180'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.props.data.tabkey}}
                         deferRendering={true}
                         >

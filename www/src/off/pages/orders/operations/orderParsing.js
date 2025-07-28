@@ -27,7 +27,7 @@ export default class orderParsing extends React.PureComponent
        
         this.btnGetClick = this.btnGetClick.bind(this)
         this.btnSave = this.btnSave.bind(this)
-        this._toGroupByCustomer = this._toGroupByCustomer.bind(this)
+        this.toGroupByCustomer = this.toGroupByCustomer.bind(this)
         this.txtRef = Math.floor(Date.now() / 1000)
         this.tabIndex = props.data.tabkey
         this.loadState = this.loadState.bind(this)
@@ -110,7 +110,7 @@ export default class orderParsing extends React.PureComponent
            }
         }
 
-        let tmpItem = await this._toGroupByCustomer(this.grdOrderList.getSelectedData(),'ITEM_CODE')
+        let tmpItem = await this.toGroupByCustomer(this.grdOrderList.getSelectedData(),'ITEM_CODE')
 
         for(let i = 0; i < Object.values(tmpItem).length; i++)
         {
@@ -142,7 +142,7 @@ export default class orderParsing extends React.PureComponent
             return
         }
         
-        let tmpCustomer = await this._toGroupByCustomer(this.grdOrderList.getSelectedData(),'CUSTOMER_GUID')
+        let tmpCustomer = await this.toGroupByCustomer(this.grdOrderList.getSelectedData(),'CUSTOMER_GUID')
 
         for (let i = 0; i < Object.keys(tmpCustomer).length; i++)
         {
@@ -219,7 +219,7 @@ export default class orderParsing extends React.PureComponent
         }
         
     }
-    async _toGroupByCustomer(pData,pProperty)
+    async toGroupByCustomer(pData,pProperty)
     {
         return pData.reduce((acc, obj) => {
             const key = obj[pProperty];
@@ -237,7 +237,7 @@ export default class orderParsing extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                <div className="row px-2 pt-2">
+                <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                             <Item location="after"
@@ -269,7 +269,7 @@ export default class orderParsing extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="frmCriter">
                                {/* cmbDepot */}
@@ -384,7 +384,7 @@ export default class orderParsing extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick} />
                         </div>
@@ -396,7 +396,7 @@ export default class orderParsing extends React.PureComponent
                             <NdButton text={this.t("btnOrder")} type="default" width="100%" onClick={()=>{this.btnSave(0)}} />
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdOrderList" parent={this} 
                             selection={{mode:"multiple"}} 
@@ -405,8 +405,9 @@ export default class orderParsing extends React.PureComponent
                             headerFilter={{visible:true}}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
-                            loadPanel={{enabled:true}}
                             allowColumnResizing={true}
+                            loadPanel={{enabled:true}}
+                            height={700}
                             >                            
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
                                 {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}

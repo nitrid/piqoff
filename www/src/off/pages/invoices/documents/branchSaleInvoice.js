@@ -34,6 +34,7 @@ export default class branchSaleInvoice extends DocBase
         this.rebate = 0;
 
         this.cellRoleRender = this.cellRoleRender.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
 
@@ -814,7 +815,150 @@ export default class branchSaleInvoice extends DocBase
             }
         }
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options:
+            {
+                icon: 'add',
+                validationGroup: 'frmDocItems' + this.tabIndex,
+                onClick: (async (c)=>
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        if(typeof this.docObj.docItems.dt()[0] != 'undefined')
+                        {
+                            if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                            {
+                                this.pg_txtItemsCode.onClick = async(data) =>
+                                {
+                                    this.checkboxReset()
 
+                                    this.grid.devGrid.beginUpdate()
+
+                                    for (let i = 0; i < data.length; i++) 
+                                    {
+                                        await this.addItem(data[i],null)
+
+                                    }
+                                    this.grid.devGrid.endUpdate()
+                                }
+                                this.pg_txtItemsCode.show()
+                                return
+                            }
+                        }
+                        
+                        this.pg_txtItemsCode.onClick = async(data) =>
+                        {
+                            this.checkboxReset()
+
+                            this.grid.devGrid.beginUpdate()
+
+                            for (let i = 0; i < data.length; i++) 
+                            {
+                                await this.addItem(data[i],null)
+                            }
+
+                            this.grid.devGrid.endUpdate()
+                        }
+                        this.pg_txtItemsCode.show()
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
+                    }
+                }).bind(this)   
+            }
+        }),
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options:
+            {
+                icon: 'add',
+                validationGroup: 'frmDocItems' + this.tabIndex,
+                text: this.t("serviceAdd"),
+                onClick: (async (c)=>
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {   
+                        if(typeof this.docObj.docItems.dt()[0] != 'undefined')
+                        {
+                            if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                            {
+                                await this.pg_service.show()
+
+                                this.pg_service.onClick = async(data) =>
+                                {
+                                    this.checkboxReset()
+                                    this.grid.devGrid.beginUpdate()
+
+                                    for (let i = 0; i < data.length; i++) 
+                                    {
+                                        await this.addItem(data[i],null)
+                                    }
+
+                                    this.grid.devGrid.endUpdate()
+                                }
+                                return
+                            }
+                        }
+                        
+                        await this.pg_service.show()
+                        this.pg_service.onClick = async(data) =>
+                        {
+                            this.checkboxReset()
+                            this.grid.devGrid.beginUpdate()
+
+                            for (let i = 0; i < data.length; i++) 
+                            {
+                                await this.addItem(data[i],null)
+                            }
+                            
+                            this.grid.devGrid.endUpdate()
+                        }
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
+                    }
+                }).bind(this)   
+            }
+        }),
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options:
+            {
+                icon: 'add',
+                validationGroup: 'frmDocItems' + this.tabIndex,
+                text: this.lang.t("collectiveItemAdd"),
+                onClick: (async (c)=>
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {   
+                        await this.popMultiItem.show()
+                        this.cmbMultiItemType.value = 1
+                        await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                        
+                        if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                        {
+                            await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                        }
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
+                    }
+                }).bind(this)   
+            }
+        })
+    }
     render()
     {
         return(
@@ -1046,7 +1190,7 @@ export default class branchSaleInvoice extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-1">
+                    <div className="row px-2 pt-1" style={{height: '130px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmDocItems">
                                 {/* txtRef-Refno */}
@@ -1437,123 +1581,6 @@ export default class branchSaleInvoice extends DocBase
                             {
                                 this.frmDocItems = e.component
                             }}>
-                                <NdItem location="after">
-                                    <Button icon="add"
-                                    validationGroup={"frmDocItems"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    this.pg_txtItemsCode.onClick = async(data) =>
-                                                    {
-                                                        this.checkboxReset()
-
-                                                        this.grid.devGrid.beginUpdate()
-  
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            await this.addItem(data[i],null)
-  
-                                                        }
-                                                        this.grid.devGrid.endUpdate()
-                                                    }
-                                                    this.pg_txtItemsCode.show()
-                                                    return
-                                                }
-                                            }
-                                           
-                                            this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                this.checkboxReset()
-
-                                                this.grid.devGrid.beginUpdate()
-
-                                                for (let i = 0; i < data.length; i++) 
-                                                {
-                                                    await this.addItem(data[i],null)
-                                                }
-
-                                                this.grid.devGrid.endUpdate()
-                                            }
-                                            this.pg_txtItemsCode.show()
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
-                                        }
-                                    }}/>
-                                    <Button icon="add" text={this.t("serviceAdd")}
-                                    validationGroup={"frmDocItems"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    await this.pg_service.show()
-                 
-                                                    this.pg_service.onClick = async(data) =>
-                                                    {
-                                                        this.checkboxReset()
-                                                        this.grid.devGrid.beginUpdate()
-
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            await this.addItem(data[i],null)
-                                                        }
-
-                                                        this.grid.devGrid.endUpdate()
-                                                    }
-                                                    return
-                                                }
-                                            }
-                                           
-                                            await this.pg_service.show()
-                                            this.pg_service.onClick = async(data) =>
-                                            {
-                                                this.checkboxReset()
-                                                this.grid.devGrid.beginUpdate()
-
-                                                for (let i = 0; i < data.length; i++) 
-                                                {
-                                                    await this.addItem(data[i],null)
-                                                }
-                                                
-                                                this.grid.devGrid.endUpdate()
-                                            }
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
-                                        }
-                                    }}/>
-                                     <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
-                                    validationGroup={"frmDocItems"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            await this.popMultiItem.show()
-                                            this.cmbMultiItemType.value = 1
-                                            await this.grdMultiItem.dataRefresh({source:this.multiItemData});
-                                            
-                                            if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                            {
-                                                await this.grid.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
-                                            }
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:"warning"})
-                                        }
-                                    }}/>
-                                </NdItem>
                                 <NdItem>
                                     <React.Fragment>
                                         <NdGrid parent={this} id={"grdSlsInv"+this.tabIndex} 
@@ -1562,7 +1589,8 @@ export default class branchSaleInvoice extends DocBase
                                         allowColumnReordering={true} 
                                         allowColumnResizing={true} 
                                         filterRow={{visible:true}}
-                                        height={'400'} 
+                                        height={'590px'} 
+                                        onToolbarPreparing={this.onGridToolbarPreparing}
                                         width={'100%'}
                                         dbApply={false}
                                         sorting={{mode:'none'}}
@@ -1737,7 +1765,7 @@ export default class branchSaleInvoice extends DocBase
                             </NdForm>
                         </div>
                     </div>
-                    <div className='row px-2 pt-1'>
+                    <div className='row px-2 pt-1' style={{height: '160px'}}>
                         <div className='col-12'>
                             <TabPanel height="100%">
                                 <Item title={this.t("tabTitleSubtotal")}>

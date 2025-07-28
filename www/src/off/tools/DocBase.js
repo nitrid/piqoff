@@ -1437,6 +1437,202 @@ export default class DocBase extends React.PureComponent
             this.frmDocItems.option('disabled',false)
        }
     }
+    async buildOrder(pGuid,pType)
+    {
+        let tmpControlQuery =
+        {
+            query : `SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID`,
+            param : ['GUID:string|50'],
+            value : [pGuid]
+        }       
+
+        let tmpControlData = await this.core.sql.execute(tmpControlQuery)
+
+        if(tmpControlData.result.recordset.length > 0 )
+        {
+            let typeTo = tmpControlData.result.recordset[0].TYPE_TO
+            let msgConfObj = {}
+            let pResult = ''
+
+            if((typeTo == 40 && pType == 20) || (typeTo == 20 && pType == 40))
+            {
+                if(typeTo == 40 && pType == 20)
+                {
+                    msgConfObj =
+                    {
+                        id:'msgControlOfDispatch',showTitle:true,title:this.t("msgControlOfDispatch.title"),showCloseButton:true,width:'500px',height:'250px',
+                        button:[{id:"btn01",caption:this.t("msgControlOfDispatch.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgControlOfDispatch.msg")}</div>)
+                    }
+                }
+                else if(typeTo == 20 && pType == 40)
+                {
+                    msgConfObj =
+                    {
+                        id:'msgControlOfFacture',showTitle:true,title:this.t("msgControlOfFacture.title"),showCloseButton:true,width:'500px',height:'250px',
+                        button:[{id:"btn01",caption:this.t("msgControlOfFacture.btn01"),location:'after'}],
+                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgControlOfFacture.msg")}</div>)
+                    }
+                }
+
+                pResult = await dialog(msgConfObj);
+
+                if(pResult == 'btn01')
+                {
+                    App.instance.panel.closePage()
+                }
+            }
+            else
+            {
+                await this.getDoc(tmpControlData.result.recordset[0].DOC_TO,tmpControlData.result.recordset[0].REF_TO,tmpControlData.result.recordset[0].REF_NO_TO) 
+                return
+            }
+        }
+
+        let tmpQuery =
+        {
+            query : `SELECT * FROM DOC_VW_01 WHERE GUID = @GUID`,
+            param : ['GUID:string|50'],
+            value : [pGuid]
+        }
+
+        let tmpData = await this.core.sql.execute(tmpQuery)
+
+        if(tmpData.result.recordset.length > 0)
+        {
+            this.docObj.dt()[0].INPUT = tmpData.result.recordset[0].INPUT
+            this.docObj.dt()[0].INPUT_CODE = tmpData.result.recordset[0].INPUT_CODE
+            this.docObj.dt()[0].INPUT_NAME = tmpData.result.recordset[0].INPUT_NAME
+            this.docObj.dt()[0].OUTPUT = tmpData.result.recordset[0].OUTPUT
+            this.docObj.dt()[0].OUTPUT_CODE = tmpData.result.recordset[0].OUTPUT_CODE
+            this.docObj.dt()[0].OUTPUT_NAME = tmpData.result.recordset[0].OUTPUT_NAME
+            this.docObj.dt()[0].PRICE_LIST_NO = tmpData.result.recordset[0].PRICE_LIST_NO
+            
+            if(this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue() != 'undefined' && this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue().value ==  true)
+            {
+                this.txtRef.value = tmpData.result.recordset[0].INPUT_CODE;
+            }
+
+            if(this.docType != 20)
+            {
+                this.txtRef.props.onChange()
+            }
+
+            let tmpOrderQuery = 
+            {
+                query : `SELECT *, 
+                        ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, 
+                        ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, 
+                        QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, 
+                        PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE, 
+                        REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE DOC_GUID = @GUID`,
+                param : ['GUID:string|50','SUB_FACTOR:string|10'],
+                value : [pGuid,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
+            }
+
+            let tmpOrderData = await this.core.sql.execute(tmpOrderQuery)
+
+            console.log('tmpOrderData',tmpOrderData)
+
+            if(tmpOrderData.result.recordset.length > 0)
+            {
+                await this.convertDocOrders(tmpOrderData.result.recordset)
+            }
+
+            this.frmDocItems.option('disabled',false)  
+       }
+    }
+    async buildDispatch(pGuid,pType)
+    {
+        let tmpControlQuery =
+        {
+            query : `SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID`,
+            param : ['GUID:string|50'],
+            value : [pGuid]
+        }       
+
+        let tmpControlData = await this.core.sql.execute(tmpControlQuery)
+
+        if(tmpControlData.result.recordset.length > 0 )
+        {
+            let typeTo = tmpControlData.result.recordset[0].TYPE_TO
+            
+            if(typeTo == 20 && pType == 20)
+            {
+                let msgConfObj =
+                {
+                    id:'msgControlOfFacture',showTitle:true,title:this.t("msgControlOfFacture.title"),showCloseButton:true,width:'500px',height:'250px',
+                    button:[{id:"btn01",caption:this.t("msgControlOfFacture.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgControlOfFacture.msg")}</div>)
+                }
+                
+                let pResult = await dialog(msgConfObj);
+                
+                if(pResult == 'btn01')
+                {
+                    App.instance.panel.closePage()
+                }
+            }
+            else
+            {
+                await this.getDoc(tmpControlData.result.recordset[0].DOC_TO,tmpControlData.result.recordset[0].REF_TO,tmpControlData.result.recordset[0].REF_NO_TO) 
+                return
+            }
+        }
+
+        let tmpQuery =
+        {
+            query : `SELECT * FROM DOC_VW_01 WHERE GUID = @GUID`,
+            param : ['GUID:string|50'],
+            value : [pGuid]
+        }
+
+        let tmpData = await this.core.sql.execute(tmpQuery)
+
+        if(tmpData.result.recordset.length > 0)
+        {
+            this.docObj.dt()[0].INPUT = tmpData.result.recordset[0].INPUT
+            this.docObj.dt()[0].INPUT_CODE = tmpData.result.recordset[0].INPUT_CODE
+            this.docObj.dt()[0].INPUT_NAME = tmpData.result.recordset[0].INPUT_NAME
+            this.docObj.dt()[0].OUTPUT = tmpData.result.recordset[0].OUTPUT
+            this.docObj.dt()[0].OUTPUT_CODE = tmpData.result.recordset[0].OUTPUT_CODE
+            this.docObj.dt()[0].OUTPUT_NAME = tmpData.result.recordset[0].OUTPUT_NAME
+            this.docObj.dt()[0].PRICE_LIST_NO = tmpData.result.recordset[0].PRICE_LIST_NO
+            
+            if(this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue() != 'undefined' && this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue().value ==  true)
+            {
+                this.txtRef.value = tmpData.result.recordset[0].INPUT_CODE;
+            }
+
+            if(this.docType != 20)
+            {
+                this.txtRef.props.onChange()
+            }
+
+            let tmpOrderQuery = 
+            {
+                query : `SELECT *, 
+                        ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, 
+                        ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, 
+                        QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, 
+                        PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE, 
+                        REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE DOC_GUID = @GUID`,
+                param : ['GUID:string|50','SUB_FACTOR:string|10'],
+                value : [pGuid,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
+            }
+
+            let tmpOrderData = await this.core.sql.execute(tmpOrderQuery)
+
+            console.log('tmpOrderData',tmpOrderData)
+
+            if(tmpOrderData.result.recordset.length > 0)
+            {
+                await this.convertDocDispatch(tmpOrderData.result.recordset)
+            }
+
+            this.frmDocItems.option('disabled',false)  
+       }
+    }
     render()
     {
         return(
@@ -1976,7 +2172,8 @@ export default class DocBase extends React.PureComponent
                 </div>
                 {/* Stok Grid */}
                 <div>
-                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} container={'#' + this.props.data.id + this.tabIndex}
+                    <NdPopGrid id={"pg_txtItemsCode"} parent={this} 
+                    container={'#' + this.props.data.id + this.tabIndex}
                     visible={false}
                     position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
@@ -2085,14 +2282,14 @@ export default class DocBase extends React.PureComponent
                             <Item>
                                 <div className='row'>
                                     <div className='col-6'>
-                                        <NdButton text={this.t("popMultiItem.btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                        <NdButton text={this.t("popMultiItem.btnApprove")} type="success" stylingMode="contained" width={'100%'} 
                                         onClick={async (e)=>
                                         {       
                                             this.multiItemAdd()
                                         }}/>
                                     </div>
                                     <div className='col-6'>
-                                        <NdButton text={this.t("popMultiItem.btnClear")} type="normal" stylingMode="contained" width={'100%'}
+                                        <NdButton text={this.t("popMultiItem.btnClear")} type="danger" stylingMode="contained" width={'100%'}
                                         onClick={()=>
                                         {
                                             this.multiItemData.clear()
@@ -2127,7 +2324,7 @@ export default class DocBase extends React.PureComponent
                                     <div className='col-6'>                                    
                                     </div>
                                     <div className='col-6'>
-                                        <NdButton text={this.t("popMultiItem.btnSave")} type="normal" stylingMode="contained" width={'100%'}
+                                        <NdButton text={this.t("popMultiItem.btnSave")} type="default" stylingMode="contained" width={'100%'}
                                         onClick={()=>
                                         {
                                             this.multiItemSave()
@@ -2784,9 +2981,10 @@ export default class DocBase extends React.PureComponent
                 </div>  
                 {/* Adres Seçim PopUp */}
                 <div>
-                    <NdPopGrid id={"pg_adress"} showCloseButton={false} parent={this} container={"#root"}
+                    <NdPopGrid id={"pg_adress"} showCloseButton={false} parent={this} 
+                    container={"#" + this.props.data.id + this.tabIndex}
                     visible={false}
-                    position={{of:'#root'}} 
+                    position={{of:'#' + this.props.data.id + this.tabIndex}} 
                     showTitle={true} 
                     showBorders={true}
                     width={'90%'}

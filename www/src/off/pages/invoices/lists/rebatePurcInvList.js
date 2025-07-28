@@ -6,9 +6,8 @@ import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Paging,Pager,Export,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Export,Scrolling,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
-import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import NdPopGrid from '../../../../core/react/devex/popgrid.js';
@@ -45,55 +44,18 @@ export default class rebateInvList extends React.PureComponent
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = '';
     }
-    _columnListBox(e)
+    async loadState()
     {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }                
-                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('INPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
-                {
-                    this.groupList.push('TOTAL')
-                }
-                
-                for (let i = 0; i < this.grdSlsIvcList.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdSlsIvcList.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdSlsIvcList.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdSlsIvcList.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                {
-                    columnListValue : e.value
-                }
-                )
-            }
-        }
-        
+        let tmpLoad = await this.access.filter({ELEMENT:'grdSlsIvcListState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
     }
+    async saveState(e)
+    {
+        let tmpSave = await this.access.filter({ELEMENT:'grdSlsIvcListState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        await tmpSave.setValue(e)
+        await tmpSave.save()
+    }
+
     async btnGetClick()
     {
         
@@ -217,7 +179,7 @@ export default class rebateInvList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-1">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={2} id="frmCriter">
                                 {/* dtFirst */}
@@ -340,7 +302,7 @@ export default class rebateInvList extends React.PureComponent
                         <div className="col-12">
                             <NdGrid id="grdSlsIvcList" parent={this} 
                             selection={{mode:"multiple"}} 
-                            height={600}
+                            height={700}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -388,7 +350,7 @@ export default class rebateInvList extends React.PureComponent
                         title={this.t("popDesign.title")}
                         container={'#' + this.props.data.id + this.props.data.tabkey} 
                         width={'500'}
-                        height={'180'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.props.data.tabkey}}
                         onShowing={async()=>
                         {

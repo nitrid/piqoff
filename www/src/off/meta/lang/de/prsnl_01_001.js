@@ -158,7 +158,7 @@ const prsnl_01_001 =
     },
     cmbTypeData:
     {
-        individual: "Einzelperson",
+        individual: "Privat person",
         company: "Firma",
         association: "Verein"
     },
@@ -171,7 +171,7 @@ const prsnl_01_001 =
     },
     cmbTaxTypeData:
     {
-        individual: "Einzelperson",
+        individual: "Privat person",
         company: "Firma"
     },
     msgCode:

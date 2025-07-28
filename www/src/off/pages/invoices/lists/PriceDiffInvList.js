@@ -6,7 +6,7 @@ import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Paging,Pager,Export,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Export,Scrolling,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
@@ -130,7 +130,7 @@ export default class PriceDiffInvList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-1">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={2} id="frmCriter">
                                 {/* dtFirst */}
@@ -253,7 +253,7 @@ export default class PriceDiffInvList extends React.PureComponent
                         <div className="col-12">
                             <NdGrid id="grdSlsIvcList" parent={this} 
                             selection={{mode:"multiple"}} 
-                            height={600}
+                            height={700}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}

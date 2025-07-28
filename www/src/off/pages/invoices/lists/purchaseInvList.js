@@ -6,7 +6,7 @@ import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Paging,Pager,Export,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Export,Scrolling,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdButton from '../../../../core/react/devex/button.js';
 import NdDatePicker from '../../../../core/react/devex/datepicker.js';
@@ -175,7 +175,7 @@ export default class purchaseInvList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-1">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={2} id="frmCriter">
                                 {/* dtFirst */}
@@ -282,13 +282,7 @@ export default class purchaseInvList extends React.PureComponent
                     </div>
                     <div className="row px-2 pt-1">
                         <div className="col-3">
-                            <NdDropDownBox simple={true} parent={this} id="cmbColumn"
-                            value={this.state.columnListValue}
-                            displayExpr="NAME"                       
-                            valueExpr="CODE"
-                            data={{source: this.columnListData}}
-                            contentRender={this._columnListBox}
-                            />
+                            
                         </div>
                         <div className="col-3">
                             
@@ -304,7 +298,7 @@ export default class purchaseInvList extends React.PureComponent
                         <div className="col-12">
                             <NdGrid id="grdPurcIvcList" parent={this} 
                             selection={{mode:"multiple"}} 
-                            height={600}
+                            height={700}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -346,7 +340,7 @@ export default class purchaseInvList extends React.PureComponent
                         title={this.t("popDesign.title")}
                         container={'#' + this.props.data.id + this.props.data.tabkey} 
                         width={'500'}
-                        height={'180'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.props.data.tabkey}}
                         deferRendering={true}
                         >

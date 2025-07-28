@@ -32,10 +32,11 @@ export default class salesInvoice extends DocBase
         this.docType = 120;
         this.rebate = 0;
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
-        this._getPayment = this._getPayment.bind(this)
-        this._addPayment = this._addPayment.bind(this)
-        this._onItemRendered = this._onItemRendered.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
+        this.getPayment = this.getPayment.bind(this)
+        this.addPayment = this.addPayment.bind(this)
+        this.onItemRendered = this.onItemRendered.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
 
         this.frmSalesInv = undefined;
         this.docLocked = false;        
@@ -144,7 +145,7 @@ export default class salesInvoice extends DocBase
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
         
-        this._getPayment(this.docObj.dt()[0].GUID)
+        this.getPayment(this.docObj.dt()[0].GUID)
     }
     async calculateTotal()
     {
@@ -165,7 +166,7 @@ export default class salesInvoice extends DocBase
             this.docObj.docItems.dt()[i].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
         }
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == "ITEM_CODE")
         {
@@ -285,7 +286,7 @@ export default class salesInvoice extends DocBase
             )
         }
     }
-    async _onItemRendered(e)
+    async onItemRendered(e)
     {
         await this.core.util.waitUntil(10)
         if(e.itemData.title == this.t("tabTitleSubtotal"))
@@ -294,7 +295,7 @@ export default class salesInvoice extends DocBase
         }
         else if(e.itemData.title == this.t("tabTitlePayments"))
         {
-            this._getPayment(this.docObj.dt()[0].GUID)
+            this.getPayment(this.docObj.dt()[0].GUID)
         }
     }
     async addItem(pData,pIndex,pQuantity)
@@ -441,7 +442,7 @@ export default class salesInvoice extends DocBase
         }
         super.getOffers(tmpQuery);
     }
-    async _getPayment()
+    async getPayment()
     {
         if(typeof this.txtRemainder == 'undefined')
         {
@@ -467,7 +468,7 @@ export default class salesInvoice extends DocBase
         }
        
     }
-    async _addPayment(pType,pAmount)
+    async addPayment(pType,pAmount)
     {
         if(pAmount > this.txtRemainder.value)
         {
@@ -556,7 +557,7 @@ export default class salesInvoice extends DocBase
               
             }
             await this.popPayment.show()
-            await this._getPayment()
+            await this.getPayment()
             await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
     }
     async multiItemAdd()
@@ -662,6 +663,103 @@ export default class salesInvoice extends DocBase
             this.popMultiItem.hide()
         }
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push({
+            location: 'after',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: 
+            {
+                icon: 'add',
+                validationGroup: 'frmSalesInv' + this.tabIndex,
+                onClick: (async(c) => 
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    { 
+                        if(typeof this.docObj.docItems.dt()[0] != 'undefined')
+                        {
+                            if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                            {
+                                
+                                this.pg_txtItemsCode.onClick = async(data) =>
+                                {
+                                    this.combineControl = true
+                                    this.combineNew = false
+                                    for (let i = 0; i < data.length; i++) 
+                                    {
+                                        await this.core.util.waitUntil(100)
+                                        await this.addItem(data[i],null)
+                                    }
+                                }
+                                this.pg_txtItemsCode.show()
+                                return
+                            }
+                        }
+                    
+                        this.pg_txtItemsCode.onClick = async(data) =>
+                        {
+                            await this.core.util.waitUntil(100)
+                            this.combineControl = true
+                            this.combineNew = false
+                            for (let i = 0; i < data.length; i++) 
+                            {
+                                await this.core.util.waitUntil(100)
+                                await this.addItem(data[i],null)
+                            }
+                        }
+                        this.pg_txtItemsCode.show()
+        
+                    }
+                    else
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'auto',
+                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                        }
+                        
+                        await dialog(tmpConfObj);
+                    }
+                }).bind(this)
+            }
+        }),
+        e.toolbarOptions.items.push(
+        {
+            location: 'after',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: {
+                icon: 'add',
+                text: this.t("collectiveItemAdd"),
+                validationGroup: 'frmSalesInv' + this.tabIndex,
+                onClick: (async(c) => 
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        await this.popMultiItem.show()
+                        await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                        if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
+                        {
+                            await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
+                        }
+                    }
+                    else
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'auto',
+                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                        }
+                        
+                        await dialog(tmpConfObj);
+                    } 
+                }).bind(this)
+            }
+        })
+  }
     render()
     {
         return(
@@ -729,7 +827,7 @@ export default class salesInvoice extends DocBase
                                                 
                                                 if((await this.docObj.save()) == 0)
                                                 {       
-                                                    this._getPayment()   
+                                                    this.getPayment()   
                                                     tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgSaveResult.msgSuccess")}</div>)
                                                     await dialog(tmpConfObj1);
                                                     this.btnSave.setState({disabled:true});
@@ -831,7 +929,7 @@ export default class salesInvoice extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-1">
+                    <div className="row px-2 pt-1" style={{height:'130px'}}>
                         <div className="col-12">
                             <Form colCount={3} id="frmSalesInv">
                                 {/* txtRef-Refno */}
@@ -1224,89 +1322,7 @@ export default class salesInvoice extends DocBase
                     {/* Grid */}
                     <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <Form colCount={1} onInitialized={(e)=>
-                            {
-                                this.frmSalesInv = e.component
-                            }}>
-                                <Item location="after">
-                                    <Button icon="add"
-                                    validationGroup={"frmSalesInv"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.docObj.docItems.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    
-                                                    this.pg_txtItemsCode.onClick = async(data) =>
-                                                    {
-                                                        this.combineControl = true
-                                                        this.combineNew = false
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            await this.core.util.waitUntil(100)
-                                                            await this.addItem(data[i],null)
-                                                        }
-                                                    }
-                                                    this.pg_txtItemsCode.show()
-                                                    return
-                                                }
-                                            }
-                                           
-                                            this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                await this.core.util.waitUntil(100)
-                                                this.combineControl = true
-                                                this.combineNew = false
-                                                for (let i = 0; i < data.length; i++) 
-                                                {
-                                                    await this.core.util.waitUntil(100)
-                                                    await this.addItem(data[i],null)
-                                                }
-                                            }
-                                            this.pg_txtItemsCode.show()
-                                
-                                        }
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                        }
-                                    }}/>
-                                     <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
-                                    validationGroup={"frmSalesInv"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            await this.popMultiItem.show()
-                                            await this.grdMultiItem.dataRefresh({source:this.multiItemData});
-                                            if( typeof this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1] != 'undefined' && this.docObj.docItems.dt()[this.docObj.docItems.dt().length - 1].ITEM_CODE == '')
-                                            {
-                                                await this.grdSlsInv.devGrid.deleteRow(this.docObj.docItems.dt().length - 1)
-                                            }
-                                        }
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                        }
-                                    }}/>
-                                </Item>
+                            <Form colCount={1} onInitialized={(e)=> { this.frmSalesInv = e.component }}>
                                 <Item>
                                  <React.Fragment>
                                     <NdGrid parent={this} id={"grdSlsInv"} 
@@ -1315,7 +1331,8 @@ export default class salesInvoice extends DocBase
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
                                     filterRow={{visible:true}}
-                                    height={'400'} 
+                                    onToolbarPreparing={this.onGridToolbarPreparing}
+                                    height={'590px'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowPrepared={async(e)=>
@@ -1414,9 +1431,9 @@ export default class salesInvoice extends DocBase
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsInv.clmCreateDate")} width={80} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdSlsInv.clmCuser")} width={90} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={100} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={100} editCellRender={this.cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={320}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} dataType={'number'} width={70} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} dataType={'number'} width={70} editCellRender={this.cellRoleRender}/>
                                         <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} dataType={'number'} width={75} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdSlsInv.clmAmount")} width={90} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                         <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} width={60} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
@@ -1441,7 +1458,7 @@ export default class salesInvoice extends DocBase
                                         else if(e.itemData.text == this.t("getPayment"))
                                         {
                                             await this.popPayment.show()
-                                            await this._getPayment()
+                                            await this.getPayment()
                                             await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
                                         }
                                         else if(e.itemData.text == this.t("getOrders"))
@@ -1458,9 +1475,9 @@ export default class salesInvoice extends DocBase
                             </Form>
                         </div>
                     </div>
-                    <div className='row px-2 pt-1'>
+                    <div className='row px-2 pt-1' style={{height:'160px'}}>
                         <div className='col-12'>
-                            <TabPanel height="100%" onItemRendered={this._onItemRendered}>
+                            <TabPanel height="100%" onItemRendered={this.onItemRendered}>
                                 <Item title={this.t("tabTitleSubtotal")}>
                                 <div className="row px-2 pt-1">
                                     <div className="col-12">
@@ -1599,7 +1616,7 @@ export default class salesInvoice extends DocBase
                                                     onClick={async (e)=>
                                                     {   
                                                         await this.popPayment.show()    
-                                                        await this._getPayment()
+                                                        await this.getPayment()
                                                         await this.grdInvoicePayment.dataRefresh({source:this.payObj.docCustomer.dt()});
                                                     }}/>
                                                 </div>
@@ -1619,10 +1636,10 @@ export default class salesInvoice extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDesign.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'250'}
-                        position={{of:'#root'}}
+                        height={'auto'}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>
@@ -1782,10 +1799,10 @@ export default class salesInvoice extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popDetail.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'250'}
-                        position={{of:'#root'}}
+                        height={'auto'}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                         <Form colCount={1} height={'fit-content'}>
@@ -1846,10 +1863,10 @@ export default class salesInvoice extends DocBase
                         showCloseButton={true}
                         showTitle={true}
                         title={this.t("popMailSend.title")}
-                        container={"#root"} 
+                        container={"#" + this.props.data.id + this.tabIndex} 
                         width={'600'}
-                        height={'600'}
-                        position={{of:'#root'}}
+                        height={'auto'}
+                        position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={true}
                         >
                             <Form colCount={1} height={'fit-content'}>

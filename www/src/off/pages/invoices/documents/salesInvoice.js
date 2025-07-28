@@ -63,6 +63,14 @@ export default class salesInvoice extends DocBase
                 {
                     this.buildOffer(this.pagePrm.offerGuid,this.pagePrm.type)
                 }
+                else if(typeof this.pagePrm.orderGuid != 'undefined')
+                {
+                    this.buildOrder(this.pagePrm.orderGuid,this.pagePrm.type)
+                }
+                else if(typeof this.pagePrm.dispatchGuid != 'undefined')
+                {
+                    this.buildDispatch(this.pagePrm.dispatchGuid,this.pagePrm.type)
+                }
                 else if(typeof this.pagePrm.GUID != 'undefined')
                 {
                     this.getDoc(this.pagePrm.GUID,'',-1)
@@ -1369,7 +1377,7 @@ export default class salesInvoice extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-1" style={{height: '120px'}}>
+                    <div className="row px-2 pt-1" style={{height: '130px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmDoc">
                                 {/* txtRef-Refno */}
@@ -2256,7 +2264,7 @@ export default class salesInvoice extends DocBase
                             </NdForm>
                         </div>
                     </div>
-                    <div className='row px-2 pt-1 pb-2' style={{height: '170px'}}>
+                    <div className='row px-2 pt-1' style={{height: '160px'}}>
                         <div className='col-12'>
                             <TabPanel height="100%">
                                 <Item title={this.t("tabTitleSubtotal")}>

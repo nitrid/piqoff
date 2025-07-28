@@ -320,7 +320,7 @@ export default class salesOrdList extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -392,8 +392,8 @@ export default class salesOrdList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
+                    <div className="row px-2 pt-1">
+                        <div className="col-12" style={{height:'80px'}}>
                             <Form colCount={2} id="frmCriter">
                                 {/* dtFirst */}
                                 <Item>
@@ -497,29 +497,21 @@ export default class salesOrdList extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-3">
+                    <div className="row px-2 pt-1">
+                        <div className="col-4" style={{marginLeft:'100px'}}>
+                            <NdCheckBox id="chkInvOrDisp" text={this.t("chkInvOrDisp")} parent={this} defaultValue={true} value={true} />
                         </div>
-                        <div className="col-3">
-                            
-                        </div>
-                        <div className="col-3">
-                            <Form>
-                                <Item>
-                                    <Label text={this.t("chkInvOrDisp")} alignment="left" />
-                                    <NdCheckBox id="chkInvOrDisp" parent={this} defaultValue={true} value={true} />
-                                </Item>
-                            </Form>
+                        <div className="col-4">
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
+                    <div className="row px-2 pt-1">
+                        <div className="col-12" >
                             <NdGrid id="grdSlsOrdList" parent={this} 
                             selection={{mode:"multiple"}} 
-                            height={600}
+                            height={700}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}

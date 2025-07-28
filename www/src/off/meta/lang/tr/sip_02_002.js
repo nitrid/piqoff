@@ -30,6 +30,43 @@ const sip_02_002 =
     txtTotalHt : "İndirimli Tutar",
     txtDocNo : "Belge No",
     cmbPricingList : "Fiyat Listesi",
+    popTransformSelect:
+    {
+        title: "Dönüştürme Seçimi"
+    },
+    msgTransformConfirm:
+    {
+        title: "Dikkat",
+        btn01: "Evet",
+        btn02: "Hayır",
+        msgDispatch: "Bu siparişi irsaliyeye çevirmek istediğinize emin misiniz?",
+        msgInvoice: "Bu siparişi faturaya çevirmek istediğinize emin misiniz?"
+    },
+    btnSelectDispatch: "Satış İrsaliyesine Çevir",
+    btnSelectInvoice: "Satış Faturasına Çevir",
+    msgControlOfDispatch:
+    {
+        title: "Dikkat",
+        btn01: "Kapat",
+        msg: "Bu sipariş daha önce bir irsaliyeye çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden yeni bir Fatura oluşturunuz."
+    },
+    msgControlOfOrder:
+    {
+        title: "Dikkat",
+        btn01: "Kapat",
+        msg: "Bu sipariş daha önce bir faturaya çevrilmiştir. İrsaliye oluşturmak istiyorsanız, Satış İrsaliyesi bölümünden yeni bir İrsaliye oluşturunuz."
+    },
+    menu:
+    {
+        btnSelectDispatch: "Satış İrsaliyesi",
+        btnSelectInvoice: "Satış Faturası"
+    },
+    msgLocked:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+    },
     pg_Docs : 
     {
         title : "Evrak Seçimi",

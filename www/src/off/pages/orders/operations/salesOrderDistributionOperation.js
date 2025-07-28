@@ -274,7 +274,7 @@ export default class salesOrdList extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -324,7 +324,7 @@ export default class salesOrdList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="frmCriter">
                                 {/* dtFirst */}
@@ -353,7 +353,7 @@ export default class salesOrdList extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -364,7 +364,7 @@ export default class salesOrdList extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="Default" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdSlsOrdList" parent={this} 
                             selection={{mode:"multiple"}} 
@@ -375,6 +375,7 @@ export default class salesOrdList extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             width={'100%'}
+                            height={700}
                             dbApply={false}
                             onCellPrepared={(e) =>
                             {
@@ -425,7 +426,7 @@ export default class salesOrdList extends React.PureComponent
                             </NdGrid>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">

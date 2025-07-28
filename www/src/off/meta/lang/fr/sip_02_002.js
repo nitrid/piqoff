@@ -31,6 +31,43 @@ const sip_02_002 =
     txtDocNo : "Numéro de document", 
     cmbPricingList : "Liste de prix",
     LINE_NO: "Numéro de ligne",
+    popTransformSelect:
+    {
+        title: "Sélection de la conversion"
+    },
+    msgTransformConfirm:
+    {
+        title: "Attention",
+        btn01: "OK",
+        btn02: "Annuler",
+        msgDispatch: "Voulez-vous vraiment convertir le document en livraison ?",
+        msgInvoice: "Voulez-vous vraiment convertir le document en facture ?"
+    },
+    btnSelectDispatch: "Convertir en Livraison",
+    btnSelectInvoice: "Convertir en Facture",
+    msgControlOfDispatch:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Ce document a déjà été converti en livraison. Si vous souhaitez créer une livraison, veuillez créer une nouvelle livraison dans le module des livraisons."
+    },
+    menu:
+    {
+        btnSelectDispatch: "Bon de livraison de vente",
+        btnSelectInvoice: "Facture de vente"
+    },
+    msgControlOfOrder:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Ce document a déjà été converti en facture. Si vous souhaitez créer une facture, veuillez créer une nouvelle facture dans le module des factures."
+    },
+    msgLocked:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+    },
     pg_Docs : 
     {
         title : "Sélection Document",

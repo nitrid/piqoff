@@ -32,9 +32,10 @@ export default class purchaseOrder extends DocBase
         this.docType = 60;
         this.rebate = 0;
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;   
@@ -146,7 +147,7 @@ export default class purchaseOrder extends DocBase
         
         this.frmDocItems.option('disabled',this.docLocked)
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
         if(e.column.dataField == "ITEM_CODE")
         {
@@ -695,13 +696,94 @@ export default class purchaseOrder extends DocBase
         }
         super.getOffers(tmpQuery)
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options:
+            {
+                icon: 'add',
+                validationGroup: 'frmPurcOrder' + this.tabIndex,
+                onClick: (async (c)=>
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        if(typeof this.docObj.docOrders.dt()[0] != 'undefined')
+                            {
+                                if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
+                                {
+                                    this.pg_txtItemsCode.onClick = async(data) =>
+                                    {
+                                        this.checkboxReset()
+                                        this.grid.devGrid.beginUpdate()
+                                        for (let i = 0; i < data.length; i++) 
+                                        {
+                                            await this.addItem(data[0],null)
+                                        }
+                                        this.grid.devGrid.endUpdate()
+                                    }
+                                    this.pg_txtItemsCode.show()
+                                    return
+                                }
+                            }
+                            this.pg_txtItemsCode.onClick = async(data) =>
+                            {
+                                this.checkboxReset()
+
+                                this.grid.devGrid.beginUpdate()
+                                for (let i = 0; i < data.length; i++) 
+                                {
+                                    await this.addItem(data[i],null)
+                                }
+                                this.grid.devGrid.endUpdate()
+                            }
+                            this.pg_txtItemsCode.show()
+                        }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
+                    }
+                }).bind(this)
+            }
+        }),
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options:
+            {
+                icon: 'add',
+                text: this.lang.t("collectiveItemAdd"),
+                validationGroup: 'frmPurcOrder' + this.tabIndex,
+                onClick: (async (c)=>
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        await this.popMultiItem.show()
+                        await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                
+                        if( typeof this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1] != 'undefined' && this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
+                        {
+                            await this.grid.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
+                        }
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
+                    }
+                }).bind(this)
+            }
+        })      
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.props.data.tabkey}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -949,7 +1031,7 @@ export default class purchaseOrder extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '130px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmPurcOrder">
                                 {/* txtRef-Refno */}
@@ -1366,75 +1448,12 @@ export default class purchaseOrder extends DocBase
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={1} onInitialized={(e)=>
                             {
                                 this.frmDocItems = e.component
                             }}>
-                                <NdItem location="after">
-                                    <Button icon="add"
-                                    validationGroup={"frmPurcOrder"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.docObj.docOrders.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    this.pg_txtItemsCode.onClick = async(data) =>
-                                                    {
-                                                        this.checkboxReset()
-                                                        this.grid.devGrid.beginUpdate()
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            await this.addItem(data[0],null)
-                                                        }
-                                                        this.grid.devGrid.endUpdate()
-                                                    }
-                                                    this.pg_txtItemsCode.show()
-                                                    return
-                                                }
-                                            }
-                                            this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                this.checkboxReset()
-
-                                                this.grid.devGrid.beginUpdate()
-                                                for (let i = 0; i < data.length; i++) 
-                                                {
-                                                    await this.addItem(data[i],null)
-                                                }
-                                                this.grid.devGrid.endUpdate()
-                                            }
-                                            this.pg_txtItemsCode.show()
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
-                                        }
-                                    }}/>
-                                    <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
-                                    validationGroup={"frmPurcOrder"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            await this.popMultiItem.show()
-                                            await this.grdMultiItem.dataRefresh({source:this.multiItemData});
-                                    
-                                            if( typeof this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1] != 'undefined' && this.docObj.docOrders.dt()[this.docObj.docOrders.dt().length - 1].ITEM_CODE == '')
-                                            {
-                                                await this.grid.devGrid.deleteRow(this.docObj.docOrders.dt().length - 1)
-                                            }
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
-                                        }
-                                    }}/>
-                                </NdItem>
                                 <NdItem>
                                     <React.Fragment>
                                         <NdGrid parent={this} id={"grdPurcOrders"+this.tabIndex} 
@@ -1442,11 +1461,12 @@ export default class purchaseOrder extends DocBase
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true} 
                                         allowColumnResizing={true} 
-                                        height={'500'} 
+                                        height={'590px'} 
                                         width={'100%'}
                                         dbApply={false}
                                         sorting={{mode:'none'}}
                                         filterRow={{visible:true}}
+                                        onToolbarPreparing={this.onGridToolbarPreparing}
                                         onRowPrepared={(e) =>
                                         {
                                             if(e.rowType == 'data' && e.data.SHIPMENT_LINE_GUID  != '00000000-0000-0000-0000-000000000000')
@@ -1635,11 +1655,11 @@ export default class purchaseOrder extends DocBase
                                             <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
                                             <Column dataField="CDATE_FORMAT" caption={this.t("grdPurcOrders.clmCreateDate")} width={80} allowEditing={false}/>
                                             <Column dataField="CUSER_NAME" caption={this.t("grdPurcOrders.clmCuser")} width={90} allowEditing={false}/>
-                                            <Column dataField="ITEM_CODE" caption={this.t("grdPurcOrders.clmItemCode")} width={105} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdPurcOrders.clmItemCode")} width={105} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="MULTICODE" caption={this.t("grdPurcOrders.clmMulticode")} width={100} allowEditing={false}/>
                                             <Column dataField="ITEM_NAME" caption={this.t("grdPurcOrders.clmItemName")} width={230} />
                                             <Column dataField="ITEM_BARCODE" caption={this.t("grdPurcOrders.clmBarcode")} width={110} allowEditing={false}/>
-                                            <Column dataField="QUANTITY" caption={this.t("grdPurcOrders.clmQuantity")} width={65} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this._cellRoleRender}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdPurcOrders.clmQuantity")} width={65} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="SUB_FACTOR" caption={this.t("grdPurcOrders.clmSubFactor")} width={65} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdPurcOrders.clmSubQuantity")} dataType={'number'} width={65} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="PRICE" caption={this.t("grdPurcOrders.clmPrice")} width={65} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
@@ -1670,7 +1690,7 @@ export default class purchaseOrder extends DocBase
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '160px'}}>
                         <div className="col-12">
                             <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
                                 {/* Ara Toplam */}
