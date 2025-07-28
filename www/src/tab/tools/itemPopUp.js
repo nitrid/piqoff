@@ -177,7 +177,7 @@ export default class NbItemPopUp extends NbBase
                         <div className='col-12'>
                             <div className='row'>
                                 <div className='col-12' style={{height:'400px'}}>
-                                    <Carousel onSelect={(e)=>
+                                    <Carousel interval={null} nSelect={(e)=>
                                     {
                                         for (let i = 0; i < 4; i++) 
                                         {
