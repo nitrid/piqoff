@@ -548,7 +548,7 @@ export default class multipleSaleContract extends React.PureComponent
                     title={this.t("msgUnit.title")}
                     container={"#root"} 
                     width={'500'}
-                    height={'400'}
+                    height={'auto'}
                     position={{of:'#root'}}
                     button={[{id:"btn01",caption:this.t("msgUnit.btn01"),location:'after'}]}
                     >
