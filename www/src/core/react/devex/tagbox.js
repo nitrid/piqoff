@@ -43,7 +43,11 @@ export default class NdTagBox extends Base
     }
     _onValueChanged(e) 
     {
-        this.value = e.value;
+        if(this.value != e.value)
+        {
+            this.value = e.value;
+        }
+        
         if(typeof this.props.onValueChanged != 'undefined')
         {
             this.props.onValueChanged(e);
