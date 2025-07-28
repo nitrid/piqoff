@@ -48,12 +48,69 @@ export default class productProfitReport extends React.PureComponent
         tmpSave.setValue(e)
         tmpSave.save()
     }
-    
+    async btnGetirClick()
+    {
+        try 
+        {
+            this.setState({ noDataMessage: '' });
+            
+            let tmpQuery = 
+            {
+                query: 
+                       `SELECT 
+                       ROW_NUMBER() OVER(ORDER BY MAIN_GRP_NAME, ITEM_NAME) AS ROW_NO, 
+                       MAIN_GRP_NAME, 
+                       ITEM_NAME, 
+                       ITEM_CODE, 
+                       SUM(QUANTITY) AS TOTAL_QUANTITY, 
+                       ROUND(AVG(COST_PRICE), 2) AS AVG_COST_PRICE, 
+                       ROUND(SUM(TOTAL_COST), 2) AS TOTAL_COST, 
+                       ROUND(SUM(TOTALHT), 2) AS TOTALHT, 
+                       ROUND((SUM(TOTALHT) - SUM(TOTAL_COST)), 2) AS TOTAL_PROFIT, 
+                       ROUND(AVG(TOTALHT / NULLIF(QUANTITY, 0)), 2) AS AVG_SELL_PRICE, 
+                       CASE WHEN SUM(TOTAL_COST) > 0 THEN 
+                       ROUND(((SUM(TOTALHT) - SUM(TOTAL_COST)) / SUM(TOTAL_COST)) * 100, 2) 
+                       ELSE 0 END AS PROFIT_PERCENT 
+                       FROM DOC_ITEMS_DETAIL_VW_01 
+                       WHERE TYPE = 1 AND REBATE= 0 AND 
+                       (DOC_TYPE = 20 OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) 
+                       AND (MAIN_CODE = @MAIN_CODE OR @MAIN_CODE = '') 
+                       AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE 
+                       GROUP BY MAIN_GRP_NAME, ITEM_NAME,ITEM_CODE 
+                       ORDER BY MAIN_GRP_NAME, ITEM_NAME`,
+                param : ['FIRST_DATE:date','LAST_DATE:date','MAIN_CODE:string|50'],
+                value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbMainGrp.value]
+            };
+            let result = await this.core.sql.execute(tmpQuery);
+            
+            if(result && result.result && result.result.recordset && result.result.recordset.length > 0) {
+                let tmpSource =
+                {
+                    source : 
+                    {
+                        select: tmpQuery,
+                        sql : this.core.sql
+                    }
+                }
+                await this.grdListe.dataRefresh(tmpSource);
+            }
+            else 
+            {
+                // Veri bulunamadığında mesajı güncelleyelim
+                this.setState({ noDataMessage: this.lang.t("msgNoData")});
+                console.log("Seçilen kriterlere uygun veri bulunamadı.");
+            }
+        }
+        catch(err) 
+        {
+            console.error("Veri yüklenirken bir hata oluştu:", err.message);
+        }
+    }
     render(){
         return (
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" 
@@ -85,40 +142,38 @@ export default class productProfitReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
-                        <NdForm id="frmReport" parent={this} width="100%" colCount={2}>
-                            <NdItem>
-                                <NdLabel text={this.t("dtDate")}/>
-                                <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('month')} endDate={moment().endOf('month')}/>
-                            </NdItem>
-                            <NdItem>
-                                <NdLabel text={this.t("cmbMainGrp")}/>
-                                <NdSelectBox simple={true} parent={this} id="cmbMainGrp"
-                                value={''}
-                                displayExpr="NAME"                       
-                                valueExpr="CODE"
-                                placeholder={this.t("selectMainGrp")}
-                                showClearButton={true}
-                                data=
-                                {{
-                                    source:
-                                    {
-                                        select:
+                    <div className="row px-2 pt-1"  style={{height:'80px'}}>
+                        <div className="col-12">
+                            <NdForm id="frmReport" colCount={2}>
+                                <NdItem>
+                                    <NdLabel text={this.t("dtDate")}/>
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment().startOf('month')} endDate={moment().endOf('month')}/>
+                                </NdItem>
+                                <NdItem>
+                                    <NdLabel text={this.t("cmbMainGrp")}/>
+                                    <NdSelectBox simple={true} parent={this} id="cmbMainGrp"
+                                    value={''}
+                                    displayExpr="NAME"                       
+                                    valueExpr="CODE"
+                                    placeholder={this.t("selectMainGrp")}
+                                    showClearButton={true}
+                                    data=
+                                    {{
+                                        source:
                                         {
-                                            query: `SELECT NAME,CODE FROM ITEM_GROUP ORDER BY NAME`,
-                                        },
-                                        sql: this.core.sql
-                                    }
-                                }}
-                                />
-                            </NdItem>
-                        </NdForm>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-6">
+                                            select:
+                                            {
+                                                query: `SELECT NAME,CODE FROM ITEM_GROUP ORDER BY NAME`,
+                                            },
+                                            sql: this.core.sql
+                                        }
+                                    }}
+                                    />
+                                </NdItem>
+                            </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -129,7 +184,7 @@ export default class productProfitReport extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             {this.state.noDataMessage ? (
                                 <div className="alert alert-warning" role="alert">
@@ -140,7 +195,7 @@ export default class productProfitReport extends React.PureComponent
                                 showBorders={true}
                                 filterRow={{visible:true}} 
                                 headerFilter={{visible:true}}
-                                height={'690'} 
+                                height={'700px'} 
                                 width={'100%'}
                                 columnAutoWidth={true}
                                 allowColumnReordering={true}
@@ -194,62 +249,7 @@ export default class productProfitReport extends React.PureComponent
         )
     }
 
-    async btnGetirClick()
-    {
-        try {
-            this.setState({ noDataMessage: '' });
-            
-            let tmpQuery = {
-                query: 
-                       `SELECT 
-                       ROW_NUMBER() OVER(ORDER BY MAIN_GRP_NAME, ITEM_NAME) AS ROW_NO, 
-                       MAIN_GRP_NAME, 
-                       ITEM_NAME, 
-                       ITEM_CODE, 
-                       SUM(QUANTITY) AS TOTAL_QUANTITY, 
-                       ROUND(AVG(COST_PRICE), 2) AS AVG_COST_PRICE, 
-                       ROUND(SUM(TOTAL_COST), 2) AS TOTAL_COST, 
-                       ROUND(SUM(TOTALHT), 2) AS TOTALHT, 
-                       ROUND((SUM(TOTALHT) - SUM(TOTAL_COST)), 2) AS TOTAL_PROFIT, 
-                       ROUND(AVG(TOTALHT / NULLIF(QUANTITY, 0)), 2) AS AVG_SELL_PRICE, 
-                       CASE WHEN SUM(TOTAL_COST) > 0 THEN 
-                       ROUND(((SUM(TOTALHT) - SUM(TOTAL_COST)) / SUM(TOTAL_COST)) * 100, 2) 
-                       ELSE 0 END AS PROFIT_PERCENT 
-                       FROM DOC_ITEMS_DETAIL_VW_01 
-                       WHERE TYPE = 1 AND REBATE= 0 AND 
-                       (DOC_TYPE = 20 OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) 
-                       AND (MAIN_CODE = @MAIN_CODE OR @MAIN_CODE = '') 
-                       AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE 
-                       GROUP BY MAIN_GRP_NAME, ITEM_NAME,ITEM_CODE 
-                       ORDER BY MAIN_GRP_NAME, ITEM_NAME`,
-                param : ['FIRST_DATE:date','LAST_DATE:date','MAIN_CODE:string|50'],
-                value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbMainGrp.value]
-            };
-            let result = await this.core.sql.execute(tmpQuery);
-            
-            if(result && result.result && result.result.recordset && result.result.recordset.length > 0) {
-                let tmpSource =
-                {
-                    source : 
-                    {
-                        select: tmpQuery,
-                        sql : this.core.sql
-                    }
-                }
-                await this.grdListe.dataRefresh(tmpSource);
-            }
-            else 
-            {
-                // Veri bulunamadığında mesajı güncelleyelim
-                this.setState({ noDataMessage: this.lang.t("msgNoData")});
-                console.log("Seçilen kriterlere uygun veri bulunamadı.");
-            }
-        }
-        catch(err) 
-        {
-            console.error("Veri yüklenirken bir hata oluştu:", err.message);
-        }
-    }
+    
 }
 
 // CSS sınıflarını tanımlayalım

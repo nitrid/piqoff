@@ -194,7 +194,7 @@ export default class itemList extends React.PureComponent
             <div>
                 <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -244,7 +244,7 @@ export default class itemList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={2} id="frmKriter">
                                 <Item>
@@ -277,7 +277,7 @@ export default class itemList extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
@@ -298,11 +298,13 @@ export default class itemList extends React.PureComponent
                             <NdButton text={this.t("btnOk")} type="default" width="100%" onClick={this.updateGroup}/>
                         </div>  
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdListe" parent={this} 
                             selection={{mode:"multiple"}} 
                             showBorders={true}
+                            height={'700px'}
+                            width={'100%'}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
                             columnAutoWidth={true}

@@ -1,5 +1,6 @@
 import React from 'react';
 import App from '../../../lib/app.js';
+import moment from 'moment';
 
 import Toolbar,{ Item } from 'devextreme-react/toolbar';
 import ScrollView from 'devextreme-react/scroll-view';
@@ -20,6 +21,15 @@ export default class promotionDeleteList extends React.PureComponent
         this.core = App.instance.core;
         
         this.btnGetClick = this.btnGetClick.bind(this)
+    }
+    componentDidMount()
+    {
+        this.init()
+    }
+    async init()
+    {
+        this.dtStartDate.value=moment(new Date()).format("YYYY-MM-DD");
+        this.dtFinishDate.value=moment(new Date()).format("YYYY-MM-DD");
     }
     async btnGetClick()
     {        
@@ -53,7 +63,7 @@ export default class promotionDeleteList extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -100,7 +110,7 @@ export default class promotionDeleteList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="frmKriter">
                                 <NdItem>
@@ -122,12 +132,12 @@ export default class promotionDeleteList extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3 offset-9">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-2   ">
                         <div className="col-12">
                             <NdGrid id="grdListe" parent={this} 
                             selection={{mode:"single"}} 
@@ -138,6 +148,8 @@ export default class promotionDeleteList extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
+                            height={'700px'}
+                            width={'100%'}
                             onRowDblClick={async(e)=>
                             {
                                 App.instance.menuClick(

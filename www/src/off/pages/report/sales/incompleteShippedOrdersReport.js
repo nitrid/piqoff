@@ -228,7 +228,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" >
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -298,7 +298,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="frmCriter">
                                 {/* dtFirst */}
@@ -386,7 +386,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -397,11 +397,11 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdSlsOrdList" parent={this} 
                             selection={{mode:"multiple"}}
-                            height={600}
+                            height={'700px'}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -454,7 +454,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                     title={this.t("popDesign.title")}
                     container={'#' + this.props.data.id + this.tabIndex} 
                     width={'500'}
-                    height={'280'}
+                    height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <NdForm colCount={1} height={'fit-content'}>
@@ -575,7 +575,7 @@ export default class incompleteShippedOrdersReport extends React.PureComponent
                     title={this.t("popDesign.title")}
                     container={'#' + this.props.data.id + this.tabIndex} 
                     width={'500'}
-                    height={'200'}
+                    height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <NdForm colCount={1} height={'fit-content'}>

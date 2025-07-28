@@ -27,12 +27,12 @@ export default class docSalesReport extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <NdButton text={this.lang.t("btnGet")} type="default" stylingMode="contained" width={'100%'}
                             onClick={async (e)=>
@@ -98,9 +98,9 @@ export default class docSalesReport extends React.PureComponent
                             }}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <NdPivot id="pvtData" parent={this} height={'750'}
+                            <NdPivot id="pvtData" parent={this} height={'700px'}
                             fields={
                             [
                                 {

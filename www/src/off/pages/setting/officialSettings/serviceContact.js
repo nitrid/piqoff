@@ -41,7 +41,7 @@ export default class serviceContact extends React.PureComponent
             <div>
             <ScrollView>
                 {/* Toolbar */}
-                <div className="row px-2 pt-2">
+                <div className="row px-2 pt-1">
                     <div className="col-12">
                         <Toolbar>
                             <Item location="after"
@@ -72,7 +72,7 @@ export default class serviceContact extends React.PureComponent
                         </Toolbar>
                     </div>
                 </div>
-                <div className="row px-2 pt-2">
+                <div className="row px-2 pt-1">
                     <div className="col-8">
                         <Form>
                             <Item>
@@ -88,51 +88,50 @@ export default class serviceContact extends React.PureComponent
                 </div>
                 <NdHtmlEditor id="htmlEditor" parent={this} height={700}>
                 </NdHtmlEditor>
-                <div className="row px-1 pt-1">
+                <div className="row px-2 pt-1">
                     <Form>
                         <Item>
-                        <NdButton text={this.t("btnApprove")} type="success" stylingMode="contained" width={'100%'} parent={this}
-                        onClick={async (e)=>
-                        {       
-                                let tmpData = {html:this.htmlEditor.value,subject:this.mailSubject.value + '-' + this.sendMail.value,sendMail:"receeep7@gmail.com",}
-                                this.core.socket.emit('mailer',tmpData,async(pResult) => 
-                                {
-                                    if((pResult) == 0)
-                                    {       
-                                        this.supportObj.clearAll()
-
-                                        let tmpSupport = {...this.supportObj.empty}
-
-                                        tmpSupport.SUBJECT = this.mailSubject.value
-                                        tmpSupport.HTML =  this.htmlEditor.value
-                                        tmpSupport.REPLY_MAIL = this.sendMail.value
-
-                                        this.supportObj.addEmpty(tmpSupport);
-
-                                        await this.supportObj.save()
-
-                                        this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
-
-                                        this.htmlEditor.value = '',
-                                        this.mailSubject.value = '',
-                                        this.sendMail.value = ''
-                                    }
-                                    else
+                            <NdButton text={this.t("btnApprove")} type="success" stylingMode="contained" width={'100%'} parent={this}
+                            onClick={async (e)=>
+                            {       
+                                    let tmpData = {html:this.htmlEditor.value,subject:this.mailSubject.value + '-' + this.sendMail.value,sendMail:"receeep7@gmail.com",}
+                                    this.core.socket.emit('mailer',tmpData,async(pResult) => 
                                     {
-                                        let tmpConfObj1 =
-                                        {
-                                            id:'msgSaveResult',showTitle:true,title:this.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'auto',
-                                            button:[{id:"btn01",caption:this.t("msgSaveResult.btn01"),location:'after'}],
+                                        if((pResult) == 0)
+                                        {       
+                                            this.supportObj.clearAll()
+
+                                            let tmpSupport = {...this.supportObj.empty}
+
+                                            tmpSupport.SUBJECT = this.mailSubject.value
+                                            tmpSupport.HTML =  this.htmlEditor.value
+                                            tmpSupport.REPLY_MAIL = this.sendMail.value
+
+                                            this.supportObj.addEmpty(tmpSupport);
+
+                                            await this.supportObj.save()
+
+                                            this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
+
+                                            this.htmlEditor.value = '',
+                                            this.mailSubject.value = '',
+                                            this.sendMail.value = ''
                                         }
-                                        tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                        await dialog(tmpConfObj1);
-                                    }
-                                });
-                        }}/>
+                                        else
+                                        {
+                                            let tmpConfObj1 =
+                                            {
+                                                id:'msgSaveResult',showTitle:true,title:this.t("msgSaveResult.title"),showCloseButton:true,width:'500px',height:'auto',
+                                                button:[{id:"btn01",caption:this.t("msgSaveResult.btn01"),location:'after'}],
+                                            }
+                                            tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
+                                            await dialog(tmpConfObj1);
+                                        }
+                                    });
+                            }}/>
                         </Item>
                     </Form>
                 </div>
-                
             </ScrollView>               
             </div>
         )

@@ -300,7 +300,7 @@ export default class rebateOperation extends React.PureComponent
             <div>
                 <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 <ScrollView>
-                <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                             <Item location="after"
@@ -331,7 +331,7 @@ export default class rebateOperation extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={2} id="frmCriter">
                                {/* cmbType */}
@@ -360,7 +360,7 @@ export default class rebateOperation extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
@@ -369,7 +369,7 @@ export default class rebateOperation extends React.PureComponent
                         <div className="col-3">
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdDeleteList" parent={this} 
                             selection={{mode:"single"}} 
@@ -380,6 +380,8 @@ export default class rebateOperation extends React.PureComponent
                             allowColumnReordering={true}
                             loadPanel={{enabled:true}}
                             allowColumnResizing={true}
+                            height={'700px'}
+                            width={'100%'}
                             >                            
                                 <Paging defaultPageSize={20} />
                                 <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} />

@@ -45,7 +45,7 @@ export default class rebateOperation extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                             <Item location="after"
@@ -76,7 +76,7 @@ export default class rebateOperation extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdServiceList" parent={this} 
                             selection={{mode:"single"}} 
@@ -87,6 +87,8 @@ export default class rebateOperation extends React.PureComponent
                             allowColumnReordering={true}
                             loadPanel={{enabled:true}}
                             allowColumnResizing={true}
+                            height={'700px'}
+                            width={'100%'}
                             onRowDblClick={async(e)=>
                                 {
                                    this.setState({html:e.data.HTML})
@@ -122,59 +124,59 @@ export default class rebateOperation extends React.PureComponent
                         </div>
                     </div>
                     {/* Detay Popup */}
-                <div>
-                    <NdPopUp parent={this} id={"popService"} 
-                    visible={false}
-                    showCloseButton={true}
-                    showTitle={true}
-                    title={this.t("popService.title")}
-                    container={"#root"} 
-                    width={'800'}
-                    height={'600'}
-                    position={{of:'#root'}}
-                    >
-                    <Form colCount={2}>
-                        <Item>
-                            <Label text={this.t("txtPopDate")} alignment="right" />
-                            <NdTextBox id="txtPopDate" parent={this} simple={true} readOnly={true} maxLength={32} />
-                        </Item>
-                        <Item>
-                            <Label text={this.t("txtPopUser")} alignment="right" />
-                            <NdTextBox id="txtPopUser" parent={this} simple={true} readOnly={true}  maxLength={32} />
-                        </Item>
-                        <Item colSpan={2}>
-                            <Label text={this.t("txtPopSubject")} alignment="right" />
-                            <NdTextBox id="txtPopSubject" parent={this} simple={true} readOnly={true}  maxLength={32} />
-                        </Item>
-                        <Item>
-                        {HTMLReactParser(this.serviceHtml)}
-                        </Item>
-                    </Form>
-                    <Form colCount={2}>
-                        <Item colSpan={2}>
-                            <Label text={this.t("txtPopProcess")} alignment="right" />
-                            <NdTextBox id="txtPopProcess" parent={this} simple={true} maxLength={100} />
-                        </Item>
-                        <Item>
-                            <div className='row'>
-                                <div className='col-6'>
-                                    <NdButton text={this.t("btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
-                                    onClick={async ()=>
-                                    {       
-                                        this.supportObj.dt().where({'GUID':this.serviceGuid})[0].PROCESS = this.txtPopProcess.value
-                                        this.supportObj.save()
-                                        this.popService.hide();  
-                                    }}/>
+                    <div>
+                        <NdPopUp parent={this} id={"popService"} 
+                        visible={false}
+                        showCloseButton={true}
+                        showTitle={true}
+                        title={this.t("popService.title")}
+                        container={"#root"} 
+                        width={'800'}
+                        height={'600'}
+                        position={{of:'#root'}}
+                        >
+                        <Form colCount={2}>
+                            <Item>
+                                <Label text={this.t("txtPopDate")} alignment="right" />
+                                <NdTextBox id="txtPopDate" parent={this} simple={true} readOnly={true} maxLength={32} />
+                            </Item>
+                            <Item>
+                                <Label text={this.t("txtPopUser")} alignment="right" />
+                                <NdTextBox id="txtPopUser" parent={this} simple={true} readOnly={true}  maxLength={32} />
+                            </Item>
+                            <Item colSpan={2}>
+                                <Label text={this.t("txtPopSubject")} alignment="right" />
+                                <NdTextBox id="txtPopSubject" parent={this} simple={true} readOnly={true}  maxLength={32} />
+                            </Item>
+                            <Item>
+                            {HTMLReactParser(this.serviceHtml)}
+                            </Item>
+                        </Form>
+                        <Form colCount={2}>
+                            <Item colSpan={2}>
+                                <Label text={this.t("txtPopProcess")} alignment="right" />
+                                <NdTextBox id="txtPopProcess" parent={this} simple={true} maxLength={100} />
+                            </Item>
+                            <Item>
+                                <div className='row'>
+                                    <div className='col-6'>
+                                        <NdButton text={this.t("btnApprove")} type="normal" stylingMode="contained" width={'100%'} 
+                                        onClick={async ()=>
+                                        {       
+                                            this.supportObj.dt().where({'GUID':this.serviceGuid})[0].PROCESS = this.txtPopProcess.value
+                                            this.supportObj.save()
+                                            this.popService.hide();  
+                                        }}/>
+                                    </div>
+                                    <div className='col-6'>
+                                        <NdButton text={this.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
+                                        onClick={()=>  { this.popService.hide()  }}/>
+                                    </div>
                                 </div>
-                                <div className='col-6'>
-                                    <NdButton text={this.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
-                                    onClick={()=>  { this.popService.hide()  }}/>
-                                </div>
-                            </div>
-                        </Item>
-                    </Form>
-                    </NdPopUp>
-                </div>  
+                            </Item>
+                        </Form>
+                        </NdPopUp>
+                    </div>  
                 </ScrollView>
             </div>
         )

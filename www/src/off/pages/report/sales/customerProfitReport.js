@@ -49,12 +49,51 @@ export default class customerProfitReport extends React.PureComponent
         tmpSave.setValue(e)
         tmpSave.save()
     }
+    async btnGetirClick()
+    {
+        let tmpSource =
+        {
+            source : 
+            {
+                select: 
+                {
+                    query: 
+                        `SELECT 
+                        ROW_NUMBER() OVER(ORDER BY INPUT_CODE) AS ROW_NO, 
+                        CUSTOMER_GROUP_NAME, 
+                        CUSTOMER_GROUP_CODE, 
+                        INPUT_NAME, 
+                        INPUT_CODE, 
+                        SUM(QUANTITY) AS TOTAL_QUANTITY, 
+                        ROUND(AVG(COST_PRICE), 2) AS AVG_COST_PRICE, 
+                        ROUND(SUM(TOTAL_COST), 2) AS TOTAL_COST, 
+                        ROUND(SUM(TOTALHT), 2) AS TOTALHT, 
+                        ROUND((SUM(TOTALHT) - SUM(TOTAL_COST)), 2) AS TOTAL_PROFIT, 
+                        ROUND(AVG(TOTALHT / NULLIF(QUANTITY, 0)), 2) AS AVG_SELL_PRICE, 
+                        CASE WHEN SUM(TOTAL_COST) > 0 THEN 
+                        ROUND(((SUM(TOTALHT) - SUM(TOTAL_COST)) / SUM(TOTAL_COST)) * 100, 2) 
+                        ELSE 0 END AS PROFIT_PERCENT 
+                        FROM DOC_ITEMS_DETAIL_VW_01 
+                        WHERE TYPE = 1 AND REBATE= 0 AND 
+                        (DOC_TYPE = 20 OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) 
+                        AND (CUSTOMER_GROUP_CODE = @MAIN_CODE OR @MAIN_CODE = '')  
+                        AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE  
+                        GROUP BY CUSTOMER_GROUP_NAME, CUSTOMER_GROUP_CODE, INPUT_NAME, INPUT_CODE 
+                        ORDER BY CUSTOMER_GROUP_NAME, INPUT_NAME`,
+                param : ['FIRST_DATE:date','LAST_DATE:date','MAIN_CODE:string|50'],
+                value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbCustomerMainGrp.value]
+                },
+                sql : this.core.sql
+            }
+        }
 
+        await this.grdListe.dataRefresh(tmpSource)
+    }
     render(){
         return (
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" 
@@ -85,7 +124,7 @@ export default class customerProfitReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="frmKriter">
                                 <NdItem>
@@ -107,7 +146,7 @@ export default class customerProfitReport extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -118,7 +157,7 @@ export default class customerProfitReport extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             {this.state.noDataMessage ? (
                                 <div className="alert alert-warning" role="alert">
@@ -129,7 +168,7 @@ export default class customerProfitReport extends React.PureComponent
                                 showBorders={true}
                                 filterRow={{visible:true}} 
                                 headerFilter={{visible:true}}
-                                height={'690'} 
+                                height={'700px'} 
                                 width={'100%'}
                                 columnAutoWidth={true}
                                 allowColumnReordering={true}
@@ -182,46 +221,7 @@ export default class customerProfitReport extends React.PureComponent
             </div>
         )
     }
-    async btnGetirClick()
-    {
-            let tmpSource =
-            {
-                source : 
-                {
-                    select: 
-                    {
-                        query: 
-                            `SELECT 
-                            ROW_NUMBER() OVER(ORDER BY INPUT_CODE) AS ROW_NO, 
-                            CUSTOMER_GROUP_NAME, 
-                            CUSTOMER_GROUP_CODE, 
-                            INPUT_NAME, 
-                            INPUT_CODE, 
-                            SUM(QUANTITY) AS TOTAL_QUANTITY, 
-                            ROUND(AVG(COST_PRICE), 2) AS AVG_COST_PRICE, 
-                            ROUND(SUM(TOTAL_COST), 2) AS TOTAL_COST, 
-                            ROUND(SUM(TOTALHT), 2) AS TOTALHT, 
-                            ROUND((SUM(TOTALHT) - SUM(TOTAL_COST)), 2) AS TOTAL_PROFIT, 
-                            ROUND(AVG(TOTALHT / NULLIF(QUANTITY, 0)), 2) AS AVG_SELL_PRICE, 
-                            CASE WHEN SUM(TOTAL_COST) > 0 THEN 
-                            ROUND(((SUM(TOTALHT) - SUM(TOTAL_COST)) / SUM(TOTAL_COST)) * 100, 2) 
-                            ELSE 0 END AS PROFIT_PERCENT 
-                            FROM DOC_ITEMS_DETAIL_VW_01 
-                            WHERE TYPE = 1 AND REBATE= 0 AND 
-                            (DOC_TYPE = 20 OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID <> '00000000-0000-0000-0000-000000000000')) 
-                            AND (CUSTOMER_GROUP_CODE = @MAIN_CODE OR @MAIN_CODE = '')  
-                            AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE  
-                            GROUP BY CUSTOMER_GROUP_NAME, CUSTOMER_GROUP_CODE, INPUT_NAME, INPUT_CODE 
-                            ORDER BY CUSTOMER_GROUP_NAME, INPUT_NAME`,
-                    param : ['FIRST_DATE:date','LAST_DATE:date','MAIN_CODE:string|50'],
-                    value : [this.dtDate.startDate,this.dtDate.endDate,this.cmbCustomerMainGrp.value]
-                    },
-                    sql : this.core.sql
-                }
-            }
 
-            await this.grdListe.dataRefresh(tmpSource)
-    }
 }
 
 // CSS sınıflarını tanımlayalım

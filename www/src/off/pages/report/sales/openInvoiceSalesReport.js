@@ -211,7 +211,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -245,7 +245,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="frmKriter">
                                 <NdItem>
@@ -348,7 +348,7 @@ export default class openInvoiceSalesReport extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -359,13 +359,13 @@ export default class openInvoiceSalesReport extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdOpenInvoiceReport 
                                 id="grdListe" 
                                 parent={this} 
                                 ref={(r) => { this.grdListe = r; }}
-                                height={'calc(100vh - auto)'}
+                                height={'700px'}
                                 currency="EUR"
                                 allowFiltering={true}
                                 allowSorting={true}

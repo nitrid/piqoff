@@ -91,7 +91,7 @@ export default class interfel extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -163,7 +163,7 @@ export default class interfel extends React.PureComponent
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Form colCount={2} onInitialized={(e)=> { this.frmTrnsfItems = e.component }}>
                                 <Item>

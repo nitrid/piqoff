@@ -8,6 +8,8 @@ import NdGrid,{Column,Editing,Paging,Pager,Scrolling,KeyboardNavigation,Export} 
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { NdForm, NdItem } from '../../../../core/react/devex/form.js';
+import {NdToast} from '../../../../core/react/devex/toast.js';
+
 export default class promoPricerSend extends React.PureComponent
 {
     constructor(props)
@@ -21,6 +23,7 @@ export default class promoPricerSend extends React.PureComponent
     {
         await this.core.util.waitUntil(0)
         this.init()
+        
     }
     async init()
     {
@@ -42,6 +45,7 @@ export default class promoPricerSend extends React.PureComponent
                 sql : this.core.sql
             }
         }
+        
 
         App.instance.loading.show()
         await this.grdPromotion.dataRefresh(tmpSource)
@@ -50,20 +54,14 @@ export default class promoPricerSend extends React.PureComponent
     async btnPromoSend()
     {
         this.core.socket.emit('allPromoSend')
-        let tmpConfObj1 =
-        {
-            id:'msgPromoSend',showTitle:true,title:this.t("msgPromoSend.title"),showCloseButton:true,width:'500px',height:'auto',
-            button:[{id:"btn01",caption:this.t("msgPromoSend.btn01"),location:'after'}],
-            content : (<div style={{textAlign:"center",fontSize:"20px",color:"green"}}>{this.t("msgPromoSend.msgSuccess")}</div>)
-        }
-        await dialog(tmpConfObj1);
+        this.toast.show({message:this.t("msgPromoSend.msgSuccess"),type:"success"})
     }
     render()
     {
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -95,12 +93,12 @@ export default class promoPricerSend extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <NdButton text={this.t("btnPromoSend")} type="default" width="100%" onClick={this.btnPromoSend}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={1} id="frmGrid">
                                 <NdItem>
@@ -109,7 +107,7 @@ export default class promoPricerSend extends React.PureComponent
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'500'} 
+                                    height={'700px'} 
                                     width={'100%'}
                                     dbApply={false}
                                     >
@@ -127,6 +125,7 @@ export default class promoPricerSend extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
+                    <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )

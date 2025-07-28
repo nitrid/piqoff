@@ -95,12 +95,32 @@ export default class taxSugar extends React.PureComponent
 
         await this.taxSugarObj.load({TYPE:0});
     }
+    onGridToolbarPreparing(e) 
+    {
+        e.toolbarOptions.items.push(
+        {
+            location: 'before',
+            widget: 'dxButton',
+            options: 
+            {
+                icon: 'add',
+                onClick: ((c) => 
+                {
+                    this.minValue.value = 0
+                    this.maxValue.value = 0
+                    this.price.value = 0
+                    this.dtDate.value =  moment(new Date()).format("YYYY-MM-DD - HH:mm")
+                    this.popTaxSugar.show()
+                }).bind(this)
+            }
+        })
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -174,27 +194,17 @@ export default class taxSugar extends React.PureComponent
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Form colCount={1} onInitialized={(e)=> { this.frmTrnsfItems = e.component }}>
-                                <Item location="after">
-                                    <Button icon="add" text={this.t("btnAdd")}
-                                    onClick={async (e)=>
-                                    {
-                                        this.minValue.value = 0
-                                        this.maxValue.value = 0
-                                        this.price.value = 0
-                                        this.dtDate.value =  moment(new Date()).format("YYYY-MM-DD - HH:mm")
-                                        this.popTaxSugar.show()
-                                    }}/>
-                                </Item>
                                 <Item>
                                     <NdGrid parent={this} id={"grdTaxSugar"} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'500'} 
+                                    onToolbarPreparing={this.onGridToolbarPreparing}
+                                    height={'700px'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>
@@ -269,7 +279,7 @@ export default class taxSugar extends React.PureComponent
                                 title={this.t("popTaxSugar.title")}
                                 container={"#" + this.props.data.id + this.tabIndex} 
                                 width={'500'}
-                                height={'600'}
+                                height={'auto'}
                                 position={{of:'#' + this.props.data.id + this.tabIndex}}
                                 >
                                     <NdForm colCount={1} height={'fit-content'}>

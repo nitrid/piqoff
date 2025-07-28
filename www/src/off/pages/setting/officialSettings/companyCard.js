@@ -139,7 +139,7 @@ export default class CompanyCard extends React.PureComponent
             <div>
                 <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -230,7 +230,7 @@ export default class CompanyCard extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={2} id={"frmCompany"  + this.tabIndex}>
                                 {/* txtTitle */}

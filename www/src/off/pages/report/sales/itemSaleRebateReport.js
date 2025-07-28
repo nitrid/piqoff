@@ -78,7 +78,7 @@ export default class itemSaleRebateReport extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                  <Item location="after"
@@ -110,7 +110,7 @@ export default class itemSaleRebateReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="itemSaleRabate">
                                 <NdItem>
@@ -198,7 +198,7 @@ export default class itemSaleRebateReport extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -217,14 +217,14 @@ export default class itemSaleRebateReport extends React.PureComponent
                             ></NdButton>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdListe" parent={this} 
                             selection={{mode:"multiple"}} 
                             showBorders={true}
                             filterRow={{visible:false}} 
                             headerFilter={{visible:false}}
-                            height={'690'} 
+                            height={'700px'} 
                             width={'100%'}
                             columnAutoWidth={true}
                             allowColumnReordering={true}

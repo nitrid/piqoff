@@ -547,7 +547,7 @@ export default class saleList extends React.PureComponent
             <div id={this.props.data.id + this.tabIndex}>
                 <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -578,7 +578,7 @@ export default class saleList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={2} id="frmCriter">
                                 <Item>
@@ -678,7 +678,7 @@ export default class saleList extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className='col-12'>
                             <NdTabPanel id={"tabPanel"} deferRendering={false} parent={this} height="700px" >
                                 <Item title={this.t("tabTitleOffer")} text={"tbOffer"}>
