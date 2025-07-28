@@ -63,14 +63,6 @@ export default class salesInvoice extends DocBase
                 {
                     this.buildOffer(this.pagePrm.offerGuid,this.pagePrm.type)
                 }
-                else if(typeof this.pagePrm.orderGuid != 'undefined')
-                {
-                    this.buildOrder(this.pagePrm.orderGuid,this.pagePrm.type)
-                }
-                else if(typeof this.pagePrm.dispatchGuid != 'undefined')
-                {
-                    this.buildDispatch(this.pagePrm.dispatchGuid,this.pagePrm.type)
-                }
                 else if(typeof this.pagePrm.GUID != 'undefined')
                 {
                     this.getDoc(this.pagePrm.GUID,'',-1)
@@ -1082,15 +1074,15 @@ export default class salesInvoice extends DocBase
             }
         })
     }
-    async onCustomerSelection(pGuid)
+    async onCustomerSelection(pData)
     {
         if(this.docObj.docItems.dt().length > 0 && this.docObj.docItems.dt()[0].ITEM == '00000000-0000-0000-0000-000000000000')
         {
             this.toast.show({message:this.t("msgCustomerLock.msg"),type:"warning"})
             return;
         }
-
-        if(typeof pGuid != "undefined" && pGuid != "")
+        
+        if(pData != null && typeof pData != "undefined" && typeof pData.GUID != "undefined" && pData.GUID != "")
         {
             let tmpDt = new datatable()
             tmpDt.selectCmd = 
@@ -1099,10 +1091,10 @@ export default class salesInvoice extends DocBase
                         ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE 
                         FROM CUSTOMER_VW_01 WHERE GUID = @GUID`,
                 param : ['GUID:string|50'],
-                value : [pGuid]
+                value : [pData.GUID]
             }
             await tmpDt.refresh()
-            console.log(tmpDt,pGuid)
+            
             if(tmpDt.length > 0)
             {
                 if(this.cmbDepot.value != '' && this.docLocked == false)
@@ -1119,7 +1111,7 @@ export default class salesInvoice extends DocBase
                 this.docObj.dt()[0].PRICE_LIST_NO = tmpDt[0].PRICE_LIST_NO
                 this.docObj.dt()[0].VAT_ZERO = tmpDt[0].VAT_ZERO
                 this.dtExpDate.value = moment(new Date()).add(tmpDt[0].EXPIRY_DAY, 'days')
-
+                
                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
 
                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
@@ -1159,12 +1151,24 @@ export default class salesInvoice extends DocBase
         }
         else
         {
-            this.pg_txtCustomerCode.show()
+            if(pData != null && typeof pData != "undefined" && typeof pData.NAME != "undefined")
+            {
+                this.pg_txtCustomerCode.setVal(pData.NAME)
+            }
+            else if(pData != null && typeof pData != "undefined" && typeof pData.CODE != "undefined")
+            {
+                this.pg_txtCustomerCode.setVal(pData.CODE)
+            }
+            else
+            {
+                this.pg_txtCustomerCode.show()    
+            }
+            
             this.pg_txtCustomerCode.onClick = async(data) =>
             {
                 if(data.length > 0)
                 {
-                    this.onCustomerSelection(data[0].GUID)
+                    this.onCustomerSelection(data[0])
                 }
             }
         }
@@ -1377,7 +1381,7 @@ export default class salesInvoice extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-1" style={{height: '130px'}}>
+                    <div className="row px-2 pt-1" style={{height: '120px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmDoc">
                                 {/* txtRef-Refno */}
@@ -1508,12 +1512,12 @@ export default class salesInvoice extends DocBase
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
                                     dt={{data:this.docObj.dt('DOC'),field:"INPUT_NAME"}} 
                                     displayExpr="NAME"                       
-                                    valueExpr="GUID"
+                                    valueExpr="NAME"
                                     value=""
                                     searchEnabled={true}
                                     searchTimeout={200}
-                                    minSearchLength={2}
-                                    acceptCustomValue={true}
+                                    minSearchLength={3}
+                                    acceptCustomValue={false}
                                     openOnFieldClick={false}
                                     buttons={[
                                     {
@@ -1524,7 +1528,6 @@ export default class salesInvoice extends DocBase
                                             elementAttr: {style: 'border:none; box-shadow:none; background:none;'},
                                             onClick:()=>
                                             {
-                                                console.log(this.txtCustomerName.value)
                                                 this.onCustomerSelection()
                                             }
                                         }
@@ -1534,7 +1537,7 @@ export default class salesInvoice extends DocBase
                                         {
                                             select:
                                             {
-                                                query : `SELECT TOP 20 GUID,ISNULL(TITLE,'') + ISNULL(' - ' + CITY,'') AS NAME FROM CUSTOMER_VW_04 WHERE UPPER(TITLE) LIKE UPPER(@SEARCH + '%')  ORDER BY TITLE ASC`,
+                                                query : `SELECT TOP 20 GUID,ISNULL(TITLE,'') + ISNULL(' - ' + CITY,'') AS NAME FROM CUSTOMER_VW_04 WHERE UPPER(TITLE) LIKE UPPER(@SEARCH + '%') OR UPPER(CODE) LIKE UPPER(@SEARCH + '%') ORDER BY TITLE ASC`,
                                                 param : ['SEARCH:string|50']
                                             },
                                             sql:this.core.sql
@@ -1543,47 +1546,27 @@ export default class salesInvoice extends DocBase
                                     }}
                                     onSelectionChanged={(async(e)=>
                                     {
-                                        if(typeof e.selectedItem.GUID != "undefined" && e.selectedItem.GUID != "")
+                                        let tmpData = this.docObj.dt().length > 0 ? this.docObj.dt()[0] : null
+                                        if(tmpData != null && typeof tmpData.INPUT != "undefined")
                                         {
-                                            console.log(e,1453)
-                                            this.onCustomerSelection(e.selectedItem.GUID)
+                                            if(e.selectedItem?.GUID != tmpData.INPUT && e.selectedItem?.NAME != tmpData.INPUT_NAME)
+                                            {
+                                                this.onCustomerSelection(e.selectedItem)
+                                            }
                                         }
                                     }).bind(this)}
                                     onCustomItemCreating={(async(e)=>
                                     {
                                         e.customItem = {GUID:'',NAME:e.text};
-                                        // if (!e.text) 
-                                        // {
-                                        //     e.customItem = null;
-                                        //     return;
-                                        // }
-
-                                        // let { component, text } = e;
-                                        // let currentItems = component.option('items');
-                                        
-                                        // let newItem = 
-                                        // {
-                                        //     GUID: text.trim(),
-                                        //     NAME: text.trim(),
-                                        // };
-                                        // console.log(text)
-                                        // let itemInDataSource = currentItems.find((item) => item.text === newItem.text)
-                                        // if (itemInDataSource) 
-                                        // {
-                                        //     e.customItem = itemInDataSource;
-                                        // } 
-                                        // else 
-                                        // {    
-                                        //     currentItems.push(newItem);
-                                        //     component.option('items', currentItems);
-                                        //     e.customItem = newItem;
-                                        // }
-                                        console.log(e.customItem)
-                                        //this.onCustomerSelection(e.customItem.GUID)
+                                        this.onCustomerSelection(e.customItem)
                                     }).bind(this)}
                                     param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
-                                    />
+                                    >
+                                        <Validator validationGroup={"frmDoc"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validCustomerCode")} />
+                                        </Validator> 
+                                    </NdSelectBox>
                                 </NdItem> 
                                 {/* dtDocDate */}
                                 <NdItem>
@@ -1621,172 +1604,13 @@ export default class salesInvoice extends DocBase
                                 {/* txtCustomerCode */}
                                 <NdItem>
                                     <NdLabel text={this.t("txtCustomerCode")} alignment="right" />
-                                    <NdSelectBox id="txtCustomerCode" parent={this} simple={true} notRefresh = {true}
-                                    dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}}
-                                    displayExpr="CODE"                       
-                                    valueExpr="GUID"
-                                    value=""
-                                    searchEnabled={true}
-                                    searchTimeout={200}
-                                    minSearchLength={2}
-                                    data={{
-                                        source:
-                                        {
-                                            select:
-                                            {
-                                                query : `SELECT TOP 10 GUID, CODE FROM CUSTOMER_VW_03 WHERE CODE LIKE '%' + @SEARCH + '%' ORDER BY CODE ASC`,
-                                                param : ['SEARCH:string|50']
-                                            },
-                                            sql:this.core.sql
-                                        },
-                                        search:true
-                                    }} 
-                                    onEnterKey={(async()=>
-                                    {
-                                        if(this.docObj.docItems.dt().length > 0 && this.docObj.docItems.dt()[0].ITEM != '00000000-0000-0000-0000-000000000000')
-                                        {
-                                            this.toast.show({message:this.t("msgCustomerLock.msg"),type:"warning"})
-                                            return;
-                                        }
-                                       
-                                        this.pg_txtCustomerCode.setVal(this.txtCustomerCode.value)
-                                        this.pg_txtCustomerCode.onClick = async(data) =>
-                                        {
-                                            if(data.length > 0)
-                                            {
-                                                if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
-                                                {
-                                                    this.frmDocItems.option('disabled',false)
-                                                }
-
-                                                this.docObj.dt()[0].INPUT = data[0].GUID
-                                                this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
-                                                this.docObj.dt()[0].INPUT_CODE = data[0].CODE
-                                                this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
-                                                this.docObj.dt()[0].ZIPCODE = data[0].ZIPCODE
-                                                this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
-                                                this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
-                                                this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
-                                                this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
-                                                
-                                                let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
-                                                
-                                                if(typeof tmpData != 'undefined' && tmpData.value ==  true)
-                                                {
-                                                    this.txtRef.value = data[0].CODE
-                                                    this.docObj.docCustomer.dt()[0].REF = data[0].CODE
-                                                }
-                                                
-                                                if(this.cmbDepot.value != '' && this.docLocked == false)
-                                                {
-                                                    this.frmDocItems.option('disabled',false)
-                                                }
-                                                
-                                                let tmpQuery = 
-                                                {
-                                                    query : `SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER`,
-                                                    param : ['CUSTOMER:string|50'],
-                                                    value : [ data[0].GUID]
-                                                }
-                                                
-                                                let tmpAdressData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpAdressData.result.recordset.length > 1)
-                                                {
-                                                    this.pg_adress.onClick = async(pdata) =>
-                                                    {
-                                                        if(pdata.length > 0)
-                                                        {
-                                                            this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
-                                                            this.docObj.dt()[0].ZIPCODE = pdata[0].ZIPCODE
-                                                        }
-                                                    }
-
-                                                    await this.pg_adress.show()
-                                                    await this.pg_adress.setData(tmpAdressData.result.recordset)
-                                                }
-                                            }
-                                        }
-                                    }).bind(this)}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:async()=>
-                                                {
-                                                    if(this.docObj.docItems.dt().length > 0 && this.docObj.docItems.dt()[0].ITEM == '00000000-0000-0000-0000-000000000000')
-                                                    {
-                                                        this.toast.show({message:this.t("msgCustomerLock.msg"),type:"warning"})
-                                                        return;
-                                                    }
-                                                    
-                                                    this.pg_txtCustomerCode.show()
-                                                    this.pg_txtCustomerCode.onClick = async(data) =>
-                                                    {
-                                                        if(data.length > 0)
-                                                        {
-                                                            if(this.txtCustomerCode.value != '' && this.cmbDepot.value != '' && this.docLocked == false)
-                                                            {
-                                                                this.frmDocItems.option('disabled',false)
-                                                            }
-
-                                                            this.docObj.dt()[0].INPUT = data[0].GUID
-                                                            this.docObj.docCustomer.dt()[0].INPUT = data[0].GUID
-                                                            this.docObj.dt()[0].INPUT_CODE = data[0].CODE
-                                                            this.docObj.dt()[0].INPUT_NAME = data[0].TITLE
-                                                            this.docObj.dt()[0].ZIPCODE = data[0].ZIPCODE
-                                                            this.docObj.dt()[0].TAX_NO = data[0].TAX_NO
-                                                            this.docObj.dt()[0].PRICE_LIST_NO = data[0].PRICE_LIST_NO
-                                                            this.docObj.dt()[0].VAT_ZERO = data[0].VAT_ZERO
-                                                            this.dtExpDate.value = moment(new Date()).add(data[0].EXPIRY_DAY, 'days')
-
-                                                            let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
-                                                            if(typeof tmpData != 'undefined' && tmpData.value ==  true)
-                                                            {
-                                                                this.txtRef.value = data[0].CODE
-                                                                this.docObj.docCustomer.dt()[0].REF = data[0].CODE
-                                                            }
-
-                                                            if(this.cmbDepot.value != '' && this.docLocked == false)
-                                                            {
-                                                                this.frmDocItems.option('disabled',false)
-                                                            }
-
-                                                            let tmpQuery = 
-                                                            {
-                                                                query : `SELECT * FROM CUSTOMER_ADRESS_VW_01 WHERE CUSTOMER = @CUSTOMER`,
-                                                                param : ['CUSTOMER:string|50'],
-                                                                value : [ data[0].GUID]
-                                                            }
-
-                                                            let tmpAdressData = await this.core.sql.execute(tmpQuery) 
-                                                            if(tmpAdressData.result.recordset.length > 1)
-                                                            {
-                                                                this.pg_adress.onClick = async(pdata) =>
-                                                                {
-                                                                    if(pdata.length > 0)
-                                                                    {
-                                                                        this.docObj.dt()[0].ADDRESS = pdata[0].ADRESS_NO
-                                                                        this.docObj.dt()[0].ZIPCODE = pdata[0].ZIPCODE
-                                                                    }
-                                                                }
-                                                                await this.pg_adress.show()
-                                                                await this.pg_adress.setData(tmpAdressData.result.recordset)
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                        ]
-                                    }
+                                    <NdTextBox id="txtCustomerCode" parent={this} simple={true}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    dt={{data:this.docObj.dt('DOC'),field:"INPUT_CODE"}} 
+                                    readOnly={true}
                                     param={this.param.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
                                     access={this.access.filter({ELEMENT:'txtCustomerCode',USERS:this.user.CODE})}
-                                    >
-                                        <Validator validationGroup={"frmDoc"  + this.tabIndex}>
-                                            <RequiredRule message={this.t("validCustomerCode")} />
-                                        </Validator>  
-                                    </NdSelectBox>
+                                    />
                                 </NdItem>
                                 {/* dtShipDate */}
                                 <NdItem>
@@ -1922,7 +1746,7 @@ export default class salesInvoice extends DocBase
                                     <React.Fragment>
                                         <NdGrid parent={this} id={"grdSlsInv"+this.tabIndex} 
                                         showBorders={true} 
-                                        columnsAutoWidth={false} 
+                                        columnsAutoWidth={true} 
                                         allowColumnReordering={true}
                                         allowColumnResizing={true} 
                                         filterRow={{visible:true}}
@@ -2264,7 +2088,7 @@ export default class salesInvoice extends DocBase
                             </NdForm>
                         </div>
                     </div>
-                    <div className='row px-2 pt-1' style={{height: '160px'}}>
+                    <div className='row px-2 pt-1 pb-2' style={{height: '170px'}}>
                         <div className='col-12'>
                             <TabPanel height="100%">
                                 <Item title={this.t("tabTitleSubtotal")}>

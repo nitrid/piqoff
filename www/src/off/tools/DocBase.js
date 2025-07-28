@@ -1649,6 +1649,8 @@ export default class DocBase extends React.PureComponent
                     title={this.t("pg_txtCustomerCode.title")} //
                     search={true}
                     deferRendering={true}
+                    selection={{mode:'single'}}
+                    showCloseButton={true}
                     >
                         <Column dataField="CODE" caption={this.t("pg_txtCustomerCode.clmCode")} width={150} />
                         <Column dataField="TITLE" caption={this.t("pg_txtCustomerCode.clmTitle")} width={500} defaultSortOrder="asc" />
