@@ -197,7 +197,7 @@ export default class itemGrpSalesReport extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -228,33 +228,20 @@ export default class itemGrpSalesReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-6">
-                            <Form>
-                                <Item>
+                            <Form colCount={3}>
+                                <Item colSpan={1}>
                                     <Label text={this.lang.t("dtDate")} alignment="right" />
                                     <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
                                 </Item>
-                            </Form>
-                        </div>
-                        <div className="col-3">
-                            <Form>
-                                <Item>
+                                <Item colSpan={1}>
                                     <Label text={this.t("chkTicket")} alignment="right" />
                                     <NdCheckBox id="chkTicket" parent={this} defaultValue={false}/>
                                 </Item>
+                                <Item colSpan={1}>
+                                </Item>
                             </Form>
-                        </div>
-                        <div className="col-3">
-                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
                             <Form colCount={4} parent={this} id="frmPurcoffer">
                                 <Item  >
                                     <Label text={this.t("txtTotalTicket")} alignment="right" />
@@ -267,12 +254,23 @@ export default class itemGrpSalesReport extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
+                        </div>
+                    </div>
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdGroupSalesReport" parent={this} 
                             selection={{mode:"single"}} 
                             showBorders={true}
-                            height={'700'} 
+                            height={'700px'} 
                             width={'100%'}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -328,7 +326,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                             </NdGrid>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-6">
                         </div>
                         <div className="col-3">
@@ -346,7 +344,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                         title={this.t("popGrpDetail.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'1200'}
-                        height={'800'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={1} height={'fit-content'}>
@@ -409,7 +407,7 @@ export default class itemGrpSalesReport extends React.PureComponent
                         title={this.t("popAnalysis.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'1400'}
-                        height={'800'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={3} height={'fit-content'}>

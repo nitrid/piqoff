@@ -166,7 +166,7 @@ export default class salesOrdList extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -197,7 +197,7 @@ export default class salesOrdList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={4} id="frmCriter">
                                 {/* dtFirst */}
@@ -226,7 +226,7 @@ export default class salesOrdList extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -237,7 +237,7 @@ export default class salesOrdList extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdSaleTicketReport" parent={this} 
                             selection={{mode:"multiple"}} 
@@ -245,7 +245,7 @@ export default class salesOrdList extends React.PureComponent
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
                             sorting={{ mode: 'single' }}
-                            height={600}
+                            height={'700px'}
                             width={"100%"}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
@@ -274,7 +274,7 @@ export default class salesOrdList extends React.PureComponent
                         title={this.t("popDetail.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'100%'}
-                        height={'100%'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                         <div className="row">
@@ -363,7 +363,7 @@ export default class salesOrdList extends React.PureComponent
                     title={this.lang.t("popLastTotal.title")}
                     container={'#' + this.props.data.id + this.tabIndex} 
                     width={"600"}
-                    height={"700"}
+                    height={"auto"}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
                     onHiding={async()=>
                     {
@@ -660,7 +660,7 @@ export default class salesOrdList extends React.PureComponent
                             title={this.t("popOpenTike.title")}
                             container={'#' + this.props.data.id + this.tabIndex}      
                             width={'900'}
-                            height={'500'}
+                            height={'auto'}
                             position={{of:'#' + this.props.data.id + this.tabIndex}}
                             >
                             <Form colCount={1} height={'fit-content'}>

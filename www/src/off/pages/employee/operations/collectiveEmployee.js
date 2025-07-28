@@ -33,6 +33,7 @@ export default class collectiveEmployee extends React.PureComponent
         this.sysPrmObj = this.param.filter({TYPE:0,USERS:this.user.CODE});
 
         this.onItemRendered  = this.onItemRendered .bind(this) 
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
     }
     async componentDidMount()
     {
@@ -198,12 +199,30 @@ export default class collectiveEmployee extends React.PureComponent
             await this.grdAdress.dataRefresh({source:this.employeeObj.employeeAdress.dt('EMPLOYEE_ADRESS')});
         }
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: {
+                icon: 'add',
+                onClick: (() => {
+                    this.txtPopAdress.value = "";
+                    this.cmbPopZipcode.value = "";
+                    this.cmbPopCity.value = "";
+                    this.cmbPopCountry.value = ''
+                    this.popAdress.show();
+                }).bind(this)
+            }
+        })
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -323,7 +342,7 @@ export default class collectiveEmployee extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'130px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id={"frmEmployees"  + this.tabIndex}>     
                                 {/* txtCode */}
@@ -569,21 +588,6 @@ export default class collectiveEmployee extends React.PureComponent
                                 <TabPanel height="100%" onItemRendered={this.onItemRendered } deferRendering={false}>
                                     <Item title={this.t("tabTitleAdress")}>
                                         <div className='row px-2 py-2'>
-                                            <div className='col-12'>
-                                                <Toolbar>
-                                                    <Item location="after">
-                                                        <Button icon="add"
-                                                        onClick={async ()=>
-                                                        {
-                                                            this.txtPopAdress.value = "";
-                                                            this.cmbPopZipcode.value = "";
-                                                            this.cmbPopCity.value = "";
-                                                            this.cmbPopCountry.value = ''
-                                                            this.popAdress.show();
-                                                        }}/>
-                                                    </Item>
-                                                </Toolbar>
-                                            </div>
                                         </div>
                                         <div className='row px-2 py-2'>
                                             <div className='col-12'>
@@ -592,7 +596,8 @@ export default class collectiveEmployee extends React.PureComponent
                                                 columnsAutoWidth={true} 
                                                 allowColumnReordering={true} 
                                                 allowColumnResizing={true} 
-                                                height={'100%'} 
+                                                onToolbarPreparing={this.onGridToolbarPreparing}
+                                                height={'500px'} 
                                                 width={'100%'}
                                                 dbApply={false}
                                                 >

@@ -38,6 +38,7 @@ export default class collection extends React.PureComponent
         this.calculateTotal = this.calculateTotal.bind(this)
         this.addPayment = this.addPayment.bind(this)
         this.btnCloseInvoice = this.btnCloseInvoice.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
 
         this.docLocked = false;        
         this.tabIndex = props.data.tabkey
@@ -499,13 +500,43 @@ export default class collection extends React.PureComponent
             this.popCloseInvoice.show()
         }
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton', 
+            options: {
+                icon: 'add',
+                validationGroup: 'frmCollection' + this.tabIndex,
+                onClick: (async(c) => {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        this.numCash.setState({value:0});
+                        this.cashDescription.setState({value:''});
+                        this.popCash.show()
+                    }
+                    else
+                    {
+                        let tmpConfObj =
+                        {
+                            id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'auto',
+                            button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
+                        }
+                        await dialog(tmpConfObj);
+                    }
+                }).bind(this)       
+            }
+        })
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -698,7 +729,7 @@ export default class collection extends React.PureComponent
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id={"frmCollection"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
@@ -914,38 +945,13 @@ export default class collection extends React.PureComponent
                                 </NdItem> 
                                 {/* Boş */}
                                 <NdEmptyItem />
-                                {/* Boş */}
-                                <NdEmptyItem />
                             </NdForm>
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={1} onInitialized={(e)=>{this.frmCollection = e.component}}>
-                                <NdItem location="after">
-                                    <Button icon="add" text={this.t("btnCash")}
-                                    validationGroup={"frmCollection"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            this.numCash.setState({value:0});
-                                            this.cashDescription.setState({value:''});
-                                            this.popCash.show()
-                                        }
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            await dialog(tmpConfObj);
-                                        }
-                                    }}/>
-                                </NdItem>
                                 <NdItem colSpan={1}>
                                     <React.Fragment>
                                         <NdGrid parent={this} id={"grdDocPayments"} 
@@ -953,7 +959,8 @@ export default class collection extends React.PureComponent
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true} 
                                         allowColumnResizing={true} 
-                                        height={'500'} 
+                                        onToolbarPreparing={this.onGridToolbarPreparing}
+                                        height={'700px'} 
                                         width={'100%'}
                                         dbApply={false}
                                         onRowDblClick={async(e)=>
@@ -1035,7 +1042,7 @@ export default class collection extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={4} parent={this} id={"frmCollection"  + this.tabIndex}>                            
                                 {/* TOPLAM */}
@@ -1060,7 +1067,7 @@ export default class collection extends React.PureComponent
                         title={this.t("popCash.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'400'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -1233,7 +1240,7 @@ export default class collection extends React.PureComponent
                         title={this.t("popCheck.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'260'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -1280,7 +1287,7 @@ export default class collection extends React.PureComponent
                         title={this.t("popCloseInvoice.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'1200'}
-                        height={'360'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>

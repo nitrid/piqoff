@@ -25,7 +25,10 @@ export default class installmentReport extends React.PureComponent
     }
     componentDidMount()
     {
-        setTimeout(async () => { this.Init() }, 1000);
+        setTimeout(async () => { this.init() }, 1000);
+    }
+    async init()
+    {
     }
     async btnGetirClick()
     {
@@ -61,7 +64,7 @@ export default class installmentReport extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                  <Item location="after"
@@ -92,7 +95,7 @@ export default class installmentReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="frmKriter">
                                 <NdItem>
@@ -102,7 +105,7 @@ export default class installmentReport extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -113,14 +116,14 @@ export default class installmentReport extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdListe" parent={this} 
                             selection={{mode:"multiple"}} 
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
-                            height={'690'} 
+                            height={'700px'} 
                             width={'100%'}
                             columnAutoWidth={true}
                             allowColumnReordering={true}

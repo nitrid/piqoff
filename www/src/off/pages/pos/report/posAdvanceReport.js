@@ -76,7 +76,7 @@ export default class enddayReport extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                               
@@ -108,7 +108,7 @@ export default class enddayReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={3} id="frmCriter">
                                 {/* cmbDevice */}
@@ -132,7 +132,7 @@ export default class enddayReport extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -143,11 +143,12 @@ export default class enddayReport extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdAdvanceData" parent={this} 
                             selection={{mode:"single"}} 
-                            height={600}
+                            height={'700px'}
+                            width={'100%'}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}

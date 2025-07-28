@@ -44,7 +44,7 @@ export default class collectionReport extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -75,7 +75,7 @@ export default class collectionReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="frmCriter">
                                 {/* dtFirst */}
@@ -163,7 +163,7 @@ export default class collectionReport extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdButton text={this.lang.t("btnGet")} type="default" stylingMode="contained" width={'100%'}
                             onClick={async (e)=>
@@ -259,17 +259,17 @@ export default class collectionReport extends React.PureComponent
                             }}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdCollectionGrid
                                 id="pvtData"
                                 rowKeyExpr="TAH_KEY"
                                 parent={this}
-                                height={'750'}
+                                height={'700px'}
                                 data={[]}
                                 group={groupCollection}
                                 childField="FACTURAS"  

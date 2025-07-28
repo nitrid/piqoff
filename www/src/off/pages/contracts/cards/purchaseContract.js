@@ -35,6 +35,7 @@ export default class purchaseContract extends React.PureComponent
         this.getItems = this.getItems.bind(this)
         this.multiItemData = new datatable
         this.checkboxReset = this.checkboxReset.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
     } 
     async componentDidMount()
     {
@@ -308,7 +309,7 @@ export default class purchaseContract extends React.PureComponent
             options: {
                 icon: 'add',
                 validationGroup: 'frmPurcContract' + this.tabIndex,
-                onClick: (c) => 
+                onClick: ((c) => 
                 {
                     if(c.validationGroup.validate().status == "valid")
                     {
@@ -354,7 +355,7 @@ export default class purchaseContract extends React.PureComponent
                     {
                         this.toast.show({type:"warning",message:this.t("msgContractValid.msg")})
                     }
-                }   
+                }).bind(this)
             }
         }),
         e.toolbarOptions.items.push({
@@ -365,7 +366,7 @@ export default class purchaseContract extends React.PureComponent
                 icon: 'increaseindent',
                 text: this.lang.t("collectiveItemAdd"),
                 validationGroup: 'frmPurcContract' + this.tabIndex,
-                onClick: (c) => {
+                onClick:((c) => {
                     if(c.validationGroup.validate().status == "valid")
                     {
                         this.multiItemData.clear
@@ -375,7 +376,7 @@ export default class purchaseContract extends React.PureComponent
                     {
                         this.toast.show({type:"warning",message:this.t("msgDocValid.msg")})
                     }
-                }   
+                }).bind(this)
             }
         })
     }
@@ -679,7 +680,7 @@ export default class purchaseContract extends React.PureComponent
                                     filterRow={{visible:true}}
                                     headerFilter={{visible:true}}
                                     onToolbarPreparing={this.onGridToolbarPreparing}
-                                    height={'auto'} 
+                                    height={'700px'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>
@@ -717,7 +718,7 @@ export default class purchaseContract extends React.PureComponent
                         title={this.t("popItems.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'450'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>

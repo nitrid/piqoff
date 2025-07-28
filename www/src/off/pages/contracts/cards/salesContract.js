@@ -37,6 +37,7 @@ export default class salesContract extends React.PureComponent
         this.cellRoleRender = this.cellRoleRender.bind(this)
         this.getItems = this.getItems.bind(this)
         this.multiItemData = new datatable
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
     } 
     async componentDidMount()
     {
@@ -351,13 +352,81 @@ export default class salesContract extends React.PureComponent
             )
         }
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: {  
+                icon: 'add',
+                validationGroup: 'frmPurcContract' + this.tabIndex,
+                onClick: ((c) => 
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                    {   
+                        this.pg_txtPopItemsCode.show()
+                        this.pg_txtPopItemsCode.onClick = async(data) =>
+                        {
+                            if(data.length == 1)
+                            {
+                                await this.addItem(data[0])
+                            }
+                            else if(data.length > 1)
+                            {
+                                for (let i = 0; i < data.length; i++) 
+                                {
+                                    if(i == 0)
+                                    {
+                                        await this.addItem(data[i])
+                                    }
+                                    else
+                                    {
+                                        this.txtCode.readOnly = true
+                                        this.txtName.readOnly = true
+                                        await this.core.util.waitUntil(100)
+                                        await this.addItem(data[i])
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        this.toast.show({type:"warning",message:this.t("msgContractValid.msg")})
+                    }
+                }).bind(this)
+            }
+        }),
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: {  
+                icon: 'increaseindent',
+                text: this.lang.t("collectiveItemAdd"),
+                validationGroup: 'frmPurcContract' + this.tabIndex,
+                onClick:((c) => {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        this.multiItemData.clear
+                        this.popMultiItem.show()
+                    }
+                    else
+                    {
+                        this.toast.show({type:"warning",message:this.t("msgDocValid.msg")})
+                    } 
+                }).bind(this)
+            }
+        })
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -476,7 +545,7 @@ export default class salesContract extends React.PureComponent
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'130px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmHeader">
                                 {/* txtCode */}
@@ -705,62 +774,9 @@ export default class salesContract extends React.PureComponent
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={1} onInitialized={(e)=>{this.frmPurcContract = e.component}}>
-                                <NdItem location="after">
-                                    <NdButton icon="add"
-                                    validationGroup={"frmPurcContract"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            this.pg_txtPopItemsCode.show()
-                                            this.pg_txtPopItemsCode.onClick = async(data) =>
-                                            {
-                                                if(data.length == 1)
-                                                {
-                                                    await this.addItem(data[0])
-                                                }
-                                                else if(data.length > 1)
-                                                {
-                                                    for (let i = 0; i < data.length; i++) 
-                                                    {
-                                                        if(i == 0)
-                                                        {
-                                                            await this.addItem(data[i])
-                                                        }
-                                                        else
-                                                        {
-                                                            this.txtCode.readOnly = true
-                                                            this.txtName.readOnly = true
-                                                            await this.core.util.waitUntil(100)
-                                                            await this.addItem(data[i])
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({type:"warning",message:this.t("msgContractValid.msg")})
-                                        }
-                                    }}/>
-                                    <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
-                                    validationGroup={"frmPurcContract"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            this.multiItemData.clear
-                                            this.popMultiItem.show()
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({type:"warning",message:this.t("msgDocValid.msg")})
-                                        }
-                                    }}/>
-                                </NdItem>
                                 <NdItem>
                                     <NdGrid parent={this} id={"grdContracts"} 
                                     showBorders={true} 
@@ -769,7 +785,8 @@ export default class salesContract extends React.PureComponent
                                     allowColumnResizing={true} 
                                     filterRow={{visible:true}}
                                     headerFilter={{visible:true}}
-                                    height={'700'} 
+                                    onToolbarPreparing={this.onGridToolbarPreparing}
+                                    height={'700px'} 
                                     width={'100%'}
                                     dbApply={false}
                                     onRowUpdated={async(e)=>
@@ -810,7 +827,7 @@ export default class salesContract extends React.PureComponent
                         title={this.t("popItems.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'450'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -944,7 +961,7 @@ export default class salesContract extends React.PureComponent
                         title={this.t("popDesign.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'280'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -1043,7 +1060,7 @@ export default class salesContract extends React.PureComponent
                         title={this.t("popMailSend.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'600'}
-                        height={'600'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>

@@ -94,7 +94,7 @@ export default class customerItemSaleReport extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -125,7 +125,7 @@ export default class customerItemSaleReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={3} id="frmCriter">
                                 {/* dtDate */}
@@ -211,7 +211,7 @@ export default class customerItemSaleReport extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdList" parent={this} 
                             selection={{mode:"single"}} 
@@ -219,7 +219,7 @@ export default class customerItemSaleReport extends React.PureComponent
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
                             sorting={{ mode: 'single' }}
-                            height={600}
+                            height={'700px'}
                             width={"100%"}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
@@ -261,7 +261,7 @@ export default class customerItemSaleReport extends React.PureComponent
                             </NdGrid>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Form colCount={4} parent={this} id={"frmSlsInv"  + this.tabIndex}>
                                 {/* Ara Toplam */}

@@ -10,7 +10,7 @@ const pos_02_009 =
     txtVat : "Toplam Vergi",
     txtRestTotal : "Vergisiz Toplam Kar",
     btnGetAnalysis : "Grafik Görünümü",
-    chkTicket : "Grub bazında fiş sayılarını hesapla",
+    chkTicket : "Grup bazında fiş sayılarını hesapla",
     chart :
     {
         salesAmount : "Satış Tutarı (€)",

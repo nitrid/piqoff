@@ -176,7 +176,7 @@ export default class customerPointReport extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -207,7 +207,7 @@ export default class customerPointReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={2} id="frmCriter">
                                 <Item>
@@ -292,7 +292,7 @@ export default class customerPointReport extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -303,7 +303,7 @@ export default class customerPointReport extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdCustomerPointReport" parent={this} 
                             selection={{mode:"single"}} 
@@ -313,6 +313,8 @@ export default class customerPointReport extends React.PureComponent
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
+                            height={'700px'}
+                            width={'100%'}
                             onRowDblClick={async(e)=>
                                 {
                                     this.getPointDetail(e.data.CODE)
@@ -332,10 +334,12 @@ export default class customerPointReport extends React.PureComponent
                             </NdGrid>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Form colCount={4} parent={this} id="frmPurcoffer">
                                 {/* Ara Toplam-Stok Ekle */}
+                                <EmptyItem colSpan={3}/>
+                                <EmptyItem colSpan={3}/>
                                 <EmptyItem colSpan={3}/>
                                 <Item>
                                     <Label text={this.t("txtAmount")} alignment="right" />
@@ -353,7 +357,7 @@ export default class customerPointReport extends React.PureComponent
                         title={this.t("popPointDetail.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'800'}
-                        height={'600'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={1} height={'fit-content'}>
@@ -416,7 +420,7 @@ export default class customerPointReport extends React.PureComponent
                         title={this.t("popDetail.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'100%'}
-                        height={'100%'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <div className="row">
@@ -480,7 +484,7 @@ export default class customerPointReport extends React.PureComponent
                         title={this.t("popPointEntry.title")}
                         container={'#' + this.props.data.id + this.tabIndex}    
                         width={'600'}
-                        height={'400'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={1} height={'fit-content'}>

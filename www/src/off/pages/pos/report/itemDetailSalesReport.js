@@ -99,7 +99,7 @@ export default class itemDetailSalesReport extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                  <Item location="after"
@@ -130,7 +130,7 @@ export default class itemDetailSalesReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={2} id="frmKriter">
                             <Item>
@@ -140,7 +140,7 @@ export default class itemDetailSalesReport extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -165,7 +165,7 @@ export default class itemDetailSalesReport extends React.PureComponent
                             showBorders={true}
                             filterRow={{visible:false}} 
                             headerFilter={{visible:true}}
-                            height={'690'} 
+                            height={'700px'} 
                             width={'100%'}
                             columnAutoWidth={true}
                             allowColumnReordering={true}

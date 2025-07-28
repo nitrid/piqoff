@@ -235,7 +235,7 @@ export default class payPlan extends React.PureComponent
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -364,7 +364,7 @@ export default class payPlan extends React.PureComponent
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id={"frmPayPlan"  + this.tabIndex}> 
                                 {/* txtRef-Refno */}
@@ -573,9 +573,12 @@ export default class payPlan extends React.PureComponent
                                 </NdItem>
                                 {/* Boş */}
                                 <NdEmptyItem />
+                                <NdEmptyItem />
+                                <NdEmptyItem />
+                                <NdEmptyItem />
                                 {/* btnInstallment */}
                                 <NdItem>
-                                    <NdButton text={this.t("btnInstallment")} type="normal" stylingMode="contained" width={'35%'}
+                                    <NdButton text={this.t("btnInstallment")} type="default" stylingMode="contained" width={'35%'}
                                     onClick={async ()=>
                                     {
                                         if(this.payPlanObj.dt().length > 0)
@@ -592,7 +595,7 @@ export default class payPlan extends React.PureComponent
                                 </NdItem> 
                                 {/* btnInstallmentCount */}
                                 <NdItem>
-                                    <NdButton text={this.t("btnInstallmentCount")} type="normal" stylingMode="contained" width={'35%'}
+                                    <NdButton text={this.t("btnInstallmentCount")} type="default" stylingMode="contained" width={'35%'}
                                     onClick={async ()=>
                                     {
                                         if(this.tmpFacGuid == '' || this.tmpFacGuid == undefined || this.txtRefno.value == '') {
@@ -612,13 +615,13 @@ export default class payPlan extends React.PureComponent
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdInstallment" parent={this} dataSource={this.payPlanObj.dt()} 
                                 columnsAutoWidth={true} 
                                 allowColumnReordering={true} 
                                 allowColumnResizing={true}
-                                height={'500'} 
+                                height={'700px'} 
                                 width={'100%'}
                                 dbApply={false}
                                 onRowInserted={async(e)=> { this.grdInstallment.dataRefresh() }}
@@ -660,7 +663,7 @@ export default class payPlan extends React.PureComponent
                             title={this.t("popInstallment.title")}
                             container={'#' + this.props.data.id + this.tabIndex} 
                             width={'1200'}
-                            height={'800'}
+                            height={'auto'}
                             position={{of:'#' + this.props.data.id + this.tabIndex}}
                             onShowing={async()=> { await this.btnGetClick() }}
                             >
@@ -719,7 +722,7 @@ export default class payPlan extends React.PureComponent
                         </NdPopUp>
                     </div>
                     {/* Installment Count and Date */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdPopUp parent={this} id={"popInstallmentCount"} 
                             visible={false}
@@ -728,7 +731,7 @@ export default class payPlan extends React.PureComponent
                             title={this.t("popInstallmentCount.title")}
                             container={'#' + this.props.data.id + this.tabIndex} 
                             width={'400'}
-                            height={'400'}
+                            height={'auto'}
                             position={{of:'#' + this.props.data.id + this.tabIndex}}
                             >
                                 <NdForm colCount={1} height={'fit-content'}>
@@ -804,7 +807,7 @@ export default class payPlan extends React.PureComponent
                         title={this.t("popDesign.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'280'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         deferRendering={false}
                         >

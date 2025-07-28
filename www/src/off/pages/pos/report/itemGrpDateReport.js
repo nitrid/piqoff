@@ -33,7 +33,7 @@ export default class itemGrpDateReport extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -64,13 +64,13 @@ export default class itemGrpDateReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Label text={this.lang.t("dtDate")} alignment="right" />
                             <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdButton text={this.t("btnGet")} type="default" stylingMode="contained" width={'100%'}
                             onClick={async (e)=>
@@ -126,9 +126,9 @@ export default class itemGrpDateReport extends React.PureComponent
                             }}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <NdPivot id="pvtData" parent={this} height={'750'}
+                            <NdPivot id="pvtData" parent={this} height={'700px'}
                             fields={
                             [
                                 {
@@ -235,6 +235,7 @@ export default class itemGrpDateReport extends React.PureComponent
                             showColumnGrandTotals={false}
                             showRowTotals={true}
                             showRowGrandTotals={true}
+                            width={'100%'}
                             onCellPrepared={(e)=>
                             {
                                 if(e.area == 'column' && e.cell.type == 'D')

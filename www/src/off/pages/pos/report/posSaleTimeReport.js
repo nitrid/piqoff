@@ -3,7 +3,7 @@ import App from '../../../lib/app.js';
 import moment from 'moment';
 
 import Toolbar from 'devextreme-react/toolbar';
-import Form, {Item, Label } from 'devextreme-react/form';
+import Form, {Item, Label, EmptyItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
 import NdCheckBox from '../../../../core/react/devex/checkbox.js';
@@ -111,7 +111,7 @@ export default class posSalesReport extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -142,37 +142,47 @@ export default class posSalesReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2"> 
+                    <div className="row px-2 pt-1" style={{height:'80px'}}> 
                         <div className="col-12">
-                            <Form>
-                                <Item>
+                            <Form colCount={2}>
+                                <Item colSpan={1}>
                                     <Label text={this.t("dtFirst")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtFirst"} type={'datetime'}/>
                                 </Item>
-                                <Item>
+                                <Item colSpan={1}>
                                     <Label text={this.t("dtLast")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtLast"} type={'datetime'}/>
                                 </Item>
                             </Form>
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmPurcoffer">
-                                <Item >
+                            <Form colCount={3} parent={this} id="frmPurcoffer">
+                                <Item colSpan={1}>
                                     <Label text={this.t("txtTotalTicket")} alignment="right" />
                                     <NdTextBox id="txtTotalTicket" parent={this} simple={true} readOnly={true} maxLength={32}/>
                                 </Item>
-                                <Item  >
+                                <Item colSpan={1}>
                                     <Label text={this.lang.t("txtTicketAvg")} alignment="right" />
                                     <NdTextBox id="txtTicketAvg" parent={this} simple={true} readOnly={true} maxLength={32}/>
+                                </Item>
+                                <Item colSpan={1}>
+                                    <Label text={this.t("chkRowTotal")} alignment="right" />
+                                    <NdCheckBox id="chkRowTotal" parent={this} defaultValue={true}
+                                    onValueChanged={(e)=>
+                                    {
+                                        this.pvtData.setState({showRowTotals:e.value})
+                                    }}/>
                                 </Item>
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
-                            <NdButton text={this.lang.t("btnGet")} type="default" stylingMode="contained" width={'100%'}
+                    <div className="row px-2 pt-1">
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                            <NdButton text={this.lang.t("btnGet")} type="success" width={'100%'}
                             onClick={async (e)=>
                             {
                                 let tmpTicketQuery = {
@@ -245,23 +255,9 @@ export default class posSalesReport extends React.PureComponent
                             }}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <Form>
-                                <Item>
-                                    <Label text={this.t("chkRowTotal")} alignment="right" />
-                                    <NdCheckBox id="chkRowTotal" parent={this} defaultValue={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.pvtData.setState({showRowTotals:e.value})
-                                    }}/>
-                                </Item>
-                            </Form>
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
-                            <NdPivot id="pvtData" parent={this} height={'750'}
+                            <NdPivot id="pvtData" parent={this} height={'700px'}
                             fields={
                             [
                                 {

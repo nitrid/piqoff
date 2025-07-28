@@ -25,8 +25,8 @@ export default class posSalesDetailReport extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
+                    <div className="row px-2 pt-1" style={{height:'30px'}}>
+                        <div className="col-4">
                             <Form>
                                 <Item>
                                     <Label text={this.lang.t("dtDate")} alignment="right" />
@@ -35,9 +35,15 @@ export default class posSalesDetailReport extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
-                            <NdButton text={this.lang.t("btnGet")} type="default" stylingMode="contained" width={'100%'}
+                    <div className="row px-2 pt-1" style={{height:'20px'}}>
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                            <NdButton text={this.lang.t("btnGet")} type="success" width={'100%'}
                             onClick={async ()=>
                             {
                                 let tmpQuery = 

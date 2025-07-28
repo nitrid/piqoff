@@ -107,7 +107,7 @@ export default class freeDiscountsReport extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -138,7 +138,7 @@ export default class freeDiscountsReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={4} id="frmCriter">
                                 {/* dtFirst */}
@@ -224,7 +224,7 @@ export default class freeDiscountsReport extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -235,7 +235,7 @@ export default class freeDiscountsReport extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdSaleTicketReport" parent={this} 
                             selection={{mode:"multiple"}} 
@@ -243,7 +243,8 @@ export default class freeDiscountsReport extends React.PureComponent
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
                             sorting={{ mode: 'single' }}
-                            height={600}
+                            height={'700px'}
+                            width={'100%'}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
                             allowColumnResizing={true}
@@ -275,45 +276,47 @@ export default class freeDiscountsReport extends React.PureComponent
                         title={this.t("popDetail.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'100%'}
-                        height={'100%'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                           <div className="row">
-                          <div className="col-1 pe-0"></div>
-                            <div className="col-7 pe-0">
-                            <NdGrid id="grdSaleTicketItems" parent={this} 
-                                selection={{mode:"multiple"}} 
-                                height={600}
-                                showBorders={true}
-                                filterRow={{visible:true}} 
-                                headerFilter={{visible:true}}
-                                columnAutoWidth={true}
-                                allowColumnReordering={true}
-                                allowColumnResizing={true}
-                                >                            
-                                    {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
-                                    {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                    {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
-                                    <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
-                                    <Column dataField="TIME" caption={this.t("grdSaleTicketItems.clmTime")} visible={true} width={100}/> 
-                                    <Column dataField="BARCODE" caption={this.t("grdSaleTicketItems.clmBarcode")} visible={true} width={150}/> 
-                                    <Column dataField="ITEM_NAME" caption={this.t("grdSaleTicketItems.clmName")} visible={true} width={250}/> 
-                                    <Column dataField="QUANTITY" caption={this.t("grdSaleTicketItems.clmQuantity")} visible={true} width={100}/> 
-                                    <Column dataField="DISCOUNT" caption={this.t("grdSaleTicketItems.clmDıscount")} visible={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
-                                    <Column dataField="PRICE" caption={this.t("grdSaleTicketItems.clmPrice")} visible={true} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
-                                    <Column dataField="TOTAL" caption={this.t("grdSaleTicketItems.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
-                                    <Summary>
-                                    <TotalItem
-                                        column="DISCOUNT"
-                                        summaryType="sum"
-                                        valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                                    <TotalItem
-                                        column="TOTAL"
-                                        summaryType="sum"
-                                        valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
-                                </Summary>
-                            </NdGrid>
+                            <div className="col-1 pe-0">
+                                
                             </div>
+                                <div className="col-7 pe-0">
+                                    <NdGrid id="grdSaleTicketItems" parent={this} 
+                                    selection={{mode:"multiple"}} 
+                                    height={600}
+                                    showBorders={true}
+                                    filterRow={{visible:true}} 
+                                    headerFilter={{visible:true}}
+                                    columnAutoWidth={true}
+                                    allowColumnReordering={true}
+                                    allowColumnResizing={true}
+                                    >                            
+                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
+                                        <Export fileName={this.lang.t("menuOff.pos_02_001")} enabled={true} allowExportSelectedData={true} />
+                                        <Column dataField="TIME" caption={this.t("grdSaleTicketItems.clmTime")} visible={true} width={100}/> 
+                                        <Column dataField="BARCODE" caption={this.t("grdSaleTicketItems.clmBarcode")} visible={true} width={150}/> 
+                                        <Column dataField="ITEM_NAME" caption={this.t("grdSaleTicketItems.clmName")} visible={true} width={250}/> 
+                                        <Column dataField="QUANTITY" caption={this.t("grdSaleTicketItems.clmQuantity")} visible={true} width={100}/> 
+                                        <Column dataField="DISCOUNT" caption={this.t("grdSaleTicketItems.clmDıscount")} visible={true} width={100} format={{ style: "currency", currency: Number.money.code,precision: 2}}/>
+                                        <Column dataField="PRICE" caption={this.t("grdSaleTicketItems.clmPrice")} visible={true} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                        <Column dataField="TOTAL" caption={this.t("grdSaleTicketItems.clmTotal")} visible={true} width={150} format={{ style: "currency", currency: Number.money.code,precision: 2}}/> 
+                                        <Summary>
+                                            <TotalItem
+                                                column="DISCOUNT"
+                                                summaryType="sum"
+                                                valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                                            <TotalItem
+                                                column="TOTAL"
+                                                summaryType="sum"
+                                                valueFormat={{ style: "currency", currency: Number.money.code,precision: 2}} />
+                                        </Summary>
+                                    </NdGrid>
+                                </div>
                             </div>
                     </NdPopUp>
                 </ScrollView>

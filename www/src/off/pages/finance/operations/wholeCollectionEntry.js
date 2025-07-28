@@ -40,7 +40,8 @@ export default class wholeCollectionEntry extends React.PureComponent
         this.loadState = this.loadState.bind(this)
         this.saveState = this.saveState.bind(this)
 
-        this.cellRoleRender = this.cellRoleRender.bind(this)        
+        this.cellRoleRender = this.cellRoleRender.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
     }
     async componentDidMount()
     {
@@ -161,13 +162,44 @@ export default class wholeCollectionEntry extends React.PureComponent
             }
         }
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push(
+        {
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: {
+                icon: 'add',
+                validationGroup: 'frmCollection' + this.tabIndex,
+                onClick: (async(c) => {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        this.dtDocDate.value = moment(new Date())
+                        this.txtCustomerCode.guid = ''
+                        this.txtCustomerCode.value = ''
+                        this.txtCustomerName.value = ''
+                        this.cmbCashSafe.value = ''
+                        this.cmbPayType.value = ''
+                        this.numCash.setState({value:0});
+                        this.cashDescription.setState({value:''});
+                        this.popCash.show()
+                    }
+                    else
+                    {
+                        this.toast.show({type:"error",message:this.t("msgSaveValid.msg")})
+                    }
+                }).bind(this)
+            }
+        })
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -286,7 +318,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'100px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id={"frmCollection"  + this.tabIndex}>
                                 {/* txtRef-Refno */}
@@ -307,57 +339,9 @@ export default class wholeCollectionEntry extends React.PureComponent
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={1} onInitialized={(e)=> { this.frmCollection = e.component }}>
-                                <NdItem location="after">
-                                    <NdButton icon="add"
-                                    validationGroup={"frmCollection"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            this.dtDocDate.value = moment(new Date())
-                                            this.txtCustomerCode.guid = ''
-                                            this.txtCustomerCode.value = ''
-                                            this.txtCustomerName.value = ''
-                                            this.cmbCashSafe.value = ''
-                                            this.cmbPayType.value = ''
-                                            this.numCash.setState({value:0});
-                                            this.cashDescription.setState({value:''});
-                                            this.popCash.show()
-                                        }
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                        }
-                                    }}/>
-                                    <Button icon="xlsxfile" text={this .t("excelAdd")}
-                                    validationGroup={"frmCollection"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        let tmpShema = this.prmObj.filter({ID:'excelFormat',USERS:this.user.CODE}).getValue()
-
-                                        if(typeof tmpShema == 'string')
-                                        {
-                                            tmpShema = JSON.parse(tmpShema)
-                                        }
-                                    
-                                        this.txtPopExcelDate.value = tmpShema.DATE
-                                        this.txtPopExcelDesc.value = tmpShema.DESC
-                                        this.txtPopExcelAmount.value = tmpShema.AMOUNT
-                                        this.txtPopExcelOutputCode.value = tmpShema.OUTPUT_CODE
-
-                                        this.popExcel.show()
-                                    }}/>
-                                </NdItem>
                                 <NdItem colSpan={1}>
                                     <React.Fragment>
                                         <NdGrid parent={this} id={"grdDocPayments"} 
@@ -365,7 +349,8 @@ export default class wholeCollectionEntry extends React.PureComponent
                                         columnsAutoWidth={true} 
                                         allowColumnReordering={true} 
                                         allowColumnResizing={true} 
-                                        height={'500'} 
+                                        onToolbarPreparing={this.onGridToolbarPreparing}
+                                        height={'700px'} 
                                         width={'100%'}
                                         dbApply={false}
                                         onRowUpdated={async(e)=>
@@ -409,7 +394,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                         title={this.t("popCash.title")}
                         container={'#' + this.props.data.id + this.tabIndex}     
                         width={'500'}
-                        height={'500'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>
@@ -633,7 +618,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                         title={this.t("popCheck.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'200'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <Form colCount={1} height={'fit-content'}>
@@ -721,7 +706,7 @@ export default class wholeCollectionEntry extends React.PureComponent
                         title={this.t("popExcel.title")}
                         container={'#' + this.props.data.id + this.tabIndex}     
                         width={'600'}
-                        height={'450'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>

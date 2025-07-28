@@ -1001,12 +1001,320 @@ export default class posSalesStatisticalReport extends React.PureComponent
             App.instance.loading.hide()
         }
     }
+        // Para birimi dağılımı verisi
+    getCurrencyDistributionData() 
+    {
+        if (!this.state.chartData || this.state.chartData.length === 0) 
+        {
+            return [];
+        }
+
+        let currencyData = {};
+        let totalAmount = 0;
+        
+        this.state.chartData.forEach(item => 
+            {
+            // Para birimi kategorileri
+            let cashAmount = (item['ESC'] || 0) + (item['FRANC'] || 0);
+            let cardAmount = (item['CB'] || 0) + (item['CB TICKET'] || 0);
+            let checkAmount = item['CHECK'] || 0;
+            let voucherAmount = (item['BON DE VALAUER'] || 0) + (item['BON D\'AVOIR'] || 0);
+            let creditAmount = item['AVOIR'] || 0;
+            let transferAmount = (item['VIRM'] || 0) + (item['PRLV'] || 0);
+            let ticketAmount = item['T.R'] || 0;
+
+            // Kategorilere göre grupla
+            if (cashAmount > 0) currencyData[this.lang.t("currencyDistributionChart.cash")] = (currencyData[this.lang.t("currencyDistributionChart.cash")] || 0) + cashAmount;
+            if (cardAmount > 0) currencyData[this.lang.t("currencyDistributionChart.card")] = (currencyData[this.lang.t("currencyDistributionChart.card")] || 0) + cardAmount;
+            if (checkAmount > 0) currencyData[this.lang.t("currencyDistributionChart.check")] = (currencyData[this.lang.t("currencyDistributionChart.check")] || 0) + checkAmount;
+            if (voucherAmount > 0) currencyData[this.lang.t("currencyDistributionChart.voucher")] = (currencyData[this.lang.t("currencyDistributionChart.voucher")] || 0) + voucherAmount;
+            if (creditAmount > 0) currencyData[this.lang.t("currencyDistributionChart.credit")] = (currencyData[this.lang.t("currencyDistributionChart.credit")] || 0) + creditAmount;
+            if (transferAmount > 0) currencyData[this.lang.t("currencyDistributionChart.transfer")] = (currencyData[this.lang.t("currencyDistributionChart.transfer")] || 0) + transferAmount;
+            if (ticketAmount > 0) currencyData[this.lang.t("currencyDistributionChart.ticket")] = (currencyData[this.lang.t("currencyDistributionChart.ticket")] || 0) + ticketAmount;
+            
+            // Toplam tutarı hesapla
+            totalAmount += cashAmount + cardAmount + checkAmount + voucherAmount + creditAmount + transferAmount + ticketAmount;
+        });
+
+        // Array formatına çevir
+        let result = Object.keys(currencyData).map(currency => (
+        {
+            currency: currency,
+            amount: parseFloat(currencyData[currency].toFixed(2))
+        })).sort((a, b) => b.amount - a.amount);
+
+        return result;
+    }
+
+    // Saatlik satış dağılımı verisi (Gerçek verilerden)
+    async getHourlySalesData() 
+    {
+        try 
+        {
+            // Gerçek saatlik veri çek
+            let tmpQuery = 
+            {
+                query: `SELECT 
+                        DATEPART(HOUR, POS.CDATE) AS HOUR,
+                        SUM(CASE WHEN POS.TYPE = 0 THEN POS.TOTAL ELSE POS.TOTAL * -1 END) AS TOTAL_SALES,
+                        COUNT(*) AS SALE_COUNT
+                        FROM POS_SALE_VW_01 AS POS 
+                        WHERE POS.STATUS = 1 
+                        AND POS.DOC_DATE >= @START 
+                        AND POS.DOC_DATE <= @END 
+                        AND POS.DEVICE <> '9999' 
+                        AND POS.TOTAL <> 0
+                        GROUP BY DATEPART(HOUR, POS.CDATE)
+                        ORDER BY DATEPART(HOUR, POS.CDATE)`,
+                param: ['START:date', 'END:date'],
+                value: [this.dtDate.startDate, this.dtDate.endDate]
+            };
+
+            App.instance.loading.show()
+
+            let tmpData = await this.core.sql.execute(tmpQuery);
+
+            App.instance.loading.hide()
+
+            let hourlyData = [];
+            
+            for (let hour = 7; hour <= 22; hour++) 
+            {
+                let hourLabel = hour < 10 ? `0${hour}:00` : `${hour}:00`;
+
+            let realData = tmpData && tmpData.result && tmpData.result.recordset ? 
+                tmpData.result.recordset.find(row => row.HOUR === hour) : null;
+                
+                let totalSales = 0;
+                let saleCount = 0;
+                
+                if (realData) 
+                {
+                    totalSales = parseFloat(realData.TOTAL_SALES || 0);
+                    saleCount = parseInt(realData.SALE_COUNT || 0);
+                }
+                
+                hourlyData.push(
+                {
+                    hour: hourLabel,
+                    totalSales: parseFloat(totalSales.toFixed(2)),
+                    saleCount: saleCount
+                });
+            }
+
+            return hourlyData;
+        } 
+        catch (error) 
+        {
+            console.error(this.lang.t("hourlySalesChart.error"), error);
+            return [];
+        }
+    }
+
+    async getFirstAndLastSaleDate() 
+    {
+    
+        let query = 
+        {
+            query: `SELECT MIN(DOC_DATE) as FIRST_DATE, MAX(DOC_DATE) as LAST_DATE FROM POS_SALE_VW_01 WHERE STATUS = 1 AND DEVICE <> '9999' AND TOTAL > 0 AND TYPE = 0`
+        };
+
+        let result = await this.core.sql.execute(query);
+        if (result?.result?.recordset?.length > 0) 
+        {
+            return {
+                first: result.result.recordset[0].FIRST_DATE,
+                last: result.result.recordset[0].LAST_DATE
+            }
+        }
+        return null;
+    }
+
+    handlePeriodComparisonChange = async () => 
+    {
+        // İki farklı tarih aralığını al
+        if (!this.state.period1StartDate || !this.state.period1EndDate || 
+            !this.state.period2StartDate || !this.state.period2EndDate) {
+            return;
+        }
+
+        let period1Start = moment(this.state.period1StartDate).format('YYYY-MM-DD');
+        let period1End = moment(this.state.period1EndDate).format('YYYY-MM-DD');
+        let period2Start = moment(this.state.period2StartDate).format('YYYY-MM-DD');
+        let period2End = moment(this.state.period2EndDate).format('YYYY-MM-DD');
+        
+        console.log('SQL dates:', period1Start, period1End, period2Start, period2End);
+        
+        this.setState({ periodChartLoading: true });
+
+        const granularity = this.state.periodGranularity;
+        
+        let selectExpr, groupExpr, labelFunc;
+
+        if (granularity === 'year') {
+            selectExpr = `YEAR(DOC_DATE) as PERIOD_VALUE`;
+            groupExpr = `YEAR(DOC_DATE)`;
+            labelFunc = row => row.PERIOD_VALUE.toString();
+        } 
+        else if (granularity === 'month') {
+            selectExpr = `MONTH(DOC_DATE) as PERIOD_VALUE`;
+            groupExpr = `MONTH(DOC_DATE)`;
+            labelFunc = row => moment().month(row.PERIOD_VALUE - 1).format('MMMM');
+        } 
+        else if (granularity === 'week') {
+            // Ay içindeki hafta numarası: 1, 2, 3, 4, 5
+            selectExpr = `CEILING(DAY(DOC_DATE) / 7.0) as PERIOD_VALUE`;
+            groupExpr = `CEILING(DAY(DOC_DATE) / 7.0)`;
+            labelFunc = row => `${row.PERIOD_VALUE}. Hafta`;
+        } 
+        else {
+            // Ay içindeki gün numarası: 1, 2, 3, ..., 31
+            selectExpr = `DAY(DOC_DATE) as PERIOD_VALUE`;
+            groupExpr = `DAY(DOC_DATE)`;
+            labelFunc = row => `${row.PERIOD_VALUE}. Gün`;
+        }
+        
+        App.instance.loading.show();
+        
+        // Period 1 sorgusu
+        let query1 = {
+            query: `SELECT ${selectExpr}, SUM(TOTAL) as TOTAL_AMOUNT
+                    FROM POS_SALE_VW_01
+                    WHERE DOC_DATE >= @START AND DOC_DATE <= @END
+                    AND STATUS = 1 AND DEVICE <> '9999' AND TOTAL > 0 AND TYPE = 0
+                    GROUP BY ${groupExpr}
+                    ORDER BY ${groupExpr}`,
+            param: ['START:date', 'END:date'],
+            value: [period1Start, period1End]
+        };
+        
+        // Period 2 sorgusu
+        let query2 = {
+            query: `SELECT ${selectExpr}, SUM(TOTAL) as TOTAL_AMOUNT
+                    FROM POS_SALE_VW_01
+                    WHERE DOC_DATE >= @START AND DOC_DATE <= @END
+                    AND STATUS = 1 AND DEVICE <> '9999' AND TOTAL > 0 AND TYPE = 0
+                    GROUP BY ${groupExpr}
+                    ORDER BY ${groupExpr}`,
+            param: ['START:date', 'END:date'],
+            value: [period2Start, period2End]
+        };
+        
+        let [result1, result2] = await Promise.all(
+        [
+            this.core.sql.execute(query1),
+            this.core.sql.execute(query2)
+        ]);
+        
+        App.instance.loading.hide();
+        
+        let period1Data = {};
+        let period2Data = {};
+        let categories = [];
+        
+        // Period 1 verilerini işle
+        if (result1?.result?.recordset?.length > 0) 
+        {
+            result1.result.recordset.forEach(row => 
+            {
+                let label = labelFunc(row);
+
+                period1Data[label] = parseFloat(row.TOTAL_AMOUNT);
+
+                if (!categories.includes(label)) categories.push(label);
+            });
+        }
+        
+        // Period 2 verilerini işle
+        if (result2?.result?.recordset?.length > 0) 
+        {
+            result2.result.recordset.forEach(row => 
+            {
+                let label = labelFunc(row);
+
+                period2Data[label] = parseFloat(row.TOTAL_AMOUNT);
+
+                if (!categories.includes(label)) categories.push(label);
+            });
+        }
+        // Kategorileri doğru sıraya koy
+        categories.sort((a, b) => 
+        {
+            if (granularity === 'year') 
+            {
+                return parseInt(a) - parseInt(b);
+            }
+            if (granularity === 'month') 
+            {
+                let monthA = moment().month(a).month();
+                let monthB = moment().month(b).month();
+
+                return monthA - monthB;
+            }
+            if (granularity === 'week') 
+            {
+                // "1. Hafta", "2. Hafta" şeklinde
+                let weekNumA = parseInt(a.split('.')[0]);
+                let weekNumB = parseInt(b.split('.')[0]);
+
+                return weekNumA - weekNumB;
+            }
+            if (granularity === 'day') 
+            {
+                // "1. Gün", "2. Gün" şeklinde  
+                let dayNumA = parseInt(a.split('.')[0]);
+                let dayNumB = parseInt(b.split('.')[0]);
+
+                return dayNumA - dayNumB;
+            }
+            return 0;
+        });
+        
+        // Chart data oluştur
+        let chartData = [];
+        let period1Label = `${moment(this.state.period1StartDate).format('DD/MM/YYYY')} - ${moment(this.state.period1EndDate).format('DD/MM/YYYY')}`;
+        let period2Label = `${moment(this.state.period2StartDate).format('DD/MM/YYYY')} - ${moment(this.state.period2EndDate).format('DD/MM/YYYY')}`;
+        
+        categories.forEach(category => 
+        {
+            // Period 1 verisi
+            chartData.push(
+            {
+                category: category,
+                value: period1Data[category] || 0,
+                series: period1Label
+            });
+            
+            // Period 2 verisi
+            chartData.push(
+            {
+                category: category,
+                value: period2Data[category] || 0,
+                series: period2Label
+            });
+        });
+        
+        let seriesMap = {};
+        seriesMap[period1Label] = period1Data;
+        seriesMap[period2Label] = period2Data;
+        
+        console.log('Final period1Data:', period1Data);
+        console.log('Final period2Data:', period2Data);
+        console.log('Final chartData length:', chartData.length);
+        
+        this.setState(
+        { 
+            periodChartData: chartData, 
+            periodChartLoading: false, 
+            periodSeriesMap: seriesMap 
+        });
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -1038,7 +1346,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Form>
                                 {this.state.selectedAnalysisType === 'comparison' && this.state.selectedSubOption === 'periodComparison' ? (
@@ -1065,13 +1373,13 @@ export default class posSalesStatisticalReport extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                         </div>
                         <div className="col-12">
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdButton text={this.lang.t("btnGet")} type="default" stylingMode="contained" width={'100%'}
                             onClick={async (e)=>
@@ -3203,312 +3511,5 @@ export default class posSalesStatisticalReport extends React.PureComponent
         )
     }
 
-    // Para birimi dağılımı verisi
-    getCurrencyDistributionData() 
-    {
-        if (!this.state.chartData || this.state.chartData.length === 0) 
-        {
-            return [];
-        }
 
-        let currencyData = {};
-        let totalAmount = 0;
-        
-        this.state.chartData.forEach(item => 
-            {
-            // Para birimi kategorileri
-            let cashAmount = (item['ESC'] || 0) + (item['FRANC'] || 0);
-            let cardAmount = (item['CB'] || 0) + (item['CB TICKET'] || 0);
-            let checkAmount = item['CHECK'] || 0;
-            let voucherAmount = (item['BON DE VALAUER'] || 0) + (item['BON D\'AVOIR'] || 0);
-            let creditAmount = item['AVOIR'] || 0;
-            let transferAmount = (item['VIRM'] || 0) + (item['PRLV'] || 0);
-            let ticketAmount = item['T.R'] || 0;
-
-            // Kategorilere göre grupla
-            if (cashAmount > 0) currencyData[this.lang.t("currencyDistributionChart.cash")] = (currencyData[this.lang.t("currencyDistributionChart.cash")] || 0) + cashAmount;
-            if (cardAmount > 0) currencyData[this.lang.t("currencyDistributionChart.card")] = (currencyData[this.lang.t("currencyDistributionChart.card")] || 0) + cardAmount;
-            if (checkAmount > 0) currencyData[this.lang.t("currencyDistributionChart.check")] = (currencyData[this.lang.t("currencyDistributionChart.check")] || 0) + checkAmount;
-            if (voucherAmount > 0) currencyData[this.lang.t("currencyDistributionChart.voucher")] = (currencyData[this.lang.t("currencyDistributionChart.voucher")] || 0) + voucherAmount;
-            if (creditAmount > 0) currencyData[this.lang.t("currencyDistributionChart.credit")] = (currencyData[this.lang.t("currencyDistributionChart.credit")] || 0) + creditAmount;
-            if (transferAmount > 0) currencyData[this.lang.t("currencyDistributionChart.transfer")] = (currencyData[this.lang.t("currencyDistributionChart.transfer")] || 0) + transferAmount;
-            if (ticketAmount > 0) currencyData[this.lang.t("currencyDistributionChart.ticket")] = (currencyData[this.lang.t("currencyDistributionChart.ticket")] || 0) + ticketAmount;
-            
-            // Toplam tutarı hesapla
-            totalAmount += cashAmount + cardAmount + checkAmount + voucherAmount + creditAmount + transferAmount + ticketAmount;
-        });
-
-        // Array formatına çevir
-        let result = Object.keys(currencyData).map(currency => (
-        {
-            currency: currency,
-            amount: parseFloat(currencyData[currency].toFixed(2))
-        })).sort((a, b) => b.amount - a.amount);
-
-        return result;
-    }
-
-    // Saatlik satış dağılımı verisi (Gerçek verilerden)
-    async getHourlySalesData() 
-    {
-        try 
-        {
-            // Gerçek saatlik veri çek
-            let tmpQuery = 
-            {
-                query: `SELECT 
-                        DATEPART(HOUR, POS.CDATE) AS HOUR,
-                        SUM(CASE WHEN POS.TYPE = 0 THEN POS.TOTAL ELSE POS.TOTAL * -1 END) AS TOTAL_SALES,
-                        COUNT(*) AS SALE_COUNT
-                        FROM POS_SALE_VW_01 AS POS 
-                        WHERE POS.STATUS = 1 
-                        AND POS.DOC_DATE >= @START 
-                        AND POS.DOC_DATE <= @END 
-                        AND POS.DEVICE <> '9999' 
-                        AND POS.TOTAL <> 0
-                        GROUP BY DATEPART(HOUR, POS.CDATE)
-                        ORDER BY DATEPART(HOUR, POS.CDATE)`,
-                param: ['START:date', 'END:date'],
-                value: [this.dtDate.startDate, this.dtDate.endDate]
-            };
-
-            App.instance.loading.show()
-
-            let tmpData = await this.core.sql.execute(tmpQuery);
-
-            App.instance.loading.hide()
-
-            let hourlyData = [];
-            
-            for (let hour = 7; hour <= 22; hour++) 
-            {
-                let hourLabel = hour < 10 ? `0${hour}:00` : `${hour}:00`;
-
-            let realData = tmpData && tmpData.result && tmpData.result.recordset ? 
-                tmpData.result.recordset.find(row => row.HOUR === hour) : null;
-                
-                let totalSales = 0;
-                let saleCount = 0;
-                
-                if (realData) 
-                {
-                    totalSales = parseFloat(realData.TOTAL_SALES || 0);
-                    saleCount = parseInt(realData.SALE_COUNT || 0);
-                }
-                
-                hourlyData.push(
-                {
-                    hour: hourLabel,
-                    totalSales: parseFloat(totalSales.toFixed(2)),
-                    saleCount: saleCount
-                });
-            }
-
-            return hourlyData;
-        } 
-        catch (error) 
-        {
-            console.error(this.lang.t("hourlySalesChart.error"), error);
-            return [];
-        }
-    }
-
-    async getFirstAndLastSaleDate() 
-    {
-    
-        let query = 
-        {
-            query: `SELECT MIN(DOC_DATE) as FIRST_DATE, MAX(DOC_DATE) as LAST_DATE FROM POS_SALE_VW_01 WHERE STATUS = 1 AND DEVICE <> '9999' AND TOTAL > 0 AND TYPE = 0`
-        };
-
-        let result = await this.core.sql.execute(query);
-        if (result?.result?.recordset?.length > 0) 
-        {
-            return {
-                first: result.result.recordset[0].FIRST_DATE,
-                last: result.result.recordset[0].LAST_DATE
-            }
-        }
-        return null;
-    }
-
-    handlePeriodComparisonChange = async () => 
-    {
-        // İki farklı tarih aralığını al
-        if (!this.state.period1StartDate || !this.state.period1EndDate || 
-            !this.state.period2StartDate || !this.state.period2EndDate) {
-            return;
-        }
-
-        let period1Start = moment(this.state.period1StartDate).format('YYYY-MM-DD');
-        let period1End = moment(this.state.period1EndDate).format('YYYY-MM-DD');
-        let period2Start = moment(this.state.period2StartDate).format('YYYY-MM-DD');
-        let period2End = moment(this.state.period2EndDate).format('YYYY-MM-DD');
-        
-        console.log('SQL dates:', period1Start, period1End, period2Start, period2End);
-        
-        this.setState({ periodChartLoading: true });
-
-        const granularity = this.state.periodGranularity;
-        
-        let selectExpr, groupExpr, labelFunc;
-
-        if (granularity === 'year') {
-            selectExpr = `YEAR(DOC_DATE) as PERIOD_VALUE`;
-            groupExpr = `YEAR(DOC_DATE)`;
-            labelFunc = row => row.PERIOD_VALUE.toString();
-        } 
-        else if (granularity === 'month') {
-            selectExpr = `MONTH(DOC_DATE) as PERIOD_VALUE`;
-            groupExpr = `MONTH(DOC_DATE)`;
-            labelFunc = row => moment().month(row.PERIOD_VALUE - 1).format('MMMM');
-        } 
-        else if (granularity === 'week') {
-            // Ay içindeki hafta numarası: 1, 2, 3, 4, 5
-            selectExpr = `CEILING(DAY(DOC_DATE) / 7.0) as PERIOD_VALUE`;
-            groupExpr = `CEILING(DAY(DOC_DATE) / 7.0)`;
-            labelFunc = row => `${row.PERIOD_VALUE}. Hafta`;
-        } 
-        else {
-            // Ay içindeki gün numarası: 1, 2, 3, ..., 31
-            selectExpr = `DAY(DOC_DATE) as PERIOD_VALUE`;
-            groupExpr = `DAY(DOC_DATE)`;
-            labelFunc = row => `${row.PERIOD_VALUE}. Gün`;
-        }
-        
-        App.instance.loading.show();
-        
-        // Period 1 sorgusu
-        let query1 = {
-            query: `SELECT ${selectExpr}, SUM(TOTAL) as TOTAL_AMOUNT
-                    FROM POS_SALE_VW_01
-                    WHERE DOC_DATE >= @START AND DOC_DATE <= @END
-                    AND STATUS = 1 AND DEVICE <> '9999' AND TOTAL > 0 AND TYPE = 0
-                    GROUP BY ${groupExpr}
-                    ORDER BY ${groupExpr}`,
-            param: ['START:date', 'END:date'],
-            value: [period1Start, period1End]
-        };
-        
-        // Period 2 sorgusu
-        let query2 = {
-            query: `SELECT ${selectExpr}, SUM(TOTAL) as TOTAL_AMOUNT
-                    FROM POS_SALE_VW_01
-                    WHERE DOC_DATE >= @START AND DOC_DATE <= @END
-                    AND STATUS = 1 AND DEVICE <> '9999' AND TOTAL > 0 AND TYPE = 0
-                    GROUP BY ${groupExpr}
-                    ORDER BY ${groupExpr}`,
-            param: ['START:date', 'END:date'],
-            value: [period2Start, period2End]
-        };
-        
-        let [result1, result2] = await Promise.all(
-        [
-            this.core.sql.execute(query1),
-            this.core.sql.execute(query2)
-        ]);
-        
-        App.instance.loading.hide();
-        
-        let period1Data = {};
-        let period2Data = {};
-        let categories = [];
-        
-        // Period 1 verilerini işle
-        if (result1?.result?.recordset?.length > 0) 
-        {
-            result1.result.recordset.forEach(row => 
-            {
-                let label = labelFunc(row);
-
-                period1Data[label] = parseFloat(row.TOTAL_AMOUNT);
-
-                if (!categories.includes(label)) categories.push(label);
-            });
-        }
-        
-        // Period 2 verilerini işle
-        if (result2?.result?.recordset?.length > 0) 
-        {
-            result2.result.recordset.forEach(row => 
-            {
-                let label = labelFunc(row);
-
-                period2Data[label] = parseFloat(row.TOTAL_AMOUNT);
-
-                if (!categories.includes(label)) categories.push(label);
-            });
-        }
-        // Kategorileri doğru sıraya koy
-        categories.sort((a, b) => 
-        {
-            if (granularity === 'year') 
-            {
-                return parseInt(a) - parseInt(b);
-            }
-            if (granularity === 'month') 
-            {
-                let monthA = moment().month(a).month();
-                let monthB = moment().month(b).month();
-
-                return monthA - monthB;
-            }
-            if (granularity === 'week') 
-            {
-                // "1. Hafta", "2. Hafta" şeklinde
-                let weekNumA = parseInt(a.split('.')[0]);
-                let weekNumB = parseInt(b.split('.')[0]);
-
-                return weekNumA - weekNumB;
-            }
-            if (granularity === 'day') 
-            {
-                // "1. Gün", "2. Gün" şeklinde  
-                let dayNumA = parseInt(a.split('.')[0]);
-                let dayNumB = parseInt(b.split('.')[0]);
-
-                return dayNumA - dayNumB;
-            }
-            return 0;
-        });
-        
-        // Chart data oluştur
-        let chartData = [];
-        let period1Label = `${moment(this.state.period1StartDate).format('DD/MM/YYYY')} - ${moment(this.state.period1EndDate).format('DD/MM/YYYY')}`;
-        let period2Label = `${moment(this.state.period2StartDate).format('DD/MM/YYYY')} - ${moment(this.state.period2EndDate).format('DD/MM/YYYY')}`;
-        
-        categories.forEach(category => 
-        {
-            // Period 1 verisi
-            chartData.push(
-            {
-                category: category,
-                value: period1Data[category] || 0,
-                series: period1Label
-            });
-            
-            // Period 2 verisi
-            chartData.push(
-            {
-                category: category,
-                value: period2Data[category] || 0,
-                series: period2Label
-            });
-        });
-        
-        let seriesMap = {};
-        seriesMap[period1Label] = period1Data;
-        seriesMap[period2Label] = period2Data;
-        
-        console.log('Final period1Data:', period1Data);
-        console.log('Final period2Data:', period2Data);
-        console.log('Final chartData length:', chartData.length);
-        
-        this.setState(
-        { 
-            periodChartData: chartData, 
-            periodChartLoading: false, 
-            periodSeriesMap: seriesMap 
-        });
-    }
 }

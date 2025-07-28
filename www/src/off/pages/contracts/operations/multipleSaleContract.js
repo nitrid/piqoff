@@ -37,6 +37,7 @@ export default class multipleSaleContract extends React.PureComponent
         this.cellRoleRender = this.cellRoleRender.bind(this)
         this.saveState = this.saveState.bind(this)
         this.loadState = this.loadState.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
     }
     async componentDidMount()
     {
@@ -306,13 +307,46 @@ export default class multipleSaleContract extends React.PureComponent
             )
         }
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: {
+                icon: 'add',
+                validationGroup: 'frmContract' + this.tabIndex,
+                onClick: ((c) => {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        if (!this.state.contractsLoaded) 
+                        {
+                            this.toast.show({ message: this.t("msgWarning"),  type: "warning" });
+                            return;
+                        }
+                        
+                        this.pg_txtPopItemsCode.show()
+
+                        this.pg_txtPopItemsCode.onClick = async(data) =>
+                        {
+                            for (let i = 0; i < data.length; i++) 
+                            {
+                                await this.core.util.waitUntil(100)
+                                await this.addItem(data[i])
+                            }
+                        }
+                    }
+                }).bind(this)
+            }
+        })
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -352,7 +386,7 @@ export default class multipleSaleContract extends React.PureComponent
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={3} id="frmHeader">
                                 {/* txtCode */}
@@ -411,39 +445,25 @@ export default class multipleSaleContract extends React.PureComponent
                                     <Label text={this.t("docDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"docDate"} />
                                 </Item>
-                                {/* btnGet */}
-                                <Item >
-                                    <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetContracts.bind(this)}></NdButton>
-                                </Item>
                             </Form>
                         </div>
+                        <div className="row px-2 pt-1"></div>
+                        <div className="row px-2 pt-1">
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                        </div>
+                        <div className="col-3">
+                            <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetContracts.bind(this)}></NdButton>
+                        </div>
+                    </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Form colCount={1} onInitialized={(e)=> { this.frmContract = e.component }}>
-                                <Item location="after">
-                                    <Button icon="add"
-                                    disabled={!this.state.contractsLoaded}
-                                    validationGroup={"frmContract"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if (!this.state.contractsLoaded) {
-                                            this.toast.show({ message: this.t("msgWarning"),  type: "warning" });
-                                            return;
-                                        }
-                                        
-                                        this.pg_txtPopItemsCode.show()
-                                        this.pg_txtPopItemsCode.onClick = async(data) =>
-                                        {
-                                            for (let i = 0; i < data.length; i++) 
-                                            {
-                                                await this.core.util.waitUntil(100)
-                                                await this.addItem(data[i])
-                                            }
-                                        }
-                                    }}/>
-                                </Item>
                                 <Item>
                                     <NdGrid parent={this} id={"grdContracts"} 
                                     showBorders={true} 
@@ -452,6 +472,7 @@ export default class multipleSaleContract extends React.PureComponent
                                     allowColumnResizing={true} 
                                     filterRow={{visible:true}}
                                     headerFilter={{visible:true}}
+                                    onToolbarPreparing={this.onGridToolbarPreparing}
                                     height={'700'} 
                                     width={'100%'}
                                     dbApply={false}

@@ -19,8 +19,9 @@ import NdDatePicker from '../../../../core/react/devex/datepicker.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
 import { NdForm, NdItem, NdLabel, NdEmptyItem }from '../../../../core/react/devex/form.js';
 import { NdToast } from '../../../../core/react/devex/toast.js';
+import DocBase from '../../../tools/DocBase.js';
 
-export default class costEntry extends React.PureComponent
+export default class costEntry extends DocBase
 {
     constructor(props)
     {
@@ -31,6 +32,7 @@ export default class costEntry extends React.PureComponent
         this.docObj = new docCls();
 
         this.calculateTotal = this.calculateTotal.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
         this.addCost = this.addCost.bind(this)
         this.docLocked = false;        
         this.tabIndex = props.data.tabkey
@@ -203,13 +205,37 @@ export default class costEntry extends React.PureComponent
 
             this.calculateTotal()
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: {
+                icon: 'add',
+                validationGroup: 'frmPayment' + this.tabIndex,
+                onClick: ((c) => {
+                    if(c.validationGroup.validate().status == "valid")
+                    {
+                        this.txtCostAmount.value = 0
+                        this.txtCostDescription.value = ''
+                        this.popCostEntry.show()
+                    }
+                    else
+                    {
+                        this.toast.show({type:"warning",message:this.t("msgDocValid.msg")})
+                    }
+                }).bind(this)
+            }
+        })
+    }
     render()
     {
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -224,7 +250,7 @@ export default class costEntry extends React.PureComponent
                                     onClick={()=> { this.init() }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmVirement"  + this.tabIndex}
+                                    <NdButton id="btnSave" parent={this} icon="floppy" type="success" validationGroup={"frmPayment"  + this.tabIndex}
                                     onClick={async (e)=>
                                     {
                                         if(this.docLocked == true)
@@ -248,6 +274,7 @@ export default class costEntry extends React.PureComponent
                                                 content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgSave.msg")}</div>)
                                             }
                                             let pResult = await dialog(tmpConfObj);
+
                                             if(pResult == 'btn01')
                                             {
                                                 let tmpConfObj1 =
@@ -318,13 +345,11 @@ export default class costEntry extends React.PureComponent
                                             }
                                             else
                                             {
-                                                tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
-                                                await dialog(tmpConfObj1);
-                                            }
+                                                this.toast.show({type:"success",message:this.t("msgSaveResult.msgFailed")});                                            }
                                         }
                                         else
                                         {
-                                            this.popPassword.show()
+                                            await this.popPassword.show()
                                             this.txtPassword.value = ''
                                         }
                                     }}/>
@@ -365,7 +390,7 @@ export default class costEntry extends React.PureComponent
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'70px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmPayment">
                                 {/* txtRef-Refno */}
@@ -396,7 +421,7 @@ export default class costEntry extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             >
-                                            <Validator validationGroup={"frmVirement"  + this.tabIndex}>
+                                            <Validator validationGroup={"frmPayment"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRef")} />
                                                 </Validator>  
                                             </NdTextBox>
@@ -444,7 +469,7 @@ export default class costEntry extends React.PureComponent
                                             param={this.param.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRefno',USERS:this.user.CODE})}
                                             >
-                                                <Validator validationGroup={"frmVirement"  + this.tabIndex}>
+                                                <Validator validationGroup={"frmPayment"  + this.tabIndex}>
                                                     <RequiredRule message={this.t("validRefNo")} />
                                                 </Validator> 
                                             </NdTextBox>
@@ -473,7 +498,7 @@ export default class costEntry extends React.PureComponent
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
                                     >
-                                        <Validator validationGroup={"frmVirement"  + this.tabIndex}>
+                                        <Validator validationGroup={"frmPayment"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />
                                         </Validator> 
                                     </NdDatePicker>
@@ -482,72 +507,53 @@ export default class costEntry extends React.PureComponent
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={4} onInitialized={(e)=> { this.frmPayment = e.component }}>
-                                <NdItem location="after">
-                                    <Button icon="add" text={this.t("btnSafeToSafe")}
-                                    validationGroup={"frmVirement"  + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            this.txtCostAmount.value = 0
-                                            this.txtCostDescription.value = ''
-                                            this.popCostEntry.show()
-                                        }
-                                        else
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgDocValid',showTitle:true,title:this.t("msgDocValid.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.t("msgDocValid.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgDocValid.msg")}</div>)
-                                            }
-                                            
-                                            await dialog(tmpConfObj);
-                                        }
-                                    }}/>
+                                <NdItem colSpan={3}>
                                 </NdItem>
                                 <NdItem colSpan={3}>
                                 </NdItem>
                                 <NdItem colSpan={4}>
-                                 <React.Fragment>
-                                    <NdGrid parent={this} id={"grdDocCostEntry"} 
-                                    showBorders={true} 
-                                    columnsAutoWidth={true} 
-                                    allowColumnReordering={true} 
-                                    allowColumnResizing={true} 
-                                    height={'500'} 
-                                    width={'100%'}
-                                    dbApply={false}
-                                    onRowUpdated={async(e)=> { this.calculateTotal() }}
-                                    onRowRemoved={async (e)=> { this.calculateTotal() }}
-                                    >
-                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
-                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
-                                        {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
-                                        <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
-                                        <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
-                                        <Export fileName={this.lang.t("menuOff.fns_02_004")} enabled={true} allowExportSelectedData={true} />
-                                        <Column dataField="CDATE_FORMAT" caption={this.t("grdDocCostEntry.clmCreateDate")} width={100} allowEditing={false}/>
-                                        <Column dataField="OUTPUT_NAME" caption={this.t("grdDocCostEntry.clmOutputName")} width={250} allowEditing={false}/>
-                                        <Column dataField="AMOUNT" caption={this.t("grdDocCostEntry.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} width={150}/>
-                                        <Column dataField="DESCRIPTION" caption={this.t("grdDocCostEntry.clmDescription")} width={250}/>
-                                    </NdGrid>
-                                    <ContextMenu
-                                    dataSource={this.rightItems}
-                                    width={200}
-                                    target="#grdDocCostEntry" />
-                                </React.Fragment>     
+                                    <React.Fragment>
+                                        <NdGrid parent={this} id={"grdDocCostEntry"} 
+                                        showBorders={true} 
+                                        columnsAutoWidth={true} 
+                                        allowColumnReordering={true} 
+                                        allowColumnResizing={true} 
+                                        onToolbarPreparing={this.onGridToolbarPreparing}
+                                        height={'700px'} 
+                                        width={'100%'}
+                                        dbApply={false}
+                                        onRowUpdated={async(e)=> { this.calculateTotal() }}
+                                        onRowRemoved={async (e)=> { this.calculateTotal() }}
+                                        >
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
+                                            <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                            <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
+                                            <Export fileName={this.lang.t("menuOff.fns_02_004")} enabled={true} allowExportSelectedData={true} />
+                                            <Column dataField="CDATE_FORMAT" caption={this.t("grdDocCostEntry.clmCreateDate")} width={100} allowEditing={false}/>
+                                            <Column dataField="OUTPUT_NAME" caption={this.t("grdDocCostEntry.clmOutputName")} width={250} allowEditing={false}/>
+                                            <Column dataField="AMOUNT" caption={this.t("grdDocCostEntry.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} width={150}/>
+                                            <Column dataField="DESCRIPTION" caption={this.t("grdDocCostEntry.clmDescription")} width={250}/>
+                                        </NdGrid>
+                                        <ContextMenu
+                                        dataSource={this.rightItems}
+                                        width={200}
+                                        target="#grdDocCostEntry" />
+                                    </React.Fragment>     
                                 </NdItem>
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={4} parent={this} id="frmPayment">                            
                                 {/* TOPLAM */}
+                                <NdEmptyItem />
+                                <NdEmptyItem />
                                 <NdEmptyItem />
                                 <NdItem>
                                 <NdLabel text={this.t("txtTotal")} alignment="right" />
@@ -569,7 +575,7 @@ export default class costEntry extends React.PureComponent
                         title={this.t("popCostEntry.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
                         width={'500'}
-                        height={'300'}
+                        height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'}>

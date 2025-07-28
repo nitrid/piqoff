@@ -93,7 +93,7 @@ export default class safeList extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -143,7 +143,7 @@ export default class safeList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="frmCriter">
                                 {/* dtFirst */}
@@ -172,7 +172,7 @@ export default class safeList extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -183,11 +183,11 @@ export default class safeList extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdSafeList" parent={this} 
                             selection={{mode:"multiple"}} 
-                            height={600}
+                            height={'700px'}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -219,13 +219,13 @@ export default class safeList extends React.PureComponent
                             </NdGrid>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <NdForm colCount={3} parent={this}>                            
+                            <NdForm colCount={4} parent={this}>                            
                                 {/* TOPLAM */}
-                                <NdEmptyItem />
-                                <NdEmptyItem />
-                                <NdEmptyItem />
+                                <NdEmptyItem colSpan={3}/>
+                                <NdEmptyItem colSpan={3}/>
+                                <NdEmptyItem colSpan={3}/>
                                 <NdItem>
                                     <NdLabel text={this.t("txtAmount")} alignment="right" />
                                     <NdTextBox id="txtAmount" parent={this} simple={true} readOnly={true}></NdTextBox>

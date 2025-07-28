@@ -105,7 +105,7 @@ export default class collectionList extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -159,7 +159,7 @@ export default class collectionList extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <NdForm colCount={2} id="frmCriter">
                                 {/* dtFirst */}
@@ -248,7 +248,7 @@ export default class collectionList extends React.PureComponent
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -259,11 +259,11 @@ export default class collectionList extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}></NdButton>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdColList" parent={this} 
                             selection={{mode:"multiple"}} 
-                            height={600}
+                            height={'700px'}
                             showBorders={true}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
@@ -297,11 +297,13 @@ export default class collectionList extends React.PureComponent
                             </NdGrid>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={4} parent={this} >                            
                                 {/* TOPLAM */}
-                                <NdEmptyItem />
+                                <NdEmptyItem colSpan={3}/>
+                                <NdEmptyItem colSpan={3}/>
+                                <NdEmptyItem colSpan={3}/>
                                 <NdItem>
                                 <NdLabel text={this.t("txtTotal")} alignment="right" />
                                     <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true}

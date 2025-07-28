@@ -3,7 +3,7 @@ import App from '../../../lib/app.js';
 import moment from 'moment';
 
 import Toolbar from 'devextreme-react/toolbar';
-import Form, {Item, Label } from 'devextreme-react/form';
+import Form, {Item, Label, EmptyItem} from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
 import NdGrid,{Column,Editing,Scrolling} from '../../../../core/react/devex/grid.js';
@@ -107,7 +107,7 @@ export default class userBasedPosSalesReport extends React.PureComponent
         return(
             <div id={this.props.data.id + this.tabIndex}>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
@@ -142,28 +142,44 @@ export default class userBasedPosSalesReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
+                            <Form colCount={4}>
+                                <Item colSpan={2}>
+                                    <Label text={this.lang.t("dtDate")} alignment="right" />
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                                </Item>
+                                <EmptyItem colSpan={1}/>
+                                <EmptyItem colSpan={1}/>
+                            </Form>
                             <Form colCount={4} parent={this} id="frmPurcoffer">
-                                <Item  >
+                                <Item colSpan={1}>
                                     <Label text={this.lang.t("txtTotalTicket")} alignment="right" />
                                     <NdTextBox id="txtTotalTicket" parent={this} simple={true} readOnly={true} maxLength={32}/>
                                 </Item>
-                                <Item  >
+                                <Item colSpan={1}>
                                     <Label text={this.lang.t("txtTicketAvg")} alignment="right" />
                                     <NdTextBox id="txtTicketAvg" parent={this} simple={true} readOnly={true} maxLength={32}/>
+                                </Item>
+                                <Item colSpan={1}>
+                                    <Label text={this.t("chkRowTotal")} alignment="right" />
+                                    <NdCheckBox id="chkRowTotal" parent={this} defaultValue={true}
+                                    onValueChanged={(e)=>
+                                    {
+                                        this.pvtData.setState({showRowTotals:e.value})
+                                    }}/>
                                 </Item>
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
-                            <NdButton text={this.lang.t("btnGet")} type="default" stylingMode="contained" width={'100%'}
+
+                    <div className="row px-2 pt-1">
+                        <div className="col-4">
+                        </div>
+                        <div className="col-4">
+                        </div>
+                        <div className="col-4">
+                            <NdButton text={this.lang.t("btnGet")} type="success" width={'100%'}
                             onClick={async (e)=>
                             {
                                 let tmpTicketQuery = {
@@ -236,23 +252,9 @@ export default class userBasedPosSalesReport extends React.PureComponent
                             }}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
-                            <Form>
-                                <Item>
-                                    <Label text={this.t("chkRowTotal")} alignment="right" />
-                                    <NdCheckBox id="chkRowTotal" parent={this} defaultValue={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        this.pvtData.setState({showRowTotals:e.value})
-                                    }}/>
-                                </Item>
-                            </Form>
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
-                            <NdPivot id="pvtData" parent={this} height={'750'}
+                            <NdPivot id="pvtData" parent={this} height={'700px'}
                             fields={
                             [
                                 {
@@ -387,8 +389,8 @@ export default class userBasedPosSalesReport extends React.PureComponent
                     showTitle={true}
                     title={this.lang.t("popOpenTike.title")}
                     container={'#' + this.props.data.id + this.tabIndex} 
-                    width={'900'}
-                    height={'500'}
+                    width={'900px'}
+                    height={'auto'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
                     >
                         <Form colCount={1} height={'fit-content'}>

@@ -92,7 +92,7 @@ export default class useingPointReport extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                               
@@ -124,11 +124,11 @@ export default class useingPointReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-6">
                             <Form>
                                 <Item>
@@ -150,12 +150,12 @@ export default class useingPointReport extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdUseingPointReport" parent={this} 
                             selection={{mode:"single"}} 
                             showBorders={true}
-                            height={'700'} 
+                            height={'700px'} 
                             width={'100%'}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}

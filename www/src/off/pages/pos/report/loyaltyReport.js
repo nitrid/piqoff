@@ -83,7 +83,7 @@ export default class loyaltyReport extends React.PureComponent
         return(
             <div>
                 <ScrollView>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                  <Item location="after"
@@ -114,17 +114,23 @@ export default class loyaltyReport extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height:'80px'}}>
                         <div className="col-12">
                             <Form colCount={2} id="frmKriter">
-                            <Item>
-                                <Label text={this.t("dtDate")} alignment="right" />
-                                <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
-                            </Item>
+                                <Item>
+                                    <Label text={this.t("dtDate")} alignment="right" />
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                                </Item>
+                            </Form>
+                            <Form colCount={4} parent={this} id="frmPurcoffer">
+                                <Item  >
+                                    <Label text={this.t("txtTotalTicket")} alignment="right" />
+                                    <NdTextBox id="txtTotalTicket" parent={this} simple={true} readOnly={true} maxLength={32}/>
+                                </Item>
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-3">
                         </div>
                         <div className="col-3">
@@ -135,24 +141,14 @@ export default class loyaltyReport extends React.PureComponent
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
-                        <div className="col-12">
-                            <Form colCount={4} parent={this} id="frmPurcoffer">
-                                <Item  >
-                                    <Label text={this.t("txtTotalTicket")} alignment="right" />
-                                    <NdTextBox id="txtTotalTicket" parent={this} simple={true} readOnly={true} maxLength={32}/>
-                                </Item>
-                            </Form>
-                        </div>
-                    </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdGrid id="grdListe" parent={this} 
                             selection={{mode:"multiple"}} 
                             showBorders={true}
                             filterRow={{visible:false}} 
                             headerFilter={{visible:true}}
-                            height={'690'} 
+                            height={'700px'} 
                             width={'100%'}
                             columnAutoWidth={true}
                             allowColumnReordering={true}
