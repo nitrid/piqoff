@@ -522,6 +522,7 @@ export const langDe =
         pos_02_019 : "Monatlicher Produktgruppen-Verkaufsbericht",
         pos_02_020 : "Benutzer-Verkaufsbericht",
         pos_02_021 : "Verkaufsstatistik-Bericht",
+        pos_02_022 : "Lieferanten-Produktgruppen-Verkaufsbericht",
         pos_03 : "Operationen", 
         pos_03_001 : "Tagesabschluss-Operationen",
         pos_03_002 : "Verlosung",

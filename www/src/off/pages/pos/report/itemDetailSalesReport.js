@@ -52,7 +52,6 @@ export default class itemDetailSalesReport extends React.PureComponent
            {
                source : 
                {
-                   groupBy : this.groupList,
                    select : 
                    {
                        query : `SELECT ITEM_CODE,ITEM_NAME,SUM(QUANTITY) AS QUANTITY,ROUND(SUM(FAMOUNT),2) AS AMOUNT,ROUND(SUM(VAT),2) AS VAT,ROUND(SUM(TOTAL),2) AS TOTAL,(SELECT CDATE FROM ITEMS WHERE ITEMS.GUID = POS_SALE_VW_01.ITEM_GUID) AS CDATE 

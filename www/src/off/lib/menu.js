@@ -1572,6 +1572,12 @@ export const menu = (e) =>
                             text: e.t('menuOff.pos_02_019'),
                             path: 'pos/report/itemGrpDateReport'
                         },
+                        //Serbest Yapılan İndirimler İçin Rapor.
+                        {
+                            id: 'pos_02_022',
+                            text: e.t('menuOff.pos_02_022'),
+                            path: 'pos/report/supplierItemGroupReport'
+                        },
                     ]
                 },
             ]

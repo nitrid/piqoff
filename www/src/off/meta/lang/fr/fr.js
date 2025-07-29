@@ -522,6 +522,7 @@ export const langFr =
         pos_02_019 : "Rapport de ventes par groupe de produits par mois",
         pos_02_020 : "Rapport de ventes par utilisateur",
         pos_02_021 : "Rapport de ventes statistiques",
+        pos_02_022 : "Rapport de ventes par groupe d'articles par fournisseur",
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         pos_03_002 : "Tirage au sort",

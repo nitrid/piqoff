@@ -506,6 +506,7 @@ export const langEn =
         pos_02_019 : "Monthly Product Group Sales Report",
         pos_02_020 : "User Sales Report",
         pos_02_021 : "Pos Sales Statistical Report",
+        pos_02_022 : "Supplier Product Group Sales Report",
         pos_03 :"Operations",
         pos_03_001 : "End of Day",
         pos_03_002 : "Draw",
