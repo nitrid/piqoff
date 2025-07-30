@@ -1719,6 +1719,11 @@ export const menu = (e) =>
                             id: 'proces_01_001',
                             text: e.t('menuOff.proces_01_001'),//'Toplu Ürün Grubu Güncelle',
                             path: 'proces/itemProces/itemGroupProces'
+                        },
+                        {
+                            id: 'proces_01_002',
+                            text: e.t('menuOff.proces_01_002'),//'Toplu Reyon Güncelle',
+                            path: 'proces/itemProces/rayonProces'
                         }
                     ]
                 },

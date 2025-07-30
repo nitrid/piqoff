@@ -14,7 +14,7 @@ import { dialog } from '../../../../core/react/devex/dialog.js';
 import {NdToast} from '../../../../core/react/devex/toast.js';
 
 
-export default class itemGroupProces extends React.PureComponent
+export default class rayonProces extends React.PureComponent
 {
     constructor(props)
     {
@@ -67,9 +67,9 @@ export default class itemGroupProces extends React.PureComponent
         {
             let tmpQuery = 
             {
-                query :`UPDATE ITEMS_GRP SET MAIN_GUID = @MAIN WHERE ITEM = @ITEM `,
-                param : ['MAIN:string|50','ITEM:string|50'],
-                value : [this.cmbItemGrp.value,this.grdListe.getSelectedData()[i].GUID]
+                query :`UPDATE ITEMS_GRP SET RAYON_GUID = @RAYON WHERE ITEM = @ITEM `,
+                param : ['RAYON:string|50','ITEM:string|50'],
+                value : [this.cmbRayon.value,this.grdListe.getSelectedData()[i].GUID]
             }
             await this.core.sql.execute(tmpQuery) 
         }
@@ -93,13 +93,13 @@ export default class itemGroupProces extends React.PureComponent
                 select : 
                 {
                     query : 
-                            `SELECT GUID,CODE,NAME,SNAME,MAIN_GRP_NAME,VAT,PRICE_SALE,MAIN_UNIT_NAME AS UNIT_NAME 
+                            `SELECT GUID,CODE,NAME,SNAME,MAIN_GRP_NAME,VAT,PRICE_SALE,MAIN_UNIT_NAME AS UNIT_NAME,RAYON_CODE,RAYON_NAME
                             FROM ITEMS_EDIT_VW_01 
                             WHERE {0}
                             ((NAME LIKE @NAME +'%') OR (@NAME = '')) AND 
                             ((MAIN_GRP = @MAIN_GRP) OR (@MAIN_GRP = '')) AND 
                             ((CUSTOMER_CODE = @CUSTOMER_CODE) OR (@CUSTOMER_CODE = '')) 
-                            GROUP BY  GUID,CODE,NAME,SNAME,MAIN_GRP_NAME,VAT,PRICE_SALE,MAIN_UNIT_NAME`,
+                            GROUP BY  GUID,CODE,NAME,SNAME,MAIN_GRP_NAME,VAT,PRICE_SALE,MAIN_UNIT_NAME,RAYON_CODE,RAYON_NAME`,
                     param : ['NAME:string|250','MAIN_GRP:string|25','CUSTOMER_CODE:string|25'],
                     value : [this.txtUrunAdi.value.replaceAll("*", "%"),this.cmbUrunGrup.value,this.cmbTedarikci.value]
                 },
@@ -194,7 +194,7 @@ export default class itemGroupProces extends React.PureComponent
             <div>
                 <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 <ScrollView>
-                    <div className="row px-2 pt-1">
+                    <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after"
@@ -244,7 +244,7 @@ export default class itemGroupProces extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-1" style={{height:'80px'}}>
+                    <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Form colCount={2} id="frmKriter">
                                 <Item>
@@ -277,7 +277,7 @@ export default class itemGroupProces extends React.PureComponent
                             </Form>
                         </div>
                     </div>
-                    <div className="row px-2 pt-1">
+                    <div className="row px-2 pt-2">
                         <div className="col-3">
                             <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetirClick}/>
                         </div>
@@ -285,26 +285,24 @@ export default class itemGroupProces extends React.PureComponent
                         </div>
                         <div className="col-3">
                               {/* cmbItemGrp */}
-                                <NdSelectBox id="cmbItemGrp" simple={true} parent={this} text={this.t("chkMasterBarcode")}
+                                <NdSelectBox id="cmbRayon" simple={true} parent={this} text={this.t("chkMasterBarcode")}
                                 displayExpr="NAME"                       
                                 valueExpr="GUID"
                                 searchEnabled={true} 
                                 showClearButton={true}
                                 pageSize ={50}
                                 notRefresh={true}
-                                data={{source:{select:{query : `SELECT GUID,CODE,NAME FROM ITEM_GROUP ORDER BY NAME ASC`},sql:this.core.sql}}} />
+                                data={{source:{select:{query : `SELECT GUID,CODE,NAME FROM RAYON ORDER BY NAME ASC`},sql:this.core.sql}}} />
                         </div>
                         <div className="col-3">
                             <NdButton text={this.t("btnOk")} type="default" width="100%" onClick={this.updateGroup}/>
                         </div>  
                     </div>
-                    <div className="row px-2 pt-1">
+                    <div className="row px-2 pt-2">
                         <div className="col-12">
                             <NdGrid id="grdListe" parent={this} 
                             selection={{mode:"multiple"}} 
                             showBorders={true}
-                            height={'700px'}
-                            width={'100%'}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}
                             columnAutoWidth={true}
@@ -313,20 +311,7 @@ export default class itemGroupProces extends React.PureComponent
                             loadPanel={{enabled:true}}
                             onCellPrepared={(e) =>
                             {
-                                if(e.rowType === "data" && e.column.dataField === "MARGIN")
-                                {
-                                    if(typeof e.data.MARGIN.split("%")[1] != 'undefined' )
-                                    {
-                                        e.cellElement.style.color = e.data.MARGIN.split("%")[1] < 30 ? "red" : "blue";
-                                    }
-                                }
-                                if(e.rowType === "data" && e.column.dataField === "NETMARGIN")
-                                {
-                                    if(typeof e.data.NETMARGIN.split("%")[1] != 'undefined' )
-                                    {
-                                        e.cellElement.style.color = e.data.NETMARGIN.split("%")[1] < 30 ? "red" : "blue";
-                                    }
-                                }
+                               
                             }}
                             onRowDblClick={async(e)=>
                             {
@@ -347,9 +332,10 @@ export default class itemGroupProces extends React.PureComponent
                                 <Export fileName={this.lang.t("menuOff.stk_03_001")} enabled={true} allowExportSelectedData={true} />
                                 <Column dataField="CODE" caption={this.t("grdListe.clmCode")} visible={true}/> 
                                 <Column dataField="NAME" caption={this.t("grdListe.clmName")} visible={true} defaultSortOrder="asc" /> 
+                                <Column dataField="RAYON_CODE" caption={this.t("grdListe.clmRayonCode")} visible={false}/> 
+                                <Column dataField="RAYON_NAME" caption={this.t("grdListe.clmRayonName")} visible={true}/> 
                                 <Column dataField="BARCODE" caption={this.t("grdListe.clmBarcode")} visible={true}/> 
                                 <Column dataField="SNAME" caption={this.t("grdListe.clmSname")} visible={false}/> 
-                                <Column dataField="MAIN_GRP_NAME" caption={this.t("grdListe.clmMainGrp")} visible={true}/> 
                                 <Column dataField="VAT" caption={this.t("grdListe.clmVat")} visible={true}/> 
                                 <Column dataField="PRICE_SALE" caption={this.t("grdListe.clmPriceSale")} visible={true}/>               
                             </NdGrid>

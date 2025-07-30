@@ -566,6 +566,7 @@ export const langFr =
         proces : "Saisie groupée",
         proces_01 : "Traitement Produit",
         proces_01_001 : "MAJ Famille Produit",
+        proces_01_002 : "MAJ Rayon",
         tkf: "Proposition",
         tkf_01: "Listes",
         tkf_02: "Document",

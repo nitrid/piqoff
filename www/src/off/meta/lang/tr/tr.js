@@ -560,6 +560,7 @@ export const langTr =
         proces : "Toplu işlemler",
         proces_01 : "Ürün İşlemleri",
         proces_01_001 : "Ürün Grubu Güncelleme",
+        proces_01_002 : "Reyon Güncelleme",
         tkf: "Teklif",
         tkf_01: "Listeler",
         tkf_02: "Evraklar",
