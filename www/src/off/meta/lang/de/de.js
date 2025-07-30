@@ -565,6 +565,7 @@ export const langDe =
         proces : "Gruppen-Eingabe",
         proces_01 : "Produkt-Verarbeitung",
         proces_01_001 : "Produktfamilie-Update",
+        proces_01_002 : "Reyon-Update",
         tkf: "Angebot",
         tkf_01: "Listen",
         tkf_02: "Dokument",
