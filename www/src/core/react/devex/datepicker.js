@@ -40,18 +40,24 @@ export default class NdDatePicker extends Base
         } 
     }
     _onValueChanged(e) 
-    {           
+    {        
         if(typeof this.props.dt != 'undefined' && typeof this.props.dt.data != 'undefined' && this.props.dt.data.length > 0 && typeof this.props.dt.field != 'undefined')
-        {            
+        {           
             if(typeof this.props.dt.filter == 'undefined')
             {
                 if(typeof this.props.dt.row != 'undefined' && typeof this.props.dt.data.find(x => x === this.props.dt.row) != 'undefined')
                 {
-                    this.props.dt.data.find(x => x === this.props.dt.row)[this.props.dt.field] = e.value
+                    if(moment(this.props.dt.data.find(x => x === this.props.dt.row)[this.props.dt.field]).format("YYYY-MM-DD") !== moment(e.value).format("YYYY-MM-DD"))
+                    {
+                        this.props.dt.data.find(x => x === this.props.dt.row)[this.props.dt.field] = e.value
+                    }
                 }
                 else
                 {
-                    this.props.dt.data[this.props.dt.data.length-1][this.props.dt.field] = e.value
+                    if(moment(this.props.dt.data[this.props.dt.data.length-1][this.props.dt.field]).format("YYYY-MM-DD") !== moment(e.value).format("YYYY-MM-DD"))
+                    {
+                        this.props.dt.data[this.props.dt.data.length-1][this.props.dt.field] = e.value
+                    }
                 }
             }   
             else
@@ -61,11 +67,17 @@ export default class NdDatePicker extends Base
                 {
                     if(typeof this.props.dt.row != 'undefined' && typeof tmpData.find(x => x === this.props.dt.row) != 'undefined')
                     {
-                        tmpData.find(x => x === this.props.dt.row)[this.props.dt.field] = e.value
+                        if(moment(tmpData.find(x => x === this.props.dt.row)[this.props.dt.field]).format("YYYY-MM-DD") !== moment(e.value).format("YYYY-MM-DD"))
+                        {
+                            tmpData.find(x => x === this.props.dt.row)[this.props.dt.field] = e.value
+                        }
                     }
                     else
                     {
-                        tmpData[tmpData.length-1][this.props.dt.field] = e.value
+                        if(moment(tmpData[tmpData.length-1][this.props.dt.field]).format("YYYY-MM-DD") !== moment(e.value).format("YYYY-MM-DD"))
+                        {
+                            tmpData[tmpData.length-1][this.props.dt.field] = e.value
+                        }
                     }
                 }
             }
@@ -79,8 +91,20 @@ export default class NdDatePicker extends Base
             this.props.onValueChanged({...e, value: newVal});
         }
     }
-    _onEnterKey()
+    _onEnterKey(e)
     {
+        // D60 formatında yazıldıysa
+        const inputText = this.dev.element().getElementsByTagName('input')[1].value;
+        if(inputText.toUpperCase().startsWith('D')) 
+        {
+            const days = parseInt(inputText.toUpperCase().replace('D', ''));
+            if(!isNaN(days)) 
+            {
+                const futureDate = moment().add(days, 'days');
+                e.component.option('value', moment(futureDate.toDate()).format("YYYY-MM-DD"));
+            }
+        }
+        // 1970-01-01 formatında yazıldıysa
         let tmpDate = this.dev.element().getElementsByTagName('input')[1].value
         let numbers = tmpDate.match(/[0-9]/g); 
         let tmpDateFromat = numbers[2] + numbers[3] +  '.' + numbers[0] + numbers[1] + '.' + numbers[4] + numbers[5] + numbers[6] + numbers[7]
@@ -112,7 +136,6 @@ export default class NdDatePicker extends Base
             disabled={this.state.editable}
             readOnly={this.state.readOnly}
             type={this.state.type}
-            dateSerializationFormat={"yyyy-MM-dd HH:mm"}
             onInitialized={this._onInitialized}
             editorOptions={this.state.editorOptions}  
             onEnterKey={this._onEnterKey} onValueChanged={this._onValueChanged} onFocusIn={this._onFocusIn}>

@@ -175,7 +175,7 @@ export class docCls
         this.ds.add(this.transportInfermotion.dt('TRANSPORT_INFORMATION'))
 
         this.ds.get('DOC').noColumnEdit = ['MARGIN']
-        this.ds.get('DOC_ITEMS').noColumnEdit = ['MARGIN']
+        this.ds.get('DOC_ITEMS').noColumnEdit = ['MARGIN','PURC_PRICE','DIFF_PRICE']
     }
     //#endregion
     dt()
@@ -469,7 +469,7 @@ export class docItemsCls
             param : ['PCUSER:string|25','PGUID:string|50','PDOC_GUID:string|50'],
             dataprm : ['CUSER','GUID','DOC_GUID']
         }
-
+        
         this.ds.add(tmpDt);
     }
     //#region

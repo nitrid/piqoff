@@ -284,6 +284,15 @@ export default class NdBase extends React.PureComponent
                 }
             }
         }
+
+        if (this.data && this.data.datatable) 
+        {
+            this.data.datatable.off('onEdit');
+            this.data.datatable.off('onNew');
+            this.data.datatable.off('onRefresh');
+            this.data.datatable.off('onClear');
+            this.data.datatable.off('onDeleteAll');
+        }
     }
     get data()
     {
@@ -513,7 +522,7 @@ export default class NdBase extends React.PureComponent
                             });
                         },
                         update: (key, values) => 
-                        {                            
+                        {           
                             return new Promise(async resolve => 
                             {
                                 if(typeof this.state.data != 'undefined' && typeof this.state.data.datatable != 'undefined')
@@ -549,48 +558,6 @@ export default class NdBase extends React.PureComponent
                                 resolve()                                
                             });
                         },
-                        onInserted: function (values,key) 
-                        {
-                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onInserted != 'undefined')
-                            {
-                                tmpThis.props.data.onInserted(values,key)
-                            }
-                        },
-                        onInserting: function (values,key) 
-                        {
-                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onInserting != 'undefined')
-                            {
-                                tmpThis.props.data.onInserting(values,key)
-                            }
-                        },
-                        onUpdated: function (key, values) 
-                        {
-                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onUpdated != 'undefined')
-                            {
-                                tmpThis.props.data.onUpdated(key,values)
-                            }
-                        },
-                        onUpdating: function (key, values) 
-                        {                           
-                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onUpdating != 'undefined')
-                            {
-                                tmpThis.props.data.onUpdating(key,values)
-                            }
-                        },
-                        onRemoved: function (key) 
-                        {
-                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onRemoved != 'undefined')
-                            {
-                                tmpThis.props.data.onRemoved(key)
-                            }
-                        },
-                        onRemoving: function (key) 
-                        {
-                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onRemoving != 'undefined')
-                            {
-                                tmpThis.props.data.onRemoving(key,values)
-                            }
-                        },
                         byKey: async function (e) 
                         {
                             let x = {}
@@ -617,7 +584,7 @@ export default class NdBase extends React.PureComponent
                             }
                         },
                     }),
-                }
+                },
             });
         });
     }

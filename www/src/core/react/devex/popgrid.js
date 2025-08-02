@@ -375,6 +375,10 @@ export default class NdPopGrid extends Base
     {
         await this.grid.dataRefresh({source:pData})
     }
+    setSelection(pMode)
+    {
+        this.setState({selection:{mode:pMode}})
+    }
     render()
     {
         return (

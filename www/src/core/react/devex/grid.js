@@ -320,23 +320,23 @@ export default class NdGrid extends Base
             {
                 this.data.datatable.on('onEdit',(e) =>
                 {  
-                    this.devGrid.refresh()
+                    this.devGrid.refresh(true)
                 });
                 this.data.datatable.on('onNew',(e) =>
-                {           
-                    this.devGrid.refresh()
+                {   
+                    this.devGrid.refresh(true);
                 });
                 this.data.datatable.on('onRefresh',() =>
                 {
-                    this.devGrid.refresh()
+                    this.devGrid.refresh(true)
                 });
                 this.data.datatable.on('onClear',() =>
                 {
-                    this.devGrid.refresh()
+                    this.devGrid.refresh(true)
                 });
                 this.data.datatable.on('onDeleteAll',() =>
                 {
-                    this.devGrid.refresh()
+                    this.devGrid.refresh(true)
                 });
             }
         }, 100);

@@ -1085,6 +1085,14 @@ export const langTr =
         status: "Stok Durumu",
         safetyStock: "Güvenlik Stoku",
     },
-            
- 
+    popItemSelect : 
+    {
+        title : "Ürün Seçimi",
+        CODE :  "ÜRÜN KODU",
+        NAME : "ÜRÜN ADI",
+        MULTICODE : "TEDARİKÇİ KODU",
+        PRICE : "FİYAT",
+        MAIN_GRP_NAME : "ANA GRUP",
+        RAYON_NAME : "RAYON",
+    },        
  }

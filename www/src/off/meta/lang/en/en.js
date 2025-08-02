@@ -1017,4 +1017,14 @@ export const langEn =
     data: "Data",
     item: "Item",
     product: "Product",
+    popItemSelect : 
+    {
+        title : "Product Selection",
+        CODE :  "PRODUCT CODE",
+        NAME : "PRODUCT NAME",
+        MULTICODE : "SUPPLIER CODE",
+        PRICE : "PRICE",
+        MAIN_GRP_NAME : "MAIN GROUP",
+        RAYON_NAME : "RAYON",
+    },
 }

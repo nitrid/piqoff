@@ -1017,5 +1017,14 @@ export const langFr =
     data: "Données",
     item: "Article",
     product: "Produit",
-     
+    popItemSelect : 
+    {
+        title : "Sélectionner Produit",
+        CODE :  "Référence Produit",
+        NAME : "Nom Produit",
+        MULTICODE : "FRN.Code",
+        PRICE : "Prix de Vente",
+        MAIN_GRP_NAME : "Groupe",
+        RAYON_NAME : "Rayon",
+    }, 
  }
