@@ -430,7 +430,7 @@ const ftr_02_001 =
     validRefNo : "Sıra Boş Geçilemez",
     validDepot : "Depo Seçmelisiniz",
     validCustomerCode : "Müşteri Kodu Boş Geçilemez",
-    validDocDate : "Tarih Seçmelisiniz",
+    validDocDate : "Tarih Seçmelisiniz. (Örn : D90 yazdığınız da 90 gün sonraki tarih otomatik olarak girilecektir.)",
     tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
     msgNewPrice : 
     {

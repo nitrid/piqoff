@@ -457,7 +457,7 @@ const  ftr_02_002 =
     validRefNo : "Saisir Réf No ",
     validDepot : "Sélectionner Dépot",
     validCustomerCode : "Le code fournisseur-client ne peut être vide",
-    validDocDate : "Sélectionner Date" ,
+    validDocDate : "Sélectionner Date. (Ex : D90, 90 jours après la date sélectionnée sera automatiquement saisi.)" ,
     tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
     msgNotQuantity: 
     {

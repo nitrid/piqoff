@@ -196,7 +196,7 @@ export default class salesInvoice extends DocBase
         this.popItemSelect.addItem = this.addItem.bind(this)        
         this.popItemSelect.docObj = this.docObj
         this.popItemSelect.docItems = this.docObj.docItems
-
+        
         this.popItemSelect.columns = 
         [
             {dataField:"CODE",width:200},
@@ -238,6 +238,8 @@ export default class salesInvoice extends DocBase
         App.instance.loading.show()
         await super.getDoc(pGuid,pRef,pRefno);
         App.instance.loading.hide()
+
+        this.dtExpDate.day = moment(this.docObj.docCustomer.dt()[0].EXPIRY_DATE).diff(moment(this.docObj.dt()[0].DOC_DATE), 'days')
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true
@@ -1102,7 +1104,11 @@ export default class salesInvoice extends DocBase
                 this.docObj.dt()[0].TAX_NO = tmpDt[0].TAX_NO
                 this.docObj.dt()[0].PRICE_LIST_NO = tmpDt[0].PRICE_LIST_NO
                 this.docObj.dt()[0].VAT_ZERO = tmpDt[0].VAT_ZERO
+
                 this.dtExpDate.value = moment(new Date()).add(tmpDt[0].EXPIRY_DAY, 'days')
+                this.dtExpDate.day = tmpDt[0].EXPIRY_DAY
+                
+                this.cmbExpiryType.value = tmpDt[0].EXPIRY_DAY != 0 ? 0 : 1
                 
                 let tmpData = this.sysParam.filter({ID:'refForCustomerCode',USERS:this.user.CODE}).getValue()
 
@@ -1565,9 +1571,28 @@ export default class salesInvoice extends DocBase
                                     <NdLabel text={this.t("dtDocDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtDocDate"}
                                     dt={{data:this.docObj.dt('DOC'),field:"DOC_DATE"}}
-                                    onValueChanged={(async()=>
+                                    onValueChanged={(async(e)=>
                                     {
                                         this.checkRow()
+                                        
+                                        if(typeof this.dtExpDate.day != 'undefined')
+                                        {
+                                            this.dtExpDate.value = moment(e.value).add(this.dtExpDate.day, 'days')
+                                        }
+                                        
+                                        if(moment(this.dtExpDate.value).diff(moment(e.value), 'days') == 0)
+                                        {
+                                            this.cmbExpiryType.value = 1
+                                            this.dtExpDate.value = this.dtDocDate.value
+                                        }
+                                        else if(moment(this.dtExpDate.value).diff(moment(e.value), 'days') > 0)
+                                        {
+                                            this.cmbExpiryType.value = 0
+                                        }
+                                        else
+                                        {
+                                            this.dtExpDate.value = this.dtDocDate.value
+                                        }
                                     }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmDoc"  + this.tabIndex}>
@@ -1628,7 +1653,10 @@ export default class salesInvoice extends DocBase
                                     data={{source:[{ID:0,VALUE:this.t("cmbTypeData.encaissement")},{ID:1,VALUE:this.t("cmbTypeData.debit")}]}}
                                     onValueChanged={(async(e)=>
                                     {
-                                       
+                                       if(this.cmbExpiryType.value == 1)
+                                       {
+                                            this.dtExpDate.value = this.dtDocDate.value
+                                       }
                                     }).bind(this)}
                                     />
                                 </NdItem>
@@ -1721,6 +1749,18 @@ export default class salesInvoice extends DocBase
                                     <NdLabel text={this.t("dtExpDate")} alignment="right" />
                                     <NdDatePicker simple={true}  parent={this} id={"dtExpDate"}
                                     dt={{data:this.docObj.docCustomer.dt('DOC_CUSTOMER'),field:"EXPIRY_DATE"}}
+                                    startFormatDay={()=>{return this.dtDocDate.value}}
+                                    onValueChanged={(async(e)=>
+                                    {
+                                        if(moment(e.value).diff(moment(this.dtDocDate.value), 'days') == 0)
+                                        {
+                                            this.cmbExpiryType.value = 1
+                                        }
+                                        else if(moment(e.value).diff(moment(this.dtDocDate.value), 'days') > 0)
+                                        {
+                                            this.cmbExpiryType.value = 0
+                                        }
+                                    }).bind(this)}
                                     >
                                         <Validator validationGroup={"frmPurcInv"  + this.tabIndex}>
                                             <RequiredRule message={this.t("validDocDate")} />

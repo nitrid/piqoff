@@ -92,12 +92,21 @@ export default class Navigation extends React.PureComponent
             path: 'main.js',
             pagePrm:tmpFavMenuData
         })
+        
         let tmpQuery = 
         {
             query :"SELECT TOP 1 NAME  FROM COMPANY_VW_01 " ,
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
-        this.firmName.value = tmpData.result.recordset[0].NAME + " - V." + this.core.appInfo.version
+
+        if(tmpData.result.recordset.length > 0)
+        {
+            this.firmName.value = tmpData.result.recordset[0].NAME + " - V." + this.core.appInfo.version
+        }
+        else
+        {
+            this.firmName.value = "... - V." + this.core.appInfo.version
+        }
     }
     async mergeMenu(tmpMenu,tmpMenuData)
     {

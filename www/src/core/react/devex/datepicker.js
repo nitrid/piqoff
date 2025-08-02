@@ -4,6 +4,8 @@ import Base,{ Validator, NumericRule, RequiredRule, CompareRule, EmailRule, Patt
 import moment from 'moment';
 
 export { Validator, NumericRule, RequiredRule, CompareRule, EmailRule, PatternRule, StringLengthRule, RangeRule, AsyncRule }
+
+// this.props.startFormatDay = () => {return this.dtDocDate.value} // D90 formatında kullanımında başlangıç tarihi gönderilir.
 export default class NdDatePicker extends Base
 {
     constructor(props)
@@ -18,7 +20,7 @@ export default class NdDatePicker extends Base
         this.state.type = typeof props.type == 'undefined' ? 'date' : props.type
         this.state.editorOptions = typeof props.editorOptions == 'undefined' ? undefined : props.editorOptions
         this.state.readOnly = typeof props.readOnly == 'undefined' ? false : props.readOnly 
-        
+
         this._onInitialized = this._onInitialized.bind(this);
         this._onValueChanged = this._onValueChanged.bind(this)
         this._onEnterKey = this._onEnterKey.bind(this)
@@ -82,13 +84,16 @@ export default class NdDatePicker extends Base
                 }
             }
         }
-        
-        let newVal = e.value ? new Date(e.value) : null;
-        this.setState({value: newVal});
-        
-        if(typeof this.props.onValueChanged != 'undefined')
+
+        if(e.value != null)
         {
-            this.props.onValueChanged({...e, value: newVal});
+            let newVal = e.value ? new Date(e.value) : null;
+            this.setState({value: newVal});
+            
+            if(typeof this.props.onValueChanged != 'undefined')
+            {
+                this.props.onValueChanged({...e, value: newVal});
+            }
         }
     }
     _onEnterKey(e)
@@ -100,22 +105,35 @@ export default class NdDatePicker extends Base
             const days = parseInt(inputText.toUpperCase().replace('D', ''));
             if(!isNaN(days)) 
             {
-                const futureDate = moment().add(days, 'days');
+                let futureDate = null;
+                let tmpStartDate = typeof this.props.startFormatDay != 'undefined' ? this.props.startFormatDay() : null;
+
+                if(tmpStartDate != null)
+                {
+                    futureDate = moment(tmpStartDate).add(days, 'days');
+                }
+                else
+                {
+                    futureDate = moment().add(days, 'days');
+                }
                 e.component.option('value', moment(futureDate.toDate()).format("YYYY-MM-DD"));
             }
         }
         // 1970-01-01 formatında yazıldıysa
-        let tmpDate = this.dev.element().getElementsByTagName('input')[1].value
-        let numbers = tmpDate.match(/[0-9]/g); 
-        let tmpDateFromat = numbers[2] + numbers[3] +  '.' + numbers[0] + numbers[1] + '.' + numbers[4] + numbers[5] + numbers[6] + numbers[7]
-        if(moment(tmpDateFromat).format("YYYY-MM-DD") != 'Invalid date')
+        if(inputText != null && inputText != '' && !inputText.toUpperCase().startsWith('D'))
         {
-            const newValue = moment(tmpDateFromat).format("YYYY-MM-DD");
-            if(newValue !== this.state.value) 
+            let numbers = inputText.match(/[0-9]/g); 
+            let tmpDateFromat = numbers[2] + numbers[3] +  '.' + numbers[0] + numbers[1] + '.' + numbers[4] + numbers[5] + numbers[6] + numbers[7]
+            if(moment(tmpDateFromat).format("YYYY-MM-DD") != 'Invalid date')
             {
-               this.setState({value: newValue});
+                const newValue = moment(tmpDateFromat).format("YYYY-MM-DD");
+                if(newValue !== this.state.value) 
+                {
+                    this.setState({value: newValue});
+                }
             }
         }
+        
         if(typeof this.props.onEnterKey != 'undefined')
         {
             this.props.onEnterKey();

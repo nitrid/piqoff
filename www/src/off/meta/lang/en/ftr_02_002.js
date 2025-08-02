@@ -419,7 +419,7 @@ const  ftr_02_002 =
     validRefNo : "Sequence cannot be empty",
     validDepot : "You must select a depot",
     validCustomerCode : "Customer Code cannot be empty",
-    validDocDate : "You must select a date",
+    validDocDate : "You must select a date. (Ex : D90, 90 days after the selected date will be automatically entered.)",
     tagItemCodePlaceholder: "Please enter the codes you want to add",
     msgNotQuantity:
     {

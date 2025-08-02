@@ -434,7 +434,7 @@ const ftr_02_001 =
     validRefNo : "Ref Nr eingeben",
     validDepot : "Lager auswählen",
     validCustomerCode : "Lieferanten-Kundencode kann nicht leer sein",
-    validDocDate : "Datum auswählen",
+    validDocDate : "Datum auswählen. (Ex : D90, 90 Tage nach der ausgewählten Datum wird automatisch eingegeben.)",
     tagItemCodePlaceholder: "Bitte geben Sie die hinzuzufügenden Codes ein",
     msgNewPrice :      
     {     
