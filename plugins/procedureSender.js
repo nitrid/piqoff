@@ -4,8 +4,10 @@ import { core } from 'gensrv';
 import fetch from 'node-fetch';
 import config from '../config.js';
 
-class ProcedureSender {
-    constructor() {
+class ProcedureSender 
+{
+    constructor() 
+    {
         this.core = core.instance;
         this.__dirname = dirname(fileURLToPath(import.meta.url));
         this.connEvt = this.connEvt.bind(this);
@@ -17,56 +19,135 @@ class ProcedureSender {
         this.subeId = process.env.SUBE_ID || 'SUBE_001';
         this.subeAdi = process.env.SUBE_ADI || 'Ana Şube';
         
+        // İzin verilen prosedür listesi
+        this.allowedProcedures = [
+            'PRD_ITEMS_INSERT',
+            'PRD_ITEMS_UPDATE',
+            'PRD_ITEM_PRICE_INSERT',
+            'PRD_ITEM_PRICE_UPDATE',
+            'PRD_ITEM_BARCODE_INSERT',
+            'PRD_ITEM_BARCODE_UPDATE',
+            'PRD_ITEM_UNIT_INSERT',
+            'PRD_ITEM_UNIT_UPDATE',
+            'PRD_ITEM_GROUP_INSERT',
+            'PRD_ITEM_GROUP_UPDATE',
+            'PRD_ITEM_IMAGE_INSERT',
+            'PRD_ITEM_IMAGE_UPDATE',
+            'PRD_UNIT_INSERT',
+            'PRD_UNIT_UPDATE',
+            'PRD_VAT_INSERT',
+            'PRD_VAT_UPDATE',
+            'PRD_ITEM_MULTICODE_INSERT',
+            'PRD_ITEM_MULTICODE_UPDATE',
+            'PRD_PROMO_INSERT',
+            'PRD_PROMO_UPDATE',
+            'PRD_PROMO_DELETE',
+            'PRD_PROMO_APPLICATION_INSERT',
+            'PRD_PROMO_APPLICATION_UPDATE',
+            'PRD_PROMO_APPLICATION_DELETE',
+            'PRD_PROMO_CONDITION_INSERT',
+            'PRD_PROMO_CONDITION_UPDATE',
+            'PRD_PROMO_CONDITION_DELETE',
+            'PRD_COLLECTIVE_ITEMS_EDIT',
+            'PRD_ITEM_GROUP_INSERT',
+            'PRD_ITEM_GROUP_UPDATE',
+        ];
+        
         // Config'den ayarları yükle
-        if (config?.plugins?.procedureSender?.active) {
+        if (config?.plugins?.procedureSender?.active) 
+        {
             this.active = config.plugins.procedureSender.active;
             this.merkezHost = config.plugins.procedureSender.host || this.merkezHost;
             this.subeId = config.plugins.procedureSender.subeId || this.subeId;
             this.subeAdi = config.plugins.procedureSender.subeAdi || this.subeAdi;
         }
-        
-        // İstatistikler
-        this.stats = {
-            gonderilen: 0,
-            basarili: 0,
-            hata: 0,
-            sonGonderim: null
-        };
-        
-        this.processRun();
-        console.log(`🔌 ProcedureSender başlatıldı - Şube: ${this.subeId}, Aktif: ${this.active}`);
     }
 
-    async connEvt(pSocket) {
-        if (!this.active) return;
+    async connEvt(pSocket) 
+    {
+        if (!this.active) 
+        {
+            return;
+        }
 
-        pSocket.on('sql', async (pParam, pCallback) => {
-            if (typeof pParam.length != 'undefined') {
-                for (let i = 0; i < pParam.length; i++) {
+        pSocket.on('sql', async (pParam, pCallback) => 
+        {
+            if (typeof pParam.length != 'undefined') 
+            {
+                for (let i = 0; i < pParam.length; i++) 
+                {
                     await this.handleSqlProcedure(pParam[i]);
                 }
             }
         });
     }
 
-    async handleSqlProcedure(procedureData) {
-        try {
+    // Prosedür adını çıkar
+    extractProcedureName(query) 
+    {
+        try 
+        {
+            // EXEC [dbo].[PRD_ITEMS_UPDATE] -> PRD_ITEMS_UPDATE
+            const match = query.match(/\[dbo\]\.\[([^\]]+)\]/);
+            if (match) 
+            {
+                return match[1];
+            }
+            
+            // EXEC PRD_ITEMS_UPDATE -> PRD_ITEMS_UPDATE
+            const match2 = query.match(/EXEC\s+([^\s]+)/i);
+            if (match2) 
+            {
+                return match2[1];
+            }
+            
+            return null;
+        } 
+        catch (error) 
+        {
+            console.error('❌ Prosedür adı çıkarma hatası:', error);
+            return null;
+        }
+    }
+
+    // Prosedürün izin verilen listede olup olmadığını kontrol et
+    isProcedureAllowed(procedureName) 
+    {
+        return this.allowedProcedures.includes(procedureName);
+    }
+
+    async handleSqlProcedure(procedureData) 
+    {
+        try 
+        {
             // SQL prosedürünü olduğu gibi al
             const procedureQuery = procedureData.query;
             const paramArray = procedureData.param || [];
             const valueArray = procedureData.value || [];
             
-            console.log(`📤 SQL Prosedürü yakalandı: ${procedureQuery.substring(0, 50)}...`);
+            // Prosedür adını çıkar
+            const procedureName = this.extractProcedureName(procedureQuery);
+            
+            if (!procedureName) 
+            {
+                console.log(`⚠️ Prosedür adı çıkarılamadı: ${procedureQuery.substring(0, 50)}...`);
+                return;
+            }
+            
+            // Prosedürün izin verilen listede olup olmadığını kontrol et
+            if (!this.isProcedureAllowed(procedureName)) 
+            {
+                return;
+            }
             
             // Param ve value dizilerini sırayla eşleştir
             const procedureParams = {};
-            for (let i = 0; i < paramArray.length; i++) {
+            for (let i = 0; i < paramArray.length; i++) 
+            {
                 const paramName = paramArray[i].split(':')[0]; // 'PGUID:string|50' -> 'PGUID'
                 const paramValue = valueArray[i];
                 procedureParams[paramName] = paramValue;
             }
-            
-            console.log('📋 Parametreler sırayla eşleştirildi:', procedureParams);
             
             // Merkeze gönderilecek veri paketini hazırla
             const procedurePaketi = {
@@ -74,23 +155,26 @@ class ProcedureSender {
                 subeAdi: this.subeAdi,
                 procedureQuery: procedureQuery,
                 procedureParams: procedureParams,
-                paramArray: paramArray, // Orijinal param dizisi
-                valueArray: valueArray, // Orijinal value dizisi
-                zaman: new Date().toISOString(),
-                gensrvData: true
+                paramArray: paramArray,
+                valueArray: valueArray,
+                procedureName: procedureName, // Prosedür adını da ekle
+                zaman: new Date().toISOString()
             };
 
             // Merkeze gönder
             await this.merkezeGonder(procedurePaketi);
             
-        } catch (error) {
+        } 
+        catch (error) 
+        {
             console.error('❌ SQL prosedür işleme hatası:', error);
-            this.stats.hata++;
         }
     }
 
-    async merkezeGonder(procedurePaketi) {
-        try {
+    async merkezeGonder(procedurePaketi) 
+    {
+        try 
+        {
             const response = await fetch(`http://${this.merkezHost}/procedure-execute`, {
                 method: 'POST',
                 headers: {
@@ -99,64 +183,61 @@ class ProcedureSender {
                 body: JSON.stringify(procedurePaketi)
             });
 
-            if (!response.ok) {
+            if (!response.ok) 
+            {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
 
             const result = await response.json();
             
-            if (result.başarılı) {
-                this.stats.basarili++;
-                console.log(`✅ Prosedür merkeze gönderildi: ${result.veriId}`);
-            } else {
+            if (result.başarılı) 
+            {
+                //console.log(`✅ Prosedür merkeze gönderildi: ${procedurePaketi.procedureName}`);
+            } 
+            else 
+            {
                 throw new Error(result.hata || 'Bilinmeyen hata');
             }
 
-            this.stats.gonderilen++;
-            this.stats.sonGonderim = new Date().toISOString();
-
-        } catch (error) {
+        } 
+        catch (error) 
+        {
             console.error('❌ Merkeze gönderme hatası:', error.message);
-            this.stats.hata++;
-            
-            // Fallback: Alternatif endpoint dene
-            try {
-                console.log('🔄 Fallback endpoint deneniyor...');
-                const fallbackResponse = await fetch(`http://${this.merkezHost}/procedure-fallback`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(procedurePaketi)
-                });
-                
-                if (fallbackResponse.ok) {
-                    console.log('✅ Fallback endpoint ile gönderildi');
-                    this.stats.basarili++;
-                }
-            } catch (fallbackError) {
-                console.error('❌ Fallback de başarısız:', fallbackError.message);
-            }
         }
     }
 
-    processRun() {
-        // Her dakika istatistikleri yazdır
-        setInterval(() => {
-            console.log(`📊 ProcedureSender İstatistikleri: Gönderilen=${this.stats.gonderilen}, Başarılı=${this.stats.basarili}, Hata=${this.stats.hata}`);
-        }, 60000);
+    // İzin verilen prosedür listesini güncelle
+    updateAllowedProcedures(newList) 
+    {
+        this.allowedProcedures = newList;
+        //console.log(`📋 İzin verilen prosedürler güncellendi: ${this.allowedProcedures.join(', ')}`);
     }
 
-    getStats() {
-        return {
-            ...this.stats,
-            subeId: this.subeId,
-            subeAdi: this.subeAdi,
-            active: this.active
-        };
+    // Prosedür listesine ekle
+    addAllowedProcedure(procedureName) 
+    {
+        if (!this.allowedProcedures.includes(procedureName)) 
+        {
+            this.allowedProcedures.push(procedureName);
+            //console.log(`➕ Prosedür eklendi: ${procedureName}`);
+        }
     }
 
-    setActive(active) {
+    // Prosedür listesinden çıkar
+    removeAllowedProcedure(procedureName) 
+    {
+        const index = this.allowedProcedures.indexOf(procedureName);
+        if (index > -1) 
+        {
+            this.allowedProcedures.splice(index, 1);
+            //console.log(`➖ Prosedür çıkarıldı: ${procedureName}`);
+        }
+    }
+
+    setActive(active) 
+    {
         this.active = active;
-        console.log(`🔌 ProcedureSender ${active ? 'etkinleştirildi' : 'devre dışı bırakıldı'}`);
+        //console.log(`🔌 ProcedureSender ${active ? 'etkinleştirildi' : 'devre dışı bırakıldı'}`);
     }
 }
 

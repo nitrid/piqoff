@@ -1670,11 +1670,8 @@ export default class itemCard extends React.PureComponent
                                 </NdLayoutItem>
                                 {/* chkTaxSugarControlLy */}
                                 <NdLayoutItem key={"chkTaxSugarControlLy"} id={"chkTaxSugarControlLy"} parent={this} data-grid={{x:4,y:0,h:1,w:1}} access={this.access.filter({ELEMENT:'chkTaxSugarControlLy',USERS:this.user.CODE})}>
-                                    <div className="row pe-3">
-                                        <div className='col-10 p-0 pe-1'>
-                                            <label className="col-form-label d-flex justify-content-end">{this.t("chkTaxSugarControl") + " :"}</label>
-                                        </div>
-                                        <div className="col-2 p-0 d-flex align-items-center">
+                                    <div className="row">
+                                        <div className="col-12 d-flex align-items-center justify-content-center">
                                             <NdCheckBox id="chkTaxSugarControl" parent={this}  
                                             dt={{data:this.itemsObj.dt('ITEMS'),field:"TAX_SUGAR"}}
                                             onValueChanged={(e) => {this.taxSugarValidCheck();}}
@@ -1683,7 +1680,7 @@ export default class itemCard extends React.PureComponent
                                     </div>
                                     <div className="row">
                                         <div className='col-12 d-flex align-items-center justify-content-center'>
-                                            <label className="col-form-label d-flex justify-content-center text-center">{this.t("chkTaxSugarControl")}</label>
+                                            <label className="col-form-label d-flex justify-content-end">{this.t("chkTaxSugarControl")}</label>
                                         </div>
                                     </div>
                                 </NdLayoutItem>
@@ -1937,7 +1934,7 @@ export default class itemCard extends React.PureComponent
                                             >
                                                 <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPrice"}/>                                
                                                 <ColumnChooser enabled={true} />  
-                                                <Paging defaultPageSize={6} />
+                                                <Paging defaultPageSize={12} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                 <Column dataField="LIST_NO" caption={this.t("grdPrice.clmListNo")} width={60} allowEditing={false}/>
                                                 <Column dataField="LIST_NAME" caption={this.t("grdPrice.clmListName")} allowEditing={false}/>
@@ -2028,7 +2025,7 @@ export default class itemCard extends React.PureComponent
                                             dbApply={false}
                                             onToolbarPreparing={this.onBarcodeGridToolbarPreparing}
                                             >
-                                                <Paging defaultPageSize={5} />
+                                                <Paging defaultPageSize={12} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                 <Column dataField="BARCODE" caption={this.t("grdBarcode.clmBarcode")} allowEditing={false}/>
                                                 <Column dataField="UNIT_NAME" caption={this.t("grdBarcode.clmUnit")} allowEditing={false}/>
@@ -2086,7 +2083,7 @@ export default class itemCard extends React.PureComponent
                                             }}
                                             onToolbarPreparing={this.onCustomerGridToolbarPreparing}
                                             >
-                                                <Paging defaultPageSize={5} />
+                                                <Paging defaultPageSize={12} />
                                                 <Editing mode="cell" allowUpdating={true} allowDeleting={true} />
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomer.clmCode")} allowEditing={false}/>
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdCustomer.clmName")} allowEditing={false}/>
@@ -2107,7 +2104,7 @@ export default class itemCard extends React.PureComponent
                                             height={'100%'} 
                                             width={'100%'}
                                             >
-                                                <Paging defaultPageSize={5} />
+                                                <Paging defaultPageSize={12} />
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                                 <Column dataField="NAME" caption={this.t("grdOtherShop.clmName")}  width={247}/>
                                                 <Column dataField="CUSTOMER" caption={this.t("grdOtherShop.clmCustomer")} width={247} />
@@ -2131,7 +2128,7 @@ export default class itemCard extends React.PureComponent
                                             height={'100%'} 
                                             width={'100%'}
                                             >
-                                                <Paging defaultPageSize={5} />
+                                                <Paging defaultPageSize={12} />
                                                 <Editing mode="cell" allowUpdating={false}  />
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdCustomerPrice.clmUser")} />
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdCustomerPrice.clmCode")} />
@@ -2154,7 +2151,7 @@ export default class itemCard extends React.PureComponent
                                             height={'100%'} 
                                             width={'100%'}
                                             >
-                                                <Paging defaultPageSize={5} />
+                                                <Paging defaultPageSize={12} />
                                                 <Editing mode="cell" allowUpdating={false} />
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdSalesPrice.clmUser")} />
                                                 <Column dataField="DATE" caption={this.t("grdSalesPrice.clmDate")} allowEditing={false}/>
@@ -2174,7 +2171,7 @@ export default class itemCard extends React.PureComponent
                                             height={'100%'} 
                                             width={'100%'}
                                             >
-                                                <Paging defaultPageSize={5} />
+                                                <Paging defaultPageSize={12} />
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdSalesContract.clmUser")} />
                                                 <Column dataField="CUSTOMER_CODE" caption={this.t("grdSalesContract.clmCode")} />
@@ -2196,7 +2193,7 @@ export default class itemCard extends React.PureComponent
                                             width={'100%'}
                                             dbApply={false}
                                             >
-                                                <Paging defaultPageSize={5} />
+                                                <Paging defaultPageSize={12} />
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                                 <Column dataField="CUSTOMER" caption={this.t("grdExtraCost.clmCustomer")} />
                                                 <Column dataField="TYPE_NAME" caption={this.t("grdExtraCost.clmTypeName")} />
@@ -2570,7 +2567,7 @@ export default class itemCard extends React.PureComponent
                                             width={'100%'}
                                             dbApply={false}
                                             >
-                                                <Paging defaultPageSize={5} />
+                                                <Paging defaultPageSize={12} />
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                                 <Column dataField="CDATE" caption={this.t("grdItemInfo.cDate")} dataType="datetime" format={"dd/MM/yyyy - HH:mm:ssZ"}/>
                                                 <Column dataField="CUSER_NAME" caption={this.t("grdItemInfo.cUser")} />
@@ -2602,7 +2599,7 @@ export default class itemCard extends React.PureComponent
                                             height={'100%'} 
                                             width={'100%'}
                                             >
-                                                <Paging defaultPageSize={5} />
+                                                <Paging defaultPageSize={12} />
                                                 <Editing mode="cell" allowUpdating={false} allowDeleting={false} />
                                                 <Column dataField="DATE" caption={this.t("grdOtherShop.clmDate")} />
                                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdOtherShop.clmCustomerPrice")} allowEditing={false} dataType="number" format={{ style: "currency", currency: Number.money.code,precision: 2}}/>

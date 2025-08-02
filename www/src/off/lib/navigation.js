@@ -97,7 +97,14 @@ export default class Navigation extends React.PureComponent
             query :"SELECT TOP 1 NAME  FROM COMPANY_VW_01 " ,
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
-        this.firmName.value = tmpData.result.recordset[0].NAME + " - V." + this.core.appInfo.version
+        if(tmpData.result.recordset.length == 0)
+        {
+            App.instance.menuClick({id: 'set_02_001', text: 'Company', path: 'setting/officialSettings/companyCard'})
+        }
+        else
+        {
+            this.firmName.value = tmpData.result.recordset[0].NAME + " - V." + this.core.appInfo.version
+        }
     }
     async mergeMenu(tmpMenu,tmpMenuData)
     {
