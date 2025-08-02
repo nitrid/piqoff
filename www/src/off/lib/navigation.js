@@ -92,20 +92,19 @@ export default class Navigation extends React.PureComponent
             path: 'main.js',
             pagePrm:tmpFavMenuData
         })
-        
+
         let tmpQuery = 
         {
             query :"SELECT TOP 1 NAME  FROM COMPANY_VW_01 " ,
         }
         let tmpData = await this.core.sql.execute(tmpQuery) 
-
-        if(tmpData.result.recordset.length > 0)
+        if(tmpData.result.recordset.length == 0)
         {
-            this.firmName.value = tmpData.result.recordset[0].NAME + " - V." + this.core.appInfo.version
+            App.instance.menuClick({id: 'set_02_001', text: 'Company', path: 'setting/officialSettings/companyCard'})
         }
         else
         {
-            this.firmName.value = "... - V." + this.core.appInfo.version
+            this.firmName.value = tmpData.result.recordset[0].NAME + " - V." + this.core.appInfo.version
         }
     }
     async mergeMenu(tmpMenu,tmpMenuData)

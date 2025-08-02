@@ -21,3 +21,7 @@
   ayarlanırken verilen isim buralara da verilecek.
 - Security bölümü Resim4 deki gibi ayarlanacak.
 - Server Options bölümü Resim5 deki gibi ayarlanacak ve Ok butonuna basıldığında başarılı şekilde eklenmiş olacaktır.
+
+
+# RESIM AKTARIMI
+- Resimler mysql ile connectoru yapıldıı yerde uygulamada _0.jpg yazarak aktarılır
