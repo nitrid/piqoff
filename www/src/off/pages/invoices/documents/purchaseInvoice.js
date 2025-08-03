@@ -1479,7 +1479,7 @@ export default class purchaseInvoice extends DocBase
             options:
             {
                 icon: 'add',
-                validationGroup: 'frmDocItems' + this.tabIndex,
+                validationGroup: 'frmDoc' + this.tabIndex,
                 onClick: (async (c)=>
                 {
                     if(c.validationGroup.validate().status == "valid")
@@ -1531,7 +1531,7 @@ export default class purchaseInvoice extends DocBase
             options:
             {
                 icon: 'add',
-                validationGroup: 'frmDocItems' + this.tabIndex,
+                validationGroup: 'frmDoc' + this.tabIndex,
                 text: this.t("serviceAdd"),
                 onClick: (async (c)=>
                 {
@@ -1585,7 +1585,7 @@ export default class purchaseInvoice extends DocBase
             options:
             {
                 icon: 'add',
-                validationGroup: 'frmDocItems' + this.tabIndex,
+                validationGroup: 'frmDoc' + this.tabIndex,
                 text: this.lang.t("collectiveItemAdd"),
                 onClick: (async (c)=>
                 {

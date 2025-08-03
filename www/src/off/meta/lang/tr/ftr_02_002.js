@@ -147,6 +147,7 @@ const  ftr_02_002 =
         clmSubPrice : "Alt Birim Fiyatı",
         clmSubFactor : "Katsayı",
         clmPartiLot : "Parti Lot",
+        clmUnit : "Birim",
     },
     pg_partiLot : 
     {
@@ -583,6 +584,9 @@ const  ftr_02_002 =
         encaissement : "Vadeli",
         debit : "Peşin",
     },
+    dispatchWarning : "Bekleyen irsaliye bulunmaktadır.",
+    orderWarning : "Bekleyen sipariş bulunmaktadır.",
+    txtOpenBalance : "Açık Bakiye",
 }
 
 export default ftr_02_002

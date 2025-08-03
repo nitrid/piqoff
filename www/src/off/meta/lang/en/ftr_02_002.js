@@ -153,6 +153,7 @@ const  ftr_02_002 =
         clmSubPrice : "Sub Price",
         clmSubFactor : "Factor",
         clmPartiLot : "Lot Code",
+        clmUnit : "Unit",
     },
     pg_partiLot : 
     {
@@ -587,6 +588,9 @@ const  ftr_02_002 =
         encaissement : "Deferred",
         debit : "Cash",
     },
+    dispatchWarning : "There are pending dispatches.",
+    orderWarning : "There are pending orders.",
+    txtOpenBalance : "Open Balance",
 }
 
 export default ftr_02_002

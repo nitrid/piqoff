@@ -147,6 +147,7 @@ const  ftr_02_002 =
         clmSubPrice : "Stückpreis", 
         clmSubFactor : "Faktor",
         clmPartiLot : "Chargennummer",
+        clmUnit : "Einheit",
     },
     msgControlOfDispatch: 
     {
@@ -626,5 +627,8 @@ const  ftr_02_002 =
         encaissement : "Kassierung",   
         debit : "Lastschrift",   
     },
+    dispatchWarning : "Es gibt offene Lieferscheine.",
+    orderWarning : "Es gibt offene Bestellungen.",
+    txtOpenBalance : "Offener Saldo",
 }
 export default ftr_02_002

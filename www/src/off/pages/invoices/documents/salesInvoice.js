@@ -222,8 +222,8 @@ export default class salesInvoice extends DocBase
         this.popItemSelect.selectQuery = 
         {
             query : `SELECT ITEMS.GUID,ITEMS.TYPE,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,ITEMS.COST_PRICE,ITEMS.UNIT,ITEMS.STATUS,
-                    ISNULL(GRP.ORGINS,'') AS ORGINS,ISNULL(GRP.UNIT_SHORT,'') AS UNIT_SHORT,ISNULL(GRP.PARTILOT,0) AS PARTILOT,
-                    ISNULL(GRP.MAIN_GRP_NAME,'') AS MAIN_GRP_NAME,ISNULL(GRP.RAYON_NAME,'') AS RAYON_NAME,
+                    ISNULL(GRP.ORGINS,'') AS ORGINS,ISNULL(GRP.UNIT_SHORT,'') AS UNIT_SHORT,ISNULL(GRP.UNIT_NAME,'') AS UNIT_NAME,
+                    ISNULL(GRP.PARTILOT,0) AS PARTILOT,ISNULL(GRP.MAIN_GRP_NAME,'') AS MAIN_GRP_NAME,ISNULL(GRP.RAYON_NAME,'') AS RAYON_NAME,
                     ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = ITEMS.GUID AND ITEM_UNIT.ID = '{UNIT_ID}' AND DELETED = 0),1) AS SUB_FACTOR,
                     ISNULL((SELECT TOP 1 SYMBOL FROM UNIT WHERE UNIT.ID = '{UNIT_ID}'),'') AS SUB_SYMBOL,
                     (SELECT [dbo].[FN_PRICE] (ITEMS.GUID,1,dbo.GETDATE(),'{INPUT}','{OUTPUT}','{PRICE_LIST_NO}',0,0)) AS PRICE 
@@ -325,6 +325,10 @@ export default class salesInvoice extends DocBase
                 >  
                 </NdTextBox>
             )
+        }
+        if(e.column.dataField == "UNIT")
+        {
+            return this.popItemSelect.cellRoleRender(e)
         }
         if(e.column.dataField == "DISCOUNT")
         {
@@ -580,9 +584,11 @@ export default class salesInvoice extends DocBase
             }
             
             this.docObj.docItems.dt()[pIndex].ORIGIN = pData.ORGINS
+            this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
+            this.docObj.docItems.dt()[pIndex].UNIT_NAME = pData.UNIT_NAME
+            this.docObj.docItems.dt()[pIndex].UNIT_SHORT = pData.UNIT_SHORT
             this.docObj.docItems.dt()[pIndex].SUB_FACTOR = pData.SUB_FACTOR
             this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = pData.SUB_SYMBOL
-            this.docObj.docItems.dt()[pIndex].UNIT_SHORT = pData.UNIT_SHORT
 
             this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
             this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
@@ -590,7 +596,6 @@ export default class salesInvoice extends DocBase
             this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
             this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
             this.docObj.docItems.dt()[pIndex].COST_PRICE = pData.COST_PRICE
-            this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
             this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
             this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity / this.docObj.docItems.dt()[pIndex].SUB_FACTOR
             this.docObj.docItems.dt()[pIndex].LINE_NO = this.docObj.docItems.dt().max("LINE_NO") + 1
@@ -817,7 +822,7 @@ export default class salesInvoice extends DocBase
                 tmpQuery.value = [this.tagItemCode.value[i]]
             
                 let tmpData = await this.core.sql.execute(tmpQuery) 
-                console.log(tmpData)
+                
                 if(tmpData.result.recordset.length > 0)
                 {
                     if(typeof this.multiItemData.where({'CODE':tmpData.result.recordset[0].CODE})[0] == 'undefined')
@@ -1082,7 +1087,8 @@ export default class salesInvoice extends DocBase
             tmpDt.selectCmd = 
             {
                 query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,EXPIRY_DAY,TAX_NO,PRICE_LIST_NO,VAT_ZERO,
-                        ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE 
+                        ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE, 
+                        ISNULL((SELECT dbo.FN_CUSTOMER_BALANCE(GUID,GETDATE())),0) AS BALANCE
                         FROM CUSTOMER_VW_01 WHERE GUID = @GUID`,
                 param : ['GUID:string|50'],
                 value : [pData.GUID]
@@ -1095,7 +1101,45 @@ export default class salesInvoice extends DocBase
                 {
                     this.frmDocItems.option('disabled',false)
                 }
+                
+                // Sipariş ve İrsaliye Uyarısı ************************************************************************************* */
+                if(this.prmObj.filter({ID:'dispatchOrderWarning',USERS:this.user.CODE}).getValue().value)
+                {
+                    let tmpDispatchDt = new datatable()
 
+                    tmpDispatchDt.selectCmd = 
+                    {
+                        query : `SELECT 
+                                ISNULL((SELECT TOP 1 1 FROM DOC_ITEMS_VW_01 WHERE INPUT = @CUSTOMER AND 
+                                INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND 
+                                TYPE = 1 AND ITEM_CODE <> 'INTERFEL' AND REBATE = 0 AND DOC_TYPE IN(40)),0) AS DISPATCHS,
+                                ISNULL((SELECT TOP 1 1 FROM DOC_ORDERS_VW_01 WHERE INPUT = @CUSTOMER AND 
+                                SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN (60)),0) AS ORDERS`,
+                        param : ['CUSTOMER:string|50'],
+                        value : [ tmpDt[0].GUID]
+                    }
+
+                    await tmpDispatchDt.refresh()
+                    
+                    if(tmpDispatchDt.length > 0)
+                    {
+                        if(tmpDispatchDt[0].DISPATCHS == 1)
+                        {
+                            await this.toast.show({message:this.t("dispatchWarning"),type:"warning"})
+                        }
+                        if(tmpDispatchDt[0].ORDERS == 1)
+                        {
+                            setTimeout(() => { this.toast.show({message:this.t("orderWarning"),type:"warning"}) }, 3000);
+                        }
+                    }
+                }
+                //******************************************************************************************************************** */
+                // Açık Bakiye ****************************************************************************************************** */
+                if(typeof this.txtOpenBalance != 'undefined')
+                {
+                    this.txtOpenBalance.value = tmpDt[0].BALANCE.toFixed(2)
+                }
+                //******************************************************************************************************************** */
                 this.docObj.dt()[0].INPUT = tmpDt[0].GUID
                 this.docObj.docCustomer.dt()[0].INPUT = tmpDt[0].GUID
                 this.docObj.dt()[0].INPUT_CODE = tmpDt[0].CODE
@@ -2077,6 +2121,8 @@ export default class salesInvoice extends DocBase
                                             <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={240} editCellRender={this.cellRoleRender}/>
                                             <Column dataField="ORIGIN" caption={this.t("grdSlsInv.clmOrigin")} width={60} allowEditing={true} editCellRender={this.cellRoleRender} />
                                             <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this.cellRoleRender} allowEditing={this.sysParam.filter({ID:'fixedUnitForCondition',USERS:this.user.CODE}).getValue() == true ? false : true}/>
+                                            <Column dataField="UNIT" caption={this.t("grdSlsInv.clmUnit")} width={70} allowEditing={true} editCellRender={this.cellRoleRender} 
+                                            cellRender={(e)=>{return e.data.UNIT_NAME}}/>
                                             <Column dataField="SUB_FACTOR" caption={this.t("grdSlsInv.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsInv.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                             <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} editorOptions={{step:0}}/>
@@ -2093,10 +2139,7 @@ export default class salesInvoice extends DocBase
                                             <Column dataField="LOT_CODE" caption={this.t("grdSlsInv.clmPartiLot")} width={100} allowEditing={false} visible={false}/>
                                             <Column dataField="DESCRIPTION" caption={this.t("grdSlsInv.clmDescription")} width={100} />
                                         </NdGrid>
-                                        <ContextMenu
-                                        dataSource={this.rightItems}
-                                        width={200}
-                                        target={"#grdSlsInv"+this.tabIndex}
+                                        <ContextMenu dataSource={this.rightItems} width={200} target={"#grdSlsInv"+this.tabIndex}
                                         onItemClick={(async(e)=>
                                         {
                                             if(e.itemData.text == this.t("getDispatch"))
@@ -2129,7 +2172,6 @@ export default class salesInvoice extends DocBase
                                         <div className="row px-2 pt-1 pb-2">
                                             <div className="col-12">
                                                 <NdForm colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
-                                                    {/* Ara Toplam */}
                                                     <NdEmptyItem colSpan={2}/>
                                                     <NdItem>
                                                         <NdLabel text={this.t("txtAmount")} alignment="right" />
@@ -2255,8 +2297,13 @@ export default class salesInvoice extends DocBase
                                                         }
                                                         />
                                                     </NdItem>
-                                                    {/* KDV */}
-                                                    <NdEmptyItem colSpan={3}/>
+                                                    {/* Açık Bakiye */}
+                                                    <NdItem>
+                                                        <NdLabel text={this.t("txtOpenBalance")} alignment="right" />
+                                                        <NdTextBox id="txtOpenBalance" parent={this} simple={true} readOnly={true} maxLength={32} value={0}/>
+                                                    </NdItem>
+                                                    <NdEmptyItem colSpan={2}/>
+                                                    {/* Genel Toplam */}
                                                     <NdItem>
                                                         <NdLabel text={this.t("txtTotal")} alignment="right" />
                                                         <NdTextBox id="txtTotal" parent={this} simple={true} readOnly={true} dt={{data:this.docObj.dt('DOC'),field:"TOTAL"}}

@@ -429,6 +429,37 @@ export default class NdDocItemSelect extends NdBase
                 />  
             )
         }
+        if(e.column.dataField == "UNIT")
+        {
+            const itemGuid = e.data.ITEM
+
+            return (
+                <NdSelectBox id={"txtGrdUnit"+e.rowIndex} parent={this} simple={true} displayExpr="NAME" valueExpr="GUID"
+                value={e.value}
+                data={{source:
+                {
+                    select:
+                    {
+                        query : `SELECT GUID,TYPE,ID,NAME,SYMBOL,FACTOR FROM ITEM_UNIT_VW_01 
+                        WHERE ITEM_GUID = '${itemGuid}' AND ITEM_GUID <> '00000000-0000-0000-0000-000000000000' 
+                        AND TYPE IN (0,2) ORDER BY TYPE ASC`
+                    },
+                    sql:this.props.parent.core.sql
+                }}}  
+                onSelectionChanged={(c)=>
+                {
+                    console.log(e)
+                    if(c.selectedItem != null)
+                    {
+                        e.data.UNIT = c.selectedItem.GUID
+                        e.data.UNIT_NAME = c.selectedItem.NAME
+                        e.data.UNIT_SHORT = c.selectedItem.SYMBOL
+                        e.data.UNIT_FACTOR = c.selectedItem.FACTOR
+                    }
+                }}              
+                />
+            )
+        }
     }
     render()
     {

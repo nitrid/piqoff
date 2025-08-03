@@ -149,6 +149,7 @@ const  ftr_02_002 =
         clmSubPrice : "Prix unitaire", 
         clmSubFactor : "Coefficient",
         clmPartiLot : "Numéro de lot",
+        clmUnit : "Unité",
     },
     msgControlOfDispatch: 
     {
@@ -628,5 +629,8 @@ const  ftr_02_002 =
         encaissement : "Encaissement",   
         debit : "Débit",   
     },
+    dispatchWarning : "Il y a des bons de livraison en attente.",
+    orderWarning : "Il y a des commandes en attente.",
+    txtOpenBalance : "Solde ouvert",
 }
 export default ftr_02_002

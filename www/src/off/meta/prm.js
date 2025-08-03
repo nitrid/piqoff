@@ -2198,6 +2198,25 @@ export const prm =
             CAPTION : "Dizayn Tagı"
         }
     },
+    // dispatchOrderWarning
+    {
+        TYPE : 1,
+        ID :"dispatchOrderWarning",
+        VALUE : 
+        {
+            value : true
+        },
+        SPECIAL : "",
+        PAGE : "ftr_02_002",
+        ELEMENT : "",
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Satış Faturası",
+            CAPTION : "Sipariş ve İrsaliye Uyarısı"
+        }
+    },
     //#endregion
     //#region Fire Alış Faturası
     //txtRef
