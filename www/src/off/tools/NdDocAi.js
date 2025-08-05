@@ -13,7 +13,6 @@ import NdTextBox from '../../core/react/devex/textbox.js'
 import NdDatePicker from '../../core/react/devex/datepicker.js';
 import NdPopGrid from '../../core/react/devex/popgrid.js';
 
-
 export default class NdDocAi extends Base
 {
     constructor(props)
@@ -53,20 +52,17 @@ export default class NdDocAi extends Base
 
             if(typeof pData.kind != 'undefined' && pData.kind == 'number' && (typeof pType != 'undefined' && pType != 'string'))
             {
-                console.log(pData)
                 tmpValue = Number(typeof tmpValue == 'undefined' || tmpValue == '' ? 0 : tmpValue)
             } 
         }
         else if(typeof pData != 'undefined' && pType == 'price')
         {
-            console.log(pData)
             if(typeof pData.content != 'undefined')
             {
                 tmpValue = pType == 'string' ? pData.content : this.parseNumber(pData.content)
-                console.log(tmpValue)
+
                 if(typeof tmpValue == 'string' && tmpValue.includes(':'))
                 {
-                    console.log(45455)
                     tmpValue = pType == 'string' ? pData.value : this.parseNumber(pData.value)
                 }
             }
@@ -79,19 +75,16 @@ export default class NdDocAi extends Base
     }
     cellRoleRender(e)
     {
-        console.log(this)
         if(e.column.dataField == "ItemCode")
         {
             return (
                 <NdTextBox id={"txtGrdItemsCode"+e.rowIndex} parent={this} simple={true} 
                 upper={true}
                 value={e.value}
-
                 onValueChanged={(v)=>
                 {
                     e.value = v.value
                 }}
-
                 button=
                 {
                     [
@@ -102,20 +95,19 @@ export default class NdDocAi extends Base
                             {
                                 this.pg_txtItemsCode.show()
                                 this.pg_txtItemsCode.onClick = (data) =>
-                                    {
-                                        console.log(e)
-                                        console.log(this.grdList.devGrid.refresh())
-                                        console.log(e.rowIndex)        
-                                        e.key.ItemCode = data[0].CODE  
-                                        e.key.ItemCost = data[0].COST_PRICE  
-                                        e.key.ItemGuid = data[0].GUID  
-                                        e.key.ItemName = data[0].NAME  
-                                        e.key.ItemType = data[0].ITEM_TYPE  
-                                        e.key.ItemUnit = data[0].UNIT
-                                        e.key.ItemVat = data[0].VAT
-                                                                   
-                                        this.grdList.devGrid.refresh
-                                    }
+                                {
+                                    e.key.ItemCode = data[0].CODE  
+                                    e.key.ItemCost = data[0].COST_PRICE  
+                                    e.key.ItemGuid = data[0].GUID  
+                                    e.key.ItemName = data[0].NAME  
+                                    e.key.ItemType = data[0].ITEM_TYPE  
+                                    e.key.ItemUnit = data[0].UNIT
+                                    e.key.ItemVat = data[0].VAT
+                                    e.key.ItemTotal = Number((e.key.Quantity * e.key.UnitPrice) -((e.key.Quantity * e.key.UnitPrice) * (e.key.DiscountRate / 100))).round(2)
+                                    this.grdList.devGrid.refresh(true)
+                                    this.grdList.devGrid.repaint()
+                                    this.txtRealHT.value = this.grdList.data.datatable.sum('ItemTotal')
+                                }
                             }
                         },
                     ]
@@ -150,7 +142,7 @@ export default class NdDocAi extends Base
     async getDoc(pData)
     {
         this.importData = undefined
-        App.instance.setState({isExecute:true})
+        App.instance.loading.show()
         
         pData.VendorTaxId = typeof pData.VendorTaxId != 'undefined' ? pData.VendorTaxId.replaceAll(' ','') : ''
         pData.InvoiceDate = typeof pData.InvoiceDate != 'undefined' ? moment(pData.InvoiceDate) : moment(new Date())
@@ -209,19 +201,20 @@ export default class NdDocAi extends Base
                 {
                     pData.Item[i].Quantity = this.getValue(pData.Item[i].Quantity)
                 }
-                console.log(pData.Item[i].UnitPrice)
-                console.log(Number(this.getValue(pData.Item[i].UnitPrice)).round(5))
                 
+                pData.Item[i].Vat = typeof this.getValue(pData.Item[i].Tax) == 'undefined' ? 0 : this.getValue(pData.Item[i].Tax)
                 pData.Item[i].Amount = typeof this.getValue(pData.Item[i].Amount) == 'undefined' ? 0 : this.getValue(pData.Item[i].Amount)
                 pData.Item[i].UnitPrice = typeof this.getValue(pData.Item[i].UnitPrice,'price') == 'undefined' ? 0 : Number(this.getValue(pData.Item[i].UnitPrice,'price')).round(5) //typeof pData.Item[i].UnitPrice == 'undefined' ? 0 : Number(pData.Item[i].Amount / pData.Item[i].Quantity).round(5)
                 pData.Item[i].Unit = typeof this.getValue(pData.Item[i].Unit) == 'undefined' ? '' : this.getValue(pData.Item[i].Unit) //typeof pData.Item[i].Unit == 'undefined' ? '' : pData.Item[i].Unit
                 pData.Item[i].DiscountRate = typeof this.getValue(pData.Item[i].DiscountRate,'string') == 'undefined' ? 0 : this.getValue(pData.Item[i].DiscountRate,'string')
+                
                 if(typeof pData.Item[i].DiscountRate == 'string')
                 {
                     pData.Item[i].DiscountRate = parseFloat(pData.Item[i].DiscountRate.replace("%", "").trim());
                 }
                 
                 let tmpItem = await this.getItem(pData.Item[i].ProductCode,pData.CustomerGuid)
+                
                 if(typeof tmpItem != 'undefined')
                 {
                     pData.Item[i].ItemCode = tmpItem.ITEM_CODE
@@ -232,7 +225,7 @@ export default class NdDocAi extends Base
                     pData.Item[i].ItemUnit = tmpItem.UNIT
                     pData.Item[i].ItemCost = tmpItem.COST_PRICE
                     pData.Item[i].ItemVat = tmpItem.VAT
-               
+                    pData.Item[i].ItemTotal = Number((pData.Item[i].Quantity * pData.Item[i].UnitPrice) - ((pData.Item[i].Quantity * pData.Item[i].UnitPrice) * (pData.Item[i].DiscountRate / 100))).round(2)
                 }
                 else
                 {
@@ -244,9 +237,14 @@ export default class NdDocAi extends Base
                     pData.Item[i].ItemUnit = '00000000-0000-0000-0000-000000000000'
                     pData.Item[i].ItemCost = 0
                     pData.Item[i].ItemVat = 0
+                    pData.Item[i].ItemTotal = 0
                 }
             }
-
+            
+            pData.Item.forEach(item => 
+            {
+                this.txtRealHT.value = Number(this.txtRealHT.value) + Number(item.ItemTotal)
+            })
 
             pData.Item = pData.Item.filter(item => typeof item.ProductCode === "string" && item.ProductCode.trim() !== "");
             await this.grdList.dataRefresh({source:pData.Item});
@@ -263,7 +261,7 @@ export default class NdDocAi extends Base
 
             await dialog(tmpConfObj);
         }
-        App.instance.setState({isExecute:false})
+        App.instance.loading.hide()
     }
     getCustomer(pVatId)
     {
@@ -362,11 +360,6 @@ export default class NdDocAi extends Base
                                 return
                             }
                         }
-                        else
-                        {
-                            console.log(barcodeQuery)
-                            console.log(barcodeData.result.err)
-                        }
                     }
                 }
                 else
@@ -390,6 +383,68 @@ export default class NdDocAi extends Base
         tmpVal = tmpVal.toFixed(2)
         
         return tmpVal;
+    }
+    multiCodeAdd(pData)
+    {
+        return new Promise(async resolve => 
+        {
+            let isMsg = false
+
+            for(let i = 0; i < pData.Item.length; i++)
+            {
+                let item = pData.Item[i]
+                
+                let tmpQuery = 
+                {
+                    query : `SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER AND CODE = @CODE AND DELETED = 0`,
+                    param : ['ITEM:string|50','CUSTOMER:string|50','CODE:string|25'],
+                    value : [item.ItemGuid,this.importData.CustomerGuid,item.ProductCode]
+                }
+
+                let tmpData = await this.core.sql.execute(tmpQuery)
+                
+                if(tmpData.result.recordset.length == 0)
+                {
+                    if(!isMsg)
+                    {
+                        isMsg = true
+
+                        let tmpConfObj =
+                        {
+                            id:'msgMultiCodeAdd',showTitle:true,title:this.lang.t("popDocAi.msgMultiCodeAdd.title"),showCloseButton:true,width:'500px',height:'auto',
+                            button:[{id:"btn01",caption:this.lang.t("popDocAi.msgMultiCodeAdd.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("popDocAi.msgMultiCodeAdd.btn02"),location:'after'}],
+                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popDocAi.msgMultiCodeAdd.msg")}</div>)
+                        }
+
+                        let tmpResult = await dialog(tmpConfObj);
+                        
+                        if(tmpResult == 'btn02')
+                        {
+                            resolve()
+                            return
+                        }
+                    }
+
+                    let tmpQueryInsert =
+                    {
+                        query : `EXEC [dbo].[PRD_ITEM_MULTICODE_INSERT] @CUSER = @PCUSER, @ITEM = @PITEM, @CUSTOMER = @PCUSTOMER, @CODE = @PCODE`,
+                        param : ['PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PCODE:string|25'],
+                        value : [this.core.auth.data.CODE,item.ItemGuid,this.importData.CustomerGuid,item.ProductCode]
+                    }
+                    await this.core.sql.execute(tmpQueryInsert)
+                    
+                    let tmpQueryPriceInsert =
+                    {
+                        query : `EXEC [dbo].[PRD_ITEM_PRICE_INSERT] @CUSER = @PCUSER, @ITEM = @PITEM, @CUSTOMER = @PCUSTOMER, @TYPE = @PTYPE, @PRICE = @PPRICE, @QUANTITY = @PQUANTITY`,
+                        param : ['PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PTYPE:string|25','PPRICE:string|25','PQUANTITY:string|25'],
+                        value : [this.core.auth.data.CODE,item.ItemGuid,this.importData.CustomerGuid,'1',item.UnitPrice,1]
+                    }
+                    await this.core.sql.execute(tmpQueryPriceInsert)
+                }
+            }
+            resolve()
+        })
+        
     }
     render()
     {
@@ -433,7 +488,7 @@ export default class NdDocAi extends Base
                             {
                                 const formData = new FormData();
                                 formData.append('file', this.files[0]);
-                                App.instance.setState({isExecute:true})
+                                App.instance.loading.show()
                                 fetch('https://docai-gqgud5cga6f2bzb8.francecentral-01.azurewebsites.net/docai', 
                                 {
                                     method: 'POST',
@@ -441,7 +496,7 @@ export default class NdDocAi extends Base
                                 })
                                 .then(response => 
                                 {
-                                    App.instance.setState({isExecute:false})
+                                    App.instance.loading.hide()
                                     if (!response.ok) 
                                     {
                                         throw new Error('Dosya yükleme başarısız. HTTP Hata: ' + response.status);
@@ -450,10 +505,9 @@ export default class NdDocAi extends Base
                                 })
                                 .then(data => 
                                 {
-                                    App.instance.setState({isExecute:false})
+                                    App.instance.loading.hide()
                                     if(data.success)
                                     {
-                                        console.log(data.result)
                                         this.getDoc(data.result)
                                     }
                                     else
@@ -463,7 +517,7 @@ export default class NdDocAi extends Base
                                 })
                                 .catch(error => 
                                 {
-                                    App.instance.setState({isExecute:false})
+                                    App.instance.loading.hide()
                                     console.error('Hata:', error.message);
                                 });
                             }
@@ -526,9 +580,47 @@ export default class NdDocAi extends Base
                                     {
                                         e.cellElement.style.backgroundColor = "red"
                                     }
+                                    if(e.rowType === "data" && e.column.dataField === "ItemVat" && e.data.Vat != e.data.ItemVat)
+                                    {
+                                        e.cellElement.style.backgroundColor = "red"
+                                    }
+                                    if(e.rowType === "data" && e.column.dataField === "Amount" && e.data.ItemTotal != e.data.Amount)
+                                    {
+                                        e.cellElement.style.backgroundColor = "red"
+                                    }
+                                }}
+                                onEditorPreparing={(e)=>
+                                {
+                                    if(e.dataField == 'Quantity')
+                                    {
+                                        e.editorOptions.onValueChanged = (c) =>
+                                        {
+                                            e.row.data.Quantity = c.value
+                                            e.row.data.ItemTotal = Number((c.value * e.row.data.UnitPrice) - ((c.value * e.row.data.UnitPrice) * (e.row.data.DiscountRate / 100))).round(2)
+                                            this.txtRealHT.value = this.grdList.data.datatable.sum('ItemTotal')
+                                        }
+                                    }
+                                    if(e.dataField == 'UnitPrice')
+                                    {
+                                        e.editorOptions.onValueChanged = (c) =>
+                                        {
+                                            e.row.data.UnitPrice = c.value
+                                            e.row.data.ItemTotal = Number((c.value * e.row.data.Quantity) - ((c.value * e.row.data.Quantity) * (e.row.data.DiscountRate / 100))).round(2)
+                                            this.txtRealHT.value = this.grdList.data.datatable.sum('ItemTotal')
+                                        }
+                                    }
+                                    if(e.dataField == 'DiscountRate')
+                                    {
+                                        e.editorOptions.onValueChanged = (c) =>
+                                        {
+                                            e.row.data.DiscountRate = c.value
+                                            e.row.data.ItemTotal = Number((e.row.data.Quantity * e.row.data.UnitPrice) - ((e.row.data.Quantity * e.row.data.UnitPrice) * (c.value / 100))).round(2)
+                                            this.txtRealHT.value = this.grdList.data.datatable.sum('ItemTotal')
+                                        }
+                                    }
                                 }}
                                 >
-                                     <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
+                                    <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
                                     <Paging defaultPageSize={10} />
                                     <Pager visible={true} allowedPageSizes={[5,10,20,50,100]} showPageSizeSelector={true} />
                                     <Scrolling mode="standart" />
@@ -538,25 +630,38 @@ export default class NdDocAi extends Base
                                     <Column dataField="ItemName" caption={this.lang.t("popDocAi.clmItemName")} allowEditing={false} width={350} allowHeaderFiltering={false}/>
                                     <Column dataField="Quantity" caption={this.lang.t("popDocAi.clmQuantity")}  width={70} dataType={'number'}/>
                                     <Column dataField="UnitPrice" caption={this.lang.t("popDocAi.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                                    <Column dataField="DiscountRate" caption={this.lang.t("popDocAi.clmDiscount") + ' %'} dataType={'number'}   width={70} allowHeaderFiltering={false}/>
-                                    <Column dataField="Amount" caption={this.lang.t("popDocAi.clmAmount")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={80} allowHeaderFiltering={false}/>
+                                    <Column dataField="DiscountRate" caption={this.lang.t("popDocAi.clmDiscount") + ' %'} dataType={'number'} width={70} allowHeaderFiltering={false}/>
+                                    <Column dataField="ItemVat" caption={this.lang.t("popDocAi.clmVat")} dataType={'number'} width={100} allowHeaderFiltering={false} allowEditing={true}
+                                    cellRender={(e)=>
+                                    {
+                                        return Number(e.data.Vat).round(2) + '%' + ' / ' + Number(e.data.ItemVat).round(2) + '%'
+                                    }}/>
+                                    <Column dataField="Amount" caption={this.lang.t("popDocAi.clmAmount")} allowEditing={false} width={80} allowHeaderFiltering={false} alignment={'right'}
+                                    cellRender={(e)=>
+                                    {
+                                        return Number(e.data.Amount).round(2).toFixed(2) + ' / ' + Number(e.data.ItemTotal).round(2).toFixed(2)
+                                    }}
+                                    />
                                 </NdGrid>
                             </div>
                         </div>
                     </Item>
                     <Item>
                         <div className="row pb-2">
-                            <div className="col-3 offset-9">
+                            <div className="col-4">
+                                <NdTextBox id="txtRealHT" parent={this} title={this.lang.t("popDocAi.txtRealHT") + ":"} readOnly={true}/>
+                            </div>
+                            <div className="col-4 offset-4">
                                 <NdTextBox id="txtHT" parent={this} title={this.lang.t("popDocAi.txtHT") + ":"} readOnly={true}/>
                             </div>
                         </div>
                         <div className="row pb-2">
-                            <div className="col-3 offset-9">
+                            <div className="col-4 offset-8">
                                 <NdTextBox id="txtTax" parent={this} title={this.lang.t("popDocAi.txtTax") + ":"} readOnly={true}/>
                             </div>
                         </div>
                         <div className="row pb-2">
-                            <div className="col-3 offset-9">
+                            <div className="col-4 offset-8">
                                 <NdTextBox id="txtTTC" parent={this} title={this.lang.t("popDocAi.txtTTC") + ":"} readOnly={true}/>
                             </div>
                         </div>
@@ -565,7 +670,27 @@ export default class NdDocAi extends Base
                         <NdButton id="btnImport" parent={this} text={this.lang.t('popDocAi.btnImport')} type="default" width={'100%'}
                         onClick={async()=>
                         {
+                            await this.multiCodeAdd(this.importData)
+                            
+                            if(this.txtRealHT.value != this.txtHT.value)
+                            {
+                                let tmpConfObj =
+                                {
+                                    id:'msgHTControl',showTitle:true,title:this.lang.t("popDocAi.msgHTControl.title"),showCloseButton:true,width:'500px',height:'auto',
+                                    button:[{id:"btn01",caption:this.lang.t("popDocAi.msgHTControl.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("popDocAi.msgHTControl.btn02"),location:'after'}],
+                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popDocAi.msgHTControl.msg")}</div>)
+                                }
+
+                                let tmpResult = await dialog(tmpConfObj);
+                                
+                                if(tmpResult == 'btn02')
+                                {
+                                    return
+                                }
+                            }
+
                             this.popDocAi.hide()
+                            
                             if(typeof this.onImport != 'undefined')
                             {
                                 this.onImport(this.importData)
@@ -595,19 +720,6 @@ export default class NdDocAi extends Base
                     sql:this.core.sql
                 }
             }}
-            button=
-            {
-                [
-                    {
-                        id:'tst',
-                        icon:'more',
-                        onClick:()=>
-                        {
-                            console.log(1111)
-                        }
-                    }
-                ]
-            }
             deferRendering={true}
             >
                 <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={'20%'} />

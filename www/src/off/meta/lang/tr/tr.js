@@ -516,6 +516,7 @@ export const langTr =
         pos_02_019 : "Aylık Ürün Grup Satış Raporu",
         pos_02_020 : "Kullanıcı Bazlı Satış Raporu",
         pos_02_021 : "Pos Satış İstatistik Raporu",
+        pos_02_022 : "Tedarikçiye Bağlı Ürün Grubu Satış Raporu",
         pos_03 :"Operasyonlar",
         pos_03_001 : "Gün Sonu",
         pos_03_002 : "Çekiliş",
@@ -702,9 +703,10 @@ export const langTr =
         txtCustomerName : "Tedarikçi Adı",
         dtDocDate : "Tarih",
         dtShipDate : "Sevk Tarihi",
-        txtHT : "Ara Toplam",
-        txtTax : "Vergi",
-        txtTTC : "Genel Toplam",
+        txtRealHT : "Ara Toplam (Gerçek)",
+        txtHT : "Ara Toplam (Döküman)",
+        txtTax : "Vergi (Döküman)",
+        txtTTC : "Genel Toplam (Döküman)",
         clmItemCode : "Kodu",
         clmMulticode : "T.Kodu",
         clmItemName : "Adı",
@@ -712,12 +714,27 @@ export const langTr =
         clmPrice : "Fiyat",
         clmDiscount : "İndirim",
         clmAmount : "Tutar",
+        clmVat : "Vergi",
         msgCustomerNotFound :
         {
             title : "Dikkat",
             btn01 : "Tamam",
             msg : "Tedarikçi bulunamadığından import işlemini yapamazsınız !"
         },
+        msgHTControl :
+        {
+            title : "Dikkat",
+            btn01 : "Tamam",
+            btn02 : "İptal",
+            msg : "Ara Toplam (Döküman) ile Ara Toplam (Gerçek) eşleşmiyor !"
+        },
+        msgMultiCodeAdd :
+        {
+            title : "Dikkat",
+            btn01 : "Tamam",
+            btn02 : "İptal",
+            msg : "Seçilen tedarikçiye ait tedarikçi ürün kodlarının kaydı yapılacaktır. Emin misiniz ?"
+        }
     },
     popTransport : 
     {
@@ -832,7 +849,7 @@ export const langTr =
     worstProducts : "En Kötü Ürünler",
     topProductGroups : "Ürün Grupları",
     selectProductGroup : "Ürün Grubu Seçin",
-    topSellingProductsInGroup : "Gruptaki En Çok Satan 20 Ürün",
+    topSellingProductsInGroup : "Gruptaki En Çok Satan 50 Ürün",
     chartType : "Grafik Türü",
     barChartPop : "Çubuk Grafik",
     pieChartPop : "Pasta Grafik",
@@ -1084,6 +1101,14 @@ export const langTr =
         status: "Stok Durumu",
         safetyStock: "Güvenlik Stoku",
     },
-            
- 
+    popItemSelect : 
+    {
+        title : "Ürün Seçimi",
+        CODE :  "ÜRÜN KODU",
+        NAME : "ÜRÜN ADI",
+        MULTICODE : "TEDARİKÇİ KODU",
+        PRICE : "FİYAT",
+        MAIN_GRP_NAME : "ANA GRUP",
+        RAYON_NAME : "RAYON",
+    },        
  }

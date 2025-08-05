@@ -522,6 +522,7 @@ export const langFr =
         pos_02_019 : "Rapport de ventes par groupe de produits par mois",
         pos_02_020 : "Rapport de ventes par utilisateur",
         pos_02_021 : "Rapport de ventes statistiques",
+        pos_02_022 : "Rapport de ventes par groupe d'articles par fournisseur",
         pos_03 : "Les opérations", 
         pos_03_001 : "Opérations de fin de journée",
         pos_03_002 : "Tirage au sort",
@@ -708,9 +709,10 @@ export const langFr =
         txtCustomerName : "Nom du fournisseur",
         dtDocDate : "Date",
         dtShipDate : "Date d'expédition",
-        txtHT : "Total HT",
-        txtTax : "Taxe",
-        txtTTC : "Total TTC",
+        txtRealHT : "Total HT (Réel)",
+        txtHT : "Total HT (Document)",
+        txtTax : "Taxe (Document)",
+        txtTTC : "Total TTC (Document)",
         clmItemCode : "Code",
         clmMulticode : "Code multiple",
         clmItemName : "Nom de l'article",
@@ -718,11 +720,26 @@ export const langFr =
         clmPrice : "Prix",
         clmDiscount : "Remise",
         clmAmount : "Montant",
+        clmVat : "Taxe",
         msgCustomerNotFound :
         {
             title : "Attention",
             btn01 : "D'accord",
             msg : "Impossible d'effectuer l'import car le fournisseur n'a pas été trouvé !"
+        },
+        msgHTControl :
+        {
+            title : "Attention",
+            btn01 : "D'accord",
+            btn02 : "Annuler",
+            msg : "Le total HT (document) ne correspond pas au total HT (réel) !"
+        },
+        msgMultiCodeAdd :
+        {
+            title : "Attention",
+            btn01 : "D'accord",
+            btn02 : "Annuler",
+            msg : "Les codes produits du fournisseur sélectionné seront enregistrés. Êtes-vous sûr ?"
         }
     },
     popTransport : 
@@ -1016,5 +1033,14 @@ export const langFr =
     data: "Données",
     item: "Article",
     product: "Produit",
-     
+    popItemSelect : 
+    {
+        title : "Sélectionner Produit",
+        CODE :  "Référence Produit",
+        NAME : "Nom Produit",
+        MULTICODE : "FRN.Code",
+        PRICE : "Prix de Vente",
+        MAIN_GRP_NAME : "Groupe",
+        RAYON_NAME : "Rayon",
+    }, 
  }

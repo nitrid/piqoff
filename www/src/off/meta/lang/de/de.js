@@ -522,6 +522,7 @@ export const langDe =
         pos_02_019 : "Monatlicher Produktgruppen-Verkaufsbericht",
         pos_02_020 : "Benutzer-Verkaufsbericht",
         pos_02_021 : "Verkaufsstatistik-Bericht",
+        pos_02_022 : "Lieferanten-Produktgruppen-Verkaufsbericht",
         pos_03 : "Operationen", 
         pos_03_001 : "Tagesabschluss-Operationen",
         pos_03_002 : "Verlosung",
@@ -708,6 +709,7 @@ export const langDe =
         txtCustomerName : "Lieferantenname",
         dtDocDate : "Datum",
         dtShipDate : "Versanddatum",
+        txtRealHT : "Gesamt ohne MwSt.",
         txtHT : "Gesamt ohne MwSt.",
         txtTax : "Steuer",
         txtTTC : "Gesamt inkl. MwSt.",
@@ -718,11 +720,26 @@ export const langDe =
         clmPrice : "Preis",
         clmDiscount : "Rabatt",
         clmAmount : "Betrag",
+        clmVat : "MwSt.",
         msgCustomerNotFound :
         {
             title : "Achtung",
             btn01 : "Einverstanden",
             msg : "Import kann nicht durchgeführt werden, da der Lieferant nicht gefunden wurde!"
+        },
+        msgHTControl :
+        {
+            title : "Achtung",
+            btn01 : "Einverstanden",
+            btn02 : "Abbrechen",
+            msg : "Der Gesamtbetrag ohne MwSt. (Dokument) entspricht nicht dem Gesamtbetrag ohne MwSt. (Réel)!"
+        },
+        msgMultiCodeAdd :   
+        {
+            title : "Achtung",
+            btn01 : "Einverstanden",
+            btn02 : "Abbrechen",
+            msg : "Die Produktcodes des ausgewählten Lieferanten werden erfasst. Sind Sie sicher?"
         }
     },
     popTransport : 
@@ -1016,5 +1033,14 @@ export const langDe =
     data: "Daten",
     item: "Artikel",
     product: "Produkt",
-     
+    popItemSelect : 
+    {
+        title : "Artikel auswählen",
+        CODE :  "Artikelreferenz",
+        NAME : "Artikelname",
+        MULTICODE : "LFR.Code",
+        PRICE : "Einkaufspreis",
+        MAIN_GRP_NAME : "Hauptgruppe",
+        RAYON_NAME : "Rayon",
+    },
  }

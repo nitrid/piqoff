@@ -506,6 +506,7 @@ export const langEn =
         pos_02_019 : "Monthly Product Group Sales Report",
         pos_02_020 : "User Sales Report",
         pos_02_021 : "Pos Sales Statistical Report",
+        pos_02_022 : "Supplier Product Group Sales Report",
         pos_03 :"Operations",
         pos_03_001 : "End of Day",
         pos_03_002 : "Draw",
@@ -691,9 +692,10 @@ export const langEn =
         txtCustomerName : "Supplier Name",
         dtDocDate : "Date",
         dtShipDate : "Shipment Date",
-        txtHT : "Subtotal",
-        txtTax : "Tax",
-        txtTTC : "Total",
+        txtRealHT : "Subtotal (Real)",
+        txtHT : "Subtotal (Document)",
+        txtTax : "Tax (Document)",
+        txtTTC : "Total (Document)",
         clmItemCode : "Code",
         clmMulticode : "Multi Code",
         clmItemName : "Name",
@@ -701,12 +703,27 @@ export const langEn =
         clmPrice : "Price",
         clmDiscount : "Discount",
         clmAmount : "Amount",
+        clmVat : "Tax",
         msgCustomerNotFound :
         {
             title : "Attention",
             btn01 : "Ok",
             msg : "Supplier not found, cannot perform import operation!"
         },
+        msgHTControl :
+        {
+            title : "Attention",
+            btn01 : "Ok",
+            btn02 : "Cancel",
+            msg : "The subtotal (document) does not match the subtotal (real)!"
+        },
+        msgMultiCodeAdd :   
+        {
+            title : "Attention",
+            btn01 : "Ok",
+            btn02 : "Cancel",
+            msg : "The product codes of the selected supplier will be recorded. Are you sure?"
+        }
     },
     popTransport : 
     {
@@ -852,7 +869,7 @@ export const langEn =
     worstProducts : "Worst Products",
     topProductGroups : "Product Groups",
     selectProductGroup : "Select Product Group",
-    topSellingProductsInGroup : "Top 20 Products in Group",
+    topSellingProductsInGroup : "Top 50 Products in Group",
     chartType : "Chart Type",
     barChartPop : "Bar Chart",
     pieChartPop : "Pie Chart",
@@ -861,7 +878,7 @@ export const langEn =
         topSellingProducts : "Top Selling Products",
         worstSellingProducts : "Worst Selling Products",
         topSellingProductGroups : "Top Selling Product Groups",
-        topSellingProductsInGroup : "Top 20 Products in Group",
+        topSellingProductsInGroup : "Top 50 Products in Group",
     },
     paretoChart : {
         title : "Pareto Chart",
@@ -1016,4 +1033,14 @@ export const langEn =
     data: "Data",
     item: "Item",
     product: "Product",
+    popItemSelect : 
+    {
+        title : "Product Selection",
+        CODE :  "PRODUCT CODE",
+        NAME : "PRODUCT NAME",
+        MULTICODE : "SUPPLIER CODE",
+        PRICE : "PRICE",
+        MAIN_GRP_NAME : "MAIN GROUP",
+        RAYON_NAME : "RAYON",
+    },
 }

@@ -420,7 +420,7 @@ function getBalanceCounter(pTicketNo,pCode)
             }
             else
             {
-                resolve(tmpDt.where({STATUS:false}))
+                resolve(tmpDt.where({STATUS:false})[0])
             }   
         }
         else
