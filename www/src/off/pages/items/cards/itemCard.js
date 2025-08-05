@@ -2480,14 +2480,14 @@ export default class itemCard extends React.PureComponent
                                                             
                                                             tmpQuery = 
                                                             {
-                                                                query : `SELECT NAME FROM ITEM_SUB_GROUP_VW_01 WHERE PARENT = '${tmpGuid}' AND GUID NOT IN (${tmpVal})`,
+                                                                query : `SELECT * FROM ITEM_SUB_GROUP_VW_01 WHERE PARENT = '${tmpGuid}' AND GUID NOT IN (${tmpVal})`,
                                                             }
                                                         }
                                                         else
                                                         {
                                                             tmpQuery = 
                                                             {
-                                                                query : `SELECT NAME FROM ITEM_SUB_GROUP_VW_01 WHERE PARENT = '00000000-0000-0000-0000-000000000000'`,
+                                                                query : `SELECT * FROM ITEM_SUB_GROUP_VW_01 WHERE PARENT = '00000000-0000-0000-0000-000000000000'`,
                                                             }
                                                         }
                                                         
@@ -2504,14 +2504,14 @@ export default class itemCard extends React.PureComponent
                                                                 let tmpVal = this.grdSubGrp.data.datatable.map(item => `'${item.SUB_GUID}'`).join(', ')
                                                                 tmpQuery = 
                                                                 {
-                                                                    query : `SELECT NAME FROM ITEM_SUB_GROUP_VW_01 WHERE PARENT = '00000000-0000-0000-0000-000000000000' AND GUID NOT IN (${tmpVal})`,
+                                                                    query : `SELECT * FROM ITEM_SUB_GROUP_VW_01 WHERE PARENT = '00000000-0000-0000-0000-000000000000' AND GUID NOT IN (${tmpVal})`,
                                                                 }
                                                             }
                                                             else
                                                             {
                                                                 tmpQuery = 
                                                                 {
-                                                                    query : `SELECT NAME FROM ITEM_SUB_GROUP_VW_01 WHERE PARENT = '00000000-0000-0000-0000-000000000000'`,
+                                                                    query : `SELECT * FROM ITEM_SUB_GROUP_VW_01 WHERE PARENT = '00000000-0000-0000-0000-000000000000'`,
                                                                 }
                                                             }
 
@@ -2525,6 +2525,7 @@ export default class itemCard extends React.PureComponent
 
                                                         this.pg_subGroup.onClick = async(e) =>
                                                         {
+                                                            console.log(e)
                                                             this.itemsObj.itemSubGrp.addEmpty()
                                                             
                                                             this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].ITEM_GUID = this.itemsObj.dt()[0].GUID
@@ -2535,6 +2536,7 @@ export default class itemCard extends React.PureComponent
                                                             this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].SUB_CODE = e[0].CODE
                                                             this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].SUB_NAME = e[0].NAME
                                                             this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].SUB_GRP_RANK = e[0].RANK
+                                                            console.log(this.itemsObj.itemSubGrp.dt())
                                                         }
                                                     }}/>
                                                 </div>

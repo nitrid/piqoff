@@ -5,6 +5,7 @@ import ScrollView from 'devextreme-react/scroll-view';
 
 import NdGrid,{Column,Editing} from '../../../../core/react/devex/grid.js';
 import { datatable } from '../../../../core/core.js';
+import { NdToast } from '../../../../core/react/devex/toast.js';
 
 export default class piqPoidUserCard extends React.PureComponent
 {
@@ -146,6 +147,7 @@ export default class piqPoidUserCard extends React.PureComponent
                             </NdGrid>
                         </div>
                     </div>
+                    <NdToast id="toast" parent={this} displayTime={2000} position={{at:"top center",offset:'0px 110px'}}/>
                 </ScrollView>
             </div>
         )
