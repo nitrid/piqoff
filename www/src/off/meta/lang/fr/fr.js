@@ -709,9 +709,10 @@ export const langFr =
         txtCustomerName : "Nom du fournisseur",
         dtDocDate : "Date",
         dtShipDate : "Date d'expédition",
-        txtHT : "Total HT",
-        txtTax : "Taxe",
-        txtTTC : "Total TTC",
+        txtRealHT : "Total HT (Réel)",
+        txtHT : "Total HT (Document)",
+        txtTax : "Taxe (Document)",
+        txtTTC : "Total TTC (Document)",
         clmItemCode : "Code",
         clmMulticode : "Code multiple",
         clmItemName : "Nom de l'article",
@@ -719,11 +720,26 @@ export const langFr =
         clmPrice : "Prix",
         clmDiscount : "Remise",
         clmAmount : "Montant",
+        clmVat : "Taxe",
         msgCustomerNotFound :
         {
             title : "Attention",
             btn01 : "D'accord",
             msg : "Impossible d'effectuer l'import car le fournisseur n'a pas été trouvé !"
+        },
+        msgHTControl :
+        {
+            title : "Attention",
+            btn01 : "D'accord",
+            btn02 : "Annuler",
+            msg : "Le total HT (document) ne correspond pas au total HT (réel) !"
+        },
+        msgMultiCodeAdd :
+        {
+            title : "Attention",
+            btn01 : "D'accord",
+            btn02 : "Annuler",
+            msg : "Les codes produits du fournisseur sélectionné seront enregistrés. Êtes-vous sûr ?"
         }
     },
     popTransport : 
