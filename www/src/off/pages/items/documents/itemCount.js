@@ -31,7 +31,7 @@ export default class itemCount extends React.PureComponent
         this.acsobj = this.access.filter({TYPE:1,USERS:this.user.CODE});
         this.countObj = new itemCountCls();
         this.tabIndex = props.data.tabkey
-
+        
         this.cellRoleRender = this.cellRoleRender.bind(this)
         this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
 
@@ -544,9 +544,9 @@ export default class itemCount extends React.PureComponent
                                         if(i == 0)
                                         {
                                             this.addItem(data[i],e.rowIndex)
-                    }
-                    else
-                    {
+                                        }
+                                        else
+                                        {
                                             let tmpDocItems = {...this.countObj.empty}
                                             tmpDocItems.LINE_NO = this.countObj.dt().length
                                             tmpDocItems.REF = this.txtRef.value

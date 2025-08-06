@@ -5,7 +5,6 @@ import moment from 'moment';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, {Item, Label, EmptyItem} from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
-import { dialog } from '../../../../core/react/devex/dialog.js';
 
 import NdGrid,{Column, ColumnChooser,StateStoring,Paging,Pager,Scrolling,Export, Summary, TotalItem} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js';
@@ -83,7 +82,7 @@ export default class supplierItemGroupReport extends React.PureComponent
                             COUNT(DISTINCT S.ITEM_GUID) AS ITEM_COUNT,
                             AVG(S.COST_PRICE) AS AVG_ITEM_PRICE,
                             COUNT(DISTINCT IM.GUID) AS MULTICODE_COUNT
-                            FROM POS_SALE_FOR_CHARTS_VW_01 S
+                            FROM POS_SALE_VW_01 S
                             INNER JOIN ITEMS_GRP IGRP ON S.ITEM_GUID = IGRP.ITEM
                             INNER JOIN ITEM_GROUP IG ON IGRP.MAIN_GUID = IG.GUID
                             INNER JOIN ITEM_MULTICODE IM ON S.ITEM_GUID = IM.ITEM AND IM.DELETED = 0
@@ -166,8 +165,8 @@ export default class supplierItemGroupReport extends React.PureComponent
                             S.AMOUNT,
                             S.COST_PRICE,
                             C.TITLE AS SUPPLIER_NAME,
-                            IG.NAME AS ITEM_GROUP_NAME
-                            FROM POS_SALE_FOR_CHARTS_VW_01 S
+                                IG.NAME AS ITEM_GROUP_NAME
+                            FROM POS_SALE_VW_01 S
                             INNER JOIN ITEMS_GRP IGRP ON S.ITEM_GUID = IGRP.ITEM
                             INNER JOIN ITEM_GROUP IG ON IGRP.MAIN_GUID = IG.GUID
                             INNER JOIN ITEM_MULTICODE IM ON S.ITEM_GUID = IM.ITEM AND IM.DELETED = 0
@@ -229,8 +228,7 @@ export default class supplierItemGroupReport extends React.PureComponent
                 </div>
                 <div className="row px-2 pt-1" style={{height:'80px'}}>
                     <div className="col-12">
-                        {/* Form'u düzelt - id ekle ve colCount'u kaldır */}
-                        <Form id="frmCriter">
+                        <Form colCount={3} id="frmCriter">
                             {/* dtDate */}
                             <Item colSpan={2}>
                                 <Label text={this.lang.t("dtDate")} alignment="right" />
@@ -406,26 +404,82 @@ export default class supplierItemGroupReport extends React.PureComponent
                             </Item>
                             <EmptyItem colSpan={1}/>
                             
-                            {/* Getir Butonu */}
-                            <Item colSpan={3}>
-                                <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
+                            <Item colSpan={1}>
+                                <EmptyItem/>
                             </Item>
+                            <Item colSpan={1}>
+                                <EmptyItem/>
+                            </Item>
+                            <Item colSpan={1}>
+                                <EmptyItem/>
+                            </Item>
+
                         </Form>
                     </div>
                 </div>
-                {/* Grid */}
-                <div className="row px-2 pt-2">
+                <div className="row px-2 pt-1">
+                    <div className="col-3">
+                    </div>
+                    <div className="col-3">
+                    </div>
+                    <div className="col-3">
+                    </div>
+                    <div className="col-3">
+                        <NdButton text={this.t("btnGet")} type="success" width="100%" onClick={this.btnGetClick}/>
+                    </div>
+                </div>
+                <div className="row px-2 pt-1">
                     <div className="col-12">
                         <NdGrid id="grdSupplierItemGroupReport" parent={this} 
-                        selection={{mode:"multiple"}} 
+                        selection={{mode:"single"}} 
                         showBorders={true}
-                        filterRow={{visible:false}} 
-                        headerFilter={{visible:true}}
                         height={'700px'} 
                         width={'100%'}
+                        filterRow={{visible:true}} 
+                        headerFilter={{visible:true}}
                         columnAutoWidth={true}
-                        onRowDblClick={this.getDetail}
-                        />
+                        allowColumnReordering={true}
+                        allowColumnResizing={true}
+                        loadPanel={{enabled:true}}
+                        onRowDblClick={(e) => {
+                            if(this.cmbSupplier.GUID && this.cmbSupplier.GUID !== '') {
+                                this.getDetail(e)
+                            }
+                        }}
+                        >                            
+                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Paging defaultPageSize={20} /> : <Paging enabled={false} />}
+                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Pager visible={true} allowedPageSizes={[5,10,50]} showPageSizeSelector={true} /> : <Paging enabled={false} />}
+                            {this.sysParam.filter({ID:'pageListControl',USERS:this.user.CODE}).getValue().value == true ? <Scrolling mode="standart" /> : <Scrolling mode="virtual" />}
+                            <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdSupplierItemGroupReport"}/>
+                            <ColumnChooser enabled={true} />
+                            <Export fileName={this.lang.t("menuOff.pos_02_022")} enabled={true} allowExportSelectedData={true} />
+                            <Column dataField="SUPPLIER_CODE" caption={this.t("supplierCode")} visible={true} width={150}/> 
+                            <Column dataField="SUPPLIER_NAME" caption={this.t("supplierName")} visible={true} width={200}/> 
+                            <Column dataField="ITEM_GROUP_CODE" caption={this.t("itemGroupCode")} visible={true} width={150}/> 
+                            <Column dataField="ITEM_GROUP_NAME" caption={this.t("itemGroupName")} visible={true} width={200}/> 
+                            <Column dataField="TICKET_COUNT" caption={this.t("ticketCount")} visible={true} width={120} allowHeaderFiltering={false}/> 
+                            <Column dataField="TOTAL_AMOUNT" caption={this.t("totalAmount")} visible={true} format="€ #,##0.00" width={150} allowHeaderFiltering={false}/> 
+                            <Column dataField="AVG_TICKET_AMOUNT" caption={this.t("avgTicketAmount")} visible={true} format="€ #,##0.00" width={150} allowHeaderFiltering={false}/> 
+                            <Column dataField="ITEM_COUNT" caption={this.t("itemCount")} visible={true} width={120} allowHeaderFiltering={false}/> 
+                            <Column dataField="AVG_ITEM_PRICE" caption={this.t("avgItemPrice")} visible={true} format="€ #,##0.00" width={150} allowHeaderFiltering={false}/> 
+                            <Summary>
+                                <TotalItem
+                                column="TOTAL_AMOUNT"
+                                summaryType="sum"
+                                valueFormat="€ #,##0.00" />
+                                <TotalItem
+                                column="AVG_TICKET_AMOUNT"
+                                summaryType="avg"
+                                valueFormat="€ #,##0.00" />
+                                <TotalItem
+                                column="ITEM_COUNT"
+                                summaryType="sum" />
+                                <TotalItem
+                                column="AVG_ITEM_PRICE"
+                                summaryType="avg"
+                                valueFormat="€ #,##0.00" />
+                            </Summary>
+                        </NdGrid>
                     </div>
                 </div>
                 </ScrollView>

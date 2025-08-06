@@ -2401,7 +2401,6 @@ export default class salesInvoice extends DocBase
                                                     let tmpData2 = await this.core.sql.execute(tmpQuery2) 
                                                     
                                                     let tmpObj = {DATA:tmpData.result.recordset,DATA1:tmpData2.result.recordset}
-                                                    console.log(tmpObj)
                                                     this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpObj) + '}',(pResult) => 
                                                     {
                                                         if(pResult.split('|')[0] != 'ERR')

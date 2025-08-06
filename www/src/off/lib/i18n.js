@@ -3,7 +3,6 @@ import {langTr} from '../meta/lang/tr/tr.js'
 import {langFr} from '../meta/lang/fr/fr.js'
 import {langDe} from '../meta/lang/de/de.js'
 import {langEn} from '../meta/lang/en/en.js'
-import {langAt} from '../meta/lang/at/at.js'
 async function loadLocaleResources(language, page) 
 {
     try
@@ -32,10 +31,6 @@ i18n.init(
         en: 
         {
             translation: langEn
-        },
-        at: 
-        {
-            translation: langAt
         }
     },
 });

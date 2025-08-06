@@ -1,3 +1,5 @@
+
+
 const pos_02_022 =
 {
     btnGet: "Get",
@@ -21,16 +23,6 @@ const pos_02_022 =
     ticketCount: "Ticket count",
     totalAmount: "Total amount",
     avgTicketAmount: "Average ticket amount",
-    totalProfit: "Total profit",
-    profitMarginPercent: "Profit margin percent",
-    saleDayCount: "Sale day count",
-    totalQuantity: "Total quantity",
-    avgCostPrice: "Average cost price",
-    supplierCount: "Supplier count",
-    firstSaleDate: "First sale date",
-    lastSaleDate: "Last sale date",
-    supplierNames: "Supplier names",
-    totalQuantity: "Total quantity",
 }
 
 export default pos_02_022

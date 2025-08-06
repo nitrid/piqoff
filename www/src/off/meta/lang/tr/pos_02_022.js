@@ -23,16 +23,6 @@ const pos_02_022 =
     ticketCount: "Fiş Sayısı",
     totalAmount: "Toplam Tutar",
     avgTicketAmount: "Ortalama Fiş Tutarı",
-    totalProfit: "Toplam Kar",
-    profitMarginPercent: "Kar Marjı",
-    saleDayCount: "Satış Gün Sayısı",
-    totalQuantity: "Toplam Miktar",
-    avgCostPrice: "Ortalama Maliyet Fiyatı",
-    supplierCount: "Tedarikçi Sayısı",
-    firstSaleDate: "İlk Satış Tarihi",
-    lastSaleDate: "Son Satış Tarihi",
-    supplierNames: "Tedarikçi Adları",
-    totalQuantity: "Toplam Miktar",
 }
 
 export default pos_02_022
