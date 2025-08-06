@@ -3,11 +3,12 @@ import moment from 'moment';
 import React from "react";
 import Base from '../../core/react/devex/base.js';
 import App from "../lib/app";
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import Form, { Label, Item, EmptyItem } from 'devextreme-react/form';
 import FileUploader from 'devextreme-react/file-uploader';
+
 import NdPopUp from '../../core/react/devex/popup.js';
 import NdButton from "../../core/react/devex/button";
-import NdGrid,{Column,Editing,Paging,Pager,KeyboardNavigation,Scrolling} from '../../core/react/devex/grid';
+import NdGrid,{ Column, Editing, Paging, Pager, KeyboardNavigation, Scrolling, Button } from '../../core/react/devex/grid';
 import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
 import NdTextBox from '../../core/react/devex/textbox.js'
 import NdDatePicker from '../../core/react/devex/datepicker.js';
@@ -438,6 +439,46 @@ export default class NdDocAi extends Base
         })
         
     }
+    openItem(pData)
+    {
+        App.instance.menuClick(
+        {
+            id: 'stk_01_001',
+            text: pData.ProductCode,
+            path: 'items/cards/itemCard.js',
+            pagePrm:
+            {
+                PRM_TYPE:'new',
+                CODE:pData.ItemCode,
+                NAME:pData.ItemName,
+                CUSTOMER_ITEM_CODE:pData.ProductCode,
+                CUSTOMER_GUID :this.importData.CustomerGuid,
+                CUSTOMER_CODE:this.importData.CustomerCode,
+                CUSTOMER_NAME:this.importData.CustomerName,
+                COST_PRICE:pData.UnitPrice,
+                VAT:pData.Vat,
+            }
+        })
+    }
+    async refreshItem(pData)
+    {
+        let tmpItem = await this.getItem(pData.ProductCode,this.importData.CustomerGuid)
+
+        if(typeof tmpItem != 'undefined')
+        {
+            pData.ItemCode = tmpItem.ITEM_CODE  
+            pData.ItemCost = tmpItem.COST_PRICE  
+            pData.ItemGuid = tmpItem.ITEM_GUID  
+            pData.ItemName = tmpItem.ITEM_NAME  
+            pData.ItemType = tmpItem.ITEM_TYPE  
+            pData.ItemUnit = tmpItem.UNIT
+            pData.ItemVat = tmpItem.VAT
+            pData.ItemTotal = Number((pData.Quantity * pData.UnitPrice) -((pData.Quantity * pData.UnitPrice) * (pData.DiscountRate / 100))).round(2)
+            this.grdList.devGrid.refresh(true)
+            this.grdList.devGrid.repaint()
+            this.txtRealHT.value = this.grdList.data.datatable.sum('ItemTotal')
+        }
+    }
     render()
     {
         return(
@@ -634,6 +675,10 @@ export default class NdDocAi extends Base
                                         return Number(e.data.Amount).round(2).toFixed(2) + ' / ' + Number(e.data.ItemTotal).round(2).toFixed(2)
                                     }}
                                     />
+                                    <Column type="buttons" width={70}>
+                                        <Button hint="Add Item" icon="inserttable" onClick={(e) => this.openItem(e.row.data)} />
+                                        <Button hint="Refresh" icon="refresh" onClick={(e) => this.refreshItem(e.row.data)} />
+                                    </Column>
                                 </NdGrid>
                             </div>
                         </div>

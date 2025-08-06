@@ -51,6 +51,7 @@ const stk_01_001 =
     validPriceFloat : "Der Betrag muss größer als 0 sein!",
     validCustomerCode :"Bitte geben Sie einen Lieferantencode ein!",
     validOriginMax8 :"Maximal 8 Zeichen eingeben!",
+    validTax : "Steuer darf nicht leer sein!",
     mainUnitName :"Haupteinheit",
     underUnitName : "Untereinheit",
     chkDayAnalysis : "Täglich",  

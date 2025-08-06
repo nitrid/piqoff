@@ -101,11 +101,46 @@ export default class itemCard extends React.PureComponent
         if(typeof this.pagePrm != 'undefined')
         {
             await this.init(); 
-            //ELECTRONJS DE BURASI PROBLEM OLUYOR. STOK LISTESINDEN ÜRÜNE ÇİFT TIKLAYIP STOK KARTINI AÇMAYA ÇALIŞTIĞINDA ÜRÜN AD BOŞ GELİYOR. ONUN İÇİN SETTIMEOUT EKLEDİK.(AQ)
-            setTimeout(() => 
+            if(this.pagePrm.CODE != '')
             {
-                this.getItem(this.pagePrm.CODE)    
-            }, 1000);
+                //ELECTRONJS DE BURASI PROBLEM OLUYOR. STOK LISTESINDEN ÜRÜNE ÇİFT TIKLAYIP STOK KARTINI AÇMAYA ÇALIŞTIĞINDA ÜRÜN AD BOŞ GELİYOR. ONUN İÇİN SETTIMEOUT EKLEDİK.(AQ)
+                setTimeout(() => {this.getItem(this.pagePrm.CODE)}, 1000);
+            }
+            else if(this.pagePrm.PRM_TYPE == 'new')
+            {
+                // Dışardan gelen veriler ile ürün kartının hazırlanması.
+                await this.core.util.waitUntil(1000)
+                this.itemsObj.dt('ITEMS')[0].CODE = this.pagePrm.CODE
+                this.itemsObj.dt('ITEMS')[0].NAME = this.pagePrm.NAME
+                this.itemsObj.dt('ITEMS')[0].COST_PRICE = this.pagePrm.COST_PRICE
+                this.itemsObj.dt('ITEMS')[0].VAT = this.pagePrm.VAT
+
+                let tmpEmptyMulti = {...this.itemsObj.itemMultiCode.empty};
+                                                    
+                tmpEmptyMulti.CUSER = this.core.auth.data.CODE,  
+                tmpEmptyMulti.ITEM_GUID = this.itemsObj.dt()[0].GUID 
+                tmpEmptyMulti.CUSTOMER_GUID = this.pagePrm.CUSTOMER_GUID                              
+                tmpEmptyMulti.CUSTOMER_CODE = this.pagePrm.CUSTOMER_CODE
+                tmpEmptyMulti.CUSTOMER_NAME = this.pagePrm.CUSTOMER_NAME
+                tmpEmptyMulti.MULTICODE = this.pagePrm.CUSTOMER_ITEM_CODE
+                tmpEmptyMulti.CUSTOMER_PRICE = this.pagePrm.COST_PRICE
+                tmpEmptyMulti.CUSTOMER_PRICE_DATE = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
+
+                let tmpResult = await this.checkMultiCode(this.pagePrm.CUSTOMER_ITEM_CODE,this.pagePrm.CUSTOMER_CODE)
+
+                if(tmpResult == 1) //KAYIT YOK
+                {
+                    this.itemsObj.itemMultiCode.addEmpty(tmpEmptyMulti);
+                }
+                // Min ve Max Fiyat 
+                let tmpMinData = this.prmObj.filter({ID:'ItemMinPricePercent'}).getValue()
+                let tmpMinPrice = this.pagePrm.COST_PRICE + (this.pagePrm.COST_PRICE * tmpMinData) /100
+                this.txtMinSalePrice.value = Number((tmpMinPrice).toFixed(2))
+                let tmpMaxData = this.prmObj.filter({ID:'ItemMaxPricePercent'}).getValue()
+                let tmpMAxPrice = this.pagePrm.COST_PRICE + (this.pagePrm.COST_PRICE * tmpMaxData) /100
+                this.txtMaxSalePrice.value = Number((tmpMAxPrice).toFixed(2))
+                this.taxSugarValidCheck()
+            }
         }
         else
         {
@@ -1419,7 +1454,11 @@ export default class itemCard extends React.PureComponent
                                             displayExpr="VAT"                       
                                             valueExpr="VAT"
                                             data={{source:{select:{query:`SELECT VAT FROM VAT ORDER BY ID ASC`},sql:this.core.sql}}}
-                                            param={this.param.filter({ELEMENT:'cmbTax',USERS:this.user.CODE})}/>
+                                            param={this.param.filter({ELEMENT:'cmbTax',USERS:this.user.CODE})}>
+                                                <Validator validationGroup={"frmItems"}>
+                                                    <RequiredRule message={this.t("validOrigin")}/>
+                                                </Validator>
+                                            </NdSelectBox>
                                         </div>
                                     </div>
                                 </NdLayoutItem>
