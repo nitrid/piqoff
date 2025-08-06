@@ -565,7 +565,6 @@ export default class itemCard extends React.PureComponent
             let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE_HT
             let tmpMargin = tmpExVat - this.txtCostPrice.value;
             let tmpMarginRate = ((tmpMargin / this.txtCostPrice.value)) * 100
-            
             if(this.itemsObj.itemPrice.dt()[i].LIST_VAT_TYPE == 0)
             {
                 this.itemsObj.itemPrice.dt()[i].VAT_EXT = tmpExVat
@@ -883,18 +882,19 @@ export default class itemCard extends React.PureComponent
                 onClick: (async() => 
                 {
                     await this.popPrice.show();
-
-                    this.cmbPopPriListNo.value = 1
-                    this.dtPopPriStartDate.value = "1970-01-01"
-                    this.dtPopPriEndDate.value = "1970-01-01"
-                    this.txtPopPriQuantity.value = 1
-                    this.txtPopPriPrice.value = 0
-                    this.txtPopPriHT.value = 0
-                    this.txtPopPriTTC.value = 0
-                    this.txtPopPriceMargin.value = 0
-                    this.cmbPopPriDepot.value = "00000000-0000-0000-0000-000000000000"
-
-                    setTimeout(async () => {this.txtPopPriPrice.focus()}, 600)
+                    setTimeout(() => 
+                    {
+                        this.txtPopPriPrice.focus()
+                        this.cmbPopPriListNo.value = 1
+                        this.dtPopPriStartDate.value = "1970-01-01"
+                        this.dtPopPriEndDate.value = "1970-01-01"
+                        this.txtPopPriQuantity.value = 1
+                        this.txtPopPriPrice.value = 0
+                        this.txtPopPriHT.value = 0
+                        this.txtPopPriTTC.value = 0
+                        this.txtPopPriceMargin.value = 0
+                        this.cmbPopPriDepot.value = "00000000-0000-0000-0000-000000000000"
+                    }, 600);
                 }).bind(this)
             }
         }); 
@@ -2686,7 +2686,13 @@ export default class itemCard extends React.PureComponent
                                     <NdNumberBox id={"txtPopPriPrice"} parent={this} simple={true}  format={"##0.000"}
                                     onValueChanged={async (e)=>
                                     {
+                                        if(this.txtPopPriceMargin.isFocused || this.txtPopPriceGrossMargin.isFocused || this.txtPopPriceNetMargin.isFocused)
+                                        {
+                                            return
+                                        }
+                                        
                                         let tmpDt = this.cmbPopPriListNo.data.datatable.where({'NO':this.cmbPopPriListNo.value})
+                                        
                                         if(tmpDt[0].VAT_TYPE == 0)
                                         {
                                             this.txtPopPriTTC.value = this.txtPopPriPrice.value
@@ -2708,7 +2714,13 @@ export default class itemCard extends React.PureComponent
                                     <NdNumberBox id={"txtPopPriceMargin"} parent={this} simple={true}  format={"##0.00"}
                                     onValueChanged={async (e)=>
                                     {
+                                        if(this.txtPopPriPrice.isFocused || this.txtPopPriceGrossMargin.isFocused || this.txtPopPriceNetMargin.isFocused)
+                                        {
+                                            return
+                                        }
+                                        
                                         let tmpDt = this.cmbPopPriListNo.data.datatable.where({'NO':this.cmbPopPriListNo.value})
+
                                         if(tmpDt[0].VAT_TYPE == 0)
                                         {
                                             this.txtPopPriHT.value =  Number(this.txtCostPrice.value * (1 + (this.txtPopPriceMargin.value / 100))).round(3);
@@ -2731,6 +2743,12 @@ export default class itemCard extends React.PureComponent
                                     <NdNumberBox id={"txtPopPriceGrossMargin"} parent={this} simple={true}  format={"##0.00"}
                                     onValueChanged={async (e)=>
                                     {
+                                        if(this.txtPopPriPrice.isFocused || this.txtPopPriceMargin.isFocused || this.txtPopPriceNetMargin.isFocused)
+                                        {
+                                            return
+                                        }
+                                           
+                                        
                                         let tmpDt = this.cmbPopPriListNo.data.datatable.where({'NO':this.cmbPopPriListNo.value})
                                         if(tmpDt[0].VAT_TYPE == 0)
                                         {
@@ -2754,6 +2772,11 @@ export default class itemCard extends React.PureComponent
                                     <NdNumberBox id={"txtPopPriceNetMargin"} parent={this} simple={true}  format={"##0.00"}
                                     onValueChanged={async (e)=>
                                     {
+                                        if(this.txtPopPriPrice.isFocused || this.txtPopPriceMargin.isFocused || this.txtPopPriceGrossMargin.isFocused)
+                                        {
+                                            return
+                                        }
+                                        
                                         let tmpDt = this.cmbPopPriListNo.data.datatable.where({'NO':this.cmbPopPriListNo.value})
 
                                         if(tmpDt[0].VAT_TYPE == 0)
@@ -2770,6 +2793,7 @@ export default class itemCard extends React.PureComponent
                                         }
                                         this.txtPopPriceMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
                                         this.txtPopPriceGrossMargin.value = Number((((this.txtPopPriHT.value - this.txtCostPrice.value) / this.txtCostPrice.value)) * 100).round(2)
+                                      
                                     }}/>
                                 </NdItem>
                                  {/* txtPopPriHT */}

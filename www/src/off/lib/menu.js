@@ -1091,6 +1091,12 @@ export const menu = (e) =>
                             id: 'slsRpt_01_014',
                             text: e.t('menuOff.slsRpt_01_014'),//'Deb Satış Detay Raporu',
                             path: 'report/sales/debSalesDetailReport'
+                        },
+                        
+                        {
+                            id: 'slsRpt_01_015',
+                            text: e.t('menuOff.slsRpt_01_015'),//'Tedarikçi Ürün İstatistik Raporu',
+                            path: 'report/sales/supplierItemStatisticsReport'
                         }
 
                     ]
@@ -1841,7 +1847,7 @@ export const menu = (e) =>
                             id: 'set_03_003',
                             text: e.t('menuOff.set_03_003'),//'Taşıyıcı  Kodu',
                             path: 'setting/documentSetting/transportTypeCard'
-                        }
+                        },
                     ]
                 },
             ]

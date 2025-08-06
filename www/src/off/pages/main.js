@@ -69,7 +69,8 @@ export default class mainPage extends React.PureComponent
             { id: 'fns_04_005', icon: 'fa-solid fa-magnifying-glass-dollar', color: '#e83e8c', path:'finance/report/collectionReport' },
             { id: 'pos_02_021', icon: 'fa-solid fa-chart-line', color: '#17a2b8', path:'pos/report/posSalesStatisticalReport' },
             { id: 'pos_02_003', icon: 'fa-solid fa-clipboard-list', color: '#e83e8c', path:'pos/report/posSalesReport' },
-            { id:'pos_02_002',icon:'fa-solid fa-gift',color:'#28a745',path:'pos/report/customerPointReport'}
+            { id:'pos_02_002',icon:'fa-solid fa-gift',color:'#28a745',path:'pos/report/customerPointReport'},
+            { id: 'slsRpt_01_015', icon: 'fa-solid fa-chart-area', color: '#6610f2', path:'report/sales/supplierItemStatisticsReport' }
         ]
     }
     componentDidMount()
