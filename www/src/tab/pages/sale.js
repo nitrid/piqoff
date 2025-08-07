@@ -155,7 +155,7 @@ export default class Sale extends React.PureComponent
     }
     async componentDidMount()
     {
-        await this.core.util.waitUntil(0)
+        await this.core.util.waitUntil(100)
         this.init()
     }
     async init()
@@ -170,13 +170,7 @@ export default class Sale extends React.PureComponent
         this.cmbGroup.value = ''
         this.docType = 0
         this.docLocked = false;
-        this.orderGroup.value = this.sysParam.filter({ID:'salesItemsType',USERS:this.user.CODE}).getValue().value        
-        this.dtFirstDate.value = moment(new Date());
-        this.dtLastDate.value = moment(new Date());
-        this.cmbDesignList.value = ''
-
-        this.grdCustomerExtreReport.dataRefresh({source:this.customerExtreReportDt})
-        this.grdFactNonSolde.dataRefresh({source:this.txtFactureNonSoldeDt})
+        this.orderGroup.value = this.sysParam.filter({ID:'salesItemsType',USERS:this.user.CODE}).getValue().value       
 
         this.docObj.dt()[0].OUTPUT = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'cmbDepot'}).getValue().value
         this.docObj.dt()[0].PRICE_LIST_NO = this.param.filter({TYPE:1,USERS:this.user.CODE,ID:'PricingListNo'}).getValue()
@@ -1209,6 +1203,7 @@ export default class Sale extends React.PureComponent
                                                         let tmpData = await this.core.sql.execute(tmpQuery) 
                                                         await this.cmbDesignList.dataRefresh({source:tmpData.result.recordset});
                                                         this.popDesign.show()
+                                                        this.cmbDesignList.value = ''
                                                     }}>
                                                         <i className="fa-solid fa-print fa-1x"></i>
                                                     </NbButton>                                                    
@@ -1505,11 +1500,13 @@ export default class Sale extends React.PureComponent
                                                                 </Item>
                                                                 <Item>
                                                                     <NbButton className="form-group btn btn-primary btn-block" style={{backgroundColor:'#154c79',width:'100%'}}
-                                                                            onClick={()=>
-                                                                            {
-                                                                                this.popCustomerExtreReport.show()
-                                                                            }}>
-                                                                            <i className="">{this.t("popCustomerExtre.customerExtreReport")}</i>
+                                                                    onClick={()=>
+                                                                    {
+                                                                        this.popCustomerExtreReport.show()
+                                                                        this.dtFirstDate.value = moment(new Date())
+                                                                        this.dtLastDate.value = moment(new Date())
+                                                                    }}>
+                                                                        <i className="">{this.t("popCustomerExtre.customerExtreReport")}</i>
                                                                     </NbButton>
                                                                 </Item>
                                                                 <Item>
@@ -2382,77 +2379,79 @@ export default class Sale extends React.PureComponent
                                         <div className='row'>
                                             <div className='col-6'>
                                                 <NdButton text={this.t("popDesign.btnPrint")} type="normal" stylingMode="contained" width={'100%'}  validationGroup={"frmSalesInvPrint" + this.tabIndex}
-                                                    onClick={async (e)=>
-                                                    {       
-                                                        if(e.validationGroup.validate().status == "valid")
+                                                onClick={async (e)=>
+                                                {       
+                                                    if(e.validationGroup.validate().status == "valid")
+                                                    {
+                                                        this.setState({isExecute:true})
+                                                        let tmpQuery = {}
+                                                        if(this.docObj.dt()[0].DOC_TYPE == 20)
                                                         {
-                                                            this.setState({isExecute:true})
-                                                            let tmpQuery = {}
-                                                            if(this.docObj.dt()[0].DOC_TYPE == 20)
-                                                            {
-                                                                let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
-                                                                let tmpExtra = {...this.extraObj.empty}
-                                                                tmpExtra.DOC = this.docObj.dt()[0].GUID
-                                                                tmpExtra.DESCRIPTION = ''
-                                                                tmpExtra.TAG = 'PRINT'
-                                                                tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
-                                                                tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
-                                                                this.extraObj.addEmpty(tmpExtra);
-                                                                await this.extraObj.save()
+                                                            let tmpLastSignature = await this.nf525.signatureDocDuplicate(this.docObj.dt()[0])
+                                                            let tmpExtra = {...this.extraObj.empty}
+                                                            tmpExtra.DOC = this.docObj.dt()[0].GUID
+                                                            tmpExtra.DESCRIPTION = ''
+                                                            tmpExtra.TAG = 'PRINT'
+                                                            tmpExtra.SIGNATURE = tmpLastSignature.SIGNATURE
+                                                            tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
+                                                            this.extraObj.addEmpty(tmpExtra);
+                                                            await this.extraObj.save()
 
-                                                                tmpQuery = 
-                                                                {
-                                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO" ,
-                                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
-                                                                }
+                                                            tmpQuery = 
+                                                            {
+                                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO" ,
+                                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
                                                             }
-                                                            else
-                                                            {
-                                                                tmpQuery = 
-                                                                {
-                                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO" ,
-                                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                                    value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
-                                                                }
-                                                            }                                                       
-                                                            let tmpData = await this.core.sql.execute(tmpQuery)                                                                                                               
-                                                            //console.log(tmpData.result.recordset) // BAK
-                                                            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
-                                                            {
-                                                                if(pResult.split('|')[0] != 'ERR')
-                                                                {     
-                                                                    let base64ToUint8Array = (base64)=>
-                                                                    {
-                                                                        let raw = atob(base64);
-                                                                        let uint8Array = new Uint8Array(raw.length);
-                                                                        for (let i = 0; i < raw.length; i++) 
-                                                                        {
-                                                                            uint8Array[i] = raw.charCodeAt(i);
-                                                                        }
-                                                                        return uint8Array;
-                                                                    }
-
-                                                                    this.popPrintView.show()
-
-                                                                    document.getElementById('printView').innerHTML = '<iframe id="pdfFrame" style="width:100%;height:100%;"></iframe>'
-                                                                    let pdfViewerFrame = document.getElementById("pdfFrame");
-                                                                    let tmpBase64 = base64ToUint8Array(pResult.split('|')[1])
-
-                                                                    pdfViewerFrame.onload = (async function() 
-                                                                    {
-                                                                        await pdfViewerFrame.contentWindow.PDFViewerApplication.open(tmpBase64);
-                                                                        if(App.instance.core.local.platform == 'cordova')
-                                                                        {
-                                                                            this.cordovaPrint(pdfViewerFrame.contentWindow.PDFViewerApplication,pResult.split('|')[1])
-                                                                        }
-                                                                    }).bind(this)
-                                                                    pdfViewerFrame.setAttribute("src","./lib/pdf/web/viewer.html?file=");
-                                                                }
-                                                            });
-                                                            this.popDesign.hide();  
                                                         }
-                                                    }}/>
+                                                        else
+                                                        {
+                                                            tmpQuery = 
+                                                            {
+                                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ORDERS_FOR_PRINT](@DOC_GUID) ORDER BY LINE_NO" ,
+                                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                                value:  [this.docObj.dt()[0].GUID,this.cmbDesignList.value,this.cmbDesignLang.value]
+                                                            }
+                                                        }                                                       
+                                                        let tmpData = await this.core.sql.execute(tmpQuery)                                                                                                               
+                                                        //console.log(tmpData.result.recordset) // BAK
+                                                        this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
+                                                        {
+                                                            if(pResult.split('|')[0] != 'ERR')
+                                                            {     
+                                                                let base64ToUint8Array = (base64)=>
+                                                                {
+                                                                    let raw = atob(base64);
+                                                                    let uint8Array = new Uint8Array(raw.length);
+                                                                    for (let i = 0; i < raw.length; i++) 
+                                                                    {
+                                                                        uint8Array[i] = raw.charCodeAt(i);
+                                                                    }
+                                                                    return uint8Array;
+                                                                }
+
+                                                                this.popPrintView.show()
+
+                                                                document.getElementById('printView').innerHTML = '<iframe id="pdfFrame" style="width:100%;height:100%;"></iframe>'
+                                                                let pdfViewerFrame = document.getElementById("pdfFrame");
+                                                                let tmpBase64 = base64ToUint8Array(pResult.split('|')[1])
+
+                                                                pdfViewerFrame.onload = (async function() 
+                                                                {
+                                                                    await pdfViewerFrame.contentWindow.PDFViewerApplication.open(tmpBase64);
+                                                                    if(App.instance.core.local.platform == 'cordova')
+                                                                    {
+                                                                        this.cordovaPrint(pdfViewerFrame.contentWindow.PDFViewerApplication,pResult.split('|')[1])
+                                                                    }
+                                                                }).bind(this)
+                                                                pdfViewerFrame.setAttribute("src","./lib/pdf/web/viewer.html?file=");
+                                                            }
+                                                        });
+
+                                                        this.setState({isExecute:false})
+                                                        this.popDesign.hide();  
+                                                    }
+                                                }}/>
                                             </div>
                                         </div>
                                         <div className='row py-2'>
@@ -2557,22 +2556,25 @@ export default class Sale extends React.PureComponent
                                                         tmpExtra.SIGNATURE_SUM = tmpLastSignature.SIGNATURE_SUM
                                                         this.extraObj.addEmpty(tmpExtra);
                                                         await this.extraObj.save()    
+                                                        
                                                         for (let i = 0; i < this.grdFactNonSolde.getSelectedData().length; i++) 
+                                                        {
+                                                            let tmpQuery = 
                                                             {
-                                                                let tmpQuery = 
-                                                                {
-                                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
-                                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                                    value:  [this.grdFactNonSolde.getSelectedData()[i].DOC_GUID,this.cmbDesignList.value,localStorage.getItem('lang').toUpperCase()]
-                                                                }
-                                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                                for (let x = 0; x < tmpData.result.recordset.length; x++) 
-                                                                {
-                                                                    tmpLines.push(tmpData.result.recordset[x])
-                                                                }
+                                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                                value:  [this.grdFactNonSolde.getSelectedData()[i].DOC_GUID,this.cmbDesignList.value,localStorage.getItem('lang').toUpperCase()]
                                                             }
+                                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                                            for (let x = 0; x < tmpData.result.recordset.length; x++) 
+                                                            {
+                                                                tmpLines.push(tmpData.result.recordset[x])
+                                                            }
+                                                        }
+
                                                         if(tmpLines.length > 0)
                                                         {
+                                                            console.log(tmpLines)
                                                             await this.popMailSend.show()
                                                             let tmpQuery = 
                                                             {
@@ -2619,8 +2621,8 @@ export default class Sale extends React.PureComponent
                                                                 }
                                                             });
                                                         });
+                                                        this.setState({isExecute:false})
                                                     }
-                                                        
                                                 }}/>
                                             </div>
                                             <div className='col-6'>
@@ -2674,8 +2676,8 @@ export default class Sale extends React.PureComponent
                                 <Column dataField="COUNTRY" caption={this.t("pg_adress.clmCountry")} width={200}/>
                             </NdPopGrid>
                         </div>
-                           {/* Adres Seçim PopUp */}
-                           <div>
+                        {/* Adres Seçim PopUp */}
+                        <div>
                             <NdPopUp parent={this} id={"popFactNonSolde"} 
                             visible={false}
                             showCloseButton={true}
@@ -2687,21 +2689,23 @@ export default class Sale extends React.PureComponent
                             position={{of:'#root'}}
                             >
                                 <Form colCount={1} height={'fit-content'}>                                
-                                <Item>
+                                    <Item>
                                         <NdButton text={this.t("btnMailSend")} type="danger" width="100%" stylingMode="contained"
-                                                  onClick={async ()=>{
-                                                        let tmpQuery = 
-                                                        {   
-                                                            query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '115'"
-                                                        }
-                                                        let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                        await this.cmbDesignList.dataRefresh({source:tmpData.result.recordset});
-                                                        this.popDesign.show()
-                                                  }}  
-                                        ></NdButton>
+                                        onClick={async ()=>
+                                        {
+                                            let tmpQuery = 
+                                            {   
+                                                query : "SELECT TAG,DESIGN_NAME FROM [dbo].[LABEL_DESIGN] WHERE PAGE = '115'"
+                                            }
+                                            let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            await this.cmbDesignList.dataRefresh({source:tmpData.result.recordset});
+                                            this.popDesign.show()
+                                            this.cmbDesignList.value = ''
+                                        }}  
+                                        />
                                     </Item>
-                                <Item >
-                                <NdGrid parent={this} id={"grdFactNonSolde"}    
+                                    <Item>
+                                        <NdGrid parent={this} id={"grdFactNonSolde"}    
                                         selection= {{mode : 'multiple'}} 
                                         showBorders={true} 
                                         columnsAutoWidth={true} 
@@ -2711,53 +2715,57 @@ export default class Sale extends React.PureComponent
                                         width={'100%'}
                                         dbApply={false}
                                         onRowDblClick={async(e)=>
+                                        {
+                                            this.setState({isExecute:true})
+                                            
+                                            let tmpQuery = 
                                             {
-                                                this.setState({isExecute:true})
-                                                
-                                                let tmpQuery = 
+                                                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
+                                                param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                                                value:  [e.data.DOC_GUID,this.cmbDesignList.value,localStorage.getItem('lang').toUpperCase()]
+                                            }
+                                            this.setState({isExecute:true})                                                        
+                                            let tmpData = await this.core.sql.execute(tmpQuery)                                                         
+                                            this.setState({isExecute:false})
+                                            this.popFactNonSolde.hide(); 
+                                            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
                                                 {
-                                                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM  [dbo].[FN_DOC_ITEMS_FOR_PRINT](@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO " ,
-                                                    param:  ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                                                    value:  [e.data.DOC_GUID,this.cmbDesignList.value,localStorage.getItem('lang').toUpperCase()]
-                                                }
-                                                this.setState({isExecute:true})                                                        
-                                                let tmpData = await this.core.sql.execute(tmpQuery)                                                         
-                                                this.setState({isExecute:false})
-                                                this.popFactNonSolde.hide(); 
-                                                this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) => 
-                                                    {
-                                                        if(pResult.split('|')[0] != 'ERR')
-                                                        {     
-                                                            let base64ToUint8Array = (base64)=>
+                                                    if(pResult.split('|')[0] != 'ERR')
+                                                    {     
+                                                        let base64ToUint8Array = (base64)=>
+                                                        {
+                                                            let raw = atob(base64);
+                                                            let uint8Array = new Uint8Array(raw.length);
+                                                            for (let i = 0; i < raw.length; i++) 
                                                             {
-                                                                let raw = atob(base64);
-                                                                let uint8Array = new Uint8Array(raw.length);
-                                                                for (let i = 0; i < raw.length; i++) 
-                                                                {
-                                                                    uint8Array[i] = raw.charCodeAt(i);
-                                                                }
-                                                                return uint8Array;
+                                                                uint8Array[i] = raw.charCodeAt(i);
                                                             }
-
-                                                            this.popPrintView.show()
-
-                                                            document.getElementById('printView').innerHTML = '<iframe id="pdfFrame" style="width:100%;height:100%;"></iframe>'
-                                                            let pdfViewerFrame = document.getElementById("pdfFrame");
-                                                            let tmpBase64 = base64ToUint8Array(pResult.split('|')[1])
-
-                                                            pdfViewerFrame.onload = (async function() 
-                                                            {
-                                                                await pdfViewerFrame.contentWindow.PDFViewerApplication.open(tmpBase64);
-                                                                if(App.instance.core.local.platform == 'cordova')
-                                                                {
-                                                                    this.cordovaPrint(pdfViewerFrame.contentWindow.PDFViewerApplication,pResult.split('|')[1])
-                                                                }
-                                                            }).bind(this)
-                                                            pdfViewerFrame.setAttribute("src","./lib/pdf/web/viewer.html?file=");
+                                                            return uint8Array;
                                                         }
-                                                    });
-                                            }}
+
+                                                        this.popPrintView.show()
+
+                                                        document.getElementById('printView').innerHTML = '<iframe id="pdfFrame" style="width:100%;height:100%;"></iframe>'
+                                                        let pdfViewerFrame = document.getElementById("pdfFrame");
+                                                        let tmpBase64 = base64ToUint8Array(pResult.split('|')[1])
+
+                                                        pdfViewerFrame.onload = (async function() 
+                                                        {
+                                                            await pdfViewerFrame.contentWindow.PDFViewerApplication.open(tmpBase64);
+                                                            if(App.instance.core.local.platform == 'cordova')
+                                                            {
+                                                                this.cordovaPrint(pdfViewerFrame.contentWindow.PDFViewerApplication,pResult.split('|')[1])
+                                                            }
+                                                        }).bind(this)
+                                                        pdfViewerFrame.setAttribute("src","./lib/pdf/web/viewer.html?file=");
+                                                    }
+                                                });
+                                        }}
                                         onRowRemoved={async (e)=>{
+                                        }}
+                                        onReady={()=>
+                                        {
+                                            this.grdFactNonSolde.dataRefresh({source:this.txtFactureNonSoldeDt})
                                         }}
                                         >
                                             <KeyboardNavigation editOnKeyPress={true} enterKeyAction={'moveFocus'} enterKeyDirection={'column'} />
@@ -2847,6 +2855,10 @@ export default class Sale extends React.PureComponent
                                                     pdfViewerFrame.setAttribute("src","./lib/pdf/web/viewer.html?file=");
                                                 }
                                             });
+                                        }}
+                                        onReady={()=>
+                                        {
+                                            this.grdCustomerExtreReport.dataRefresh({source:this.customerExtreReportDt})
                                         }}
                                         >
                                             <Paging defaultPageSize={20} />
