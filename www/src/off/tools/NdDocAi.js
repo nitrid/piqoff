@@ -751,13 +751,14 @@ export default class NdDocAi extends Base
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,STATUS,0 AS ITEM_TYPE,UNIT,COST_PRICE,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                        query : `SELECT GUID,CODE,NAME,STATUS,0 AS ITEM_TYPE,MIN(UNIT_GUID) AS UNIT,COST_PRICE,VAT FROM ITEMS_BARCODE_MULTICODE_VW_01   WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL
+                                GROUP BY  GUID,CODE,NAME,STATUS,COST_PRICE,VAT`,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
                 }
             }}
-            deferRendering={true}
+            deferRendering={false}
             >
                 <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={'20%'} />
                 <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={'70%'} defaultSortOrder="asc" />

@@ -134,7 +134,10 @@ export default class NbItemPopUp extends NbBase
                 if(this.cmbUnit.data.datatable.length > 0)
                 {
                     this.cmbUnit.value = this.data.UNIT;
-                    this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
+                    console.log('this.data.PRICE',this.data.PRICE)
+                    console.log('this.data.UNIT_FACTOR',this.data.UNIT_FACTOR)
+                    this.txtPrice.value = this.data.PRICE
+                    console.log('this.txtPrice.value',this.txtPrice.value)
                 }
             }}>
                 <div>
@@ -261,8 +264,8 @@ export default class NbItemPopUp extends NbBase
                                                     if(typeof tmpData.result.err == 'undefined' && tmpData.result.recordset.length > 0)
                                                     {
                                                         this.txtPrice.value = tmpData.result.recordset[0].PRICE
-                                                        console.log('this.txtPrice.value',this.txtPrice.value)
-                                                        this.data.PRICE = this.txtPrice.value
+                                                        console.log('this.txtPrice.value',this.txtPrice.value,2)
+                                                        this.data.PRICE  = this.txtPrice.value 
                                                         this._onValueChange(this.data)
                                                     }
                                                 }
@@ -292,11 +295,13 @@ export default class NbItemPopUp extends NbBase
                                                     if(e.value != '00000000-0000-0000-0000-000000000000' && e.value != '')
                                                     {                
                 
-                                                        this.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
-                                                        this.data.UNIT = e.value
-                                                        this.txtPrice.value = Number(this.data.PRICE * this.data.UNIT_FACTOR).round(3)
-                                                        this.txtFactor.value = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
-    
+                                                        // this.data.UNIT_FACTOR = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+                                                        // this.data.UNIT = e.value
+                                                        // this.txtFactor.value = this.cmbUnit.data.datatable.where({'GUID':e.value})[0].FACTOR
+                                                        // console.log('this.txtFactor.value',this.txtFactor.value)
+                                                        // console.log('this.data.PRICE',this.data.PRICE)
+                                                        // this.txtPrice.value = Number(this.data.PRICE * this.txtFactor.value).round(3)
+                                                        // console.log('this.txtPrice.value',this.txtPrice.value,3)
                                                         this._onValueChange(this.data)
                                                     }
                                                 }).bind(this)}

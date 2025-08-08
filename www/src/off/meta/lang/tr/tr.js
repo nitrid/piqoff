@@ -1176,7 +1176,8 @@ export const langTr =
         RAYON_NAME : "RAYON",
     }, 
     
-    supplierItemStatisticsReport: {
+    supplierItemStatisticsReport: 
+    {
         supplier: "Tedarikçi",
         supplierSelect: "Tedarikçi Seçimi",
         supplierCode: "Tedarikçi Kodu",
@@ -1224,7 +1225,5 @@ export const langTr =
         comparativeAnalysisDescription: "Seçili kriterlere göre dönemsel ve kategorik karşılaştırma analizleri bu bölümde gösterilecektir.",
         btnAnalyze: "Analiz Et",
         detail: "Detay"
-                
-     
      }      
  }

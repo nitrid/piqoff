@@ -999,9 +999,15 @@ export default class Sale extends React.PureComponent
                             <NdSelectBox simple={true} parent={this} id="cmbGroup" height='fit-content' 
                             displayExpr="NAME"                       
                             valueExpr="CODE"
-                            value= ""
                             showClearButton={true}
-                            onValueChanged={(async(e)=> { this.getItems() }).bind(this)}
+                            notRefresh={true}
+                            onValueChanged={
+                                (async(e)=> { 
+                                    if(e.value != null)
+                                    {
+                                        this.getItems() 
+                                    }
+                                }).bind(this)}
                             data={{source:{select:{query : `SELECT CODE,NAME,GUID FROM ITEM_GROUP ORDER BY NAME ASC`},sql:this.core.sql}}}
                             />
                         </div>
