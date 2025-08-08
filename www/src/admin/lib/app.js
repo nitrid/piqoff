@@ -97,7 +97,7 @@ export default class App extends React.Component
                 options : 
                 {
                     width: 80,
-                    items: [{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
+                    items: [{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"},{id:"at",text:"AT"},{id:"de",text:"DE"}],
                     valueExpr: 'id',
                     displayExpr: 'text',
                     value: localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang'),

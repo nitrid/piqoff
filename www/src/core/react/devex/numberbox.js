@@ -11,6 +11,7 @@ export default class NdNumberBox extends Base
         super(props)
 
         this.dev = null;
+        this.isFocused = false;
         
         this.state.value = typeof props.value != 'undefined' ? props.value : 0
         this.state.title = typeof props.title == 'undefined' ? '' : props.title
@@ -51,6 +52,8 @@ export default class NdNumberBox extends Base
     }
     _onFocusIn(e)
     {
+        this.isFocused = true;
+
         if(typeof this.props.selectAll == 'undefined' || this.props.selectAll == true)
         {
             this.dev.element().getElementsByTagName('input')[1].select()
@@ -62,6 +65,7 @@ export default class NdNumberBox extends Base
     }
     _onFocusOut()
     {
+        this.isFocused = false;
         if(typeof this.props.onFocusOut != 'undefined')
         {
             this.props.onFocusOut();

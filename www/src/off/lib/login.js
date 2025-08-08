@@ -183,7 +183,7 @@ export default class Login extends React.PureComponent
                 options : 
                 {
                     width: 80,
-                    items: [{id:"de",text:"DE"},{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}],
+                    items: [{id:"de",text:"DE"},{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"},{id:"at",text:"AT"},],
                     valueExpr: 'id',
                     displayExpr: 'text',
                     value: localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang'),
@@ -358,7 +358,7 @@ export default class Login extends React.PureComponent
                                 displayExpr="text"                       
                                 valueExpr="id"
                                 value= {localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang')}
-                                data={{source:[{id:"de",text:"DE"},{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"}]}}
+                                data={{source:[{id:"de",text:"DE"},{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"},{id:"at",text:"AT"}]}}
                                 onValueChanged={(async(args)=>
                                 {
                                     localStorage.setItem('lang',args.value)

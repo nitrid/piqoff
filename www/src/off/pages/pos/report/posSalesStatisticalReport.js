@@ -5,6 +5,7 @@ import moment from 'moment';
 import Toolbar from 'devextreme-react/toolbar';
 import Form, {Item,  Label } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
+import { dialog } from '../../../../core/react/devex/dialog.js';
 
 import { Chart, Series, SeriesTemplate, CommonSeriesSettings, Legend, ValueAxis, Title, Tooltip, Border, ArgumentAxis, CommonAxisSettings, Grid, Margin, Label as ChartLabel, Format, Strips, Strip, ZoomAndPan } from 'devextreme-react/chart';
 import PieChart, { Legend as PieLegend, Series as PieSeries, Tooltip as PieTooltip, Label as PieLabel , Connector as PieConnector, LoadingIndicator as PieLoadingIndicator} from 'devextreme-react/pie-chart';
@@ -513,8 +514,6 @@ export default class posSalesStatisticalReport extends React.PureComponent
     
     async getProductGroups() 
     {
-        App.instance.loading.show()
-        
         try 
         {
             let query = 
@@ -522,7 +521,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                 query: `SELECT DISTINCT 
                         POS.ITEM_GRP_CODE,
                         POS.ITEM_GRP_NAME
-                        FROM POS_SALE_VW_01 POS WITH (NOLOCK)
+                        FROM POS_SALE_FOR_CHARTS_VW_01 POS WITH (NOLOCK)
                         WHERE POS.STATUS = 1 
                         AND POS.DOC_DATE >= @FIRST_DATE 
                         AND POS.DOC_DATE <= @LAST_DATE
@@ -564,8 +563,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
     // Ürün detay analizi için yeni fonksiyon
     async calculateProductDetailData(productCode, productName, analysisType = 'daily') 
     {
-        App.instance.loading.show()
-        
+
         try {
             let productDetailData = {}
             
@@ -574,26 +572,15 @@ export default class posSalesStatisticalReport extends React.PureComponent
                 // Günlük satış verileri
                 let tmpQuery = 
                 {
-                    query: `SELECT 
-                                POS.DOC_DATE,
-                                SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
-                                SUM(POS.TOTAL) AS TOTAL_AMOUNT,
-                                COUNT(DISTINCT POS.GUID) AS SALE_COUNT
-                            FROM POS_SALE_VW_01 POS WITH (NOLOCK)
-                            WHERE POS.STATUS = 1 
-                            AND POS.DOC_DATE >= @FIRST_DATE 
-                            AND POS.DOC_DATE <= @LAST_DATE
-                            AND POS.DEVICE <> '9999'
-                            AND POS.TOTAL > 0
-                            AND POS.TYPE = 0
-                            AND POS.ITEM_CODE = @ITEM_CODE
-                            GROUP BY POS.DOC_DATE
-                            ORDER BY POS.DOC_DATE`,
+                    query: `EXEC PRD_CALCULATE_PRODUCT_DETAIL_DATA @FIRST_DATE = @FIRST_DATE, @LAST_DATE = @LAST_DATE, @ITEM_CODE = @ITEM_CODE`,
                     param: ['FIRST_DATE:date', 'LAST_DATE:date', 'ITEM_CODE:string|25'],
                     value: [this.dtDate.startDate, this.dtDate.endDate, productCode]
                 }
+                
 
+                App.instance.loading.show()
                 let tmpData = await this.core.sql.execute(tmpQuery)
+                App.instance.loading.hide()
                 
                 if (tmpData?.result?.recordset?.length > 0) 
                 {
@@ -613,32 +600,18 @@ export default class posSalesStatisticalReport extends React.PureComponent
             
             if (analysisType === 'weekly') 
             {
+                
                 // Haftalık satış verileri
                 let tmpQuery = 
                 {
-                    query: `SELECT 
-                                DATEPART(WEEK, POS.DOC_DATE) AS WEEK_NUMBER,
-                                DATEPART(YEAR, POS.DOC_DATE) AS YEAR_NUMBER,
-                                MIN(POS.DOC_DATE) AS WEEK_START,
-                                MAX(POS.DOC_DATE) AS WEEK_END,
-                                SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
-                                SUM(POS.TOTAL) AS TOTAL_AMOUNT,
-                                COUNT(DISTINCT POS.GUID) AS SALE_COUNT
-                            FROM POS_SALE_VW_01 POS WITH (NOLOCK)
-                            WHERE POS.STATUS = 1 
-                            AND POS.DOC_DATE >= @FIRST_DATE 
-                            AND POS.DOC_DATE <= @LAST_DATE
-                            AND POS.DEVICE <> '9999'
-                            AND POS.TOTAL > 0
-                            AND POS.TYPE = 0
-                            AND POS.ITEM_CODE = @ITEM_CODE
-                            GROUP BY DATEPART(WEEK, POS.DOC_DATE), DATEPART(YEAR, POS.DOC_DATE)
-                            ORDER BY YEAR_NUMBER, WEEK_NUMBER`,
+                    query: `EXEC PRD_CALCULATE_PRODUCT_DETAIL_DATA_WEEKLY @FIRST_DATE = @FIRST_DATE, @LAST_DATE = @LAST_DATE, @ITEM_CODE = @ITEM_CODE`,
                     param: ['FIRST_DATE:date', 'LAST_DATE:date', 'ITEM_CODE:string|25'],
                     value: [this.dtDate.startDate, this.dtDate.endDate, productCode]
                 }
 
+                App.instance.loading.show()
                 let tmpData = await this.core.sql.execute(tmpQuery)
+                App.instance.loading.hide()
                 
                 if (tmpData?.result?.recordset?.length > 0) 
                 {
@@ -661,31 +634,19 @@ export default class posSalesStatisticalReport extends React.PureComponent
             
             if (analysisType === 'monthly') 
             {
+                
                 // Aylık satış verileri
                 let tmpQuery = 
                 {
-                    query: `SELECT 
-                                DATEPART(MONTH, POS.DOC_DATE) AS MONTH_NUMBER,
-                                DATEPART(YEAR, POS.DOC_DATE) AS YEAR_NUMBER,
-                                SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
-                                SUM(POS.TOTAL) AS TOTAL_AMOUNT,
-                                COUNT(DISTINCT POS.GUID) AS SALE_COUNT
-                            FROM POS_SALE_VW_01 POS WITH (NOLOCK)
-                            WHERE POS.STATUS = 1 
-                            AND POS.DOC_DATE >= @FIRST_DATE 
-                            AND POS.DOC_DATE <= @LAST_DATE
-                            AND POS.DEVICE <> '9999'
-                            AND POS.TOTAL > 0
-                            AND POS.TYPE = 0
-                            AND POS.ITEM_CODE = @ITEM_CODE
-                            GROUP BY DATEPART(MONTH, POS.DOC_DATE), DATEPART(YEAR, POS.DOC_DATE)
-                            ORDER BY YEAR_NUMBER, MONTH_NUMBER`,
+                    query: `EXEC PRD_CALCULATE_PRODUCT_DETAIL_DATA_MONTHLY @FIRST_DATE = @FIRST_DATE, @LAST_DATE = @LAST_DATE, @ITEM_CODE = @ITEM_CODE`,
                     param: ['FIRST_DATE:date', 'LAST_DATE:date', 'ITEM_CODE:string|25'],
                     value: [this.dtDate.startDate, this.dtDate.endDate, productCode]
                 }
 
+                App.instance.loading.show()
                 let tmpData = await this.core.sql.execute(tmpQuery)
-                
+                App.instance.loading.hide()
+
                 if (tmpData?.result?.recordset?.length > 0) 
                 {
                     productDetailData.monthly = tmpData.result.recordset.map((item) => 
@@ -711,11 +672,11 @@ export default class posSalesStatisticalReport extends React.PureComponent
                 let tmpQuery = 
                 {
                     query: `SELECT 
-                                DATEPART(WEEKDAY, POS.DOC_DATE) AS DAY_OF_WEEK,
-                                SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
-                                SUM(POS.TOTAL) AS TOTAL_AMOUNT,
-                                COUNT(DISTINCT POS.GUID) AS SALE_COUNT
-                            FROM POS_SALE_VW_01 POS WITH (NOLOCK)
+                            DATEPART(WEEKDAY, POS.DOC_DATE) AS DAY_OF_WEEK,
+                            SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
+                            SUM(POS.TOTAL) AS TOTAL_AMOUNT,
+                            COUNT(DISTINCT POS.GUID) AS SALE_COUNT
+                            FROM POS_SALE_FOR_CHARTS_VW_01 POS WITH (NOLOCK)
                             WHERE POS.STATUS = 1 
                             AND POS.DOC_DATE >= @FIRST_DATE 
                             AND POS.DOC_DATE <= @LAST_DATE
@@ -729,8 +690,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     value: [this.dtDate.startDate, this.dtDate.endDate, productCode]
                 }
 
+                App.instance.loading.show()
                 let tmpData = await this.core.sql.execute(tmpQuery)
-                
+                App.instance.loading.hide()
+
                 if (tmpData?.result?.recordset?.length > 0) 
                 {
                     let dayNames = ['', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
@@ -752,6 +715,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
             
             if (analysisType === 'yearly') 
             {
+                App.instance.loading.show()
                 let tmpQuery = 
                 {
                     query: `SELECT 
@@ -759,7 +723,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                             SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
                             SUM(POS.TOTAL) AS TOTAL_AMOUNT,
                             COUNT(DISTINCT POS.GUID) AS SALE_COUNT
-                            FROM POS_SALE_VW_01 POS WITH (NOLOCK)
+                            FROM POS_SALE_FOR_CHARTS_VW_01 POS WITH (NOLOCK)
                             WHERE POS.STATUS = 1 
                             AND POS.DOC_DATE >= @FIRST_DATE 
                             AND POS.DOC_DATE <= @LAST_DATE
@@ -774,7 +738,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                 }
 
                 let tmpData = await this.core.sql.execute(tmpQuery)
-                
+                App.instance.loading.hide()
+
                 if (tmpData?.result?.recordset?.length > 0) 
                 {
                     productDetailData.yearly = tmpData.result.recordset.map((item) => 
@@ -806,23 +771,22 @@ export default class posSalesStatisticalReport extends React.PureComponent
         }
     }
     async calculateProductAnalysisData(analysisType) 
-    {
-        App.instance.loading.show()
-        
+    {  
         try {
             let productAnalysisData = {}
             
             if (analysisType === 'topSellingProducts') 
             {
+                
                 // En çok satan ürünler
                 let tmpQuery = 
                 {
                     query: `SELECT TOP 20 
-                                POS.ITEM_CODE,
-                                POS.ITEM_NAME,
-                                SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
-                                SUM(POS.TOTAL) AS TOTAL_AMOUNT
-                            FROM POS_SALE_VW_01 POS WITH (NOLOCK)
+                            POS.ITEM_CODE,
+                            POS.ITEM_NAME,
+                            SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
+                            SUM(POS.TOTAL) AS TOTAL_AMOUNT
+                            FROM POS_SALE_FOR_CHARTS_VW_01 POS WITH (NOLOCK)
                             WHERE POS.STATUS = 1 
                             AND POS.DOC_DATE >= @FIRST_DATE 
                             AND POS.DOC_DATE <= @LAST_DATE
@@ -835,8 +799,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     value: [this.dtDate.startDate, this.dtDate.endDate]
                 }
 
+                App.instance.loading.show()
                 let tmpData = await this.core.sql.execute(tmpQuery)
-                
+                App.instance.loading.hide()
+
                 if (tmpData?.result?.recordset?.length > 0) 
                 {
                     productAnalysisData.topSellingProducts = tmpData.result.recordset.map((item, index) => 
@@ -858,14 +824,16 @@ export default class posSalesStatisticalReport extends React.PureComponent
             
             if (analysisType === 'worstSellingProducts') 
             {
+                App.instance.loading.show()
                 // En az satan ürünler
-                let tmpQuery = {
+                let tmpQuery = 
+                {
                     query: `SELECT TOP 20 
-                                POS.ITEM_CODE,
-                                POS.ITEM_NAME,
-                                SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
-                                SUM(POS.TOTAL) AS TOTAL_AMOUNT
-                            FROM POS_SALE_VW_01 POS WITH (NOLOCK)
+                            POS.ITEM_CODE,
+                            POS.ITEM_NAME,
+                            SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
+                            SUM(POS.TOTAL) AS TOTAL_AMOUNT
+                            FROM POS_SALE_FOR_CHARTS_VW_01 POS WITH (NOLOCK)
                             WHERE POS.STATUS = 1 
                             AND POS.DOC_DATE >= @FIRST_DATE 
                             AND POS.DOC_DATE <= @LAST_DATE
@@ -879,7 +847,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                 }
 
                 let tmpData = await this.core.sql.execute(tmpQuery)
-                
+                App.instance.loading.hide()
                 if (tmpData?.result?.recordset?.length > 0) 
                 {
                     productAnalysisData.worstSellingProducts = tmpData.result.recordset.map((item, index) => 
@@ -901,17 +869,18 @@ export default class posSalesStatisticalReport extends React.PureComponent
             
             if (analysisType === 'topSellingProductsInGroup' && this.selectedProductGroup) 
             {
+                
                 // Seçili gruptaki en çok satan ürünler
                 let tmpQuery = 
                 {
                     query: `SELECT TOP 50 
-                                POS.ITEM_CODE,
-                                POS.ITEM_NAME,
-                                POS.ITEM_GRP_CODE,
-                                POS.ITEM_GRP_NAME,
-                                SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
-                                SUM(POS.TOTAL) AS TOTAL_AMOUNT
-                            FROM POS_SALE_VW_01 POS WITH (NOLOCK)
+                            POS.ITEM_CODE,
+                            POS.ITEM_NAME,
+                            POS.ITEM_GRP_CODE,
+                            POS.ITEM_GRP_NAME,
+                            SUM(POS.QUANTITY) AS TOTAL_QUANTITY,
+                            SUM(POS.TOTAL) AS TOTAL_AMOUNT
+                            FROM POS_SALE_FOR_CHARTS_VW_01 POS WITH (NOLOCK)
                             WHERE POS.STATUS = 1 
                             AND POS.DOC_DATE >= @FIRST_DATE 
                             AND POS.DOC_DATE <= @LAST_DATE
@@ -925,8 +894,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     value: [this.dtDate.startDate, this.dtDate.endDate, this.selectedProductGroup]
                 }
 
+                App.instance.loading.show()
                 let tmpData = await this.core.sql.execute(tmpQuery)
-                
+                App.instance.loading.hide()
+
                 if (tmpData?.result?.recordset?.length > 0) 
                 {
                     productAnalysisData.topSellingProductsInGroup = tmpData.result.recordset.map((item, index) => 
@@ -948,15 +919,16 @@ export default class posSalesStatisticalReport extends React.PureComponent
             
             if (analysisType === 'topSellingProductGroups') 
             {
+                
                 // En çok satan ürün grupları
                 let tmpQuery = 
                 {
                     query: `SELECT TOP 50 
-                                POS.ITEM_GRP_CODE,
-                                POS.ITEM_GRP_NAME AS GROUP_NAME,
-                                SUM(POS.TOTAL) AS TOTAL_AMOUNT,
-                                COUNT(DISTINCT POS.ITEM_CODE) AS ITEM_COUNT
-                            FROM POS_SALE_VW_01 POS WITH (NOLOCK)
+                            POS.ITEM_GRP_CODE,
+                            POS.ITEM_GRP_NAME AS GROUP_NAME,
+                            SUM(POS.TOTAL) AS TOTAL_AMOUNT,
+                            COUNT(DISTINCT POS.ITEM_CODE) AS ITEM_COUNT
+                            FROM POS_SALE_FOR_CHARTS_VW_01 POS WITH (NOLOCK)
                             WHERE POS.STATUS = 1 
                             AND POS.DOC_DATE >= @FIRST_DATE 
                             AND POS.DOC_DATE <= @LAST_DATE
@@ -969,8 +941,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     value: [this.dtDate.startDate, this.dtDate.endDate]
                 }
 
+                App.instance.loading.show()
                 let tmpData = await this.core.sql.execute(tmpQuery)
-                
+                App.instance.loading.hide()
                 if (tmpData?.result?.recordset?.length > 0) 
                 {
                     productAnalysisData.topSellingProductGroups = tmpData.result.recordset.map((item, index) => 
@@ -1051,6 +1024,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
     {
         try 
         {
+            
             // Gerçek saatlik veri çek
             let tmpQuery = 
             {
@@ -1058,12 +1032,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
                         DATEPART(HOUR, POS.CDATE) AS HOUR,
                         SUM(CASE WHEN POS.TYPE = 0 THEN POS.TOTAL ELSE POS.TOTAL * -1 END) AS TOTAL_SALES,
                         COUNT(*) AS SALE_COUNT
-                        FROM POS_SALE_VW_01 AS POS 
+                        FROM POS_SALE_FOR_CHARTS_VW_01 AS POS 
                         WHERE POS.STATUS = 1 
                         AND POS.DOC_DATE >= @START 
                         AND POS.DOC_DATE <= @END 
-                        AND POS.DEVICE <> '9999' 
-                        AND POS.TOTAL <> 0
                         GROUP BY DATEPART(HOUR, POS.CDATE)
                         ORDER BY DATEPART(HOUR, POS.CDATE)`,
                 param: ['START:date', 'END:date'],
@@ -1109,6 +1081,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
             console.error(this.lang.t("hourlySalesChart.error"), error);
             return [];
         }
+        finally
+        {
+            App.instance.loading.hide()
+        }
     }
 
     async getFirstAndLastSaleDate() 
@@ -1116,7 +1092,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
     
         let query = 
         {
-            query: `SELECT MIN(DOC_DATE) as FIRST_DATE, MAX(DOC_DATE) as LAST_DATE FROM POS_SALE_VW_01 WHERE STATUS = 1 AND DEVICE <> '9999' AND TOTAL > 0 AND TYPE = 0`
+            query: `SELECT MIN(DOC_DATE) as FIRST_DATE, MAX(DOC_DATE) as LAST_DATE FROM POS_SALE_FOR_CHARTS_VW_01 WHERE STATUS = 1 AND DEVICE <> '9999' AND TOTAL > 0 AND TYPE = 0`
         };
 
         let result = await this.core.sql.execute(query);
@@ -1143,45 +1119,46 @@ export default class posSalesStatisticalReport extends React.PureComponent
         let period2Start = moment(this.state.period2StartDate).format('YYYY-MM-DD');
         let period2End = moment(this.state.period2EndDate).format('YYYY-MM-DD');
         
-        console.log('SQL dates:', period1Start, period1End, period2Start, period2End);
-        
         this.setState({ periodChartLoading: true });
 
         const granularity = this.state.periodGranularity;
         
         let selectExpr, groupExpr, labelFunc;
 
-        if (granularity === 'year') {
+        if (granularity === 'year') 
+        {
             selectExpr = `YEAR(DOC_DATE) as PERIOD_VALUE`;
             groupExpr = `YEAR(DOC_DATE)`;
             labelFunc = row => row.PERIOD_VALUE.toString();
         } 
-        else if (granularity === 'month') {
+        else if (granularity === 'month') 
+        {
             selectExpr = `MONTH(DOC_DATE) as PERIOD_VALUE`;
             groupExpr = `MONTH(DOC_DATE)`;
             labelFunc = row => moment().month(row.PERIOD_VALUE - 1).format('MMMM');
         } 
-        else if (granularity === 'week') {
+        else if (granularity === 'week') 
+        {
             // Ay içindeki hafta numarası: 1, 2, 3, 4, 5
             selectExpr = `CEILING(DAY(DOC_DATE) / 7.0) as PERIOD_VALUE`;
             groupExpr = `CEILING(DAY(DOC_DATE) / 7.0)`;
             labelFunc = row => `${row.PERIOD_VALUE}. Hafta`;
         } 
-        else {
+        else 
+        {
             // Ay içindeki gün numarası: 1, 2, 3, ..., 31
             selectExpr = `DAY(DOC_DATE) as PERIOD_VALUE`;
             groupExpr = `DAY(DOC_DATE)`;
             labelFunc = row => `${row.PERIOD_VALUE}. Gün`;
         }
         
-        App.instance.loading.show();
         
         // Period 1 sorgusu
-        let query1 = {
+        let query1 = 
+        {
             query: `SELECT ${selectExpr}, SUM(TOTAL) as TOTAL_AMOUNT
-                    FROM POS_SALE_VW_01
+                    FROM POS_SALE_FOR_CHARTS_VW_01
                     WHERE DOC_DATE >= @START AND DOC_DATE <= @END
-                    AND STATUS = 1 AND DEVICE <> '9999' AND TOTAL > 0 AND TYPE = 0
                     GROUP BY ${groupExpr}
                     ORDER BY ${groupExpr}`,
             param: ['START:date', 'END:date'],
@@ -1189,17 +1166,19 @@ export default class posSalesStatisticalReport extends React.PureComponent
         };
         
         // Period 2 sorgusu
-        let query2 = {
+        let query2 = 
+        {
             query: `SELECT ${selectExpr}, SUM(TOTAL) as TOTAL_AMOUNT
-                    FROM POS_SALE_VW_01
+                    FROM POS_SALE_FOR_CHARTS_VW_01
                     WHERE DOC_DATE >= @START AND DOC_DATE <= @END
-                    AND STATUS = 1 AND DEVICE <> '9999' AND TOTAL > 0 AND TYPE = 0
                     GROUP BY ${groupExpr}
                     ORDER BY ${groupExpr}`,
             param: ['START:date', 'END:date'],
             value: [period2Start, period2End]
         };
-        
+
+        App.instance.loading.show()
+
         let [result1, result2] = await Promise.all(
         [
             this.core.sql.execute(query1),
@@ -1298,10 +1277,6 @@ export default class posSalesStatisticalReport extends React.PureComponent
         seriesMap[period1Label] = period1Data;
         seriesMap[period2Label] = period2Data;
         
-        console.log('Final period1Data:', period1Data);
-        console.log('Final period2Data:', period2Data);
-        console.log('Final chartData length:', chartData.length);
-        
         this.setState(
         { 
             periodChartData: chartData, 
@@ -1365,10 +1340,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                         </span>
                                     </div>
                                 ) : (
-                                    <Item>
-                                        <Label text={this.lang.t("dtDate")} alignment="right" />
-                                        <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
-                                    </Item>
+                                <Item>
+                                    <Label text={this.lang.t("dtDate")} alignment="right" />
+                                    <NbDateRange id={"dtDate"} parent={this} startDate={moment(new Date())} endDate={moment(new Date())}/>
+                                </Item>
                                 )}
                             </Form>
                         </div>
@@ -1386,41 +1361,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                             {
                                 let tmpQuery = 
                                 {
-                                    query : `SELECT 
-                                            POS.DOC_DATE AS DOC_DATE, 
-                                            POS.DEVICE AS DEVICE, 
-                                            CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, 
-                                            'SALES' AS TITLE, 
-                                            'HT' AS TYPE, 
-                                            POS.VAT_RATE AS VAT_RATE, 
-                                            CASE WHEN POS.TYPE = 0 THEN SUM(POS.FAMOUNT) ELSE SUM(POS.FAMOUNT) * -1 END AS AMOUNT 
-                                            FROM POS_SALE_VW_01 AS POS 
-                                            WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 
-                                            GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE 
-                                            UNION ALL 
-                                            SELECT 
-                                            POS.DOC_DATE AS DOC_DATE, 
-                                            POS.DEVICE AS DEVICE, 
-                                            CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, 
-                                            'SALES' AS TITLE, 
-                                            'TVA' AS TYPE, 
-                                            POS.VAT_RATE AS VAT_RATE, 
-                                            CASE WHEN POS.TYPE = 0 THEN SUM(POS.VAT) ELSE SUM(POS.VAT) * -1 END AS AMOUNT 
-                                            FROM POS_SALE_VW_01 AS POS 
-                                            WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' AND POS.TOTAL <> 0 
-                                            GROUP BY POS.DOC_DATE,POS.TYPE,POS.VAT_RATE,POS.DEVICE 
-                                            UNION ALL 
-                                            SELECT 
-                                            POS.DOC_DATE AS DOC_DATE, 
-                                            POS.DEVICE AS DEVICE, 
-                                            CASE WHEN POS.TYPE = 0 THEN 'VENTE' ELSE 'REMB.MNT' END AS DOC_TYPE, 
-                                            'PAYMENT' AS TITLE, 
-                                            PAY_TYPE_NAME AS TYPE, 
-                                            0 AS VAT_RATE, 
-                                            CASE WHEN POS.TYPE = 0 THEN SUM(AMOUNT - CHANGE) ELSE SUM(AMOUNT - CHANGE) * -1 END AS AMOUNT  
-                                            FROM POS_PAYMENT_VW_01 AS POS 
-                                            WHERE POS.STATUS = 1 AND POS.DOC_DATE >= @START AND POS.DOC_DATE <= @END AND POS.DEVICE <> '9999' 
-                                            GROUP BY POS.GUID,POS.DOC_DATE,POS.TYPE,POS.PAY_TYPE_NAME,POS.PAY_TYPE,POS.DEVICE` , 
+                                    query : `EXEC PRD_SALES_DAILY_DATA @START = @START, @END = @END` , 
                                     param : ['START:date','END:date'],
                                     value : [this.dtDate.startDate,this.dtDate.endDate]
                                 }
@@ -1552,12 +1493,12 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     <div className="row px-2 pt-3">
                         <div className="col-12 text-center">
                             <NdButton 
-                                text={this.lang.t("btnAnalysis")} 
-                                width={'250px'}
-                                type="success"
-                                icon="fa-solid fa-chart-line"
-                                elementAttr = {{style: "font-weight:bold;font-size:16px" }}
-                                onClick = {() =>  {  this.popAnalysis.show() }}
+                            text={this.lang.t("btnAnalysis")} 
+                            width={'250px'}
+                            type="success"
+                            icon="fa-solid fa-chart-line"
+                            elementAttr = {{style: "font-weight:bold;font-size:16px" }}
+                            onClick = {() =>  {  this.popAnalysis.show() }}
                             />
                         </div>
                     </div>
@@ -1582,7 +1523,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             // Tarihe göre sırala - en eski tarih en solda
                                             let dateA = moment(a.date, 'DD/MM/YYYY');
                                             let dateB = moment(b.date, 'DD/MM/YYYY');
-                                            
+                                        
                                             return dateA.diff(dateB);
                                         })}
                                         palette="Violet"
@@ -1752,11 +1693,11 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     
                                                     return (
                                                         <Series
-                                                        key={payType}
-                                                        valueField={payType}
-                                                        name={config.name}
-                                                        stack="payments"
-                                                        color={config.color}
+                                                            key={payType}
+                                                            valueField={payType}
+                                                            name={config.name}
+                                                            stack="payments"
+                                                            color={config.color}
                                                         />
                                                     );
                                                 })
@@ -1929,7 +1870,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         text: `${arg.seriesName}: ${parseFloat(arg.valueText).toFixed(2)} €`
                                                     };
                                                 }
-                                            }}
+                                                }}
                                             />
                                         </Chart>
                                     </div>
@@ -1957,30 +1898,30 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     {
                         await new Promise(resolve => this.setState(
                         {
-                            selectedProduct: null,
-                            productDetailData: {},
-                            productDetailAnalysisType: 'daily',
-                            productDetailChartType: 'line'
-                        }, resolve));
+                                selectedProduct: null,
+                                productDetailData: {},
+                                productDetailAnalysisType: 'daily',
+                                productDetailChartType: 'line'
+                            }, resolve));
 
                         App.instance.loading.hide()
-                    }}
+                        }}
                     onShowing={async () => 
                     {
-                        const newKey = Date.now();
+                            const newKey = Date.now();
                         
                         await new Promise(resolve => this.setState(
                         {
-                            selectedAnalysisType: 'best',
-                            selectedSubOption: 'topDay',
-                            selectedAnalysis: 'topDay',
-                            chartType: 'bar',
-                            selectedProductGroup: null,
-                            productAnalysisData: {},
-                            popAnalysisResetKey: newKey
-                        }, resolve));
-                    }}
-                    >
+                                selectedAnalysisType: 'best',
+                                selectedSubOption: 'topDay',
+                                selectedAnalysis: 'topDay',
+                                chartType: 'bar',
+                                selectedProductGroup: null,
+                                productAnalysisData: {},
+                                popAnalysisResetKey: newKey
+                            }, resolve));
+                        }}
+                        >
                         <div className="row p-4">
                             {/* Başlık ve Açıklama */}
                             <div className="col-12 mb-4 text-center">
@@ -2009,12 +1950,12 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             parent={this} 
                                             dataSource={
                                             [
-                                                    { id: 'best', name: '🔝 ' + this.lang.t("bestDays") },
-                                                    { id: 'worst', name: '🔻 ' + this.lang.t("worstDays") },
-                                                    { id: 'comparison', name: '⚖️ ' + this.lang.t("comparison") },
-                                                    { id: 'distribution', name: '📊 ' + this.lang.t("distribution") },
-                                                    { id: 'trend', name: '📈 ' + this.lang.t("trend") },
-                                                    { id: 'products', name: '📦 ' + this.lang.t("products") }
+                                                { id: 'best', name: '🔝 ' + this.lang.t("bestDays") },
+                                                { id: 'worst', name: '🔻 ' + this.lang.t("worstDays") },
+                                                { id: 'comparison', name: '⚖️ ' + this.lang.t("comparison") },
+                                                { id: 'distribution', name: '📊 ' + this.lang.t("distribution") },
+                                                { id: 'trend', name: '📈 ' + this.lang.t("trend") },
+                                                { id: 'products', name: '📦 ' + this.lang.t("products") }
                                             ]}
                                             displayExpr="name"
                                             valueExpr="id"
@@ -2022,8 +1963,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             width="100%"
                                             onValueChanged={async (e) => 
                                             {
-                                                this.setState
-                                                ({ 
+                                                this.setState(
+                                                { 
                                                     selectedAnalysisType: e.value,
                                                     selectedAnalysis: null,
                                                     selectedSubOption: null,
@@ -2033,7 +1974,6 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 if(e.value === 'products')
                                                 {
                                                     // Sadece ürün gruplarını yükle, analiz yapma
-                                                    
                                                     try {
                                                         let productGroups = await this.getProductGroups()
                                                         this.setState
@@ -2049,7 +1989,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 }
                                             }}
                                             />
-                                    </div>
+                                        </div>
                                         <div className="col-md-6">
                                             <div style={{marginBottom: '15px'}}>
                                                 <Label 
@@ -2068,12 +2008,11 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             width="100%"
                                             onValueChanged={async (e) => 
                                             {
-                                            this.setState(
-                                            { 
-                                                selectedSubOption: e.value,
-                                                selectedAnalysis: e.value
-                                            })
-                                            
+                                                this.setState({ 
+                                                    selectedSubOption: e.value,
+                                                    selectedAnalysis: e.value
+                                                })
+                                                    
                                             // periodComparison seçildiğinde veriyi yükle
                                             if (this.state.selectedAnalysisType === 'comparison' && e.value === 'periodComparison') 
                                             {
@@ -2084,9 +2023,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 }, 100);
                                             }
                                             
-                                            // Ürün analizleri seçildiğinde ilgili veriyi yükle
+                                            // Ürün analizleri seçildiğinde SADECE ürün gruplarını yükle, analiz yapma
                                             if (this.state.selectedAnalysisType === 'products') 
-                                            {
+                                                {
                                                     try 
                                                     {
                                                         if (e.value === 'topSellingProductsInGroup') 
@@ -2234,187 +2173,186 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                 }}>
                                     {/* periodComparison için özel alan */}
                                     {this.state.selectedAnalysisType === 'comparison' && this.state.selectedSubOption === 'periodComparison' && (
-                                                         <div style={{ background: '#f8f9fa', borderRadius: '8px', padding: '20px', marginBottom: '20px', border: '1px solid #dee2e6'}}>
-                             <h5 style={{ textAlign: 'center', color: '#495057', marginBottom: '20px', fontSize: '18px', fontWeight: '500'}}>
-                                 {this.lang.t('periodComparison')}
-                             </h5>
-                             
-                             <div className="row mb-3">
-                                 {/* Granularity Seçimi */}
-                                 <div className="col-md-3">
-                                     <div>
-                                         <label style={{fontWeight: 'bold', marginBottom: '5px',marginLeft: '100px', color: '#495057', fontSize: '14px'}}>
-                                             {this.lang.t('granularity')}
-                                         </label>
-                                        <NdSelectBox
-                                            id="periodGranularity"
-                                            parent={this}
-                                            dataSource={
-                                            [
-                                                { id: 'year', name: this.lang.t('year') },
-                                                { id: 'month', name: this.lang.t('month') },
-                                                { id: 'week', name: this.lang.t('week') },
-                                                { id: 'day', name: this.lang.t('day') }
-                                            ]}
-                                            displayExpr="name"
-                                            valueExpr="id"
-                                            value={this.state.periodGranularity}
-                                            onValueChanged={e => 
-                                            {
-                                                this.setState({ periodGranularity: e.value }, () => 
-                                                {
-                                                    this.handlePeriodComparisonChange();
-                                                });
-                                            }}/>
-                                    </div>
-                                </div>
-
-                                {/* Period 1 */}
-                                <div className="col-md-4">
-                                    <div>
-                                        <label style={{fontWeight: 'bold', marginBottom: '5px', color: '#495057', fontSize: '14px'}}>
-                                            {this.lang.t('period1')} ({this.lang.t('comparedWith')})
-                                        </label>
-                                        <NbDateRange
-                                        id="period1Range"
-                                        parent={this}
-                                        startDate={this.state.period1StartDate}
-                                        endDate={this.state.period1EndDate}
-                                        ref={(el) => { this.period1Range = el; }}
-                                        onValueChanged={e => 
-                                        {
-                                            console.log('Period1 date changed:', e.startDate, e.endDate);
-                                            this.setState(
-                                            { 
-                                                period1StartDate: e.startDate, 
-                                                period1EndDate: e.endDate 
-                                            }, () => 
-                                            {
-                                                console.log('Period1 state updated, calling handlePeriodComparisonChange');
-                                                this.handlePeriodComparisonChange();
-                                            });
-                                        }}
-                                        onFocusOut={() => {
-                                            console.log('Period1 focus out - checking dates');
-                                            if (this.period1Range && this.period1Range.startDate && this.period1Range.endDate) {
-                                                this.setState({
-                                                    period1StartDate: this.period1Range.startDate,
-                                                    period1EndDate: this.period1Range.endDate
-                                                }, () => {
-                                                    this.handlePeriodComparisonChange();
-                                                });
-                                            }
-                                        }}
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Period 2 */}
-                                <div className="col-md-5">
-                                    <div>
-                                        <label style={{fontWeight: 'bold', marginBottom: '5px', color: '#495057', fontSize: '14px'}}>
-                                            {this.lang.t('period2')} ({this.lang.t('comparedWith')})
-                                        </label>
-                                        <NbDateRange
-                                        id="period2Range"
-                                        parent={this}
-                                        startDate={this.state.period2StartDate}
-                                        endDate={this.state.period2EndDate}
-                                        ref={(el) => { this.period2Range = el; }}
-                                        onValueChanged={e => 
-                                        {
-                                            console.log('Period2 date changed:', e.startDate, e.endDate);
-                                            this.setState(
-                                            { 
-                                                period2StartDate: e.startDate, 
-                                                period2EndDate: e.endDate 
-                                            }, () => 
-                                            {
-                                                console.log('Period2 state updated, calling handlePeriodComparisonChange');
-                                                this.handlePeriodComparisonChange();
-                                            });
-                                        }}
-                                        />
-                                    </div>
-                                </div>
-                                
-                                {/* Manuel Güncelleme Butonu */}
-                                <div className="row mt-3">
-                                    <div className="col-12 text-center">
-                                        <NdButton
-                                        id="btnUpdateComparison"
-                                        parent={this}
-                                        icon="refresh"
-                                        type="default"
-                                        stylingMode="contained"
-                                        text={this.lang.t("updateChart")}
-                                        onClick={() => 
-                                        {
-                                            // Ref'lerden tarihleri oku
-                                            if (this.period1Range && this.period2Range) 
-                                            {
-                                                this.setState(
-                                                {
-                                                    period1StartDate: this.period1Range.startDate || this.state.period1StartDate,
-                                                    period1EndDate: this.period1Range.endDate || this.state.period1EndDate,
-                                                    period2StartDate: this.period2Range.startDate || this.state.period2StartDate,
-                                                    period2EndDate: this.period2Range.endDate || this.state.period2EndDate
-                                                }, () => 
-                                                {
-                                                    this.handlePeriodComparisonChange();
-                                                });
-                                            } 
-                                            else 
-                                            {
-                                                this.handlePeriodComparisonChange();
-                                            }
-                                        }}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                                                <div style={{minHeight: '400px'}}>
-                                                {this.state.periodChartLoading ? (
-                                                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px'}}>
-                                                        <span>{this.lang.t('loading')}</span>
-                                                    </div>
-                                                ) : (
-                                                    <Chart
-                                                    dataSource={this.state.periodChartData}
-                                                    palette={["#1db2f5", "#f57c00", "#43a047", "#e91e63", "#607d8b"]}
-                                                    style={{minHeight: '400px'}}
-                                                    >
-                                                        <CommonSeriesSettings 
-                                                        argumentField="category" 
-                                                        valueField="value"
-                                                        type="bar" 
-                                                        />
-                                                        <SeriesTemplate 
-                                                        nameField="series"
-                                                        />
-                                                        <ValueAxis>
-                                                            <Title text={this.lang.t("productAnalysis.amount") + ' €'} />
-                                                            <Grid visible={true} opacity={0.2} />
-                                                        </ValueAxis>
-                                                        <Legend visible={true} />
-                                                        <Tooltip enabled={true} customizeTooltip={arg => 
+                                    <div style={{ background: '#f8f9fa', borderRadius: '8px', padding: '20px', marginBottom: '20px', border: '1px solid #dee2e6'}}>
+                                        <h5 style={{ textAlign: 'center', color: '#495057', marginBottom: '20px', fontSize: '18px', fontWeight: '500'}}>
+                                            {this.lang.t('periodComparison')}
+                                        </h5>
+                                        <div className="row mb-3">
+                                            {/* Granularity Seçimi */}
+                                            <div className="col-md-3">
+                                                <div>
+                                                    <label style={{fontWeight: 'bold', marginBottom: '5px',marginLeft: '100px', color: '#495057', fontSize: '14px'}}>
+                                                        {this.lang.t('granularity')}
+                                                    </label>
+                                                    <NdSelectBox
+                                                    id="periodGranularity"
+                                                    parent={this}
+                                                    dataSource={
+                                                    [
+                                                        { id: 'year', name: this.lang.t('year') },
+                                                        { id: 'month', name: this.lang.t('month') },
+                                                        { id: 'week', name: this.lang.t('week') },
+                                                        { id: 'day', name: this.lang.t('day') }
+                                                    ]}
+                                                    displayExpr="name"
+                                                    valueExpr="id"
+                                                    value={this.state.periodGranularity}
+                                                    onValueChanged={e => 
+                                                    {
+                                                        this.setState({ periodGranularity: e.value }, () => 
                                                         {
-                                                            // Sadece tarih aralığı yerine kategori bilgisi göster
-                                                            let periodInfo = this.state.periodGranularity === 'day' ? arg.argumentText :
-                                                                           this.state.periodGranularity === 'week' ? arg.argumentText :
-                                                                           this.state.periodGranularity === 'month' ? arg.argumentText :
-                                                                           arg.argumentText;
-                                                            
-                                                            let dateRangeInfo = arg.seriesName;
-                                                            
-                                                            return { 
-                                                                text: `${periodInfo} - ${dateRangeInfo}: ${parseFloat(arg.valueText).toFixed(2)} €` 
-                                                            };
-                                                        }} />
-                                                    </Chart>
-                                                )}
+                                                            this.handlePeriodComparisonChange();
+                                                        });
+                                                    }}/>
+                                                </div>
+                                            </div>
+
+                                            {/* Period 1 */}
+                                            <div className="col-md-4">
+                                                <div>
+                                                    <label style={{fontWeight: 'bold', marginBottom: '5px', color: '#495057', fontSize: '14px'}}>
+                                                        {this.lang.t('period1')} ({this.lang.t('comparedWith')})
+                                                    </label>
+                                                    <NbDateRange
+                                                    id="period1Range"
+                                                    parent={this}
+                                                    startDate={this.state.period1StartDate}
+                                                    endDate={this.state.period1EndDate}
+                                                    ref={(el) => { this.period1Range = el; }}
+                                                    onValueChanged={e => 
+                                                    {
+                                                        console.log('Period1 date changed:', e.startDate, e.endDate);
+                                                        this.setState(
+                                                        { 
+                                                            period1StartDate: e.startDate, 
+                                                            period1EndDate: e.endDate 
+                                                        }, () => 
+                                                        {
+                                                            console.log('Period1 state updated, calling handlePeriodComparisonChange');
+                                                            this.handlePeriodComparisonChange();
+                                                        });
+                                                    }}
+                                                    onFocusOut={() => {
+                                                        console.log('Period1 focus out - checking dates');
+                                                        if (this.period1Range && this.period1Range.startDate && this.period1Range.endDate) {
+                                                            this.setState({
+                                                                period1StartDate: this.period1Range.startDate,
+                                                                period1EndDate: this.period1Range.endDate
+                                                            }, () => {
+                                                                this.handlePeriodComparisonChange();
+                                                            });
+                                                        }
+                                                    }}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {/* Period 2 */}
+                                            <div className="col-md-5">
+                                                <div>
+                                                    <label style={{fontWeight: 'bold', marginBottom: '5px', color: '#495057', fontSize: '14px'}}>
+                                                        {this.lang.t('period2')} ({this.lang.t('comparedWith')})
+                                                    </label>
+                                                    <NbDateRange
+                                                    id="period2Range"
+                                                    parent={this}
+                                                    startDate={this.state.period2StartDate}
+                                                    endDate={this.state.period2EndDate}
+                                                    ref={(el) => { this.period2Range = el; }}
+                                                    onValueChanged={e => 
+                                                    {
+                                                        console.log('Period2 date changed:', e.startDate, e.endDate);
+                                                        this.setState(
+                                                        { 
+                                                            period2StartDate: e.startDate, 
+                                                            period2EndDate: e.endDate 
+                                                        }, () => 
+                                                        {
+                                                            console.log('Period2 state updated, calling handlePeriodComparisonChange');
+                                                            this.handlePeriodComparisonChange();
+                                                        });
+                                                    }}
+                                                    />
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Manuel Güncelleme Butonu */}
+                                            <div className="row mt-3">
+                                                <div className="col-12 text-center">
+                                                    <NdButton
+                                                    id="btnUpdateComparison"
+                                                    parent={this}
+                                                    icon="refresh"
+                                                    type="default"
+                                                    stylingMode="contained"
+                                                    text={this.lang.t("updateChart")}
+                                                    onClick={() => 
+                                                    {
+                                                        // Ref'lerden tarihleri oku
+                                                        if (this.period1Range && this.period2Range) 
+                                                        {
+                                                            this.setState(
+                                                            {
+                                                                period1StartDate: this.period1Range.startDate || this.state.period1StartDate,
+                                                                period1EndDate: this.period1Range.endDate || this.state.period1EndDate,
+                                                                period2StartDate: this.period2Range.startDate || this.state.period2StartDate,
+                                                                period2EndDate: this.period2Range.endDate || this.state.period2EndDate
+                                                            }, () => 
+                                                            {
+                                                                this.handlePeriodComparisonChange();
+                                                            });
+                                                        } 
+                                                        else 
+                                                        {
+                                                            this.handlePeriodComparisonChange();
+                                                        }
+                                                    }}
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
+                                        <div style={{minHeight: '400px'}}>
+                                            {this.state.periodChartLoading ? (
+                                                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px'}}>
+                                                    <span>{this.lang.t('loading')}</span>
+                                                </div>
+                                            ) : (
+                                                <Chart
+                                                dataSource={this.state.periodChartData}
+                                                palette={["#1db2f5", "#f57c00", "#43a047", "#e91e63", "#607d8b"]}
+                                                style={{minHeight: '400px'}}
+                                                >
+                                                    <CommonSeriesSettings 
+                                                    argumentField="category" 
+                                                    valueField="value"
+                                                    type="bar" 
+                                                    />
+                                                    <SeriesTemplate 
+                                                    nameField="series"
+                                                    />
+                                                    <ValueAxis>
+                                                        <Title text={this.lang.t("productAnalysis.amount") + ' €'} />
+                                                        <Grid visible={true} opacity={0.2} />
+                                                    </ValueAxis>
+                                                    <Legend visible={true} />
+                                                    <Tooltip enabled={true} customizeTooltip={arg => 
+                                                    {
+                                                        // Sadece tarih aralığı yerine kategori bilgisi göster
+                                                        let periodInfo = this.state.periodGranularity === 'day' ? arg.argumentText :
+                                                                        this.state.periodGranularity === 'week' ? arg.argumentText :
+                                                                        this.state.periodGranularity === 'month' ? arg.argumentText :
+                                                                        arg.argumentText;
+                                                        
+                                                        let dateRangeInfo = arg.seriesName;
+                                                        
+                                                        return { 
+                                                            text: `${periodInfo} - ${dateRangeInfo}: ${parseFloat(arg.valueText).toFixed(2)} €` 
+                                                        };
+                                                    }} />
+                                                </Chart>
+                                            )}
+                                        </div>
+                                    </div>
                                     )}
                                     
                                     {/* Ana grafik render kısmı - periodComparison dışındaki tüm analizler için */}
@@ -2434,8 +2372,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 if (this.state.selectedAnalysis === 'topSellingProductGroups' && e.target.data.groupCode)
                                                 {
                                                     // Önce state'i güncelle
-                                                    this.setState(
-                                                    { 
+                                                this.setState(
+                                                { 
                                                         selectedProductGroup: e.target.data.groupCode,
                                                         selectedAnalysis: 'topSellingProductsInGroup'
                                                     }, 
@@ -2453,10 +2391,10 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                             e.target.data.itemCode)
                                                 {
                                                     // Ürün detay popup'ını aç
-                                                    this.setState(
-                                                    { 
-                                                        selectedProduct: 
-                                                        {
+                                                this.setState(
+                                                { 
+                                                    selectedProduct: 
+                                                    {
                                                             code: e.target.data.itemCode,
                                                             name: e.target.data.itemName
                                                         },
@@ -2475,8 +2413,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                                 e.target.data.itemName, 
                                                                 'daily'
                                                             )
-                                                            this.setState(
-                                                            { 
+                                                        this.setState(
+                                                        { 
                                                                 productDetailData
                                                             })
                                                             
@@ -2518,7 +2456,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     }
                                                     
                                                     let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
-                                                    
+                                                
                                                     let dataItem = this.state.productAnalysisData[this.state.selectedAnalysis]?.find(item => 
                                                         item.category === arg.argumentText
                                                     )
@@ -2554,7 +2492,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             palette="Bright"
                                             style={{minHeight: '400px'}}
                                             visible={this.state.productAnalysisData[this.state.selectedAnalysis]?.length > 0}
-                                            onPointClick={async (e) => {
+                                            onPointClick={async (e) => 
+                                            {
                                                 // Eğer ürün grupları grafiğindeyse ve bir gruba tıklandıysa
                                                 if (this.state.selectedAnalysis === 'topSellingProductGroups' && e.target.data.groupCode)
                                                 {
@@ -2608,14 +2547,14 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         {
                                                             console.error('Error loading product detail:', error)
                                                         }
-                                                        
+                                                    
                                                     });
                                                 }
                                             }}
                                             >
                                                 <CommonSeriesSettings 
                                                 argumentField="category" 
-                                                    type="line"
+                                                type="line"
                                                 />
                                                 <Series
                                                 valueField="value"
@@ -2627,8 +2566,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 />
                                                 <ArgumentAxis
                                                 allowDecimals={false}
-                                                    axisDivisionFactor={1}
-                                                    discreteAxisDivisionMode="crossLabels"
+                                                axisDivisionFactor={1}
+                                                discreteAxisDivisionMode="crossLabels"
                                                 >
                                                     <ChartLabel rotationAngle={45} />
                                                 </ArgumentAxis>
@@ -2679,7 +2618,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                         ) : (
                                             // Default bar chart
                                             <Chart
-                                            id="analysisChart"
+                                        id="analysisChart"
                                                 title={this.state.productAnalysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
                                                 dataSource={this.state.productAnalysisData[this.state.selectedAnalysis] || []}
                                                 palette="Bright"
@@ -2741,13 +2680,13 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                             }
                                                         });
                                                     }
-                                            }} 
+                                                }}
                                             >
                                                 <CommonSeriesSettings 
-                                                argumentField="category" 
-                                                type="bar"
-                                                barPadding={0.1}
-                                                minBarSize={3}
+                                                    argumentField="category" 
+                                                    type="bar"
+                                                    barPadding={0.1}
+                                                    minBarSize={3}
                                                 />
                                                 <Series
                                                 valueField="value"
@@ -2761,9 +2700,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 }}
                                                 />
                                                 <ArgumentAxis
-                                                allowDecimals={false}
-                                                axisDivisionFactor={1}
-                                                discreteAxisDivisionMode="crossLabels"
+                                                    allowDecimals={false}
+                                                    axisDivisionFactor={1}
+                                                    discreteAxisDivisionMode="crossLabels"
                                                 >
                                                     <ChartLabel rotationAngle={45} wordWrap="none" textOverflow="ellipsis" />
                                                     <Grid visible={true} />
@@ -2790,7 +2729,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     }
                                                     
                                                     let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
-                                                    
+                                                
                                                     let dataItem = this.state.productAnalysisData[this.state.selectedAnalysis]?.find(item => 
                                                         item.category === arg.argumentText
                                                     )
@@ -2805,9 +2744,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                         {    
                                                             tooltipText += `\n${this.lang.t("quantity")}: ${dataItem.quantity}`
                                                         }
-                                                        if (dataItem.itemCount) 
-                                                        {
-                                                            tooltipText += `\n${this.lang.t("itemCount")}: ${dataItem.itemCount}`
+                                                    if (dataItem.itemCount) 
+                                                    {
+                                                        tooltipText += `\n${this.lang.t("itemCount")}: ${dataItem.itemCount}`
                                                         }
                                                     }
                                                     
@@ -2818,127 +2757,127 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 />
                                             </Chart>
                                         )
-                                    ) : this.state.selectedAnalysis === 'dayOfWeekDistribution' ? (
-                                        <PieChart
-                                        id="analysisPieChart"
-                                        type="doughnut"
-                                    title={this.state.analysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
-                                        palette="Bright"
-                                    dataSource={this.state.analysisData[this.state.selectedAnalysis] || []}
-                                        visible={this.state.analysisData[this.state.selectedAnalysis]?.length > 0}
-                                        >
-                                            <PieSeries 
-                                            argumentField="category"
-                                            valueField="value"
+                                        ) : this.state.selectedAnalysis === 'dayOfWeekDistribution' ? (
+                                            <PieChart
+                                            id="analysisPieChart"
+                                            type="doughnut"
+                                            title={this.state.analysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
+                                            palette="Bright"
+                                            dataSource={this.state.analysisData[this.state.selectedAnalysis] || []}
+                                            visible={this.state.analysisData[this.state.selectedAnalysis]?.length > 0}
                                             >
-                                                <PieLabel visible={true} customizeText={(arg) => {
-                                                    let total = (this.state.analysisData[this.state.selectedAnalysis] || []).reduce((sum, item) => sum + item.value, 0)
-                                                    let percentage = ((arg.value / total) * 100).toFixed(1)
-                                                    
-                                                    return `${arg.argumentText}\n${arg.value.toFixed(2)} € (${percentage}%)`
-                                                }}>
-                                                    <PieConnector visible={true} /> 
-                                                </PieLabel>
-                                            </PieSeries>
-                                            <PieLegend 
-                                            margin={0} 
-                                            horizontalAlignment="center" 
-                                            verticalAlignment="bottom" 
-                                            />
-                                            <PieTooltip 
-                                            enabled={true}
-                                            customizeTooltip={(arg) => 
-                                            {
-                                                return {
-                                                    text: `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
-                                                };
-                                            }}
-                                            />
-                                        </PieChart>
-                                    ) : this.state.chartType === 'pie' ? 
-                                    (
-                                        <PieChart
-                                        id="analysisPieChart"
-                                        type="doughnut"
-                                        title={this.state.analysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
-                                    palette="Bright"
-                                        dataSource={this.state.analysisData[this.state.selectedAnalysis] || []}
-                                        visible={this.state.analysisData[this.state.selectedAnalysis]?.length > 0}
-                                        >
-                                            <PieSeries 
-                                            argumentField="category"
-                                            valueField="value"
+                                                <PieSeries 
+                                                argumentField="category"
+                                                valueField="value"
+                                                >
+                                                    <PieLabel visible={true} customizeText={(arg) => {
+                                                        let total = (this.state.analysisData[this.state.selectedAnalysis] || []).reduce((sum, item) => sum + item.value, 0)
+                                                        let percentage = ((arg.value / total) * 100).toFixed(1)
+                                                        
+                                                        return `${arg.argumentText}\n${arg.value.toFixed(2)} € (${percentage}%)`
+                                                    }}>
+                                                        <PieConnector visible={true} /> 
+                                                    </PieLabel>
+                                                </PieSeries>
+                                                <PieLegend 
+                                                margin={0} 
+                                                horizontalAlignment="center" 
+                                                verticalAlignment="bottom" 
+                                                />
+                                                <PieTooltip 
+                                                enabled={true}
+                                                customizeTooltip={(arg) => 
+                                                {
+                                                    return {
+                                                        text: `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
+                                                    };
+                                                }}
+                                                />
+                                            </PieChart>
+                                        ) : this.state.chartType === 'pie' ? 
+                                        (
+                                            <PieChart
+                                            id="analysisPieChart"
+                                            type="doughnut"
+                                            title={this.state.analysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
+                                            palette="Bright"
+                                            dataSource={this.state.analysisData[this.state.selectedAnalysis] || []}
+                                            visible={this.state.analysisData[this.state.selectedAnalysis]?.length > 0}
                                             >
-                                                <PieLabel visible={true} customizeText={(arg) => 
-                                                {
-                                                    let total = (this.state.analysisData[this.state.selectedAnalysis] || []).reduce((sum, item) => sum + item.value, 0)
-                                                    let percentage = ((arg.value / total) * 100).toFixed(1)
-                                                    
-                                                    return `${arg.argumentText}\n${arg.value.toFixed(2)} € (${percentage}%)`
-                                                }}>
-                                                    <PieConnector visible={true} /> 
-                                                </PieLabel>
-                                            </PieSeries>
-                                            <PieLegend 
-                                            margin={0} 
-                                            horizontalAlignment="center" 
-                                            verticalAlignment="bottom" 
-                                            />
-                                            <PieTooltip 
-                                            enabled={true}
-                                            customizeTooltip={(arg) => 
-                                            {
-                                                let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
-                                                if (this.state.selectedAnalysis === 'top10Days' || this.state.selectedAnalysis === 'worst10Days') 
-                                                {
-                                                    let dataItem = this.state.analysisData[this.state.selectedAnalysis]?.find(item => item.category === arg.argumentText)
-                                                    if (dataItem && dataItem.rank) 
+                                                <PieSeries 
+                                                argumentField="category"
+                                                valueField="value"
+                                                >
+                                                    <PieLabel visible={true} customizeText={(arg) => 
                                                     {
-                                                        tooltipText = `${dataItem.rank}. ${tooltipText}`
+                                                        let total = (this.state.analysisData[this.state.selectedAnalysis] || []).reduce((sum, item) => sum + item.value, 0)
+                                                        let percentage = ((arg.value / total) * 100).toFixed(1)
+                                                        
+                                                        return `${arg.argumentText}\n${arg.value.toFixed(2)} € (${percentage}%)`
+                                                    }}>
+                                                        <PieConnector visible={true} /> 
+                                                    </PieLabel>
+                                                </PieSeries>
+                                                <PieLegend 
+                                                margin={0} 
+                                                horizontalAlignment="center" 
+                                                verticalAlignment="bottom" 
+                                                />
+                                                <PieTooltip 
+                                                enabled={true}
+                                                customizeTooltip={(arg) => 
+                                                {
+                                                    let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
+                                                    if (this.state.selectedAnalysis === 'top10Days' || this.state.selectedAnalysis === 'worst10Days') 
+                                                    {
+                                                        let dataItem = this.state.analysisData[this.state.selectedAnalysis]?.find(item => item.category === arg.argumentText)
+                                                        if (dataItem && dataItem.rank) 
+                                                        {
+                                                            tooltipText = `${dataItem.rank}. ${tooltipText}`
+                                                        }
                                                     }
-                                                }
-                                                return { text: tooltipText };
-                                            }}
-                                            />
-                                        </PieChart>
-                                    ) : this.state.chartType === 'line' ? 
-                                    (
-                                        <Chart
+                                                    return { text: tooltipText };
+                                                }}
+                                                />
+                                            </PieChart>
+                                        ) : this.state.chartType === 'line' ? 
+                                        (
+                                            <Chart
                                             id="analysisLineChart"
-                                        title={this.state.analysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
-                                        dataSource={this.state.analysisData[this.state.selectedAnalysis] || []}
-                                        palette="Bright"
-                                        style={{minHeight: '400px'}}
-                                        visible={this.state.analysisData[this.state.selectedAnalysis]?.length > 0}
-                                    >
-                                        <CommonSeriesSettings 
-                                        argumentField="category" 
-                                        type="line"
-                                        />
-                                        <Series
+                                            title={this.state.analysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
+                                            dataSource={this.state.analysisData[this.state.selectedAnalysis] || []}
+                                            palette="Bright"
+                                            style={{minHeight: '400px'}}
+                                            visible={this.state.analysisData[this.state.selectedAnalysis]?.length > 0}
+                                        >
+                                            <CommonSeriesSettings 
+                                            argumentField="category" 
+                                            type="line"
+                                            />
+                                            <Series
                                             valueField="value"
                                             name={this.lang.t("analysisChart.title")}
                                             hoverMode="allArgumentPoints"
                                             point={{ hoverMode: "allArgumentPoints"  }}
-                                        />
-                                        <ArgumentAxis
-                                        allowDecimals={false}
-                                        axisDivisionFactor={1}
-                                        discreteAxisDivisionMode="crossLabels"
-                                        >
-                                            <ChartLabel rotationAngle={45} />
-                                        </ArgumentAxis>
-                                        <ValueAxis>
-                                            <Title text={this.lang.t("analysisChart.amount")} />
-                                        </ValueAxis>
-                                        <Legend 
-                                        position="outside"
-                                        horizontalAlignment="center"
-                                        verticalAlignment="bottom"
-                                        orientation="horizontal"
-                                        />
-                                        <Tooltip 
-                                        enabled={true}
+                                            />
+                                            <ArgumentAxis
+                                            allowDecimals={false}
+                                            axisDivisionFactor={1}
+                                            discreteAxisDivisionMode="crossLabels"
+                                            >
+                                                <ChartLabel rotationAngle={45} />
+                                            </ArgumentAxis>
+                                            <ValueAxis>
+                                                <Title text={this.lang.t("analysisChart.amount")} />
+                                            </ValueAxis>
+                                            <Legend 
+                                            position="outside"
+                                            horizontalAlignment="center"
+                                            verticalAlignment="bottom"
+                                            orientation="horizontal"
+                                            />
+                                            <Tooltip 
+                                            enabled={true}
                                             zIndex={9999}
                                             customizeTooltip={(arg) => 
                                             {
@@ -2953,104 +2892,104 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             }
                                                 return { text: tooltipText };
                                             }}
-                                        />
-                                        </Chart>
-                                    ) : (
-                                        // Diğer analizler için Bar Chart
-                                        <Chart
-                                        id="analysisChart"
-                                        title={this.state.analysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
-                                        dataSource={this.state.analysisData[this.state.selectedAnalysis] || []}
-                                        palette="Bright"
-                                        style={{minHeight: '400px'}}
-                                        visible={this.state.analysisData[this.state.selectedAnalysis]?.length > 0}
-                                        onPointClick={async (e) => 
-                                        {
-                                            
-                                            // Eğer ürün grupları grafiğindeyse ve bir gruba tıklandıysa
-                                            if (this.state.selectedAnalysis === 'topSellingProductGroups' && e.target.data.groupCode) {
-                                                
-                                                // Önce state'i güncelle
-                                                this.setState({ 
-                                                    selectedProductGroup: e.target.data.groupCode,
-                                                    selectedAnalysis: 'topSellingProductsInGroup'
-                                                },   
-                                                async () => 
-                                                {
-                                                    // Sonra veriyi yükle
-                                                    let productAnalysisData = await this.calculateProductAnalysisData('topSellingProductsInGroup');
-                                                    this.setState({ productAnalysisData: productAnalysisData });
-                                                });
-                                            }
-                                        }}
-                                        >
-                                            <CommonSeriesSettings 
-                                            argumentField="category" 
-                                            type="bar"
                                             />
-                                            <Series
-                                            valueField="value"
-                                            name={this.lang.t("analysisChart.title")}
-                                            hoverMode="allArgumentPoints"
-                                            point={{
-                                                hoverMode: "allArgumentPoints"
+                                            </Chart>
+                                        ) : (
+                                            // Diğer analizler için Bar Chart
+                                            <Chart
+                                            id="analysisChart"
+                                            title={this.state.analysisData[this.state.selectedAnalysis]?.[0]?.title || this.lang.t("analysisChart.title")}
+                                            dataSource={this.state.analysisData[this.state.selectedAnalysis] || []}
+                                            palette="Bright"
+                                            style={{minHeight: '400px'}}
+                                            visible={this.state.analysisData[this.state.selectedAnalysis]?.length > 0}
+                                            onPointClick={async (e) => 
+                                            {
+                                                
+                                                // Eğer ürün grupları grafiğindeyse ve bir gruba tıklandıysa
+                                                if (this.state.selectedAnalysis === 'topSellingProductGroups' && e.target.data.groupCode) {
+                                                    
+                                                    // Önce state'i güncelle
+                                                    this.setState({ 
+                                                        selectedProductGroup: e.target.data.groupCode,
+                                                        selectedAnalysis: 'topSellingProductsInGroup'
+                                                    },   
+                                                    async () => 
+                                                    {
+                                                        // Sonra veriyi yükle
+                                                        let productAnalysisData = await this.calculateProductAnalysisData('topSellingProductsInGroup');
+                                                        this.setState({ productAnalysisData: productAnalysisData });
+                                                    });
+                                                }
+                                            }}
+                                            >
+                                                <CommonSeriesSettings 
+                                                argumentField="category" 
+                                                type="bar"
+                                                />
+                                                <Series
+                                                valueField="value"
+                                                name={this.lang.t("analysisChart.title")}
+                                                hoverMode="allArgumentPoints"
+                                                point={{
+                                                    hoverMode: "allArgumentPoints"
+                                                }}
+                                            />
+                                                <ArgumentAxis
+                                                allowDecimals={false}
+                                                axisDivisionFactor={1}
+                                                discreteAxisDivisionMode="crossLabels"
+                                                >
+                                                    <ChartLabel rotationAngle={45} wordWrap="none" textOverflow="ellipsis" />
+                                                    <Grid visible={true} />
+                                                </ArgumentAxis>
+                                                <ValueAxis>
+                                                    <Title text={this.lang.t("analysisChart.amount")} />
+                                                    <Grid visible={true} />
+                                                </ValueAxis>
+                                                <Legend 
+                                                position="outside"
+                                                horizontalAlignment="center"
+                                                verticalAlignment="bottom"
+                                                orientation="horizontal"
+                                                />
+                                                <Tooltip 
+                                                enabled={true}
+                                                zIndex={9999}
+                                                customizeTooltip={(arg) => {
+                                                    if (!arg || !arg.argumentText || !arg.valueText) 
+                                                    {
+                                                        return { text: this.lang.t("noData") };
+                                                    }
+                                                    
+                                                    let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
+                                                    let dataItem = this.state.analysisData[this.state.selectedAnalysis]?.find(item => 
+                                                        item.category === arg.argumentText
+                                                    )
+                                                    
+                                                    if (dataItem) 
+                                                    {
+                                                        if (dataItem.rank) 
+                                                        {
+                                                            tooltipText = `${dataItem.rank}. ${tooltipText}`
+                                                        }
+                                                        if (dataItem.quantity) 
+                                                        {
+                                                            tooltipText += `\n${this.lang.t("quantity")}: ${dataItem.quantity}`
+                                                        }
+                                                        if (dataItem.saleCount) 
+                                                        {
+                                                            tooltipText += `\n${this.lang.t("saleCount")}: ${dataItem.saleCount}`
+                                                    }
+                                                }
+                                                
+                                                return {
+                                                    text: tooltipText
+                                                };
                                             }}
                                             />
-                                            <ArgumentAxis
-                                            allowDecimals={false}
-                                            axisDivisionFactor={1}
-                                            discreteAxisDivisionMode="crossLabels"
-                                            >
-                                                <ChartLabel rotationAngle={45} wordWrap="none" textOverflow="ellipsis" />
-                                                <Grid visible={true} />
-                                            </ArgumentAxis>
-                                            <ValueAxis>
-                                                <Title text={this.lang.t("analysisChart.amount")} />
-                                                <Grid visible={true} />
-                                            </ValueAxis>
-                                            <Legend 
-                                            position="outside"
-                                            horizontalAlignment="center"
-                                            verticalAlignment="bottom"
-                                            orientation="horizontal"
-                                            />
-                                            <Tooltip 
-                                            enabled={true}
-                                            zIndex={9999}
-                                            customizeTooltip={(arg) => {
-                                                if (!arg || !arg.argumentText || !arg.valueText) 
-                                                {
-                                                    return { text: this.lang.t("noData") };
-                                                }
-                                                
-                                                let tooltipText = `${arg.argumentText}: ${parseFloat(arg.valueText).toFixed(2)} €`
-                                                let dataItem = this.state.analysisData[this.state.selectedAnalysis]?.find(item => 
-                                                    item.category === arg.argumentText
-                                                )
-                                                
-                                                if (dataItem) 
-                                                {
-                                                    if (dataItem.rank) 
-                                                    {
-                                                        tooltipText = `${dataItem.rank}. ${tooltipText}`
-                                                    }
-                                                    if (dataItem.quantity) 
-                                                    {
-                                                        tooltipText += `\n${this.lang.t("quantity")}: ${dataItem.quantity}`
-                                                    }
-                                                    if (dataItem.saleCount) 
-                                                    {
-                                                        tooltipText += `\n${this.lang.t("saleCount")}: ${dataItem.saleCount}`
-                                                }
-                                            }
-                                            
-                                            return {
-                                                text: tooltipText
-                                            };
-                                        }}
-                                        />
-                                        </Chart>
-                                    )}
+                                            </Chart>
+                                        )}
                                     </>
                                     )}
                                 </div>
@@ -3065,8 +3004,8 @@ export default class posSalesStatisticalReport extends React.PureComponent
                     showTitle={true}
                     title={this.state.selectedProduct ? `${this.state.selectedProduct.name} - ${this.lang.t("productDetailAnalysis")}` : this.lang.t("productDetailAnalysis")}
                     container={'#' + this.props.data.id + this.tabIndex}       
-                    width={'1400'}
-                    height={'900'}
+                    width={'1000'}
+                    height={'800'}
                     position={{of:'#' + this.props.data.id + this.tabIndex}}
                     ref={(el) => { this.popProductDetail = el }}
                     onHiding={async () => 
@@ -3135,9 +3074,9 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                         <div className="col-md-6">
                                             <div style={{marginBottom: '15px'}}>
                                                 <Label 
-                                                text={this.lang.t("selectAnalysisType")} 
-                                                alignment="center"
-                                                style={{color: 'white', fontWeight: 'bold', fontSize: '16px'}}
+                                                    text={this.lang.t("selectAnalysisType")} 
+                                                    alignment="center"
+                                                    style={{color: 'white', fontWeight: 'bold', fontSize: '16px'}}
                                                 />
                                             </div>
                                             <NdSelectBox key={this.state.selectBoxResetKey}
@@ -3145,11 +3084,11 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                             parent={this} 
                                             dataSource={
                                             [
-                                                { id: 'daily', name: '📅 ' + this.lang.t("dailyAnalysis") },
-                                                { id: 'weekly', name: '📊 ' + this.lang.t("weeklyAnalysis") },
-                                                { id: 'monthly', name: '📈 ' + this.lang.t("monthlyAnalysis") },
-                                                { id: 'dayOfWeek', name: '🗓️ ' + this.lang.t("dayOfWeekAnalysis") },
-                                                { id: 'yearly', name: '📆 ' + this.lang.t("yearlyAnalysis") }
+                                                    { id: 'daily', name: '📅 ' + this.lang.t("dailyAnalysis") },
+                                                    { id: 'weekly', name: '📊 ' + this.lang.t("weeklyAnalysis") },
+                                                    { id: 'monthly', name: '📈 ' + this.lang.t("monthlyAnalysis") },
+                                                    { id: 'dayOfWeek', name: '🗓️ ' + this.lang.t("dayOfWeekAnalysis") },
+                                                    { id: 'yearly', name: '📆 ' + this.lang.t("yearlyAnalysis") }
                                             ]}
                                             displayExpr="name"
                                             valueExpr="id"
@@ -3178,12 +3117,12 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     }
                                                     finally
                                                     {
-                                                        App.instance.loading.hide()
+                                                    App.instance.loading.hide()
                                                     }
                                                 }
                                             }}
-                                            />
-                                      </div>
+                                        />
+                                        </div>
                                         <div className="col-md-6">
                                             <div style={{marginBottom: '15px'}}>
                                                 <Label 
@@ -3297,7 +3236,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                 type="spline"
                                                 />
                                                 <Series
-                                                    valueField="value"
+                                                valueField="value"
                                                 name={this.lang.t("amount")}
                                                 hoverMode="allArgumentPoints"
                                                 point={{ hoverMode: "allArgumentPoints"   }}
@@ -3389,7 +3328,7 @@ export default class posSalesStatisticalReport extends React.PureComponent
                                                     <Grid visible={true} />
                                                 </ValueAxis>
                                                 <Legend 
-                                                    visible={true}
+                                                visible={true}
                                                 position="outside"
                                                 horizontalAlignment="center"
                                                 verticalAlignment="bottom"

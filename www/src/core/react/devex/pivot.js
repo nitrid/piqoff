@@ -1,7 +1,9 @@
 import React from 'react';
 import Base from './base.js';
-import PivotGrid,{FieldChooser,Export,StateStoring} from 'devextreme-react/pivot-grid';
+import PivotGrid,{FieldChooser,Export,StateStoring,PivotGridTypes} from 'devextreme-react/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
+import { Workbook } from 'exceljs';
+import { exportPivotGrid } from 'devextreme/excel_exporter';
 
 export {FieldChooser,Export,StateStoring}
 export default class NdPivot extends Base
@@ -24,6 +26,24 @@ export default class NdPivot extends Base
             showRowGrandTotals : props.showRowGrandTotals,
         } 
     }
+
+    onExporting = (e) => 
+    {
+        const workbook = new Workbook();
+        const worksheet = workbook.addWorksheet('Sales');
+      
+        exportPivotGrid({
+          component: e.component,
+          worksheet,
+        })
+        .then(() => 
+        {
+            workbook.xlsx.writeBuffer().then((buffer) => 
+            {
+            saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Sales.xlsx');
+            });
+        });
+    };
     setDataSource(pData,pField)
     {
         this.setState(
@@ -52,6 +72,7 @@ export default class NdPivot extends Base
             showRowGrandTotals={this.state.showRowGrandTotals}
             onCellPrepared={this.props.onCellPrepared}
             height={this.props.height}
+            onExporting={this.onExporting}
             >
                 {this.props.children}
             </PivotGrid>

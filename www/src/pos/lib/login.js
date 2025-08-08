@@ -200,7 +200,7 @@ export default class Login extends React.Component
                                 displayExpr="text"                       
                                 valueExpr="id"
                                 value= {localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang')}
-                                data={{source:[{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"de",text:"DE"},{id:"es",text:"ES"},{id:"it",text:"IT"},{id:"tr",text:"TR"}]}}
+                                data={{source:[{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"de",text:"DE"},{id:"es",text:"ES"},{id:"it",text:"IT"},{id:"tr",text:"TR"},{id:"at",text:"AT"}]}}
                                 onValueChanged={(async(args)=>
                                 {
                                     localStorage.setItem('lang',args.value)

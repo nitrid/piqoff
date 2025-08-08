@@ -386,7 +386,7 @@ export default class DocBase extends React.PureComponent
             else
             {
                 this.docLocked = false
-                this.frmDocItems.option('disabled',false)
+                
             }
 
             for(let i = 0; i < this.docDetailObj.dt().length; i++)
@@ -2099,12 +2099,14 @@ export default class DocBase extends React.PureComponent
                                             }
 
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
+                                            console.log('tmpData',tmpData)
 
                                             if(tmpData.result.recordset.length > 0)
                                             {
                                                 this.docObj.dt()[0].LOCKED = 0
                                                 this.docLocked = false
                                                 this.toast.show({message:this.t("msgPasswordSucces.msg"),type:'success',displayTime:2000})
+                                                this.frmDocItems.option('disabled',false)
                                                 this.popPassword.hide();  
 
                                                 if(typeof this.popPassword.onStatus != 'undefined')
@@ -2134,7 +2136,8 @@ export default class DocBase extends React.PureComponent
                                         <NdButton text={this.lang.t("btnCancel")} type="normal" stylingMode="contained" width={'100%'}
                                         onClick={()=>
                                         {
-                                            this.popPassword.hide();  
+                                            this.popPassword.hide(); 
+                                            this.frmDocItems.option('disabled',true) 
                                         }}/>
                                     </div>
                                 </div>

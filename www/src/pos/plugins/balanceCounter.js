@@ -101,7 +101,6 @@ posDoc.prototype.getItem = async function(pCode)
     let tmpTicketNo = getBarPattern(pCode)
     if(typeof tmpTicketNo != 'undefined')
     {
-        console.log('tmpTicketNo',tmpTicketNo)
         if(!this.state.loading)
         {
             this.txtBarcode.value = "";
@@ -347,18 +346,19 @@ posDoc.prototype.getItem = async function(pCode)
             }
             else
             {
-                let tmpConfObj =
-                {
-                    id:'msgBarcodeBalanceNotFound',
-                    showTitle:true,
-                    title:this.lang.t("msgBarcodeBalanceNotFound.title"),
-                    showCloseButton:true,
-                    width:'500px',
-                    height:'auto',
-                    button:[{id:"btn01",caption:this.lang.t("msgBarcodeBalanceNotFound.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeBalanceNotFound.msg")}</div>)
-                }
-                await dialog(tmpConfObj);
+                // let tmpConfObj =
+                // {
+                //     id:'msgBarcodeBalanceNotFound',
+                //     showTitle:true,
+                //     title:this.lang.t("msgBarcodeBalanceNotFound.title"),
+                //     showCloseButton:true,
+                //     width:'500px',
+                //     height:'auto',
+                //     button:[{id:"btn01",caption:this.lang.t("msgBarcodeBalanceNotFound.btn01"),location:'after'}],
+                //     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeBalanceNotFound.msg")}</div>)
+                // }
+                // await dialog(tmpConfObj);
+                document.getElementById("Sound").play(); 
             }
             this.loading.hide()
         }
@@ -420,7 +420,12 @@ function getBalanceCounter(pTicketNo,pCode)
             }
             else
             {
-                resolve(tmpDt.where({STATUS:false}))
+                let tmpData = new datatable();
+                if(typeof tmpDt.where({STATUS:false})[0] != 'undefined')
+                {
+                    tmpData.push(tmpDt.where({STATUS:false})[0])
+                }
+                resolve(tmpData)
             }   
         }
         else
