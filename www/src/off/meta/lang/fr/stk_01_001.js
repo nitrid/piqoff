@@ -51,6 +51,7 @@ const stk_01_001 =
     validPriceFloat : "Le montant doit être supérieur à 0 !",
     validCustomerCode :"Veuillez Entrer un Code Fournisseur !",
     validOriginMax8 :"Entrez au maximum 8 caractères !",
+    validTax : "La taxe ne peut être vide !",
     mainUnitName :"Unité Principale",
     underUnitName : "Sous Unité",
     chkDayAnalysis : "Journalier",  
