@@ -98,14 +98,16 @@ posDoc.prototype.getItem = async function(pCode)
     getBarPattern = getBarPattern.bind(this)
     getBalanceCounter = getBalanceCounter.bind(this)
     
-    let tmpTicketNo = getBarPattern(pCode)
+    let tmpCode = pCode.split('|')
+
+    let tmpTicketNo = getBarPattern(tmpCode[0])
     if(typeof tmpTicketNo != 'undefined')
     {
         if(!this.state.loading)
         {
             this.txtBarcode.value = "";
             this.loading.show()
-            let tmpBalanceDt = await getBalanceCounter(tmpTicketNo,pCode)
+            let tmpBalanceDt = await getBalanceCounter(tmpTicketNo,tmpCode)
 
             if(tmpBalanceDt.length > 0)
             {
@@ -299,7 +301,6 @@ posDoc.prototype.getItem = async function(pCode)
 
                         this.saleAdd(tmpItemsDt[0])
 
-                        console.log(this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl)
                         if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl != 'undefined' && this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl)
                         {
                             if(typeof tmpBalanceDt[0].STATUS == 'undefined')
@@ -346,18 +347,18 @@ posDoc.prototype.getItem = async function(pCode)
             }
             else
             {
-                // let tmpConfObj =
-                // {
-                //     id:'msgBarcodeBalanceNotFound',
-                //     showTitle:true,
-                //     title:this.lang.t("msgBarcodeBalanceNotFound.title"),
-                //     showCloseButton:true,
-                //     width:'500px',
-                //     height:'auto',
-                //     button:[{id:"btn01",caption:this.lang.t("msgBarcodeBalanceNotFound.btn01"),location:'after'}],
-                //     content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeBalanceNotFound.msg")}</div>)
-                // }
-                // await dialog(tmpConfObj);
+                let tmpConfObj =
+                {
+                    id:'msgBarcodeBalanceNotFound',
+                    showTitle:true,
+                    title:this.lang.t("msgBarcodeBalanceNotFound.title"),
+                    showCloseButton:true,
+                    width:'500px',
+                    height:'auto',
+                    button:[{id:"btn01",caption:this.lang.t("msgBarcodeBalanceNotFound.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgBarcodeBalanceNotFound.msg")}</div>)
+                }
+                await dialog(tmpConfObj);
                 document.getElementById("Sound").play(); 
             }
             this.loading.hide()
@@ -373,7 +374,6 @@ function getBarPattern(pBarcode)
     pBarcode = pBarcode.toString().trim()
     let tmpPrm = this.prmObj.filter({ID:'BarcodePattern',TYPE:0}).getValue();
     
-    console.log(pBarcode)
     if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
     {            
         return
@@ -420,35 +420,33 @@ function getBalanceCounter(pTicketNo,pCode)
             }
             else
             {
-                let tmpData = new datatable();
-                if(typeof tmpDt.where({STATUS:false})[0] != 'undefined')
-                {
-                    tmpData.push(tmpDt.where({STATUS:false})[0])
-                }
-                resolve(tmpData)
+                resolve(tmpDt.where({STATUS:false}))
             }   
         }
         else
         {
-            let tmpBar = this.getBarPattern(pCode)
-            if(typeof tmpBar.code != 'undefined' && typeof tmpBar.price != 'undefined' && typeof tmpBar.quantity != 'undefined')
+            for (let i = 0; i < pCode.length; i++) 
             {
-                tmpDt.push(
-                    {
-                        GUID : datatable.uuidv4(),
-                        ITEM_CODE : "B" + tmpBar.code,
-                        QUANTITY : tmpBar.quantity,
-                        PRICE : tmpBar.price,
-                        FREE : typeof tmpBar.isDiscount == 'undefined' ? false : tmpBar.isDiscount
-                    }
-                )
-
-                resolve(tmpDt)
+                let tmpBar = this.getBarPattern(pCode[i])
+                if(typeof tmpBar.code != 'undefined' && typeof tmpBar.price != 'undefined' && typeof tmpBar.quantity != 'undefined')
+                {
+                    tmpDt.push(
+                        {
+                            GUID : datatable.uuidv4(),
+                            ITEM_CODE : "B" + tmpBar.code,
+                            QUANTITY : tmpBar.quantity,
+                            PRICE : tmpBar.price,
+                            FREE : typeof tmpBar.isDiscount == 'undefined' ? false : tmpBar.isDiscount
+                        }
+                    )
+    
+                    resolve(tmpDt)
+                }
+                else
+                {
+                    resolve(tmpDt)
+                }
             }
-            else
-            {
-                resolve(tmpDt)
-            }
-        }
-    })
+        }
+    })
 }
