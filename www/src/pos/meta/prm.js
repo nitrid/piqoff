@@ -321,63 +321,63 @@ export const prm =
             [
                 {
                     id:"btn01",
-                    title:"Course annulé.",
-                    text:"Le client ne veux plus son produit."
+                    title:"docDel.btn01.title", // Dil anahtarı
+                    text:"docDel.btn01.text"    // Dil anahtarı
                 },
                 {
                     id:"btn02",
-                    title:"Montant insuffisant!",
-                    text:"Le client n'a pas le montant requis pour payer ses produits."
+                    title:"docDel.btn02.title",
+                    text:"docDel.btn02.text"
                 },
                 {
                     id:"btn03",
-                    title:"Refus CB.",
-                    text:"Paiement Refusée de la banque CB du client."
+                    title:"docDel.btn03.title",
+                    text:"docDel.btn03.text"
                 },
                 {
                     id:"btn04",
-                    title:"La responsable teste.",
-                    text:"La responsable teste des produits."
+                    title:"docDel.btn04.title",
+                    text:"docDel.btn04.text"
                 },
                 {
                     id:"btn05",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"docDel.btn05.title",
+                    text:"docDel.btn05.text"
                 },
                 {
                     id:"btn06",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"docDel.btn06.title",
+                    text:"docDel.btn06.text"
                 },
                 {
                     id:"btn07",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"docDel.btn07.title",
+                    text:"docDel.btn07.text"
                 },
                 {
                     id:"btn08",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"docDel.btn08.title",
+                    text:"docDel.btn08.text"
                 },
                 {
                     id:"btn09",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"docDel.btn09.title",
+                    text:"docDel.btn09.text"
                 },
                 {
                     id:"btn10",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"docDel.btn10.title",
+                    text:"docDel.btn10.text"
                 },
                 {
                     id:"btn11",
-                    title:"Description vide.",
-                    text:"Description non saisie."
+                    title:"docDel.btn11.title",
+                    text:"docDel.btn11.text"
                 },
                 {
                     id:"btn12",
-                    title:"TEST.",
-                    text:"Produit scanné suite à test pour une mise à jour."
+                    title:"docDel.btn12.title",
+                    text:"docDel.btn12.text"
                 }
             ]
         },

@@ -162,6 +162,70 @@ export const langTr =
         head : "Silme İşlemi Açıklaması",
         title : "Lütfen Silme Nedeninizi Giriniz"
     },
+    docDel: 
+    {
+        caption: "Evrak Sil Açıklama",
+        btn01: 
+        {
+            title: "Alisveris iptal edildi.",
+            text: "Müşteri artık ürününü istemiyor."
+        },
+        btn02: 
+        {
+            title: "Tutar yetersiz!",
+            text: "Müşterinin ürünleri için gerekli olan tutarı yok."
+        },
+        btn03: 
+        {
+            title: "CB ödemesi reddedildi.",
+            text: "Müşterinin kredi kartı ödemesi reddedildi."
+        },
+        btn04: 
+        {
+            title: "Sorumlu test ediyor.",
+            text: "Sorumlu ürünleri test ediyor."
+        },
+        btn05: 
+        {
+            title: "Açıklama boş.",
+            text: "Açıklama boş geçilemez."
+        },
+        btn06: 
+        {
+            title: "Açıklama boş.",
+            text: "Açıklama boş geçilemez."
+        },
+        btn07:  
+        {
+            title: "Açıklama boş.",
+            text: "Açıklama boş geçilemez."
+        },
+        btn08:          
+        {
+            title: "Açıklama boş.",
+            text: "Açıklama boş geçilemez."
+        },
+        btn09:      
+        {
+            title: "Açıklama boş.",
+            text: "Açıklama boş geçilemez."
+        },
+        btn10:        
+        {
+            title: "Açıklama boş.",
+            text: "Açıklama boş geçilemez."
+        },
+        btn11: 
+        {
+            title: "Açıklama boş.",     
+            text: "Açıklama boş geçilemez."
+        },
+        btn12: 
+        {
+            title: "TEST.",
+            text: "Ürün tarandı, güncelleme için test ediliyor."
+        }
+    },
     popVatRate:
     {
         title : "Vergi Oranları",
@@ -1110,5 +1174,57 @@ export const langTr =
         PRICE : "FİYAT",
         MAIN_GRP_NAME : "ANA GRUP",
         RAYON_NAME : "RAYON",
-    },        
+    }, 
+    
+    supplierItemStatisticsReport: {
+        supplier: "Tedarikçi",
+        supplierSelect: "Tedarikçi Seçimi",
+        supplierCode: "Tedarikçi Kodu",
+        supplierName: "Tedarikçi Adı",
+        itemGroup: "Ürün Grubu",
+        itemGroupSelect: "Ürün Grubu Seçimi",
+        itemGroupCode: "Ürün Grup Kodu",
+        itemGroupName: "Ürün Grup Adı",
+        analysisType: "Analiz Türü",
+        summaryAnalysis: "Özet Analiz",
+        detailedAnalysis: "Detaylı Analiz",
+        statisticalAnalysis: "İstatistiksel Analiz",
+        comparativeAnalysis: "Karşılaştırmalı Analiz",
+        trendAnalysis: "Trend Analizi",
+        ticketCount: "Fiş Sayısı",
+        uniqueItemCount: "Benzersiz Ürün Sayısı",
+        totalQuantity: "Toplam Miktar",
+        totalAmount: "Toplam Tutar",
+        avgTicketAmount: "Ortalama Fiş Tutarı",
+        totalProfit: "Toplam Kar",
+        profitMarginPercent: "Kar Marjı %",
+        avgCostPrice: "Ortalama Maliyet",
+        activeSaleDays: "Aktif Satış Günleri",
+        salesFrequencyPercent: "Satış Sıklığı %",
+        dailyAvgSales: "Günlük Ortalama Satış",
+        avgQuantityPerTicket: "Fiş Başına Ortalama Miktar",
+        amountStandardDeviation: "Tutar Standart Sapması",
+        minTicketAmount: "Min Fiş Tutarı",
+        maxTicketAmount: "Max Fiş Tutarı",
+        minAmount: "Min Tutar",
+        maxAmount: "Max Tutar",
+        detailedItemStatistics: "Detaylı Ürün İstatistikleri",
+        itemCode: "Ürün Kodu",
+        itemName: "Ürün Adı",
+        saleDays: "Satış Günleri",
+        monthlyTrendAnalysis: "Aylık Trend Analizi",
+        salesAndProfitTrend: "Satış ve Kar Trendi",
+        period: "Dönem",
+        salesAmount: "Satış Tutarı",
+        profitAmount: "Kar Tutarı",
+        monthlySales: "Aylık Satışlar",
+        monthlyProfit: "Aylık Kar",
+        monthlyTickets: "Aylık Fişler",
+        comparativeStatistics: "Karşılaştırmalı İstatistikler",
+        comparativeAnalysisDescription: "Seçili kriterlere göre dönemsel ve kategorik karşılaştırma analizleri bu bölümde gösterilecektir.",
+        btnAnalyze: "Analiz Et",
+        detail: "Detay"
+                
+     
+     }      
  }

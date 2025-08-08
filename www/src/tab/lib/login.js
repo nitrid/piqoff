@@ -174,7 +174,7 @@ export default class Login extends React.PureComponent
                                 displayExpr="text"                       
                                 valueExpr="id"
                                 value= {localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang')}
-                                data={{source:[{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"},{id:"de",text:"DE"}]}}
+                                data={{source:[{id:"en",text:"EN"},{id:"fr",text:"FR"},{id:"tr",text:"TR"},{id:"de",text:"DE"},{id:"at",text:"AT"}]}}
                                 onValueChanged={(async(args)=>
                                 {
                                     localStorage.setItem('lang',args.value)

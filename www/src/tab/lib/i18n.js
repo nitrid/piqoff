@@ -3,6 +3,8 @@ import {langTr} from '../meta/lang/tr.js'
 import {langFr} from '../meta/lang/fr.js'
 import {langDe} from '../meta/lang/de.js'
 import {langEn} from '../meta/lang/en.js'
+import {langAt} from '../meta/lang/at.js'
+
 i18n.init(
 {
     lng: 'en',
@@ -23,6 +25,10 @@ i18n.init(
         en: 
         {
             translation: langEn
+        },
+        at: 
+        {
+            translation: langAt
         }
     },
 });

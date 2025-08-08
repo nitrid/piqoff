@@ -309,7 +309,8 @@ export const prm =
             CAPTION : "Zorunlu Evrak Silme Açıklaması"
         }
     },
-    //Evrak Sil Açıklama
+    //Evrak Sil Açıklama-FR
+
     {
         TYPE : 0,
         ID :"DocDelDescription",

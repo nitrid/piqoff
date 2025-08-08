@@ -650,6 +650,70 @@ export const langFr =
         btn01: "OK",   
         msg: "Document Numéroté Supprimé !Veuillez vous Renseigner Auprès d'un Responsable.."   
     },
+    docDel: 
+    {
+        caption: "Description de la Suppression",
+        btn01: 
+        {
+            title: "Course annulé.",
+            text: "Le client ne veux plus son produit."
+        },
+        btn02: 
+        {
+            title: "Montant insuffisant!",
+            text: "Le client n'a pas le montant requis pour payer ses produits."
+        },
+        btn03: 
+        {
+            title: "Refus CB.",
+            text: "Paiement Refusée de la banque CB du client."
+        },
+        btn04: 
+        {
+            title: "La responsable teste.",
+            text: "La responsable teste des produits."
+        },
+        btn05: 
+        {
+            title: "Description vide.",
+            text: "Description non saisie."
+        },
+        btn06: 
+        {
+            title: "Description vide.",
+            text: "Description non saisie."
+        },
+        btn07:  
+        {
+            title: "Description vide.",
+            text: "Description non saisie."
+        },
+        btn08:          
+        {
+            title: "Description vide.",
+            text: "Description non saisie."
+        },
+        btn09:      
+        {
+            title: "Description vide.",
+            text: "Description non saisie."
+        },
+        btn10:        
+        {
+            title: "Description vide.",
+            text: "Description non saisie."
+        },
+        btn11: 
+        {
+            title: "Description vide.",     
+            text: "Description non saisie."
+        },
+        btn12: 
+        {
+            title: "TEST.",
+            text: "Produit scanné suite à test pour une mise à jour."
+        }
+    },
     msgCheckDocNo:
     {
         title: "Attention",

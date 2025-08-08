@@ -638,6 +638,70 @@ export const langDe =
         slsRpt_02_006 : "Offene Einkaufsrechnungs-Bericht",
         slsRpt_02_007 : "Einkaufsrechnungs-Alterungsbericht",
     },
+    docDel: 
+    {
+        caption: "Dokument-Löschbeschreibung",
+        btn01: 
+        {
+            title: "Einkaufsbestellung abgebrochen.",
+            text: "Der Kunde will sein Produkt nicht mehr."
+        },
+        btn02: 
+        {
+            title: "Betrag nicht ausreichend!",
+            text: "Der Kunde hat nicht den erforderlichen Betrag für die Zahlung seiner Produkte."
+        },
+        btn03: 
+        {
+            title: "CB-Zahlung abgelehnt.",
+            text: "Die Zahlung durch die Kreditkarte des Kunden wurde abgelehnt."
+        },
+        btn04: 
+        {
+            title: "Verantwortlicher testet.",
+            text: "Der Verantwortliche testet die Produkte."
+        },
+        btn05: 
+        {
+            title: "Beschreibung leer.",
+            text: "Beschreibung nicht eingegeben."
+        },
+        btn06: 
+        {
+            title: "Beschreibung leer.",
+            text: "Beschreibung nicht eingegeben."
+        },
+        btn07:  
+        {
+            title: "Beschreibung leer.",
+            text: "Beschreibung nicht eingegeben."
+        },
+        btn08:          
+        {
+            title: "Beschreibung leer.",
+            text: "Beschreibung nicht eingegeben."
+        },
+        btn09:      
+        {
+            title: "Beschreibung leer.",
+            text: "Beschreibung nicht eingegeben."
+        },
+        btn10:        
+        {
+            title: "Beschreibung leer.",
+            text: "Beschreibung nicht eingegeben."
+        },
+        btn11: 
+        {
+            title: "Beschreibung leer.",     
+            text: "Beschreibung nicht eingegeben."
+        },
+        btn12: 
+        {
+            title: "TEST.",
+            text: "Produkt wurde gescannt, um eine Aktualisierung zu testen."
+        }
+    },
     login:
     {
         login:"Bestätigen",

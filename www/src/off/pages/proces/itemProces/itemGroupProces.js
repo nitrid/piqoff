@@ -244,7 +244,7 @@ export default class itemGroupProces extends React.PureComponent
                             </Toolbar>
                         </div>
                     </div>
-                    <div className="row px-2 pt-1" style={{height:'80px'}}>
+                    <div className="row px-2 pt-1" >
                         <div className="col-12">
                             <Form colCount={2} id="frmKriter">
                                 <Item>
@@ -303,7 +303,7 @@ export default class itemGroupProces extends React.PureComponent
                             <NdGrid id="grdListe" parent={this} 
                             selection={{mode:"multiple"}} 
                             showBorders={true}
-                            height={'700px'}
+                            height={'690px'}
                             width={'100%'}
                             filterRow={{visible:true}} 
                             headerFilter={{visible:true}}

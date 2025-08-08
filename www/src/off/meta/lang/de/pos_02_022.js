@@ -23,6 +23,16 @@ const pos_02_022 =
     ticketCount: "Anzahl der Tickets",
     totalAmount: "Gesamtbetrag",
     avgTicketAmount: "Durchschnittlicher Ticketbetrag",
+    totalProfit: "Gesamtgewinn",
+    profitMarginPercent: "Gewinnmarge",
+    saleDayCount: "Anzahl der Verkaufstage",
+    totalQuantity: "Gesamtmenge",
+    avgCostPrice: "Durchschnittlicher Einstandspreis",
+    supplierCount: "Anzahl der Lieferanten",
+    firstSaleDate: "Datum des ersten Verkaufs",
+    lastSaleDate: "Datum des letzten Verkaufs",
+    supplierNames: "Lieferantennamen",
+    totalQuantity: "Gesamtmenge",
 }
 
 export default pos_02_022

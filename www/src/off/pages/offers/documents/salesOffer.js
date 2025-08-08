@@ -764,7 +764,7 @@ export default class salesOffer extends DocBase
                 validationGroup: 'frmslsDoc' + this.tabIndex,
                 onClick: (async (c)=>
                 {
-                    if(e.validationGroup.validate().status == "valid")
+                    if(c.validationGroup.validate().status == "valid")
                         {
                             await this.popMultiItem.show()
                             await this.grdMultiItem.dataRefresh({source:this.multiItemData});
