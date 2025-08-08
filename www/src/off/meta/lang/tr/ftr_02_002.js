@@ -58,11 +58,11 @@ const  ftr_02_002 =
     btnMailsend : "Mail Gönder",
     validMail : "Lütfen Boş Geçmeyin.",
     placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
-    msgControlOfDispatch: 
+    msgControlOfFacture:
     {
         title: "Dikkat",
         btn01: "Kapat",
-        msg: "Bu satış teklifi daha önce bir irsaliyeye çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden yeni bir Fatura oluşturunuz."
+        msg: "Bu irsaliye daha önce bir faturaya çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden Faturayi seçiniz. Bu islem kapatılacaktır."
     },
     isMsgSave :
     {  
@@ -108,7 +108,9 @@ const  ftr_02_002 =
         title : "Ürün Seçimi",
         clmCode :  "ÜRÜN KODU",
         clmName : "ÜRÜN ADI",
-        clmPrice : "SATIŞ FİYATI"
+        clmPrice : "SATIŞ FİYATI",
+        clmMainGrp : "ANA GRUP",
+        clmRayon : "RAYON"
     },
     pg_dispatchGrid : 
     {

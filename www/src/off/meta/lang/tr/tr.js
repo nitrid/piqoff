@@ -703,10 +703,9 @@ export const langTr =
         txtCustomerName : "Tedarikçi Adı",
         dtDocDate : "Tarih",
         dtShipDate : "Sevk Tarihi",
-        txtRealHT : "Ara Toplam (Gerçek)",
-        txtHT : "Ara Toplam (Döküman)",
-        txtTax : "Vergi (Döküman)",
-        txtTTC : "Genel Toplam (Döküman)",
+        txtHT : "Ara Toplam",
+        txtTax : "Vergi",
+        txtTTC : "Genel Toplam",
         clmItemCode : "Kodu",
         clmMulticode : "T.Kodu",
         clmItemName : "Adı",
@@ -714,27 +713,12 @@ export const langTr =
         clmPrice : "Fiyat",
         clmDiscount : "İndirim",
         clmAmount : "Tutar",
-        clmVat : "Vergi",
         msgCustomerNotFound :
         {
             title : "Dikkat",
             btn01 : "Tamam",
             msg : "Tedarikçi bulunamadığından import işlemini yapamazsınız !"
         },
-        msgHTControl :
-        {
-            title : "Dikkat",
-            btn01 : "Tamam",
-            btn02 : "İptal",
-            msg : "Ara Toplam (Döküman) ile Ara Toplam (Gerçek) eşleşmiyor !"
-        },
-        msgMultiCodeAdd :
-        {
-            title : "Dikkat",
-            btn01 : "Tamam",
-            btn02 : "İptal",
-            msg : "Seçilen tedarikçiye ait tedarikçi ürün kodlarının kaydı yapılacaktır. Emin misiniz ?"
-        }
     },
     popTransport : 
     {
@@ -1101,14 +1085,6 @@ export const langTr =
         status: "Stok Durumu",
         safetyStock: "Güvenlik Stoku",
     },
-    popItemSelect : 
-    {
-        title : "Ürün Seçimi",
-        CODE :  "ÜRÜN KODU",
-        NAME : "ÜRÜN ADI",
-        MULTICODE : "TEDARİKÇİ KODU",
-        PRICE : "FİYAT",
-        MAIN_GRP_NAME : "ANA GRUP",
-        RAYON_NAME : "RAYON",
-    },        
+            
+ 
  }

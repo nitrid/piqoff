@@ -3,6 +3,7 @@ const pos_02_012 =
 {
     btnGet: "Suchen",
     txtTotalTicket: "Gesamtzahl der Kassenbelege",
+    dtDate: "Datum",
     grdListe:
     {
         clmDocDate: "Datum",

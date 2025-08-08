@@ -709,10 +709,9 @@ export const langFr =
         txtCustomerName : "Nom du fournisseur",
         dtDocDate : "Date",
         dtShipDate : "Date d'expédition",
-        txtRealHT : "Total HT (Réel)",
-        txtHT : "Total HT (Document)",
-        txtTax : "Taxe (Document)",
-        txtTTC : "Total TTC (Document)",
+        txtHT : "Total HT",
+        txtTax : "Taxe",
+        txtTTC : "Total TTC",
         clmItemCode : "Code",
         clmMulticode : "Code multiple",
         clmItemName : "Nom de l'article",
@@ -720,26 +719,11 @@ export const langFr =
         clmPrice : "Prix",
         clmDiscount : "Remise",
         clmAmount : "Montant",
-        clmVat : "Taxe",
         msgCustomerNotFound :
         {
             title : "Attention",
             btn01 : "D'accord",
             msg : "Impossible d'effectuer l'import car le fournisseur n'a pas été trouvé !"
-        },
-        msgHTControl :
-        {
-            title : "Attention",
-            btn01 : "D'accord",
-            btn02 : "Annuler",
-            msg : "Le total HT (document) ne correspond pas au total HT (réel) !"
-        },
-        msgMultiCodeAdd :
-        {
-            title : "Attention",
-            btn01 : "D'accord",
-            btn02 : "Annuler",
-            msg : "Les codes produits du fournisseur sélectionné seront enregistrés. Êtes-vous sûr ?"
         }
     },
     popTransport : 
@@ -1033,14 +1017,5 @@ export const langFr =
     data: "Données",
     item: "Article",
     product: "Produit",
-    popItemSelect : 
-    {
-        title : "Sélectionner Produit",
-        CODE :  "Référence Produit",
-        NAME : "Nom Produit",
-        MULTICODE : "FRN.Code",
-        PRICE : "Prix de Vente",
-        MAIN_GRP_NAME : "Groupe",
-        RAYON_NAME : "Rayon",
-    }, 
+     
  }

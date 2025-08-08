@@ -692,10 +692,9 @@ export const langEn =
         txtCustomerName : "Supplier Name",
         dtDocDate : "Date",
         dtShipDate : "Shipment Date",
-        txtRealHT : "Subtotal (Real)",
-        txtHT : "Subtotal (Document)",
-        txtTax : "Tax (Document)",
-        txtTTC : "Total (Document)",
+        txtHT : "Subtotal",
+        txtTax : "Tax",
+        txtTTC : "Total",
         clmItemCode : "Code",
         clmMulticode : "Multi Code",
         clmItemName : "Name",
@@ -703,27 +702,12 @@ export const langEn =
         clmPrice : "Price",
         clmDiscount : "Discount",
         clmAmount : "Amount",
-        clmVat : "Tax",
         msgCustomerNotFound :
         {
             title : "Attention",
             btn01 : "Ok",
             msg : "Supplier not found, cannot perform import operation!"
         },
-        msgHTControl :
-        {
-            title : "Attention",
-            btn01 : "Ok",
-            btn02 : "Cancel",
-            msg : "The subtotal (document) does not match the subtotal (real)!"
-        },
-        msgMultiCodeAdd :   
-        {
-            title : "Attention",
-            btn01 : "Ok",
-            btn02 : "Cancel",
-            msg : "The product codes of the selected supplier will be recorded. Are you sure?"
-        }
     },
     popTransport : 
     {
@@ -1033,14 +1017,4 @@ export const langEn =
     data: "Data",
     item: "Item",
     product: "Product",
-    popItemSelect : 
-    {
-        title : "Product Selection",
-        CODE :  "PRODUCT CODE",
-        NAME : "PRODUCT NAME",
-        MULTICODE : "SUPPLIER CODE",
-        PRICE : "PRICE",
-        MAIN_GRP_NAME : "MAIN GROUP",
-        RAYON_NAME : "RAYON",
-    },
 }

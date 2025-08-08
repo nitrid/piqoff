@@ -1,6 +1,33 @@
 // "Satış Teklifi"
 const tkf_02_002 =
 {
+    menu :
+    {
+       
+        btnSelectOrder : "Satış Siparişi",
+        btnSelectInvoice : "Satış Faturası",
+        btnSelectDispatch : "Satış İrsaliyesi",
+    },
+    msgControlOfFacture :
+    {
+        title : "Dikkat",
+        btn01 : "Tamam",
+        msg : "Bu teklifi faturaya çevirmek istediğinize emin misiniz?"
+    },
+    msgControlOfDispatch :
+    {
+        title : "Dikkat",
+        btn01 : "Tamam",
+        msg : "Bu teklifi irsaliyeye çevirmek istediğinize emin misiniz?"
+    },
+    msgControlOfOrder :
+    {
+        title : "Dikkat",
+        btn01 : "Tamam",
+        msg : "Bu teklifi siparişe çevirmek istediğinize emin misiniz?"
+    },
+
+    btnSelectOrder : "Satış Siparişi",
     txtRefRefno : "Seri-Sıra",
     cmbDepot: "Depo",
     txtCustomerCode : "Müşteri Kodu",
@@ -33,6 +60,7 @@ const tkf_02_002 =
     msgTransform :
     {
         title : "Evrak Dönüştürme",
+        btnOrder : "Sipariş",
         btnDispatch : "İrsaliye",
         btnInvoice : "Fatura",
         msg : "Bu teklifi dönüştürmek istediğinize emin misiniz?"
@@ -40,6 +68,7 @@ const tkf_02_002 =
     msgTransformConfirm :
     {
         title : "Evrak Dönüştürme Onayı",
+        msgOrder : "Bu teklifi siparise çevirmek istediğinize emin misiniz?",
         msgDispatch : "Bu teklifi irsaliyeye çevirmek istediğinize emin misiniz?",
         msgInvoice : "Bu teklifi faturaya çevirmek istediğinize emin misiniz?",
         btn01 : "Evet",

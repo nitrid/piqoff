@@ -6,7 +6,8 @@ const stk_04_008 =
     {
         clmItemCode : "Code",
         clmItemName : "Name",
-        clmPrice : "Preis",
+        clmPrice : "Preis",  
+        clmDate : "Datum",
     },   
     msgItemSend:
     {

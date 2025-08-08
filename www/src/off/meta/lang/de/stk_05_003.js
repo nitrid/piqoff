@@ -9,13 +9,14 @@ const stk_05_003 =
     {
         clmCode: "Code", 
         clmName : "Name",           
-        clmQuantity : "Menge", 
-        clmBarcode : "Barcode", 
-        clmCostPrice : "Einkaufspreis",    
-        clmTotalCost : "Einkaufswert",    
-        clmSalePrice : "Verkaufspreis",    
-        clmTotalPrice : "Gesamter Verkaufswert" ,
-        clmUnitSymbol : 'Einheit' 
+        clmQuantity : "Menge",
+        clmBarcode : "Barcode",
+        clmCostPrice : "Kaufpreis", 
+        clmTotalCost : "Bestandswert", 
+        clmSalePrice : "Verkaufspreis", 
+        clmTotalPrice : "Gesamtwert des Verkaufs",
+        clmUnitSymbol : 'Einheit',
+        clmDate : "Datum"
     },
     txtTotalQuantity : "Gesamtmenge",
     txtTotalCost : "Inventarwert",

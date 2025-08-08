@@ -15,9 +15,10 @@ const stk_05_004 =
         clmCostPrice : "Kosten",   
         clmTotalCost : "Gesamtkosten",   
         clmDocDate : "Datum",   
-        clmRef : "Referenz",  
-        clmRefNo : "Zeile",   
-        clmDescription : "Beschreibung"  
+        clmRef : "Serie",
+        clmRefNo : "Reihe",   
+        clmDescription : "Beschreibung",
+        clmDate : "Datum"
     },
     txtTotalQuantity : "Gesamtmenge",  
     txtTotalCost : "Inventarwert",  

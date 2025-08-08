@@ -182,7 +182,7 @@ export const dialog = function()
             title={arguments[0].title} 
             showCloseButton={arguments[0].showCloseButton}
             width={arguments[0].width}
-            height={arguments[0].height}
+            height={'auto'}
             button={arguments[0].button}
             timeout={arguments[0].timeout}
             deferRendering={typeof arguments[0].deferRendering == 'undefined' ? false : arguments[0].deferRendering}

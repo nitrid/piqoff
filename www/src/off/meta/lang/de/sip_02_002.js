@@ -31,6 +31,43 @@ const sip_02_002 =
     txtDocNo : "Dokumentnummer",
     cmbPricingList : "Preisliste",
     LINE_NO: "Zeilennummer",
+    popTransformSelect:
+    {
+        title: "Umwandlung auswählen"
+    },
+    msgTransformConfirm:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        btn02: "Abbrechen",
+        msgDispatch: "Möchten Sie das Dokument wirklich in Lieferschein umwandeln?",
+        msgInvoice: "Möchten Sie das Dokument wirklich in Rechnung umwandeln?"
+    },
+    btnSelectDispatch: "In Lieferschein umwandeln",
+    btnSelectInvoice: "In Rechnung umwandeln",
+    msgControlOfDispatch:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Dieses Dokument wurde bereits in einen Lieferschein umgewandelt. Wenn Sie einen Lieferschein erstellen möchten, erstellen Sie bitte einen neuen Lieferschein im Lieferscheinmodul."
+    },
+    menu:
+    {
+        btnSelectDispatch: "Lieferschein",
+        btnSelectInvoice: "Rechnung"
+    },
+    msgControlOfOrder:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Dieses Dokument wurde bereits in eine Rechnung umgewandelt. Wenn Sie eine Rechnung erstellen möchten, erstellen Sie bitte eine neue Rechnung im Rechnungsmodul."
+    },
+    msgLocked:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Dokument gespeichert und gesperrt!"
+    },
     pg_Docs : 
     {
         title : "Dokumentauswahl",

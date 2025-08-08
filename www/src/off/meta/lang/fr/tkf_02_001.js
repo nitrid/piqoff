@@ -263,7 +263,7 @@ const tkf_02_001 =
     popMultiItem:
     {
         title: "Ajout Groupe de Produit",
-        btnApprove: "Chercher Produits",
+        btnApprove: "Rechercher Produits",
         btnClear : "Vider",
         btnSave : "Ajouter Lignes",
     },

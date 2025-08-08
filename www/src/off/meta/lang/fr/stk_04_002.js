@@ -13,7 +13,7 @@ const stk_04_002 =
         clmGenusName : "Genre"
     },
     cmbDepot : 'Dépôt',  
-    btnGet : 'Chercher',
+    btnGet : 'Rechercher',
     btnInvoice : "Convertir En Facture",
     btnDispatch : 'Convertir en Bon de Livraison',
     grdRebateList : 

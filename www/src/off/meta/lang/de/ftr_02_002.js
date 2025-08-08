@@ -59,6 +59,12 @@ const  ftr_02_002 =
     tabTitleDetail : "Detailinformationen",
     validMail : "Bitte lassen Sie dieses Feld nicht leer.",
     placeMailHtmlEditor : "Sie können eine Beschreibung Ihrer E-Mail eingeben.",
+    msgControlOfFacture:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Dieses Lieferschein wurde bereits in eine Rechnung umgewandelt. Wenn Sie eine Rechnung erstellen möchten, wählen Sie bitte die Rechnung im Verkaufsrechnungsmodul. Diese Aktion wird geschlossen."
+    },
     isMsgSave :
     {
         title: "Achtung",

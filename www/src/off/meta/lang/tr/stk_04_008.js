@@ -7,6 +7,7 @@ const stk_04_008 =
         clmItemCode :"Kodu",
         clmItemName :"Adı",
         clmPrice :"Fiyat",
+        clmDate :"Tarih",
     },   
     msgItemSend:
     {

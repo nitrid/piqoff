@@ -286,7 +286,7 @@ const irs_02_004 =
     popMultiItem:
     {
         title: "Ajout Groupé de Produit",
-        btnApprove: "Chercher Produits",
+        btnApprove: "Rechercher Produits",
         btnClear : "Vider",
         btnSave : "Ajouter Lignes",
     },

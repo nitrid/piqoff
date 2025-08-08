@@ -59,6 +59,12 @@ const  ftr_02_002 =
     tabTitleDetail : "Informations détaillées",
     validMail : "Veuillez ne pas laisser ce champ vide.",
     placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+    msgControlOfFacture:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Ce bon de livraison a déjà été converti en facture. Si vous souhaitez créer une facture, veuillez créer une nouvelle facture dans le module des factures de vente."
+    },
     isMsgSave :
     {
         title: "Attention",
@@ -103,7 +109,9 @@ const  ftr_02_002 =
         title : "Sélectionner Produit",
         clmCode :  "Référence Produit",
         clmName : "Nom Produit",
-        clmPrice : "Prix de Vente" 
+        clmPrice : "Prix de Vente",
+        clmMainGrp : "Groupe",
+        clmRayon : "Rayon"
     },
     pg_dispatchGrid : 
     {
@@ -416,7 +424,7 @@ const  ftr_02_002 =
     popMultiItem:
     {
         title: "Ajout Groupé de Produit",
-        btnApprove: "Chercher Produit",
+        btnApprove: "Rechercher Produit",
         btnClear : "Supprimer",
         btnSave : "Ajouter Lignes",
     },

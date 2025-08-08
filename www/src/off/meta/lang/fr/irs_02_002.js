@@ -36,6 +36,41 @@ const irs_02_002 =
     btnMailsend : "Envoyer un courriel",
     validMail : "Veuillez ne pas laisser ce champ vide.",
     placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+    popTransformSelect:
+    {
+        title: "Sélection de la conversion"
+    },
+    msgTransformConfirm:
+    {
+        title: "Attention",
+        btn01: "OK",
+        btn02: "Annuler",
+        msgDispatch: "Voulez-vous vraiment convertir le document en livraison ?",
+        msgInvoice: "Voulez-vous vraiment convertir le document en facture ?"
+    },
+    btnSelectInvoice: "Convertir en Facture",
+    msgControlOfDispatch:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Ce document a déjà été converti en livraison. Si vous souhaitez créer une livraison, veuillez créer une nouvelle livraison dans le module des livraisons."
+    },
+    menu:
+    {
+        btnSelectInvoice: "Facture de vente"
+    },
+    msgControlOfOrder:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Ce document a déjà été converti en facture. Si vous souhaitez créer une facture, veuillez créer une nouvelle facture dans le module des factures."
+    },
+    msgLocked:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Document enregistré et verrouillé !"
+    },
     msgControlOfFacture:
     {
         title: "Attention",

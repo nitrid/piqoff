@@ -1,6 +1,30 @@
 // "Satış Teklifi"
 const tkf_02_002 =
 {
+    menu :
+    {
+        btnSelectOrder : "Order",
+        btnSelectInvoice : "Invoice",
+        btnSelectDispatch : "Dispatch",
+    },
+    msgControlOfFacture :
+    {   
+        title : "Attention",
+        btn01 : "OK",
+        msg : "Do you want to convert the document to an invoice ?"
+    },
+    msgControlOfDispatch :
+    {
+        title : "Attention",
+        btn01 : "OK",
+        msg : "Do you want to convert the document to a dispatch ?"
+    },
+    msgControlOfOrder :
+    {
+        title : "Attention",
+        btn01 : "OK",
+        msg : "Voulez-vous vraiment convertir le document en commande ?"
+    },
     txtRefRefno : "Series-Row",
     cmbDepot: "Depo",
     txtCustomerCode : "Customer Code",
@@ -28,11 +52,13 @@ const tkf_02_002 =
     validMail : "Please do not leave blank.",
     cmbPricingList : "Pricing List",
     LINE_NO : "Line No",
+    btnSelectOrder : "Convert to Order",
     btnSelectDispatch : "Convert to Dispatch",
     btnSelectInvoice : "Convert to Invoice",
     msgTransform :
     {
         title : "Convert Document",
+        btnOrder : "Order",
         btnDispatch : "Dispatch",
         btnInvoice : "Invoice",
         msg : "Do you want to convert the document to a dispatch or invoice ?"
@@ -40,6 +66,7 @@ const tkf_02_002 =
     msgTransformConfirm :
     {
         title : "Convert Document",
+        msgOrder : "Do you want to convert the document to an order ?",
         msgDispatch : "Do you want to convert the document to a dispatch ?",
         msgInvoice : "Do you want to convert the document to an invoice ?",
         btn01 : "Yes",

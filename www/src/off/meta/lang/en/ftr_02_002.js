@@ -58,6 +58,12 @@ const  ftr_02_002 =
     btnMailsend : "Send Mail",
     validMail : "Please do not leave blank.",
     placeMailHtmlEditor : "You can enter a description to your mail.",
+    msgControlOfFacture:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "This dispatch has already been converted to a facture. If you want to create a facture, please select the facture in the sales invoice module. This action will be closed."
+    },
     msgControlOfDispatch: 
     {
         title: "Attention",
@@ -108,7 +114,9 @@ const  ftr_02_002 =
         title : "Product Selection",
         clmCode :  "PRODUCT CODE",
         clmName : "PRODUCT NAME",
-        clmPrice : "SALES PRICE"
+        clmPrice : "SALES PRICE",
+        clmMainGrp : "MAIN GROUP",
+        clmRayon : "RAYON"
     },
     pg_dispatchGrid : 
     {
