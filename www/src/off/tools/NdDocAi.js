@@ -3,11 +3,12 @@ import moment from 'moment';
 import React from "react";
 import Base from '../../core/react/devex/base.js';
 import App from "../lib/app";
-import Form, { Label,Item,EmptyItem } from 'devextreme-react/form';
+import Form, { Label, Item, EmptyItem } from 'devextreme-react/form';
 import FileUploader from 'devextreme-react/file-uploader';
+
 import NdPopUp from '../../core/react/devex/popup.js';
 import NdButton from "../../core/react/devex/button";
-import NdGrid,{Column,Editing,Paging,Pager,KeyboardNavigation,Scrolling} from '../../core/react/devex/grid';
+import NdGrid,{ Column, Editing, Paging, Pager, KeyboardNavigation, Scrolling, Button } from '../../core/react/devex/grid';
 import NdDialog, { dialog } from '../../core/react/devex/dialog.js';
 import NdTextBox from '../../core/react/devex/textbox.js'
 import NdDatePicker from '../../core/react/devex/datepicker.js';
@@ -432,19 +433,51 @@ export default class NdDocAi extends Base
                         value : [this.core.auth.data.CODE,item.ItemGuid,this.importData.CustomerGuid,item.ProductCode]
                     }
                     await this.core.sql.execute(tmpQueryInsert)
-                    
-                    let tmpQueryPriceInsert =
-                    {
-                        query : `EXEC [dbo].[PRD_ITEM_PRICE_INSERT] @CUSER = @PCUSER, @ITEM = @PITEM, @CUSTOMER = @PCUSTOMER, @TYPE = @PTYPE, @PRICE = @PPRICE, @QUANTITY = @PQUANTITY`,
-                        param : ['PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PTYPE:string|25','PPRICE:string|25','PQUANTITY:string|25'],
-                        value : [this.core.auth.data.CODE,item.ItemGuid,this.importData.CustomerGuid,'1',item.UnitPrice,1]
-                    }
-                    await this.core.sql.execute(tmpQueryPriceInsert)
                 }
             }
             resolve()
         })
         
+    }
+    openItem(pData)
+    {
+        App.instance.menuClick(
+        {
+            id: 'stk_01_001',
+            text: pData.ProductCode,
+            path: 'items/cards/itemCard.js',
+            pagePrm:
+            {
+                PRM_TYPE:'new',
+                CODE:pData.ItemCode,
+                NAME:pData.ItemName,
+                CUSTOMER_ITEM_CODE:pData.ProductCode,
+                CUSTOMER_GUID :this.importData.CustomerGuid,
+                CUSTOMER_CODE:this.importData.CustomerCode,
+                CUSTOMER_NAME:this.importData.CustomerName,
+                COST_PRICE:pData.UnitPrice,
+                VAT:pData.Vat,
+            }
+        })
+    }
+    async refreshItem(pData)
+    {
+        let tmpItem = await this.getItem(pData.ProductCode,this.importData.CustomerGuid)
+
+        if(typeof tmpItem != 'undefined')
+        {
+            pData.ItemCode = tmpItem.ITEM_CODE  
+            pData.ItemCost = tmpItem.COST_PRICE  
+            pData.ItemGuid = tmpItem.ITEM_GUID  
+            pData.ItemName = tmpItem.ITEM_NAME  
+            pData.ItemType = tmpItem.ITEM_TYPE  
+            pData.ItemUnit = tmpItem.UNIT
+            pData.ItemVat = tmpItem.VAT
+            pData.ItemTotal = Number((pData.Quantity * pData.UnitPrice) -((pData.Quantity * pData.UnitPrice) * (pData.DiscountRate / 100))).round(2)
+            this.grdList.devGrid.refresh(true)
+            this.grdList.devGrid.repaint()
+            this.txtRealHT.value = this.grdList.data.datatable.sum('ItemTotal')
+        }
     }
     render()
     {
@@ -642,6 +675,10 @@ export default class NdDocAi extends Base
                                         return Number(e.data.Amount).round(2).toFixed(2) + ' / ' + Number(e.data.ItemTotal).round(2).toFixed(2)
                                     }}
                                     />
+                                    <Column type="buttons" width={70}>
+                                        <Button hint="Add Item" icon="inserttable" onClick={(e) => this.openItem(e.row.data)} />
+                                        <Button hint="Refresh" icon="refresh" onClick={(e) => this.refreshItem(e.row.data)} />
+                                    </Column>
                                 </NdGrid>
                             </div>
                         </div>
@@ -714,13 +751,14 @@ export default class NdDocAi extends Base
                 {
                     select:
                     {
-                        query : "SELECT GUID,CODE,NAME,STATUS,0 AS ITEM_TYPE,UNIT,COST_PRICE,VAT FROM ITEMS_VW_01 WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL)",
+                        query : `SELECT GUID,CODE,NAME,STATUS,0 AS ITEM_TYPE,MIN(UNIT_GUID) AS UNIT,COST_PRICE,VAT FROM ITEMS_BARCODE_MULTICODE_VW_01   WHERE UPPER(CODE) LIKE UPPER(@VAL) OR UPPER(NAME) LIKE UPPER(@VAL) OR BARCODE LIKE @VAL
+                                GROUP BY  GUID,CODE,NAME,STATUS,COST_PRICE,VAT`,
                         param : ['VAL:string|50']
                     },
                     sql:this.core.sql
                 }
             }}
-            deferRendering={true}
+            deferRendering={false}
             >
                 <Column dataField="CODE" caption={this.t("pg_txtItemsCode.clmCode")} width={'20%'} />
                 <Column dataField="NAME" caption={this.t("pg_txtItemsCode.clmName")} width={'70%'} defaultSortOrder="asc" />
