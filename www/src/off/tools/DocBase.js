@@ -623,17 +623,32 @@ export default class DocBase extends React.PureComponent
     }
     async calculateTotalMargin()
     {
+        // Safe check for document data
+        if (!this.docObj || !this.docObj.dt() || this.docObj.dt().length === 0) {
+            return;
+        }
+        
+        if (!this.docDetailObj || !this.docDetailObj.dt()) {
+            return;
+        }
+
         let tmpTotalCost = 0
 
-        if(typeof this.docObj.dt()[0] != 'undefined')
+        const docData = this.docObj.dt()[0];
+        if (docData)
         {
             for (let  i= 0; i < this.docDetailObj.dt().length; i++) 
             {
-                tmpTotalCost += this.docDetailObj.dt()[i].COST_PRICE * this.docDetailObj.dt()[i].QUANTITY
+                const detailItem = this.docDetailObj.dt()[i];
+                if (detailItem && typeof detailItem.COST_PRICE === 'number' && typeof detailItem.QUANTITY === 'number') {
+                    tmpTotalCost += detailItem.COST_PRICE * detailItem.QUANTITY;
+                }
             }
-            let tmpMargin = ((this.docObj.dt()[0].TOTALHT ) - tmpTotalCost)
-            let tmpMarginRate = Number(tmpTotalCost).rate2Num(tmpMargin,2)
-            this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+            
+            const totalHt = docData.TOTALHT || 0;
+            let tmpMargin = (totalHt - tmpTotalCost)
+            let tmpMarginRate = Number(tmpTotalCost).rate2Num ? Number(tmpTotalCost).rate2Num(tmpMargin,2) : 0;
+            docData.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
         }
     }
     async calculateMargin()
@@ -1355,24 +1370,116 @@ export default class DocBase extends React.PureComponent
 
         if(tmpControlData.result.recordset.length > 0 )
         {
-            //Bu devis daha once IRSALIYEYE cevrilmistir
-            if(tmpControlData.result.recordset[0].TYPE_TO == 40 && pType == 20)
+            let targetConnection = tmpControlData.result.recordset.find(conn => conn.TYPE_TO == pType);
+
+            if(targetConnection)
             {
-                let tmpConfObj =
-                {
-                    id:'msgControlOfDispatch',showTitle:true,title:this.t("msgControlOfDispatch.title"),showCloseButton:true,width:'500px',height:'250px',
-                    button:[{id:"btn01",caption:this.t("msgControlOfDispatch.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgControlOfDispatch.msg")}</div>)
-                }
+                await this.getDoc(targetConnection.DOC_TO, targetConnection.REF_TO, targetConnection.REF_NO_TO) 
+                return
+            }
 
-                let pResult = await dialog(tmpConfObj);
-
-                if(pResult == 'btn01')
+            let parentQuery = {
+                query : "SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_TO = @GUID",
+                param : ['GUID:string|50'],
+                value : [pGuid]
+            }
+            let parentData = await this.core.sql.execute(parentQuery)
+            
+            if(parentData.result.recordset.length > 0)
+            {
+                for(let parent of parentData.result.recordset)
                 {
-                    App.instance.panel.closePage()
+                    let parentOutQuery = 
+                    {
+                        query : "SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID",
+                        param : ['GUID:string|50'],
+                        value : [parent.DOC_FROM]
+                    }
+
+                    let parentOutData = await this.core.sql.execute(parentOutQuery)
+
+                    if(parentOutData.result.recordset.length > 0)
+                    {
+                        let parentTarget = parentOutData.result.recordset.find(conn => conn.TYPE_TO == pType)
+                       
+                        if(parentTarget)
+                        {
+                            await this.getDoc(parentTarget.DOC_TO, parentTarget.REF_TO, parentTarget.REF_NO_TO)
+                            return
+                        }
+
+                        for(let pConn of parentOutData.result.recordset)
+                        {
+                            let level2Query = 
+                            {
+                                query : "SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID",
+                                param : ['GUID:string|50'],
+                                value : [pConn.DOC_TO]
+                            }
+
+                            let level2Data = await this.core.sql.execute(level2Query)
+
+                            if(level2Data.result.recordset.length > 0)
+                            {
+                                let level2Target = level2Data.result.recordset.find(conn => conn.TYPE_TO == pType)
+                              
+                                if(level2Target)
+                                {
+                                    console.log('buildOrder - Navigating to existing document via parent level-2:', level2Target.DOC_TO)
+                                    await this.getDoc(level2Target.DOC_TO, level2Target.REF_TO, level2Target.REF_NO_TO)
+                                    return
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            else if (tmpControlData.result.recordset[0].TYPE_TO == 20 && pType == 40)
+
+            let allConnections = tmpControlData.result.recordset
+            let hasDispatch = allConnections.some(conn => conn.TYPE_TO == 40) // İrsaliye var mı?
+            let hasInvoice = allConnections.some(conn => conn.TYPE_TO == 20)  // Fatura var mı?
+
+            // Forward chain: Offer -> (direct) DOC_TO; onların çıkışlarını tara
+            for(let c of allConnections)
+            {
+                let outQ = { 
+                    query: "SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID", 
+                    param: ['GUID:string|50'], 
+                    value: [c.DOC_TO] 
+                }
+                let outD = await this.core.sql.execute(outQ)
+                for(let oc of outD.result.recordset)
+                {
+                    if(oc.TYPE_TO == 40) { hasDispatch = true }
+                    if(oc.TYPE_TO == 20) { hasInvoice = true }
+                }
+            }
+
+            // Parent chain: Offer'a gelen bağlantıların (DOC_TO = offer) çıkışlarını tara
+            if(typeof parentData !== 'undefined' && parentData.result.recordset.length > 0)
+            {
+                for(let parent of parentData.result.recordset)
+                {
+                    let parentOutQuery = { 
+                        query : "SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID", 
+                        param : ['GUID:string|50'], 
+                        value : [parent.DOC_FROM] 
+                    }
+                    let parentOutData = await this.core.sql.execute(parentOutQuery)
+                    for(let oc of parentOutData.result.recordset)
+                    {
+                        if(oc.TYPE_TO == 40) { hasDispatch = true }
+                        if(oc.TYPE_TO == 20) { hasInvoice = true }
+                    }
+                }
+            }
+
+            console.log('buildOffer - Has Dispatch (40):', hasDispatch)
+            console.log('buildOffer - Has Invoice (20):', hasInvoice)
+            console.log('buildOffer - Requesting type:', pType)
+            
+            // Teklif → İrsaliye ama zaten Fatura'ya çevrilmiş
+            if(hasInvoice && pType == 40)
             {
                 let tmpConfObj =
                 {
@@ -1385,14 +1492,117 @@ export default class DocBase extends React.PureComponent
                 {
                     App.instance.panel.closePage()
                 }
- 
-            }
-            else
-            {
-                await this.getDoc(tmpControlData.result.recordset[0].DOC_TO,tmpControlData.result.recordset[0].REF_TO,tmpControlData.result.recordset[0].REF_NO_TO) 
                 return
             }
+            // Teklif → Fatura ama zaten İrsaliye'ye çevrilmiş
+            else if(hasDispatch && pType == 20)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgControlOfDispatch',showTitle:true,title:this.t("msgControlOfDispatch.title"),showCloseButton:true,width:'500px',height:'250px',
+                    button:[{id:"btn01",caption:this.t("msgControlOfDispatch.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgControlOfDispatch.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                if(pResult == 'btn01')
+                {
+                    App.instance.panel.closePage()
+                }
+                return
+            }
+            
+            // Direct connection yok, indirect connection ara (ör: Teklif→Sipariş→İrsaliye→Fatura)
+            console.log('buildOffer - No direct connection, searching indirect...')
+            
+            for(let connection of tmpControlData.result.recordset)
+            {
+                console.log('buildOffer - Checking intermediate document:', connection.DOC_TO, 'type:', connection.TYPE_TO)
+                
+                // Level 1: Ara dokümanın connection'larını kontrol et
+                let intermediateQuery = {
+                    query : "SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID",
+                    param : ['GUID:string|50'],
+                    value : [connection.DOC_TO]
+                }
+                let intermediateData = await this.core.sql.execute(intermediateQuery)
+                
+                if(intermediateData.result.recordset.length > 0)
+                {
+                    // Level 1 direct check
+                    let indirectTarget = intermediateData.result.recordset.find(conn => conn.TYPE_TO == pType);
+                    if(indirectTarget)
+                    {
+                        console.log('buildOffer - Found Level 1 indirect connection via:', connection.TYPE_TO, '→', indirectTarget.TYPE_TO)
+                        console.log('buildOffer - Navigating to Level 1 indirect document:', indirectTarget.DOC_TO)
+                        await this.getDoc(indirectTarget.DOC_TO, indirectTarget.REF_TO, indirectTarget.REF_NO_TO)
+                        return
+                    }
+                    
+                    // Level 2: Deeper indirect search (ör: Teklif→Sipariş→İrsaliye→Fatura)
+                    for(let level2Connection of intermediateData.result.recordset)
+                    {
+                        console.log('buildOffer - Checking Level 2 document:', level2Connection.DOC_TO, 'type:', level2Connection.TYPE_TO)
+                        
+                        let level2Query = {
+                            query : "SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID",
+                            param : ['GUID:string|50'],
+                            value : [level2Connection.DOC_TO]
+                        }
+                        let level2Data = await this.core.sql.execute(level2Query)
+
+                        if(level2Data.result.recordset.length > 0)
+                        {
+                            let level2Target = level2Data.result.recordset.find(conn => conn.TYPE_TO == pType);
+
+                            if(level2Target)
+                            {
+                                await this.getDoc(level2Target.DOC_TO, level2Target.REF_TO, level2Target.REF_NO_TO)
+                                return
+                            }
+                        }
+                    }
+                }
+            }
         }
+        
+        // Hiç connection yok - mevcut fatura var mı kontrol et
+        console.log('buildOffer - No connections found, checking for existing invoice...')
+        
+        // Fatura istiyorsa (type: 20), önce mevcut fatura ara
+        if(pType == 20) {
+            let tmpDocQuery = {
+                query : "SELECT * FROM DOC_VW_01 WHERE GUID = @GUID",
+                param : ['GUID:string|50'],
+                value : [pGuid]
+            }
+            let tmpDocData = await this.core.sql.execute(tmpDocQuery)
+            
+            if(tmpDocData.result.recordset.length > 0) {
+                let sourceDoc = tmpDocData.result.recordset[0]
+                
+                // Aynı müşteri için en son faturayı ara
+                let tmpInvoiceQuery = {
+                    query : `SELECT TOP 1 * FROM DOC_VW_01 
+                             WHERE OUTPUT = @OUTPUT 
+                             AND TYPE = 20 
+                             AND DOC_DATE >= @DOC_DATE
+                             ORDER BY DOC_DATE DESC, REF_NO DESC`,
+                    param : ['OUTPUT:string|50', 'DOC_DATE:date'],
+                    value : [sourceDoc.OUTPUT, sourceDoc.DOC_DATE]
+                }
+                let tmpInvoiceData = await this.core.sql.execute(tmpInvoiceQuery)
+                
+                if(tmpInvoiceData.result.recordset.length > 0) {
+                    console.log('buildOffer - Found existing invoice, navigating to:', tmpInvoiceData.result.recordset[0].GUID)
+                    await this.getDoc(tmpInvoiceData.result.recordset[0].GUID, tmpInvoiceData.result.recordset[0].REF, tmpInvoiceData.result.recordset[0].REF_NO)
+                    return
+                }
+                
+                console.log('buildOffer - No existing invoice found, creating new one')
+            }
+        }
+        
+        console.log('buildOffer - Proceeding with normal transform')
 
         let tmpQuery =
         {
@@ -1417,7 +1627,7 @@ export default class DocBase extends React.PureComponent
             {
                 this.txtRef.value = tmpData.result.recordset[0].INPUT_CODE;
             }
-            
+
             if(this.docType != 20)
             {
                 this.txtRef.props.onChange()
@@ -1425,26 +1635,27 @@ export default class DocBase extends React.PureComponent
 
             let tmpOfferQuery = 
             {
-                query : `SELECT *,
+                query : `SELECT *, 
                         ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, 
                         ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, 
-                        QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY,  
-                        PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE,  
+                        QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, 
+                        PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE, 
                         REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE DOC_GUID = @GUID`,
                 param : ['GUID:string|50','SUB_FACTOR:string|10'],
                 value : [pGuid,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
             }
-           
+
             let tmpOfferData = await this.core.sql.execute(tmpOfferQuery)
-           
+
             if(tmpOfferData.result.recordset.length > 0)
             {
                 await this.convertDocOffers(tmpOfferData.result.recordset)
             }
-           
+
             this.frmDocItems.option('disabled',false)
-       }
+        }
     }
+
     async buildOrder(pGuid,pType)
     {
         let tmpControlQuery =
@@ -1455,47 +1666,175 @@ export default class DocBase extends React.PureComponent
         }       
 
         let tmpControlData = await this.core.sql.execute(tmpControlQuery)
+        
+        console.log('buildOrder - Control Query Result for GUID:', pGuid)
+        console.log('buildOrder - Found connections:', tmpControlData.result.recordset)
+        console.log('buildOrder - Requested type:', pType)
 
         if(tmpControlData.result.recordset.length > 0 )
         {
-            let typeTo = tmpControlData.result.recordset[0].TYPE_TO
-            let msgConfObj = {}
-            let pResult = ''
-
-            if((typeTo == 40 && pType == 20) || (typeTo == 20 && pType == 40))
+            // ÖNCE: İstenen tip için connection ara (aynı tip varsa aç)
+            let targetConnection = tmpControlData.result.recordset.find(conn => conn.TYPE_TO == pType);
+            
+            console.log('buildOrder - Looking for connection type:', pType)
+            console.log('buildOrder - Direct connection found:', targetConnection)
+            
+            // Eğer istenen tip bulunursa, o dokümanı aç
+            if(targetConnection)
             {
-                if(typeTo == 40 && pType == 20)
+                console.log('buildOrder - Navigating to existing document:', targetConnection.DOC_TO)
+                await this.getDoc(targetConnection.DOC_TO, targetConnection.REF_TO, targetConnection.REF_NO_TO) 
+                return
+            }
+            
+            // SONRA: Çapraz dönüşüm kontrolü (istenen tip yok ama başka tip var)
+            let allConnections = tmpControlData.result.recordset
+            let hasDispatch = allConnections.some(conn => conn.TYPE_TO == 40) // İrsaliye var mı?
+            let hasInvoice = allConnections.some(conn => conn.TYPE_TO == 20)  // Fatura var mı?
+            
+            console.log('buildOrder - Has Dispatch (40):', hasDispatch)
+            console.log('buildOrder - Has Invoice (20):', hasInvoice)
+            console.log('buildOrder - Requesting type:', pType)
+            
+            // Sipariş → Fatura ama zaten İrsaliye'ye çevrilmiş
+            if(hasDispatch && pType == 20)
+            {
+                let tmpConfObj =
                 {
-                    msgConfObj =
-                    {
-                        id:'msgControlOfDispatch',showTitle:true,title:this.t("msgControlOfDispatch.title"),showCloseButton:true,width:'500px',height:'250px',
-                        button:[{id:"btn01",caption:this.t("msgControlOfDispatch.btn01"),location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgControlOfDispatch.msg")}</div>)
-                    }
+                    id:'msgControlOfDispatch',showTitle:true,title:this.t("msgControlOfDispatch.title"),showCloseButton:true,width:'500px',height:'250px',
+                    button:[{id:"btn01",caption:this.t("msgControlOfDispatch.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgControlOfDispatch.msg")}</div>)
                 }
-                else if(typeTo == 20 && pType == 40)
-                {
-                    msgConfObj =
-                    {
-                        id:'msgControlOfFacture',showTitle:true,title:this.t("msgControlOfFacture.title"),showCloseButton:true,width:'500px',height:'250px',
-                        button:[{id:"btn01",caption:this.t("msgControlOfFacture.btn01"),location:'after'}],
-                        content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgControlOfFacture.msg")}</div>)
-                    }
-                }
-
-                pResult = await dialog(msgConfObj);
-
+                let pResult = await dialog(tmpConfObj);
                 if(pResult == 'btn01')
                 {
                     App.instance.panel.closePage()
                 }
-            }
-            else
-            {
-                await this.getDoc(tmpControlData.result.recordset[0].DOC_TO,tmpControlData.result.recordset[0].REF_TO,tmpControlData.result.recordset[0].REF_NO_TO) 
                 return
             }
+            // Sipariş → İrsaliye ama zaten Fatura'ya çevrilmiş  
+            else if(hasInvoice && pType == 40)
+            {
+                let tmpConfObj =
+                {
+                    id:'msgControlOfFacture',showTitle:true,title:this.t("msgControlOfFacture.title"),showCloseButton:true,width:'500px',height:'250px',
+                    button:[{id:"btn01",caption:this.t("msgControlOfFacture.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgControlOfFacture.msg")}</div>)
+                }
+                let pResult = await dialog(tmpConfObj);
+                if(pResult == 'btn01')
+                {
+                    App.instance.panel.closePage()
+                }
+                return
+            }
+            
+            // Direct connection yok, indirect connection ara (ör: Sipariş→İrsaliye→Fatura)
+            console.log('buildOrder - No direct connection, searching indirect...')
+            
+            for(let connection of tmpControlData.result.recordset)
+            {
+                console.log('buildOrder - Checking intermediate document:', connection.DOC_TO, 'type:', connection.TYPE_TO)
+                
+                // Level 1: Ara dokümanın connection'larını kontrol et
+                let intermediateQuery = {
+                    query : "SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID",
+                    param : ['GUID:string|50'],
+                    value : [connection.DOC_TO]
+                }
+                let intermediateData = await this.core.sql.execute(intermediateQuery)
+                
+                if(intermediateData.result.recordset.length > 0)
+                {
+                    // Level 1 direct check
+                    let indirectTarget = intermediateData.result.recordset.find(conn => conn.TYPE_TO == pType);
+                    if(indirectTarget)
+                    {
+                        console.log('buildOrder - Found Level 1 indirect connection via:', connection.TYPE_TO, '→', indirectTarget.TYPE_TO)
+                        console.log('buildOrder - Navigating to Level 1 indirect document:', indirectTarget.DOC_TO)
+                        await this.getDoc(indirectTarget.DOC_TO, indirectTarget.REF_TO, indirectTarget.REF_NO_TO)
+                        return
+                    }
+                    
+                    // Level 2: Deeper indirect search (ör: Sipariş→İrsaliye→Fatura)
+                    for(let level2Connection of intermediateData.result.recordset)
+                    {
+                        console.log('buildOrder - Checking Level 2 document:', level2Connection.DOC_TO, 'type:', level2Connection.TYPE_TO)
+                        
+                        let level2Query = {
+                            query : "SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID",
+                            param : ['GUID:string|50'],
+                            value : [level2Connection.DOC_TO]
+                        }
+                        let level2Data = await this.core.sql.execute(level2Query)
+                        
+                        console.log('buildOrder - Level 2 query result:', level2Data.result.recordset.length, 'connections')
+                        if(level2Data.result.recordset.length > 0) {
+                            console.log('buildOrder - Level 2 connections:', level2Data.result.recordset.map(c => `${c.TYPE_FROM}→${c.TYPE_TO}`))
+                        }
+                        
+                        if(level2Data.result.recordset.length > 0)
+                        {
+                            let level2Target = level2Data.result.recordset.find(conn => conn.TYPE_TO == pType);
+                            console.log('buildOrder - Level 2 target search for type:', pType, 'found:', level2Target ? 'YES' : 'NO')
+                            
+                            if(level2Target)
+                            {
+                                console.log('buildOrder - Found Level 2 indirect connection via:', connection.TYPE_TO, '→', level2Connection.TYPE_TO, '→', level2Target.TYPE_TO)
+                                console.log('buildOrder - Navigating to Level 2 indirect document:', level2Target.DOC_TO)
+                                await this.getDoc(level2Target.DOC_TO, level2Target.REF_TO, level2Target.REF_NO_TO)
+                                return
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Indirect search de başarısız - hiç connection bulunamadı  
+            console.log('buildOrder - No direct or indirect connections found for type:', pType)
+            console.log('buildOrder - Falling back to normal transform flow')
+            
+            // Fallback: Normal transform flow'a geç
         }
+        
+        // Hiç connection yok - mevcut fatura var mı kontrol et
+        console.log('buildOrder - No connections found, checking for existing invoice...')
+        
+        // Fatura istiyorsa (type: 20), önce mevcut fatura ara
+        if(pType == 20) {
+            let tmpDocQuery = {
+                query : `SELECT * FROM DOC_VW_01 WHERE GUID = @GUID`,
+                param : ['GUID:string|50'],
+                value : [pGuid]
+            }
+            let tmpDocData = await this.core.sql.execute(tmpDocQuery)
+            
+            if(tmpDocData.result.recordset.length > 0) {
+                let sourceDoc = tmpDocData.result.recordset[0]
+                
+                // Aynı müşteri için en son faturayı ara
+                let tmpInvoiceQuery = {
+                    query : `SELECT TOP 1 * FROM DOC_VW_01 
+                             WHERE OUTPUT = @OUTPUT 
+                             AND TYPE = 20 
+                             AND DOC_DATE >= @DOC_DATE
+                             ORDER BY DOC_DATE DESC, REF_NO DESC`,
+                    param : ['OUTPUT:string|50', 'DOC_DATE:date'],
+                    value : [sourceDoc.OUTPUT, sourceDoc.DOC_DATE]
+                }
+                let tmpInvoiceData = await this.core.sql.execute(tmpInvoiceQuery)
+                
+                if(tmpInvoiceData.result.recordset.length > 0) {
+                    console.log('buildOrder - Found existing invoice, navigating to:', tmpInvoiceData.result.recordset[0].GUID)
+                    await this.getDoc(tmpInvoiceData.result.recordset[0].GUID, tmpInvoiceData.result.recordset[0].REF, tmpInvoiceData.result.recordset[0].REF_NO)
+                    return
+                }
+                
+                console.log('buildOrder - No existing invoice found, creating new one')
+            }
+        }
+        
+        console.log('buildOrder - Proceeding with normal transform')
 
         let tmpQuery =
         {
@@ -1545,8 +1884,8 @@ export default class DocBase extends React.PureComponent
                 await this.convertDocOrders(tmpOrderData.result.recordset)
             }
 
-            this.frmDocItems.option('disabled',false)  
-       }
+            this.frmDocItems.option('disabled',false)
+        }
     }
     async buildDispatch(pGuid,pType)
     {
@@ -1558,33 +1897,206 @@ export default class DocBase extends React.PureComponent
         }       
 
         let tmpControlData = await this.core.sql.execute(tmpControlQuery)
+        
+        console.log('buildDispatch - Control Query Result for GUID:', pGuid)
+        console.log('buildDispatch - Found connections:', tmpControlData.result.recordset)
+        console.log('buildDispatch - Requested type:', pType)
+        
+        // DEBUG: İrsaliye'nin kendi bilgilerini kontrol et
+        let tmpDispatchInfoQuery = {
+            query : `SELECT GUID, TYPE, REF, REF_NO, OUTPUT, DOC_DATE FROM DOC_VW_01 WHERE GUID = @GUID`,
+            param : ['GUID:string|50'],
+            value : [pGuid]
+        }
+        let tmpDispatchInfo = await this.core.sql.execute(tmpDispatchInfoQuery)
+        console.log('buildDispatch - Dispatch info:', tmpDispatchInfo.result.recordset[0])
+        
+        // DEBUG: Bu İrsaliye'ye gelen connection'ları da kontrol et
+        let tmpIncomingQuery = {
+            query : `SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_TO = @GUID`,
+            param : ['GUID:string|50'],
+            value : [pGuid]
+        }
+        let tmpIncomingData = await this.core.sql.execute(tmpIncomingQuery)
+        console.log('buildDispatch - Incoming connections to this dispatch:', tmpIncomingData.result.recordset)
 
         if(tmpControlData.result.recordset.length > 0 )
         {
-            let typeTo = tmpControlData.result.recordset[0].TYPE_TO
+            // İstenen tip için connection ara
+            let targetConnection = tmpControlData.result.recordset.find(conn => conn.TYPE_TO == pType);
             
-            if(typeTo == 20 && pType == 20)
+            console.log('buildDispatch - Looking for connection type:', pType)
+            console.log('buildDispatch - Direct connection found:', targetConnection)
+            
+            // Eğer direct connection bulunursa, o dokümanı aç
+            if(targetConnection)
             {
-                let msgConfObj =
-                {
-                    id:'msgControlOfFacture',showTitle:true,title:this.t("msgControlOfFacture.title"),showCloseButton:true,width:'500px',height:'250px',
-                    button:[{id:"btn01",caption:this.t("msgControlOfFacture.btn01"),location:'after'}],
-                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgControlOfFacture.msg")}</div>)
-                }
-                
-                let pResult = await dialog(msgConfObj);
-                
-                if(pResult == 'btn01')
-                {
-                    App.instance.panel.closePage()
-                }
-            }
-            else
-            {
-                await this.getDoc(tmpControlData.result.recordset[0].DOC_TO,tmpControlData.result.recordset[0].REF_TO,tmpControlData.result.recordset[0].REF_NO_TO) 
+                console.log('buildDispatch - Navigating to existing document:', targetConnection.DOC_TO)
+                await this.getDoc(targetConnection.DOC_TO, targetConnection.REF_TO, targetConnection.REF_NO_TO) 
                 return
             }
+            
+            // Direct connection yoksa, PARENT üzerinden aynı tipi ara (DOC_TO = current GUID)
+            console.log('buildDispatch - No direct connection, searching via parents (incoming connections)')
+            let parentQuery = {
+                query : "SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_TO = @GUID",
+                param : ['GUID:string|50'],
+                value : [pGuid]
+            }
+            let parentData = await this.core.sql.execute(parentQuery)
+            if(parentData.result.recordset.length > 0)
+            {
+                console.log('buildDispatch - Found parents:', parentData.result.recordset.map(p => p.DOC_FROM))
+                for(let parent of parentData.result.recordset)
+                {
+                    // Parent'in çıkış bağlantılarında istenen tipi ara (genelde 20)
+                    let parentOutQuery = {
+                        query : "SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID",
+                        param : ['GUID:string|50'],
+                        value : [parent.DOC_FROM]
+                    }
+                    let parentOutData = await this.core.sql.execute(parentOutQuery)
+                    if(parentOutData.result.recordset.length > 0)
+                    {
+                        let parentTarget = parentOutData.result.recordset.find(conn => conn.TYPE_TO == pType)
+                        console.log('buildDispatch - Parent direct search for type', pType, 'found:', parentTarget ? 'YES' : 'NO')
+                        if(parentTarget)
+                        {
+                            console.log('buildDispatch - Navigating to existing document via parent:', parentTarget.DOC_TO)
+                            await this.getDoc(parentTarget.DOC_TO, parentTarget.REF_TO, parentTarget.REF_NO_TO)
+                            return
+                        }
+
+                        // Level-2 zincir araması
+                        for(let pConn of parentOutData.result.recordset)
+                        {
+                            let level2Query = {
+                                query : "SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID",
+                                param : ['GUID:string|50'],
+                                value : [pConn.DOC_TO]
+                            }
+                            let level2Data = await this.core.sql.execute(level2Query)
+                            if(level2Data.result.recordset.length > 0)
+                            {
+                                let level2Target = level2Data.result.recordset.find(conn => conn.TYPE_TO == pType)
+                                console.log('buildDispatch - Parent level-2 search for type', pType, 'found:', level2Target ? 'YES' : 'NO')
+                                if(level2Target)
+                                {
+                                    console.log('buildDispatch - Navigating to existing document via parent level-2:', level2Target.DOC_TO)
+                                    await this.getDoc(level2Target.DOC_TO, level2Target.REF_TO, level2Target.REF_NO_TO)
+                                    return
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Direct connection yok, indirect connection ara (genelde İrsaliye→Fatura)
+            console.log('buildDispatch - No direct connection, searching indirect...')
+            
+            for(let connection of tmpControlData.result.recordset)
+            {
+                console.log('buildDispatch - Checking intermediate document:', connection.DOC_TO, 'type:', connection.TYPE_TO)
+                
+                // Ara dokümanın connection'larını kontrol et
+                let intermediateQuery = {
+                    query : "SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID",
+                    param : ['GUID:string|50'],
+                    value : [connection.DOC_TO]
+                }
+                let intermediateData = await this.core.sql.execute(intermediateQuery)
+                
+                if(intermediateData.result.recordset.length > 0)
+                {
+                    // Level 1 direct check
+                    let indirectTarget = intermediateData.result.recordset.find(conn => conn.TYPE_TO == pType);
+                    if(indirectTarget)
+                    {
+                        console.log('buildDispatch - Found Level 1 indirect connection via:', connection.TYPE_TO, '→', indirectTarget.TYPE_TO)
+                        console.log('buildDispatch - Navigating to Level 1 indirect document:', indirectTarget.DOC_TO)
+                        await this.getDoc(indirectTarget.DOC_TO, indirectTarget.REF_TO, indirectTarget.REF_NO_TO)
+                        return
+                    }
+                    
+                    // Level 2: Deeper indirect search (ör: İrsaliye→...→Fatura)
+                    for(let level2Connection of intermediateData.result.recordset)
+                    {
+                        console.log('buildDispatch - Checking Level 2 document:', level2Connection.DOC_TO, 'type:', level2Connection.TYPE_TO)
+                        
+                        let level2Query = {
+                            query : "SELECT * FROM DOC_CONNECT_VW_01 WHERE DOC_FROM = @GUID",
+                            param : ['GUID:string|50'],
+                            value : [level2Connection.DOC_TO]
+                        }
+                        let level2Data = await this.core.sql.execute(level2Query)
+                        
+                        console.log('buildDispatch - Level 2 query result:', level2Data.result.recordset.length, 'connections')
+                        if(level2Data.result.recordset.length > 0) {
+                            console.log('buildDispatch - Level 2 connections:', level2Data.result.recordset.map(c => `${c.TYPE_FROM}→${c.TYPE_TO}`))
+                        }
+                        
+                        if(level2Data.result.recordset.length > 0)
+                        {
+                            let level2Target = level2Data.result.recordset.find(conn => conn.TYPE_TO == pType);
+                            console.log('buildDispatch - Level 2 target search for type:', pType, 'found:', level2Target ? 'YES' : 'NO')
+                            
+                            if(level2Target)
+                            {
+                                console.log('buildDispatch - Found Level 2 indirect connection via:', connection.TYPE_TO, '→', level2Connection.TYPE_TO, '→', level2Target.TYPE_TO)
+                                console.log('buildDispatch - Navigating to Level 2 indirect document:', level2Target.DOC_TO)
+                                await this.getDoc(level2Target.DOC_TO, level2Target.REF_TO, level2Target.REF_NO_TO)
+                                return
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Ne direct ne indirect - normal flow göster
+            console.log('buildDispatch - No target connection found, showing first connection')
+            await this.getDoc(tmpControlData.result.recordset[0].DOC_TO,tmpControlData.result.recordset[0].REF_TO,tmpControlData.result.recordset[0].REF_NO_TO) 
+            return
         }
+        
+        // Hiç connection yok - mevcut fatura var mı kontrol et
+        console.log('buildDispatch - No connections found, checking for existing invoice...')
+        
+        // Fatura istiyorsa (type: 20), önce mevcut fatura ara
+        if(pType == 20) {
+            let tmpDocQuery = {
+                query : `SELECT * FROM DOC_VW_01 WHERE GUID = @GUID`,
+                param : ['GUID:string|50'],
+                value : [pGuid]
+            }
+            let tmpDocData = await this.core.sql.execute(tmpDocQuery)
+            
+            if(tmpDocData.result.recordset.length > 0) {
+                let sourceDoc = tmpDocData.result.recordset[0]
+                
+                // Aynı müşteri için en son faturayı ara
+                let tmpInvoiceQuery = {
+                    query : `SELECT TOP 1 * FROM DOC_VW_01 
+                             WHERE OUTPUT = @OUTPUT 
+                             AND TYPE = 20 
+                             AND DOC_DATE >= @DOC_DATE
+                             ORDER BY DOC_DATE DESC, REF_NO DESC`,
+                    param : ['OUTPUT:string|50', 'DOC_DATE:date'],
+                    value : [sourceDoc.OUTPUT, sourceDoc.DOC_DATE]
+                }
+                let tmpInvoiceData = await this.core.sql.execute(tmpInvoiceQuery)
+                
+                if(tmpInvoiceData.result.recordset.length > 0) {
+                    console.log('buildDispatch - Found existing invoice, navigating to:', tmpInvoiceData.result.recordset[0].GUID)
+                    await this.getDoc(tmpInvoiceData.result.recordset[0].GUID, tmpInvoiceData.result.recordset[0].REF, tmpInvoiceData.result.recordset[0].REF_NO)
+                    return
+                }
+                
+                console.log('buildDispatch - No existing invoice found, creating new one')
+            }
+        }
+        
+        console.log('buildDispatch - Proceeding with normal transform')
 
         let tmpQuery =
         {
@@ -3476,4 +3988,6 @@ export default class DocBase extends React.PureComponent
             </div>
         )
     }
+    
+
 }

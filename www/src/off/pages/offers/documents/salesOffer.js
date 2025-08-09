@@ -802,12 +802,12 @@ export default class salesOffer extends DocBase
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
                                         onClick={async (e)=>
-                                        {
+                                    {
                                             await this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
                                             // Offers için button state'leri manuel ayarla
                                             this.btnBack.setState({disabled:true})
                                             this.btnNew.setState({disabled:false})
-                                        }}/>
+                                    }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnNew" parent={this} icon="file" type="default"
@@ -2235,7 +2235,7 @@ export default class salesOffer extends DocBase
                                                     id: 'sip_02_002',
                                                     text: this.t("menu.btnSelectOrder"),
                                                     path: 'orders/documents/salesOrder.js',
-                                                    pagePrm: {offerGuid: this.docObj.dt()[0].GUID, type: 30}
+                                                    pagePrm: {offerGuid: this.docObj.dt()[0].GUID, type: 60}
                                                 })
                                             }
                                         }}
@@ -2340,7 +2340,7 @@ export default class salesOffer extends DocBase
                                             let pResult = await dialog(tmpConfObj);
  
                                             if(pResult == 'btn01')
-                                            {   
+                                            {  
                                                 App.instance.menuClick(
                                                 {
                                                     id: 'ftr_02_002',

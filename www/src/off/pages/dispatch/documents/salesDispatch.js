@@ -176,17 +176,34 @@ export default class salesDispatch extends DocBase
     }
     calculateTotalMargin()
     {
+        // Safe check for document data
+        if (!this.docObj || !this.docObj.dt() || this.docObj.dt().length === 0) 
+        {
+            return;
+        }
+        
+        if (!this.docObj.docItems || !this.docObj.docItems.dt()) 
+        {
+            return;
+        }
+
         let tmpTotalCost = 0
 
         for (let  i= 0; i < this.docObj.docItems.dt().length; i++) 
         {
-            tmpTotalCost += this.docObj.docItems.dt()[i].COST_PRICE * this.docObj.docItems.dt()[i].QUANTITY
+            const item = this.docObj.docItems.dt()[i];
+            if (item && typeof item.COST_PRICE === 'number' && typeof item.QUANTITY === 'number') {
+                tmpTotalCost += item.COST_PRICE * item.QUANTITY;
+            }
         }
 
-        let tmpMargin = ((this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost)
-        let tmpMarginRate = ((( this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT) - tmpTotalCost) - (this.docObj.dt()[0].TOTAL - this.docObj.dt()[0].VAT)) * 100
-        
-        this.docObj.dt()[0].MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+        const docData = this.docObj.dt()[0];
+        if (docData) {
+            const totalHt = docData.TOTALHT || 0;
+            let tmpMargin = (totalHt - tmpTotalCost)
+            let tmpMarginRate = Number(tmpTotalCost).rate2Num ? Number(tmpTotalCost).rate2Num(tmpMargin,2) : 0;
+            docData.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
+        }
     }
     calculateMargin()
     {
