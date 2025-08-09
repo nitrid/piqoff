@@ -31,6 +31,12 @@ const sip_02_002 =
     txtDocNo : "Dokumentnummer",
     cmbPricingList : "Preisliste",
     LINE_NO: "Zeilennummer",
+    isMsgSave :
+    {  
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Vorgang kann nicht ohne Speicherung des Dokuments durchgeführt werden!"         
+    },
     popTransformSelect:
     {
         title: "Umwandlung auswählen"

@@ -30,6 +30,12 @@ const sip_02_002 =
     txtTotalHt : "Discounted Total",
     txtDocNo : "Document No",
     cmbPricingList : "Price List",
+    isMsgSave :
+    {  
+        title: "Attention",
+        btn01: "OK",
+        msg: "Impossible to proceed without saving the document !"         
+    },
     popTransformSelect:
     {
         title: "Conversion Selection"

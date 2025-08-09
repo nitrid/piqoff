@@ -44,6 +44,12 @@ const sip_02_002 =
     },
     btnSelectDispatch: "Satış İrsaliyesine Çevir",
     btnSelectInvoice: "Satış Faturasına Çevir",
+    isMsgSave :
+    {  
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Evrak Kayıt Edilmeden Işlem yapılamaz !"         
+    },
     msgControlOfDispatch:
     {
         title: "Dikkat",
