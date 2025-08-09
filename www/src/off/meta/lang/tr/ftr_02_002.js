@@ -64,6 +64,12 @@ const  ftr_02_002 =
         btn01: "Kapat",
         msg: "Bu irsaliye daha önce bir faturaya çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden Faturayi seçiniz. Bu islem kapatılacaktır."
     },
+    msgControlOfDispatch:
+    {
+        title: "Dikkat",
+        btn01: "Kapat",
+        msg: "Bu Fatura daha önce bir irsaliyeye çevrilmiştir. İrsaliye oluşturmak istiyorsanız, Satış İrsaliyesi bölümünden İrsaliye seçiniz. Bu islem kapatılacaktır."
+    },  
     isMsgSave :
     {  
         title: "Dikkat",

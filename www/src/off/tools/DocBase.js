@@ -125,11 +125,15 @@ export default class DocBase extends React.PureComponent
                 }
             })
             this.docObj.ds.on('onEdit',(pTblName,pData) =>
-            {            
+            {         
                 if(pData.rowData.stat == 'edit')
                 {
-                    this.btnBack.setState({disabled:false});
-                    this.btnNew.setState({disabled:true});
+                    // docType 61 (Offers) için button state değişimlerini engelle
+                    if(this.docType !== 61)
+                    {
+                        this.btnBack.setState({disabled:false});
+                        this.btnNew.setState({disabled:true});
+                    }
                     this.btnSave.setState({disabled:false});
                     this.btnPrint.setState({disabled:false});
                     if(typeof this.btnDelete != 'undefined')
@@ -139,10 +143,14 @@ export default class DocBase extends React.PureComponent
                     pData.rowData.CUSER = this.user.CODE
                 }                 
             })
-            this.docObj.ds.on('onRefresh',(pTblName) =>
-            {            
-                this.btnBack.setState({disabled:true});
-                this.btnNew.setState({disabled:false});
+                        this.docObj.ds.on('onRefresh',(pTblName) =>
+            {  
+                // docType 61 (Offers) için button state değişimlerini engelle
+                if(this.docType !== 61)
+                {
+                    this.btnBack.setState({disabled:true});
+                    this.btnNew.setState({disabled:false});
+                }
                 this.btnSave.setState({disabled:true});
                 this.btnPrint.setState({disabled:false});  
                 
@@ -153,7 +161,7 @@ export default class DocBase extends React.PureComponent
 
                 this.calculateMargin()
                 this.calculateTotalMargin()        
-            })
+            })      
             this.docObj.ds.on('onDelete',(pTblName) =>
             {            
                 this.btnBack.setState({disabled:false});
@@ -1532,8 +1540,6 @@ export default class DocBase extends React.PureComponent
 
             let tmpOrderData = await this.core.sql.execute(tmpOrderQuery)
 
-            console.log('tmpOrderData',tmpOrderData)
-
             if(tmpOrderData.result.recordset.length > 0)
             {
                 await this.convertDocOrders(tmpOrderData.result.recordset)
@@ -1622,8 +1628,6 @@ export default class DocBase extends React.PureComponent
             }
 
             let tmpOrderData = await this.core.sql.execute(tmpOrderQuery)
-
-            console.log('tmpOrderData',tmpOrderData)
 
             if(tmpOrderData.result.recordset.length > 0)
             {
@@ -2099,7 +2103,6 @@ export default class DocBase extends React.PureComponent
                                             }
 
                                             let tmpData = await this.core.sql.execute(tmpQuery) 
-                                            console.log('tmpData',tmpData)
 
                                             if(tmpData.result.recordset.length > 0)
                                             {
