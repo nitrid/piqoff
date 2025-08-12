@@ -68,6 +68,14 @@ export default class salesInvoice extends DocBase
                 {
                     this.buildOffer(this.pagePrm.offerGuid,this.pagePrm.type)
                 }
+                else if(typeof this.pagePrm.orderGuid != 'undefined')
+                {
+                    this.buildOrder(this.pagePrm.orderGuid,this.pagePrm.type)
+                }
+                else if(typeof this.pagePrm.dispatchGuid != 'undefined')
+                {
+                    this.buildDispatch(this.pagePrm.dispatchGuid,this.pagePrm.type)
+                }
                 else if(typeof this.pagePrm.GUID != 'undefined')
                 {
                     this.getDoc(this.pagePrm.GUID,'',-1)
@@ -256,7 +264,20 @@ export default class salesInvoice extends DocBase
         await super.getDoc(pGuid,pRef,pRefno);
         App.instance.loading.hide()
 
-        this.dtExpDate.day = moment(this.docObj.docCustomer.dt()[0].EXPIRY_DATE).diff(moment(this.docObj.dt()[0].DOC_DATE), 'days')
+        // Safe access for EXPIRY_DATE calculation
+        if (this.docObj?.docCustomer?.dt() && this.docObj.docCustomer.dt().length > 0 && 
+            this.docObj?.dt() && this.docObj.dt().length > 0) {
+            const customerData = this.docObj.docCustomer.dt()[0];
+            const docData = this.docObj.dt()[0];
+            
+            if (customerData?.EXPIRY_DATE && docData?.DOC_DATE) {
+                this.dtExpDate.day = moment(customerData.EXPIRY_DATE).diff(moment(docData.DOC_DATE), 'days')
+            } else {
+                this.dtExpDate.day = 0; // Default value
+            }
+        } else {
+            this.dtExpDate.day = 0; // Default value
+        }
 
         this.txtRef.readOnly = true
         this.txtRefno.readOnly = true

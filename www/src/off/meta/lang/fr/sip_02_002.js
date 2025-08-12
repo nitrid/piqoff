@@ -45,6 +45,12 @@ const sip_02_002 =
     },
     btnSelectDispatch: "Convertir en Livraison",
     btnSelectInvoice: "Convertir en Facture",
+    isMsgSave :
+    {  
+        title: "Attention",
+        btn01: "OK",
+        msg: "Impossible de procéder sans enregistrement du document !"         
+    },
     msgControlOfDispatch:
     {
         title: "Attention",
