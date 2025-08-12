@@ -21,7 +21,8 @@ export default class NdDocItemSelect extends NdBase
         this.listeners = Object();
         this.viewQuery = this.props.viewQuery || ''
         this.selectQuery = this.props.selectQuery || ''
-        
+        this.unitParam = this.props.unitParam || ''
+
         this._onHiding = this._onHiding.bind(this);
         this._onSelectionChanged = this._onSelectionChanged.bind(this);
         this._onClick = this._onClick.bind(this);
@@ -159,8 +160,9 @@ export default class NdDocItemSelect extends NdBase
             }
 
             let tmpDt = new datatable()
-            let tmpQuery = this.selectQuery.query.replace('{UNIT_ID}',this.props.parent.sysParam.filter({ID:'secondFactor',USERS:this.props.parent.user.CODE}).getValue())
-            
+            let tmpQuery = this.selectQuery.query
+
+            tmpQuery = tmpQuery.replaceAll('{UNIT}',this.unitParam)
             tmpQuery = tmpQuery.replaceAll('{INPUT}',this.docObj.dt()[0].INPUT)
             tmpQuery = tmpQuery.replaceAll('{OUTPUT}',this.docObj.dt()[0].OUTPUT)
             tmpQuery = tmpQuery.replaceAll('{PRICE_LIST_NO}',this.docObj.dt()[0].PRICE_LIST_NO)
@@ -191,10 +193,11 @@ export default class NdDocItemSelect extends NdBase
 
         this.on('showing',()=>
         {
-            let tmpQuery = this.viewQuery.query.replace('{UNIT_ID}',this.props.parent.sysParam.filter({ID:'secondFactor',USERS:this.props.parent.user.CODE}).getValue())
-            tmpQuery = tmpQuery.replace('{INPUT}',this.docObj.dt()[0].INPUT)
-            tmpQuery = tmpQuery.replace('{OUTPUT}',this.docObj.dt()[0].OUTPUT)
-            tmpQuery = tmpQuery.replace('{PRICE_LIST_NO}',this.docObj.dt()[0].PRICE_LIST_NO)
+            let tmpQuery = this.viewQuery.query
+            
+            tmpQuery = tmpQuery.replaceAll('{INPUT}',this.docObj.dt()[0].INPUT)
+            tmpQuery = tmpQuery.replaceAll('{OUTPUT}',this.docObj.dt()[0].OUTPUT)
+            tmpQuery = tmpQuery.replaceAll('{PRICE_LIST_NO}',this.docObj.dt()[0].PRICE_LIST_NO)
             
             this.setSource(
             {
@@ -448,13 +451,21 @@ export default class NdDocItemSelect extends NdBase
                 }}}  
                 onSelectionChanged={(c)=>
                 {
-                    console.log(e)
                     if(c.selectedItem != null)
                     {
                         e.data.UNIT = c.selectedItem.GUID
                         e.data.UNIT_NAME = c.selectedItem.NAME
-                        e.data.UNIT_SHORT = c.selectedItem.SYMBOL
-                        e.data.UNIT_FACTOR = c.selectedItem.FACTOR
+                        e.data.UNIT_SHORT = c.selectedItem.SYMBOL || e.data.UNIT_SHORT
+                        e.data.UNIT_FACTOR = c.selectedItem.FACTOR || e.data.UNIT_FACTOR
+                        e.data.UNIT_PRICE = Number(e.data.PRICE * e.data.UNIT_FACTOR).round(4)
+                        e.data.QUANTITY = Number(e.data.UNIT_QUANTITY * e.data.UNIT_FACTOR).round(4)
+
+                        if(this.docItemsGrid.devGrid.option('onRowUpdated') && typeof  c.selectedItem.SYMBOL != 'undefined')
+                        {
+                            let tmpData = {...e}
+                            tmpData.data = { QUANTITY: e.data.QUANTITY }
+                            this.docItemsGrid.devGrid.option('onRowUpdated')({ ...tmpData});
+                        }
                     }
                 }}              
                 />
@@ -464,43 +475,42 @@ export default class NdDocItemSelect extends NdBase
     render()
     {
         return(
-            <React.Fragment>
-                <NdPopUp parent={this} id={"pop_" + this.props.id} 
-                onHiding={this._onHiding}                   
-                closeOnOutsideClick={false}
-                showCloseButton={true}
-                showTitle={this.props.showTitle}
-                title={this.props.title}
-                container={this.props.container}
-                width={this.props.width}
-                height={this.props.height}
-                position={this.props.position}
-                deferRendering={true}
-                onShowed={async()=>
-                {
-                    this.grid = await this._isGrid();
-                    this.grid.devGrid.clearSelection()
+        <React.Fragment>
+            <NdPopUp parent={this} id={"pop_" + this.props.id} 
+            onHiding={this._onHiding}                   
+            closeOnOutsideClick={false}
+            showCloseButton={true}
+            showTitle={this.props.showTitle}
+            title={this.props.title}
+            container={this.props.container}
+            width={this.props.width}
+            height={this.props.height}
+            position={this.props.position}
+            deferRendering={true}
+            onShowed={async()=>
+            {
+                this.grid = await this._isGrid();
+                this.grid.devGrid.clearSelection()
 
-                    if(typeof this.props.search == 'undefined' || this.props.search == false)
+                if(typeof this.props.search == 'undefined' || this.props.search == false)
+                {
+                    await this.grid.dataRefresh(this.state.data)
+                }
+                else
+                {                    
+                    if(this["txt" + this.props.id].value == '')
                     {
-                        await this.grid.dataRefresh(this.state.data)
+                        this.grid.devGrid.clearFilter()
+                        await this.grid.dataRefresh({source:[]})
+                        this["txt" + this.props.id].setState({value:''})
                     }
-                    else
-                    {                    
-                        if(this["txt" + this.props.id].value == '')
-                        {
-                            this.grid.devGrid.clearFilter()
-                            await this.grid.dataRefresh({source:[]})
-                            this["txt" + this.props.id].setState({value:''})
-                        }
-                    
-                        setTimeout(() => 
-                        {
-                            this["txt" + this.props.id].focus()
-                        }, 700);
-                    }
-                }}
-            >
+                
+                    setTimeout(() => 
+                    {
+                        this["txt" + this.props.id].focus()
+                    }, 700);
+                }
+            }}>
                 {this._formView()}      
                 <div className="row p-2" style={{height:"85%"}}>
                     <div className="col-12">

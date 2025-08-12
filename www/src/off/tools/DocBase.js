@@ -277,7 +277,8 @@ export default class DocBase extends React.PureComponent
 
                 tmpUnitDt.selectCmd = 
                 {
-                    query: `SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM ORDER BY TYPE` ,
+                    query: `SELECT GUID,ISNULL((SELECT NAME FROM UNIT WHERE UNIT.ID = ITEM_UNIT.ID),'') AS NAME,
+                            FACTOR,TYPE FROM ITEM_UNIT WHERE DELETED = 0 AND ITEM = @ITEM AND TYPE IN (0,2) ORDER BY TYPE ASC` ,
                     param:  ['ITEM:string|50'],
                     value:  [this.msgUnit.tmpData.ITEM]
                 }
@@ -302,17 +303,8 @@ export default class DocBase extends React.PureComponent
                     }
 
                     this.txtTotalQuantity.value =  this.msgUnit.tmpData.QUANTITY
-
-                    if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
-                    {
-                        this.txtUnitQuantity.value = this.msgUnit.tmpData.QUANTITY * this.txtUnitFactor.value                        
-                        this.txtUnitPrice.value = Number(this.msgUnit.tmpData.PRICE).round(2)
-                    }
-                    else
-                    {
-                        this.txtUnitQuantity.value = this.msgUnit.tmpData.QUANTITY / this.txtUnitFactor.value
-                        this.txtUnitPrice.value = Number(this.msgUnit.tmpData.PRICE * this.txtUnitFactor.value).round(2)
-                    }
+                    this.txtUnitQuantity.value = this.msgUnit.tmpData.QUANTITY / this.txtUnitFactor.value
+                    this.txtUnitPrice.value = Number(this.msgUnit.tmpData.PRICE * this.txtUnitFactor.value).round(2)
                 }
             }
             if(typeof this.txtRef != 'undefined' && typeof this.txtRef.props.onChange != 'undefined')

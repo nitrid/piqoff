@@ -34,6 +34,7 @@ import Form, { Label, Item } from 'devextreme-react/form';
 import NdTextBox from '../../core/react/devex/textbox.js'
 import NdButton from '../../core/react/devex/button.js';
 import { NdLoadPanel } from '../../core/react/devex/loadpanel.js';
+import appInsight from '../../core/cls/appInsight.js';
 
 import Navigation from './navigation.js'
 import Panel from './panel.js'
@@ -60,7 +61,6 @@ export default class App extends React.PureComponent
         
         this.UserChange = this.UserChange.bind(this)
         this.passChange = this.passChange.bind(this)
-
         this.style =
         {
             splash_body : 
@@ -193,6 +193,7 @@ export default class App extends React.PureComponent
             this.core.socket.emit('get-macid',{},(tmpMacId) =>
             {
                 this.macid = tmpMacId;
+                this.insight = appInsight.initialize('OFF',this.macid,this.core?.appInfo?.version);
             })
 
             if((await this.core.sql.try()).status == 1)
@@ -259,8 +260,6 @@ export default class App extends React.PureComponent
         })
         this.core.socket.on('disconnect',async() => 
         {
-            //App.instance.setState({connected:false});
-            //this.core.auth.logout()
             if(!this.msgConnection.isShowed)
             {
                 this.msgConnection.show()
@@ -356,7 +355,6 @@ export default class App extends React.PureComponent
     }
     async setUser()
     {
-        
         this.setState({toolbarItems:[
             {
                 widget : 'dxButton',

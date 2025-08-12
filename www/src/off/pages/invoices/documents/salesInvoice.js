@@ -52,14 +52,8 @@ export default class salesInvoice extends DocBase
 
         this.rightItems = [{ text: this.t("getDispatch")},{ text: this.t("getOrders")},{ text: this.t("getOffers")},{ text: this.t("getProforma")}]
 
-        document.addEventListener('keydown',(e)=>
-        {
-            if (e.altKey && (e.key === 'e' || e.key === 'E')) 
-            {
-                e.preventDefault();
-                this.addItemClick();
-            }
-        })
+        this.keyDownHandler = this.keyDownHandler.bind(this)
+        document.addEventListener('keydown',this.keyDownHandler)
     }
     async componentDidMount()
     {
@@ -79,6 +73,17 @@ export default class salesInvoice extends DocBase
                     this.getDoc(this.pagePrm.GUID,'',-1)
                 }
             }, 1000);
+        }
+    }
+    componentWillUnmount()
+    {
+        document.removeEventListener('keydown',this.keyDownHandler)
+    }
+    keyDownHandler(e)
+    {
+        if((e.key == 'e' || e.key == 'E') && e.altKey)
+        {
+            this.addItemClick()
         }
     }
     loadState() 
@@ -156,8 +161,6 @@ export default class salesInvoice extends DocBase
                             query : `SELECT ITEMS.GUID,ITEMS.TYPE,ITEMS.CODE,ITEMS.NAME,ITEMS.COST_PRICE,ITEMS.UNIT,ITEMS.VAT,BARCODE,PARTILOT_GUID,LOT_CODE, 
                                     ISNULL(GRP.ORGINS,'') AS ORGINS,ISNULL(GRP.UNIT_SHORT,'') AS UNIT_SHORT,ISNULL(GRP.PARTILOT,0) AS PARTILOT,
                                     ISNULL(GRP.MAIN_GRP_NAME,'') AS MAIN_GRP_NAME,ISNULL(GRP.RAYON_NAME,'') AS RAYON_NAME,
-                                    ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = ITEMS.GUID AND ITEM_UNIT.ID = '${this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue()}' AND DELETED = 0),1) AS SUB_FACTOR,
-                                    ISNULL((SELECT TOP 1 SYMBOL FROM UNIT WHERE UNIT.ID = '${this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue()}'),'') AS SUB_SYMBOL,
                                     ISNULL((SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM_MULTICODE.ITEM = ITEMS.GUID AND ITEM_MULTICODE.CUSTOMER = '${this.docObj.dt()[0].INPUT}' AND DELETED = 0 ORDER BY LDATE DESC),'') AS MULTICODE
                                     FROM ITEMS_VW_04 AS ITEMS 
                                     LEFT OUTER JOIN ITEMS_GRP_VW_01 AS GRP ON 
@@ -196,7 +199,9 @@ export default class salesInvoice extends DocBase
         this.popItemSelect.addItem = this.addItem.bind(this)        
         this.popItemSelect.docObj = this.docObj
         this.popItemSelect.docItems = this.docObj.docItems
-        
+        this.popItemSelect.docItemsGrid = this.grid
+        this.popItemSelect.unitParam = this.sysParam.filter({ID:'cmbUnit',USERS:this.user.CODE}).getValue().value
+
         this.popItemSelect.columns = 
         [
             {dataField:"CODE",width:200},
@@ -221,11 +226,23 @@ export default class salesInvoice extends DocBase
 
         this.popItemSelect.selectQuery = 
         {
-            query : `SELECT ITEMS.GUID,ITEMS.TYPE,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,ITEMS.COST_PRICE,ITEMS.UNIT,ITEMS.STATUS,
-                    ISNULL(GRP.ORGINS,'') AS ORGINS,ISNULL(GRP.UNIT_SHORT,'') AS UNIT_SHORT,ISNULL(GRP.UNIT_NAME,'') AS UNIT_NAME,
-                    ISNULL(GRP.PARTILOT,0) AS PARTILOT,ISNULL(GRP.MAIN_GRP_NAME,'') AS MAIN_GRP_NAME,ISNULL(GRP.RAYON_NAME,'') AS RAYON_NAME,
-                    ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = ITEMS.GUID AND ITEM_UNIT.ID = '{UNIT_ID}' AND DELETED = 0),1) AS SUB_FACTOR,
-                    ISNULL((SELECT TOP 1 SYMBOL FROM UNIT WHERE UNIT.ID = '{UNIT_ID}'),'') AS SUB_SYMBOL,
+            query : `SELECT 
+                    ITEMS.GUID,
+                    ITEMS.TYPE,
+                    ITEMS.CODE,
+                    ITEMS.NAME,
+                    ITEMS.VAT,
+                    ITEMS.COST_PRICE,
+                    ITEMS.STATUS,
+                    ISNULL(GRP.ORGINS,'') AS ORGINS,
+                    ISNULL(GRP.MAIN_GRP_NAME,'') AS MAIN_GRP_NAME,
+                    ISNULL(GRP.RAYON_NAME,'') AS RAYON_NAME,
+                    ISNULL(GRP.UNIT_SHORT,'') AS MAIN_UNIT_SHORT,
+                    ISNULL(GRP.PARTILOT,0) AS PARTILOT,
+                    ISNULL((SELECT GUID FROM dbo.FN_FIND_UNIT(ITEMS.GUID,'{UNIT}')),'00000000-0000-0000-0000-000000000000') AS UNIT,
+                    ISNULL((SELECT SYMBOL FROM dbo.FN_FIND_UNIT(ITEMS.GUID,'{UNIT}')),'') AS UNIT_SHORT,
+                    ISNULL((SELECT NAME FROM dbo.FN_FIND_UNIT(ITEMS.GUID,'{UNIT}')),'') AS UNIT_NAME,
+                    ISNULL((SELECT FACTOR FROM dbo.FN_FIND_UNIT(ITEMS.GUID,'{UNIT}')),'') AS UNIT_FACTOR,
                     (SELECT [dbo].[FN_PRICE] (ITEMS.GUID,1,dbo.GETDATE(),'{INPUT}','{OUTPUT}','{PRICE_LIST_NO}',0,0)) AS PRICE 
                     FROM ITEMS_VW_04 AS ITEMS 
                     LEFT OUTER JOIN ITEMS_GRP_VW_01 AS GRP ON
@@ -288,17 +305,10 @@ export default class salesInvoice extends DocBase
                                 
                                 e.key.UNIT = this.cmbUnit.value
                                 e.key.UNIT_FACTOR = this.txtUnitFactor.value
-
-                                if(this.cmbUnit.data.datatable.where({'GUID':this.cmbUnit.value})[0].TYPE == 1)
-                                {
-                                    e.data.PRICE = parseFloat((this.txtUnitPrice.value * this.txtUnitFactor.value).toFixed(4))
-                                }
-                                else
-                                {
-                                    e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
-                                }
-
+                                
+                                e.data.PRICE = parseFloat((this.txtUnitPrice.value / this.txtUnitFactor.value).toFixed(4))
                                 e.data.QUANTITY = this.txtTotalQuantity.value
+                                e.data.UNIT_QUANTITY = this.txtUnitQuantity.value
 
                                 if(this.docObj.dt()[0].VAT_ZERO != 1)
                                 {
@@ -317,7 +327,7 @@ export default class salesInvoice extends DocBase
                                 //BAĞLI ÜRÜN İÇİN YAPILDI *****************/
                                 await this.itemRelatedUpdate(e.data.ITEM,this.txtTotalQuantity.value)
                                 //*****************************************/
-                                this.calculateTotal()  
+                                this.calculateTotal()
                             }
                         },
                     ]
@@ -445,6 +455,7 @@ export default class salesInvoice extends DocBase
     async addItemClick() 
     {
         const groupConfig = validationEngine.getGroupConfig('frmDoc' + this.tabIndex);
+        
         if(groupConfig.validate().status == "valid")
         {   
             let tmpDocItem = this.docObj.docItems.dt().where({'ITEM':'00000000-0000-0000-0000-000000000000'})
@@ -548,12 +559,12 @@ export default class salesInvoice extends DocBase
             if(typeof tmpMergDt != 'undefined' && this.combineNew == false)
             {
                 tmpMergDt[0].QUANTITY = tmpMergDt[0].QUANTITY + pQuantity
-                tmpMergDt[0].SUB_QUANTITY = tmpMergDt[0].SUB_QUANTITY + pQuantity / tmpMergDt[0].SUB_FACTOR
+                tmpMergDt[0].UNIT_QUANTITY = (tmpMergDt[0].UNIT_QUANTITY + pQuantity) / tmpMergDt[0].UNIT_FACTOR
 
                 if(this.sysParam.filter({ID:'ceilingUnitForWeight',USERS:this.user.CODE}).getValue() == true)
                 {
-                    tmpMergDt[0].SUB_QUANTITY = Math.ceil(tmpMergDt[0].SUB_QUANTITY)
-                    tmpMergDt[0].QUANTITY = tmpMergDt[0].SUB_QUANTITY * tmpMergDt[0].SUB_FACTOR
+                    tmpMergDt[0].UNIT_QUANTITY = Math.ceil(tmpMergDt[0].UNIT_QUANTITY)
+                    tmpMergDt[0].QUANTITY = tmpMergDt[0].UNIT_QUANTITY / tmpMergDt[0].UNIT_FACTOR
                 }
 
                 if(this.docObj.dt()[0].VAT_ZERO != 1)
@@ -584,35 +595,34 @@ export default class salesInvoice extends DocBase
             }
             
             this.docObj.docItems.dt()[pIndex].ORIGIN = pData.ORGINS
-            this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
-            this.docObj.docItems.dt()[pIndex].UNIT_NAME = pData.UNIT_NAME
-            this.docObj.docItems.dt()[pIndex].UNIT_SHORT = pData.UNIT_SHORT
-            this.docObj.docItems.dt()[pIndex].SUB_FACTOR = pData.SUB_FACTOR
-            this.docObj.docItems.dt()[pIndex].SUB_SYMBOL = pData.SUB_SYMBOL
-
             this.docObj.docItems.dt()[pIndex].ITEM_CODE = pData.CODE
             this.docObj.docItems.dt()[pIndex].ITEM = pData.GUID
             this.docObj.docItems.dt()[pIndex].ITEM_TYPE = pData.TYPE
             this.docObj.docItems.dt()[pIndex].VAT_RATE = pData.VAT
             this.docObj.docItems.dt()[pIndex].ITEM_NAME = pData.NAME
             this.docObj.docItems.dt()[pIndex].COST_PRICE = pData.COST_PRICE
-            this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity
-            this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = pQuantity / this.docObj.docItems.dt()[pIndex].SUB_FACTOR
+            this.docObj.docItems.dt()[pIndex].UNIT = pData.UNIT
+            this.docObj.docItems.dt()[pIndex].UNIT_NAME = pData.UNIT_NAME
+            this.docObj.docItems.dt()[pIndex].UNIT_SHORT = pData.UNIT_SHORT
+            this.docObj.docItems.dt()[pIndex].UNIT_FACTOR = pData.UNIT_FACTOR
+            this.docObj.docItems.dt()[pIndex].MAIN_UNIT_SHORT = pData.MAIN_UNIT_SHORT
+            this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].UNIT_FACTOR
+            this.docObj.docItems.dt()[pIndex].UNIT_QUANTITY = this.docObj.docItems.dt()[pIndex].QUANTITY / this.docObj.docItems.dt()[pIndex].UNIT_FACTOR
             this.docObj.docItems.dt()[pIndex].LINE_NO = this.docObj.docItems.dt().max("LINE_NO") + 1
 
             if(this.sysParam.filter({ID:'ceilingUnitForWeight',USERS:this.user.CODE}).getValue() == true)
             {
-                this.docObj.docItems.dt()[pIndex].SUB_QUANTITY = Math.ceil(this.docObj.docItems.dt()[pIndex].SUB_QUANTITY)
-                this.docObj.docItems.dt()[pIndex].QUANTITY = this.docObj.docItems.dt()[pIndex].SUB_QUANTITY * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
-                pQuantity = this.docObj.docItems.dt()[pIndex].QUANTITY
+                this.docObj.docItems.dt()[pIndex].UNIT_QUANTITY = Math.ceil(this.docObj.docItems.dt()[pIndex].UNIT_QUANTITY)
+                this.docObj.docItems.dt()[pIndex].QUANTITY = this.docObj.docItems.dt()[pIndex].UNIT_QUANTITY * this.docObj.docItems.dt()[pIndex].UNIT_FACTOR
             }
 
             if(this.sysParam.filter({ID:'fixedUnitForCondition',USERS:this.user.CODE}).getValue() == true && pQuantity == 1)
             {
-                this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].SUB_FACTOR
-                pQuantity = this.docObj.docItems.dt()[pIndex].QUANTITY
+                this.docObj.docItems.dt()[pIndex].QUANTITY = pQuantity * this.docObj.docItems.dt()[pIndex].UNIT_FACTOR
             }           
         
+            pQuantity = this.docObj.docItems.dt()[pIndex].QUANTITY
+            console.log(this.docObj.docItems.dt()[pIndex])
             //MÜŞTERİ İNDİRİMİ UYGULAMA...
             let tmpDiscRate = this.discObj.getDocDisc(this.type == 0 ? this.docObj.dt()[0].OUTPUT : this.docObj.dt()[0].INPUT,pData.GUID)
             
@@ -636,7 +646,7 @@ export default class salesInvoice extends DocBase
                     this.docObj.docItems.dt()[pIndex].AMOUNT = parseFloat((tmpData.result.recordset[0].PRICE  * pQuantity)).round(2)
                     this.docObj.docItems.dt()[pIndex].TOTAL = Number(((tmpData.result.recordset[0].PRICE * pQuantity) + this.docObj.docItems.dt()[pIndex].VAT)).round(2)
                     this.docObj.docItems.dt()[pIndex].TOTALHT = Number(((tmpData.result.recordset[0].PRICE  * pQuantity) - this.docObj.docItems.dt()[pIndex].DISCOUNT)).round(2)
-                    this.docObj.docItems.dt()[pIndex].SUB_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) / this.docObj.docItems.dt()[pIndex].SUB_FACTOR).round(2)
+                    this.docObj.docItems.dt()[pIndex].UNIT_PRICE = Number(parseFloat((tmpData.result.recordset[0].PRICE).toFixed(4)) * this.docObj.docItems.dt()[pIndex].UNIT_FACTOR).round(2)
                     this.calculateTotal()
                 }
             }
@@ -698,14 +708,10 @@ export default class salesInvoice extends DocBase
     {
         let tmpQuery = 
         {
-            query : `SELECT *, 
-                    ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, 
-                    ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, 
-                    QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, 
-                    PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE, 
-                    REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND ITEM_CODE <> 'INTERFEL' AND REBATE = 0 AND DOC_TYPE IN(40)`,
-            param : ['INPUT:string|50','SUB_FACTOR:string|10'],
-            value : [this.docObj.dt()[0].INPUT,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
+            query : `SELECT *,REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS 
+                     FROM DOC_ITEMS_VW_01 WHERE INPUT = @INPUT AND INVOICE_DOC_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND ITEM_CODE <> 'INTERFEL' AND REBATE = 0 AND DOC_TYPE IN(40)`,
+            param : ['INPUT:string|50'],
+            value : [this.docObj.dt()[0].INPUT]
         }
         super.getDispatch(tmpQuery)
     }
@@ -713,14 +719,10 @@ export default class salesInvoice extends DocBase
     {
         let tmpQuery = 
         {
-            query : `SELECT *, 
-                    ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, 
-                    ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, 
-                    QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, 
-                    PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE,
-                    REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_ORDERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN (60)`,
-            param : ['INPUT:string|50','SUB_FACTOR:string|10'],
-            value : [this.docObj.dt()[0].INPUT,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
+            query : `SELECT *, REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS 
+                     FROM DOC_ORDERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN (60)`,
+            param : ['INPUT:string|50'],
+            value : [this.docObj.dt()[0].INPUT]
         }
         super.getOrders(tmpQuery)
     }
@@ -728,14 +730,10 @@ export default class salesInvoice extends DocBase
     {
         let tmpQuery = 
         {
-            query : `SELECT *, 
-                    ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, 
-                    ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, 
-                    QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, 
-                    PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE, 
-                    REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS FROM DOC_OFFERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN (61)`,
-            param : ['INPUT:string|50','SUB_FACTOR:string|10'],
-            value : [this.docObj.dt()[0].INPUT,this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue().value]
+            query : `SELECT *, REF + '-' + CONVERT(VARCHAR,REF_NO) AS REFERANS 
+                     FROM DOC_OFFERS_VW_01 WHERE INPUT = @INPUT AND SHIPMENT_LINE_GUID = '00000000-0000-0000-0000-000000000000' AND TYPE = 1 AND DOC_TYPE IN (61)`,
+            param : ['INPUT:string|50'],
+            value : [this.docObj.dt()[0].INPUT]
         }
         super.getOffers(tmpQuery)
     }
@@ -776,8 +774,6 @@ export default class salesInvoice extends DocBase
             query : `SELECT ITEMS.GUID,ITEMS.TYPE,ITEMS.CODE,ITEMS.NAME,ITEMS.VAT,1 AS QUANTITY,ITEMS.COST_PRICE,
                     ISNULL(GRP.ORGINS,'') AS ORGINS,ISNULL(GRP.PARTILOT,0) AS PARTILOT,
                     ISNULL(GRP.MAIN_GRP_NAME,'') AS MAIN_GRP_NAME,ISNULL(GRP.RAYON_NAME,'') AS RAYON_NAME,
-                    ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = ITEMS.GUID AND ITEM_UNIT.ID = '${this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue()}' ),1) AS SUB_FACTOR,
-                    ISNULL((SELECT TOP 1 SYMBOL FROM UNIT WHERE UNIT.ID = '${this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue()}'),'') AS SUB_SYMBOL,
                     CASE WHEN UNIT.GUID IS NULL THEN ITEMS.UNIT ELSE UNIT.GUID END AS UNIT, 
                     CASE WHEN UNIT.NAME IS NULL THEN ITEMS.UNIT_NAME ELSE UNIT.NAME END AS UNIT_NAME, 
                     CASE WHEN UNIT.SYMBOL IS NULL THEN ITEMS.UNIT_SHORT ELSE UNIT.SYMBOL END AS UNIT_SHORT, 
@@ -920,8 +916,7 @@ export default class salesInvoice extends DocBase
             
                     let tmpCvoQuery = 
                     {
-                        query : `SELECT *,1 AS TYPE,'' AS ORGINS,'' AS UNIT_SHORT,0 AS PARTILOT,1 AS SUB_FACTOR,'' AS SUB_SYMBOL 
-                                FROM SERVICE_ITEMS_VW_01 WHERE CODE = 'INTERFEL'`,
+                        query : `SELECT *, 1 AS TYPE, '' AS ORGINS, '' AS UNIT_SHORT, 0 AS PARTILOT FROM SERVICE_ITEMS_VW_01 WHERE CODE = 'INTERFEL'`,
                     }
             
                     let tmpCvoData = await this.core.sql.execute(tmpCvoQuery) 
@@ -1754,9 +1749,7 @@ export default class salesInvoice extends DocBase
                                             query : `SELECT ITEMS.GUID,ITEMS.TYPE,ITEMS.CODE,ITEMS.NAME,ITEMS.COST_PRICE,ITEMS.UNIT_GUID AS UNIT,
                                                     ITEMS.VAT,ITEMS.MULTICODE,ITEMS.CUSTOMER_NAME,ITEMS.BARCODE,ITEMS.PARTILOT_GUID,ITEMS.LOT_CODE,
                                                     ISNULL(GRP.ORGINS,'') AS ORGINS,ISNULL(GRP.UNIT_SHORT,'') AS UNIT_SHORT,
-                                                    ISNULL(GRP.PARTILOT,0) AS PARTILOT, 
-                                                    ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT WHERE ITEM_UNIT.ITEM = ITEMS.GUID AND ITEM_UNIT.ID = '${this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue()}' AND DELETED = 0),1) AS SUB_FACTOR,
-                                                    ISNULL((SELECT TOP 1 SYMBOL FROM UNIT WHERE UNIT.ID = '${this.sysParam.filter({ID:'secondFactor',USERS:this.user.CODE}).getValue()}'),'') AS SUB_SYMBOL
+                                                    ISNULL(GRP.PARTILOT,0) AS PARTILOT 
                                                     FROM ITEMS_BARCODE_MULTICODE_VW_01 AS ITEMS 
                                                     LEFT OUTER JOIN ITEMS_GRP_VW_01 AS GRP ON 
                                                     ITEMS.GUID = GRP.GUID
@@ -1967,16 +1960,17 @@ export default class salesInvoice extends DocBase
                                         }}
                                         onRowUpdated={async(e)=>
                                         {
+                                            console.log(e)
                                             if(typeof e.data.QUANTITY != 'undefined')
                                             {
                                                 if(this.sysParam.filter({ID:'ceilingUnitForWeight',USERS:this.user.CODE}).getValue() == true)
                                                 {
-                                                    e.key.SUB_QUANTITY = Math.ceil(e.data.QUANTITY / e.key.SUB_FACTOR)
-                                                    e.key.QUANTITY = Number(e.key.SUB_QUANTITY * e.key.SUB_FACTOR).round(3)
+                                                    e.key.UNIT_QUANTITY = Math.ceil(e.data.QUANTITY / e.key.UNIT_FACTOR)
+                                                    e.key.QUANTITY = Number(e.key.UNIT_QUANTITY * e.key.UNIT_FACTOR).round(3)
                                                 }
                                                 else
                                                 {
-                                                    e.key.SUB_QUANTITY =  e.data.QUANTITY / e.key.SUB_FACTOR
+                                                    e.key.UNIT_QUANTITY =  e.data.QUANTITY / e.key.UNIT_FACTOR
                                                 }
                                                 
                                                 let tmpQuery = 
@@ -1991,31 +1985,24 @@ export default class salesInvoice extends DocBase
                                                 if(tmpData.result.recordset.length > 0)
                                                 {
                                                     e.key.PRICE = parseFloat((tmpData.result.recordset[0].PRICE).toFixed(3))
-                                                    e.key.SUB_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) * e.key.SUB_FACTOR).round(2)
+                                                    e.key.UNIT_PRICE = Number(((tmpData.result.recordset[0].PRICE).toFixed(3)) * e.key.UNIT_FACTOR).round(2)
                                                     this.calculateTotal()
                                                 }
                                             }
-                                            
-                                            if(typeof e.data.SUB_QUANTITY != 'undefined')
+
+                                            if(typeof e.data.UNIT_QUANTITY != 'undefined')
                                             {
-                                                {
-                                                    e.key.QUANTITY = Number(e.data.SUB_QUANTITY * e.key.SUB_FACTOR).round(3)
-                                                }
-                                            }
-                                            
-                                            if(typeof e.data.SUB_FACTOR != 'undefined')
-                                            {
-                                                e.key.QUANTITY = e.key.SUB_QUANTITY * e.data.SUB_FACTOR
+                                                e.key.QUANTITY = Number(e.data.UNIT_QUANTITY * e.key.UNIT_FACTOR).round(3)
                                             }
                                             
                                             if(typeof e.data.PRICE != 'undefined')
                                             {
-                                                e.key.SUB_PRICE = e.data.PRICE * e.key.SUB_FACTOR
+                                                e.key.UNIT_PRICE = e.data.PRICE * e.key.UNIT_FACTOR
                                             }
                                             
-                                            if(typeof e.data.SUB_PRICE != 'undefined')
+                                            if(typeof e.data.UNIT_PRICE != 'undefined')
                                             {
-                                                e.key.PRICE = e.data.SUB_PRICE / e.key.SUB_FACTOR
+                                                e.key.PRICE = e.data.UNIT_PRICE / e.key.UNIT_FACTOR
                                             }
                                             
                                             if(typeof e.data.DISCOUNT_RATE != 'undefined')
@@ -2115,29 +2102,41 @@ export default class salesInvoice extends DocBase
                                             <Editing mode="cell" allowUpdating={true} allowDeleting={true} confirmDelete={false}/>
                                             <Export fileName={this.lang.t("menuOff.ftr_02_002")} enabled={true} allowExportSelectedData={true} />
                                             <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} allowEditing={false} defaultSortOrder="desc"/>
-                                            <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsInv.clmCreateDate")} width={70} allowEditing={false}/>
-                                            <Column dataField="CUSER_NAME" caption={this.t("grdSlsInv.clmCuser")} width={75} allowEditing={false}/>
-                                            <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={75} editCellRender={this.cellRoleRender}/>
-                                            <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={240} editCellRender={this.cellRoleRender}/>
-                                            <Column dataField="ORIGIN" caption={this.t("grdSlsInv.clmOrigin")} width={60} allowEditing={true} editCellRender={this.cellRoleRender} />
-                                            <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} width={70} dataType={'number'} cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}} editCellRender={this.cellRoleRender} allowEditing={this.sysParam.filter({ID:'fixedUnitForCondition',USERS:this.user.CODE}).getValue() == true ? false : true}/>
-                                            <Column dataField="UNIT" caption={this.t("grdSlsInv.clmUnit")} width={70} allowEditing={true} editCellRender={this.cellRoleRender} 
-                                            cellRender={(e)=>{return e.data.UNIT_NAME}}/>
-                                            <Column dataField="SUB_FACTOR" caption={this.t("grdSlsInv.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
-                                            <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsInv.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
-                                            <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}} editorOptions={{step:0}}/>
-                                            <Column dataField="SUB_PRICE" caption={this.t("grdSlsInv.clmSubPrice")} dataType={'number'} format={Number.money.sign + '#,##0.000'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + Number.money.sign + " / " + e.data.SUB_SYMBOL}}/>
-                                            <Column dataField="AMOUNT" caption={this.t("grdSlsInv.clmAmount")} width={80} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
-                                            <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} width={60} editCellRender={this.cellRoleRender} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                                            <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsInv.clmDiscountRate")} width={60} dataType={'number'} editCellRender={this.cellRoleRender}/>
-                                            <Column dataField="MARGIN" caption={this.t("grdSlsInv.clmMargin")} dataType={'text'} width={80} allowEditing={false}/>
-                                            <Column dataField="VAT" caption={this.t("grdSlsInv.clmVat")} width={70} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
-                                            <Column dataField="VAT_RATE" caption={this.t("grdSlsInv.clmVatRate")} width={50} allowEditing={false}/>
-                                            <Column dataField="TOTALHT" caption={this.t("grdSlsInv.clmTotalHt")} format={{ style: "currency", currency: Number.money.code,precision: 2}} allowEditing={false} width={90} allowHeaderFiltering={false}/>
-                                            <Column dataField="TOTAL" caption={this.t("grdSlsInv.clmTotal")} width={100} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
-                                            <Column dataField="CONNECT_REF" caption={this.t("grdSlsInv.clmDispatch")} width={100} allowEditing={false}/>
+                                            <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsInv.clmCreateDate")} width={70} allowEditing={false} visible={false}/>
+                                            <Column dataField="CUSER_NAME" caption={this.t("grdSlsInv.clmCuser")} width={75} allowEditing={false} visible={false}/>
+                                            <Column dataField="ITEM_CODE" caption={this.t("grdSlsInv.clmItemCode")} width={150} editCellRender={this.cellRoleRender}/>
+                                            <Column dataField="ITEM_NAME" caption={this.t("grdSlsInv.clmItemName")} width={350} editCellRender={this.cellRoleRender}/>
+                                            <Column dataField="ORIGIN" caption={this.t("grdSlsInv.clmOrigin")} width={60} allowEditing={true} editCellRender={this.cellRoleRender} visible={false}/>
+                                            <Column dataField="UNIT_QUANTITY" caption={this.t("grdSlsInv.clmSubQuantity")} dataType={'number'} width={100} 
+                                                editorOptions={{step: 0.01, format: "#,##0.000"}} allowHeaderFiltering={false} 
+                                                cellRender={(e)=>{return e.value + " / " + e.data.UNIT_SHORT}}/>
+                                            <Column dataField="UNIT" caption={this.t("grdSlsInv.clmUnit")} width={120} allowEditing={true} editCellRender={this.cellRoleRender} 
+                                                cellRender={(e)=>{return e.data.UNIT_NAME}}/>
+                                            <Column dataField="QUANTITY" caption={this.t("grdSlsInv.clmQuantity")} width={90} dataType={'number'} 
+                                                editorOptions={{step: 0.01, format: "#,##0.000"}}
+                                                cellRender={(e)=>{return e.value + " / " + e.data.MAIN_UNIT_SHORT}} editCellRender={this.cellRoleRender} 
+                                                allowEditing={this.sysParam.filter({ID:'fixedUnitForCondition',USERS:this.user.CODE}).getValue() == true ? false : true}/>
+                                            <Column dataField="PRICE" caption={this.t("grdSlsInv.clmPrice")} width={85} dataType={'number'} 
+                                                format={{ style: "currency", currency: Number.money.code, precision: 2}} editorOptions={{step: 0.01, format: "#,##0.0000"}}/>
+                                            <Column dataField="UNIT_PRICE" caption={this.t("grdSlsInv.clmSubPrice")} dataType={'number'} width={90} allowHeaderFiltering={false} 
+                                                cellRender={(e)=>{return e.value.toFixed(2) + Number.money.sign + " / " + e.data.UNIT_SHORT}} editorOptions={{step: 0.01, format: "#,##0.0000"}}/>
+                                            <Column dataField="AMOUNT" caption={this.t("grdSlsInv.clmAmount")} width={90} 
+                                                format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
+                                            <Column dataField="DISCOUNT" caption={this.t("grdSlsInv.clmDiscount")} dataType={'number'} width={85} 
+                                                editCellRender={this.cellRoleRender} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
+                                            <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsInv.clmDiscountRate")} width={60} dataType={'number'} visible={false}
+                                                editCellRender={this.cellRoleRender}/>
+                                            <Column dataField="MARGIN" caption={this.t("grdSlsInv.clmMargin")} dataType={'text'} width={80} allowEditing={false} visible={false}/>
+                                            <Column dataField="VAT" caption={this.t("grdSlsInv.clmVat")} width={80} 
+                                                format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
+                                            <Column dataField="VAT_RATE" caption={this.t("grdSlsInv.clmVatRate")} width={50} allowEditing={false} visible={false}/>
+                                            <Column dataField="TOTALHT" caption={this.t("grdSlsInv.clmTotalHt")} allowEditing={false} width={135}
+                                                format={{ style: "currency", currency: Number.money.code,precision: 2}} allowHeaderFiltering={false}/>
+                                            <Column dataField="TOTAL" caption={this.t("grdSlsInv.clmTotal")} width={145} 
+                                                format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
+                                            <Column dataField="CONNECT_REF" caption={this.t("grdSlsInv.clmDispatch")} width={100} allowEditing={false} visible={false}/>
                                             <Column dataField="LOT_CODE" caption={this.t("grdSlsInv.clmPartiLot")} width={100} allowEditing={false} visible={false}/>
-                                            <Column dataField="DESCRIPTION" caption={this.t("grdSlsInv.clmDescription")} width={100} />
+                                            <Column dataField="DESCRIPTION" caption={this.t("grdSlsInv.clmDescription")} width={100} visible={false}/>
                                         </NdGrid>
                                         <ContextMenu dataSource={this.rightItems} width={200} target={"#grdSlsInv"+this.tabIndex}
                                         onItemClick={(async(e)=>

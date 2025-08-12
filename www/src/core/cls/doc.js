@@ -14,7 +14,9 @@ export class docCls
     {
         this.core = core.instance;
         this.ds = new dataset();
-        this.empty = {
+
+        this.empty = 
+        {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
             TYPE: -1,
@@ -57,6 +59,7 @@ export class docCls
             TAX_NO : '',
             ZIPCODE : '',
         }
+
         this.isSaved = false
         this.docItems = new docItemsCls();
         this.docCustomer = new docCustomerCls();
@@ -74,93 +77,97 @@ export class docCls
         let tmpDt = new datatable('DOC')
         tmpDt.selectCmd =
         {
-            query : "SELECT * FROM DOC_VW_01 WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND " + 
-                    "((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND" +
-                    "((DOC_TYPE = @DOC_TYPE) OR (@DOC_TYPE = -1)) AND " +
-                    "((PAYMENT_DOC_GUID = @PAYMENT_DOC_GUID) OR (@PAYMENT_DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((DOC_DATE = @DOC_DATE) OR (@DOC_DATE ='19700101'))" ,
+            query : `SELECT * FROM DOC_VW_01 WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1)) AND ((TYPE = @TYPE) OR (@TYPE = -1)) AND 
+                    ((TYPE = @TYPE) OR (@TYPE = -1)) AND ((DOC_TYPE = @DOC_TYPE) OR (@DOC_TYPE = -1)) AND 
+                    ((PAYMENT_DOC_GUID = @PAYMENT_DOC_GUID) OR (@PAYMENT_DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((DOC_DATE = @DOC_DATE) OR (@DOC_DATE ='19700101'))`,
             param : ['GUID:string|50','REF:string|25','REF_NO:int','TYPE:int','DOC_TYPE:int','PAYMENT_DOC_GUID:string|50','DOC_DATE:date']
         }
         tmpDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_INSERT] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@TYPE = @PTYPE, " +
-                    "@DOC_TYPE = @PDOC_TYPE, " +
-                    "@VAT_ZERO = @PVAT_ZERO," +
-                    "@REBATE = @PREBATE, " +
-                    "@REF = @PREF, " +
-                    "@REF_NO = @PREF_NO, " +
-                    "@DOC_NO = @PDOC_NO, " +
-                    "@DOC_DATE = @PDOC_DATE, " + 
-                    "@SHIPMENT_DATE = @PSHIPMENT_DATE, " +
-                    "@INPUT = @PINPUT, " +
-                    "@OUTPUT = @POUTPUT, " +
-                    "@AMOUNT = @PAMOUNT, " +
-                    "@DISCOUNT = @PDISCOUNT, " +
-                    "@DOC_DISCOUNT_1 = @PDOC_DISCOUNT_1, " +
-                    "@DOC_DISCOUNT_2 = @PDOC_DISCOUNT_2, " +
-                    "@DOC_DISCOUNT_3 = @PDOC_DISCOUNT_3, " +
-                    "@INTERFEL = @PINTERFEL, " +
-                    "@VAT = @PVAT, " +
-                    "@TOTAL = @PTOTAL, " +
-                    "@DESCRIPTION = @PDESCRIPTION, " +
-                    "@ADDRESS = @PADDRESS, " +
-                    "@TRANSPORT_TYPE = @PTRANSPORT_TYPE, " +
-                    "@PRICE_LIST_NO = @PPRICE_LIST_NO, " +
-                    "@LOCKED = @PLOCKED, " +
-                    "@CERTIFICATE = @PCERTIFICATE, " +
-                    "@SIGNATURE = @PSIGNATURE, " +
-                    "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PVAT_ZERO:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_NO:string|50','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                    'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PINTERFEL:float','PVAT:float','PTOTAL:float',
-                    'PDESCRIPTION:string|500','PADDRESS:int','PTRANSPORT_TYPE:string|25','PPRICE_LIST_NO:int','PLOCKED:int','PCERTIFICATE:string|250','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
-            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','VAT_ZERO','REBATE','REF','REF_NO','DOC_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','DOC_DISCOUNT_1','DOC_DISCOUNT_2',
-                      'DOC_DISCOUNT_3','INTERFEL','VAT','TOTAL','DESCRIPTION','ADDRESS','TRANSPORT_TYPE','PRICE_LIST_NO','LOCKED','CERTIFICATE','SIGNATURE','SIGNATURE_SUM']
+            query : `EXEC [dbo].[PRD_DOC_INSERT] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @TYPE = @PTYPE, 
+                    @DOC_TYPE = @PDOC_TYPE, 
+                    @VAT_ZERO = @PVAT_ZERO,
+                    @REBATE = @PREBATE, 
+                    @REF = @PREF, 
+                    @REF_NO = @PREF_NO, 
+                    @DOC_NO = @PDOC_NO, 
+                    @DOC_DATE = @PDOC_DATE, 
+                    @SHIPMENT_DATE = @PSHIPMENT_DATE, 
+                    @INPUT = @PINPUT, 
+                    @OUTPUT = @POUTPUT, 
+                    @AMOUNT = @PAMOUNT, 
+                    @DISCOUNT = @PDISCOUNT, 
+                    @DOC_DISCOUNT_1 = @PDOC_DISCOUNT_1, 
+                    @DOC_DISCOUNT_2 = @PDOC_DISCOUNT_2, 
+                    @DOC_DISCOUNT_3 = @PDOC_DISCOUNT_3, 
+                    @INTERFEL = @PINTERFEL, 
+                    @VAT = @PVAT, 
+                    @TOTAL = @PTOTAL, 
+                    @DESCRIPTION = @PDESCRIPTION, 
+                    @ADDRESS = @PADDRESS, 
+                    @TRANSPORT_TYPE = @PTRANSPORT_TYPE, 
+                    @PRICE_LIST_NO = @PPRICE_LIST_NO, 
+                    @LOCKED = @PLOCKED, 
+                    @CERTIFICATE = @PCERTIFICATE, 
+                    @SIGNATURE = @PSIGNATURE, 
+                    @SIGNATURE_SUM = @PSIGNATURE_SUM `,
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PVAT_ZERO:int','PREBATE:int','PREF:string|25','PREF_NO:int',
+                    'PDOC_NO:string|50','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50','POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float',
+                    'PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PINTERFEL:float','PVAT:float','PTOTAL:float',
+                    'PDESCRIPTION:string|500','PADDRESS:int','PTRANSPORT_TYPE:string|25','PPRICE_LIST_NO:int','PLOCKED:int','PCERTIFICATE:string|250',
+                    'PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
+            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','VAT_ZERO','REBATE','REF','REF_NO','DOC_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT',
+                      'DISCOUNT','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','INTERFEL','VAT','TOTAL','DESCRIPTION','ADDRESS','TRANSPORT_TYPE',
+                      'PRICE_LIST_NO','LOCKED','CERTIFICATE','SIGNATURE','SIGNATURE_SUM']
         }
         tmpDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_UPDATE] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@TYPE = @PTYPE, " +
-                    "@DOC_TYPE = @PDOC_TYPE, " +
-                    "@VAT_ZERO = @PVAT_ZERO," +
-                    "@REBATE = @PREBATE, " +
-                    "@REF = @PREF, " +
-                    "@REF_NO = @PREF_NO, " +
-                    "@DOC_NO = @PDOC_NO, " +
-                    "@DOC_DATE = @PDOC_DATE, " + 
-                    "@SHIPMENT_DATE = @PSHIPMENT_DATE, " +
-                    "@INPUT = @PINPUT, " +
-                    "@OUTPUT = @POUTPUT, " +
-                    "@AMOUNT  = @PAMOUNT, " +
-                    "@DISCOUNT  = @PDISCOUNT, " +
-                    "@DOC_DISCOUNT_1  = @PDOC_DISCOUNT_1, " +
-                    "@DOC_DISCOUNT_2  = @PDOC_DISCOUNT_2, " +
-                    "@DOC_DISCOUNT_3  = @PDOC_DISCOUNT_3, " +
-                    "@INTERFEL  = @PINTERFEL, " +
-                    "@VAT  = @PVAT, " +
-                    "@TOTAL  = @PTOTAL, " +
-                    "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@ADDRESS  = @PADDRESS, " +
-                    "@TRANSPORT_TYPE  = @PTRANSPORT_TYPE, " +
-                    "@PRICE_LIST_NO = @PPRICE_LIST_NO, " +
-                    "@LOCKED  = @PLOCKED, " +
-                    "@SIGNATURE = @PSIGNATURE, " +
-                    "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
-            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PVAT_ZERO:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_NO:string|50','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                    'POUTPUT:string|50','PAMOUNT:float','PDISCOUNT:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PINTERFEL:float','PVAT:float','PTOTAL:float',
-                    'PDESCRIPTION:string|500','PADDRESS:int','PTRANSPORT_TYPE:string|25','PPRICE_LIST_NO:int','PLOCKED:int','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
-            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','VAT_ZERO','REBATE','REF','REF_NO','DOC_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','AMOUNT','DISCOUNT','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3',
-                      'INTERFEL','VAT','TOTAL','DESCRIPTION','ADDRESS','TRANSPORT_TYPE','PRICE_LIST_NO','LOCKED','SIGNATURE','SIGNATURE_SUM']
+            query : `EXEC [dbo].[PRD_DOC_UPDATE] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @TYPE = @PTYPE, 
+                    @DOC_TYPE = @PDOC_TYPE, 
+                    @VAT_ZERO = @PVAT_ZERO,
+                    @REBATE = @PREBATE, 
+                    @REF = @PREF, 
+                    @REF_NO = @PREF_NO, 
+                    @DOC_NO = @PDOC_NO, 
+                    @DOC_DATE = @PDOC_DATE, 
+                    @SHIPMENT_DATE = @PSHIPMENT_DATE, 
+                    @INPUT = @PINPUT, 
+                    @OUTPUT = @POUTPUT, 
+                    @AMOUNT  = @PAMOUNT, 
+                    @DISCOUNT  = @PDISCOUNT, 
+                    @DOC_DISCOUNT_1  = @PDOC_DISCOUNT_1, 
+                    @DOC_DISCOUNT_2  = @PDOC_DISCOUNT_2, 
+                    @DOC_DISCOUNT_3  = @PDOC_DISCOUNT_3, 
+                    @INTERFEL  = @PINTERFEL, 
+                    @VAT  = @PVAT, 
+                    @TOTAL  = @PTOTAL, 
+                    @DESCRIPTION  = @PDESCRIPTION, 
+                    @ADDRESS  = @PADDRESS, 
+                    @TRANSPORT_TYPE  = @PTRANSPORT_TYPE, 
+                    @PRICE_LIST_NO = @PPRICE_LIST_NO, 
+                    @LOCKED  = @PLOCKED, 
+                    @SIGNATURE = @PSIGNATURE, 
+                    @SIGNATURE_SUM = @PSIGNATURE_SUM`,
+            param : ['PGUID:string|50','PCUSER:string|25','PTYPE:int','PDOC_TYPE:int','PVAT_ZERO:int','PREBATE:int','PREF:string|25','PREF_NO:int',
+                    'PDOC_NO:string|50','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50','POUTPUT:string|50','PAMOUNT:float',
+                    'PDISCOUNT:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PINTERFEL:float','PVAT:float',
+                    'PTOTAL:float','PDESCRIPTION:string|500','PADDRESS:int','PTRANSPORT_TYPE:string|25','PPRICE_LIST_NO:int','PLOCKED:int',
+                    'PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
+            dataprm : ['GUID','CUSER','TYPE','DOC_TYPE','VAT_ZERO','REBATE','REF','REF_NO','DOC_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT',
+                      'AMOUNT','DISCOUNT','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','INTERFEL','VAT','TOTAL','DESCRIPTION','ADDRESS',
+                      'TRANSPORT_TYPE','PRICE_LIST_NO','LOCKED','SIGNATURE','SIGNATURE_SUM']
         }
         tmpDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 1, " + 
-                    "@GUID = @PGUID ", 
+            query : `EXEC [dbo].[PRD_DOC_DELETE] @CUSER = @PCUSER, @UPDATE = 1, @GUID = @PGUID `, 
             param : ['PCUSER:string|25','PGUID:string|50'],
             dataprm : ['CUSER','GUID']
         }
@@ -219,7 +226,7 @@ export class docCls
         //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR ÖRN: {CODE:''}
         return new Promise(async resolve =>
         {
-            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0,TYPE:-1,DOC_TYPE: -1,PAYMENT_DOC_GUID:'00000000-0000-0000-0000-000000000000',DOC_DATE:'19700101',SUB_FACTOR:''}
+            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0,TYPE:-1,DOC_TYPE: -1,PAYMENT_DOC_GUID:'00000000-0000-0000-0000-000000000000',DOC_DATE:'19700101'}
             if(arguments.length > 0)
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
@@ -229,7 +236,6 @@ export class docCls
                 tmpPrm.DOC_TYPE = typeof arguments[0].DOC_TYPE == 'undefined' ? -1 : arguments[0].DOC_TYPE;
                 tmpPrm.PAYMENT_DOC_GUID = typeof arguments[0].PAYMENT_DOC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].PAYMENT_DOC_GUID;
                 tmpPrm.DOC_DATE = typeof arguments[0].DOC_DATE == 'undefined' ? '19700101' : arguments[0].DOC_DATE;
-                tmpPrm.SUB_FACTOR = typeof arguments[0].SUB_FACTOR == 'undefined' ? '' : arguments[0].SUB_FACTOR;
             }
             this.ds.get('DOC').selectCmd.value = Object.values(tmpPrm);
 
@@ -238,9 +244,9 @@ export class docCls
             if(this.ds.get('DOC').length > 0)
             {  
                 this.isSaved = true
-                await this.docItems.load({DOC_GUID:this.ds.get('DOC')[0].GUID,SUB_FACTOR:tmpPrm.SUB_FACTOR})
+                await this.docItems.load({DOC_GUID:this.ds.get('DOC')[0].GUID})
                 await this.docCustomer.load({GUID:this.ds.get('DOC')[0].GUID})
-                await this.docOrders.load({DOC_GUID:this.ds.get('DOC')[0].GUID,SUB_FACTOR:tmpPrm.SUB_FACTOR})
+                await this.docOrders.load({DOC_GUID:this.ds.get('DOC')[0].GUID})
                 await this.docOffers.load({DOC_GUID:this.ds.get('DOC')[0].GUID})
                 await this.docDemand.load({DOC_GUID:this.ds.get('DOC')[0].GUID})
                 await this.transportInfermotion.load({DOC_GUID:this.ds.get('DOC')[0].GUID})
@@ -265,7 +271,9 @@ export class docItemsCls
     {
         this.core = core.instance;
         this.ds =  new dataset()
-        this.empty = {
+
+        this.empty = 
+        {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
             CDATE_FORMAT :  moment(new Date()).format("YYYY-MM-DD"),
@@ -292,12 +300,11 @@ export class docItemsCls
             UNIT_NAME : '',
             UNIT_FACTOR : 1,
             UNIT_SHORT : '',
+            MAIN_UNIT_SHORT : '',
             QUANTITY : 1,
-            SUB_QUANTITY : 1,
+            UNIT_QUANTITY : 1,
             PRICE : 0,
-            SUB_PRICE : 0,
-            SUB_FACTOR : 1,
-            SUB_SYMBOL : '',
+            UNIT_PRICE : 0,
             CUSTOMER_PRICE : 0,
             DIFF_PRICE : 0,
             DISCOUNT : 0,
@@ -346,126 +353,129 @@ export class docItemsCls
         let tmpDt = new datatable('DOC_ITEMS');
         tmpDt.selectCmd = 
         {  
-            query : "SELECT *, " +
-            "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, " +
-            "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, " +
-            "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
-            "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ITEMS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE " + 
-            "FROM [dbo].[DOC_ITEMS_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND (((DOC_GUID = @DOC_GUID) OR (INVOICE_DOC_GUID = @DOC_GUID AND " + 
-            "DOC_TYPE IN(40,42))) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000'))  AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1))",
-            param : ['GUID:string|50','DOC_GUID:string|50','REF:string|25','REF_NO:int','SUB_FACTOR:string|50']
+            query : `SELECT * 
+                    FROM [dbo].[DOC_ITEMS_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    (((DOC_GUID = @DOC_GUID) OR (INVOICE_DOC_GUID = @DOC_GUID AND 
+                    DOC_TYPE IN(40,42))) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1))`,
+            param : ['GUID:string|50','DOC_GUID:string|50','REF:string|25','REF_NO:int']
         }
         tmpDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_ITEMS_INSERT] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@DOC_GUID = @PDOC_GUID, " + 
-                    "@TYPE = @PTYPE, " +
-                    "@DOC_TYPE = @PDOC_TYPE, " +
-                    "@REBATE = @PREBATE, " +
-                    "@REF = @PREF, " +
-                    "@REF_NO = @PREF_NO, " +
-                    "@DOC_DATE = @PDOC_DATE, " + 
-                    "@SHIPMENT_DATE = @PSHIPMENT_DATE, " +
-                    "@INPUT = @PINPUT, " +
-                    "@OUTPUT = @POUTPUT, " +
-                    "@ITEM  = @PITEM, " +
-                    "@ITEM_NAME  = @PITEM_NAME, " +
-                    "@ITEM_TYPE  = @PITEM_TYPE, " +
-                    "@LINE_NO  = @PLINE_NO, " +
-                    "@UNIT  = @PUNIT, " +
-                    "@QUANTITY  = @PQUANTITY, " +
-                    "@PRICE  = @PPRICE, " +
-                    "@DISCOUNT1 = @PDISCOUNT1, " +
-                    "@DISCOUNT2 = @PDISCOUNT2, " +
-                    "@DISCOUNT3 = @PDISCOUNT3, " +
-                    "@DOC_DISCOUNT1 = @PDOC_DISCOUNT1, " +
-                    "@DOC_DISCOUNT2 = @PDOC_DISCOUNT2, " +
-                    "@DOC_DISCOUNT3 = @PDOC_DISCOUNT3, " +
-                    "@VAT = @PVAT, " +
-                    "@VAT_RATE = @PVAT_RATE, " +
-                    "@AMOUNT = @PAMOUNT, " +
-                    "@TOTAL = @PTOTAL, " +
-                    "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@INVOICE_LINE_GUID  = @PINVOICE_LINE_GUID, " +
-                    "@INVOICE_DOC_GUID  = @PINVOICE_DOC_GUID, " +
-                    "@ORDER_LINE_GUID  = @PORDER_LINE_GUID, " +
-                    "@ORDER_DOC_GUID  = @PORDER_DOC_GUID, " +
-                    "@OFFER_LINE_GUID  = @POFFER_LINE_GUID, " +
-                    "@OFFER_DOC_GUID  = @POFFER_DOC_GUID, " +
-                    "@PROFORMA_LINE_GUID  = @PPROFORMA_LINE_GUID, "  +
-                    "@PROFORMA_DOC_GUID  = @PPROFORMA_DOC_GUID, "  +
-                    "@ORIGINS = @PORIGINS, " +
-                    "@PARTILOT_GUID = @PPARTILOT_GUID, " +
-                    "@LOT_CODE = @PLOT_CODE " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                    'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|max','PITEM_TYPE:int','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PDISCOUNT1:float','PDISCOUNT2:float','PDISCOUNT3:float',
-                    'PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float','PDOC_DISCOUNT3:float','PVAT:float','PVAT_RATE:float',
-                    'PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|500','PINVOICE_LINE_GUID:string|50','PINVOICE_DOC_GUID:string|50','PORDER_LINE_GUID:string|50','PORDER_DOC_GUID:string|50',
-                    'POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50','PPROFORMA_LINE_GUID:string|50','PPROFORMA_DOC_GUID:string|50','PORIGINS:string|10','PPARTILOT_GUID:string|50','PLOT_CODE:string|50'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','ITEM_TYPE','LINE_NO','UNIT','QUANTITY','PRICE',
-                        'DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','INVOICE_LINE_GUID','INVOICE_DOC_GUID','ORDER_LINE_GUID','ORDER_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID','PROFORMA_LINE_GUID','PROFORMA_DOC_GUID','ORIGIN','PARTILOT_GUID','LOT_CODE']
+            query : `EXEC [dbo].[PRD_DOC_ITEMS_INSERT] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DOC_GUID = @PDOC_GUID, 
+                    @TYPE = @PTYPE, 
+                    @DOC_TYPE = @PDOC_TYPE, 
+                    @REBATE = @PREBATE, 
+                    @REF = @PREF, 
+                    @REF_NO = @PREF_NO, 
+                    @DOC_DATE = @PDOC_DATE, 
+                    @SHIPMENT_DATE = @PSHIPMENT_DATE, 
+                    @INPUT = @PINPUT, 
+                    @OUTPUT = @POUTPUT, 
+                    @ITEM = @PITEM, 
+                    @ITEM_NAME = @PITEM_NAME, 
+                    @ITEM_TYPE = @PITEM_TYPE, 
+                    @LINE_NO = @PLINE_NO, 
+                    @UNIT = @PUNIT, 
+                    @QUANTITY = @PQUANTITY, 
+                    @PRICE = @PPRICE, 
+                    @DISCOUNT1 = @PDISCOUNT1, 
+                    @DISCOUNT2 = @PDISCOUNT2, 
+                    @DISCOUNT3 = @PDISCOUNT3, 
+                    @DOC_DISCOUNT1 = @PDOC_DISCOUNT1, 
+                    @DOC_DISCOUNT2 = @PDOC_DISCOUNT2, 
+                    @DOC_DISCOUNT3 = @PDOC_DISCOUNT3, 
+                    @VAT = @PVAT, 
+                    @VAT_RATE = @PVAT_RATE, 
+                    @AMOUNT = @PAMOUNT, 
+                    @TOTAL = @PTOTAL, 
+                    @DESCRIPTION  = @PDESCRIPTION, 
+                    @INVOICE_LINE_GUID = @PINVOICE_LINE_GUID, 
+                    @INVOICE_DOC_GUID = @PINVOICE_DOC_GUID, 
+                    @ORDER_LINE_GUID = @PORDER_LINE_GUID, 
+                    @ORDER_DOC_GUID = @PORDER_DOC_GUID, 
+                    @OFFER_LINE_GUID = @POFFER_LINE_GUID, 
+                    @OFFER_DOC_GUID = @POFFER_DOC_GUID, 
+                    @PROFORMA_LINE_GUID = @PPROFORMA_LINE_GUID, 
+                    @PROFORMA_DOC_GUID = @PPROFORMA_DOC_GUID, 
+                    @ORIGINS = @PORIGINS, 
+                    @PARTILOT_GUID = @PPARTILOT_GUID, 
+                    @LOT_CODE = @PLOT_CODE `,
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int',
+                    'PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50','POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|max',
+                    'PITEM_TYPE:int','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PDISCOUNT1:float','PDISCOUNT2:float',
+                    'PDISCOUNT3:float','PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float','PDOC_DISCOUNT3:float','PVAT:float','PVAT_RATE:float',
+                    'PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|500','PINVOICE_LINE_GUID:string|50','PINVOICE_DOC_GUID:string|50',
+                    'PORDER_LINE_GUID:string|50','PORDER_DOC_GUID:string|50','POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50',
+                    'PPROFORMA_LINE_GUID:string|50','PPROFORMA_DOC_GUID:string|50','PORIGINS:string|10','PPARTILOT_GUID:string|50','PLOT_CODE:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME',
+                      'ITEM_TYPE','LINE_NO','UNIT','QUANTITY','PRICE','DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2',
+                      'DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','INVOICE_LINE_GUID','INVOICE_DOC_GUID','ORDER_LINE_GUID',
+                      'ORDER_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID','PROFORMA_LINE_GUID','PROFORMA_DOC_GUID','ORIGIN','PARTILOT_GUID','LOT_CODE']
         }
         tmpDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_ITEMS_UPDATE] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@DOC_GUID = @PDOC_GUID, " + 
-                    "@TYPE = @PTYPE, " +
-                    "@DOC_TYPE = @PDOC_TYPE, " +
-                    "@REBATE = @PREBATE, " +
-                    "@REF = @PREF, " +
-                    "@REF_NO = @PREF_NO, " +
-                    "@DOC_DATE = @PDOC_DATE, " +
-                    "@SHIPMENT_DATE = @PSHIPMENT_DATE, " + 
-                    "@INPUT = @PINPUT, " +
-                    "@OUTPUT = @POUTPUT, " +
-                    "@ITEM  = @PITEM, " +
-                    "@ITEM_NAME  = @PITEM_NAME, " +
-                    "@ITEM_TYPE  = @PITEM_TYPE, " +
-                    "@LINE_NO  = @PLINE_NO, " +
-                    "@UNIT  = @PUNIT, " +
-                    "@QUANTITY  = @PQUANTITY, " +
-                    "@PRICE  = @PPRICE, " +
-                    "@DISCOUNT1 = @PDISCOUNT1, " +
-                    "@DISCOUNT2 = @PDISCOUNT2, " +
-                    "@DISCOUNT3 = @PDISCOUNT3, " +
-                    "@DOC_DISCOUNT1 = @PDOC_DISCOUNT1, " +
-                    "@DOC_DISCOUNT2 = @PDOC_DISCOUNT2, " +
-                    "@DOC_DISCOUNT3 = @PDOC_DISCOUNT3, " +
-                    "@VAT = @PVAT, " +
-                    "@VAT_RATE = @PVAT_RATE, " +
-                    "@AMOUNT = @PAMOUNT, " +
-                    "@TOTAL = @PTOTAL, " +
-                    "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@INVOICE_LINE_GUID  = @PINVOICE_LINE_GUID, " +
-                    "@INVOICE_DOC_GUID  = @PINVOICE_DOC_GUID, " +
-                    "@ORDER_LINE_GUID  = @PORDER_LINE_GUID, " +
-                    "@ORDER_DOC_GUID  = @PORDER_DOC_GUID, " +
-                    "@OFFER_LINE_GUID  = @POFFER_LINE_GUID, " +
-                    "@OFFER_DOC_GUID  = @POFFER_DOC_GUID, " +
-                    "@PROFORMA_LINE_GUID  = @PPROFORMA_LINE_GUID, "  +
-                    "@PROFORMA_DOC_GUID  = @PPROFORMA_DOC_GUID, "  +
-                    "@ORIGINS = @PORIGINS, " +
-                    "@PARTILOT_GUID = @PPARTILOT_GUID, " +
-                    "@LOT_CODE = @PLOT_CODE " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50',
-                    'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|max','PITEM_TYPE:int','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PDISCOUNT1:float','PDISCOUNT2:float','PDISCOUNT3:float',
-                    'PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float','PDOC_DISCOUNT3:float','PVAT:float','PVAT_RATE:float',
-                    'PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|500','PINVOICE_LINE_GUID:string|50','PINVOICE_DOC_GUID:string|50','PORDER_LINE_GUID:string|50','PORDER_DOC_GUID:string|50',
-                    'POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50','PPROFORMA_LINE_GUID:string|50','PPROFORMA_DOC_GUID:string|50','PORIGINS:string|10','PPARTILOT_GUID:string|50','PLOT_CODE:string|50'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','ITEM_TYPE','LINE_NO','UNIT','QUANTITY','PRICE',
-                        'DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','INVOICE_LINE_GUID','INVOICE_DOC_GUID','ORDER_LINE_GUID','ORDER_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID','PROFORMA_LINE_GUID','PROFORMA_DOC_GUID','ORIGIN','PARTILOT_GUID','LOT_CODE']
+            query : `EXEC [dbo].[PRD_DOC_ITEMS_UPDATE] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DOC_GUID = @PDOC_GUID, 
+                    @TYPE = @PTYPE, 
+                    @DOC_TYPE = @PDOC_TYPE, 
+                    @REBATE = @PREBATE, 
+                    @REF = @PREF, 
+                    @REF_NO = @PREF_NO, 
+                    @DOC_DATE = @PDOC_DATE, 
+                    @SHIPMENT_DATE = @PSHIPMENT_DATE, 
+                    @INPUT = @PINPUT, 
+                    @OUTPUT = @POUTPUT, 
+                    @ITEM = @PITEM, 
+                    @ITEM_NAME = @PITEM_NAME, 
+                    @ITEM_TYPE = @PITEM_TYPE, 
+                    @LINE_NO = @PLINE_NO, 
+                    @UNIT = @PUNIT, 
+                    @QUANTITY = @PQUANTITY, 
+                    @PRICE = @PPRICE, 
+                    @DISCOUNT1 = @PDISCOUNT1, 
+                    @DISCOUNT2 = @PDISCOUNT2, 
+                    @DISCOUNT3 = @PDISCOUNT3, 
+                    @DOC_DISCOUNT1 = @PDOC_DISCOUNT1, 
+                    @DOC_DISCOUNT2 = @PDOC_DISCOUNT2, 
+                    @DOC_DISCOUNT3 = @PDOC_DISCOUNT3, 
+                    @VAT = @PVAT, 
+                    @VAT_RATE = @PVAT_RATE, 
+                    @AMOUNT = @PAMOUNT, 
+                    @TOTAL = @PTOTAL, 
+                    @DESCRIPTION = @PDESCRIPTION, 
+                    @INVOICE_LINE_GUID = @PINVOICE_LINE_GUID, 
+                    @INVOICE_DOC_GUID = @PINVOICE_DOC_GUID, 
+                    @ORDER_LINE_GUID = @PORDER_LINE_GUID, 
+                    @ORDER_DOC_GUID = @PORDER_DOC_GUID, 
+                    @OFFER_LINE_GUID = @POFFER_LINE_GUID, 
+                    @OFFER_DOC_GUID = @POFFER_DOC_GUID, 
+                    @PROFORMA_LINE_GUID = @PPROFORMA_LINE_GUID, 
+                    @PROFORMA_DOC_GUID = @PPROFORMA_DOC_GUID, 
+                    @ORIGINS = @PORIGINS, 
+                    @PARTILOT_GUID = @PPARTILOT_GUID, 
+                    @LOT_CODE = @PLOT_CODE `,
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int',
+                    'PDOC_DATE:date','PSHIPMENT_DATE:date','PINPUT:string|50','POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|max',
+                    'PITEM_TYPE:int','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PDISCOUNT1:float','PDISCOUNT2:float',
+                    'PDISCOUNT3:float','PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float','PDOC_DISCOUNT3:float','PVAT:float','PVAT_RATE:float',
+                    'PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|500','PINVOICE_LINE_GUID:string|50','PINVOICE_DOC_GUID:string|50',
+                    'PORDER_LINE_GUID:string|50','PORDER_DOC_GUID:string|50','POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50',
+                    'PPROFORMA_LINE_GUID:string|50','PPROFORMA_DOC_GUID:string|50','PORIGINS:string|10','PPARTILOT_GUID:string|50','PLOT_CODE:string|50'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','SHIPMENT_DATE','INPUT','OUTPUT','ITEM',
+                      'ITEM_NAME','ITEM_TYPE','LINE_NO','UNIT','QUANTITY','PRICE','DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1',
+                      'DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','INVOICE_LINE_GUID','INVOICE_DOC_GUID',
+                      'ORDER_LINE_GUID','ORDER_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID','PROFORMA_LINE_GUID','PROFORMA_DOC_GUID','ORIGIN',
+                      'PARTILOT_GUID','LOT_CODE']
         }
         tmpDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_ITEMS_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 1, " + 
-                    "@GUID = @PGUID, " + 
-                    "@DOC_GUID = @PDOC_GUID ", 
+            query : `EXEC [dbo].[PRD_DOC_ITEMS_DELETE] @CUSER = @PCUSER, @UPDATE = 1, @GUID = @PGUID, @DOC_GUID = @PDOC_GUID`,
             param : ['PCUSER:string|25','PGUID:string|50','PDOC_GUID:string|50'],
             dataprm : ['CUSER','GUID','DOC_GUID']
         }
@@ -516,14 +526,13 @@ export class docItemsCls
         //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR.
         return new Promise(async resolve =>
         {
-            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',DOC_GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0,SUB_FACTOR:''}
+            let tmpPrm = {GUID:'00000000-0000-0000-0000-000000000000',DOC_GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0}
             if(arguments.length > 0)
             {
                 tmpPrm.GUID = typeof arguments[0].GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].GUID;
                 tmpPrm.DOC_GUID = typeof arguments[0].DOC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DOC_GUID;
                 tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
                 tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? -1 : arguments[0].REF_NO;
-                tmpPrm.SUB_FACTOR = typeof arguments[0].SUB_FACTOR == 'undefined' ? '' : arguments[0].SUB_FACTOR;
             }
 
             this.ds.get('DOC_ITEMS').selectCmd.value = Object.values(tmpPrm);
@@ -590,69 +599,72 @@ export class docCustomerCls
         let tmpDt = new datatable('DOC_CUSTOMER');
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[DOC_CUSTOMER_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((DOC_TYPE = @DOC_TYPE) OR (@DOC_TYPE = -1)) AND " +
-                    "((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1)) AND ((INVOICE_GUID = @INVOICE_GUID) OR (@INVOICE_GUID = '00000000-0000-0000-0000-000000000000')) ORDER BY CDATE",
+            query : `SELECT * FROM [dbo].[DOC_CUSTOMER_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((DOC_TYPE = @DOC_TYPE) OR (@DOC_TYPE = -1)) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1)) AND 
+                    ((INVOICE_GUID = @INVOICE_GUID) OR (@INVOICE_GUID = '00000000-0000-0000-0000-000000000000')) ORDER BY CDATE`,
             param : ['DOC_GUID:string|50','DOC_TYPE:int','REF:string|25','REF_NO:int','INVOICE_GUID:string|50']
         }
         tmpDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_CUSTOMER_INSERT] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@DOC_GUID = @PDOC_GUID, " + 
-                    "@TYPE = @PTYPE, " +
-                    "@DOC_TYPE = @PDOC_TYPE, " +
-                    "@REBATE = @PREBATE, " +
-                    "@REF = @PREF, " +
-                    "@REF_NO = @PREF_NO, " +
-                    "@DOC_DATE = @PDOC_DATE, " + 
-                    "@INPUT = @PINPUT, " +
-                    "@OUTPUT = @POUTPUT, " +
-                    "@PAY_TYPE = @PPAY_TYPE, " +
-                    "@AMOUNT = @PAMOUNT, "+
-                    "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@INVOICE_GUID = @PINVOICE_GUID, "+
-                    "@EXPIRY_DATE = @PEXPIRY_DATE, "+
-                    "@EXPIRY_FEE = @PEXPIRY_FEE, " +
-                    "@EXPIRY_TYPE = @PEXPIRY_TYPE, " +
-                    "@ROUND = @PROUND",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PEXPIRY_DATE:date','PEXPIRY_FEE:float','PEXPIRY_TYPE:int','PROUND:float'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID','EXPIRY_DATE','EXPIRY_FEE','EXPIRY_TYPE','ROUND']
+            query : `EXEC [dbo].[PRD_DOC_CUSTOMER_INSERT] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DOC_GUID = @PDOC_GUID, 
+                    @TYPE = @PTYPE, 
+                    @DOC_TYPE = @PDOC_TYPE, 
+                    @REBATE = @PREBATE, 
+                    @REF = @PREF, 
+                    @REF_NO = @PREF_NO, 
+                    @DOC_DATE = @PDOC_DATE, 
+                    @INPUT = @PINPUT, 
+                    @OUTPUT = @POUTPUT, 
+                    @PAY_TYPE = @PPAY_TYPE, 
+                    @AMOUNT = @PAMOUNT, 
+                    @DESCRIPTION  = @PDESCRIPTION, 
+                    @INVOICE_GUID = @PINVOICE_GUID, 
+                    @EXPIRY_DATE = @PEXPIRY_DATE, 
+                    @EXPIRY_FEE = @PEXPIRY_FEE, 
+                    @EXPIRY_TYPE = @PEXPIRY_TYPE, 
+                    @ROUND = @PROUND`,
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25',
+                    'PREF_NO:int','PDOC_DATE:date','PINPUT:string|50','POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float',
+                    'PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PEXPIRY_DATE:date','PEXPIRY_FEE:float','PEXPIRY_TYPE:int',
+                    'PROUND:float'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE',
+                      'AMOUNT','DESCRIPTION','INVOICE_GUID','EXPIRY_DATE','EXPIRY_FEE','EXPIRY_TYPE','ROUND']
         }
         tmpDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_CUSTOMER_UPDATE] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@DOC_GUID = @PDOC_GUID, " + 
-                    "@TYPE = @PTYPE, " +
-                    "@DOC_TYPE = @PDOC_TYPE, " +
-                    "@REBATE = @PREBATE, " +
-                    "@REF = @PREF, " +
-                    "@REF_NO = @PREF_NO, " +
-                    "@DOC_DATE = @PDOC_DATE, " + 
-                    "@INPUT = @PINPUT, " +
-                    "@OUTPUT = @POUTPUT, " +
-                    "@PAY_TYPE = @PPAY_TYPE, " +
-                    "@AMOUNT = @PAMOUNT, "+
-                    "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@INVOICE_GUID = @PINVOICE_GUID, "+
-                    "@EXPIRY_DATE = @PEXPIRY_DATE, "+
-                    "@EXPIRY_FEE = @PEXPIRY_FEE, " +
-                    "@EXPIRY_TYPE = @PEXPIRY_TYPE, " +
-                    "@ROUND = @PROUND",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float','PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PEXPIRY_DATE:date','PEXPIRY_FEE:float','PEXPIRY_TYPE:int','PROUND:float'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE','AMOUNT','DESCRIPTION','INVOICE_GUID','EXPIRY_DATE','EXPIRY_FEE','EXPIRY_TYPE','ROUND']
+            query : `EXEC [dbo].[PRD_DOC_CUSTOMER_UPDATE] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DOC_GUID = @PDOC_GUID, 
+                    @TYPE = @PTYPE, 
+                    @DOC_TYPE = @PDOC_TYPE, 
+                    @REBATE = @PREBATE, 
+                    @REF = @PREF, 
+                    @REF_NO = @PREF_NO, 
+                    @DOC_DATE = @PDOC_DATE, 
+                    @INPUT = @PINPUT, 
+                    @OUTPUT = @POUTPUT, 
+                    @PAY_TYPE = @PPAY_TYPE, 
+                    @AMOUNT = @PAMOUNT, 
+                    @DESCRIPTION  = @PDESCRIPTION, 
+                    @INVOICE_GUID = @PINVOICE_GUID, 
+                    @EXPIRY_DATE = @PEXPIRY_DATE, 
+                    @EXPIRY_FEE = @PEXPIRY_FEE, 
+                    @EXPIRY_TYPE = @PEXPIRY_TYPE, 
+                    @ROUND = @PROUND`,
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25',
+                    'PREF_NO:int','PDOC_DATE:date','PINPUT:string|50','POUTPUT:string|50','PPAY_TYPE:int','PAMOUNT:float',
+                    'PDESCRIPTION:string|100','PINVOICE_GUID:string|50','PEXPIRY_DATE:date','PEXPIRY_FEE:float','PEXPIRY_TYPE:int',
+                    'PROUND:float'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','PAY_TYPE',
+                      'AMOUNT','DESCRIPTION','INVOICE_GUID','EXPIRY_DATE','EXPIRY_FEE','EXPIRY_TYPE','ROUND']
         }
         tmpDt.deleteCmd = 
         {
-            query : "[dbo].[PRD_DOC_CUSTOMER_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 1, " + 
-                    "@GUID = @PGUID, " + 
-                    "@DOC_GUID = @PDOC_GUID ", 
+            query : `EXEC [dbo].[PRD_DOC_CUSTOMER_DELETE] @CUSER = @PCUSER, @UPDATE = 1, @GUID = @PGUID, @DOC_GUID = @PDOC_GUID`,
             param : ['PCUSER:string|25','PGUID:string|50','PDOC_GUID:string|50'],
             dataprm : ['CUSER','GUID','DOC_GUID']
         }
@@ -727,7 +739,8 @@ export class checkCls
     {
         this.core = core.instance;
         this.ds =  new dataset()
-        this.empty = {
+        this.empty = 
+        {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
             DOC_GUID : '00000000-0000-0000-0000-000000000000',
@@ -749,51 +762,49 @@ export class checkCls
         let tmpDt = new datatable('CHECK');
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[CHECK_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) ",
-            param : ['DOC_GUID:string|50','REF:string|25']
+            query : `SELECT * FROM [dbo].[CHECK_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((REF = @REF) OR (@REF = ''))`,
+            param : ['GUID:string|50','REF:string|25']
         }
         tmpDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_CHECK_INSERT] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@DOC_GUID = @PDOC_GUID, " + 
-                    "@REF = @PREF, " +
-                    "@DOC_DATE = @PDOC_DATE, " + 
-                    "@CHECK_DATE = @PCHECK_DATE, " +
-                    "@CUSTOMER = @PCUSTOMER, " +
-                    "@AMOUNT = @PAMOUNT, " +
-                    "@SAFE = @PSAFE, "+
-                    "@BREAK = @PBREAK, "+
-                    "@BREAK_DATE  = @PBREAK_DATE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PREF:string|25','PDOC_DATE:date','PCHECK_DATE:date','PCUSTOMER:string|50',
-                        'PAMOUNT:float','PSAFE:string|50','PBREAK:string|50','PBREAK_DATE:date'],
+            query : `EXEC [dbo].[PRD_CHECK_INSERT] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DOC_GUID = @PDOC_GUID, 
+                    @REF = @PREF, 
+                    @DOC_DATE = @PDOC_DATE, 
+                    @CHECK_DATE = @PCHECK_DATE, 
+                    @CUSTOMER = @PCUSTOMER, 
+                    @AMOUNT = @PAMOUNT, 
+                    @SAFE = @PSAFE, 
+                    @BREAK = @PBREAK, 
+                    @BREAK_DATE  = @PBREAK_DATE`,
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PREF:string|25','PDOC_DATE:date','PCHECK_DATE:date',
+                    'PCUSTOMER:string|50','PAMOUNT:float','PSAFE:string|50','PBREAK:string|50','PBREAK_DATE:date'],
             dataprm : ['GUID','CUSER','DOC_GUID','REF','DOC_DATE','CHECK_DATE','CUSTOMER','AMOUNT','SAFE','BREAK','BREAK_DATE']
         }
         tmpDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_CHECK_UPDATE] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@DOC_GUID = @PDOC_GUID, " + 
-                    "@REF = @PREF, " +
-                    "@DOC_DATE = @PDOC_DATE, " + 
-                    "@CHECK_DATE = @PCHECK_DATE, " +
-                    "@CUSTOMER = @PCUSTOMER, " +
-                    "@AMOUNT = @PAMOUNT, " +
-                    "@SAFE = @PSAFE, "+
-                    "@BREAK = @PBREAK, "+
-                    "@BREAK_DATE  = @PBREAK_DATE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PREF:string|25','PDOC_DATE:date','PCHECK_DATE:date','PCUSTOMER:string|50',
-                        'PAMOUNT:float','PSAFE:string|50','PBREAK:string|50','PBREAK_DATE:date'],
+            query : `EXEC [dbo].[PRD_CHECK_UPDATE] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DOC_GUID = @PDOC_GUID, 
+                    @REF = @PREF, 
+                    @DOC_DATE = @PDOC_DATE, 
+                    @CHECK_DATE = @PCHECK_DATE, 
+                    @CUSTOMER = @PCUSTOMER, 
+                    @AMOUNT = @PAMOUNT, 
+                    @SAFE = @PSAFE, 
+                    @BREAK = @PBREAK, 
+                    @BREAK_DATE  = @PBREAK_DATE`,
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PREF:string|25','PDOC_DATE:date','PCHECK_DATE:date',
+                    'PCUSTOMER:string|50','PAMOUNT:float','PSAFE:string|50','PBREAK:string|50','PBREAK_DATE:date'],
             dataprm : ['GUID','CUSER','DOC_GUID','REF','DOC_DATE','CHECK_DATE','CUSTOMER','AMOUNT','SAFE','BREAK','BREAK_DATE']
         }
         tmpDt.deleteCmd = 
         {
-            query : "[dbo].[PRD_CHECK_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 1, " + 
-                    "@GUID = @PGUID " ,
+            query : `EXEC [dbo].[PRD_CHECK_DELETE] @CUSER = @PCUSER, @UPDATE = 1, @GUID = @PGUID`,
             param : ['PCUSER:string|25','PGUID:string|50'],
             dataprm : ['CUSER','GUID']
         }
@@ -871,7 +882,8 @@ export class docOrdersCls
     {
         this.core = core.instance;
         this.ds =  new dataset()
-        this.empty = {
+        this.empty = 
+        {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
             CDATE_FORMAT :  moment(new Date()).format("YYYY-MM-DD"),
@@ -896,12 +908,11 @@ export class docOrdersCls
             UNIT_NAME : '',
             UNIT_FACTOR : 1,
             UNIT_SHORT : '',
+            MAIN_UNIT_SHORT : '',
             QUANTITY : 1,
-            SUB_QUANTITY : 1,
+            UNIT_QUANTITY : 1,
             PRICE : 0,
-            SUB_PRICE : 0,
-            SUB_FACTOR : 1,
-            SUB_SYMBOL : '',
+            UNIT_PRICE : 0,
             ORIGIN : '',
             COMP_QUANTITY : 0,
             CLOSED : 0,
@@ -939,109 +950,113 @@ export class docOrdersCls
         let tmpDt = new datatable('DOC_ORDERS');
         tmpDt.selectCmd = 
         {
-            query : "SELECT *,  " +
-            "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR,  " +
-            "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL,  " +
-            "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
-            "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_ORDERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE " + 
-            " FROM [dbo].[DOC_ORDERS_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1))",
-            param : ['DOC_GUID:string|50','REF:string|25','REF_NO:int','SUB_FACTOR:string|10']
+            query : `SELECT * FROM [dbo].[DOC_ORDERS_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1))`,
+            param : ['DOC_GUID:string|50','REF:string|25','REF_NO:int']
         }
         tmpDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_ORDERS_INSERT] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@DOC_GUID = @PDOC_GUID, " + 
-                    "@TYPE = @PTYPE, " +
-                    "@DOC_TYPE = @PDOC_TYPE, " +
-                    "@REF = @PREF, " +
-                    "@REF_NO = @PREF_NO, " +
-                    "@DOC_DATE = @PDOC_DATE, " + 
-                    "@INPUT = @PINPUT, " +
-                    "@OUTPUT = @POUTPUT, " +
-                    "@ITEM  = @PITEM, " +
-                    "@ITEM_NAME  = @PITEM_NAME, " +
-                    "@LINE_NO  = @PLINE_NO, " +
-                    "@UNIT  = @PUNIT, " +
-                    "@QUANTITY  = @PQUANTITY, " +
-                    "@APPROVED_QUANTITY  = @PAPPROVED_QUANTITY, " +
-                    "@COMP_QUANTITY  = @PCOMP_QUANTITY, " +
-                    "@CLOSED  = @PCLOSED, " +
-                    "@PRICE  = @PPRICE, " +
-                    "@DISCOUNT_1 = @PDISCOUNT_1, " +
-                    "@DISCOUNT_2 = @PDISCOUNT_2, " +
-                    "@DISCOUNT_3 = @PDISCOUNT_3, " +
-                    "@DOC_DISCOUNT1 = @PDOC_DISCOUNT1, " +
-                    "@DOC_DISCOUNT2 = @PDOC_DISCOUNT2, " +
-                    "@DOC_DISCOUNT3 = @PDOC_DISCOUNT3, " +
-                    "@VAT = @PVAT, " +
-                    "@VAT_RATE = @PVAT_RATE, " +
-                    "@AMOUNT = @PAMOUNT, " +
-                    "@TOTAL = @PTOTAL, " +
-                    "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@SHIPMENT_LINE_GUID  = @PSHIPMENT_LINE_GUID, " +
-                    "@SHIPMENT_DOC_GUID  = @PSHIPMENT_DOC_GUID, " +
-                    "@OFFER_LINE_GUID  = @POFFER_LINE_GUID, " +
-                    "@OFFER_DOC_GUID  = @POFFER_DOC_GUID, " +
-                    "@SHIPMENT_DATE = @PSHIPMENT_DATE",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|500','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PAPPROVED_QUANTITY:float','PCOMP_QUANTITY:float','PCLOSED:int','PPRICE:float',
-                        'PDISCOUNT_1:float','PDISCOUNT_2:float','PDISCOUNT_3:float','PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float','PDOC_DISCOUNT3:float','PVAT:float','PVAT_RATE:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_LINE_GUID:string|50','PSHIPMENT_DOC_GUID:string|50','POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50','PSHIPMENT_DATE:date'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','APPROVED_QUANTITY','COMP_QUANTITY','CLOSED','PRICE',
-                        'DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_LINE_GUID','SHIPMENT_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID','SHIPMENT_DATE']
+            query : `EXEC [dbo].[PRD_DOC_ORDERS_INSERT] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DOC_GUID = @PDOC_GUID, 
+                    @TYPE = @PTYPE, 
+                    @DOC_TYPE = @PDOC_TYPE, 
+                    @REF = @PREF, 
+                    @REF_NO = @PREF_NO, 
+                    @DOC_DATE = @PDOC_DATE, 
+                    @INPUT = @PINPUT, 
+                    @OUTPUT = @POUTPUT, 
+                    @ITEM  = @PITEM, 
+                    @ITEM_NAME  = @PITEM_NAME, 
+                    @LINE_NO  = @PLINE_NO, 
+                    @UNIT  = @PUNIT, 
+                    @QUANTITY  = @PQUANTITY, 
+                    @APPROVED_QUANTITY  = @PAPPROVED_QUANTITY, 
+                    @COMP_QUANTITY  = @PCOMP_QUANTITY, 
+                    @CLOSED  = @PCLOSED, 
+                    @PRICE  = @PPRICE, 
+                    @DISCOUNT_1 = @PDISCOUNT_1, 
+                    @DISCOUNT_2 = @PDISCOUNT_2, 
+                    @DISCOUNT_3 = @PDISCOUNT_3, 
+                    @DOC_DISCOUNT1 = @PDOC_DISCOUNT1, 
+                    @DOC_DISCOUNT2 = @PDOC_DISCOUNT2, 
+                    @DOC_DISCOUNT3 = @PDOC_DISCOUNT3, 
+                    @VAT = @PVAT, 
+                    @VAT_RATE = @PVAT_RATE, 
+                    @AMOUNT = @PAMOUNT, 
+                    @TOTAL = @PTOTAL, 
+                    @DESCRIPTION  = @PDESCRIPTION, 
+                    @SHIPMENT_LINE_GUID  = @PSHIPMENT_LINE_GUID, 
+                    @SHIPMENT_DOC_GUID  = @PSHIPMENT_DOC_GUID, 
+                    @OFFER_LINE_GUID  = @POFFER_LINE_GUID, 
+                    @OFFER_DOC_GUID  = @POFFER_DOC_GUID, 
+                    @SHIPMENT_DATE = @PSHIPMENT_DATE`,
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int',
+                    'PDOC_DATE:date','PINPUT:string|50','POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|500','PLINE_NO:int',
+                    'PUNIT:string|50','PQUANTITY:float','PAPPROVED_QUANTITY:float','PCOMP_QUANTITY:float','PCLOSED:int','PPRICE:float',
+                    'PDISCOUNT_1:float','PDISCOUNT_2:float','PDISCOUNT_3:float','PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float',
+                    'PDOC_DISCOUNT3:float','PVAT:float','PVAT_RATE:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100',
+                    'PSHIPMENT_LINE_GUID:string|50','PSHIPMENT_DOC_GUID:string|50','POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50',
+                    'PSHIPMENT_DATE:date'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO',
+                      'UNIT','QUANTITY','APPROVED_QUANTITY','COMP_QUANTITY','CLOSED','PRICE','DISCOUNT_1','DISCOUNT_2','DISCOUNT_3',
+                      'DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_LINE_GUID',
+                      'SHIPMENT_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID','SHIPMENT_DATE']
         }
         tmpDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_ORDERS_UPDATE] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@DOC_GUID = @PDOC_GUID, " + 
-                    "@TYPE = @PTYPE, " +
-                    "@DOC_TYPE = @PDOC_TYPE, " +
-                    "@REF = @PREF, " +
-                    "@REF_NO = @PREF_NO, " +
-                    "@DOC_DATE = @PDOC_DATE, " + 
-                    "@INPUT = @PINPUT, " +
-                    "@OUTPUT = @POUTPUT, " +
-                    "@ITEM  = @PITEM, " +
-                    "@ITEM_NAME  = @PITEM_NAME, " +
-                    "@LINE_NO  = @PLINE_NO, " +
-                    "@UNIT  = @PUNIT, " +
-                    "@QUANTITY  = @PQUANTITY, " +
-                    "@APPROVED_QUANTITY  = @PAPPROVED_QUANTITY, " +
-                    "@COMP_QUANTITY  = @PCOMP_QUANTITY, " +
-                    "@CLOSED  = @PCLOSED, " +
-                    "@PRICE  = @PPRICE, " +
-                    "@DISCOUNT_1 = @PDISCOUNT_1, " +
-                    "@DISCOUNT_2 = @PDISCOUNT_2, " +
-                    "@DISCOUNT_3 = @PDISCOUNT_3, " +
-                    "@DOC_DISCOUNT1 = @PDOC_DISCOUNT1, " +
-                    "@DOC_DISCOUNT2 = @PDOC_DISCOUNT2, " +
-                    "@DOC_DISCOUNT3 = @PDOC_DISCOUNT3, " +
-                    "@VAT = @PVAT, " +
-                    "@VAT_RATE = @PVAT_RATE, " +
-                    "@AMOUNT = @PAMOUNT, " +
-                    "@TOTAL = @PTOTAL, " +
-                    "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@SHIPMENT_LINE_GUID  = @PSHIPMENT_LINE_GUID, " +
-                    "@SHIPMENT_DOC_GUID  = @PSHIPMENT_DOC_GUID, " +
-                    "@OFFER_LINE_GUID  = @POFFER_LINE_GUID, " +
-                    "@OFFER_DOC_GUID  = @POFFER_DOC_GUID, " +
-                    "@SHIPMENT_DATE = @PSHIPMENT_DATE",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|500','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PAPPROVED_QUANTITY:float','PCOMP_QUANTITY:float','PCLOSED:int','PPRICE:float',
-                        'PDISCOUNT_1:float','PDISCOUNT_2:float','PDISCOUNT_3:float','PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float','PDOC_DISCOUNT3:float','PVAT:float','PVAT_RATE:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_LINE_GUID:string|50','PSHIPMENT_DOC_GUID:string|50','POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50','PSHIPMENT_DATE:date'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','APPROVED_QUANTITY','COMP_QUANTITY','CLOSED','PRICE',
-                        'DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','SHIPMENT_LINE_GUID','SHIPMENT_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID','SHIPMENT_DATE']
+            query : `EXEC [dbo].[PRD_DOC_ORDERS_UPDATE] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DOC_GUID = @PDOC_GUID, 
+                    @TYPE = @PTYPE, 
+                    @DOC_TYPE = @PDOC_TYPE, 
+                    @REF = @PREF, 
+                    @REF_NO = @PREF_NO, 
+                    @DOC_DATE = @PDOC_DATE, 
+                    @INPUT = @PINPUT, 
+                    @OUTPUT = @POUTPUT, 
+                    @ITEM  = @PITEM, 
+                    @ITEM_NAME  = @PITEM_NAME, 
+                    @LINE_NO  = @PLINE_NO, 
+                    @UNIT  = @PUNIT, 
+                    @QUANTITY  = @PQUANTITY, 
+                    @APPROVED_QUANTITY  = @PAPPROVED_QUANTITY, 
+                    @COMP_QUANTITY  = @PCOMP_QUANTITY, 
+                    @CLOSED  = @PCLOSED, 
+                    @PRICE  = @PPRICE, 
+                    @DISCOUNT_1 = @PDISCOUNT_1, 
+                    @DISCOUNT_2 = @PDISCOUNT_2, 
+                    @DISCOUNT_3 = @PDISCOUNT_3, 
+                    @DOC_DISCOUNT1 = @PDOC_DISCOUNT1, 
+                    @DOC_DISCOUNT2 = @PDOC_DISCOUNT2, 
+                    @DOC_DISCOUNT3 = @PDOC_DISCOUNT3, 
+                    @VAT = @PVAT, 
+                    @VAT_RATE = @PVAT_RATE, 
+                    @AMOUNT = @PAMOUNT, 
+                    @TOTAL = @PTOTAL, 
+                    @DESCRIPTION  = @PDESCRIPTION, 
+                    @SHIPMENT_LINE_GUID  = @PSHIPMENT_LINE_GUID, 
+                    @SHIPMENT_DOC_GUID  = @PSHIPMENT_DOC_GUID, 
+                    @OFFER_LINE_GUID  = @POFFER_LINE_GUID, 
+                    @OFFER_DOC_GUID  = @POFFER_DOC_GUID, 
+                    @SHIPMENT_DATE = @PSHIPMENT_DATE`,
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int',
+                    'PDOC_DATE:date','PINPUT:string|50','POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|500','PLINE_NO:int',
+                    'PUNIT:string|50','POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|500','PLINE_NO:int','PUNIT:string|50',
+                    'PQUANTITY:float','PAPPROVED_QUANTITY:float','PCOMP_QUANTITY:float','PCLOSED:int','PPRICE:float','PDISCOUNT_1:float',
+                    'PDISCOUNT_2:float','PDISCOUNT_3:float','PDOC_DISCOUNT1:float','PDOC_DISCOUNT2:float','PDOC_DISCOUNT3:float',
+                    'PVAT:float','PVAT_RATE:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PSHIPMENT_LINE_GUID:string|50',
+                    'PSHIPMENT_DOC_GUID:string|50','POFFER_LINE_GUID:string|50','POFFER_DOC_GUID:string|50','PSHIPMENT_DATE:date'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO',
+                      'UNIT','QUANTITY','APPROVED_QUANTITY','COMP_QUANTITY','CLOSED','PRICE','DISCOUNT_1','DISCOUNT_2','DISCOUNT_3',
+                      'DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT',
+                      'TOTAL','DESCRIPTION','SHIPMENT_LINE_GUID','SHIPMENT_DOC_GUID','OFFER_LINE_GUID','OFFER_DOC_GUID','SHIPMENT_DATE']
         }
         tmpDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_ORDERS_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 1, " + 
-                    "@GUID = @PGUID, " + 
-                    "@DOC_GUID = @PDOC_GUID ", 
+            query : `EXEC [dbo].[PRD_DOC_ORDERS_DELETE] @CUSER = @PCUSER, @UPDATE = 1, @GUID = @PGUID, @DOC_GUID = @PDOC_GUID`, 
             param : ['PCUSER:string|25','PGUID:string|50','PDOC_GUID:string|50'],
             dataprm : ['CUSER','GUID','DOC_GUID']
         }
@@ -1092,13 +1107,12 @@ export class docOrdersCls
         //PARAMETRE OLARAK OBJE GÖNDERİLİR YADA PARAMETRE BOŞ İSE TÜMÜ GETİRİLİR.
         return new Promise(async resolve =>
         {
-            let tmpPrm = {DOC_GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0,SUB_FACTOR:''}
+            let tmpPrm = {DOC_GUID:'00000000-0000-0000-0000-000000000000',REF:'',REF_NO:0}
             if(arguments.length > 0)
             {
                 tmpPrm.DOC_GUID = typeof arguments[0].DOC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DOC_GUID;
                 tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
                 tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? -1 : arguments[0].REF_NO;
-                tmpPrm.SUB_FACTOR = typeof arguments[0].SUB_FACTOR == 'undefined' ? '' : arguments[0].SUB_FACTOR;
             }
 
             this.ds.get('DOC_ORDERS').selectCmd.value = Object.values(tmpPrm);
@@ -1126,7 +1140,8 @@ export class docOffersCls
     {
         this.core = core.instance;
         this.ds =  new dataset()
-        this.empty = {
+        this.empty = 
+        {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
             CDATE_FORMAT :  moment(new Date()).format("YYYY-MM-DD"),
@@ -1150,11 +1165,10 @@ export class docOffersCls
             UNIT_NAME : '',
             UNIT_FACTOR : 1,
             UNIT_SHORT : '',
+            MAIN_UNIT_SHORT : '',
             QUANTITY : 1,
             COMP_QUANTITY : 0,
-            SUB_QUANTITY : 1,
-            SUB_FACTOR : 1,
-            SUB_SYMBOL : '',
+            UNIT_QUANTITY : 1,
             PRICE : 0,
             DISCOUNT : 0,
             DISCOUNT_1 : 0,
@@ -1178,7 +1192,6 @@ export class docOffersCls
             MARGIN : 0,
             MULTICODE : '',
             ITEM_BARCODE : '',
-
         }
 
         this._initDs();
@@ -1189,95 +1202,94 @@ export class docOffersCls
         let tmpDt = new datatable('DOC_OFFERS');
         tmpDt.selectCmd = 
         {
-            query : "SELECT *, " +
-            "ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_FACTOR, " +
-            "ISNULL((SELECT TOP 1 SYMBOL FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),'') AS SUB_SYMBOL, " +
-            "QUANTITY / ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_QUANTITY, " + 
-            "PRICE * ISNULL((SELECT TOP 1 FACTOR FROM ITEM_UNIT_VW_01 WHERE ITEM_UNIT_VW_01.ITEM_GUID = DOC_OFFERS_VW_01.ITEM AND ITEM_UNIT_VW_01.ID = @SUB_FACTOR),1) AS SUB_PRICE " + 
-            "FROM [dbo].[DOC_OFFERS_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1))",
-            param : ['DOC_GUID:string|50','REF:string|25','REF_NO:int','SUB_FACTOR:string|10']
+            query : `SELECT * FROM [dbo].[DOC_OFFERS_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1))`,
+            param : ['DOC_GUID:string|50','REF:string|25','REF_NO:int']
         }
         tmpDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_OFFERS_INSERT] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@DOC_GUID = @PDOC_GUID, " + 
-                    "@TYPE = @PTYPE, " +
-                    "@DOC_TYPE = @PDOC_TYPE, " +
-                    "@REF = @PREF, " +
-                    "@REF_NO = @PREF_NO, " +
-                    "@DOC_DATE = @PDOC_DATE, " + 
-                    "@INPUT = @PINPUT, " +
-                    "@OUTPUT = @POUTPUT, " +
-                    "@ITEM  = @PITEM, " +
-                    "@ITEM_NAME  = @PITEM_NAME, " +
-                    "@LINE_NO  = @PLINE_NO, " +
-                    "@UNIT  = @PUNIT, " +
-                    "@QUANTITY  = @PQUANTITY, " +
-                    "@COMP_QUANTITY  = @PCOMP_QUANTITY, " +
-                    "@PRICE  = @PPRICE, " +
-                    "@DISCOUNT_1 = @PDISCOUNT_1, " +
-                    "@DISCOUNT_2 = @PDISCOUNT_2, " +
-                    "@DISCOUNT_3 = @PDISCOUNT_3, " +
-                    "@DOC_DISCOUNT1 = @PDOC_DISCOUNT_1, " +
-                    "@DOC_DISCOUNT2 = @PDOC_DISCOUNT_2, " +
-                    "@DOC_DISCOUNT3 = @PDOC_DISCOUNT_3, " +
-                    "@VAT = @PVAT, " +
-                    "@VAT_RATE = @PVAT_RATE, " +
-                    "@AMOUNT = @PAMOUNT, " +
-                    "@TOTAL = @PTOTAL, " +
-                    "@DESCRIPTION  = @PDESCRIPTION " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|500','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PPRICE:float',
-                        'PDISCOUNT_1:float','PDISCOUNT_2:float','PDISCOUNT_3:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PVAT:float','PVAT_RATE:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','PRICE',
-                        'DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION']
+            query : `EXEC [dbo].[PRD_DOC_OFFERS_INSERT] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DOC_GUID = @PDOC_GUID, 
+                    @TYPE = @PTYPE, 
+                    @DOC_TYPE = @PDOC_TYPE, 
+                    @REF = @PREF, 
+                    @REF_NO = @PREF_NO, 
+                    @DOC_DATE = @PDOC_DATE, 
+                    @INPUT = @PINPUT, 
+                    @OUTPUT = @POUTPUT, 
+                    @ITEM  = @PITEM, 
+                    @ITEM_NAME  = @PITEM_NAME, 
+                    @LINE_NO  = @PLINE_NO, 
+                    @UNIT  = @PUNIT, 
+                    @QUANTITY  = @PQUANTITY, 
+                    @COMP_QUANTITY  = @PCOMP_QUANTITY, 
+                    @PRICE  = @PPRICE, 
+                    @DISCOUNT_1 = @PDISCOUNT_1, 
+                    @DISCOUNT_2 = @PDISCOUNT_2, 
+                    @DISCOUNT_3 = @PDISCOUNT_3, 
+                    @DOC_DISCOUNT1 = @PDOC_DISCOUNT_1, 
+                    @DOC_DISCOUNT2 = @PDOC_DISCOUNT_2, 
+                    @DOC_DISCOUNT3 = @PDOC_DISCOUNT_3, 
+                    @VAT = @PVAT, 
+                    @VAT_RATE = @PVAT_RATE, 
+                    @AMOUNT = @PAMOUNT, 
+                    @TOTAL = @PTOTAL, 
+                    @DESCRIPTION  = @PDESCRIPTION `,
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int',
+                    'PDOC_DATE:date','PINPUT:string|50','POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|500','PLINE_NO:int',
+                    'PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PPRICE:float','PDISCOUNT_1:float','PDISCOUNT_2:float',
+                    'PDISCOUNT_3:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PVAT:float','PVAT_RATE:float',
+                    'PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO',
+                      'UNIT','QUANTITY','COMP_QUANTITY','PRICE','DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2',
+                      'DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION']
         }
         tmpDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_OFFERS_UPDATE] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@DOC_GUID = @PDOC_GUID, " + 
-                    "@TYPE = @PTYPE, " +
-                    "@DOC_TYPE = @PDOC_TYPE, " +
-                    "@REF = @PREF, " +
-                    "@REF_NO = @PREF_NO, " +
-                    "@DOC_DATE = @PDOC_DATE, " + 
-                    "@INPUT = @PINPUT, " +
-                    "@OUTPUT = @POUTPUT, " +
-                    "@ITEM  = @PITEM, " +
-                    "@ITEM_NAME  = @PITEM_NAME, " +
-                    "@LINE_NO  = @PLINE_NO, " +
-                    "@UNIT  = @PUNIT, " +
-                    "@QUANTITY  = @PQUANTITY, " +
-                    "@COMP_QUANTITY  = @PCOMP_QUANTITY, " +
-                    "@PRICE  = @PPRICE, " +
-                    "@DISCOUNT_1 = @PDISCOUNT_1, " +
-                    "@DISCOUNT_2 = @PDISCOUNT_2, " +
-                    "@DISCOUNT_3 = @PDISCOUNT_3, " +
-                    "@DOC_DISCOUNT1 = @PDOC_DISCOUNT_1, " +
-                    "@DOC_DISCOUNT2 = @PDOC_DISCOUNT_2, " +
-                    "@DOC_DISCOUNT3 = @PDOC_DISCOUNT_3, " +
-                    "@VAT = @PVAT, " +
-                    "@VAT_RATE = @PVAT_RATE, " +
-                    "@AMOUNT = @PAMOUNT, " +
-                    "@TOTAL = @PTOTAL, " +
-                    "@DESCRIPTION  = @PDESCRIPTION " ,
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int','PDOC_DATE:date','PINPUT:string|50',
-                        'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|500','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float','PCOMP_QUANTITY:float','PPRICE:float',
-                        'PDISCOUNT_1:float','PDISCOUNT_2:float','PDISCOUNT_3:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PVAT:float','PVAT_RATE:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100'],
-            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO','UNIT','QUANTITY','COMP_QUANTITY','PRICE',
-                        'DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION']
+            query : `EXEC [dbo].[PRD_DOC_OFFERS_UPDATE] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DOC_GUID = @PDOC_GUID, 
+                    @TYPE = @PTYPE, 
+                    @DOC_TYPE = @PDOC_TYPE, 
+                    @REF = @PREF, 
+                    @REF_NO = @PREF_NO, 
+                    @DOC_DATE = @PDOC_DATE, 
+                    @INPUT = @PINPUT, 
+                    @OUTPUT = @POUTPUT, 
+                    @ITEM  = @PITEM, 
+                    @ITEM_NAME  = @PITEM_NAME, 
+                    @LINE_NO  = @PLINE_NO, 
+                    @UNIT  = @PUNIT, 
+                    @QUANTITY  = @PQUANTITY, 
+                    @COMP_QUANTITY  = @PCOMP_QUANTITY, 
+                    @PRICE  = @PPRICE, 
+                    @DISCOUNT_1 = @PDISCOUNT_1, 
+                    @DISCOUNT_2 = @PDISCOUNT_2, 
+                    @DISCOUNT_3 = @PDISCOUNT_3, 
+                    @DOC_DISCOUNT1 = @PDOC_DISCOUNT_1, 
+                    @DOC_DISCOUNT2 = @PDOC_DISCOUNT_2, 
+                    @DOC_DISCOUNT3 = @PDOC_DISCOUNT_3, 
+                    @VAT = @PVAT, 
+                    @VAT_RATE = @PVAT_RATE, 
+                    @AMOUNT = @PAMOUNT, 
+                    @TOTAL = @PTOTAL, 
+                    @DESCRIPTION  = @PDESCRIPTION `,
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREF:string|25','PREF_NO:int',
+                    'PDOC_DATE:date','PINPUT:string|50','POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|500','PLINE_NO:int',
+                    'POUTPUT:string|50','PITEM:string|50','PITEM_NAME:string|500','PLINE_NO:int','PUNIT:string|50','PQUANTITY:float',
+                    'PCOMP_QUANTITY:float','PPRICE:float','PDISCOUNT_1:float','PDISCOUNT_2:float','PDISCOUNT_3:float','PDOC_DISCOUNT_1:float',
+                    'PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PVAT:float','PVAT_RATE:float','PAMOUNT:float','PTOTAL:float',
+                    'PDESCRIPTION:string|100'],
+            dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REF','REF_NO','DOC_DATE','INPUT','OUTPUT','ITEM','ITEM_NAME','LINE_NO',
+                      'UNIT','QUANTITY','COMP_QUANTITY','PRICE','DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2',
+                      'DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION']
         }
         tmpDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_OFFERS_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 1, " + 
-                    "@GUID = @PGUID, " + 
-                    "@DOC_GUID = @PDOC_GUID ", 
+            query : `EXEC [dbo].[PRD_DOC_OFFERS_DELETE] @CUSER = @PCUSER, @UPDATE = 1, @GUID = @PGUID, @DOC_GUID = @PDOC_GUID `, 
             param : ['PCUSER:string|25','PGUID:string|50','PDOC_GUID:string|50'],
             dataprm : ['CUSER','GUID','DOC_GUID']
         }
@@ -1333,7 +1345,6 @@ export class docOffersCls
                 tmpPrm.DOC_GUID = typeof arguments[0].DOC_GUID == 'undefined' ? '00000000-0000-0000-0000-000000000000' : arguments[0].DOC_GUID;
                 tmpPrm.REF = typeof arguments[0].REF == 'undefined' ? '' : arguments[0].REF;
                 tmpPrm.REF_NO = typeof arguments[0].REF_NO == 'undefined' ? -1 : arguments[0].REF_NO;
-                tmpPrm.SUB_FACTOR = typeof arguments[0].SUB_FACTOR == 'undefined' ? '' : arguments[0].SUB_FACTOR;
             }
 
             this.ds.get('DOC_OFFERS').selectCmd.value = Object.values(tmpPrm);
@@ -1375,21 +1386,21 @@ export class quickDescCls
       
         tmpDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_QUICK_DESCRIPTION_INSERT] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@DESCRIPTION = @PDESCRIPTION, " + 
-                    "@PAGE = @PPAGE " ,
+            query : `EXEC [dbo].[PRD_QUICK_DESCRIPTION_INSERT] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DESCRIPTION = @PDESCRIPTION, 
+                    @PAGE = @PPAGE `,
             param : ['PGUID:string|50','PCUSER:string|25','PDESCRIPTION:string|500','PPAGE:string|25'],
             dataprm : ['GUID','CUSER','DESCRIPTION','PAGE']
         }
         tmpDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_QUICK_DESCRIPTION_UPDATE] " +
-            "@GUID = @PGUID, " +
-            "@CUSER = @PCUSER, " +
-            "@DESCRIPTION = @PDESCRIPTION, " + 
-            "@PAGE = @PPAGE " ,
+            query : `EXEC [dbo].[PRD_QUICK_DESCRIPTION_UPDATE] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DESCRIPTION = @PDESCRIPTION, 
+                    @PAGE = @PPAGE `,
             param : ['PGUID:string|50','PCUSER:string|25','PDESCRIPTION:string|500','PPAGE:string|25'],
             dataprm : ['GUID','CUSER','DESCRIPTION','PAGE']
         }
@@ -1445,7 +1456,8 @@ export class docExtraCls
     {
         this.core = core.instance;
         this.ds =  new dataset()
-        this.empty = {
+        this.empty = 
+        {
             GUID : '00000000-0000-0000-0000-000000000000',
             CUSER : this.core.auth.data.CODE,
             TAG : '',
@@ -1464,15 +1476,16 @@ export class docExtraCls
       
         tmpDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_EXTRA_INSERT] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@TAG = @PTAG, " +
-                    "@DOC = @PDOC, " +
-                    "@DESCRIPTION = @PDESCRIPTION, " +
-                    "@SIGNATURE = @PSIGNATURE, " + 
-                    "@SIGNATURE_SUM = @PSIGNATURE_SUM ",
-            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PDOC:string|50','PDESCRIPTION:string|500','PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
+            query : `EXEC [dbo].[PRD_DOC_EXTRA_INSERT] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @TAG = @PTAG, 
+                    @DOC = @PDOC, 
+                    @DESCRIPTION = @PDESCRIPTION, 
+                    @SIGNATURE = @PSIGNATURE, 
+                    @SIGNATURE_SUM = @PSIGNATURE_SUM `,
+            param : ['PGUID:string|50','PCUSER:string|25','PTAG:string|25','PDOC:string|50','PDESCRIPTION:string|500',
+                    'PSIGNATURE:string|max','PSIGNATURE_SUM:string|max'],
             dataprm : ['GUID','CUSER','TAG','DOC','DESCRIPTION','SIGNATURE','SIGNATURE_SUM']
         }
         this.ds.add(tmpDt);
@@ -1548,35 +1561,25 @@ export class transportTypeCls
         let tmpDt = new datatable('TRANSPORT_TYPE');            
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[TRANSPORT_TYPE_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND ((TYPE_NO = @CODE) OR (@TYPE_NO = ''))",
+            query : `SELECT * FROM [dbo].[TRANSPORT_TYPE_VW_01] WHERE ((GUID = @GUID) OR (@GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((TYPE_NO = @CODE) OR (@TYPE_NO = ''))`,
             param : ['GUID:string|50','CODE:string|25']
         } 
         tmpDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_TRANSPORT_TYPE_INSERT] " + 
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " + 
-                    "@TYPE_NO = @PTYPE_NO, " + 
-                    "@TYPE_NAME = @PTYPE_NAME " , 
+            query : `EXEC [dbo].[PRD_TRANSPORT_TYPE_INSERT] @GUID = @PGUID, @CUSER = @PCUSER, @TYPE_NO = @PTYPE_NO, @TYPE_NAME = @PTYPE_NAME `,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE_NO:string|50','PTYPE_NAME:string|50'],
             dataprm : ['GUID','CUSER','TYPE_NO','TYPE_NAME']
         } 
         tmpDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_TRANSPORT_TYPE_UPDATE] " + 
-            "@GUID = @PGUID, " +
-            "@CUSER = @PCUSER, " + 
-            "@TYPE_NO = @PTYPE_NO, " + 
-            "@TYPE_NAME = @PTYPE_NAME " , 
+            query : `EXEC [dbo].[PRD_TRANSPORT_TYPE_UPDATE] @GUID = @PGUID, @CUSER = @PCUSER, @TYPE_NO = @PTYPE_NO, @TYPE_NAME = @PTYPE_NAME `,
             param : ['PGUID:string|50','PCUSER:string|25','PTYPE_NO:string|50','PTYPE_NAME:string|50'],
             dataprm : ['GUID','CUSER','TYPE_NO','TYPE_NAME']
         } 
         tmpDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_TRANSPORT_TYPE_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@UPDATE = 1, " + 
-                    "@GUID = @PGUID ",
+            query : `EXEC [dbo].[PRD_TRANSPORT_TYPE_DELETE] @CUSER = @PCUSER, @UPDATE = 1, @GUID = @PGUID `,
             param : ['PCUSER:string|25','PGUID:string|50'],
             dataprm : ['CUSER','GUID']
         }
@@ -1678,45 +1681,44 @@ export class deptCreditMatchingCls
         let tmpDt = new datatable('DEPT_CREDIT_MATCHING');
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM DEPT_CREDIT_MATCHING WHERE PAID_DOC = @PAID_DOC OR PAYING_DOC = @PAYING_DOC",
+            query : `SELECT * FROM DEPT_CREDIT_MATCHING WHERE PAID_DOC = @PAID_DOC OR PAYING_DOC = @PAYING_DOC`,
             param : ['PAID_DOC:string|50','PAYING_DOC:string|50']
         }
         tmpDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_DEPT_CREDIT_MATCHING_INSERT] " +
-                    "@GUID = @PGUID, " +
-                    "@TYPE = @PTYPE, " +
-                    "@DATE = @PDATE, " +
-                    "@CUSTOMER = @PCUSTOMER, " +
-                    "@PAID_DOC = @PPAID_DOC, " +
-                    "@PAYING_DOC = @PPAYING_DOC, " +
-                    "@PAYING_DAY = @PPAYING_DAY, " +
-                    "@PAID_AMOUNT = @PPAID_AMOUNT, " +
-                    "@PAYING_AMOUNT = @PPAYING_AMOUNT ",
-            param : ['PGUID:string|50','PTYPE:int','PDATE:date','PCUSTOMER:string|50','PPAID_DOC:string|50','PPAYING_DOC:string|50','PPAYING_DAY:int','PPAID_AMOUNT:float','PPAYING_AMOUNT:float'],
+            query : `EXEC [dbo].[PRD_DEPT_CREDIT_MATCHING_INSERT] 
+                    @GUID = @PGUID, 
+                    @TYPE = @PTYPE, 
+                    @DATE = @PDATE, 
+                    @CUSTOMER = @PCUSTOMER, 
+                    @PAID_DOC = @PPAID_DOC, 
+                    @PAYING_DOC = @PPAYING_DOC, 
+                    @PAYING_DAY = @PPAYING_DAY, 
+                    @PAID_AMOUNT = @PPAID_AMOUNT, 
+                    @PAYING_AMOUNT = @PPAYING_AMOUNT `,
+            param : ['PGUID:string|50','PTYPE:int','PDATE:date','PCUSTOMER:string|50','PPAID_DOC:string|50','PPAYING_DOC:string|50',
+                    'PPAYING_DAY:int','PPAID_AMOUNT:float','PPAYING_AMOUNT:float'],
             dataprm : ['GUID','TYPE','DATE','CUSTOMER','PAID_DOC','PAYING_DOC','PAYING_DAY','PAID_AMOUNT','PAYING_AMOUNT']
         }
         tmpDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_DEPT_CREDIT_MATCHING_UPDATE] " +
-                    "@GUID = @PGUID, " +
-                    "@TYPE = @PTYPE, " +
-                    "@DATE = @PDATE, " +
-                    "@CUSTOMER = @PCUSTOMER, " +
-                    "@PAID_DOC = @PPAID_DOC, " +
-                    "@PAYING_DOC = @PPAYING_DOC, " +
-                    "@PAYING_DAY = @PPAYING_DAY, " +
-                    "@PAID_AMOUNT = @PPAID_AMOUNT, " +
-                    "@PAYING_AMOUNT = @PPAYING_AMOUNT ",
-            param : ['PGUID:string|50','PTYPE:int','PPAID_DOC:string|50','PPAYING_DOC:string|50','PPAYING_DAY:int','PPAID_AMOUNT:float','PPAYING_AMOUNT:float'],
+            query : `EXEC [dbo].[PRD_DEPT_CREDIT_MATCHING_UPDATE] 
+                    @GUID = @PGUID, 
+                    @TYPE = @PTYPE, 
+                    @DATE = @PDATE, 
+                    @CUSTOMER = @PCUSTOMER, 
+                    @PAID_DOC = @PPAID_DOC, 
+                    @PAYING_DOC = @PPAYING_DOC, 
+                    @PAYING_DAY = @PPAYING_DAY, 
+                    @PAID_AMOUNT = @PPAID_AMOUNT, 
+                    @PAYING_AMOUNT = @PPAYING_AMOUNT `,
+            param : ['PGUID:string|50','PTYPE:int','PPAID_DOC:string|50','PPAYING_DOC:string|50','PPAYING_DAY:int','PPAID_AMOUNT:float',
+                    'PPAYING_AMOUNT:float'],
             dataprm : ['GUID','TYPE','DATE','CUSTOMER','PAID_DOC','PAYING_DOC','PAYING_DAY','PAID_AMOUNT','PAYING_AMOUNT']
         }
         tmpDt.deleteCmd = 
         {
-            query : "[dbo].[PRD_DEPT_CREDIT_MATCHING_DELETE] " + 
-                    "@GUID = @PGUID, " + 
-                    "@PAID_DOC = @PPAID_DOC, " + 
-                    "@PAYING_DOC = @PPAYING_DOC ",
+            query : `EXEC [dbo].[PRD_DEPT_CREDIT_MATCHING_DELETE] @GUID = @PGUID, @PAID_DOC = @PPAID_DOC, @PAYING_DOC = @PPAYING_DOC`,
             param : ['PGUID:string|50','PPAID_DOC:string|50','PPAYING_DOC:string|50'],
             dataprm : ['GUID','PAID_DOC','PAYING_DOC']
         }
@@ -1952,11 +1954,11 @@ export class deptCreditMatchingCls
         {
             let tmpQuery = 
             {
-                query : "SELECT *, " + 
-                        "CASE WHEN TYPE = 1 THEN BALANCE WHEN TYPE = 0 THEN BALANCE * -1 END AS REMAINDER, " +
-                        "(SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_TYPE_NAME](TYPE,DOC_TYPE,REBATE)) AND LANG = @LANG) AS TYPE_NAME " + 
-                        "FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND TYPE IN (0,1) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE {0} " + 
-                        "ORDER BY DOC_DATE ASC,LDATE ASC",
+                query : `SELECT *, 
+                        CASE WHEN TYPE = 1 THEN BALANCE WHEN TYPE = 0 THEN BALANCE * -1 END AS REMAINDER, 
+                        (SELECT TOP 1 VALUE FROM DB_LANGUAGE WHERE TAG = (SELECT [dbo].[FN_DOC_TYPE_NAME](TYPE,DOC_TYPE,REBATE)) AND LANG = @LANG) AS TYPE_NAME 
+                        FROM DEPT_CREDIT_MATCHING_VW_02 WHERE CUSTOMER_GUID = @CUSTOMER_GUID AND TYPE IN (0,1) AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE {0} 
+                        ORDER BY DOC_DATE ASC,LDATE ASC`,
                 param : ['CUSTOMER_GUID:string|50','LANG:string|50','FIRST_DATE:date','LAST_DATE:date'],
                 value : [this.pCustomer,this.lang.language.toUpperCase(),this.dtPopDeptCreditListDate.startDate,this.dtPopDeptCreditListDate.endDate]
             }
@@ -2031,7 +2033,8 @@ export class docDemandCls
     {
         this.core = core.instance;
         this.ds =  new dataset()
-        this.empty = {
+        this.empty = 
+        {
             GUID : '00000000-0000-0000-0000-000000000000',
             CDATE_FORMAT :  moment(new Date()).format("YYYY-MM-DD"),
             CUSER : this.core.auth.data.CODE,
@@ -2093,101 +2096,104 @@ export class docDemandCls
         let tmpDt = new datatable('DOC_DEMAND');
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[DOC_DEMAND_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1))",
+            query : `SELECT * FROM [dbo].[DOC_DEMAND_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) AND 
+                    ((REF = @REF) OR (@REF = '')) AND ((REF_NO = @REF_NO) OR (@REF_NO = -1))`,
             param : ['DOC_GUID:string|50','REF:string|25','REF_NO:int']
         }
         tmpDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_DEMAND_INSERT] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@DOC_GUID = @PDOC_GUID, " + 
-                    "@TYPE = @PTYPE, " +
-                    "@DOC_TYPE = @PDOC_TYPE, " +
-                    "@REBATE = @PREBATE, " +
-                    "@REF = @PREF, " +
-                    "@REF_NO = @PREF_NO, " +
-                    "@PRICE_AGREED = @PPRICE_AGREED, " +
-                    "@INVOICED_PRICE = @PINVOICED_PRICE, " +
-                    "@DOC_DATE = @PDOC_DATE, " + 
-                    "@INPUT = @PINPUT, " +
-                    "@OUTPUT = @POUTPUT, " +
-                    "@ITEM  = @PITEM, " +
-                    "@LINE_NO  = @PLINE_NO, " +
-                    "@ITEM_NAME  = @PITEM_NAME, " +
-                    "@UNIT  = @PUNIT, " +
-                    "@QUANTITY  = @PQUANTITY, " +
-                    "@PRICE  = @PPRICE, " +
-                    "@DISCOUNT1 = @PDISCOUNT_1, " +
-                    "@DISCOUNT2 = @PDISCOUNT_2, " +
-                    "@DISCOUNT3 = @PDISCOUNT_3, " +
-                    "@DOC_DISCOUNT1 = @PDOC_DISCOUNT_1, " +
-                    "@DOC_DISCOUNT2 = @PDOC_DISCOUNT_2, " +
-                    "@DOC_DISCOUNT3 = @PDOC_DISCOUNT_3, " +
-                    "@VAT = @PVAT, " +
-                    "@VAT_RATE = @PVAT_RATE, " +
-                    "@AMOUNT = @PAMOUNT, " +
-                    "@TOTAL = @PTOTAL, " +
-                    "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@INVOICE_DOC_GUID = @PINVOICE_DOC_GUID, " +
-                    "@INVOICE_LINE_GUID = @PINVOICE_LINE_GUID," +
-                    "@DELETED  = @PDELETED ",
-        param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PPRICE_AGREED:float','PINVOICED_PRICE:float','PDOC_DATE:date','PINPUT:string|50',
-                    'POUTPUT:string|50','PITEM:string|50','PLINE_NO:int','PITEM_NAME:string|500','PUNIT:string|50','PQUANTITY:float','PPRICE:float',
-                    'PDISCOUNT_1:float','PDISCOUNT_2:float','PDISCOUNT_3:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PVAT:float','PVAT_RATE:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_DOC_GUID:string|50',
-                    'PINVOICE_LINE_GUID:string|50','PDELETED:int'],
-        dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','PRICE_AGREED','INVOICED_PRICE','DOC_DATE','INPUT','OUTPUT','ITEM','LINE_NO','ITEM_NAME','UNIT','QUANTITY','PRICE',
-                    'DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','INVOICE_DOC_GUID','INVOICE_LINE_GUID','DELETED']
+            query : `EXEC [dbo].[PRD_DOC_DEMAND_INSERT] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DOC_GUID = @PDOC_GUID, 
+                    @TYPE = @PTYPE, 
+                    @DOC_TYPE = @PDOC_TYPE, 
+                    @REBATE = @PREBATE, 
+                    @REF = @PREF, 
+                    @REF_NO = @PREF_NO, 
+                    @PRICE_AGREED = @PPRICE_AGREED, 
+                    @INVOICED_PRICE = @PINVOICED_PRICE, 
+                    @DOC_DATE = @PDOC_DATE, 
+                    @INPUT = @PINPUT, 
+                    @OUTPUT = @POUTPUT, 
+                    @ITEM  = @PITEM, 
+                    @LINE_NO  = @PLINE_NO, 
+                    @ITEM_NAME  = @PITEM_NAME, 
+                    @UNIT  = @PUNIT, 
+                    @QUANTITY  = @PQUANTITY, 
+                    @PRICE  = @PPRICE, 
+                    @DISCOUNT1 = @PDISCOUNT_1, 
+                    @DISCOUNT2 = @PDISCOUNT_2, 
+                    @DISCOUNT3 = @PDISCOUNT_3, 
+                    @DOC_DISCOUNT1 = @PDOC_DISCOUNT_1, 
+                    @DOC_DISCOUNT2 = @PDOC_DISCOUNT_2, 
+                    @DOC_DISCOUNT3 = @PDOC_DISCOUNT_3, 
+                    @VAT = @PVAT, 
+                    @VAT_RATE = @PVAT_RATE, 
+                    @AMOUNT = @PAMOUNT, 
+                    @TOTAL = @PTOTAL, 
+                    @DESCRIPTION  = @PDESCRIPTION, 
+                    @INVOICE_DOC_GUID = @PINVOICE_DOC_GUID, 
+                    @INVOICE_LINE_GUID = @PINVOICE_LINE_GUID,
+                    @DELETED  = @PDELETED `,
+        param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int',
+                'PPRICE_AGREED:float','PINVOICED_PRICE:float','PDOC_DATE:date','PINPUT:string|50','POUTPUT:string|50','PITEM:string|50','PLINE_NO:int',
+                'POUTPUT:string|50','PITEM:string|50','PLINE_NO:int','PITEM_NAME:string|500','PUNIT:string|50','PQUANTITY:float','PPRICE:float',
+                'PDISCOUNT_1:float','PDISCOUNT_2:float','PDISCOUNT_3:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float',
+                'PVAT:float','PVAT_RATE:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_DOC_GUID:string|50',
+                'PINVOICE_LINE_GUID:string|50','PDELETED:int'],
+        dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','PRICE_AGREED','INVOICED_PRICE','DOC_DATE','INPUT','OUTPUT',
+                  'ITEM','LINE_NO','ITEM_NAME','UNIT','QUANTITY','PRICE','DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2',
+                  'DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','INVOICE_DOC_GUID','INVOICE_LINE_GUID','DELETED']
         }
         tmpDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_DEMAND_UPDATE] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@DOC_GUID = @PDOC_GUID, " + 
-                    "@TYPE = @PTYPE, " +
-                    "@DOC_TYPE = @PDOC_TYPE, " +
-                    "@REBATE = @PREBATE, " +
-                    "@REF = @PREF, " +
-                    "@REF_NO = @PREF_NO, " +
-                    "@PRICE_AGREED = @PPRICE_AGREED, " +
-                    "@INVOICED_PRICE = @PINVOICED_PRICE, " +
-                    "@DOC_DATE = @PDOC_DATE, " + 
-                    "@INPUT = @PINPUT, " +
-                    "@OUTPUT = @POUTPUT, " +
-                    "@ITEM  = @PITEM, " +
-                    "@LINE_NO  = @PLINE_NO, " +
-                    "@ITEM_NAME  = @PITEM_NAME, " +
-                    "@UNIT  = @PUNIT, " +
-                    "@QUANTITY  = @PQUANTITY, " +
-                    "@PRICE  = @PPRICE, " +
-                    "@DISCOUNT1 = @PDISCOUNT_1, " +
-                    "@DISCOUNT2 = @PDISCOUNT_2, " +
-                    "@DISCOUNT3 = @PDISCOUNT_3, " +
-                    "@DOC_DISCOUNT1 = @PDOC_DISCOUNT_1, " +
-                    "@DOC_DISCOUNT2 = @PDOC_DISCOUNT_2, " +
-                    "@DOC_DISCOUNT3 = @PDOC_DISCOUNT_3, " +
-                    "@VAT = @PVAT, " +
-                    "@VAT_RATE = @PVAT_RATE, " +
-                    "@AMOUNT = @PAMOUNT, " +
-                    "@TOTAL = @PTOTAL, " +
-                    "@DESCRIPTION  = @PDESCRIPTION, " +
-                    "@INVOICE_DOC_GUID = @PINVOICE_DOC_GUID, " +
-                    "@INVOICE_LINE_GUID = @PINVOICE_LINE_GUID," +
-                    "@DELETED  = @PDELETED ",
-        param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int','PPRICE_AGREED:float','PINVOICED_PRICE:float','PDOC_DATE:date','PINPUT:string|50',
-                    'POUTPUT:string|50','PITEM:string|50','PLINE_NO:int','PITEM_NAME:string|500','PUNIT:string|50','PQUANTITY:float','PPRICE:float',
-                    'PDISCOUNT_1:float','PDISCOUNT_2:float','PDISCOUNT_3:float','PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PVAT:float','PVAT_RATE:float','PAMOUNT:float','PTOTAL:float','PDESCRIPTION:string|100','PINVOICE_DOC_GUID:string|50',
-                    'PINVOICE_LINE_GUID:string|50','PDELETED:int'],
-        dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','PRICE_AGREED','INVOICED_PRICE','DOC_DATE','INPUT','OUTPUT','ITEM','LINE_NO','ITEM_NAME','UNIT','QUANTITY','PRICE',
-                    'DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2','DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','INVOICE_DOC_GUID','INVOICE_LINE_GUID','DELETED']
+            query : `EXEC [dbo].[PRD_DOC_DEMAND_UPDATE] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DOC_GUID = @PDOC_GUID, 
+                    @TYPE = @PTYPE, 
+                    @DOC_TYPE = @PDOC_TYPE, 
+                    @REBATE = @PREBATE, 
+                    @REF = @PREF, 
+                    @REF_NO = @PREF_NO, 
+                    @PRICE_AGREED = @PPRICE_AGREED, 
+                    @INVOICED_PRICE = @PINVOICED_PRICE, 
+                    @DOC_DATE = @PDOC_DATE, 
+                    @INPUT = @PINPUT, 
+                    @OUTPUT = @POUTPUT, 
+                    @ITEM  = @PITEM, 
+                    @LINE_NO  = @PLINE_NO, 
+                    @ITEM_NAME  = @PITEM_NAME, 
+                    @UNIT  = @PUNIT, 
+                    @QUANTITY  = @PQUANTITY, 
+                    @PRICE  = @PPRICE, 
+                    @DISCOUNT1 = @PDISCOUNT_1, 
+                    @DISCOUNT2 = @PDISCOUNT_2, 
+                    @DISCOUNT3 = @PDISCOUNT_3, 
+                    @DOC_DISCOUNT1 = @PDOC_DISCOUNT_1, 
+                    @DOC_DISCOUNT2 = @PDOC_DISCOUNT_2, 
+                    @DOC_DISCOUNT3 = @PDOC_DISCOUNT_3, 
+                    @VAT = @PVAT, 
+                    @VAT_RATE = @PVAT_RATE, 
+                    @AMOUNT = @PAMOUNT, 
+                    @TOTAL = @PTOTAL, 
+                    @DESCRIPTION  = @PDESCRIPTION, 
+                    @INVOICE_DOC_GUID = @PINVOICE_DOC_GUID, 
+                    @INVOICE_LINE_GUID = @PINVOICE_LINE_GUID,
+                    @DELETED  = @PDELETED `,
+        param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PTYPE:int','PDOC_TYPE:int','PREBATE:int','PREF:string|25','PREF_NO:int',
+                'PPRICE_AGREED:float','PINVOICED_PRICE:float','PDOC_DATE:date','PINPUT:string|50','POUTPUT:string|50','PITEM:string|50','PLINE_NO:int',
+                'PITEM_NAME:string|500','PUNIT:string|50','PQUANTITY:float','PPRICE:float','PDISCOUNT_1:float','PDISCOUNT_2:float','PDISCOUNT_3:float',
+                'PDOC_DISCOUNT_1:float','PDOC_DISCOUNT_2:float','PDOC_DISCOUNT_3:float','PVAT:float','PVAT_RATE:float','PAMOUNT:float','PTOTAL:float',
+                'PDESCRIPTION:string|100','PINVOICE_DOC_GUID:string|50','PINVOICE_LINE_GUID:string|50','PDELETED:int'],
+        dataprm : ['GUID','CUSER','DOC_GUID','TYPE','DOC_TYPE','REBATE','REF','REF_NO','PRICE_AGREED','INVOICED_PRICE','DOC_DATE','INPUT','OUTPUT',
+                  'ITEM','LINE_NO','ITEM_NAME','UNIT','QUANTITY','PRICE','DISCOUNT_1','DISCOUNT_2','DISCOUNT_3','DOC_DISCOUNT_1','DOC_DISCOUNT_2',
+                  'DOC_DISCOUNT_3','VAT','VAT_RATE','AMOUNT','TOTAL','DESCRIPTION','INVOICE_DOC_GUID','INVOICE_LINE_GUID','DELETED']
         }
         tmpDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_DOC_DEMAND_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@GUID = @PGUID, " + 
-                    "@DOC_GUID = @PDOC_GUID ", 
+            query : `EXEC [dbo].[PRD_DOC_DEMAND_DELETE] @CUSER = @PCUSER, @GUID = @PGUID, @DOC_GUID = @PDOC_GUID `, 
             param : ['PCUSER:string|25','PGUID:string|50','PDOC_GUID:string|50'],
             dataprm : ['CUSER','GUID','DOC_GUID']
         }
@@ -2268,7 +2274,8 @@ export class transportInfermotionCls
     {
         this.core = core.instance;
         this.ds =  new dataset()
-        this.empty = {
+        this.empty = 
+        {
             GUID : '00000000-0000-0000-0000-000000000000',
             CDATE_FORMAT :  moment(new Date()).format("YYYY-MM-DD"),
             CUSER : this.core.auth.data.CODE,
@@ -2303,81 +2310,85 @@ export class transportInfermotionCls
         let tmpDt = new datatable('TRANSPORT_INFORMATION');
         tmpDt.selectCmd = 
         {
-            query : "SELECT * FROM [dbo].[TRANSPORT_INFORMATION_VW_01] WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000')) ",
+            query : `SELECT * FROM [dbo].[TRANSPORT_INFORMATION_VW_01] 
+                    WHERE ((DOC_GUID = @DOC_GUID) OR (@DOC_GUID = '00000000-0000-0000-0000-000000000000'))`,
             param : ['DOC_GUID:string|50']
         }
         tmpDt.insertCmd = 
         {
-            query : "EXEC [dbo].[PRD_TRANSPORT_INFORMATION_INSERT] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@DOC_GUID = @PDOC_GUID, " + 
-                    "@SENDER_NAME = @PSENDER_NAME, " +
-                    "@SENDER_ADRESS = @PSENDER_ADRESS, " + 
-                    "@SENDER_CITY = @PSENDER_CITY, " +
-                    "@SENDER_COUNTRY = @PSENDER_COUNTRY, " +
-                    "@SENDER_ZIPCODE = @PSENDER_ZIPCODE, " +
-                    "@RECIEVER_NAME = @PRECIEVER_NAME, " +
-                    "@RECIEVER_ADRESS = @PRECIEVER_ADRESS, " +
-                    "@RECIEVER_CITY = @PRECIEVER_CITY, " +
-                    "@RECIEVER_COUNTRY = @PRECIEVER_COUNTRY, " +
-                    "@RECIEVER_ZIPCODE = @PRECIEVER_ZIPCODE, " +
-                    "@TRANSPORTER = @PTRANSPORTER, " + 
-                    "@TRANSPORTER_PLATE = @PTRANSPORTER_PLATE, " +
-                    "@PALLET_QUANTITY = @PPALLET_QUANTITY, " +
-                    "@METTER = @PMETTER, " +
-                    "@WEIGHT = @PWEIGHT, " +
-                    "@COLIS = @PCOLIS, " +
-                    "@SENDER_NOTE = @PSENDER_NOTE, " +
-                    "@RECIEVER_NOTE = @PRECIEVER_NOTE, " +
-                    "@SENDER_DATE = @PSENDER_DATE, " +
-                    "@RECIEVER_DATE = @PRECIEVER_DATE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PSENDER_NAME:string|50','PSENDER_ADRESS:string|250','PSENDER_CITY:string|25','PSENDER_COUNTRY:string|50',
-                        'PSENDER_ZIPCODE:string|25','PRECIEVER_NAME:string|50','PRECIEVER_ADRESS:string|250','PRECIEVER_CITY:string|25','PRECIEVER_COUNTRY:string|25',
-                        'PRECIEVER_ZIPCODE:string|25','PTRANSPORTER:string|50','PTRANSPORTER_PLATE:string|50','PPALLET_QUANTITY:float','PMETTER:float','PWEIGHT:float','PCOLIS:float','PSENDER_NOTE:string|250','PRECIEVER_NOTE:string|250',
-                    'PSENDER_DATE:date','PRECIEVER_DATE:date'],
-            dataprm : ['GUID','CUSER','DOC_GUID','SENDER_NAME','SENDER_ADRESS','SENDER_CITY','SENDER_COUNTRY','SENDER_ZIPCODE','RECIEVER_NAME','RECIEVER_ADRESS','RECIEVER_CITY','RECIEVER_COUNTRY',
-                    'RECIEVER_ZIPCODE','TRANSPORTER','TRANSPORTER_PLATE','PALLET_QUANTITY','METTER','WEIGHT','COLIS','SENDER_NOTE','RECIEVER_NOTE','SENDER_DATE','RECIEVER_DATE']
+            query : `EXEC [dbo].[PRD_TRANSPORT_INFORMATION_INSERT] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DOC_GUID = @PDOC_GUID, 
+                    @SENDER_NAME = @PSENDER_NAME, 
+                    @SENDER_ADRESS = @PSENDER_ADRESS, 
+                    @SENDER_CITY = @PSENDER_CITY, 
+                    @SENDER_COUNTRY = @PSENDER_COUNTRY, 
+                    @SENDER_ZIPCODE = @PSENDER_ZIPCODE, 
+                    @RECIEVER_NAME = @PRECIEVER_NAME, 
+                    @RECIEVER_ADRESS = @PRECIEVER_ADRESS, 
+                    @RECIEVER_CITY = @PRECIEVER_CITY, 
+                    @RECIEVER_COUNTRY = @PRECIEVER_COUNTRY, 
+                    @RECIEVER_ZIPCODE = @PRECIEVER_ZIPCODE, 
+                    @TRANSPORTER = @PTRANSPORTER, 
+                    @TRANSPORTER_PLATE = @PTRANSPORTER_PLATE, 
+                    @PALLET_QUANTITY = @PPALLET_QUANTITY, 
+                    @METTER = @PMETTER, 
+                    @WEIGHT = @PWEIGHT, 
+                    @COLIS = @PCOLIS, 
+                    @SENDER_NOTE = @PSENDER_NOTE, 
+                    @RECIEVER_NOTE = @PRECIEVER_NOTE, 
+                    @SENDER_DATE = @PSENDER_DATE, 
+                    @RECIEVER_DATE = @PRECIEVER_DATE `,
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PSENDER_NAME:string|50','PSENDER_ADRESS:string|250',
+                    'PSENDER_CITY:string|25','PSENDER_COUNTRY:string|50','PSENDER_ZIPCODE:string|25','PRECIEVER_NAME:string|50',
+                    'PRECIEVER_ADRESS:string|250','PRECIEVER_CITY:string|25','PRECIEVER_COUNTRY:string|25','PRECIEVER_ZIPCODE:string|25',
+                    'PTRANSPORTER:string|50','PTRANSPORTER_PLATE:string|50','PPALLET_QUANTITY:float','PMETTER:float','PWEIGHT:float',
+                    'PCOLIS:float','PSENDER_NOTE:string|250','PRECIEVER_NOTE:string|250','PSENDER_DATE:date','PRECIEVER_DATE:date'],
+            dataprm : ['GUID','CUSER','DOC_GUID','SENDER_NAME','SENDER_ADRESS','SENDER_CITY','SENDER_COUNTRY','SENDER_ZIPCODE',
+                      'RECIEVER_NAME','RECIEVER_ADRESS','RECIEVER_CITY','RECIEVER_COUNTRY','RECIEVER_ZIPCODE','TRANSPORTER',
+                      'TRANSPORTER_PLATE','PALLET_QUANTITY','METTER','WEIGHT','COLIS','SENDER_NOTE','RECIEVER_NOTE','SENDER_DATE',
+                      'RECIEVER_DATE']
         }
         tmpDt.updateCmd = 
         {
-            query : "EXEC [dbo].[PRD_TRANSPORT_INFORMATION_UPDATE] " +
-                    "@GUID = @PGUID, " +
-                    "@CUSER = @PCUSER, " +
-                    "@DOC_GUID = @PDOC_GUID, " + 
-                    "@SENDER_NAME = @PSENDER_NAME, " +
-                    "@SENDER_ADRESS = @PSENDER_ADRESS, " + 
-                    "@SENDER_CITY = @PSENDER_CITY, " +
-                    "@SENDER_COUNTRY = @PSENDER_COUNTRY, " +
-                    "@SENDER_ZIPCODE = @PSENDER_ZIPCODE, " +
-                    "@RECIEVER_NAME = @PRECIEVER_NAME, " +
-                    "@RECIEVER_ADRESS = @PRECIEVER_ADRESS, " +
-                    "@RECIEVER_CITY = @PRECIEVER_CITY, " +
-                    "@RECIEVER_COUNTRY = @PRECIEVER_COUNTRY, " +
-                    "@RECIEVER_ZIPCODE = @PRECIEVER_ZIPCODE, " +
-                    "@TRANSPORTER = @PTRANSPORTER, " + 
-                    "@TRANSPORTER_PLATE = @PTRANSPORTER_PLATE, " +
-                    "@PALLET_QUANTITY = @PPALLET_QUANTITY, " +
-                    "@METTER = @PMETTER, " +
-                    "@WEIGHT = @PWEIGHT, " +
-                    "@COLIS = @PCOLIS, " +
-                    "@SENDER_NOTE = @PSENDER_NOTE, " +
-                    "@RECIEVER_NOTE = @PRECIEVER_NOTE, " +
-                    "@SENDER_DATE = @PSENDER_DATE, " +
-                    "@RECIEVER_DATE = @PRECIEVER_DATE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PSENDER_NAME:string|50','PSENDER_ADRESS:string|250','PSENDER_CITY:string|25','PSENDER_COUNTRY:string|50',
-                        'PSENDER_ZIPCODE:string|25','PRECIEVER_NAME:string|50','PRECIEVER_ADRESS:string|250','PRECIEVER_CITY:string|25','PRECIEVER_COUNTRY:string|25',
-                        'PRECIEVER_ZIPCODE:string|25','PTRANSPORTER:string|50','PTRANSPORTER_PLATE:string|50','PPALLET_QUANTITY:float','PMETTER:float','PWEIGHT:float','PCOLIS:float','PSENDER_NOTE:string|250','PRECIEVER_NOTE:string|250',
+            query : `EXEC [dbo].[PRD_TRANSPORT_INFORMATION_UPDATE] 
+                    @GUID = @PGUID, 
+                    @CUSER = @PCUSER, 
+                    @DOC_GUID = @PDOC_GUID, 
+                    @SENDER_NAME = @PSENDER_NAME, 
+                    @SENDER_ADRESS = @PSENDER_ADRESS, 
+                    @SENDER_CITY = @PSENDER_CITY, 
+                    @SENDER_COUNTRY = @PSENDER_COUNTRY, 
+                    @SENDER_ZIPCODE = @PSENDER_ZIPCODE, 
+                    @RECIEVER_NAME = @PRECIEVER_NAME, 
+                    @RECIEVER_ADRESS = @PRECIEVER_ADRESS, 
+                    @RECIEVER_CITY = @PRECIEVER_CITY, 
+                    @RECIEVER_COUNTRY = @PRECIEVER_COUNTRY, 
+                    @RECIEVER_ZIPCODE = @PRECIEVER_ZIPCODE, 
+                    @TRANSPORTER = @PTRANSPORTER, 
+                    @TRANSPORTER_PLATE = @PTRANSPORTER_PLATE, 
+                    @PALLET_QUANTITY = @PPALLET_QUANTITY, 
+                    @METTER = @PMETTER, 
+                    @WEIGHT = @PWEIGHT, 
+                    @COLIS = @PCOLIS, 
+                    @SENDER_NOTE = @PSENDER_NOTE, 
+                    @RECIEVER_NOTE = @PRECIEVER_NOTE, 
+                    @SENDER_DATE = @PSENDER_DATE, 
+                    @RECIEVER_DATE = @PRECIEVER_DATE `,
+            param : ['PGUID:string|50','PCUSER:string|25','PDOC_GUID:string|50','PSENDER_NAME:string|50','PSENDER_ADRESS:string|250',
+                    'PSENDER_CITY:string|25','PSENDER_COUNTRY:string|50','PSENDER_ZIPCODE:string|25','PRECIEVER_NAME:string|50',
+                    'PSENDER_ZIPCODE:string|25','PRECIEVER_NAME:string|50','PRECIEVER_ADRESS:string|250','PRECIEVER_CITY:string|25',
+                    'PRECIEVER_COUNTRY:string|25','PRECIEVER_ZIPCODE:string|25','PTRANSPORTER:string|50','PTRANSPORTER_PLATE:string|50',
+                    'PPALLET_QUANTITY:float','PMETTER:float','PWEIGHT:float','PCOLIS:float','PSENDER_NOTE:string|250','PRECIEVER_NOTE:string|250',
                     'PSENDER_DATE:date','PRECIEVER_DATE:date'],
-            dataprm : ['GUID','CUSER','DOC_GUID','SENDER_NAME','SENDER_ADRESS','SENDER_CITY','SENDER_COUNTRY','SENDER_ZIPCODE','RECIEVER_NAME','RECIEVER_ADRESS','RECIEVER_CITY','RECIEVER_COUNTRY',
-                    'RECIEVER_ZIPCODE','TRANSPORTER','TRANSPORTER_PLATE','PALLET_QUANTITY','METTER','WEIGHT','COLIS','SENDER_NOTE','RECIEVER_NOTE','SENDER_DATE','RECIEVER_DATE']
+            dataprm : ['GUID','CUSER','DOC_GUID','SENDER_NAME','SENDER_ADRESS','SENDER_CITY','SENDER_COUNTRY','SENDER_ZIPCODE','RECIEVER_NAME',
+                      'RECIEVER_ADRESS','RECIEVER_CITY','RECIEVER_COUNTRY','RECIEVER_ZIPCODE','TRANSPORTER','TRANSPORTER_PLATE','PALLET_QUANTITY',
+                      'METTER','WEIGHT','COLIS','SENDER_NOTE','RECIEVER_NOTE','SENDER_DATE','RECIEVER_DATE']
         }
         tmpDt.deleteCmd = 
         {
-            query : "EXEC [dbo].[PRD_TRANSPORT_INFORMATION_DELETE] " + 
-                    "@CUSER = @PCUSER, " + 
-                    "@GUID = @PGUID, " + 
-                    "@DOC_GUID = @PDOC_GUID ", 
+            query : `EXEC [dbo].[PRD_TRANSPORT_INFORMATION_DELETE] @CUSER = @PCUSER, @GUID = @PGUID, @DOC_GUID = @PDOC_GUID `, 
             param : ['PCUSER:string|25','PGUID:string|50','PDOC_GUID:string|50'],
             dataprm : ['CUSER','GUID','DOC_GUID']
         }
