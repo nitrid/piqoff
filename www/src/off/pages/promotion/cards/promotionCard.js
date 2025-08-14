@@ -463,6 +463,10 @@ export default class promotionCard extends React.PureComponent
                                         <NdTextBox id={"txtPrmQuantity" + pItem.WITHAL} parent={this} simple={true} value={pItem.QUANTITY}
                                         onValueChanged={(e)=>
                                         {
+                                            if(this["txtPrmAmount" + pItem.WITHAL].isFocused)
+                                            {
+                                                return
+                                            }
                                             this["txtPrmAmount" + pItem.WITHAL].value = 0
                                             if(this.condDt.where({WITHAL:pItem.WITHAL}).length > 0)
                                             {
@@ -497,6 +501,10 @@ export default class promotionCard extends React.PureComponent
                                         <NdTextBox id={"txtPrmAmount" + pItem.WITHAL} parent={this} simple={true} value={pItem.AMOUNT}
                                         onValueChanged={(e)=>
                                         {
+                                            if(this["txtPrmQuantity" + pItem.WITHAL].isFocused)
+                                            {
+                                                return
+                                            }
                                             this["txtPrmQuantity" + pItem.WITHAL].value = 0
                                             if(this.condDt.where({WITHAL:pItem.WITHAL}).length > 0)
                                             {
