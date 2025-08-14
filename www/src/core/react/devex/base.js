@@ -57,7 +57,7 @@ export default class NdBase extends React.PureComponent
                         //TEXTBOX DISPLAY DEĞERİ SET EDİLİYOR
                         if(typeof this.props.dt.display != 'undefined')
                         {
-                            if(this.constructor.name == 'NdTextBox')
+                            if(this.constructor.name == 'NdTextBox' || this.constructor.name == 'NdSelectBox')
                             {
                                 if(!this.isUnmounted)
                                 {
@@ -100,7 +100,7 @@ export default class NdBase extends React.PureComponent
                             //TEXTBOX DISPLAY DEĞERİ SET EDİLİYOR
                             if(typeof this.props.dt.display != 'undefined')
                             {
-                                if(this.constructor.name == 'NdTextBox')
+                                if(this.constructor.name == 'NdTextBox' || this.constructor.name == 'NdSelectBox')
                                 {
                                     if(!this.isUnmounted)
                                     {
@@ -284,6 +284,15 @@ export default class NdBase extends React.PureComponent
                 }
             }
         }
+
+        if (this.data && this.data.datatable) 
+        {
+            this.data.datatable.off('onEdit');
+            this.data.datatable.off('onNew');
+            this.data.datatable.off('onRefresh');
+            this.data.datatable.off('onClear');
+            this.data.datatable.off('onDeleteAll');
+        }
     }
     get data()
     {
@@ -405,9 +414,9 @@ export default class NdBase extends React.PureComponent
                                 }
                                 // EĞER DATA SOURCE A QUERY SET GÖNDERİLMİŞ İSE
                                 else if (typeof e != 'undefined' && typeof e.source != 'undefined' && typeof e.source == 'object' && typeof e.source.sql != 'undefined' && typeof e.source.select != 'undefined')
-                                {          
-                                    // BÜYÜK DATALARDA SÜREKLİ DATAYI GETİRMEMESİ İÇİN İF EKLENDİ
-                                    if(typeof tmpThis.state.data.datatable == 'undefined' || typeof tmpThis.props.notRefresh == 'undefined')
+                                {   
+                                    // Database üzerinde arama yapılıyorsa dbSearch true olarak gönderilir.
+                                    if(typeof e.dbSearch != 'undefined' && e.dbSearch == true)
                                     {
                                         tmpThis.state.data.source = e.source;
                                         tmpThis.state.data.datatable = new datatable();
@@ -416,10 +425,32 @@ export default class NdBase extends React.PureComponent
                                         tmpThis.state.data.datatable.insertCmd = e.source.insert;
                                         tmpThis.state.data.datatable.updateCmd = e.source.update;
                                         tmpThis.state.data.datatable.deleteCmd = e.source.delete;
-    
-                                        await tmpThis.state.data.datatable.refresh()
-                                    }   
-                                }                                
+
+                                        let searchValue = loadOption.searchValue || '';
+                                        if(searchValue != '')
+                                        {
+                                            tmpThis.state.data.datatable.selectCmd.value = [searchValue.replaceAll('*','%')];
+                                            await tmpThis.state.data.datatable.refresh()
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // BÜYÜK DATALARDA SÜREKLİ DATAYI GETİRMEMESİ İÇİN İF EKLENDİ
+                                        if(typeof tmpThis.state.data.datatable == 'undefined' || typeof tmpThis.props.notRefresh == 'undefined')
+                                        {
+                                            tmpThis.state.data.source = e.source;
+                                            tmpThis.state.data.datatable = new datatable();
+                                            tmpThis.state.data.datatable.sql = e.source.sql
+                                            tmpThis.state.data.datatable.selectCmd = e.source.select;
+                                            tmpThis.state.data.datatable.insertCmd = e.source.insert;
+                                            tmpThis.state.data.datatable.updateCmd = e.source.update;
+                                            tmpThis.state.data.datatable.deleteCmd = e.source.delete;
+
+                                            await tmpThis.state.data.datatable.refresh()
+                                        }
+                                    }
+                                }           
+
                                 if(typeof tmpThis.state.data != 'undefined' && typeof tmpThis.state.data.datatable != 'undefined')
                                 {
                                     //GROUP BY İÇİN YAPILDI
@@ -439,7 +470,7 @@ export default class NdBase extends React.PureComponent
                                     }
                                     else
                                     {
-                                        if(typeof loadOption.searchValue != 'undefined' && loadOption.searchValue != null)
+                                        if(typeof loadOption.searchValue != 'undefined' && loadOption.searchValue != null && typeof e.dbSearch == 'undefined')
                                         {
                                             function filterByValue(array, string) 
                                             {
@@ -491,7 +522,7 @@ export default class NdBase extends React.PureComponent
                             });
                         },
                         update: (key, values) => 
-                        {                            
+                        {           
                             return new Promise(async resolve => 
                             {
                                 if(typeof this.state.data != 'undefined' && typeof this.state.data.datatable != 'undefined')
@@ -527,48 +558,6 @@ export default class NdBase extends React.PureComponent
                                 resolve()                                
                             });
                         },
-                        onInserted: function (values,key) 
-                        {
-                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onInserted != 'undefined')
-                            {
-                                tmpThis.props.data.onInserted(values,key)
-                            }
-                        },
-                        onInserting: function (values,key) 
-                        {
-                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onInserting != 'undefined')
-                            {
-                                tmpThis.props.data.onInserting(values,key)
-                            }
-                        },
-                        onUpdated: function (key, values) 
-                        {
-                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onUpdated != 'undefined')
-                            {
-                                tmpThis.props.data.onUpdated(key,values)
-                            }
-                        },
-                        onUpdating: function (key, values) 
-                        {                           
-                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onUpdating != 'undefined')
-                            {
-                                tmpThis.props.data.onUpdating(key,values)
-                            }
-                        },
-                        onRemoved: function (key) 
-                        {
-                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onRemoved != 'undefined')
-                            {
-                                tmpThis.props.data.onRemoved(key)
-                            }
-                        },
-                        onRemoving: function (key) 
-                        {
-                            if(typeof tmpThis.props.data != 'undefined' && typeof tmpThis.props.data.onRemoving != 'undefined')
-                            {
-                                tmpThis.props.data.onRemoving(key,values)
-                            }
-                        },
                         byKey: async function (e) 
                         {
                             let x = {}
@@ -595,7 +584,7 @@ export default class NdBase extends React.PureComponent
                             }
                         },
                     }),
-                }
+                },
             });
         });
     }
