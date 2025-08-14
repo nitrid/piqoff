@@ -201,7 +201,7 @@ export default class NdSelectBox extends Base
                 }
             }
         }
-        
+
         this.setState({value:e == null ? '' : e})
     }
     get readOnly()
@@ -226,6 +226,10 @@ export default class NdSelectBox extends Base
     async setData(pData)
     {
         await this.dataRefresh({source:pData})
+    }
+    focus()
+    {
+        this.dev.focus();
     }
     render()
     {

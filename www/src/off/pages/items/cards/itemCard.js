@@ -1001,6 +1001,55 @@ export default class itemCard extends React.PureComponent
             }
         });
     }
+    async onCustomerSelection(pData)
+    {
+        
+        if(pData != null && typeof pData != "undefined" && typeof pData.GUID != "undefined" && pData.GUID != "")
+        {
+            let tmpDt = new datatable()
+            tmpDt.selectCmd = 
+            {
+                query : `SELECT GUID,CODE,TITLE,NAME,LAST_NAME,TYPE_NAME,GENUS_NAME,EXPIRY_DAY,TAX_NO,PRICE_LIST_NO,VAT_ZERO,
+                        ISNULL((SELECT TOP 1 ZIPCODE FROM CUSTOMER_ADRESS_VW_01 WHERE ADRESS_NO = 0),'') AS ZIPCODE, 
+                        ISNULL((SELECT dbo.FN_CUSTOMER_BALANCE(GUID,GETDATE())),0) AS BALANCE
+                        FROM CUSTOMER_VW_01 WHERE GUID = @GUID`,
+                param : ['GUID:string|50'],
+                value : [pData.GUID]
+            }
+            await tmpDt.refresh()
+            
+            if(tmpDt.length > 0)
+            {
+                this.txtPopCustomerCode.GUID = tmpDt[0].GUID
+                this.txtPopCustomerCode.value = tmpDt[0].CODE;
+                this.txtPopCustomerName.value = tmpDt[0].TITLE;
+                this.txtPopCustomerItemCode.focus()
+            }
+        }
+        else
+        {
+            if(pData != null && typeof pData != "undefined" && typeof pData.NAME != "undefined")
+            {
+                this.pg_txtPopCustomerCode.setVal(pData.NAME)
+            }
+            else if(pData != null && typeof pData != "undefined" && typeof pData.CODE != "undefined")
+            {
+                this.pg_txtPopCustomerCode.setVal(pData.CODE)
+            }
+            else
+            {
+                this.pg_txtPopCustomerCode.show()    
+            }
+            
+            this.pg_txtPopCustomerCode.onClick = async(data) =>
+            {
+                if(data.length > 0)
+                {
+                    this.onCustomerSelection(data[0])
+                }
+            }
+        }
+    }
     render()
     {           
         return (
@@ -1379,8 +1428,9 @@ export default class itemCard extends React.PureComponent
                                                     this.txtPopCustomerPrice.value = 0;
                                                     setTimeout(async () => 
                                                     {
-                                                    this.txtPopCustomerCode.focus()
-                                                    }, 600)
+                                                        console.log(this.txtPopCustomerName)
+                                                        this.txtPopCustomerName.focus()
+                                                    }, 300)
                                                 }
                                             }]}
                                             param={this.param.filter({ELEMENT:'txtCustomer',USERS:this.user.CODE})}/>
@@ -3122,11 +3172,69 @@ export default class itemCard extends React.PureComponent
                         showTitle={true}
                         title={this.t("popCustomer.title")}
                         container={'#' + this.props.data.id + this.tabIndex} 
-                        width={'400'}
+                        width={'500'}
                         height={'auto'}
                         position={{of:'#' + this.props.data.id + this.tabIndex}}
                         >
                             <NdForm colCount={1} height={'fit-content'} id={"frmItemCustomer" + + this.tabIndex}>
+                                    {/* txtPopCustomerName */}
+                                    <NdItem>
+                                    <NdLabel text={this.t("popCustomer.txtPopCustomerName")} alignment="right" />
+                                    <NdSelectBox id="txtPopCustomerName" parent={this} simple={true}  
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
+                                    displayExpr="NAME"                       
+                                    valueExpr="NAME"
+                                    value=""
+                                    searchEnabled={true}
+                                    searchTimeout={200}
+                                    minSearchLength={3}
+                                    acceptCustomValue={false}
+                                    openOnFieldClick={false}
+                                    buttons={[
+                                    {
+                                        location:'after',name: 'searchButton',
+                                        options:
+                                        {
+                                            icon:'more',
+                                            elementAttr: {style: 'border:none; box-shadow:none; background:none;'},
+                                            onClick:()=>
+                                            {
+                                                this.onCustomerSelection()
+                                            }
+                                        }
+                                    }]}
+                                    data={{
+                                        source:
+                                        {
+                                            select:
+                                            {
+                                                query : `SELECT TOP 20 GUID,ISNULL(TITLE,'') + ISNULL(' - ' + CITY,'') AS NAME FROM CUSTOMER_VW_04 WHERE UPPER(TITLE) LIKE UPPER(@SEARCH + '%') OR UPPER(CODE) LIKE UPPER(@SEARCH + '%') ORDER BY TITLE ASC`,
+                                                param : ['SEARCH:string|50']
+                                            },
+                                            sql:this.core.sql
+                                        },
+                                        dbSearch:true
+                                    }}
+                                    onSelectionChanged={(async(e)=>
+                                    {
+                                        if(e.selectedItem?.GUID != this.txtPopCustomerName.GUID && e.selectedItem?.NAME != this.txtPopCustomerName.value)
+                                        {
+                                            this.onCustomerSelection(e.selectedItem)
+                                        }
+                                    }).bind(this)}
+                                    onCustomItemCreating={(async(e)=>
+                                    {
+                                        e.customItem = {GUID:'',NAME:e.text};
+                                        this.onCustomerSelection(e.customItem)
+                                    }).bind(this)}
+                                    param={this.param.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
+                                    access={this.access.filter({ELEMENT:'txtCustomerName',USERS:this.user.CODE})}
+                                    >
+                                        <Validator validationGroup={"frmDoc"  + this.tabIndex}>
+                                            <RequiredRule message={this.t("validCustomerCode")} />
+                                        </Validator> 
+                                    </NdSelectBox>
+                                </NdItem> 
                                 <NdItem>
                                     <NdLabel text={this.t("popCustomer.txtPopCustomerCode")} alignment="right" />
                                     <NdTextBox id={"txtPopCustomerCode"} parent={this} simple={true}
@@ -3145,36 +3253,7 @@ export default class itemCard extends React.PureComponent
                                             }
                                         }
                                     }).bind(this)}
-                                    button=
-                                    {
-                                        [
-                                            {
-                                                id:'01',
-                                                icon:'more',
-                                                onClick:()=>
-                                                {                                                
-                                                    this.pg_txtPopCustomerCode.show()
-                                                    this.pg_txtPopCustomerCode.onClick = (data) =>
-                                                    {
-                                                        if(data.length > 0)
-                                                        {
-                                                            this.txtPopCustomerCode.GUID = data[0].GUID
-                                                            this.txtPopCustomerCode.value = data[0].CODE;
-                                                            this.txtPopCustomerName.value = data[0].TITLE;
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                id:'02',
-                                                icon:'add',
-                                                onClick:()=>
-                                                {                                                
-                                                   
-                                                }
-                                            }
-                                        ]
-                                    }/>                                        
+                                    />                                        
                                     <NdPopGrid id={"pg_txtPopCustomerCode"} parent={this} 
                                     container={'#' + this.props.data.id + this.tabIndex} 
                                     position={{of:'#' + this.props.data.id + this.tabIndex}} 
@@ -3203,15 +3282,6 @@ export default class itemCard extends React.PureComponent
                                         <Column dataField="TITLE" caption={this.t("pg_txtPopCustomerCode.clmName")} width={650} defaultSortOrder="asc" />
                                         <Column dataField="CODE" caption={this.t("pg_txtPopCustomerCode.clmCode")} width={150} />
                                     </NdPopGrid>
-                                </NdItem>
-                                <NdItem>
-                                    <NdLabel text={this.t("popCustomer.txtPopCustomerName")} alignment="right" />
-                                    <NdTextBox id={"txtPopCustomerName"} parent={this} simple={true} readOnly={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}>
-                                        <Validator validationGroup={"frmItemCustomer" + this.tabIndex}>
-                                            <RequiredRule message={this.t("validCustomerCode")}/>
-                                        </Validator> 
-                                    </NdTextBox>
                                 </NdItem>
                                 <NdItem>
                                     <NdLabel text={this.t("popCustomer.txtPopCustomerItemCode")} alignment="right" />
