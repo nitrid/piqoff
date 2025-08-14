@@ -1027,6 +1027,11 @@ export class datatable
             this.listeners[pEvt] = Array();
             this.listeners[pEvt].push(pCallback); 
     }
+    off(pEvt)
+    {
+        if (this.listeners.hasOwnProperty(pEvt))
+            delete this.listeners[pEvt];
+    }
     emit(pEvt, pParams)
     {
         if (pEvt in this.listeners) 
