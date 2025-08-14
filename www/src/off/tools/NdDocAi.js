@@ -395,44 +395,55 @@ export default class NdDocAi extends Base
             {
                 let item = pData.Item[i]
                 
-                let tmpQuery = 
+                if(item.ItemGuid != '00000000-0000-0000-0000-000000000000')
                 {
-                    query : `SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER AND CODE = @CODE AND DELETED = 0`,
-                    param : ['ITEM:string|50','CUSTOMER:string|50','CODE:string|25'],
-                    value : [item.ItemGuid,this.importData.CustomerGuid,item.ProductCode]
-                }
-
-                let tmpData = await this.core.sql.execute(tmpQuery)
-                
-                if(tmpData.result.recordset.length == 0)
-                {
-                    if(!isMsg)
+                    let tmpQuery = 
                     {
-                        isMsg = true
-
-                        let tmpConfObj =
-                        {
-                            id:'msgMultiCodeAdd',showTitle:true,title:this.lang.t("popDocAi.msgMultiCodeAdd.title"),showCloseButton:true,width:'500px',height:'auto',
-                            button:[{id:"btn01",caption:this.lang.t("popDocAi.msgMultiCodeAdd.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("popDocAi.msgMultiCodeAdd.btn02"),location:'after'}],
-                            content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popDocAi.msgMultiCodeAdd.msg")}</div>)
-                        }
-
-                        let tmpResult = await dialog(tmpConfObj);
-                        
-                        if(tmpResult == 'btn02')
-                        {
-                            resolve()
-                            return
-                        }
+                        query : `SELECT TOP 1 CODE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER AND CODE = @CODE AND DELETED = 0`,
+                        param : ['ITEM:string|50','CUSTOMER:string|50','CODE:string|25'],
+                        value : [item.ItemGuid,this.importData.CustomerGuid,item.ProductCode]
                     }
-
-                    let tmpQueryInsert =
+    
+                    let tmpData = await this.core.sql.execute(tmpQuery)
+                    
+                    if(tmpData.result.recordset.length == 0)
                     {
-                        query : `EXEC [dbo].[PRD_ITEM_MULTICODE_INSERT] @CUSER = @PCUSER, @ITEM = @PITEM, @CUSTOMER = @PCUSTOMER, @CODE = @PCODE`,
-                        param : ['PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PCODE:string|25'],
-                        value : [this.core.auth.data.CODE,item.ItemGuid,this.importData.CustomerGuid,item.ProductCode]
+                        if(!isMsg)
+                        {
+                            isMsg = true
+    
+                            let tmpConfObj =
+                            {
+                                id:'msgMultiCodeAdd',showTitle:true,title:this.lang.t("popDocAi.msgMultiCodeAdd.title"),showCloseButton:true,width:'500px',height:'auto',
+                                button:[{id:"btn01",caption:this.lang.t("popDocAi.msgMultiCodeAdd.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("popDocAi.msgMultiCodeAdd.btn02"),location:'after'}],
+                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("popDocAi.msgMultiCodeAdd.msg")}</div>)
+                            }
+    
+                            let tmpResult = await dialog(tmpConfObj);
+                            
+                            if(tmpResult == 'btn02')
+                            {
+                                resolve()
+                                return
+                            }
+                        }
+    
+                        let tmpQueryInsert =
+                        {
+                            query : `EXEC [dbo].[PRD_ITEM_MULTICODE_INSERT] @CUSER = @PCUSER, @ITEM = @PITEM, @CUSTOMER = @PCUSTOMER, @CODE = @PCODE`,
+                            param : ['PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PCODE:string|25'],
+                            value : [this.core.auth.data.CODE,item.ItemGuid,this.importData.CustomerGuid,item.ProductCode]
+                        }
+                        await this.core.sql.execute(tmpQueryInsert)
+    
+                        let tmpQueryPriceInsert =
+                        {
+                            query : `EXEC [dbo].[PRD_ITEM_PRICE_INSERT] @CUSER = @PCUSER, @ITEM = @PITEM, @CUSTOMER = @PCUSTOMER, @TYPE = @PTYPE, @PRICE = @PPRICE, @QUANTITY = @PQUANTITY`,
+                            param : ['PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PTYPE:string|25','PPRICE:string|25','PQUANTITY:string|25'],
+                            value : [this.core.auth.data.CODE,item.ItemGuid,this.importData.CustomerGuid,'1',item.UnitPrice,1]
+                        }
+                        await this.core.sql.execute(tmpQueryPriceInsert)
                     }
-                    await this.core.sql.execute(tmpQueryInsert)
                 }
             }
             resolve()
