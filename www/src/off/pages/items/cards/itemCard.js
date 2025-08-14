@@ -1023,7 +1023,7 @@ export default class itemCard extends React.PureComponent
                 this.txtPopCustomerCode.GUID = tmpDt[0].GUID
                 this.txtPopCustomerCode.value = tmpDt[0].CODE;
                 this.txtPopCustomerName.value = tmpDt[0].TITLE;
-                this.txtPopCustomerItemCode.focus()
+                setTimeout(async () => {this.txtPopCustomerItemCode.focus()}, 300)
             }
         }
         else
@@ -3178,7 +3178,7 @@ export default class itemCard extends React.PureComponent
                         >
                             <NdForm colCount={1} height={'fit-content'} id={"frmItemCustomer" + + this.tabIndex}>
                                     {/* txtPopCustomerName */}
-                                    <NdItem>
+                                <NdItem>
                                     <NdLabel text={this.t("popCustomer.txtPopCustomerName")} alignment="right" />
                                     <NdSelectBox id="txtPopCustomerName" parent={this} simple={true}  
                                     upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value}
@@ -3208,7 +3208,7 @@ export default class itemCard extends React.PureComponent
                                         {
                                             select:
                                             {
-                                                query : `SELECT TOP 20 GUID,ISNULL(TITLE,'') + ISNULL(' - ' + CITY,'') AS NAME FROM CUSTOMER_VW_04 WHERE UPPER(TITLE) LIKE UPPER(@SEARCH + '%') OR UPPER(CODE) LIKE UPPER(@SEARCH + '%') ORDER BY TITLE ASC`,
+                                                query : `SELECT TOP 20 GUID,ISNULL(TITLE,'') + ISNULL(' - ' + CITY,'') AS NAME FROM CUSTOMER_VW_04 WHERE (UPPER(TITLE) LIKE UPPER(@SEARCH + '%') OR UPPER(CODE) LIKE UPPER(@SEARCH + '%')) AND GENUS IN(1,2,3) ORDER BY TITLE ASC`,
                                                 param : ['SEARCH:string|50']
                                             },
                                             sql:this.core.sql
@@ -3286,7 +3286,12 @@ export default class itemCard extends React.PureComponent
                                 <NdItem>
                                     <NdLabel text={this.t("popCustomer.txtPopCustomerItemCode")} alignment="right" />
                                     <NdTextBox id={"txtPopCustomerItemCode"} parent={this} simple={true}
-                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} >
+                                    upper={this.sysParam.filter({ID:'onlyBigChar',USERS:this.user.CODE}).getValue().value} 
+                                    onEnterKey={()=>
+                                    {
+                                        this.txtPopCustomerPrice.focus()
+                                    }}
+                                    >
                                         <Validator validationGroup={"frmItemCustomer" + this.tabIndex}>
                                             <RequiredRule message={this.t("validCustomerCode")}/>
                                         </Validator> 
@@ -3294,7 +3299,11 @@ export default class itemCard extends React.PureComponent
                                 </NdItem>
                                 <NdItem>
                                     <NdLabel text={this.t("popCustomer.txtPopCustomerPrice")} alignment="right" />
-                                    <NdNumberBox id={"txtPopCustomerPrice"} parent={this} simple={true} >
+                                    <NdNumberBox id={"txtPopCustomerPrice"} parent={this} simple={true} 
+                                    onEnterKey={(()=>
+                                    {
+                                    }).bind(this)}
+                                    >
                                         <Validator validationGroup={"frmItemCustomer" + this.tabIndex}>
                                             <RequiredRule message={this.t("validPrice")}/>
                                             <RangeRule min={0.001} message={this.t("validPriceFloat")}/>
@@ -3304,7 +3313,7 @@ export default class itemCard extends React.PureComponent
                                 <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
-                                            <NdButton text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmItemCustomer" + this.tabIndex}
+                                            <NdButton id={'btnCustomerSave'} parent={this} text={this.lang.t("btnSave")} type="normal" stylingMode="contained" width={'100%'} validationGroup={"frmItemCustomer" + this.tabIndex}
                                             onClick={async (e)=>
                                             {       
                                                 if(e.validationGroup.validate().status == "valid")
