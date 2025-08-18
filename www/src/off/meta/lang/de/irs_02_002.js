@@ -53,7 +53,7 @@ const irs_02_002 =
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Dieses Dokument wurde bereits in einen Lieferschein umgewandelt. Wenn Sie einen Lieferschein erstellen möchten, erstellen Sie bitte einen neuen Lieferschein im Lieferscheinmodul."
+        msg: "Dieses Dokument wurde bereits in einen Lieferschein umgewandelt. Wenn Sie eine Rechnung erstellen möchten, erstellen Sie bitte eine neue Rechnung im Rechnungsmodul."
     },
     msgControlOfOrder:
     {

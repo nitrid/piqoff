@@ -90,7 +90,35 @@ export default class priceCheck extends React.PureComponent
             this.clearEntry();
             
             this.itemDt.selectCmd.value = [pCode]
-            await this.itemDt.refresh();  
+            await this.itemDt.refresh(); 
+            if(this.itemDt.length > 0)
+            {
+                let tmpMargin = (this.itemDt[0].PRICE_SALE - this.itemDt[0].VAT/100) - (this.itemDt[0].COST_PRICE)
+                let tmpMarginRate = (tmpMargin / (this.itemDt[0].PRICE_SALE - this.itemDt[0].VAT/100)) * 100
+                
+                // Margin display parametresinden format al
+                let marginDisplayPrm = this.param.filter({TYPE:0,ID:'marginDisplay'}).getValue();
+                let marginFormat = "";
+                
+                if(marginDisplayPrm.showAmount) 
+                {
+                    marginFormat += tmpMargin.toFixed(2) + marginDisplayPrm.currency;
+                }
+
+                if(marginDisplayPrm.showAmount && marginDisplayPrm.showRate) 
+                {
+                    marginFormat += marginDisplayPrm.separator;
+                }
+                
+                if(marginDisplayPrm.showRate) 
+                {
+                    marginFormat += tmpMarginRate.toFixed(2);
+                }
+                
+                this.itemDt[0].MARGIN = marginFormat
+                this.popNumber.margin = this.itemDt[0].MARGIN
+            }
+
             
             if(this.itemDt.length > 0)
             {
@@ -277,7 +305,8 @@ export default class priceCheck extends React.PureComponent
                                             {
                                                 if(e.column.dataField == "PRICE")
                                                 {
-                                                    let tmpResult = await this.popNumber.show("PRICE",Number(e.value))
+                                                    let currentMargin = this.itemDt.length > 0 ? this.itemDt[0].MARGIN : "";
+                                                    let tmpResult = await this.popNumber.show("PRICE",Number(e.value), true, currentMargin)
                                                     
                                                     if(typeof tmpResult != 'undefined' && tmpResult != '' && Number(e.value) != Number(tmpResult))
                                                     {
@@ -331,7 +360,7 @@ export default class priceCheck extends React.PureComponent
                             </div>
                             {/* Number Popup */}
                             <div>
-                                <NbPopNumber id={"popNumber"} parent={this}/>
+                                <NbPopNumber id={"popNumber"} parent={this} margin={this.itemDt.length > 0 ? this.itemDt[0].MARGIN : ""}/>
                             </div>
                         </PageContent>
                     </PageView>

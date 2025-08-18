@@ -2501,5 +2501,41 @@ export const prm =
             CAPTION : "Daha önce irsaliye oluşmuşsa getir",
         }
     },
+    //Margin Gösterim Formatı
+    {
+        TYPE : 0,
+        ID :"marginDisplay",
+        VALUE : 
+        {
+            showAmount: true,
+            showRate: true,
+            currency: "€",
+            separator: " / %",
+            editable: true
+        },
+        SPECIAL : "",
+        PAGE : "stk_01",
+        ELEMENT : "",
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "popInput",
+            PAGE_NAME : "Fiyat Kontrol",
+            CAPTION : "Margin Gösterim Formatı",
+            DISPLAY : "showAmount",
+            FORM: 
+            {
+                width:"400",
+                height:"auto",
+                item:
+                [
+                    {type:"checkbox",caption:"Tutarı Göster",field:"showAmount",id:"chkPopMarginDisplayAmount"},
+                    {type:"checkbox",caption:"Oranı Göster",field:"showRate",id:"chkPopMarginDisplayRate"},
+                    {type:"text",caption:"Para Birimi",field:"currency",id:"txtPopMarginDisplayCurrency"},
+                    {type:"text",caption:"Ayırıcı",field:"separator",id:"txtPopMarginDisplaySeparator"}
+                ]
+            }
+        }
+    },
     //#endregion
 ]

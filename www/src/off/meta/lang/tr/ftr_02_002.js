@@ -68,7 +68,7 @@ const  ftr_02_002 =
     {
         title: "Dikkat",
         btn01: "Kapat",
-        msg: "Bu evrak daha önce bir irsaliyeye çevrilmiştir. İrsaliye oluşturmak istiyorsanız, Satış İrsaliyesi bölümünden İrsaliye seçiniz. Bu islem kapatılacaktır."
+        msg: "Bu evrak daha önce bir irsaliyeye çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden İrsaliyeyi çağırarak seçiniz. Bu işlem kapatılacaktır."
     },  
     isMsgSave :
     {  

@@ -46,15 +46,14 @@ const irs_02_002 =
         title: "Dikkat",
         btn01: "Evet",
         btn02: "Hayır",
-        msgDispatch: "Bu siparişi irsaliyeye çevirmek istediğinize emin misiniz?",
-        msgInvoice: "Bu siparişi faturaya çevirmek istediğinize emin misiniz?"
+        msgInvoice: "Bu irsaliyeyi faturaya çevirmek istediğinize emin misiniz?"
     },
     btnSelectInvoice: "Satış Faturasına Çevir",
     msgControlOfDispatch:
     {
         title: "Dikkat",
         btn01: "Kapat",
-        msg: "Bu sipariş daha önce bir irsaliyeye çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden yeni bir Fatura oluşturunuz."
+        msg: "Bu evrak daha önce bir irsaliyeye çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden İrsaliyeyi çağırarak seçiniz. Bu işlem kapatılacaktır."
     },
     menu:
     {
@@ -64,7 +63,7 @@ const irs_02_002 =
     {
         title: "Dikkat",
         btn01: "Kapat",
-        msg: "Bu sipariş daha önce bir faturaya çevrilmiştir. İrsaliye oluşturmak istiyorsanız, Satış İrsaliyesi bölümünden yeni bir İrsaliye oluşturunuz."
+        msg: "Bu evrak daha önce bir faturaya çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden yeni bir Fatura oluşturunuz."
     },
     msgLocked:
     {
@@ -76,7 +75,7 @@ const irs_02_002 =
     {
         title: "Dikkat",
         btn01: "Kapat",
-        msg: "Bu satış teklifi daha önce bir faturaya çevrilmiştir. İrsaliye oluşturmak istiyorsanız, Satış İrsaliyesi bölümünde yeni bir irsaliye oluşturunuz."
+        msg: "Bu evrak daha önce bir faturaya çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden yeni bir Fatura oluşturunuz."
     },
     pg_partiLot :
     {

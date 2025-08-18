@@ -169,6 +169,10 @@ export const langDe =
         lblBarcode : "Barcode",
         lblItemName : "Produktname",
         lblMenu : "Menü",
+        msgMargin :
+        {
+            title : "Gewinn",
+        },
         msgAlert :
         {
             btn01 : "OK",

@@ -153,7 +153,7 @@ const  ftr_02_002 =
     {
         title: "Achtung",
         btn01: "OK",
-        msg: "Dieses Angebot wurde bereits in einen Lieferschein umgewandelt. Wenn Sie eine Rechnung erstellen möchten, erstellen Sie bitte eine neue Rechnung im Verkaufsrechnungsmodul."
+        msg: "Dieses Dokument wurde bereits in einen Lieferschein umgewandelt. Wenn Sie eine Rechnung erstellen möchten, erstellen Sie bitte eine neue Rechnung im Rechnungsmodul."
     },
     pg_partiLot : 
     {
