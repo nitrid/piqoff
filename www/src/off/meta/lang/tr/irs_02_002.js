@@ -37,11 +37,45 @@ const irs_02_002 =
     validMail : "Lütfen Boş Geçmeyin.",
     placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
     clmPartiLot : "Parti Lot",
+    popTransformSelect:
+    {
+        title: "Dönüştürme Seçimi"
+    },
+    msgTransformConfirm:
+    {
+        title: "Dikkat",
+        btn01: "Evet",
+        btn02: "Hayır",
+        msgInvoice: "Bu irsaliyeyi faturaya çevirmek istediğinize emin misiniz?"
+    },
+    btnSelectInvoice: "Satış Faturasına Çevir",
+    msgControlOfDispatch:
+    {
+        title: "Dikkat",
+        btn01: "Kapat",
+        msg: "Bu evrak daha önce bir irsaliyeye çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden İrsaliyeyi çağırarak seçiniz. Bu işlem kapatılacaktır."
+    },
+    menu:
+    {
+        btnSelectInvoice: "Satış Faturası"
+    },
+    msgControlOfOrder:
+    {
+        title: "Dikkat",
+        btn01: "Kapat",
+        msg: "Bu evrak daha önce bir faturaya çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden yeni bir Fatura oluşturunuz."
+    },
+    msgLocked:
+    {
+        title: "Dikkat",
+        btn01: "Tamam",
+        msg: "Evrak Kayıt Edildi Ve Kilitlendi !"
+    },
     msgControlOfFacture:
     {
         title: "Dikkat",
         btn01: "Kapat",
-        msg: "Bu satış teklifi daha önce bir faturaya çevrilmiştir. İrsaliye oluşturmak istiyorsanız, Satış İrsaliyesi bölümünde yeni bir irsaliye oluşturunuz."
+        msg: "Bu evrak daha önce bir faturaya çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden yeni bir Fatura oluşturunuz."
     },
     pg_partiLot :
     {

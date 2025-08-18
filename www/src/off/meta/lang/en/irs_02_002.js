@@ -36,6 +36,48 @@ const irs_02_002 =
     btnMailsend : "Send Mail",
     validMail : "Please do not leave blank.",
     placeMailHtmlEditor : "You can enter a description in your mail.",
+    popTransformSelect:
+    {
+        title: "Conversion Selection"
+    },
+    msgTransformConfirm:
+    {
+        title: "Attention",
+        btn01: "OK",
+        btn02: "No",
+        msgDispatch: "Do you want to convert the document to a dispatch ?",
+        msgInvoice: "Do you want to convert the document to an invoice ?"
+    },
+    btnSelectDispatch: "Dispatch",
+    btnSelectInvoice: "Convert to Invoice",
+    menu:
+    {
+        btnSelectInvoice: "Sales Invoice"
+    },
+    msgControlOfDispatch:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "This document has already been converted to a dispatch. If you want to create a facture, please pass the facture module and select the dispatch."
+    },
+    msgControlOfOrder:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "This document has already been converted to an invoice. If you want to create an invoice, please create a new invoice in the invoice module."
+    },
+    menu:
+    {
+        btnSelectOrder: "Order",
+        btnSelectDispatch: "Dispatch",
+        btnSelectInvoice: "Invoice"
+    },
+    msgLocked:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Document Saved and Locked !"
+    },
     msgControlOfFacture:
     {
         title: "Attention",

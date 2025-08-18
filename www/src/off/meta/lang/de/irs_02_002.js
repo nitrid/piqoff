@@ -32,6 +32,41 @@ const irs_02_002 =
     txtDocNo: "Belegnummer",
     extraCost: "Zusatzkosten",
     cmbPricingList: "Preisliste",
+    popTransformSelect:
+    {
+        title: "Umwandlung auswählen"
+    },
+    msgTransformConfirm:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        btn02: "Nein",
+        msgDispatch: "Möchten Sie das Dokument wirklich in Lieferschein umwandeln?",
+        msgInvoice: "Möchten Sie das Dokument wirklich in Rechnung umwandeln?"
+    },
+    btnSelectInvoice: "In Rechnung umwandeln",
+    menu:
+    {
+        btnSelectInvoice: "Rechnung"
+    },
+    msgControlOfDispatch:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Dieses Dokument wurde bereits in einen Lieferschein umgewandelt. Wenn Sie eine Rechnung erstellen möchten, erstellen Sie bitte eine neue Rechnung im Rechnungsmodul."
+    },
+    msgControlOfOrder:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Dieses Dokument wurde bereits in eine Rechnung umgewandelt. Wenn Sie eine Rechnung erstellen möchten, erstellen Sie bitte eine neue Rechnung im Rechnungsmodul."
+    },
+    msgLocked:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Dokument gespeichert und gesperrt!"
+    },
     msgControlOfFacture:
     {
         title: "Achtung",

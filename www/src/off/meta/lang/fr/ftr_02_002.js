@@ -59,6 +59,12 @@ const  ftr_02_002 =
     tabTitleDetail : "Informations détaillées",
     validMail : "Veuillez ne pas laisser ce champ vide.",
     placeMailHtmlEditor : "Vous pouvez entrer une description de votre courrier.",
+    msgControlOfFacture:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "Ce bon de livraison a déjà été converti en facture. Si vous souhaitez créer une facture, veuillez créer une nouvelle facture dans le module des factures de vente."
+    },
     isMsgSave :
     {
         title: "Attention",
@@ -103,7 +109,9 @@ const  ftr_02_002 =
         title : "Sélectionner Produit",
         clmCode :  "Référence Produit",
         clmName : "Nom Produit",
-        clmPrice : "Prix de Vente" 
+        clmPrice : "Prix de Vente",
+        clmMainGrp : "Groupe",
+        clmRayon : "Rayon"
     },
     pg_dispatchGrid : 
     {
@@ -141,12 +149,13 @@ const  ftr_02_002 =
         clmSubPrice : "Prix unitaire", 
         clmSubFactor : "Coefficient",
         clmPartiLot : "Numéro de lot",
+        clmUnit : "Unité",
     },
     msgControlOfDispatch: 
     {
         title: "Attention",
         btn01: "OK",
-        msg: "Ce devis a déjà été converti en bon de livraison. Si vous souhaitez créer une facture, veuillez créer une nouvelle facture dans le module des factures de vente."
+        msg: "Ce document a déjà été converti en livraison. Si vous souhaitez créer une facture, veuillez passer le module des factures et ramener le document livraison ce que vous voulez."
     },
     pg_partiLot : 
     {
@@ -416,7 +425,7 @@ const  ftr_02_002 =
     popMultiItem:
     {
         title: "Ajout Groupé de Produit",
-        btnApprove: "Chercher Produit",
+        btnApprove: "Rechercher Produit",
         btnClear : "Supprimer",
         btnSave : "Ajouter Lignes",
     },
@@ -449,7 +458,7 @@ const  ftr_02_002 =
     validRefNo : "Saisir Réf No ",
     validDepot : "Sélectionner Dépot",
     validCustomerCode : "Le code fournisseur-client ne peut être vide",
-    validDocDate : "Sélectionner Date" ,
+    validDocDate : "Sélectionner Date. (Ex : D90, 90 jours après la date sélectionnée sera automatiquement saisi.)" ,
     tagItemCodePlaceholder: "Veuillez Saisir les Codes à Ajouter",
     msgNotQuantity: 
     {
@@ -620,5 +629,8 @@ const  ftr_02_002 =
         encaissement : "Encaissement",   
         debit : "Débit",   
     },
+    dispatchWarning : "Il y a des bons de livraison en attente.",
+    orderWarning : "Il y a des commandes en attente.",
+    txtOpenBalance : "Solde ouvert",
 }
 export default ftr_02_002

@@ -1,6 +1,30 @@
 // "Verkaufsangebot"
 const tkf_02_002 =
 {
+    menu :
+    {
+        btnSelectOrder : "Bestellung",
+        btnSelectInvoice : "Rechnung",
+        btnSelectDispatch : "Lieferschein",
+    },
+    msgControlOfFacture :
+    {
+        title : "Achtung",
+        btn01 : "OK",
+        msg : "Möchten Sie das Dokument wirklich in Rechnung umwandeln?"
+    },
+    msgControlOfDispatch :
+    {
+        title : "Achtung",
+        btn01 : "OK",
+        msg : "Möchten Sie das Dokument wirklich in Lieferschein umwandeln?"
+    },
+    msgControlOfOrder :
+    {
+        title : "Achtung",
+        btn01 : "OK",
+        msg : "Möchten Sie das Dokument wirklich in Bestellung umwandeln?"
+    },
     txtRefRefno : "Ref. Ref No",
     cmbDepot: "Lager",
     txtCustomerCode : "Kundencode",
@@ -27,12 +51,14 @@ const tkf_02_002 =
     validDesign : "Bitte wählen Sie ein Design aus.",  
     validMail : "Bitte lassen Sie das Feld nicht leer.",
     cmbPricingList : "Preisliste",
-    LINE_NO : "Zeilennummer",
+    LINE_NO : "Zeilennummer",   
+    btnSelectOrder : "In Bestellung umwandeln",
     btnSelectDispatch : "In Lieferschein umwandeln",
     btnSelectInvoice : "In Rechnung umwandeln",
     msgTransform :
     {
         title : "Dokument umwandeln",
+        btnOrder : "Bestellung",
         btnDispatch : "Lieferschein",
         btnInvoice : "Rechnung",
         msg : "Möchten Sie das Dokument wirklich in Lieferschein oder Rechnung umwandeln?"
@@ -40,6 +66,7 @@ const tkf_02_002 =
     msgTransformConfirm :
     {
         title : "Dokument umwandeln",
+        msgOrder : "Möchten Sie das Dokument wirklich in Bestellung umwandeln?",
         msgDispatch : "Möchten Sie das Dokument wirklich in Lieferschein umwandeln?",
         msgInvoice : "Möchten Sie das Dokument wirklich in Rechnung umwandeln?",
         btn01 : "Ja",

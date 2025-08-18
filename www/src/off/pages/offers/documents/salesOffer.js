@@ -31,7 +31,8 @@ export default class salesOffer extends DocBase
         this.docType = 61;
         this.rebate = 0;
 
-        this._cellRoleRender = this._cellRoleRender.bind(this)
+        this.cellRoleRender = this.cellRoleRender.bind(this)
+        this.onGridToolbarPreparing = this.onGridToolbarPreparing.bind(this)
 
         this.frmDocItems = undefined;
         this.docLocked = false;        
@@ -44,6 +45,12 @@ export default class salesOffer extends DocBase
     {
         await this.core.util.waitUntil(0)
         await this.init()
+        
+        setTimeout(() => {
+            this.btnBack.setState({disabled:false})
+            this.btnNew.setState({disabled:true})  // Orders gibi başlangıçta pasif
+        }, 200);
+        
         if(typeof this.pagePrm != 'undefined')
         {
             setTimeout(() => {
@@ -138,9 +145,8 @@ export default class salesOffer extends DocBase
         super.calculateTotal()
         this.calculateTotalMargin()
     }
-    _cellRoleRender(e)
+    cellRoleRender(e)
     {
-        console.log(this.grid)
         if(e.column.dataField == "ITEM_CODE")
         {
             return (
@@ -231,8 +237,6 @@ export default class salesOffer extends DocBase
                 value={e.value}
                 onChange={(r)=>
                 {
-                    console.log(r.component._changedValue,this.grid,e.rowIndex)
-
                     this.grid.devGrid.cellValue(e.rowIndex,"QUANTITY",r.component._changedValue)
                 }}
                 button=
@@ -701,20 +705,108 @@ export default class salesOffer extends DocBase
         }
         this.grid.devGrid.endUpdate()
     }
+    onGridToolbarPreparing(e)
+    {
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: 
+            {
+                icon: 'add',
+                validationGroup: 'frmslsDoc' + this.tabIndex,
+                onClick: (async (c)=>
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                        {
+                            if(typeof this.docObj.docOffers.dt()[0] != 'undefined')
+                            {
+                                if(this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
+                                {
+                                    this.pg_txtItemsCode.onClick = async(data) =>
+                                    {
+                                        this.checkboxReset()
+                
+                                        this.grid.devGrid.beginUpdate()
+                                        for (let i = 0; i < data.length; i++) 
+                                        {
+                                            await this.addItem(data[i],null)
+                                        }
+                                        this.grid.devGrid.endUpdate()
+                                    }
+                                    this.pg_txtItemsCode.show()
+                                    return
+                                }
+                            }
+                           
+                            this.pg_txtItemsCode.onClick = async(data) =>
+                            {
+                                this.checkboxReset()
+                                this.grid.devGrid.beginUpdate()
+                                for (let i = 0; i < data.length; i++) 
+                                {
+                                    await this.addItem(data[i],null)
+                                }
+                                this.grid.devGrid.endUpdate()
+                            }
+                            this.pg_txtItemsCode.show()
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
+                    }
+                }).bind(this)
+            }
+        }),
+
+        e.toolbarOptions.items.push({
+            location: 'before',
+            locateInMenu: 'auto',
+            widget: 'dxButton',
+            options: 
+            {
+                icon: 'increaseindent',
+                text: this.lang.t("collectiveItemAdd"),
+                validationGroup: 'frmslsDoc' + this.tabIndex,
+                onClick: (async (c)=>
+                {
+                    if(c.validationGroup.validate().status == "valid")
+                        {
+                            await this.popMultiItem.show()
+                            await this.grdMultiItem.dataRefresh({source:this.multiItemData});
+                            this.cmbMultiItemType.value = 1
+                
+                            if( typeof this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1] != 'undefined' && this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
+                            {
+                                await this.grid.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
+                            }
+                    }
+                    else
+                    {
+                        this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
+                    }
+                }).bind(this)
+            }
+        })
+    }
+
     render()
     {
         return(
             <div id={this.props.data.id + this.props.data.tabkey}>
                 <ScrollView>
                     {/* Toolbar */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <Toolbar>
                                 <Item location="after" locateInMenu="auto">
                                     <NdButton id="btnBack" parent={this} icon="revert" type="default"
-                                    onClick={()=>
+                                        onClick={async (e)=>
                                     {
-                                        this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
+                                            await this.getDoc(this.docObj.dt()[0].GUID,this.docObj.dt()[0].REF,this.docObj.dt()[0].REF_NO)
+                                            // Offers için button state'leri manuel ayarla
+                                            this.btnBack.setState({disabled:true})
+                                            this.btnNew.setState({disabled:false})
                                     }}/>
                                 </Item>
                                 <Item location="after" locateInMenu="auto">
@@ -982,7 +1074,7 @@ export default class salesOffer extends DocBase
                         </div>
                     </div>
                     {/* Form */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '130px'}}>
                         <div className="col-12">
                             <NdForm colCount={3} id="frmslsDoc">
                                 {/* txtRef-Refno */}
@@ -1327,84 +1419,20 @@ export default class salesOffer extends DocBase
                         </div>
                     </div>
                     {/* Grid */}
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1">
                         <div className="col-12">
                             <NdForm colCount={1} onInitialized={(e)=>{this.frmDocItems = e.component}}>
-                                <NdItem location="after">
-                                    <Button icon="add"
-                                    validationGroup={"frmslsDoc" + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            if(typeof this.docObj.docOffers.dt()[0] != 'undefined')
-                                            {
-                                                if(this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
-                                                {
-                                                    this.pg_txtItemsCode.onClick = async(data) =>
-                                                    {
-                                                        this.checkboxReset()
-
-                                                        this.grid.devGrid.beginUpdate()
-                                                        for (let i = 0; i < data.length; i++) 
-                                                        {
-                                                            await this.addItem(data[i],null)
-                                                        }
-                                                        this.grid.devGrid.endUpdate()
-                                                    }
-                                                    this.pg_txtItemsCode.show()
-                                                    return
-                                                }
-                                            }
-                                           
-                                            this.pg_txtItemsCode.onClick = async(data) =>
-                                            {
-                                                this.checkboxReset()
-                                                this.grid.devGrid.beginUpdate()
-                                                for (let i = 0; i < data.length; i++) 
-                                                {
-                                                    await this.addItem(data[i],null)
-                                                }
-                                                this.grid.devGrid.endUpdate()
-                                            }
-                                            this.pg_txtItemsCode.show()
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
-                                        }
-                                    }}/>
-                                     <Button icon="increaseindent" text={this.lang.t("collectiveItemAdd")}
-                                     validationGroup={"frmslsDoc" + this.tabIndex}
-                                    onClick={async (e)=>
-                                    {
-                                        if(e.validationGroup.validate().status == "valid")
-                                        {
-                                            await this.popMultiItem.show()
-                                            await this.grdMultiItem.dataRefresh({source:this.multiItemData});
-                                            this.cmbMultiItemType.value = 1
-
-                                            if( typeof this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1] != 'undefined' && this.docObj.docOffers.dt()[this.docObj.docOffers.dt().length - 1].ITEM_CODE == '')
-                                            {
-                                                await this.grid.devGrid.deleteRow(this.docObj.docOffers.dt().length - 1)
-                                            }
-                                        }
-                                        else
-                                        {
-                                            this.toast.show({message:this.t("msgDocValid.msg"),type:'warning',displayTime:2000})
-                                        }
-                                    }}/>
-                                </NdItem>
                                 <NdItem>
                                     <NdGrid parent={this} id={"grdSlsOffer"+this.tabIndex} 
                                     showBorders={true} 
                                     columnsAutoWidth={true} 
                                     allowColumnReordering={true} 
                                     allowColumnResizing={true} 
-                                    height={'500'} 
+                                    height={'590px'} 
                                     width={'100%'}
                                     dbApply={false}
                                     filterRow={{visible:true}}
+                                    onToolbarPreparing={this.onGridToolbarPreparing}
                                     onRowPrepared={(e) =>
                                     {
                                         if(e.rowType == 'data' && (e.data.ORDER_LINE_GUID  != '00000000-0000-0000-0000-000000000000' || e.key.SHIPMENT_LINE_GUID != '00000000-0000-0000-0000-000000000000'))
@@ -1632,16 +1660,16 @@ export default class salesOffer extends DocBase
                                         <Column dataField="LINE_NO" caption={this.t("LINE_NO")} visible={false} width={50} dataType={'number'} defaultSortOrder="desc"/>
                                         <Column dataField="CDATE_FORMAT" caption={this.t("grdSlsOffer.clmCreateDate")} width={80} allowEditing={false}/>
                                         <Column dataField="CUSER_NAME" caption={this.t("grdSlsOffer.clmCuser")} width={90} allowEditing={false}/>
-                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsOffer.clmItemCode")} width={105} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="ITEM_CODE" caption={this.t("grdSlsOffer.clmItemCode")} width={105} editCellRender={this.cellRoleRender}/>
                                         <Column dataField="ITEM_NAME" caption={this.t("grdSlsOffer.clmItemName")} width={230} />
                                         <Column dataField="ITEM_BARCODE" caption={this.t("grdSlsOffer.clmBarcode")} width={110} allowEditing={false}/>
-                                        <Column dataField="QUANTITY" caption={this.t("grdSlsOffer.clmQuantity")}  width={70} editCellRender={this._cellRoleRender} dataType={'number'}/>
+                                        <Column dataField="QUANTITY" caption={this.t("grdSlsOffer.clmQuantity")}  width={70} editCellRender={this.cellRoleRender} dataType={'number'}/>
                                         <Column dataField="SUB_FACTOR" caption={this.t("grdSlsOffer.clmSubFactor")} width={70} allowEditing={true} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}}/>
                                         <Column dataField="SUB_QUANTITY" caption={this.t("grdSlsOffer.clmSubQuantity")} dataType={'number'} width={70} allowHeaderFiltering={false} cellRender={(e)=>{return e.value + " / " + e.data.SUB_SYMBOL}} />
                                         <Column dataField="PRICE" caption={this.t("grdSlsOffer.clmPrice")}  width={70} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
                                         <Column dataField="AMOUNT" caption={this.t("grdSlsOffer.clmAmount")}  width={90} allowEditing={false} format={{ style: "currency", currency: Number.money.code,precision: 3}}/>
-                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsOffer.clmDiscount")}  width={60} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}} editCellRender={this._cellRoleRender}/>
-                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsOffer.clmDiscountRate")}  dataType={'number'}  format={'##0.00'} width={60} editCellRender={this._cellRoleRender}/>
+                                        <Column dataField="DISCOUNT" caption={this.t("grdSlsOffer.clmDiscount")}  width={60} dataType={'number'} format={{ style: "currency", currency: Number.money.code,precision: 2}} editCellRender={this.cellRoleRender}/>
+                                        <Column dataField="DISCOUNT_RATE" caption={this.t("grdSlsOffer.clmDiscountRate")}  dataType={'number'}  format={'##0.00'} width={60} editCellRender={this.cellRoleRender}/>
                                         <Column dataField="MARGIN" caption={this.t("grdSlsOffer.clmMargin")} width={80} allowEditing={false}/>
                                         <Column dataField="VAT" caption={this.t("grdSlsOffer.clmVat")} width={75} format={{ style: "currency", currency: Number.money.code,precision: 3}} allowEditing={false}/>
                                         <Column dataField="VAT_RATE" caption={this.t("grdSlsOffer.clmVatRate")} width={50} allowEditing={false}/>
@@ -1653,7 +1681,7 @@ export default class salesOffer extends DocBase
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-2">
+                    <div className="row px-2 pt-1" style={{height: '160px'}}>
                         <div className="col-12">
                             <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
                                 {/* Ara Toplam */}
@@ -2163,7 +2191,60 @@ export default class salesOffer extends DocBase
                         deferRendering={true}
                         >
                             <div className="row" style={{padding: '20px'}}>
-                                <div className="col-6 text-center">
+                            <div className="col-4 text-center">
+                                    <div 
+                                        style={{
+                                            display: 'flex', 
+                                            flexDirection: 'column', 
+                                            alignItems: 'center', 
+                                            justifyContent: 'center',
+                                            width: '100%',
+                                            height: '150px',
+                                            border: '1px solid #ccc',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                            backgroundColor: '#fff',
+                                            padding: '10px',
+                                            gap: '8px',
+                                            transition: 'all 0.2s ease'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.target.style.backgroundColor = '#f5f5f5';
+                                            e.target.style.borderColor = '#0078d4';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.target.style.backgroundColor = '#fff';
+                                            e.target.style.borderColor = '#ccc';
+                                        }}
+                                        onClick={async()=>
+                                        {
+                                            this.popTransformSelect.hide()
+                                            
+                                            let tmpConfObj =
+                                            {
+                                                id:'msgTransformConfirm',showTitle:true,title:this.t("msgTransformConfirm.title"),showCloseButton:true,width:'500px',height:'200px',
+                                                button:[{id:"btn01",caption:this.t("msgTransformConfirm.btn01"),location:'before'},{id:"btn02",caption:this.t("msgTransformConfirm.btn02"),location:'after'}],
+                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgTransformConfirm.msgOrder")}</div>)
+                                            }
+                                            
+                                            let pResult = await dialog(tmpConfObj);
+                                            if(pResult == 'btn01')
+                                            {
+                                                App.instance.menuClick(
+                                                {
+                                                    id: 'sip_02_002',
+                                                    text: this.t("menu.btnSelectOrder"),
+                                                    path: 'orders/documents/salesOrder.js',
+                                                    pagePrm: {offerGuid: this.docObj.dt()[0].GUID, type: 60}
+                                                })
+                                            }
+                                        }}
+                                    >
+                                        <i className="fa-solid fa-clipboard-list" style={{fontSize: '36px', color: '#0078d4'}}></i>
+                                        <span style={{fontSize: '14px', fontWeight: '500', color: '#333'}}>{this.t("btnSelectOrder")}</span>
+                                    </div>
+                                </div>
+                                <div className="col-4 text-center">
                                     <div 
                                         style={{
                                             display: 'flex', 
@@ -2208,7 +2289,7 @@ export default class salesOffer extends DocBase
                                                 App.instance.menuClick(
                                                 {
                                                     id: 'irs_02_002',
-                                                    text: this.lang.t("menuOff.irs_02_002"),
+                                                    text: this.t("menu.btnSelectDispatch"),
                                                     path: 'dispatch/documents/salesDispatch.js',
                                                     pagePrm: {offerGuid: this.docObj.dt()[0].GUID, type: 40}
                                                 })
@@ -2218,7 +2299,7 @@ export default class salesOffer extends DocBase
                                         <span style={{fontSize: '14px', fontWeight: '500', color: '#333'}}>{this.t("btnSelectDispatch")}</span>
                                     </div>
                                 </div>
-                                <div className="col-6 text-center">
+                                <div className="col-4 text-center">
                                     <div 
                                         style={{
                                             display: 'flex', 
@@ -2226,7 +2307,7 @@ export default class salesOffer extends DocBase
                                             alignItems: 'center', 
                                             justifyContent: 'center',
                                             width: '100%',
-                                            height: '150px',
+                                            height: 'auto',
                                             border: '1px solid #ccc',
                                             borderRadius: '4px',
                                             cursor: 'pointer',
@@ -2259,11 +2340,11 @@ export default class salesOffer extends DocBase
                                             let pResult = await dialog(tmpConfObj);
  
                                             if(pResult == 'btn01')
-                                            {   
+                                            {  
                                                 App.instance.menuClick(
                                                 {
                                                     id: 'ftr_02_002',
-                                                    text: this.lang.t("menuOff.ftr_02_002"),
+                                                    text: this.t("menu.btnSelectInvoice"),
                                                     path: 'invoices/documents/salesInvoice.js',
                                                     pagePrm: {offerGuid: this.docObj.dt()[0].GUID, type: 20}
                                                 })
