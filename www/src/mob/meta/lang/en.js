@@ -186,7 +186,8 @@ export const langEn =
         {
             clmDate : "End Date",
             clmQuantity :  "Quantity",
-            clmPrice : "Price"
+            clmPrice : "Price",
+            clmMargin : "Margin"
         },
         grdCustomer : 
         {

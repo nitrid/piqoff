@@ -193,7 +193,8 @@ export const langTr =
         {
             clmDate : "Bitiş Tarihi",
             clmQuantity :  "Miktar",
-            clmPrice : "Fiyat"
+            clmPrice : "Fiyat",
+            clmMargin : "Kar Marjı"
         },
         grdCustomer : 
         {

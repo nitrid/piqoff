@@ -1504,7 +1504,7 @@ export default class salesOrder extends DocBase
                                         allowColumnResizing={true} 
                                         filterRow={{visible:true}}
                                         headerFilter={{visible:true}}
-                                        height={'590px'} 
+                                        height={'540px'} 
                                         width={'100%'}
                                         dbApply={false}
                                         sorting={{mode:'none'}}
@@ -1777,7 +1777,7 @@ export default class salesOrder extends DocBase
                             </NdForm>
                         </div>
                     </div>
-                    <div className="row px-2 pt-1" style={{height: '160px'}}>
+                    <div className="row px-2 pt-1" style={{height: '120px'}}>
                         <div className="col-12">
                             <Form colCount={4} parent={this} id={"frmPurcInv"  + this.tabIndex}>
                                 {/* Ara Toplam */}
