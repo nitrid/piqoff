@@ -3942,6 +3942,181 @@ export default class posDoc extends React.PureComponent
             }
         })
     }
+    async btnTotalClick()
+    {
+        if(this.posObj.posSale.dt().length == 0)
+        {
+            let tmpConfObj =
+            {
+                id:'msgCollectForSale',showTitle:true,title:this.lang.t("msgCollectForSale.title"),showCloseButton:false,width:'500px',height:'auto',
+                button:[{id:"btn01",caption:this.lang.t("msgCollectForSale.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCollectForSale.msg")}</div>)
+            }
+
+            let tmpMsgResult = await dialog(tmpConfObj);
+            
+            if(tmpMsgResult == 'btn01')
+            {
+                return
+            }
+        }  
+        
+        let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
+
+        let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
+        this.posLcd.print({blink:0,text:tmpLcdStr})
+        App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
+
+        this.rbtnPayType.value = 0                                                                       
+        this.popTotal.show();
+        this.txtPopTotal.newStart = true;   
+    }
+    async btnCreditCardClick()
+    {
+        if(this.posObj.posSale.dt().length == 0)
+        {
+            let tmpConfObj =
+            {
+                id:'msgCollectForSale',showTitle:true,title:this.lang.t("msgCollectForSale.title"),showCloseButton:true,width:'500px',height:'auto',
+                button:[{id:"btn01",caption:this.lang.t("msgCollectForSale.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCollectForSale.msg")}</div>)
+            }
+
+            let tmpMsgResult = await dialog(tmpConfObj);
+            
+            if(tmpMsgResult == 'btn01')
+            {
+                return
+            }
+        }
+        
+        if(this.prmObj.filter({ID:'PosCardTicketQuestion',TYPE:0,USERS:this.user.CODE}).getValue() == true)
+        {
+            let tmpResult2 = await this.msgCardPayType.show()
+
+            if(tmpResult2 == "btn01")
+            {
+                this.popCardPay.show();
+                this.txtPopCardPay.newStart = true;
+            }
+            else if(tmpResult2 == "btn02")
+            {
+                this.popCardTicketPay.show();
+                this.txtPopCardTicketPay.newStart = true;
+            }
+        }
+        else
+        {
+            let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
+        
+            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
+            this.posLcd.print({blink : 0,text : tmpLcdStr})
+            App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
+
+            this.popCardPay.show();
+            this.txtPopCardPay.newStart = true;
+        }   
+    }
+    async btnCashClick()
+    {
+        if(this.posObj.posSale.dt().length == 0)
+        {
+            let tmpConfObj =
+            {
+                id:'msgCollectForSale',showTitle:true,title:this.lang.t("msgCollectForSale.title"),showCloseButton:true,width:'500px',height:'auto',
+                button:[{id:"btn01",caption:this.lang.t("msgCollectForSale.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCollectForSale.msg")}</div>)
+            }
+
+            let tmpMsgResult = await dialog(tmpConfObj);
+            
+            if(tmpMsgResult == 'btn01')
+            {
+                return
+            }
+        }   
+                    
+        let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
+        
+        let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
+        this.posLcd.print({blink : 0,text : tmpLcdStr})
+        App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
+
+        this.popCashPay.show();
+        this.txtPopCashPay.newStart = true;
+    }
+    async btnCardTicketClick()
+    {
+        if(this.posObj.posSale.dt().length == 0)
+        {
+            let tmpConfObj =
+            {
+                id:'msgCollectForSale',showTitle:true,title:this.lang.t("msgCollectForSale.title"),showCloseButton:true,width:'500px',height:'auto',
+                button:[{id:"btn01",caption:this.lang.t("msgCollectForSale.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCollectForSale.msg")}</div>)
+            }
+
+            let tmpMsgResult = await dialog(tmpConfObj);
+            
+            if(tmpMsgResult == 'btn01')
+            {
+                return
+            }
+        }   
+                    
+        let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
+        
+        let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
+        this.posLcd.print({blink : 0,text : tmpLcdStr})
+        App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
+
+        let tmpTotalGrand = this.posObj.dt()[0].TOTAL
+        let tmpRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2))                                        
+
+        this.popCardTotalGrand.value = Number(tmpTotalGrand).round(2)
+        this.payCardTotalRest.value = Number(tmpRest).round(2)
+        
+        this.popCardTicketPay.show();
+        this.txtPopCardTicketPay.newStart = true;   
+    }
+    async btnCheqpayClick()
+    {
+        //TICKET REST. SADAKAT PUAN KULLANIMI PARAMETRESI
+        if(this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0,USERS:this.user.CODE}).getValue() == 0)
+        {
+            if(this.customerName.value != '')
+            {
+                let tmpConfObj =
+                {
+                    id:'msgTicketForNotCustomer',showTitle:true,title:this.lang.t("msgTicketForNotCustomer.title"),showCloseButton:true,width:'500px',height:'auto',
+                    button:[{id:"btn01",caption:this.lang.t("msgTicketForNotCustomer.btn01"),location:'after'}],
+                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgTicketForNotCustomer.msg")}</div>)
+                }
+                await dialog(tmpConfObj);
+                return
+            }
+        }
+
+        if(this.posObj.posSale.dt().length == 0)
+        {
+            let tmpConfObj =
+            {
+                id:'msgPayForSelling',showTitle:true,title:this.lang.t("msgPayForSelling.title"),showCloseButton:true,width:'500px',height:'auto',
+                button:[{id:"btn01",caption:this.lang.t("msgPayForSelling.btn01"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayForSelling.msg")}</div>)
+            }
+            await dialog(tmpConfObj);
+            return
+        }
+        
+        await this.cheqDt.refresh();
+        await this.grdPopCheqpayList.dataRefresh({source:this.cheqDt});
+        this.core.util.writeLog("calcGrandTotal : 12")
+        await this.calcGrandTotal(false);
+        await this.core.util.waitUntil(500)
+        
+        this.popCheqpay.show();   
+    }
     render()
     {
         return(
@@ -4448,35 +4623,7 @@ export default class posDoc extends React.PureComponent
                             access={this.acsObj.filter({ELEMENT:'btnTotalLy',USERS:this.user.CODE})}>
                                 <div>
                                     <NbButton id={"btnTotal"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"0.6rem", padding:"3px"}} type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnTotal")} 
-                                    onClick={async ()=>
-                                    {
-                                        if(this.posObj.posSale.dt().length == 0)
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgCollectForSale',showTitle:true,title:this.lang.t("msgCollectForSale.title"),showCloseButton:false,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.lang.t("msgCollectForSale.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCollectForSale.msg")}</div>)
-                                            }
-
-                                            let tmpMsgResult = await dialog(tmpConfObj);
-                                            
-                                            if(tmpMsgResult == 'btn01')
-                                            {
-                                                return
-                                            }
-                                        }  
-                                        
-                                        let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
-
-                                        let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
-                                        this.posLcd.print({blink:0,text:tmpLcdStr})
-                                        App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
-
-                                        this.rbtnPayType.value = 0                                                                       
-                                        this.popTotal.show();
-                                        this.txtPopTotal.newStart = true;
-                                    }}>
+                                    onClick={this.btnTotalClick.bind(this)}>
                                         <i className="text-white fa-solid fa-sack-dollar" style={{fontSize: "1.6rem"}} />
                                     </NbButton>
                                 </div>
@@ -4487,52 +4634,7 @@ export default class posDoc extends React.PureComponent
                                 <div>
                                     <NbButton id={"btnCreditCard"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"0.6rem",padding:"3px"}}  
                                     type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnCreditCard")} 
-                                    onClick={async ()=>
-                                    {                  
-                                        if(this.posObj.posSale.dt().length == 0)
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgCollectForSale',showTitle:true,title:this.lang.t("msgCollectForSale.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.lang.t("msgCollectForSale.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCollectForSale.msg")}</div>)
-                                            }
-
-                                            let tmpMsgResult = await dialog(tmpConfObj);
-                                            
-                                            if(tmpMsgResult == 'btn01')
-                                            {
-                                                return
-                                            }
-                                        }
-                                        
-                                        if(this.prmObj.filter({ID:'PosCardTicketQuestion',TYPE:0,USERS:this.user.CODE}).getValue() == true)
-                                        {
-                                            let tmpResult2 = await this.msgCardPayType.show()
-
-                                            if(tmpResult2 == "btn01")
-                                            {
-                                                this.popCardPay.show();
-                                                this.txtPopCardPay.newStart = true;
-                                            }
-                                            else if(tmpResult2 == "btn02")
-                                            {
-                                                this.popCardTicketPay.show();
-                                                this.txtPopCardTicketPay.newStart = true;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
-                                        
-                                            let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
-                                            this.posLcd.print({blink : 0,text : tmpLcdStr})
-                                            App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
-    
-                                            this.popCardPay.show();
-                                            this.txtPopCardPay.newStart = true;
-                                        }
-                                    }}>
+                                    onClick={this.btnCreditCardClick.bind(this)}>
                                         <i className={"text-white fa-solid " + (this.payType.where({TYPE:1}).length > 0 ? this.payType.where({TYPE:1})[0].ICON : "")} style={{fontSize: "1.6rem"}} />
                                     </NbButton>
                                 </div>
@@ -4599,34 +4701,7 @@ export default class posDoc extends React.PureComponent
                                 <div>
                                     <NbButton id={"btnCash"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"0.6rem",padding:"3px"}}
                                     type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnCash")} 
-                                    onClick={async ()=>
-                                    {           
-                                        if(this.posObj.posSale.dt().length == 0)
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgCollectForSale',showTitle:true,title:this.lang.t("msgCollectForSale.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.lang.t("msgCollectForSale.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCollectForSale.msg")}</div>)
-                                            }
-
-                                            let tmpMsgResult = await dialog(tmpConfObj);
-                                            
-                                            if(tmpMsgResult == 'btn01')
-                                            {
-                                                return
-                                            }
-                                        }   
-                                                    
-                                        let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
-                                        
-                                        let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
-                                        this.posLcd.print({blink : 0,text : tmpLcdStr})
-                                        App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
-
-                                        this.popCashPay.show();
-                                        this.txtPopCashPay.newStart = true;
-                                    }}>
+                                    onClick={this.btnCashClick.bind(this)}>
                                         <i className={"text-white fa-solid " + (this.payType.where({TYPE:0}).length > 0 ? this.payType.where({TYPE:0})[0].ICON : "")} style={{fontSize: "1.6rem"}} />
                                     </NbButton>
                                 </div>
@@ -4687,40 +4762,7 @@ export default class posDoc extends React.PureComponent
                                 <div>
                                     <NbButton id={"btnCardTicket"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"0.6rem",padding:"3px"}}
                                     type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnCardTicket")} 
-                                    onClick={async ()=>
-                                    {           
-                                        if(this.posObj.posSale.dt().length == 0)
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgCollectForSale',showTitle:true,title:this.lang.t("msgCollectForSale.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.lang.t("msgCollectForSale.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgCollectForSale.msg")}</div>)
-                                            }
-
-                                            let tmpMsgResult = await dialog(tmpConfObj);
-                                            
-                                            if(tmpMsgResult == 'btn01')
-                                            {
-                                                return
-                                            }
-                                        }   
-                                                    
-                                        let tmpPayRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2));
-                                        
-                                        let tmpLcdStr = ("").space(20,"s") + ("TOTAL : " + (parseFloat(tmpPayRest).round(2).toFixed(2) + Number.money.code)).space(20,"s")
-                                        this.posLcd.print({blink : 0,text : tmpLcdStr})
-                                        App.instance.secondScreenSend({tag:"lcd",digit:tmpLcdStr})
-
-                                        let tmpTotalGrand = this.posObj.dt()[0].TOTAL
-                                        let tmpRest = (this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)) < 0 ? 0 : Number(parseFloat(this.posObj.dt()[0].TOTAL - this.posObj.posPay.dt().sum('AMOUNT',2)).round(2))                                        
-
-                                        this.popCardTotalGrand.value = Number(tmpTotalGrand).round(2)
-                                        this.payCardTotalRest.value = Number(tmpRest).round(2)
-                                        
-                                        this.popCardTicketPay.show();
-                                        this.txtPopCardTicketPay.newStart = true;
-                                    }}>
+                                    onClick={this.btnCardTicketClick.bind(this)}>
                                         <i className={"text-white fa-solid " + (this.payType.where({TYPE:9}).length > 0 ? this.payType.where({TYPE:9})[0].ICON : "")} style={{fontSize: "1.6rem"}} />
                                     </NbButton>
                                 </div>
@@ -4783,44 +4825,7 @@ export default class posDoc extends React.PureComponent
                                 <div>
                                     <NbButton id={"btnCheqpay"} parent={this} className="form-group btn btn-info btn-block" style={{height:"100%",width:"100%",fontSize:"0.6rem",padding:"3px"}}
                                     type={this.prmObj.filter({ID:'PosBtnText',TYPE:0,USERS:this.user.CODE}).getValue()} text={this.lang.t("btnList.btnCheqpay")} 
-                                    onClick={async ()=>
-                                    {
-                                        //TICKET REST. SADAKAT PUAN KULLANIMI PARAMETRESI
-                                        if(this.prmObj.filter({ID:'UseTicketRestLoyalty',TYPE:0,USERS:this.user.CODE}).getValue() == 0)
-                                        {
-                                            if(this.customerName.value != '')
-                                            {
-                                                let tmpConfObj =
-                                                {
-                                                    id:'msgTicketForNotCustomer',showTitle:true,title:this.lang.t("msgTicketForNotCustomer.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                    button:[{id:"btn01",caption:this.lang.t("msgTicketForNotCustomer.btn01"),location:'after'}],
-                                                    content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgTicketForNotCustomer.msg")}</div>)
-                                                }
-                                                await dialog(tmpConfObj);
-                                                return
-                                            }
-                                        }
-
-                                        if(this.posObj.posSale.dt().length == 0)
-                                        {
-                                            let tmpConfObj =
-                                            {
-                                                id:'msgPayForSelling',showTitle:true,title:this.lang.t("msgPayForSelling.title"),showCloseButton:true,width:'500px',height:'auto',
-                                                button:[{id:"btn01",caption:this.lang.t("msgPayForSelling.btn01"),location:'after'}],
-                                                content:(<div style={{textAlign:"center",fontSize:"20px"}}>{this.lang.t("msgPayForSelling.msg")}</div>)
-                                            }
-                                            await dialog(tmpConfObj);
-                                            return
-                                        }
-                                        
-                                        await this.cheqDt.refresh();
-                                        await this.grdPopCheqpayList.dataRefresh({source:this.cheqDt});
-                                        this.core.util.writeLog("calcGrandTotal : 12")
-                                        await this.calcGrandTotal(false);
-                                        await this.core.util.waitUntil(500)
-                                        
-                                        this.popCheqpay.show();
-                                    }}>
+                                    onClick={this.btnCheqpayClick.bind(this)}>
                                         <i className={"text-white fa-solid " + (this.payType.where({TYPE:3}).length > 0 ? this.payType.where({TYPE:3})[0].ICON : "")} style={{fontSize: "1.6rem"}} />
                                     </NbButton>
                                 </div>

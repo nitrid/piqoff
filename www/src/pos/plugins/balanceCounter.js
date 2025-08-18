@@ -4,12 +4,84 @@ import moment from "moment";
 import { datatable } from "../../core/core.js";
 import NdDialog,{ dialog } from "../../core/react/devex/dialog.js";
 import React from "react";
+import i18n from 'i18next';
+import App from '../lib/app.js'
+import { acsDialog } from "../../core/react/devex/acsdialog.js";
 
+const orgLoadPos = App.prototype.loadPos
 const orgGetItem = posDoc.prototype.getItem
 const orgDelete = posDoc.prototype.delete
 const orgRowDelete = posDoc.prototype.rowDelete
 const orgGetBarPattern = posDoc.prototype.getBarPattern
 
+const orgBtnTotalClick = posDoc.prototype.btnTotalClick
+const orgBtnCreditCardClick = posDoc.prototype.btnCreditCardClick
+const orgBtnCashClick = posDoc.prototype.btnCashClick
+const orgBtnCardTicketClick = posDoc.prototype.btnCardTicketClick
+const orgBtnCheqpayClick = posDoc.prototype.btnCheqpayClick
+
+App.prototype.loadPos = async function()
+{
+    orgLoadPos.call(this)
+
+    let tmpLang = localStorage.getItem('lang') == null ? 'tr' : localStorage.getItem('lang')
+    const resources = await import(`./balanceCounter/meta/lang/${tmpLang}.js`)
+    
+    for (let i = 0; i < Object.keys(resources.default).length; i++) 
+    {
+        i18n.addResource(tmpLang, 'translation', Object.keys(resources.default)[i], resources.default[Object.keys(resources.default)[i]])
+    }
+}
+posDoc.prototype.btnTotalClick = async function()
+{
+    checkTicket = checkTicket.bind(this)
+    let tmpResult = await checkTicket(this.posObj.dt()[0].GUID)
+
+    if(tmpResult)
+    {
+        orgBtnTotalClick.call(this)
+    }
+}
+posDoc.prototype.btnCreditCardClick = async function()
+{
+    checkTicket = checkTicket.bind(this)
+    let tmpResult = await checkTicket(this.posObj.dt()[0].GUID)
+
+    if(tmpResult)
+    {
+        orgBtnCreditCardClick.call(this)
+    }
+}
+posDoc.prototype.btnCashClick = async function()
+{
+    checkTicket = checkTicket.bind(this)
+    let tmpResult = await checkTicket(this.posObj.dt()[0].GUID)
+
+    if(tmpResult)
+    {
+        orgBtnCashClick.call(this)
+    }
+}
+posDoc.prototype.btnCardTicketClick = async function()
+{
+    checkTicket = checkTicket.bind(this)
+    let tmpResult = await checkTicket(this.posObj.dt()[0].GUID)
+
+    if(tmpResult)
+    {
+        orgBtnCardTicketClick.call(this)
+    }
+}
+posDoc.prototype.btnCheqpayClick = async function()
+{
+    checkTicket = checkTicket.bind(this)
+    let tmpResult = await checkTicket(this.posObj.dt()[0].GUID)
+
+    if(tmpResult)
+    {
+        orgBtnCheqpayClick.call(this)
+    }
+}   
 posDoc.prototype.rowDelete = async function()
 {
     if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl != 'undefined' && this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().dbControl)
@@ -447,6 +519,105 @@ function getBalanceCounter(pTicketNo,pCode)
                     resolve(tmpDt)
                 }
             }
+        }
+    })
+}
+function checkTicket(pGuid)
+{
+    return new Promise(async resolve => 
+    {
+        if(typeof this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().customerTrack == 'undefined' || this.prmObj.filter({ID:'ScaleBarcodeControl',TYPE:0}).getValue().customerTrack == false)
+        {
+            resolve(true)
+            return
+        }
+
+        let tmpDt = new datatable(); 
+        tmpDt.selectCmd = 
+        {
+            query : `SELECT TICKET_NO,AMOUNT,STATUS,WEIGHER_NAME FROM BALANCE_COUNTER_VW_01 
+                    WHERE REF IN (SELECT REF FROM BALANCE_COUNTER_VW_01 WHERE POS_GUID = @POS_GUID GROUP BY REF) AND REF <> 0
+                    ORDER BY CDATE ASC`,
+            param : ['POS_GUID:string|50'],
+            value: [pGuid]
+        }
+        await tmpDt.refresh();
+
+        if(tmpDt.length > 0)
+        {
+            let tmpCount = tmpDt.where({STATUS:false}).length
+            let tmpTotalCount = tmpDt.length
+            let tmpAmount = tmpDt.where({STATUS:false}).sum('AMOUNT')
+            let tmpTotalAmount = tmpDt.sum('AMOUNT')
+            let tmpWeighingDt = tmpDt.groupBy('WEIGHER_NAME')
+            let tmpWeighing = ""
+
+            if(tmpCount == 0)
+            {
+                resolve(true)
+                return
+            }
+
+            for (let i = 0; i < tmpWeighingDt.length; i++) 
+            {
+                tmpWeighing += tmpWeighingDt[i].WEIGHER_NAME + ","
+            }
+
+            let tmpConfObj =
+            {
+                id:'msgCheckTicket',showTitle:true,title:this.lang.t("msgCheckTicket.title"),showCloseButton:false,width:'400px',height:'auto',
+                button:[{id:"btn01",caption:this.lang.t("msgCheckTicket.btn01"),location:'before'},{id:"btn02",caption:this.lang.t("msgCheckTicket.btn02"),location:'after'}],
+                content:(<div style={{textAlign:"center",fontSize:"20px"}}>
+                    <div className="row pb-2">
+                        <div className="col-12" style={{fontWeight:"700"}}>
+                            {`${tmpWeighing}`}
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12" style={{fontWeight:"700",color:"green"}}>
+                            {`${this.lang.t("msgCheckTicket.createdArticles")}: ${tmpTotalCount}`}
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12" style={{fontWeight:"700",color:"green"}}>
+                            {`${this.lang.t("msgCheckTicket.total")}: ${Number(tmpTotalAmount).round(2).toFixed(2)}€`}
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12" style={{fontWeight:"700",color:"red"}}>
+                            {`${this.lang.t("msgCheckTicket.missingArticles")}: ${tmpCount}`}
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12" style={{fontWeight:"700",color:"red"}}>
+                            {`${this.lang.t("msgCheckTicket.totalMissingAmount")}: ${Number(tmpAmount).round(2).toFixed(2)}€`}
+                        </div>
+                    </div>
+                </div>)
+            }
+            let tmpResult = await dialog(tmpConfObj);
+
+            if(tmpResult == 'btn01')
+            {
+                resolve(false)
+            }
+            else
+            {
+                let tmpAcsResult = await acsDialog({id:"AcsDialog",parent:this,type:1})
+
+                if(tmpAcsResult)
+                {
+                    resolve(true)
+                }
+                else
+                {
+                    resolve(false)
+                }
+            }
+        }
+        else
+        {
+            resolve(true)
         }
     })
 }
