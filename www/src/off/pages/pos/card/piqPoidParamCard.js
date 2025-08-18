@@ -225,6 +225,38 @@ export default class piqPoidDeviceCard extends React.PureComponent
                     CAPTION : {tr:"Terazide Gözükücek Ana Grup",fr:"Groupe principal à afficher sur la balance"}
                 }
             },
+            // Musteri Takip
+            {
+                TYPE : 0,
+                ID :"CustomerTrack",
+                VALUE : false,
+                SPECIAL : "",
+                PAGE : "poid",
+                ELEMENT : "",
+                APP : "POID",
+                VIEW : 
+                {
+                    TYPE : "checkbox",
+                    PAGE_NAME : "Poid",
+                    CAPTION : {tr:"Musteri Takip",fr:"Suivi du client"}
+                }
+            },
+            // Bekleyen ticket uyarısı
+            {
+                TYPE : 0,
+                ID :"TicketAlertWait",
+                VALUE : false,
+                SPECIAL : "",
+                PAGE : "poid",
+                ELEMENT : "",
+                APP : "POID",
+                VIEW : 
+                {
+                    TYPE : "checkbox",
+                    PAGE_NAME : "Poid",
+                    CAPTION : {tr:"Bekleyen ticket uyarısı",fr:"Avertissement de ticket en attente"}
+                }
+            },
         ]
     }
     async componentDidMount()

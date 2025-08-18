@@ -640,8 +640,6 @@ export const prm =
             CAPTION : "Mail Açıklaması çıkacak yazısı"
         }
     },
-
-
     //#endregion
     //#region Stok Tanıtım
     //txtRef

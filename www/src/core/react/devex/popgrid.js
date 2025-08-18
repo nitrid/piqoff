@@ -13,6 +13,7 @@ export default class NdPopGrid extends Base
         super(props);
         
         this.listeners = Object(); 
+        this.lang = typeof props.lang != 'undefined' ? props.lang : this.lang
 
         this.state.show = typeof props.visible == 'undefined' ? false : props.visible
         this.state.closeOnOutsideClick = typeof props.closeOnOutsideClick == 'undefined' ? false : props.closeOnOutsideClick

@@ -143,7 +143,7 @@ export default class DocBase extends React.PureComponent
                     pData.rowData.CUSER = this.user.CODE
                 }                 
             })
-                        this.docObj.ds.on('onRefresh',(pTblName) =>
+            this.docObj.ds.on('onRefresh',(pTblName) =>
             {  
                 // docType 61 (Offers) için button state değişimlerini engelle
                 if(this.docType !== 61)

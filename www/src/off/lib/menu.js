@@ -942,6 +942,11 @@ export const menu = (e) =>
                                     path: 'invoices/documents/salesInvoice'
                                 },
                                 {
+                                    id: 'ftr_02_010',
+                                    text: e.t('menuOff.ftr_02_002'),//'Satış Faturası',
+                                    path: 'invoices/documents/salesInvoice1'
+                                },
+                                {
                                     id: 'ftr_02_005',
                                     text: e.t('menuOff.ftr_02_005'),//'Şubeler Arası Satış',
                                     path: 'invoices/documents/branchSaleInvoice'

@@ -60,6 +60,21 @@ export const langFr =
     price : "Prix",
     itemCount : "Nombre de produits",
     saleCount : "Nombre de ventes",
+    msgGetLocked: "Document verrouillé ! \n Pour enregistrer les modifications, vous devez déverrouiller le document avec le mot de passe administrateur !",
+    msgCheckDocNo: "Le numéro de document saisi existe déjà !",
+    popDoc : 
+    {
+        title : "Sélection Document",
+        clmDate : "Date",
+        clmRef : "Référence",
+        clmRefNo : "Numéro",
+        clmInputName : "Nom Client",
+        clmInputCode  : "Code Client",
+        clmOutputName : "Nom Fournisseur",
+        clmOutputCode  : "Code fournisseur",
+        clmTotal : "Total TTC",
+        clmClosed : "Fermé"
+    },
     popUserList:
     {
         title: "Liste des utilisateurs",
@@ -713,12 +728,6 @@ export const langFr =
             title: "TEST.",
             text: "Produit scanné suite à test pour une mise à jour."
         }
-    },
-    msgCheckDocNo:
-    {
-        title: "Attention",
-        btn01: "OK",
-        msg: "Le numéro de document est déjà enregistré !."
     },
     popDeptCreditList : //BAK
     {

@@ -60,6 +60,21 @@ export const langTr =
     itemCount : "Ürün Sayısı",
     saleCount : "Satış Sayısı",
     passChange : "Şifre Değiştir",
+    msgGetLocked: "Evrak Kilitlenmiş ! \n Değişiklikleri Kaydetmek İçin Yönetici Şifresi İle Kilidi Açmalısınız !",
+    msgCheckDocNo: "Girmiş olduğunuz belge no daha önceden kayıt edilmiş !",
+    popDoc : 
+    {
+        title : "Evrak Seçimi",
+        clmDate : "TARIH",
+        clmRef : "SERİ",
+        clmRefNo : "SIRA",
+        clmInputName : "CARİ ADI",
+        clmInputCode  : "CARİ KODU",
+        clmOutputName : "CARİ ADI",
+        clmOutputCode  : "CARİ KODU",
+        clmTotal : "KDVLİ TOPLAM",
+        clmClosed : "KAPANAN"
+    },
     popUserList :
     {
         title : "Kullanıcı Listesi",
@@ -707,12 +722,6 @@ export const langTr =
         title: "Dikkat",
         btn01: "Tamam",
         msg: "Bu Evrak Numarasıyla Silinmiş Evrak! Lütfen Yetkili İle Görüşün.."
-    },
-    msgCheckDocNo:
-    {
-        title: "Dikkat",
-        btn01: "Tamam",
-        msg: "Girmiş olduğunuz belge no daha önceden kayıt edilmiş !"
     },
     popDeptCreditList : 
     {

@@ -60,6 +60,21 @@ export const langEn =
     itemCount : "Item Count",
     saleCount : "Sale Count",
     passChange : "Password Change",
+    msgGetLocked: "Document locked ! \n To save changes, you must unlock the document with the administrator password !",
+    msgCheckDocNo: "The document number you entered has already been recorded!",
+    popDoc : 
+    {
+        title : "Document Selection",
+        clmDate : "DATE",
+        clmRef : "SERIES",
+        clmRefNo : "SEQUENCE",
+        clmOutputName : "CUSTOMER NAME",
+        clmOutputCode  : "CUSTOMER CODE",
+        clmInputName : "CUSTOMER NAME",
+        clmInputCode  : "CUSTOMER CODE",
+        clmTotal : "VAT INCLUDED TOTAL",
+        clmClosed : "CLOSED"
+    },
     popUserList :
     {
         title : "User List",
@@ -632,12 +647,6 @@ export const langEn =
         title: "Attention",
         btn01: "Ok",
         msg: "This document has been deleted! Please contact the authorized person.."
-    },
-    msgCheckDocNo:
-    {
-        title: "Attention",
-        btn01: "Ok",
-        msg: "The document number you entered has already been recorded!"
     },
     popDeptCreditList : 
     {

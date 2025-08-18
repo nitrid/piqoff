@@ -60,6 +60,21 @@ export const langAt =
     price : "Preis",
     itemCount : "Anzahl Produkte",
     saleCount : "Anzahl Verkäufe",
+    msgGetLocked: "Dokument gesperrt ! \n Um Änderungen zu speichern, müssen Sie es mit dem Administrator-Passwort entsperren!",
+    msgCheckDocNo: "Die Dokumentnummer ist bereits registriert!",
+    popDoc : 
+    {
+        title : "Dokumentenauswahl",
+        clmDate : "Datum",
+        clmRef : "Referenz",
+        clmRefNo : "Nummer",
+        clmOutputName : "Lieferantenname",
+        clmOutputCode  : "Lieferantencode",
+        clmInputName : "Kundenname",
+        clmInputCode  : "Kundenkode",
+        clmTotal : "Gesamt inkl. MwSt.",
+        clmClosed : "Geschlossen"
+    },
     popUserList:
     {
         title: "Benutzerliste",
@@ -649,12 +664,6 @@ export const langAt =
         title: "Achtung",   
         btn01: "OK",   
         msg: "Nummeriertes Dokument gelöscht! Bitte wenden Sie sich an einen Verantwortlichen."   
-    },
-    msgCheckDocNo:
-    {
-        title: "Achtung",
-        btn01: "OK",
-        msg: "Die Dokumentnummer ist bereits registriert!"
     },
     popDeptCreditList :
     {
