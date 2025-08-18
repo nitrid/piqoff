@@ -95,8 +95,56 @@ export const prm =
             ]
         }
     }
+    
 },
-//#endregion
+    //BarcodePattern
+    {
+        TYPE : 0,
+        ID :"BarcodePattern",
+        VALUE : 
+        [
+            '20NNNNMMMCCF',
+            '21NNNNNMMMCCF',
+            '29NNNNMMMCCF',
+            '29NNNNNMMMCCF',
+            '020NNNNMMMCCF',
+            '27NNNNNKKGGGF',
+        ],
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "popTextList",
+            PAGE_NAME : "Pos Satış Sipariş",
+            CAPTION : "Barkod Desenleri",
+            FORM: 
+            {
+                width:"400",
+                height:"400",
+                textHeight:"260"
+            }
+        }
+    },
+    //Terazi Fiyat Çarpanı
+    {
+        TYPE : 0,
+        ID :"ScalePriceFactory",
+        VALUE : 1,
+        SPECIAL : "",
+        PAGE : "",
+        ELEMENT : "",
+        APP : "MOB",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Pos Satış Sipariş",
+            CAPTION : "Terazi Fiyat Çarpanı"
+        }
+    },
+    //#endregion
+
     //#region Alış Sipariş
     //txtRef
     {
@@ -660,53 +708,7 @@ export const prm =
             DATA : [{CODE:0,NAME:"Birleştir"},{CODE:1,NAME:"Birleştirme"},{CODE:2,NAME:"Kullanıcıya Sor"}]
         }
     },
-    //BarcodePattern
-    {
-        TYPE : 1,
-        ID :"BarcodePattern",
-        VALUE : 
-        [
-            '20NNNNMMMCCF',
-            '21NNNNNMMMCCF',
-            '29NNNNMMMCCF',
-            '29NNNNNMMMCCF',
-            '020NNNNMMMCCF',
-            '27NNNNNKKGGGF',
-        ],
-        SPECIAL : "",
-        PAGE : "sip_04",
-        ELEMENT : "",
-        APP : "MOB",
-        VIEW : 
-        {
-            TYPE : "popTextList",
-            PAGE_NAME : "Pos",
-            CAPTION : "Barkod Desenleri",
-            FORM: 
-            {
-                width:"400",
-                height:"400",
-                textHeight:"260"
-            }
-        }
-    },
-     //Terazi Fiyat Çarpanı
-     {
-        TYPE : 1,
-        ID :"ScalePriceFactory",
-        VALUE : 1,
-        SPECIAL : "",
-        PAGE : "sip_04",
-        ELEMENT : "",
-        APP : "MOB",
-        VIEW : 
-        {
-            TYPE : "text",
-            PAGE_NAME : "Pos",
-            CAPTION : "Terazi Fiyat Çarpanı"
-        }
-    },
-    //#endregion
+
     //#region Toplu Sipariş
     //txtRef
     {

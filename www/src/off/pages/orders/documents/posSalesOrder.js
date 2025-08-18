@@ -1309,6 +1309,7 @@ export default class posSalesOrder extends DocBase
                                             {
                                                 if(tmpPrice != 0 || tmpQuantity != 0)
                                                 {
+                                                    tmpPrice = tmpPrice.rateInNum(tmpData.result.recordset[0].VAT)
                                                     this.addItem(tmpData.result.recordset[0],null,tmpQuantity == 0 ? 1 : tmpQuantity,tmpPrice)
                                                 }
                                                 else
