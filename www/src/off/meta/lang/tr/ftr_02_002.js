@@ -58,12 +58,18 @@ const  ftr_02_002 =
     btnMailsend : "Mail Gönder",
     validMail : "Lütfen Boş Geçmeyin.",
     placeMailHtmlEditor : "Mailinize açıklama girebilirsiniz.",
-    msgControlOfDispatch: 
+    msgControlOfFacture:
     {
         title: "Dikkat",
         btn01: "Kapat",
-        msg: "Bu satış teklifi daha önce bir irsaliyeye çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden yeni bir Fatura oluşturunuz."
+        msg: "Bu evrak daha önce bir faturaya çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden Faturayi seçiniz. Bu islem kapatılacaktır."
     },
+    msgControlOfDispatch:
+    {
+        title: "Dikkat",
+        btn01: "Kapat",
+        msg: "Bu evrak daha önce bir irsaliyeye çevrilmiştir. İrsaliye oluşturmak istiyorsanız, Satış İrsaliyesi bölümünden İrsaliye seçiniz. Bu islem kapatılacaktır."
+    },  
     isMsgSave :
     {  
         title: "Dikkat",
@@ -108,7 +114,9 @@ const  ftr_02_002 =
         title : "Ürün Seçimi",
         clmCode :  "ÜRÜN KODU",
         clmName : "ÜRÜN ADI",
-        clmPrice : "SATIŞ FİYATI"
+        clmPrice : "SATIŞ FİYATI",
+        clmMainGrp : "ANA GRUP",
+        clmRayon : "RAYON"
     },
     pg_dispatchGrid : 
     {
@@ -141,10 +149,11 @@ const  ftr_02_002 =
         clmCuser :"Kullanıcı",
         clmVatRate : "KDV %",
         clmOrigin : "Menşei",
-        clmSubQuantity : "Alt Birim",
-        clmSubPrice : "Alt Birim Fiyatı",
+        clmSubQuantity : "Birim Miktarı",
+        clmSubPrice : "Birim Fiyatı",
         clmSubFactor : "Katsayı",
         clmPartiLot : "Parti Lot",
+        clmUnit : "Birim",
     },
     pg_partiLot : 
     {
@@ -411,7 +420,7 @@ const  ftr_02_002 =
     validRefNo : "Sıra Boş Geçilemez",
     validDepot : "Depo Seçmelisiniz",
     validCustomerCode : "Müşteri Kodu Boş Geçilemez",
-    validDocDate : "Tarih Seçmelisiniz",
+    validDocDate : "Tarih Seçmelisiniz. (Örn : D90 yazdığınız da 90 gün sonraki tarih otomatik olarak girilecektir.)",
     tagItemCodePlaceholder: "Lütfen Eklemek İstediğiniz Kodları Giriniz",
     msgNotQuantity:
     {
@@ -581,6 +590,9 @@ const  ftr_02_002 =
         encaissement : "Vadeli",
         debit : "Peşin",
     },
+    dispatchWarning : "Bekleyen irsaliye bulunmaktadır.",
+    orderWarning : "Bekleyen sipariş bulunmaktadır.",
+    txtOpenBalance : "Açık Bakiye",
 }
 
 export default ftr_02_002

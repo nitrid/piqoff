@@ -59,6 +59,12 @@ const  ftr_02_002 =
     tabTitleDetail : "Detailinformationen",
     validMail : "Bitte lassen Sie dieses Feld nicht leer.",
     placeMailHtmlEditor : "Sie können eine Beschreibung Ihrer E-Mail eingeben.",
+    msgControlOfFacture:
+    {
+        title: "Achtung",
+        btn01: "OK",
+        msg: "Dieses Lieferschein wurde bereits in eine Rechnung umgewandelt. Wenn Sie eine Rechnung erstellen möchten, wählen Sie bitte die Rechnung im Verkaufsrechnungsmodul. Diese Aktion wird geschlossen."
+    },
     isMsgSave :
     {
         title: "Achtung",
@@ -141,6 +147,7 @@ const  ftr_02_002 =
         clmSubPrice : "Stückpreis", 
         clmSubFactor : "Faktor",
         clmPartiLot : "Chargennummer",
+        clmUnit : "Einheit",
     },
     msgControlOfDispatch: 
     {
@@ -449,7 +456,7 @@ const  ftr_02_002 =
     validRefNo : "Ref Nr eingeben",
     validDepot : "Lager auswählen",
     validCustomerCode : "Lieferanten-Kundencode kann nicht leer sein",
-    validDocDate : "Datum auswählen",
+    validDocDate : "Datum auswählen. (Ex : D90, 90 Tage nach der ausgewählten Datum wird automatisch eingegeben.)",
     tagItemCodePlaceholder: "Bitte geben Sie die hinzuzufügenden Codes ein",
     msgNotQuantity: 
     {
@@ -620,5 +627,8 @@ const  ftr_02_002 =
         encaissement : "Kassierung",   
         debit : "Lastschrift",   
     },
+    dispatchWarning : "Es gibt offene Lieferscheine.",
+    orderWarning : "Es gibt offene Bestellungen.",
+    txtOpenBalance : "Offener Saldo",
 }
 export default ftr_02_002

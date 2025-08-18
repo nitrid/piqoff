@@ -58,6 +58,12 @@ const  ftr_02_002 =
     btnMailsend : "Send Mail",
     validMail : "Please do not leave blank.",
     placeMailHtmlEditor : "You can enter a description to your mail.",
+    msgControlOfFacture:
+    {
+        title: "Attention",
+        btn01: "OK",
+        msg: "This dispatch has already been converted to a facture. If you want to create a facture, please select the facture in the sales invoice module. This action will be closed."
+    },
     msgControlOfDispatch: 
     {
         title: "Attention",
@@ -108,7 +114,9 @@ const  ftr_02_002 =
         title : "Product Selection",
         clmCode :  "PRODUCT CODE",
         clmName : "PRODUCT NAME",
-        clmPrice : "SALES PRICE"
+        clmPrice : "SALES PRICE",
+        clmMainGrp : "MAIN GROUP",
+        clmRayon : "RAYON"
     },
     pg_dispatchGrid : 
     {
@@ -145,6 +153,7 @@ const  ftr_02_002 =
         clmSubPrice : "Sub Price",
         clmSubFactor : "Factor",
         clmPartiLot : "Lot Code",
+        clmUnit : "Unit",
     },
     pg_partiLot : 
     {
@@ -411,7 +420,7 @@ const  ftr_02_002 =
     validRefNo : "Sequence cannot be empty",
     validDepot : "You must select a depot",
     validCustomerCode : "Customer Code cannot be empty",
-    validDocDate : "You must select a date",
+    validDocDate : "You must select a date. (Ex : D90, 90 days after the selected date will be automatically entered.)",
     tagItemCodePlaceholder: "Please enter the codes you want to add",
     msgNotQuantity:
     {
@@ -579,6 +588,9 @@ const  ftr_02_002 =
         encaissement : "Deferred",
         debit : "Cash",
     },
+    dispatchWarning : "There are pending dispatches.",
+    orderWarning : "There are pending orders.",
+    txtOpenBalance : "Open Balance",
 }
 
 export default ftr_02_002
