@@ -11,6 +11,7 @@ import ExcelJS from 'exceljs';
 import NdPopUp from '../../../../core/react/devex/popup.js';
 import NdTextBox, {Validator,RequiredRule} from '../../../../core/react/devex/textbox.js'
 import NbDateRange from '../../../../core/react/bootstrap/daterange.js';
+import NbKeyboard from '../../../../core/react/bootstrap/keyboard.js';
 import NdPivot,{FieldChooser,Export,StateStoring} from '../../../../core/react/devex/pivot.js';
 import NdButton from '../../../../core/react/devex/button.js';
 import { dialog } from '../../../../core/react/devex/dialog.js';
@@ -409,6 +410,12 @@ export default class posSaleReport extends React.PureComponent
                                         <Label text={this.lang.t("popMailSend.txtMailSubject")} alignment="right" />
                                         <NdTextBox id="txtMailSubject" parent={this} simple={true}
                                         maxLength={128}
+                                        onFocusIn={()=>
+                                        {
+                                            this.keyboardRef.show('txtMailSubject')
+                                            this.keyboardRef.inputName = "txtMailSubject"
+                                            this.keyboardRef.setInput(this.txtMailSubject.value)
+                                        }}                                            
                                         >
                                             <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                                 <RequiredRule message={this.lang.t("validMail")} />
@@ -419,6 +426,12 @@ export default class posSaleReport extends React.PureComponent
                                         <Label text={this.lang.t("popMailSend.txtSendMail")} alignment="right" />
                                         <NdTextBox id="txtSendMail" parent={this} simple={true}
                                         maxLength={128}
+                                        onFocusIn={()=>
+                                        {
+                                            this.keyboardRef.show('txtSendMail')
+                                            this.keyboardRef.inputName = "txtSendMail"
+                                            this.keyboardRef.setInput(this.txtSendMail.value)
+                                        }}
                                         >
                                             <Validator validationGroup={"frmMailsend" + this.tabIndex}>
                                                 <RequiredRule message={this.lang.t("validMail")} />
@@ -496,6 +509,7 @@ export default class posSaleReport extends React.PureComponent
                         </div>   
                     </div>
                 </ScrollView>
+                <NbKeyboard id={"keyboardRef"} parent={this} autoPosition={true} closeButton={true} keyType={this.prmObj.filter({ID:'KeyType',TYPE:0,USERS:this.user.CODE}).getValue()}/>
             </div>
         )
     }
