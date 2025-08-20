@@ -11,11 +11,15 @@ export default class NbPopNumber extends NbBase
         super(props)
         this.state.showCloseButton = typeof this.props.showCloseButton == 'undefined' ? true : false
     }
-    async show(pTitle,pValue,pShowCloseButton)
+    async show(pTitle,pValue,pShowCloseButton,pMargin)
     {
         this[this.props.id].setTitle(typeof pTitle == 'undefined' ? '' : pTitle);
         this["txt" + this.props.id].value = typeof pValue == 'undefined' ? 0 : pValue
         this["txt" + this.props.id].newStart = true;
+        if(typeof pMargin != 'undefined')
+        {
+            this["txtMargin" + this.props.id].value = pMargin;
+        }
         this[this.props.id].setState({showCloseButton: typeof pShowCloseButton == 'undefined' ? true : pShowCloseButton})
         this[this.props.id].show();
         return new Promise(async resolve => 
@@ -45,9 +49,10 @@ export default class NbPopNumber extends NbBase
                 title={""}
                 container={"#root"} 
                 width={"300"}
-                height={"180"}
+                height={"auto"}
                 onHiding={()=> {this._onClick('close')}}
                 position={{of:"#root"}}
+                margin={this.props.margin}
                 >
                     {/* txt */}
                     <div className="row pt-1">
@@ -56,6 +61,14 @@ export default class NbPopNumber extends NbBase
                             </NdTextBox> 
                         </div>
                     </div> 
+                    <div className="row pt-1">
+                        <div className="col-12">
+                            <div style={{display: 'flex', flexDirection: 'column'}}>
+                                <div style={{fontSize: '12px', color: '#666', marginBottom: '2px'}}>{this.t("msgMargin.title")}</div>
+                                <NdTextBox id={"txtMargin" + this.props.id} parent={this} simple={true} value={this.props.margin} readOnly={true}/>
+                            </div>
+                        </div>
+                    </div>
                     {/* btn */}
                     <div className="row pt-2">
                         <div className="col-12">

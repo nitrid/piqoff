@@ -191,17 +191,22 @@ export default class salesDispatch extends DocBase
 
         for (let  i= 0; i < this.docObj.docItems.dt().length; i++) 
         {
-            const item = this.docObj.docItems.dt()[i];
-            if (item && typeof item.COST_PRICE === 'number' && typeof item.QUANTITY === 'number') {
+            let item = this.docObj.docItems.dt()[i];
+
+            if (item && typeof item.COST_PRICE === 'number' && typeof item.QUANTITY === 'number') 
+            {
                 tmpTotalCost += item.COST_PRICE * item.QUANTITY;
             }
         }
 
-        const docData = this.docObj.dt()[0];
-        if (docData) {
-            const totalHt = docData.TOTALHT || 0;
+        let docData = this.docObj.dt()[0];
+
+        if (docData) 
+        {
+            let totalHt = docData.TOTALHT || 0;
             let tmpMargin = (totalHt - tmpTotalCost)
             let tmpMarginRate = Number(tmpTotalCost).rate2Num ? Number(tmpTotalCost).rate2Num(tmpMargin,2) : 0;
+            
             docData.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
         }
     }

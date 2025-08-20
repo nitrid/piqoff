@@ -54,7 +54,7 @@ const sip_02_002 =
     {
         title: "Dikkat",
         btn01: "Kapat",
-        msg: "Bu sipariş daha önce bir irsaliyeye çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden yeni bir Fatura oluşturunuz."
+        msg: "Bu sipariş daha önce bir irsaliyeye çevrilmiştir. Fatura oluşturmak istiyorsanız, Satış Faturası bölümünden İrsaliyeyi çağırarak seçiniz. Bu işlem kapatılacaktır."
     },
     msgControlOfOrder:
     {

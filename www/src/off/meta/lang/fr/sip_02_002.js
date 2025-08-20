@@ -55,7 +55,7 @@ const sip_02_002 =
     {
         title: "Attention",
         btn01: "OK",
-        msg: "Ce document a déjà été converti en livraison. Si vous souhaitez créer une livraison, veuillez créer une nouvelle livraison dans le module des livraisons."
+        msg: "Ce document a déjà été converti en livraison. Si vous souhaitez créer une facture, veuillez passer le module des factures et ramener le document livraison ce que vous voulez."
     },
     menu:
     {

@@ -68,7 +68,7 @@ const  ftr_02_002 =
     {
         title: "Attention",
         btn01: "OK",
-        msg: "This offer has already been converted to a dispatch. If you want to create a facture, please create a new facture in the facture module."
+        msg: "This document has already been converted to a dispatch. If you want to create a facture, please pass the facture module and select the dispatch."
     },
     isMsgSave :
     {  

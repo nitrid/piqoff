@@ -283,6 +283,7 @@ export default class salesInvoice extends DocBase
         this.txtRefno.readOnly = true
         this.frmDocItems.option('disabled',false)
     }
+    
     async calculateTotal()
     {
         await super.calculateTotal();

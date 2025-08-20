@@ -169,6 +169,10 @@ export const langEn =
         lblBarcode : "Barcode",
         lblItemName : "Product Name",
         lblMenu : "Menu",
+        msgMargin :
+        {
+            title : "Margin",
+        },
         msgAlert :
         {
             btn01 : "OK",
@@ -182,7 +186,8 @@ export const langEn =
         {
             clmDate : "End Date",
             clmQuantity :  "Quantity",
-            clmPrice : "Price"
+            clmPrice : "Price",
+            clmMargin : "Margin"
         },
         grdCustomer : 
         {

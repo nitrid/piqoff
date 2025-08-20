@@ -267,6 +267,52 @@ export default class customerExtreReport extends React.PureComponent
                             allowColumnReordering={true}
                             allowColumnResizing={true}
                             loadPanel={{enabled:true}}
+                            onExporting={(e) => {
+                                if(e.format === 'pdf') 
+                                {
+                                    const { jsPDF } = require('jspdf');
+                                    
+                                    const { exportDataGrid: exportDataGridToPdf } = require('devextreme/pdf_exporter');
+                                    
+                                    const doc = new jsPDF();
+                                    
+                                    doc.setFontSize(16);
+                                    doc.setFont(undefined, 'bold');
+                                    doc.text(this.lang.t("menuOff.cri_04_001"), 14, 22);
+                                    
+                                    doc.setFontSize(10);
+                                    doc.setFont(undefined, 'normal');
+                                    doc.text(`Date : ${moment().format('DD/MM/YYYY HH:mm')}`, 14, 32);
+
+                                    if(this.txtCustomerCode.value) 
+                                    {
+                                        doc.text(`Client/Fournisseur : ${this.txtCustomerCode.value}`, 14, 42);
+                                    }
+                                    
+                                    exportDataGridToPdf(
+                                    {
+                                        jsPDFDocument: doc,
+                                        component: e.component,
+                                        margin: { top: 60 }, // Başlık için boşluk
+                                        autoTableOptions: {
+                                            theme: 'grid',
+                                            startY: 60, // Başlık sonrası başla
+                                            styles: { fontSize: 8 },
+                                            headStyles: { 
+                                                fillColor: [52, 73, 94],
+                                                textColor: [255, 255, 255],
+                                                fontSize: 9 
+                                            }
+                                        }
+                                    })
+                                    .then(() => 
+                                    {
+                                        let fileName = this.lang.t("menuOff.cri_04_001") + '.pdf';
+                                        doc.save(fileName);
+                                    });
+                                    e.cancel = true;
+                                }
+                            }}
                             onCellPrepared={(e) => 
                             {
                                 if (e.rowType === "data" && (e.column.dataField === "BALANCE")) 

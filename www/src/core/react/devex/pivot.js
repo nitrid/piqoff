@@ -4,6 +4,7 @@ import PivotGrid,{FieldChooser,Export,StateStoring,PivotGridTypes} from 'devextr
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Workbook } from 'exceljs';
 import { exportPivotGrid } from 'devextreme/excel_exporter';
+import { saveAs } from 'file-saver';
 
 export {FieldChooser,Export,StateStoring}
 export default class NdPivot extends Base
@@ -24,7 +25,8 @@ export default class NdPivot extends Base
             showColumnGrandTotals : props.showColumnGrandTotals,
             showRowTotals : props.showRowTotals,
             showRowGrandTotals : props.showRowGrandTotals,
-        } 
+        }
+        this._onExporting = this._onExporting.bind(this)
     }
 
     onExporting = (e) => 
@@ -57,6 +59,39 @@ export default class NdPivot extends Base
             )
         })
     }
+    _onExporting(e)
+    {
+        if(typeof this.props.onExporting != 'undefined')
+        {
+            this.props.onExporting(e);
+        }
+        console.log('e',e)
+        let fileName = e.fileName
+        // XLSX Export (varsayılan)
+        let workbook = new Workbook();
+        let worksheet = workbook.addWorksheet('Sheet');
+        
+            // Eğer uzantı yoksa .xlsx ekle
+            if (!fileName.toLowerCase().includes('.')) 
+            {
+                fileName += '.xlsx';
+            }
+        
+            exportPivotGrid(
+            {
+                component: e.component,
+                worksheet,
+                autoFilterEnabled: true
+            })
+            .then(() => 
+            {
+                workbook.xlsx.writeBuffer().then((buffer) => 
+                {
+                    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), fileName);
+                });
+            });
+        e.cancel = true;
+    }
     render()
     {
         return(
@@ -72,7 +107,7 @@ export default class NdPivot extends Base
             showRowGrandTotals={this.state.showRowGrandTotals}
             onCellPrepared={this.props.onCellPrepared}
             height={this.props.height}
-            onExporting={this.onExporting}
+            onExporting={this._onExporting}
             >
                 {this.props.children}
             </PivotGrid>

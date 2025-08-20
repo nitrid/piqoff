@@ -116,45 +116,155 @@ export default class purchaseOrder extends React.PureComponent
         this.cmbDepot.readOnly = true
         this.dtDocDate.readOnly = true
     }
+    getBarPattern(pBarcode)
+    {
+        pBarcode = pBarcode.toString().trim()
+        
+        let tmpPrm = this.sysParam.filter({ID:'BarcodePattern',TYPE:0}).getValue();
+        
+        if(typeof tmpPrm == 'undefined' || tmpPrm.length == 0)
+        {            
+            return {barcode:pBarcode}
+        }
+        //201234012550 0211234012550
+        for (let i = 0; i < tmpPrm.length; i++) 
+        {
+            let tmpFlag = tmpPrm[i].substring(0,tmpPrm[i].indexOf('N'))
+        
+            if(tmpFlag != '' && tmpPrm[i].length == pBarcode.length && pBarcode.substring(0,tmpFlag.length) == tmpFlag)
+            {
+                let tmpMoney = pBarcode.substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
+                let tmpMoneyFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('M'),tmpPrm[i].lastIndexOf('M') + 1)
+                let tmpCent = pBarcode.substring(tmpPrm[i].indexOf('C'),tmpPrm[i].lastIndexOf('C') + 1)
+                let tmpCentFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('C'),tmpPrm[i].lastIndexOf('C') + 1)
+                let tmpKg = pBarcode.substring(tmpPrm[i].indexOf('K'),tmpPrm[i].lastIndexOf('K') + 1)
+                let tmpKgFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('K'),tmpPrm[i].lastIndexOf('K') + 1)
+                let tmpGram = pBarcode.substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
+                let tmpGramFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('G'),tmpPrm[i].lastIndexOf('G') + 1)
+
+                let tmpSumFlag = ""
+        
+                if(tmpPrm[i].indexOf('F') > -1)
+                {
+                    tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('F'),tmpPrm[i].lastIndexOf('F') + 1)
+                }
+                else if(tmpPrm[i].indexOf('E') > -1)
+                {
+                    tmpSumFlag = tmpPrm[i].substring(tmpPrm[i].indexOf('E'),tmpPrm[i].lastIndexOf('E') + 1)
+                }
+                
+                let tmpFactory = 1
+        
+                if(tmpSumFlag == 'F')
+                {
+                    tmpFactory =  this.sysParam.filter({ID:'ScalePriceFactory',TYPE:0}).getValue()
+                }
+
+                return {
+                    barcode : pBarcode.substring(0,tmpPrm[i].lastIndexOf('N') + 1) + tmpMoneyFlag + tmpCentFlag + tmpKgFlag + tmpGramFlag + tmpSumFlag,
+                    price : parseFloat((tmpMoney == '' ? "0" : tmpMoney) + "." + (tmpCent == '' ? "0" : tmpCent)) * tmpFactory,
+                    quantity : parseFloat((tmpKg == '' ? "0" : tmpKg) + "." + (tmpGram == '' ? "0" : tmpGram))
+                }
+            }
+        }
+        return {barcode : pBarcode}
+    }
     getItem(pCode)
     {
         return new Promise(async resolve => 
         {
             this.clearEntry();
+
+            let tmpBarPattern = this.getBarPattern(pCode)
+            let tmpPrice = typeof tmpBarPattern.price == 'undefined' ? 0 : tmpBarPattern.price
+            let tmpQuantity = typeof tmpBarPattern.quantity == 'undefined' ? 0 : tmpBarPattern.quantity
+            let pBarCode = tmpBarPattern.barcode  
             
-            this.itemDt.selectCmd.value = [pCode]
-            await this.itemDt.refresh();  
+            let tmpQuery = 
+            {  
+                query : `SELECT GUID,CODE,NAME,COST_PRICE,UNIT_GUID AS UNIT,VAT,MULTICODE,CUSTOMER_NAME,BARCODE FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE STATUS = 1 AND (BARCODE = @CODE OR CODE = @CODE OR (MULTICODE = @CODE AND CUSTOMER_GUID = @CUSTOMER))`,
+                param : ['CODE:string|50','CUSTOMER:string|50'],
+                value : [pBarCode,this.docObj.dt()[0].INPUT]
+            }
             
-            if(this.itemDt.length > 0)
+            let tmpData = await this.core.sql.execute(tmpQuery) 
+            
+            if(tmpData.result.recordset.length > 0)
             {
-                this.lblItemName.value = this.itemDt[0].NAME
-
-                this.unitDt.selectCmd.value = [this.itemDt[0].GUID]
-                await this.unitDt.refresh()
-                this.cmbUnit.setData(this.unitDt)
-
-                if(this.unitDt.length > 0)
+                if(tmpPrice != 0 || tmpQuantity != 0)
                 {
-                    this.cmbUnit.value = this.unitDt.where({TYPE:0})[0].GUID
-                    this.txtFactor.value = this.unitDt.where({TYPE:0})[0].FACTOR
-                    this.txtFactor.props.onValueChanged()
-                }
+                    tmpPrice = tmpPrice.rateInNum(tmpData.result.recordset[0].VAT)
 
-                this.txtBarcode.value = ""
-                this.txtQuantity.focus();
-                this.txtQuantity.value = 1
-                
-                this.calcEntry()
+                    this.itemDt.selectCmd.value = [tmpData.result.recordset[0].CODE]
+                    await this.itemDt.refresh();  
+                    
+                    if(this.itemDt.length > 0)
+                    {
+                        this.lblItemName.value = this.itemDt[0].NAME
+
+                        this.unitDt.selectCmd.value = [this.itemDt[0].GUID]
+                        await this.unitDt.refresh()
+                        this.cmbUnit.setData(this.unitDt)
+
+                        if(this.unitDt.length > 0)
+                        {
+                            this.cmbUnit.value = this.unitDt.where({TYPE:0})[0].GUID
+                            this.txtFactor.value = this.unitDt.where({TYPE:0})[0].FACTOR
+                            this.txtFactor.props.onValueChanged()
+                        }
+
+                        this.txtPrice.value = tmpPrice
+                        this.txtQuantity.value = tmpQuantity == 0 ? 1 : tmpQuantity
+                        this.txtEntryAmount.value = tmpPrice * tmpQuantity
+                        this.calcEntry(false)
+
+                        this.txtBarcode.value = ""
+                        this.txtQuantity.focus();
+                    }
+                }
+                else
+                {
+                    this.itemDt.selectCmd.value = [pCode]
+                    await this.itemDt.refresh();  
+                    
+                    if(this.itemDt.length > 0)
+                    {
+                        this.lblItemName.value = this.itemDt[0].NAME
+
+                        this.unitDt.selectCmd.value = [this.itemDt[0].GUID]
+                        await this.unitDt.refresh()
+                        this.cmbUnit.setData(this.unitDt)
+
+                        if(this.unitDt.length > 0)
+                        {
+                            this.cmbUnit.value = this.unitDt.where({TYPE:0})[0].GUID
+                            this.txtFactor.value = this.unitDt.where({TYPE:0})[0].FACTOR
+                            this.txtFactor.props.onValueChanged()
+                        }
+
+                        this.txtPrice.value = tmpPrice
+                        this.txtQuantity.value = tmpQuantity == 0 ? 1 : tmpQuantity
+                        this.txtEntryAmount.value = tmpPrice * tmpQuantity
+                        this.calcEntry()
+
+                        this.txtBarcode.value = ""
+                        this.txtQuantity.focus();
+                    }
+                    else
+                    {                               
+                        document.getElementById("Sound").play(); 
+
+                        this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgBarcodeNotFound")}</div>)
+                        await dialog(this.alertContent);
+                        
+                        this.txtBarcode.value = ""
+                        this.txtBarcode.focus();
+                    }
+                }
             }
             else
-            {                               
-                document.getElementById("Sound").play(); 
+            {
                 
-                this.alertContent.content = (<div style={{textAlign:"center",fontSize:"20px"}}>{this.t("msgAlert.msgBarcodeNotFound")}</div>)
-                await dialog(this.alertContent);
-                
-                this.txtBarcode.value = ""
-                this.txtBarcode.focus();
             }
             resolve();
         });
@@ -799,7 +909,7 @@ export default class purchaseOrder extends React.PureComponent
                                                 <label style={{fontSize: '12px', color: '#6c757d', fontWeight: '500'}}>{this.t("lblQuantity")}</label>
                                             </div>
                                             <div className='col-3'>
-                                                <NdTextBox id="txtFactor" parent={this} simple={true} maxLength={32} readOnly={true} onValueChanged={this.calcEntry.bind(this)} dt={{data:this.orderDt,field:"FACTOR"}}
+                                                <NdTextBox id="txtFactor" parent={this} simple={true} maxLength={32} readOnly={true} onValueChanged={this.calcEntry.bind(this,false)} dt={{data:this.orderDt,field:"FACTOR"}}
                                                 style={{borderRadius: '6px', border: '1px solid #ced4da', textAlign: 'center', fontSize: '13px'}}
                                                 onEnterKey={this.addItem.bind(this)}/>
                                             </div>
@@ -809,7 +919,7 @@ export default class purchaseOrder extends React.PureComponent
                                             <div className='col-3'>
                                                 <NdNumberBox id="txtQuantity" parent={this} simple={true} maxLength={32}
                                                 style={{borderRadius: '6px', border: '2px solid #007bff', textAlign: 'center', fontSize: '13px'}}
-                                                onValueChanged={this.calcEntry.bind(this)} 
+                                                onValueChanged={this.calcEntry.bind(this,false)} 
                                                 dt={{data:this.orderDt,field:"QUANTITY"}}
                                                 onEnterKey={this.addItem.bind(this)}/>
                                             </div>

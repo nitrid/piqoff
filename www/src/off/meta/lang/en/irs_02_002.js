@@ -58,7 +58,7 @@ const irs_02_002 =
     {
         title: "Attention",
         btn01: "OK",
-        msg: "This document has already been converted to a dispatch. If you want to create a dispatch, please create a new dispatch in the dispatch module."
+        msg: "This document has already been converted to a dispatch. If you want to create a facture, please pass the facture module and select the dispatch."
     },
     msgControlOfOrder:
     {

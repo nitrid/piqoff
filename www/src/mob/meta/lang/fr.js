@@ -175,6 +175,10 @@ export const langFr =
         lblBarcode : "Code-barres",
         lblItemName : "Nom du Produit",
         lblMenu : "Menu",
+        msgMargin :
+        {
+            title : "Marge",
+        },
         msgAlert :
         {
             btn01 : "D'accord",
@@ -188,7 +192,8 @@ export const langFr =
         {
             clmDate : "Date de fin",
             clmQuantity :  "Quantité",
-            clmPrice : "Prix"
+            clmPrice : "Prix",
+            clmMargin : "Marge"
         },
         grdCustomer : 
         {

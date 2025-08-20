@@ -615,12 +615,13 @@ export default class DocBase extends React.PureComponent
     }
     async calculateTotalMargin()
     {
-        // Safe check for document data
-        if (!this.docObj || !this.docObj.dt() || this.docObj.dt().length === 0) {
+        if (!this.docObj || !this.docObj.dt() || this.docObj.dt().length === 0) 
+        {
             return;
         }
         
-        if (!this.docDetailObj || !this.docDetailObj.dt()) {
+        if (!this.docDetailObj || !this.docDetailObj.dt()) 
+        {
             return;
         }
 
@@ -632,14 +633,18 @@ export default class DocBase extends React.PureComponent
             for (let  i= 0; i < this.docDetailObj.dt().length; i++) 
             {
                 const detailItem = this.docDetailObj.dt()[i];
-                if (detailItem && typeof detailItem.COST_PRICE === 'number' && typeof detailItem.QUANTITY === 'number') {
+                if (detailItem && typeof detailItem.COST_PRICE === 'number' && typeof detailItem.QUANTITY === 'number') 
+                {
                     tmpTotalCost += detailItem.COST_PRICE * detailItem.QUANTITY;
                 }
             }
             
             const totalHt = docData.TOTALHT || 0;
+
             let tmpMargin = (totalHt - tmpTotalCost)
+
             let tmpMarginRate = Number(tmpTotalCost).rate2Num ? Number(tmpTotalCost).rate2Num(tmpMargin,2) : 0;
+
             docData.MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2)
         }
     }
@@ -1380,7 +1385,6 @@ export default class DocBase extends React.PureComponent
         }
 
         let parentData = await this.core.sql.execute(parentQuery)
-        console.log('buildOffer - Parent connections:', parentData.result.recordset)
         
         if(parentData.result.recordset.length > 0)
         {
@@ -1401,7 +1405,6 @@ export default class DocBase extends React.PureComponent
                    
                     if(parentTarget)
                     {
-                        console.log('buildOffer - Parent target found, opening:', parentTarget.DOC_TO)
                         await this.getDoc(parentTarget.DOC_TO, parentTarget.REF_TO, parentTarget.REF_NO_TO)
                         return
                     }
@@ -1424,7 +1427,6 @@ export default class DocBase extends React.PureComponent
                           
                             if(level2Target)
                             {
-                                console.log('buildOffer - Level2 target found, opening:', level2Target.DOC_TO)
                                 await this.getDoc(level2Target.DOC_TO, level2Target.REF_TO, level2Target.REF_NO_TO)
                                 return
                             }
@@ -1454,7 +1456,6 @@ export default class DocBase extends React.PureComponent
                     
                     if(indirectTarget)
                     {
-                        console.log('buildOffer - Forward chain target found, opening:', indirectTarget.DOC_TO)
                         await this.getDoc(indirectTarget.DOC_TO, indirectTarget.REF_TO, indirectTarget.REF_NO_TO)
                         return
                     }
@@ -1478,7 +1479,6 @@ export default class DocBase extends React.PureComponent
 
                             if(level2Target)
                             {
-                                console.log('buildOffer - Forward Level2 target found, opening:', level2Target.DOC_TO)
                                 await this.getDoc(level2Target.DOC_TO, level2Target.REF_TO, level2Target.REF_NO_TO)
                                 return
                             }
@@ -1540,12 +1540,9 @@ export default class DocBase extends React.PureComponent
             }
         }
 
-        console.log('buildOffer - Conflict check: hasDispatch=', hasDispatch, 'hasInvoice=', hasInvoice, 'pType=', pType)
-
         // Teklif → İrsaliye ama zaten Fatura'ya çevrilmiş
         if(hasInvoice && pType == 40)
         {
-            console.log('buildOffer - Invoice exists, blocking Dispatch creation')
             let tmpConfObj =
             {
                 id:'msgControlOfFacture',showTitle:true,title:this.t("msgControlOfFacture.title"),showCloseButton:true,width:'500px',height:'250px',
@@ -1564,7 +1561,6 @@ export default class DocBase extends React.PureComponent
         // Teklif → Fatura ama zaten İrsaliye'ye çevrilmiş
         else if(hasDispatch && pType == 20)
         {
-            console.log('buildOffer - Dispatch exists, blocking Invoice creation')
             let tmpConfObj =
             {
                 id:'msgControlOfDispatch',showTitle:true,title:this.t("msgControlOfDispatch.title"),showCloseButton:true,width:'500px',height:'250px',
@@ -1667,7 +1663,6 @@ export default class DocBase extends React.PureComponent
             this.frmDocItems.option('disabled',false)
         }
     }
-
     async buildOrder(pGuid,pType)
     {
         let tmpControlQuery =
@@ -1702,7 +1697,6 @@ export default class DocBase extends React.PureComponent
         }
 
         let parentData = await this.core.sql.execute(parentQuery)
-        console.log('buildOrder - Parent connections:', parentData.result.recordset)
         
         if(parentData.result.recordset.length > 0)
         {
@@ -1723,7 +1717,6 @@ export default class DocBase extends React.PureComponent
                    
                     if(parentTarget)
                     {
-                        console.log('buildOrder - Parent target found, opening:', parentTarget.DOC_TO)
                         await this.getDoc(parentTarget.DOC_TO, parentTarget.REF_TO, parentTarget.REF_NO_TO)
                         return
                     }
@@ -1746,7 +1739,6 @@ export default class DocBase extends React.PureComponent
                           
                             if(level2Target)
                             {
-                                console.log('buildOrder - Level2 target found, opening:', level2Target.DOC_TO)
                                 await this.getDoc(level2Target.DOC_TO, level2Target.REF_TO, level2Target.REF_NO_TO)
                                 return
                             }

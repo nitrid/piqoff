@@ -185,11 +185,16 @@ export const langTr =
             
             msgNotSave : "Kayıt İşlemi Başarısız",
         },
+        msgMargin :
+        {
+            title : "Kar Marjı",
+        },
         grdPrice : 
         {
             clmDate : "Bitiş Tarihi",
             clmQuantity :  "Miktar",
-            clmPrice : "Fiyat"
+            clmPrice : "Fiyat",
+            clmMargin : "Kar Marjı"
         },
         grdCustomer : 
         {

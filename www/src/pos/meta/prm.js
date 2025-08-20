@@ -1352,7 +1352,8 @@ export const prm =
         {
             active : false,
             dbControl:false,
-            tolerans : 0.030
+            tolerans : 0.030,
+            customerTrack : false
         },
         SPECIAL : "",
         PAGE : "pos",
@@ -1367,13 +1368,14 @@ export const prm =
             FORM: 
             {
                 width:"400",
-                height:"220",
+                height:"auto",
                 colCount:1,
                 item:
                 [
                     {type:"checkbox",caption:"Aktif",field:"active",id:"chkPopScaleBarcodeControlActive"},
                     {type:"checkbox",caption:"Databese Fiş Kontrolü",field:"dbControl",id:"chkPopScaleBarcodeControlTicket"},
                     {type:"text",caption:"Tolerans",field:"tolerans",id:"txtPopScaleBarcodeControlTolerans"},
+                    {type:"checkbox",caption:"Müşteri Takip",field:"customerTrack",id:"chkPopScaleBarcodeControlCustomerTrack"},
                 ]
             }
         }
