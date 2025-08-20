@@ -111,9 +111,6 @@ export default class posSalesReport extends React.PureComponent
                     <div className="row px-2 pt-2">
                         <div className="col-12">
                             <Toolbar>
-                                <Item location="after" locateInMenu="auto">
-                                    <NdButton id="btnPrint" parent={this} icon="print" type="default" onClick={async()=> { this.printReport() }}/>
-                                </Item>
                                 <Item location="after"
                                 locateInMenu="auto"
                                 widget="dxButton"
@@ -329,6 +326,10 @@ export default class posSalesReport extends React.PureComponent
                             showColumnGrandTotals={false}
                             showRowTotals={true}
                             showRowGrandTotals={true}
+                            onExporting={(e)=>
+                            {
+                                e.fileName = 'Sales.xlsx'
+                            }}
                             onCellPrepared={(e)=>
                             {
                                 if(e.area == 'column' && e.cell.type == 'D')
@@ -374,7 +375,7 @@ export default class posSalesReport extends React.PureComponent
                                 }
                             }}
                             >
-                                <Export fileName={"Report"} enabled={true} allowExportSelectedData={true} />
+                                <Export enabled={true} allowExportSelectedData={true} />
                                 <FieldChooser enabled={true} height={400} />
                             </NdPivot>
                         </div>

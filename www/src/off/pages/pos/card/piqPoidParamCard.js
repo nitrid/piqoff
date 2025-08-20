@@ -225,6 +225,54 @@ export default class piqPoidDeviceCard extends React.PureComponent
                     CAPTION : {tr:"Terazide Gözükücek Ana Grup",fr:"Groupe principal à afficher sur la balance"}
                 }
             },
+            // Musteri Takip
+            {
+                TYPE : 0,
+                ID :"CustomerTrack",
+                VALUE : false,
+                SPECIAL : "",
+                PAGE : "poid",
+                ELEMENT : "",
+                APP : "POID",
+                VIEW : 
+                {
+                    TYPE : "checkbox",
+                    PAGE_NAME : "Poid",
+                    CAPTION : {tr:"Musteri Takip",fr:"Suivi du client"}
+                }
+            },
+            // Bekleyen ticket uyarısı
+            {
+                TYPE : 0,
+                ID :"TicketAlertWait",
+                VALUE : false,
+                SPECIAL : "",
+                PAGE : "poid",
+                ELEMENT : "",
+                APP : "POID",
+                VIEW : 
+                {
+                    TYPE : "checkbox",
+                    PAGE_NAME : "Poid",
+                    CAPTION : {tr:"Bekleyen ticket uyarısı",fr:"Avertissement de ticket en attente"}
+                }
+            },
+            // Bekleyen ticket uyarı süresi
+            {
+                TYPE : 0,
+                ID :"TicketAlertWaitTime",
+                VALUE : 30,
+                SPECIAL : "",
+                PAGE : "poid",
+                ELEMENT : "",
+                APP : "POID",
+                VIEW : 
+                {
+                    TYPE : "text",
+                    PAGE_NAME : "Poid",
+                    CAPTION : {tr:"Bekleyen ticket uyarı süresi",fr:"Durée d'avertissement de ticket en attente"}
+                }
+            },
         ]
     }
     async componentDidMount()
@@ -270,7 +318,7 @@ export default class piqPoidDeviceCard extends React.PureComponent
                                     valueExpr="CODE"
                                     value={""}
                                     showClearButton={true}
-                                    data={{source:{select:{query : `SELECT CODE,NAME FROM BALANCE_DEVICES ORDER BY NAME ASC`},sql:this.core.sql}}}
+                                    data={{source:{select:{query : `SELECT CODE,NAME FROM BALANCE_DEVICES WHERE DELETED = 0 ORDER BY NAME ASC`},sql:this.core.sql}}}
                                     onValueChanged={async(e)=>
                                     {
                                         await this.prmData.load({APP:'POID'})

@@ -341,6 +341,10 @@ export default class posSaleReport extends React.PureComponent
                                 showColumnGrandTotals={false}
                                 showRowTotals={true}
                                 showRowGrandTotals={true}
+                                onExporting={(e)=>
+                                {
+                                    e.fileName = 'Sales.xlsx'
+                                }}
                                 onCellPrepared={(e)=>
                                 {
                                     if(e.area == 'column' && e.cell.type == 'D')

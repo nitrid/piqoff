@@ -7,11 +7,12 @@ import NdPopGrid from '../../../core/react/devex/popgrid';
 import NdGrid,{ Column, Editing, Paging, Scrolling, KeyboardNavigation } from '../../../core/react/devex/grid';
 import { dialog } from '../../../core/react/devex/dialog.js';
 import NbLabel from '../../../core/react/bootstrap/label';
-import NbPopNumber from '../../tools/popnumber';
+import NbButton from "../../../core/react/bootstrap/button.js";
 
 import { PageBar } from '../../tools/pageBar';
 import { PageView,PageContent } from '../../tools/pageView';
 import moment from 'moment';
+import NdPopUp  from '../../../core/react/devex/popup.js';
 export default class priceCheck extends React.PureComponent
 {
     constructor(props)
@@ -83,6 +84,36 @@ export default class priceCheck extends React.PureComponent
         this.itemDt.clear();
         this.lblItemPrice.value = 0
     }
+
+    calculateMarginForPrice(newPrice)
+    {
+        if(this.itemDt.length > 0 && newPrice)
+        {
+            let tmpMargin = (newPrice - (newPrice * this.itemDt[0].VAT/100)) - (this.itemDt[0].COST_PRICE)
+            let tmpMarginRate = (tmpMargin / this.itemDt[0].COST_PRICE) * 100
+
+            let marginDisplayPrm = this.param.filter({TYPE:0,ID:'marginDisplay'}).getValue();
+            let marginFormat = "";
+            this.itemDt[0].MARGIN = tmpMargin.toFixed(2) + marginDisplayPrm.currency + marginDisplayPrm.separator + tmpMarginRate.toFixed(2)
+            this.priceDt[0].MARGIN = tmpMargin.toFixed(2) + marginDisplayPrm.currency + marginDisplayPrm.separator + tmpMarginRate.toFixed(2)
+            
+            
+            if(marginDisplayPrm.showAmount) 
+            {
+                marginFormat += tmpMargin.toFixed(2) + marginDisplayPrm.currency;
+            }
+            if(marginDisplayPrm.showAmount && marginDisplayPrm.showRate) 
+            {
+                marginFormat += marginDisplayPrm.separator;
+            }
+            if(marginDisplayPrm.showRate) 
+            {
+                marginFormat += tmpMarginRate.toFixed(2);
+            }
+
+            this.txtMarginDisplay.value = marginFormat;
+        }
+    }
     getItem(pCode)
     {
         return new Promise(async resolve => 
@@ -90,36 +121,10 @@ export default class priceCheck extends React.PureComponent
             this.clearEntry();
             
             this.itemDt.selectCmd.value = [pCode]
-            await this.itemDt.refresh(); 
-            if(this.itemDt.length > 0)
-            {
-                let tmpMargin = (this.itemDt[0].PRICE_SALE - this.itemDt[0].VAT/100) - (this.itemDt[0].COST_PRICE)
-                let tmpMarginRate = (tmpMargin / (this.itemDt[0].PRICE_SALE - this.itemDt[0].VAT/100)) * 100
-                
-                // Margin display parametresinden format al
-                let marginDisplayPrm = this.param.filter({TYPE:0,ID:'marginDisplay'}).getValue();
-                let marginFormat = "";
-                
-                if(marginDisplayPrm.showAmount) 
-                {
-                    marginFormat += tmpMargin.toFixed(2) + marginDisplayPrm.currency;
-                }
-
-                if(marginDisplayPrm.showAmount && marginDisplayPrm.showRate) 
-                {
-                    marginFormat += marginDisplayPrm.separator;
-                }
-                
-                if(marginDisplayPrm.showRate) 
-                {
-                    marginFormat += tmpMarginRate.toFixed(2);
-                }
-                
-                this.itemDt[0].MARGIN = marginFormat
-                this.popNumber.margin = this.itemDt[0].MARGIN
-            }
-
+            await this.itemDt.refresh();
             
+
+
             if(this.itemDt.length > 0)
             {
                 this.lblItemName.value = this.itemDt[0].NAME
@@ -131,6 +136,19 @@ export default class priceCheck extends React.PureComponent
                 
                 this.priceDt.selectCmd.value = [this.itemDt[0].CODE]
                 await this.priceDt.refresh();  
+                
+                // PriceDt'deki her satır için margin hesapla
+                for(let i = 0; i < this.priceDt.length; i++)
+                {
+                    let priceRow = this.priceDt[i];
+                    let tmpMargin = (priceRow.PRICE - (priceRow.PRICE * this.itemDt[0].VAT)/100) - (this.itemDt[0].COST_PRICE)
+                    let tmpMarginRate = (tmpMargin / this.itemDt[0].COST_PRICE) * 100
+                    
+                    let marginDisplayPrm = this.param.filter({TYPE:0,ID:'marginDisplay'}).getValue();
+                    let marginFormat = tmpMargin.toFixed(2) + marginDisplayPrm.currency + marginDisplayPrm.separator + tmpMarginRate.toFixed(2);
+                    
+                    this.priceDt[i].MARGIN = marginFormat;
+                }
                 
                 if(this.itemDt[0].STATUS == false)
                 {
@@ -305,14 +323,14 @@ export default class priceCheck extends React.PureComponent
                                             {
                                                 if(e.column.dataField == "PRICE")
                                                 {
-                                                    let currentMargin = this.itemDt.length > 0 ? this.itemDt[0].MARGIN : "";
-                                                    let tmpResult = await this.popNumber.show("PRICE",Number(e.value), true, currentMargin)
+                                                    // Popup'ı aç
+                                                    this.popMargin.setTitle("FİYAT DEĞİŞTİR");
+                                                    this.txtPrice.value = Number(e.value);
+                                                    this.txtMarginDisplay.value = this.itemDt.length > 0 ? this.itemDt[0].MARGIN : "";
+                                                    this.popMargin.show();
                                                     
-                                                    if(typeof tmpResult != 'undefined' && tmpResult != '' && Number(e.value) != Number(tmpResult))
-                                                    {
-                                                        e.data.PRICE = Number(tmpResult)
-                                                        this.priceDt.update()
-                                                    }
+                                                    // Return promise için değişken hazırla
+                                                    this.currentData = e.data;
                                                 }
                                             }}
                                             >
@@ -330,6 +348,7 @@ export default class priceCheck extends React.PureComponent
                                                     return
                                                 }}/>
                                                 <Column dataField="QUANTITY" caption={this.t("grdPrice.clmQuantity")} dataType={'number'} width={80}/>
+                                                <Column dataField="MARGIN" caption={this.t("grdPrice.clmMargin")} dataType={'string'} width={120}/>
                                                 <Column dataField="PRICE" caption={this.t("grdPrice.clmPrice")} dataType={'number'} format={{ style: "currency", currency: "EUR",precision: 3}} width={60}/>
                                             </NdGrid>
                                         </div>
@@ -359,8 +378,61 @@ export default class priceCheck extends React.PureComponent
                                 </div>
                             </div>
                             {/* Number Popup */}
-                            <div>
+                            {/* <div>
                                 <NbPopNumber id={"popNumber"} parent={this} margin={this.itemDt.length > 0 ? this.itemDt[0].MARGIN : ""}/>
+                            </div   > */}
+                            <div>
+                                <NdPopUp parent={this} id={"popMargin"} 
+                                visible={false}                        
+                                showCloseButton={true}
+                                showTitle={true}
+                                title={""}
+                                container={"#root"} 
+                                width={"300"}
+                                height={"auto"}
+                                onHiding={()=> {}}
+                                position={{of:"#root"}}
+                                margin={this.itemDt.length > 0 ? this.itemDt[0].MARGIN : ""}
+                                >
+                                    {/* Fiyat */}
+                                    <div className="row pt-1">
+                                        <div className="col-12">
+                                            <div style={{fontSize: '12px', color: '#666', marginBottom: '2px'}}>Fiyat</div>
+                                            <NdTextBox id={"txtPrice"} parent={this} simple={true} 
+                                            onValueChanged={(e) => {
+                                                // Fiyat değiştiğinde margin'ı yeniden hesapla
+                                                this.calculateMarginForPrice(e.value);
+                                            }}>     
+                                            </NdTextBox> 
+                                        </div>
+                                    </div> 
+                                    {/* Margin */}
+                                    <div className="row pt-1">
+                                        <div className="col-12">
+                                            <div style={{display: 'flex', flexDirection: 'column'}}>
+                                                <div style={{fontSize: '12px', color: '#666', marginBottom: '2px'}}>Margin</div>
+                                                <NdTextBox id={"txtMarginDisplay"} parent={this} simple={true} readOnly={true} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* btn */}
+                                    <div className="row pt-2">
+                                        <div className="col-12">
+                                            <NbButton id={"btnMarginOk"} parent={this} className="form-group btn btn-success btn-block" style={{height:"60px",width:"100%"}}
+                                            onClick={() => {
+                                                // Fiyatı güncelle
+                                                if(this.currentData) 
+                                                {
+                                                    this.currentData.PRICE = Number(this.txtPrice.value);
+                                                    this.priceDt.update();
+                                                }
+                                                this.popMargin.hide();
+                                            }}>
+                                                <i className="text-white fa-solid fa-check" style={{fontSize: "24px"}} />
+                                            </NbButton>
+                                        </div>
+                                    </div>
+                                </NdPopUp>
                             </div>
                         </PageContent>
                     </PageView>
