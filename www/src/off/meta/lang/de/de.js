@@ -390,6 +390,7 @@ export const langDe =
         ftr_01_005: "Interne Verkaufsrechnungsliste", 
         ftr_01_006 : "Rückgabe-Rechnungsliste", 
         ftr_01_007 : "Verschwendungs-Rechnungsliste",  
+        ftr_01_008 : "Alle Verkaufsrechnungsliste",
         ftr_02_001: "Einkaufsrechnung eingeben",
         ftr_02_002: "Verkaufsrechnung eingeben",
         ftr_02_003: "Gutschrift eingeben",

@@ -373,6 +373,7 @@ export const langEn =
         ftr_01_005: "Inter-Branch Sales Invoice List",
         ftr_01_006 : "Incoming Return Invoice List",
         ftr_01_007 : "Fire Invoice List",
+        ftr_01_008 : "All Sales Invoice List",
         ftr_02_001: "Purchase Invoice",
         ftr_02_002: "Sales Invoice",
         ftr_02_003: "Sent Return Invoice",

@@ -6,7 +6,7 @@ import Toolbar from 'devextreme-react/toolbar';
 import Form, { Label,Item } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import NdGrid,{Column,Paging,Pager,Export,Scrolling} from '../../../../core/react/devex/grid.js';
+import NdGrid,{Column,Paging,Pager,Export,Scrolling,StateStoring,ColumnChooser} from '../../../../core/react/devex/grid.js';
 import NdTextBox from '../../../../core/react/devex/textbox.js'
 import NdDropDownBox from '../../../../core/react/devex/dropdownbox.js';
 import NdListBox from '../../../../core/react/devex/listbox.js';
@@ -45,55 +45,19 @@ export default class rebateInvList extends React.PureComponent
         this.dtLast.value=moment(new Date()).format("YYYY-MM-DD");
         this.txtCustomerCode.CODE = '';
     }
-    _columnListBox(e)
+    loadState()
     {
-        let onOptionChanged = (e) =>
-        {
-            if (e.name == 'selectedItemKeys') 
-            {
-                this.groupList = [];
-                if(typeof e.value.find(x => x == 'REF') != 'undefined')
-                {
-                    this.groupList.push('REF')
-                }
-                if(typeof e.value.find(x => x == 'REF_NO') != 'undefined')
-                {
-                    this.groupList.push('REF_NO')
-                }                
-                if(typeof e.value.find(x => x == 'INPUT_NAME') != 'undefined')
-                {
-                    this.groupList.push('INPUT_NAME')
-                }
-                if(typeof e.value.find(x => x == 'DOC_DATE') != 'undefined')
-                {
-                    this.groupList.push('DOC_DATE')
-                }
-                if(typeof e.value.find(x => x == 'TOTAL') != 'undefined')
-                {
-                    this.groupList.push('TOTAL')
-                }
-                
-                for (let i = 0; i < this.grdSlsIvcList.devGrid.columnCount(); i++) 
-                {
-                    if(typeof e.value.find(x => x == this.grdSlsIvcList.devGrid.columnOption(i).name) == 'undefined')
-                    {
-                        this.grdSlsIvcList.devGrid.columnOption(i,'visible',false)
-                    }
-                    else
-                    {
-                        this.grdSlsIvcList.devGrid.columnOption(i,'visible',true)
-                    }
-                }
-
-                this.setState(
-                {
-                    columnListValue : e.value
-                }
-                )
-            }
-        }
-        
+        let tmpLoad = this.access.filter({ELEMENT:'grdAllInvoicesState',USERS:this.user.CODE})
+        return tmpLoad.getValue()
     }
+
+    saveState(e)
+    {
+        let tmpSave = this.access.filter({ELEMENT:'grdAllInvoicesState',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
+        tmpSave.setValue(e)
+        tmpSave.save()
+    }
+
     async btnGetClick()
     {
         

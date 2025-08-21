@@ -390,6 +390,7 @@ export const langFr =
         ftr_01_005: "Liste Factures de vente interne", 
         ftr_01_006 : "Liste des factures retours", 
         ftr_01_007 : "Liste des factures gaspillées",  
+        ftr_01_008 : "Liste des toutes les factures de vente",
         ftr_02_001: "Saisie Facture d'achat",
         ftr_02_002: "Saisie Facture de vente",
         ftr_02_003: "Saisie Facture d'avoir",

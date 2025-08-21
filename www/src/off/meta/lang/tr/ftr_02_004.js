@@ -79,6 +79,7 @@ const ftr_02_004 =
         title : "Ürün Seçimi",
         clmCode :  "ÜRÜN KODU",
         clmName : "ÜRÜN ADI",
+        clmPrice : "FİYAT"
     },
     pg_contractGrid : 
     {

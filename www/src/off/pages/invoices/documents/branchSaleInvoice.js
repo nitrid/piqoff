@@ -1059,7 +1059,14 @@ export default class branchSaleInvoice extends DocBase
                                             maxLength={32}
                                             onValueChanged={(async(e)=>
                                             {
-                                                this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
+                                                if(this.docObj.docCustomer.dt().length > 0)
+                                                {
+                                                    this.docObj.docCustomer.dt()[0].REF = this.txtRef.value
+                                                }
+                                                else
+                                                {
+                                                    return;
+                                                }
                                             }).bind(this)}
                                             param={this.param.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}
                                             access={this.access.filter({ELEMENT:'txtRef',USERS:this.user.CODE})}

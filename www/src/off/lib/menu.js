@@ -989,6 +989,11 @@ export const menu = (e) =>
                                     text: e.t('menuOff.ftr_01_007'),//'Fire  Fatura Listesi',
                                     path: 'invoices/lists/outageInvList'
                                 },
+                                {
+                                    id: 'ftr_01_008',
+                                    text: e.t('menuOff.ftr_01_008'),//'Tüm Satış İşlemleri Listesi',
+                                    path: 'invoices/lists/salesAllFactureList'
+                                }
                             ]
                         },
                         {
