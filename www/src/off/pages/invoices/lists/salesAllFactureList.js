@@ -214,7 +214,7 @@ export default class salesAllFactureList extends React.PureComponent
 
     async loadDesignList(invoiceTypeCode)
     {
-        let pageType = this.getInvoicePageTypeByCode(invoiceTypeCode)
+        let pageType = await this.getInvoicePageTypeByCode(invoiceTypeCode)
         
         let tmpQuery = 
         {
@@ -257,46 +257,83 @@ export default class salesAllFactureList extends React.PureComponent
 
     async printWithDesign(designTag, selectedData)
     {
-        let tmpLines = []
-        
         App.instance.loading.show()
         
-        for(let i = 0; i < selectedData.length; i++)
+        // İlk fatura tipine göre PAGE değerini kontrol et
+        let firstInvoiceType = selectedData[0].INVOICE_TYPE_CODE
+        let pageType = await this.getInvoicePageTypeByCode(firstInvoiceType)
+        
+        // PAGE 18, 19, 22 ise ayrı ayrı PDF - diğerleri için birleşik PDF
+        if(pageType === '18' || pageType === '19' || pageType === '22')
         {
-            let tmpQuery = 
+            // Her fatura için ayrı ayrı PDF oluştur
+            for(let i = 0; i < selectedData.length; i++)
             {
-                query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM FN_DOC_ITEMS_FOR_PRINT(@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO",
-                param: ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
-                value: [selectedData[i].GUID, designTag, localStorage.getItem('lang').toUpperCase()]
-            }
-
-            let tmpData = await this.core.sql.execute(tmpQuery)
-            
-            for(let x = 0; x < tmpData.result.recordset.length; x++)
-            {
-                tmpLines.push(tmpData.result.recordset[x])
-            }
-        }
-
-        if(tmpLines.length > 0)
-        {
-            this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
-            {
-                App.instance.loading.hide()
-                if(pResult.split('|')[0] != 'ERR')
+                let tmpQuery = 
                 {
-                    var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
-                    mywindow.onload = function() 
-                    { 
-                        mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
-                    } 
+                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM FN_DOC_ITEMS_FOR_PRINT(@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO",
+                    param: ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                    value: [selectedData[i].GUID, designTag, localStorage.getItem('lang').toUpperCase()]
                 }
-            });
+
+                let tmpData = await this.core.sql.execute(tmpQuery)
+                
+                if(tmpData.result.recordset.length > 0)
+                {
+                    // Her fatura için ayrı devprint call'ı
+                    this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpData.result.recordset[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpData.result.recordset) + '}',async(pResult) =>
+                    {
+                        if(pResult.split('|')[0] != 'ERR')
+                        {
+                            var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                            mywindow.onload = function() 
+                            { 
+                                mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                            } 
+                        }
+                    });
+                }
+            }
         }
         else
         {
-            App.instance.loading.hide()
+            // Diğer PAGE'ler için birleşik PDF (eski sistem)
+            let tmpLines = []
+            
+            for(let i = 0; i < selectedData.length; i++)
+            {
+                let tmpQuery = 
+                {
+                    query: "SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM FN_DOC_ITEMS_FOR_PRINT(@DOC_GUID,@LANG) ORDER BY DOC_DATE,LINE_NO",
+                    param: ['DOC_GUID:string|50','DESIGN:string|25','LANG:string|10'],
+                    value: [selectedData[i].GUID, designTag, localStorage.getItem('lang').toUpperCase()]
+                }
+
+                let tmpData = await this.core.sql.execute(tmpQuery)
+                
+                for(let x = 0; x < tmpData.result.recordset.length; x++)
+                {
+                    tmpLines.push(tmpData.result.recordset[x])
+                }
+            }
+
+            if(tmpLines.length > 0)
+            {
+                this.core.socket.emit('devprint','{"TYPE":"REVIEW","PATH":"' + tmpLines[0].PATH.replaceAll('\\','/') + '","DATA":' + JSON.stringify(tmpLines) + '}',async(pResult) =>
+                {
+                    if(pResult.split('|')[0] != 'ERR')
+                    {
+                        var mywindow = window.open('printview.html','_blank',"width=900,height=1000,left=500");      
+                        mywindow.onload = function() 
+                        { 
+                            mywindow.document.getElementById("view").innerHTML="<iframe src='data:application/pdf;base64," + pResult.split('|')[1] + "' type='application/pdf' width='100%' height='100%'></iframe>"      
+                        } 
+                    }
+                });
+            }
         }
+        
+        App.instance.loading.hide()
         
         // Grid seçimlerini sıfırla
         this.grdAllInvoices.devGrid.clearSelection()
@@ -360,7 +397,7 @@ export default class salesAllFactureList extends React.PureComponent
 
     async getDefaultDesignByCode(invoiceTypeCode)
     {
-        let pageType = this.getInvoicePageTypeByCode(invoiceTypeCode)
+        let pageType = await this.getInvoicePageTypeByCode(invoiceTypeCode)
         
         let tmpQuery = 
         {
@@ -370,7 +407,7 @@ export default class salesAllFactureList extends React.PureComponent
         }
         
         let tmpData = await this.core.sql.execute(tmpQuery)
-        
+
         if(tmpData.result.recordset.length > 0)
         {
             return tmpData.result.recordset[0].TAG
@@ -384,7 +421,7 @@ export default class salesAllFactureList extends React.PureComponent
         switch(invoiceTypeCode)
         {
             case '1_20_0': return '115' // Satış
-            case '0_20_1': return '16' // Alış İade
+            case '0_20_1': return '116' // Alış İade
             case '1_22_0': return '22' // Şubelerarasi Satış
             case '0_21_0': return '18' // Fiyat Fark alis
             case '0_23_1': return '19' // Fire alis

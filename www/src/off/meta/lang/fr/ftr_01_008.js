@@ -9,7 +9,7 @@ const ftr_01_008 =
     branchSalesInvoices : "Facture de vente interne",
     priceDifferencePurcInvoices : "Facture de différence de prix",
     rebatePurcInvoices : "Facture de retour de vente",
-    outageInvoices : "Facture de défaut",
+    outageInvoices : "Facture liée au frais",
     otherInvoices : "Autre facture",
     date : "Date",
     reference : "Référence",
@@ -24,6 +24,11 @@ const ftr_01_008 =
     msgSelectInvoice : "Veuillez sélectionner le type de facture.",
     btnOk : "OK",
     msgSameTypeRequired : "Le type de facture doit être le même.",
+    printDesign : "Design d'impression",
+    design : "Design",
+    btnPrint : "Imprimer",
+    btnCancel : "Annuler",
+    msgSelectDesign : "Veuillez sélectionner le design d'impression."
     
     
 }

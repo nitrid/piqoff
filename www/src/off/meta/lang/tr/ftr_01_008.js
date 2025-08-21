@@ -24,7 +24,11 @@ const ftr_01_008 =
     msgSelectInvoice : "Lütfen fatura tipi seçiniz.",
     btnOk : "Tamam",
     msgSameTypeRequired : "Aynı tip fatura seçilmesi gerekmektedir.",
-    
+    printDesign : "Yazdırma Deseni",
+    design : "Desen",
+    btnPrint : "Yazdır",
+    btnCancel : "İptal",
+    msgSelectDesign : "Lütfen yazdırma deseni seçiniz."
     
 }
 

@@ -24,7 +24,11 @@ const ftr_01_008 =
     msgSelectInvoice : "Bitte wählen Sie den Rechnungstyp.",
     btnOk : "OK",
     msgSameTypeRequired : "Der Rechnungstyp muss gleich sein.",
-    
+    printDesign : "Druckdesign",
+    design : "Design",
+    btnPrint : "Drucken",
+    btnCancel : "Abbrechen",
+    msgSelectDesign : "Bitte wählen Sie das Druckdesign."
     
 }
 

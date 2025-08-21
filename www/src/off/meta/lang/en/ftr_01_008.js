@@ -9,7 +9,7 @@ const ftr_01_008 =
     branchSalesInvoices : "Branch sales invoice",
     priceDifferencePurcInvoices : "Price difference invoice",
     rebatePurcInvoices : "Sales return invoice",
-    outageInvoices : "Outage invoice",
+    outageInvoices : "Invoice related to outage",
     otherInvoices : "Other invoice",
     date : "Date",
     reference : "Reference",
@@ -24,7 +24,11 @@ const ftr_01_008 =
     msgSelectInvoice : "Please select the type of invoice.",
     btnOk : "OK",
     msgSameTypeRequired : "The type of invoice must be the same.",
-    
+    printDesign : "Print design",
+    design : "Design",
+    btnPrint : "Print",
+    btnCancel : "Cancel",
+    msgSelectDesign : "Please select the print design."
     
 }
 
