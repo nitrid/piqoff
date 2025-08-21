@@ -6,7 +6,7 @@ const ftr_01_008 =
     btnGet : "Rechercher",
     allInvoices : "Tous les documents de vente",
     salesInvoices : "Facture de vente",
-    branchSalesInvoices : "Facture de vente de branche",
+    branchSalesInvoices : "Facture de vente interne",
     priceDifferencePurcInvoices : "Facture de différence de prix",
     rebatePurcInvoices : "Facture de retour de vente",
     outageInvoices : "Facture de défaut",
