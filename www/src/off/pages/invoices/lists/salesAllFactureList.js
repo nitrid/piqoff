@@ -297,7 +297,6 @@ export default class salesAllFactureList extends React.PureComponent
         }
         else
         {
-            // Diğer PAGE'ler için birleşik PDF (eski sistem)
             let tmpLines = []
             
             for(let i = 0; i < selectedData.length; i++)

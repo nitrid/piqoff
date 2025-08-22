@@ -444,7 +444,7 @@ const ftr_02_001 =
         title: "Dikkat",
         btn01: "Hiç Birini Güncelleme",
         btn02: "Seçilen Fiyatları Güncelle",
-        msg: "Lütfen Tarihlerini Güncellemek İsteidiğiniz Ürünleri Seçiniz.. "
+        msg: "Lütfen Tarihlerini Güncellemek İstediğiniz Ürünleri Seçiniz.. "
     },
     grdNewPrice: 
     {
