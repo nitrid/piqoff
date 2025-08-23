@@ -176,11 +176,7 @@ export default class itemCard extends React.PureComponent
                 this.btnDelete.setState({disabled:false});
                 this.btnCopy.setState({disabled:false});
             }
-            //ALT BİRİM FİYAT HESAPLAMASI
-            this.underPrice();
-            //MARGIN HESAPLAMASI
-            this.grossMargin()                 
-            this.netMargin()       
+           
         })
         this.itemsObj.ds.on('onEdit',(pTblName,pData) =>
         {            
@@ -196,11 +192,7 @@ export default class itemCard extends React.PureComponent
             }    
             if(pTblName == 'ITEM_PRICE' || pTblName == 'ITEM_UNIT')
             {
-                // //ALT BİRİM FİYAT HESAPLAMASI
-                this.underPrice();  
-                // //MARGIN HESAPLAMASI
-                this.grossMargin()                 
-                this.netMargin() 
+              
             }
                            
         })
@@ -213,10 +205,7 @@ export default class itemCard extends React.PureComponent
             this.btnDelete.setState({disabled:false});
             this.btnCopy.setState({disabled:false});
             //ALT BİRİM FİYAT HESAPLAMASI
-            this.underPrice()
-            //MARGIN HESAPLAMASI
-            this.grossMargin()                 
-            this.netMargin()
+        
             if(pTblName == 'ITEM_MULTICODE')
             {
                 this.taxSugarValidCheck()
@@ -232,6 +221,8 @@ export default class itemCard extends React.PureComponent
         })        
 
         this.itemsObj.addEmpty();
+
+        this.systemDepot = this.sysParam.filter({ID:'systemDepot',USERS:this.user.CODE}).getValue()
         
         this.txtRef.value = Math.floor(Date.now() / 1000)
         this.txtCustomer.value = "";
@@ -601,11 +592,13 @@ export default class itemCard extends React.PureComponent
     }
     async grossMargin()
     {
+        console.log('1')
         for (let i = 0; i < this.itemsObj.itemPrice.dt().length; i++) 
         {
+            let tmpCostPrice = await this.getDepotCostPrice(this.itemsObj.dt("ITEMS")[0].GUID, this.itemsObj.itemPrice.dt()[i].DEPOT)
             let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE_HT
-            let tmpMargin = tmpExVat - this.txtCostPrice.value;
-            let tmpMarginRate = ((tmpMargin / this.txtCostPrice.value)) * 100
+            let tmpMargin = tmpExVat - tmpCostPrice;
+            let tmpMarginRate = ((tmpMargin / tmpCostPrice)) * 100
             
             if(this.itemsObj.itemPrice.dt()[i].LIST_VAT_TYPE == 0)
             {
@@ -619,6 +612,7 @@ export default class itemCard extends React.PureComponent
             this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN = tmpMargin.toFixed(2) + Number.money.sign + " / %" +  tmpMarginRate.toFixed(2);                 
             this.itemsObj.itemPrice.dt()[i].GROSS_MARGIN_RATE = tmpMarginRate.toFixed(2);     
             this.itemsObj.itemPrice.dt()[i].MARGIN =  tmpMarginRate.toFixed(2); 
+            this.itemsObj.itemPrice.dt()[i].COST_PRICE = tmpCostPrice
 
         }
         await this.grdPrice.dataRefresh({source:this.itemsObj.itemPrice.dt('ITEM_PRICE')});
@@ -627,9 +621,10 @@ export default class itemCard extends React.PureComponent
     {
         for (let i = 0; i < this.itemsObj.itemPrice.dt().length; i++) 
         {
+            let tmpCostPrice = await this.getDepotCostPrice(this.itemsObj.dt("ITEMS")[0].GUID, this.itemsObj.itemPrice.dt()[i].DEPOT)
             let tmpExVat = this.itemsObj.itemPrice.dt()[i].PRICE_HT
-            let tmpMargin = (tmpExVat - this.txtCostPrice.value) / 1.15;
-            let tmpMarginRate = (((tmpMargin / this.txtCostPrice.value) )) * 100
+            let tmpMargin = (tmpExVat - tmpCostPrice) / 1.15;
+            let tmpMarginRate = (((tmpMargin / tmpCostPrice) )) * 100
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN = tmpMargin.toFixed(2)  + Number.money.sign +  " / %" +  tmpMarginRate.toFixed(2); 
             this.itemsObj.itemPrice.dt()[i].NET_MARGIN_RATE = tmpMarginRate.toFixed(2);    
         }
@@ -812,9 +807,10 @@ export default class itemCard extends React.PureComponent
         {
             this.txtTotalExtraCost.setState({value:0})
         }
-
+        this.underPrice()
+        //MARGIN HESAPLAMASI
+        this.grossMargin()                 
         this.netMargin()
-        this.grossMargin()
     }
     cellRoleRender(e)
     {
@@ -933,7 +929,15 @@ export default class itemCard extends React.PureComponent
                     this.txtPopPriHT.value = 0
                     this.txtPopPriTTC.value = 0
                     this.txtPopPriceMargin.value = 0
-                    this.cmbPopPriDepot.value = "00000000-0000-0000-0000-000000000000"
+                    this.cmbPopPriDepot.value = this.systemDepot.toUpperCase()
+                    if(this.sysParam.filter({ID:'systemDepotAccess'}).getValue() == false && this.systemDepot.toUpperCase() != '00000000-0000-0000-0000-000000000000') 
+                    {
+                        this.cmbPopPriDepot.readOnly = true
+                    }
+                    else
+                    {
+                        this.cmbPopPriDepot.readOnly = false
+                    }
 
                     setTimeout(async () => {this.txtPopPriPrice.focus()}, 600)
                 }).bind(this)
@@ -1055,6 +1059,36 @@ export default class itemCard extends React.PureComponent
                     this.onCustomerSelection(data[0])
                 }
             }
+        }
+    }
+    async getDepotCostPrice(pGUID, pDepot)
+    {
+        if(this.systemDepot.toUpperCase() == '00000000-0000-0000-0000-000000000000')
+        {
+            return this.txtCostPrice.value
+        }
+        if(pDepot.toUpperCase() == this.systemDepot.toUpperCase())
+        {
+            return this.txtCostPrice.value
+        }
+
+        let tmpQuery = 
+        {
+            query : `SELECT TOP 1 CUSTOMER_PRICE FROM ITEM_MULTICODE_VW_01 
+                    WHERE ITEM_GUID = @ITEM_GUID AND DEPOT_GUID = @DEPOT_GUID 
+                    ORDER BY CHANGE_PRICE_DATE DESC`,
+            param : ['ITEM_GUID:string|50', 'DEPOT_GUID:string|50'],
+            value : [pGUID, pDepot]
+        }
+
+        let tmpData = await this.core.sql.execute(tmpQuery)
+        if(tmpData.result.recordset.length > 0)
+        {
+            return tmpData.result.recordset[0].CUSTOMER_PRICE
+        }
+        else
+        {
+            return this.txtCostPrice.value
         }
     }
     render()
@@ -1981,14 +2015,22 @@ export default class itemCard extends React.PureComponent
                                                     e.component.cancelEditData()  
                                                     this.toast.show({message:this.t("msgDateInvalid.msg"),type:'warning'})
                                                 }
-                                                if(typeof e.newData.PRICE != 'undefined')
+                                                if(typeof e.newData.PRICE != 'undefined' || typeof e.newData.QUANTITY != 'undefined')
                                                 {
                                                     //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
-                                                    if(this.prmObj.filter({ID:'SalePriceCostCtrl'}).getValue() && this.txtCostPrice.value != 0 && this.txtCostPrice.value >= e.newData.PRICE && e.newData.PRICE != 0)
+                                                    if( this.prmObj.filter({ID:'SalePriceCostCtrl'}).getValue() && this.txtCostPrice.value != 0 && this.txtCostPrice.value >= e.newData.PRICE && e.newData.PRICE != 0)
                                                     {
                                                         e.cancel = true;
                                                         e.component.cancelEditData()
                                                         this.toast.show({message:this.t("msgCostPriceValid.msg"),type:'warning'})
+                                                    }
+                                                    
+                                                    // DEPOT KONTROLU ICIN YAPILDI
+                                                    if(this.sysParam.filter({ID:'systemDepotAccess'}).getValue() == false && (this.systemDepot.toUpperCase()) != (e.key.DEPOT.toUpperCase()) && (this.systemDepot.toUpperCase()) != '00000000-0000-0000-0000-000000000000')
+                                                    {
+                                                        e.cancel = true;
+                                                        e.component.cancelEditData()
+                                                        this.toast.show({message:this.t("msgAccessDepot"),type:'warning'})
                                                     }
                                                     //********************************** */
                                                 }
@@ -2011,6 +2053,7 @@ export default class itemCard extends React.PureComponent
                                                 }
                                                 if(typeof e.data.MARGIN != 'undefined')
                                                 {
+
                                                     if(e.key.LIST_VAT_TYPE == 0)
                                                     {
                                                         e.key.PRICE_HT =   Number(this.txtCostPrice.value * (1 + (e.data.MARGIN / 100) )).round(3);
@@ -2024,9 +2067,14 @@ export default class itemCard extends React.PureComponent
                                                         e.key.PRICE =  e.key.PRICE_HT
                                                     }
                                                 }
+                                                this.underPrice()
+                                                //MARGIN HESAPLAMASI
+                                                this.grossMargin()                 
+                                                this.netMargin()
                                             }}
                                             onToolbarPreparing={this.onPriceGridToolbarPreparing}
                                             >
+                                                
                                                 <StateStoring enabled={true} type="custom" customLoad={this.loadState} customSave={this.saveState} storageKey={this.props.data.id + "_grdPrice"}/>                                
                                                 <ColumnChooser enabled={true} />  
                                                 <Paging defaultPageSize={12} />
@@ -2035,6 +2083,7 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="LIST_NAME" caption={this.t("grdPrice.clmListName")} allowEditing={false}/>
                                                 <Column dataField="DEPOT_NAME" caption={this.t("grdPrice.clmDepot")} allowEditing={false}/>
                                                 <Column dataField="CUSTOMER_NAME" caption={this.t("grdPrice.clmCustomerName")} visible={false} allowEditing={false}/>
+                                                <Column dataField="COST_PRICE" caption={this.t("grdPrice.clmCostPrice")} dataType="number" format={Number.money.sign +"##0.000"} allowEditing={false}/>
                                                 <Column dataField="START_DATE" caption={this.t("grdPrice.clmStartDate")} dataType="date" 
                                                 editorOptions={{value:null}}
                                                 cellRender={(e) => 
@@ -2151,6 +2200,7 @@ export default class itemCard extends React.PureComponent
                                             selection={{mode:"single"}} 
                                             onRowUpdating={async(e)=>
                                             {
+                                                console.log(e)
                                                 this.btnSave.setState({disabled:false});
                                                 if(typeof e.newData.CUSTOMER_PRICE != 'undefined')
                                                 {
@@ -2163,18 +2213,28 @@ export default class itemCard extends React.PureComponent
                                                         this.toast.show({message:this.t("msgSalePriceToCustomerPrice.msg"),type:'warning'})
                                                     }
                                                     else
-                                                    {
-                                                        this.txtCostPrice.value = e.newData.CUSTOMER_PRICE
-                                                        // Min ve Max Fiyat 
-                                                        let tmpMinData = this.prmObj.filter({ID:'ItemMinPricePercent'}).getValue()
-                                                        let tmpMinPrice = e.newData.CUSTOMER_PRICE + (e.newData.CUSTOMER_PRICE * tmpMinData) /100
-                                                        this.txtMinSalePrice.value = Number((tmpMinPrice).toFixed(2))
-                                                        let tmpMaxData = this.prmObj.filter({ID:'ItemMaxPricePercent'}).getValue()
-                                                        let tmpMAxPrice = e.newData.CUSTOMER_PRICE + (e.newData.CUSTOMER_PRICE * tmpMaxData) /100
-                                                        this.txtMaxSalePrice.value = Number((tmpMAxPrice).toFixed(2))
+                                                    { 
+                                                        if(this.systemDepot.toUpperCase() == '00000000-0000-0000-0000-000000000000' || this.systemDepot.toUpperCase() == e.key.DEPOT_GUID.toUpperCase())
+                                                        {
+                                                            this.txtCostPrice.value = e.newData.CUSTOMER_PRICE
+                                                            // Min ve Max Fiyat 
+                                                            let tmpMinData = this.prmObj.filter({ID:'ItemMinPricePercent'}).getValue()
+                                                            let tmpMinPrice = e.newData.CUSTOMER_PRICE + (e.newData.CUSTOMER_PRICE * tmpMinData) /100
+                                                            this.txtMinSalePrice.value = Number((tmpMinPrice).toFixed(2))
+                                                            let tmpMaxData = this.prmObj.filter({ID:'ItemMaxPricePercent'}).getValue()
+                                                            let tmpMAxPrice = e.newData.CUSTOMER_PRICE + (e.newData.CUSTOMER_PRICE * tmpMaxData) /100
+                                                            this.txtMaxSalePrice.value = Number((tmpMAxPrice).toFixed(2))
+                                                        }
+
                                                         this.taxSugarValidCheck()
                                                     }
                                                 }
+                                            }}
+                                            onRowUpdated={async(e)=>
+                                            {
+                                                this.underPrice()
+                                                this.grossMargin()                 
+                                                this.netMargin()
                                             }}
                                             onToolbarPreparing={this.onCustomerGridToolbarPreparing}
                                             >
@@ -2621,7 +2681,6 @@ export default class itemCard extends React.PureComponent
 
                                                         this.pg_subGroup.onClick = async(e) =>
                                                         {
-                                                            console.log(e)
                                                             this.itemsObj.itemSubGrp.addEmpty()
                                                             
                                                             this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].ITEM_GUID = this.itemsObj.dt()[0].GUID
@@ -2632,7 +2691,6 @@ export default class itemCard extends React.PureComponent
                                                             this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].SUB_CODE = e[0].CODE
                                                             this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].SUB_NAME = e[0].NAME
                                                             this.itemsObj.itemSubGrp.dt()[this.itemsObj.itemSubGrp.dt().length - 1].SUB_GRP_RANK = e[0].RANK
-                                                            console.log(this.itemsObj.itemSubGrp.dt())
                                                         }
                                                     }}/>
                                                 </div>
@@ -3388,179 +3446,7 @@ export default class itemCard extends React.PureComponent
                                 </NdItem>
                             </NdForm>
                         </NdPopUp>
-                    </div>      
-                    {/* İSTATİSTİK POPUP */}
-                    <div>
-                        <NdPopUp parent={this} id={"popAnalysis"} 
-                        visible={false}
-                        showCloseButton={true}
-                        showTitle={true}
-                        title={this.t("popAnalysis.title")}
-                        container={'#' + this.props.data.id + this.tabIndex} 
-                        width={'1200'}
-                        height={'700'}
-                        position={{of:'#' + this.props.data.id + this.tabIndex}}
-                        >
-                            <NdForm colCount={3} height={'fit-content'}>
-                                <NdItem colSpan={2}>
-                                    <div className="col-12">
-                                        <NbDateRange id={"dtDate"} parent={this} startDate={ moment().startOf('month')} endDate={moment(new Date())}/>
-                                    </div>
-                                </NdItem>
-                                <NdItem>
-                                    <NdButton id="btnGet" parent={this} text={this.t("btnGet")} type="default" width='100%'
-                                    onClick={async()=>
-                                    {
-                                        App.instance.loading.show()
-                                        if(this.cmbAnlysType.value == 0)
-                                        {
-                                            if(this.chkDayAnalysis.value == true)
-                                            {
-                                                let tmpQuery = 
-                                                {
-                                                    query : `SELECT SUM(QUANTITY) AS QUANTITY,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE FROM POS_SALE_VW_01 
-                                                            WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND DEVICE <> '9999'
-                                                            GROUP BY DOC_DATE,ITEM_CODE`,
-                                                    param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                                                    value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {
-                                                    this.setState({dataSource:tmpData.result.recordset})
-                                                }
-                                                else
-                                                {
-                                                    this.setState({dataRefresh:{}})
-                                                }
-                                            }
-                                            else if(this.chkMountAnalysis.value == true)
-                                            {
-                                                let tmpQuery = 
-                                                {
-                                                    query : `SELECT SUM(QUANTITY) AS QUANTITY,MONTH(DOC_DATE) AS DOC_DATE FROM POS_SALE_VW_01 
-                                                            WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND DEVICE <> '9999' 
-                                                            GROUP BY MONTH(DOC_DATE),ITEM_CODE`,
-                                                    param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                                                    value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {
-                                                    this.setState({dataSource:tmpData.result.recordset})
-                                                }
-                                                else
-                                                {
-                                                    this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
-                                                }
-                                            }
-                                        }
-                                        else if(this.cmbAnlysType.value == 1)
-                                        {
-                                            if(this.chkDayAnalysis.value == true)
-                                            {
-                                                let tmpFacQuery = 
-                                                {
-                                                    query : `SELECT SUM(QUANTITY) AS QUANTITY,CONVERT(NVARCHAR,DOC_DATE,104) AS DOC_DATE FROM DOC_ITEMS_VW_01 
-                                                            WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE AND TYPE = 1 AND ((DOC_TYPE = 20) OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID != '00000000-0000-0000-0000-000000000000')) 
-                                                            GROUP BY DOC_DATE,ITEM_CODE`,
-                                                    param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                                                    value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
-                                                }
-                                                let tmpFacData = await this.core.sql.execute(tmpFacQuery) 
-                                                if(tmpFacData.result.recordset.length > 0)
-                                                {
-                                                    this.setState({dataSource:tmpFacData.result.recordset})
-                                                }
-                                                else
-                                                {
-                                                    this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
-                                                }
-                                            }
-                                            else if(this.chkMountAnalysis.value == true)
-                                            {
-                                                let tmpQuery = 
-                                                {
-                                                    query : `SELECT SUM(QUANTITY) AS QUANTITY,MONTH(DOC_DATE) AS DOC_DATE FROM DOC_ITEMS_VW_01 
-                                                            WHERE ITEM_CODE = @CODE AND DOC_DATE >= @FIRST_DATE AND DOC_DATE <= @LAST_DATE  AND TYPE = 1 AND ((DOC_TYPE = 20) OR (DOC_TYPE = 40 AND INVOICE_DOC_GUID != '00000000-0000-0000-0000-000000000000')) 
-                                                            GROUP BY MONTH(DOC_DATE),ITEM_CODE`,
-                                                    param : ['CODE:string|50','FIRST_DATE:date','LAST_DATE:date'],
-                                                    value : [this.txtRef.value,this.dtDate.startDate,this.dtDate.endDate]
-                                                }
-                                                let tmpData = await this.core.sql.execute(tmpQuery) 
-                                                if(tmpData.result.recordset.length > 0)
-                                                {
-                                                    this.setState({dataSource:tmpData.result.recordset})
-                                                }
-                                                else
-                                                {
-                                                    this.setState({dataRefresh:{0:{QUANTITY:0,DOC_DATE:''}}})
-                                                }
-                                            }
-                                        } 
-                                        App.instance.loading.hide()
-                                    }}/>
-                                </NdItem>
-                                {/* cmbAnlysType */}
-                                <NdItem>
-                                    <NdLabel text={this.t("cmbAnlysType")} alignment="right" />
-                                    <NdSelectBox simple={true} parent={this} id="cmbAnlysType" height='fit-content'
-                                    displayExpr="VALUE"                       
-                                    valueExpr="ID"
-                                    data={{source:[{ID:0,VALUE:this.t("cmbAnlysTypeData.pos")},{ID:1,VALUE:this.t("cmbAnlysTypeData.invoice")}]}}
-                                    onValueChanged={(async(e)=>
-                                    {
-                                        
-                                    }).bind(this)}
-                                    param={this.param.filter({ELEMENT:'cmbAnlysType',USERS:this.user.CODE})}
-                                    access={this.access.filter({ELEMENT:'cmbAnlysType',USERS:this.user.CODE})}
-                                    />
-                                </NdItem>       
-                                <NdItem>
-                                    <NdLabel text={this.t("chkDayAnalysis")} alignment="right" />
-                                    <NdCheckBox id="chkDayAnalysis" parent={this} defaultValue={true} value={true}
-                                    onValueChanged={(e)=>
-                                    {
-                                        if(e.value == true)
-                                        {
-                                            this.chkMountAnalysis.value = false
-                                        }
-                                    }}/>
-                                </NdItem>  
-                                <NdItem>
-                                    <NdLabel text={this.t("chkMountAnalysis")} alignment="right" />
-                                    <NdCheckBox id="chkMountAnalysis" parent={this} defaultValue={false} 
-                                    onValueChanged={(e)=>
-                                    {
-                                        if(e.value == true)
-                                        {
-                                            this.chkDayAnalysis.value = false
-                                        }
-                                    }}/>
-                                </NdItem>
-                                <NdItem colSpan={3}>
-                                    <Chart id="chart" dataSource={this.state.dataSource}>
-                                        <CommonSeriesSettings
-                                            argumentField="state"
-                                            type="bar"
-                                            hoverMode="allArgumentPoints"
-                                            selectionMode="allArgumentPoints"
-                                            >
-                                            <Label visible={true}>
-                                                <Format type="fixedPoint" precision={0} />
-                                            </Label>
-                                        </CommonSeriesSettings>
-                                            <Series
-                                            valueField="QUANTITY"
-                                            argumentField="DOC_DATE"
-                                            name="Vente"
-                                            type="bar"
-                                            color="#008000" />
-                                    </Chart>
-                                </NdItem>
-                            </NdForm>
-                        </NdPopUp>
-                    </div>    
+                    </div>       
                     {/* BİRİM POPUP */}
                     <div>
                         <NdDialog parent={this} id={"msgUnit"} 

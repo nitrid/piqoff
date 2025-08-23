@@ -61,6 +61,7 @@ const stk_01_001 =
     txtGenus : "Ürün Cinsi",
     txtRayon : "Rayon",
     chkTaxSugarControl : "Şeker Vergisi",
+    msgAccessDepot : "Bu depoya erişim yetkiniz yok !",
     cmbAnlysTypeData : 
     {
         pos: "Pos",
@@ -142,7 +143,8 @@ const stk_01_001 =
         clmGrossMargin: "Brüt Marj",
         clmNetMargin: "Net Marj",
         clmMargin : "Marj %",
-        clmListName: "Liste Adı"
+        clmListName: "Liste Adı",
+        clmCostPrice: "Maliyet Fiyatı"
     },
     grdUnit: 
     {

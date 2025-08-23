@@ -61,6 +61,7 @@ const stk_01_001 =
     txtGenus : "Type de produit",
     txtRayon : "Rayon",
     chkTaxSugarControl : "Taxe Sucre",
+    msgAccessDepot : "Vous n'avez pas accès à ce dépôt !",
     cmbAnlysTypeData : 
     {
         pos: "Pos", 
@@ -143,7 +144,8 @@ const stk_01_001 =
         clmGrossMargin: "Marge Brute",
         clmNetMargin: "Marge Nette",
         clmMargin : "Marge %",
-        clmListName: "Nom de Liste"
+        clmListName: "Nom de Liste",
+        clmCostPrice: "Prix de Revient"
 
     },
     grdUnit: 

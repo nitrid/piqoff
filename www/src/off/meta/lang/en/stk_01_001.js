@@ -59,6 +59,9 @@ const stk_01_001 =
     cmbAnlysType : "Type",
     txtCustoms : "Customs Code",
     txtGenus : "Product Genus",
+    txtRayon : "Rayon",
+    chkTaxSugarControl : "Taxe Sucre",
+    msgAccessDepot : "You do not have access to this depot !",
     cmbAnlysTypeData : 
     {
         pos: "Pos",
@@ -140,7 +143,8 @@ const stk_01_001 =
         clmGrossMargin: "Gross Margin",
         clmNetMargin: "Net Margin",
         clmMargin : "Margin %",
-        clmListName: "List Name"
+        clmListName: "List Name",
+        clmCostPrice: "Cost Price"
     },
     grdUnit: 
     {

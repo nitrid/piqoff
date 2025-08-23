@@ -623,6 +623,32 @@ export const prm =
             }
         }
     }, 
+    //Şube Depo ID
+    {
+        TYPE : 0,
+        ID :"systemDepot",
+        VALUE : '00000000-0000-0000-0000-000000000000',
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "text",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Sistem Depo ID"
+        }
+    },
+    // Sube depo yetkisi
+    {
+        TYPE : 0,
+        ID :"systemDepotAccess",
+        VALUE : false,
+        APP : "OFF",
+        VIEW : 
+        {
+            TYPE : "checkbox",
+            PAGE_NAME : "Sistem",
+            CAPTION : "Sube depo yetkisi"
+        }
+    },
     //#mail acıklaması parametresi
     {
         TYPE : 0,
@@ -639,19 +665,7 @@ export const prm =
             CAPTION : "Mail Açıklaması çıkacak yazısı"
         }
     },
-    //Şube Depo ID
-    {
-        TYPE : 0,
-        ID :"systemDepot",
-        VALUE : '00000000-0000-0000-0000-000000000000',
-        APP : "OFF",
-        VIEW : 
-        {
-            TYPE : "text",
-            PAGE_NAME : "Sistem",
-            CAPTION : "Sistem Depo ID"
-        }
-    },
+
 
     //#endregion
     //#region Stok Tanıtım

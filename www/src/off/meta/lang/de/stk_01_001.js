@@ -61,6 +61,7 @@ const stk_01_001 =
     txtGenus : "Produkttyp",
     txtRayon : "Abteilung",
     chkTaxSugarControl : "Zuckersteuer",
+    msgAccessDepot : "Sie haben keinen Zugriff auf dieses Lager!",
     cmbAnlysTypeData : 
     {
         pos: "POS", 
@@ -142,7 +143,8 @@ const stk_01_001 =
         clmGrossMargin: "Bruttomarge",
         clmNetMargin: "Nettomarge",
         clmMargin : "Marge %",
-        clmListName: "Listenname"
+        clmListName: "Listenname",
+        clmCostPrice: "Selbstkostenpreis"
     },
     grdUnit: 
     {
