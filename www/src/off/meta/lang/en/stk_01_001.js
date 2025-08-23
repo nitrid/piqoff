@@ -123,7 +123,8 @@ const stk_01_001 =
         txtPopCustomerCode: "Code",
         txtPopCustomerName: "Name", 
         txtPopCustomerItemCode: "Item Code",
-        txtPopCustomerPrice: "Price"
+        txtPopCustomerPrice: "Price",
+        cmbPopCustomerDepot: "Depot"
     },
     grdPrice: 
     {
@@ -174,7 +175,8 @@ const stk_01_001 =
         clmPriceUserName: "User",
         clmPriceDate: "Last Price Date",
         clmPrice: "Price",
-        clmMulticode: "Customer Item Code"
+        clmMulticode: "Customer Item Code",
+        clmDepot: "Depot"
     },
     grdSalesContract: 
     {

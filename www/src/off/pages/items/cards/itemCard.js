@@ -456,14 +456,20 @@ export default class itemCard extends React.PureComponent
             }
         });
     }   
-    async checkMultiCode(pCode,pSupply)
+    async checkMultiCode(pCode,pSupply,pDepot)
     {
         return new Promise(async resolve => 
         {
             if(pCode !== '')
             {
-                let tmpData = await new itemMultiCodeCls().load({MULTICODE:pCode,CUSTOMER_CODE:pSupply});
-                if(tmpData.length > 0)
+                let tmpQuery = 
+                {
+                    query : `SELECT TOP 1 GUID,ITEM_CODE,CUSTOMER_CODE,DEPOT_GUID FROM ITEM_MULTICODE_VW_01 WHERE MULTICODE = @MULTICODE AND CUSTOMER_CODE = @CUSTOMER_CODE AND DEPOT_GUID = @DEPOT_GUID`,
+                    param : ['MULTICODE:string|50','CUSTOMER_CODE:string|50','DEPOT_GUID:string|50'],
+                    value : [pCode,pSupply,pDepot]
+                }
+                let tmpData = await this.core.sql.execute(tmpQuery)
+                if(tmpData.result.recordset.length > 0)
                 {
                     let tmpConfObj =
                     {
@@ -480,7 +486,7 @@ export default class itemCard extends React.PureComponent
                     let pResult = await dialog(tmpConfObj);
                     if(pResult == 'btn01')
                     {
-                        this.getItem(tmpData[0].ITEM_CODE)
+                        this.getItem(tmpData.result.recordset[0].ITEM_CODE)
                         resolve(2) //KAYIT VAR
                     }
                     else
@@ -491,7 +497,7 @@ export default class itemCard extends React.PureComponent
                 else
                 {
                     // SANAL DATA DA MÜŞTERİ KODU KONTROLÜ
-                    if(this.itemsObj.itemMultiCode.dt().where({CUSTOMER_CODE:pSupply}).length > 0)
+                    if(this.itemsObj.itemMultiCode.dt().where({CUSTOMER_CODE:pSupply}).where({DEPOT_GUID:this.cmbPopCustomerDepot.value}).length > 0)
                     {
                         this.toast.show({message:this.t("msgCheckCustomerCode.msg"),type:'warning'})
                         resolve(3)
@@ -993,10 +999,11 @@ export default class itemCard extends React.PureComponent
                 onClick: (async() => 
                 {   
                     await this.popCustomer.show();
+                    this.cmbPopCustomerDepot.value = "00000000-0000-0000-0000-000000000000"
                     this.txtPopCustomerItemCode.value = "";
                     this.txtPopCustomerPrice.value = 0;
 
-                    setTimeout(async () => {this.txtPopCustomerCode.focus()}, 600);
+                    setTimeout(async () => {this.txtPopCustomerName.focus()}, 600);
                 }).bind(this)
             }
         });
@@ -1428,7 +1435,6 @@ export default class itemCard extends React.PureComponent
                                                     this.txtPopCustomerPrice.value = 0;
                                                     setTimeout(async () => 
                                                     {
-                                                        console.log(this.txtPopCustomerName)
                                                         this.txtPopCustomerName.focus()
                                                     }, 300)
                                                 }
@@ -2180,6 +2186,7 @@ export default class itemCard extends React.PureComponent
                                                 <Column dataField="CUSTOMER_PRICE_DATE" caption={this.t("grdCustomer.clmPriceDate")} editCellRender={this.cellRoleRender}/>
                                                 <Column dataField="CUSTOMER_PRICE" caption={this.t("grdCustomer.clmPrice")} dataType="number" format={Number.money.sign + '#,##0.000'}/>
                                                 <Column dataField="MULTICODE" caption={this.t("grdCustomer.clmMulticode")} />
+                                                <Column dataField="DEPOT_NAME" caption={this.t("grdCustomer.clmDepot")} />
                                             </NdGrid>
                                         </div>
                                     </div>
@@ -3310,6 +3317,19 @@ export default class itemCard extends React.PureComponent
                                         </Validator> 
                                     </NdNumberBox>
                                 </NdItem>
+                                <NdItem >
+                                    <NdLabel text={this.t("popCustomer.cmbPopCustomerDepot")} alignment="right" />
+                                    <NdSelectBox simple={true} parent={this} id="cmbPopCustomerDepot" tabIndex={this.tabIndex}
+                                    displayExpr="NAME"                       
+                                    valueExpr="GUID"
+                                    value=""
+                                    searchEnabled={true} 
+                                    showClearButton={true}
+                                    pageSize ={50}
+                                    notRefresh={true}
+                                    data={{source:{select:{query:`SELECT '00000000-0000-0000-0000-000000000000' AS GUID, 'GENERAL' AS NAME UNION ALL SELECT GUID,NAME FROM DEPOT_VW_01 WHERE STATUS = 1 ORDER BY NAME ASC`},sql:this.core.sql}}}
+                                    />
+                                </NdItem>
                                 <NdItem>
                                     <div className='row'>
                                         <div className='col-6'>
@@ -3327,9 +3347,11 @@ export default class itemCard extends React.PureComponent
                                                     tmpEmptyMulti.CUSTOMER_NAME = this.txtPopCustomerName.value
                                                     tmpEmptyMulti.MULTICODE = this.txtPopCustomerItemCode.value
                                                     tmpEmptyMulti.CUSTOMER_PRICE = this.txtPopCustomerPrice.value
+                                                    tmpEmptyMulti.DEPOT_GUID = this.cmbPopCustomerDepot.value
+                                                    tmpEmptyMulti.DEPOT_NAME = this.cmbPopCustomerDepot.displayValue
                                                     tmpEmptyMulti.CUSTOMER_PRICE_DATE = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
 
-                                                    let tmpResult = await this.checkMultiCode(this.txtPopCustomerItemCode.value,this.txtPopCustomerCode.value)
+                                                    let tmpResult = await this.checkMultiCode(this.txtPopCustomerItemCode.value,this.txtPopCustomerCode.value,this.cmbPopCustomerDepot.value)
                                                     if(tmpResult == 2) //KAYIT VAR
                                                     {
                                                         this.popCustomer.hide(); 
