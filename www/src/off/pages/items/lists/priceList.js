@@ -39,7 +39,7 @@ export default class priceList extends React.PureComponent
     }
     saveState(e)
     {
-        let tmpSave = this.access.filter({ELEMENT:'grdPriceListe',USERS:this.user.CODE})
+        let tmpSave = this.access.filter({ELEMENT:'grdPriceListe',USERS:this.user.CODE,PAGE:this.props.data.id,APP:"OFF"})
         tmpSave.setValue(e)
         tmpSave.save()
     }
