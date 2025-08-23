@@ -130,5 +130,9 @@ const pos_02_001 =
         btn01: "OK",
         msg: "Eine Rechnung kann nicht erstellt werden, wenn kein Kunde für den Beleg ausgewählt ist!"
     },
+    msgNoFacture:
+    {
+        msg: "Belege ohne Rechnung können nicht in eine Rechnung umgewandelt werden!"
+    }
 }
 export default pos_02_001

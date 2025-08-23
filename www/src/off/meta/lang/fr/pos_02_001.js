@@ -130,5 +130,9 @@ const pos_02_001 =
         btn01: "Ok", 
         msg: "Une facture ne peut pas être établie si vous ne choissisez pas de client pour le ticket" 
     },
+    msgNoFacture:
+    {
+        msg: "Les tickets sans facture ne peuvent pas être convertis en facture !"
+    }
 }
 export default pos_02_001
