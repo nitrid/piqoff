@@ -1358,14 +1358,15 @@ export default class purchaseInvoice extends DocBase
             }
             
             let pResult = await dialog(tmpConfObj);
+
             if(pResult == 'btn01')
             {
                 let tmpData = this.sysParam.filter({ID:'purcInvoıcePriceSave',USERS:this.user.CODE}).getValue()
                 
                 if(typeof tmpData != 'undefined' && tmpData.value ==  true)
                 {
-                    App.instance.loading.show()
                     this.newPriceDate.clear()
+
                     for (let i = 0; i < this.docObj.docItems.dt().length; i++) 
                     {
                         if(this.docObj.docItems.dt()[i].ITEM_TYPE == 0)
@@ -1414,7 +1415,6 @@ export default class purchaseInvoice extends DocBase
                     }
                     if(this.newPriceDate.length > 0)
                     {
-                        App.instance.loading.show()
                         await this.msgNewPriceDate.show().then(async (e) =>
                         {
                 
@@ -1440,7 +1440,6 @@ export default class purchaseInvoice extends DocBase
                                     param : ['PNEW_CUSER:string|25','PCUSTOMER_PRICE_GUID:string|50'],
                                     dataprm : ['CUSER','CUSTOMER_PRICE_GUID']
                                 } 
-                                App.instance.loading.show()
                                 
                                 for (let i = 0; i < this.grdNewPriceDate.getSelectedData().length; i++) 
                                 {
@@ -1448,14 +1447,14 @@ export default class purchaseInvoice extends DocBase
                                 }
                                 
                                 await this.updatePriceData.update()
-                                App.instance.loading.hide()
                                 this.updatePriceData.clear()
                             }
                         })
+                        
                     }    
-                    App.instance.loading.hide()
                 }
             }
+            App.instance.loading.show()
             let tmpConfObj1 =
             {
                 id:'msgSaveResult',showTitle:true,title:this.t("msgSave.title"),showCloseButton:true,width:'500px',height:'auto',
@@ -1463,7 +1462,8 @@ export default class purchaseInvoice extends DocBase
             }
             
             if((await this.docObj.save()) == 0)
-            {                                                    
+            {   
+                App.instance.loading.hide()
                 this.toast.show({message:this.t("msgSaveResult.msgSuccess"),type:"success"})
 
                 if(typeof this.piqX != 'undefined')
@@ -1476,6 +1476,7 @@ export default class purchaseInvoice extends DocBase
             }
             else
             {
+                App.instance.loading.hide()
                 tmpConfObj1.content = (<div style={{textAlign:"center",fontSize:"20px",color:"red"}}>{this.t("msgSaveResult.msgFailed")}</div>)
                 await dialog(tmpConfObj1);
             }
