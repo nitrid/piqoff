@@ -126,7 +126,8 @@ const stk_01_001 =
         txtPopCustomerCode: "Code",
         txtPopCustomerName: "Nom", 
         txtPopCustomerItemCode: "Référence Fournisseur",
-        txtPopCustomerPrice: "Prix d'Achat "
+        txtPopCustomerPrice: "Prix d'Achat ",
+        cmbPopCustomerDepot: "Réserve"
     },
     grdPrice: 
     {
@@ -178,7 +179,8 @@ const stk_01_001 =
         clmPriceUserName: "Utilisateur",
         clmPriceDate: "Date Dernier Prix de Revient",
         clmPrice: "Prix ",
-        clmMulticode: "Code Produit Fournisseur"
+        clmMulticode: "Code Produit Fournisseur",
+        clmDepot: "Réserve"
     },
     grdSalesContract: 
     {

@@ -125,7 +125,8 @@ const stk_01_001 =
         txtPopCustomerCode: "Code",
         txtPopCustomerName: "Name", 
         txtPopCustomerItemCode: "Lieferantenreferenz",
-        txtPopCustomerPrice: "Einkaufspreis "
+        txtPopCustomerPrice: "Einkaufspreis ",
+        cmbPopCustomerDepot: "Lager"
     },
     grdPrice: 
     {
@@ -176,7 +177,8 @@ const stk_01_001 =
         clmPriceUserName: "Benutzer",
         clmPriceDate: "Letztes Selbstkostenpreisdatum",
         clmPrice: "Preis ",
-        clmMulticode: "Lieferantenproduktcode"
+        clmMulticode: "Lieferantenproduktcode",
+        clmDepot: "Lager"
     },
     grdSalesContract: 
     {

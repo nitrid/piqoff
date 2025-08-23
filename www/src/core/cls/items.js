@@ -981,6 +981,8 @@ export class itemMultiCodeCls
             CUSTOMER_GUID : '00000000-0000-0000-0000-000000000000',            
             CUSTOMER_CODE : '',            
             CUSTOMER_NAME : '',
+            DEPOT_GUID : '00000000-0000-0000-0000-000000000000',
+            DEPOT_NAME : '',
             MULTICODE : '',
             CUSTOMER_PRICE_GUID : '00000000-0000-0000-0000-000000000000',
             CUSTOMER_PRICE : '0',
@@ -1016,9 +1018,10 @@ export class itemMultiCodeCls
                     "@CUSTOMER = @PCUSTOMER, " + 
                     "@CODE = @PCODE, " + 
                     "@PRICE_GUID = @PPRICE_GUID, " + 
-                    "@PRICE = @PPRICE ",
-            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PCODE:string|25','PPRICE_GUID:string|50','PPRICE:float'],
-            dataprm : ['GUID','CUSER','ITEM_GUID','CUSTOMER_GUID','MULTICODE','CUSTOMER_PRICE_GUID','CUSTOMER_PRICE']
+                    "@PRICE = @PPRICE, " +
+                    "@DEPOT = @PDEPOT ",
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PCODE:string|25','PPRICE_GUID:string|50','PPRICE:float','PDEPOT:string|50'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','CUSTOMER_GUID','MULTICODE','CUSTOMER_PRICE_GUID','CUSTOMER_PRICE','DEPOT_GUID']
         } 
         tmpDt.updateCmd = 
         {
@@ -1029,9 +1032,10 @@ export class itemMultiCodeCls
                     "@CUSTOMER = @PCUSTOMER, " + 
                     "@CODE = @PCODE, " + 
                     "@PRICE_GUID = @PPRICE_GUID, " + 
-                    "@PRICE = @PPRICE ", 
-            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PCODE:string|25','PPRICE_GUID:string|50','PPRICE:float'],
-            dataprm : ['GUID','CUSER','ITEM_GUID','CUSTOMER_GUID','MULTICODE','CUSTOMER_PRICE_GUID','CUSTOMER_PRICE']
+                    "@PRICE = @PPRICE, " +
+                    "@DEPOT = @PDEPOT ", 
+            param : ['PGUID:string|50','PCUSER:string|25','PITEM:string|50','PCUSTOMER:string|50','PCODE:string|25','PPRICE_GUID:string|50','PPRICE:float','PDEPOT:string|50'],
+            dataprm : ['GUID','CUSER','ITEM_GUID','CUSTOMER_GUID','MULTICODE','CUSTOMER_PRICE_GUID','CUSTOMER_PRICE','DEPOT_GUID']
         }
         tmpDt.deleteCmd = 
         {

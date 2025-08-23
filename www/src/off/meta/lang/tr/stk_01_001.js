@@ -125,7 +125,8 @@ const stk_01_001 =
         txtPopCustomerCode: "Kodu",
         txtPopCustomerName: "Adı", 
         txtPopCustomerItemCode: "Ürün Kodu",
-        txtPopCustomerPrice: "Fiyat"
+        txtPopCustomerPrice: "Fiyat",
+        cmbPopCustomerDepot: "Depo"
     },
     grdPrice: 
     {
@@ -176,7 +177,8 @@ const stk_01_001 =
         clmPriceUserName: "Kullanıcı",
         clmPriceDate: "Son Fiyat Tarih",
         clmPrice: "Fiyat",
-        clmMulticode: "Tedarikçi Ürün Kodu"
+        clmMulticode: "Tedarikçi Ürün Kodu",
+        clmDepot: "Depo"
     },
     grdSalesContract: 
     {

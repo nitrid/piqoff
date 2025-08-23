@@ -155,6 +155,27 @@ class querySender
                                
                             }
                         }
+                        else if(pParam[i].query.indexOf('PRD_CUSTOMERS_INSERT') > -1)
+                        {
+                            if(typeof pParam[i].rowData.GUID != 'undefined')
+                            {
+                               
+                            }
+                        }
+                        else if(pParam[i].query.indexOf('PRD_CUSTOMERS_UPDATE') > -1)
+                        {
+                            if(typeof pParam[i].rowData.GUID != 'undefined')
+                            {
+                               
+                            }
+                        }
+                        else if(pParam[i].query.indexOf('PRD_CUSTOMERS_DELETE') > -1)
+                        {
+                            if(typeof pParam[i].rowData.GUID != 'undefined')
+                            {
+                               
+                            }
+                        }
                     }
                 }
             })

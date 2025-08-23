@@ -212,6 +212,7 @@ export default class purchaseDispatch extends DocBase
 
         this.dtDocDate.value = moment(new Date())
         this.dtShipDate.value = moment(new Date())
+        this.systemDepot = this.sysParam.filter({ID:'systemDepot',USERS:this.user.CODE}).getValue()
 
         this.txtRef.readOnly = false
         this.txtRefno.readOnly = false
@@ -642,9 +643,9 @@ export default class purchaseDispatch extends DocBase
            
             let tmpCheckQuery = 
             {
-                query : `SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,'00000000-0000-0000-0000-000000000000',0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0`,
-                param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float'],
-                value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity]
+                query : `SELECT CODE AS MULTICODE,(SELECT dbo.FN_PRICE(ITEM,@QUANTITY,dbo.GETDATE(),CUSTOMER,@DEPOT,0,1,0)) AS PRICE FROM ITEM_MULTICODE WHERE ITEM = @ITEM AND CUSTOMER = @CUSTOMER_GUID AND DELETED = 0`,
+                param : ['ITEM:string|50','CUSTOMER_GUID:string|50','QUANTITY:float','DEPOT:string|50'],
+                value : [pData.GUID,this.docObj.dt()[0].OUTPUT,pQuantity,this.systemDepot]
             }
 
             let tmpCheckData = await this.core.sql.execute(tmpCheckQuery) 
@@ -999,9 +1000,14 @@ export default class purchaseDispatch extends DocBase
                         {
                             let tmpQuery = 
                             {
-                                query : "SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER",
-                                param : ['ITEM:string|50','CUSTOMER:string|50'],
-                                value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT]
+                                query : `SELECT TOP 1 GUID AS PRICE_GUID,
+                                        PRICE AS SALE_PRICE,
+                                        (SELECT VAT FROM ITEMS WHERE ITEMS.GUID = ITEM_PRICE.ITEM) AS VAT_RATE,
+                                        (SELECT TOP 1 GUID FROM ITEM_PRICE AS CUSTOMER_PRICE WHERE CUSTOMER_PRICE.ITEM = ITEM_PRICE.ITEM AND CUSTOMER_PRICE.CUSTOMER = @CUSTOMER AND TYPE = 1 AND DEPOT = @DEPOT) AS CUSTOMER_PRICE_GUID
+                                        FROM ITEM_PRICE
+                                        WHERE  TYPE = 0 AND ITEM = @ITEM AND DEPOT = @DEPOT AND START_DATE = '19700101' AND FINISH_DATE = '19700101' AND QUANTITY <= 1 `,
+                                param : ['ITEM:string|50','CUSTOMER:string|50','DEPOT:string|50'],
+                                value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT,this.systemDepot]
                             }
         
                             let tmpData = await this.core.sql.execute(tmpQuery)
@@ -1106,9 +1112,14 @@ export default class purchaseDispatch extends DocBase
                             {
                                 let tmpQuery = 
                                 {
-                                    query : `SELECT TOP 1 PRICE_SALE_GUID AS PRICE_GUID,PRICE_SALE AS SALE_PRICE,CUSTOMER_PRICE_GUID AS CUSTOMER_PRICE_GUID,VAT AS VAT FROM ITEMS_BARCODE_MULTICODE_VW_01 WHERE  GUID = @ITEM AND CUSTOMER_GUID = @CUSTOMER`,
-                                    param : ['ITEM:string|50','CUSTOMER:string|50'],
-                                    value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT]
+                                    query : `SELECT TOP 1 GUID AS PRICE_GUID,
+                                        PRICE AS SALE_PRICE,
+                                        (SELECT VAT FROM ITEMS WHERE ITEMS.GUID = ITEM_PRICE.ITEM) AS VAT_RATE,
+                                        (SELECT TOP 1 GUID FROM ITEM_PRICE AS CUSTOMER_PRICE WHERE CUSTOMER_PRICE.ITEM = ITEM_PRICE.ITEM AND CUSTOMER_PRICE.CUSTOMER = @CUSTOMER AND TYPE = 1 AND DEPOT = @DEPOT) AS CUSTOMER_PRICE_GUID
+                                        FROM ITEM_PRICE
+                                        WHERE  TYPE = 0 AND ITEM = @ITEM AND DEPOT = @DEPOT AND START_DATE = '19700101' AND FINISH_DATE = '19700101' AND QUANTITY <= 1 `,
+                                    param : ['ITEM:string|50','CUSTOMER:string|50','DEPOT:string|50'],
+                                    value : [this.docObj.docItems.dt()[i].ITEM,this.docObj.docItems.dt()[i].OUTPUT,this.systemDepot]
                                 }
 
                                 let tmpData = await this.core.sql.execute(tmpQuery)
