@@ -1317,12 +1317,12 @@ export default class salesOrdList extends React.PureComponent
                                             <NdButton text={this.lang.t("btnPrint")} type="normal" stylingMode="contained" width={'100%'} 
                                             onClick={async ()=>
                                             {       
-                                                if(this.grdSaleTicketReport.devGrid.getSelectedRowsData().length > 0)
+                                                if(this.grdSaleTicketReport.devGrid.getSelectedRowsData().length > 0  && this.grdSaleTicketReport.devGrid.getSelectedRowsData()[0].FACT_REF != 0)
                                                 {
                                                     App.instance.loading.show()
                                                     let tmpQuery = 
                                                     {
-                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM POS_SALE_VW_01 WHERE POS_GUID = @POS_GUID ORDER BY LINE_NO ` ,
+                                                        query: `SELECT *,ISNULL((SELECT TOP 1 PATH FROM LABEL_DESIGN WHERE TAG = @DESIGN),'') AS PATH FROM POS_SALE_VW_03 WHERE POS_GUID = @POS_GUID ORDER BY LINE_NO ` ,
                                                         param:  ['POS_GUID:string|50','DESIGN:string|25'],
                                                         value:  [this.grdSaleTicketReport.devGrid.getSelectedRowsData()[0].POS_GUID,this.cmbDesignList.value]
                                                     }
@@ -1343,6 +1343,10 @@ export default class salesOrdList extends React.PureComponent
                                                         }
                                                     });
                                                     this.popDesign.hide();  
+                                                }
+                                                else
+                                                {
+                                                    this.toast.show({message:this.t("msgNoFacture.msg"),type:"warning"})
                                                 }
                                                 
                                             }}/>

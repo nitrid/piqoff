@@ -129,6 +129,10 @@ const pos_02_001 =
         btn01: "Tamam",
         msg: "Müşteri tanımlayanmamış fiş faturaya çevrilemez !"
     },
+    msgNoFacture:
+    {
+        msg: "Fatura olmayan fişler faturaya çevrilemez !"
+    }
 }
 
 export default pos_02_001

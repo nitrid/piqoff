@@ -129,6 +129,10 @@ const pos_02_001 =
         btn01: "OK",
         msg: "A ticket that does not have a customer cannot be converted to an invoice !"
     },
+    msgNoFacture:
+    {
+        msg: "Tickets without an invoice cannot be converted to an invoice!"
+    }
 }
 
 export default pos_02_001
