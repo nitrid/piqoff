@@ -2,7 +2,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { core } from 'gensrv';
 import fetch from 'node-fetch';
-import config from '../config/config.js';
+import config from '../config.js';
 
 class ProcedureSender {
     constructor() {
