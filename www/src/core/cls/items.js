@@ -579,7 +579,7 @@ export class itemPriceCls
             param : ['PCUSER:string|25','PGUID:string|50'],
             dataprm : ['CUSER','GUID']
         }
-        tmpDt.noColumnEdit = ['VAT_EXT','GROSS_MARGIN','GROSS_MARGIN_RATE','NET_MARGIN','NET_MARGIN_RATE']
+        tmpDt.noColumnEdit = ['VAT_EXT','GROSS_MARGIN','GROSS_MARGIN_RATE','NET_MARGIN','NET_MARGIN_RATE','MARGIN']
 
         this.ds.add(tmpDt);
     }
