@@ -2018,7 +2018,7 @@ export default class itemCard extends React.PureComponent
                                                 if(typeof e.newData.PRICE != 'undefined' || typeof e.newData.QUANTITY != 'undefined')
                                                 {
                                                     //FİYAT GİRERKEN MALİYET FİYAT KONTROLÜ
-                                                    if( this.prmObj.filter({ID:'SalePriceCostCtrl'}).getValue() && this.txtCostPrice.value != 0 && this.txtCostPrice.value >= e.newData.PRICE && e.newData.PRICE != 0)
+                                                    if( this.prmObj.filter({ID:'SalePriceCostCtrl'}).getValue() && e.key.COST_PRICE != 0 && e.key.COST_PRICE >= e.newData.PRICE && e.newData.PRICE != 0)
                                                     {
                                                         e.cancel = true;
                                                         e.component.cancelEditData()
@@ -2049,20 +2049,20 @@ export default class itemCard extends React.PureComponent
                                                         e.key.PRICE_HT = e.data.PRICE
                                                         e.key.PRICE_TTC =  Number(e.data.PRICE).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                     }
-                                                    e.key.MARGIN =  Number(((e.key.PRICE_HT  / this.txtCostPrice.value)) * 100).round(2)
+                                                    e.key.MARGIN =  Number(((e.key.PRICE_HT  / e.key.COST_PRICE)) * 100).round(2)
                                                 }
                                                 if(typeof e.data.MARGIN != 'undefined')
                                                 {
 
                                                     if(e.key.LIST_VAT_TYPE == 0)
                                                     {
-                                                        e.key.PRICE_HT =   Number(this.txtCostPrice.value * (1 + (e.data.MARGIN / 100) )).round(3);
+                                                        e.key.PRICE_HT =   Number(e.key.COST_PRICE * (1 + (e.data.MARGIN / 100) )).round(3);
                                                         e.key.PRICE_TTC =  Number(e.key.PRICE_HT).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                         e.key.PRICE =  e.key.PRICE_TTC
                                                     }
                                                     else
                                                     {
-                                                        e.key.PRICE_HT =  Number(this.txtCostPrice.value * (1 + (e.data.MARGIN / 100))).round(3);
+                                                        e.key.PRICE_HT =  Number(e.key.COST_PRICE * (1 + (e.data.MARGIN / 100))).round(3);
                                                         e.key.PRICE_TTC = Number(e.key.PRICE_HT).rateExc(this.itemsObj.dt("ITEMS")[0].VAT,3)
                                                         e.key.PRICE =  e.key.PRICE_HT
                                                     }
@@ -2224,6 +2224,12 @@ export default class itemCard extends React.PureComponent
                                                             let tmpMaxData = this.prmObj.filter({ID:'ItemMaxPricePercent'}).getValue()
                                                             let tmpMAxPrice = e.newData.CUSTOMER_PRICE + (e.newData.CUSTOMER_PRICE * tmpMaxData) /100
                                                             this.txtMaxSalePrice.value = Number((tmpMAxPrice).toFixed(2))
+                                                        }
+                                                        else
+                                                        {
+                                                           this.toast.show({message:this.t("msgAccessDepot"),type:'warning'})
+                                                           e.cancel = true
+                                                           e.component.cancelEditData()
                                                         }
 
                                                         this.taxSugarValidCheck()
